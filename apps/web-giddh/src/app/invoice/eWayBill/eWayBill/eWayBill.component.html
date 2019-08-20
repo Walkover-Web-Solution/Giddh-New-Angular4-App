@@ -135,7 +135,7 @@
                                         </div>
                                     </td>
                                     <td class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td class="nowrap text-right pr-1">₹ {{item?.totalValue | giddhCurrency}}</td>
+                                    <td class="nowrap text-right pr-1"><i class="fa fa-inr"></i> {{item?.totalValue | giddhCurrency}}</td>
                                     <td class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
                                             <!-- <button type="button" class="btn btn-primary dropdown-toggle"
@@ -559,7 +559,7 @@
                             <small href=".." class="cp btn-link text-green">MANUALLY GENERATED</small>
                         </td>
                         <td>{{item?.ewayBillDate}}</td>
-                        <td>₹ {{item?.totalValue}}</td>
+                        <td><i class="fa fa-inr"></i> {{item?.totalValue}}</td>
                         <td><a href="../../../../../../../src/app/invoice/eWayBill" class="btn-link">Action</a></td>
                     </tr>
 

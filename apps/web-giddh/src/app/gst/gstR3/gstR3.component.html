@@ -169,23 +169,23 @@
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1221="1221">
                                 <td>(a) Outward taxable supplies (other than zero rated, nil rated and exempted)</td>
-                                <td class="text-right btn-link">₹{{gstr3BData?.sup_details?.osup_det?.txval}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_det?.iamt}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_det?.camt}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_det?.samt}} </td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_det?.csamt}}</td>
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_det?.txval}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_det?.iamt}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_det?.camt}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_det?.samt}} </td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_det?.csamt}}</td>
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1222="1222">
                                 <td>(b) Outward taxable supplies (zero rated)</td>
-                                <td class="text-right btn-link">₹{{gstr3BData?.sup_details?.osup_zero?.txval}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_zero?.iamt}}</td>
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_zero?.txval}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_zero?.iamt}}</td>
                                 <td class="text-right gstr3b-null"></td>
                                 <td class="text-right gstr3b-null"></td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.osup_zero?.csamt}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_zero?.csamt}}</td>
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1223="1223">
                                 <td>(c) Other outward supplies (Nil rated, exempted)</td>
-                                <td class="text-right btn-link">₹{{gstr3BData?.sup_details?.osup_nil_exmp?.txval?gstr3BData?.sup_details?.osup_nil_exmp?.txval:0}}</td>
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_nil_exmp?.txval?gstr3BData?.sup_details?.osup_nil_exmp?.txval:0}}</td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
@@ -193,15 +193,15 @@
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1224="1224">
                                 <td>(d) Inward supplies (liable to reverse charge)</td>
-                                <td class="text-right btn-link">₹{{gstr3BData?.sup_details?.isup_rev?.txval? gstr3BData?.sup_details?.isup_rev?.txval: 0}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0}}</td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0}} </td>
-                                <td class="text-right ">₹{{gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0}}</td>
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.txval? gstr3BData?.sup_details?.isup_rev?.txval: 0}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0}}</td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0}} </td>
+                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0}}</td>
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1225="1225">
                                 <td>(e) Non-GST outward supplies</td>
-                                <td class="text-right btn-link">₹{{gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0}}</td>
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0}}</td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
@@ -209,11 +209,11 @@
                             </tr>
                             <tr>
                                 <td class="bold">Total Value</td>
-                                <td class="text-right">₹{{this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0}}</td>
-                                <td class="text-right">₹{{this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0}}</td>
-                                <td class="text-right">₹{{this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0}}</td>
-                                <td class="text-right">₹{{this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0}}</td>
-                                <td class="text-right">₹{{this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0}}</td>
+                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0}}</td>
+                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0}}</td>
+                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0}}</td>
+                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0}}</td>
+                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -300,28 +300,28 @@
                                     <ng-container *ngIf="item?.ty==='IMPG'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1226="1226">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(1) Import of Goods </td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
                                             <td class="text-right gstr3b-null"></td>
                                             <td class="text-right gstr3b-null"></td>
-                                            <td class="text-right">₹{{item?.csamt}} </td>
+                                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='IMPS'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1227="1227">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(2) Import of Services</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
                                             <td class="text-center gstr3b-null"></td>
                                             <td class="text-center gstr3b-null"></td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='ISRC'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1228="1228">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(3) Inward supplies (liable to reverse charge)</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='ISD'">
@@ -333,10 +333,10 @@
                                     <ng-container *ngIf="item?.ty==='OTH'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1229="1229">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(5) All other ITC</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
@@ -350,19 +350,19 @@
                                     <ng-container *ngIf="item?.ty==='RUL'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1230="1230">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(1) As per rules 42 & 43 of CGST Rules</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='OTH'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(2) Others</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
@@ -373,10 +373,10 @@
                             <ng-container>
                                 <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
                                     <td>(C) Net ITC Available (A)-(B)</td>
-                                    <td class="text-right btn-link">₹{{gstr3BData?.itc_elg?.itc_net?.iamt? gstr3BData?.itc_elg?.itc_net?.iamt: 0}}</td>
-                                    <td class="text-right ">₹{{gstr3BData?.itc_elg?.itc_net?.camt?gstr3BData?.itc_elg?.itc_net?.camt: 0}}</td>
-                                    <td class="text-right ">₹{{gstr3BData?.itc_elg?.itc_net?.samt? gstr3BData?.itc_elg?.itc_net?.samt: 0}}</td>
-                                    <td class="text-right ">₹{{gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0}} </td>
+                                    <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.iamt? gstr3BData?.itc_elg?.itc_net?.iamt: 0}}</td>
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.camt?gstr3BData?.itc_elg?.itc_net?.camt: 0}}</td>
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.samt? gstr3BData?.itc_elg?.itc_net?.samt: 0}}</td>
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0}} </td>
                                 </tr>
                             </ng-container>
 
@@ -388,19 +388,19 @@
                                     <ng-container *ngIf="item?.ty==='RUL'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1230="1230">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(1) As per section 17(5)</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='OTH'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(2) Others</td>
-                                            <td class="text-right btn-link">₹{{item?.iamt}}</td>
-                                            <td class="text-right ">₹{{item?.camt}}</td>
-                                            <td class="text-right ">₹{{item?.samt}}</td>
-                                            <td class="text-right ">₹{{item?.csamt}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt}} </td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
@@ -429,16 +429,16 @@
                                     <ng-container *ngIf="item?.ty==='GST'">
                                         <tr>
                                             <td class="text-left ">&nbsp;Composition Scheme, Exempted, Nil Rated</td>
-                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1232="1232">₹{{item?.inter}}</td>
-                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1233="1233">₹{{item?.intra}}</td>
+                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1232="1232"><i class="fa fa-inr"></i>{{item?.inter}}</td>
+                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1233="1233"><i class="fa fa-inr"></i>{{item?.intra}}</td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='NONGST'">
                                         <tr>
                                             <td class="text-left ">&nbsp;Non-GST supply</td>
 
-                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1234="1234">₹{{item?.inter}}</td>
-                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1235="1235">₹{{item?.intra}}</td>
+                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1234="1234"><i class="fa fa-inr"></i>{{item?.inter}}</td>
+                                            <td class="text-right btn-link" data-ember-action="" data-ember-action-1235="1235"><i class="fa fa-inr"></i>{{item?.intra}}</td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
