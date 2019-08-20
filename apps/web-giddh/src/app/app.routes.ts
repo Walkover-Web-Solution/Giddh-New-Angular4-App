@@ -61,7 +61,7 @@ export const ROUTES: Routes = [
   { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
   { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full'},
   { path: 'select-plan', component: SelectPlanComponent },
-  { path: 'billing-detail', redirectTo: 'pages/billing-detail', pathMatch: 'full' },
+  { path: 'billing-detail', component: BillingDetailComponent},
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [

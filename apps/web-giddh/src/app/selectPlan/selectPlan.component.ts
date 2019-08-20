@@ -69,16 +69,17 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  public selectPlanClicked(plan: any) {
-    // console.log('selectplan clicked ', plan);
-  }
-
-  public paidPlanSelected(plan: CreateCompanyUsersPlan) {
-
-    this.SubscriptionRequestObj.subscriptionUnqiueName = plan.subscriptionId;
-    this._route.navigate(['/pages', 'billing-detail']);
+  public buyPlanClicked(plan: any) {
+    this._route.navigate(['billing-detail']);
     this.store.dispatch(this.companyActions.selectedPlan(plan));
   }
+
+  // public paidPlanSelected(plan: CreateCompanyUsersPlan) {
+
+  //   this.SubscriptionRequestObj.subscriptionUnqiueName = plan.subscriptionId;
+  //   this._route.navigate(['billing-detail']);
+  //   this.store.dispatch(this.companyActions.selectedPlan(plan));
+  // }
 
   public createCompany(item: CreateCompanyUsersPlan) {
     if (!this.createNewCompanyPreObj) {

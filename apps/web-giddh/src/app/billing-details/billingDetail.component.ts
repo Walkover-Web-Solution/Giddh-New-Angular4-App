@@ -19,7 +19,15 @@ import { takeUntil, take } from 'rxjs/operators';
 export class BillingDetailComponent implements OnInit, OnDestroy {
 
   public logedInuser: UserDetails;
-  public billingDetailsObj: BillingDetails = new BillingDetails();
+  public billingDetailsObj: BillingDetails = {
+    name: '',
+    email: '',
+    mobile: '',
+    gstin: '',
+    state: '',
+    address: '',
+    autorenew: ''
+  };
   public createNewCompanyFinalObj: CompanyCreateRequest;
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public stateStream$: Observable<States[]>;
@@ -99,9 +107,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
   }
 
   public autoRenewSelected(event) {
-    this.billingDetailsObj.autorenew = event.target.value;
-    console.log(this.billingDetailsObj);
-
+    if (event) {
+      this.billingDetailsObj.autorenew = event.target.value;
+      console.log(this.billingDetailsObj);
+    }
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
