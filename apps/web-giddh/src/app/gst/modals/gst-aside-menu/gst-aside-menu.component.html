@@ -299,8 +299,9 @@
               </div>
 
               <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <span>{{returnType === 'gstr2' ? 'GSTR-2' : 'GSTR-1 '}}</span>
-
+                <span *ngIf="returnType === 'gstr2'">GSTR-2</span>
+                <span *ngIf="returnType === 'gstr1'">GSTR-1</span>
+                <span *ngIf="returnType === 'gstr3b'">GSTR-3B</span>
               </div>
             </div>
           </div>
