@@ -99,7 +99,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public initSettingObj() {
     this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
-
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;
@@ -232,17 +231,19 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     };
     delete this.formToSave.sendThroughGmail;
     delete this.formToSave.razorPayform; // delete razorPay before sending form
-    // if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-    //   this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
-    // } else {
-    //   this.formToSave.invoiceSettings.lockDate = null;
-    // }
+
+    if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
+      this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+    } else {
+      this.formToSave.invoiceSettings.lockDate = null;
+    }
 
     if (this.isAutoPaidOn) {
       this.formToSave.invoiceSettings.autoPaid = 'runtime';
     } else {
       this.formToSave.invoiceSettings.autoPaid = 'never';
     }
+
     this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
     this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     // }

@@ -26,7 +26,7 @@
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix max150">
-                                            <sh-select placeholder="Payment Gateway" name="paymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
+                                            <sh-select placeholder="Payment Gateway" name="defaultPaymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
                                         </div>
                                     </div>
 
@@ -110,7 +110,7 @@
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix">
-                                            <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="invoiceCreatePaymentEntry" />
+                                            <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="enableEstimate" />
                                         </div>
                                     </div>
 
@@ -125,7 +125,7 @@
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix">
-                                            <input type="checkbox"  [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="invoiceCreatePaymentEntry" />
+                                            <input type="checkbox"  [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="enableProforma" />
                                         </div>
                                     </div>
 
@@ -249,7 +249,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="estimateProforma" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" [(ngModel)]="estimateSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateProforma" />
+                                                <input type="text" class="form-control" [(ngModel)]="estimateSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateHeaderName" />
                                             </div>
 <!--                                            <input type="checkbox" name="estimate-checkbox" />-->
                                         </div>
@@ -270,7 +270,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" [(ngModel)]="estimateSetting.duePeriod" maxlength="3" placeholder="00" decimalDigitsDirective name="default-expiry" />
+                                                <input type="text" class="form-control" [(ngModel)]="estimateSetting.duePeriod" maxlength="3" placeholder="00" decimalDigitsDirective name="estimate-default-expiry" />
                                                 <span> Days </span>
 
                                             </div>
@@ -326,7 +326,7 @@
 
                                     <div class="col-xs-2 p-0">
                                         <div>
-                                            <input class="radio_theme" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'"> Invoice
+                                            <input class="radio_theme" name="nextStepToEstimate" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'"> Invoice
                                         </div>
                                     </div>
 
@@ -343,7 +343,7 @@
                                 </div>
 
                                 <div class="col-xs-7 form-group p-0">
-                                    <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp" name="invoiceAutoChange" />
+                                    <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp" name="estimateAutoChange" />
                                 </div>
                             </div>
 
@@ -355,7 +355,7 @@
                                     <label>Auto mail when generated</label>
                                 </div>
                                 <div class="col-xs-7 form-group p-0">
-                                    <input type="checkbox" [(ngModel)]="estimateSetting.autoMail" name="invoiceAutomail" />
+                                    <input type="checkbox" [(ngModel)]="estimateSetting.autoMail" name="estimateAutomail" />
                                 </div>
                             </div>
                         </div>
@@ -372,26 +372,26 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix pdT1">
-                            <div class="row">
-                                <div class="col-xs-5"><label>Custom Estimation</label></div>
-                                <div class="col-xs-7 p-0">
-                                    <div class="form-group clearfix ">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />
-                                        <div class=" d-inline-flex customEstimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">
-                                            <div class="d-inline-flex pos-rel">
-                                                <label>Initial No.</label>
-                                                <input type="text" class="form-control text-right initialnumber" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
-                                            </div>
-                                            <div class="d-inline-flex pos-rel">
-                                                <label style="right:0px;">Prefix</label>
-                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="clearfix pdT1">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-xs-5"><label>Custom Estimation</label></div>-->
+<!--                                <div class="col-xs-7 p-0">-->
+<!--                                    <div class="form-group clearfix ">-->
+<!--                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
+<!--                                        <div class=" d-inline-flex customEstimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">-->
+<!--                                            <div class="d-inline-flex pos-rel">-->
+<!--                                                <label>Initial No.</label>-->
+<!--                                                <input type="text" class="form-control text-right initialnumber" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">-->
+<!--                                            </div>-->
+<!--                                            <div class="d-inline-flex pos-rel">-->
+<!--                                                <label style="right:0px;">Prefix</label>-->
+<!--                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                     </div>
@@ -422,7 +422,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="estimateProforma" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" placeholder="Eg. Estimate/Quotation/Proforma" name="proformaSetting.headerName" [(ngModel)]="proformaSetting.headerName" />
+                                                <input type="text" class="form-control" placeholder="Eg. Estimate/Quotation/Proforma" name="proformaHeaderName" [(ngModel)]="proformaSetting.headerName" />
 
                                             </div>
 <!--                                            <input type="checkbox" name="estimate-checkbox" />-->
@@ -440,7 +440,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" placeholder="00" name="default-expiry" decimalDigitsDirective maxlength="3" [(ngModel)]="proformaSetting.duePeriod" />
+                                                <input type="text" class="form-control" placeholder="00" name="proformaDuePeriod" decimalDigitsDirective maxlength="3" [(ngModel)]="proformaSetting.duePeriod" />
                                                 <span> Days </span>
 
                                             </div>
@@ -482,7 +482,7 @@
                                     <label>Auto change status (on expiry)</label>
                                 </div>
                                 <div class="col-xs-7 form-group p-0">
-                                    <input type="checkbox" [(ngModel)]="proformaSetting.autoChangeStatusOnExp" name="invoiceAutoChange" />
+                                    <input type="checkbox" [(ngModel)]="proformaSetting.autoChangeStatusOnExp" name="proformaAutoChange" />
                                 </div>
                             </div>
                         </div>
@@ -493,7 +493,7 @@
                                     <label>Auto mail when updated/generated</label>
                                 </div>
                                 <div class="col-xs-7 form-group p-0">
-                                    <input type="checkbox" [(ngModel)]="proformaSetting.autoMail" name="invoiceAutomail" />
+                                    <input type="checkbox" [(ngModel)]="proformaSetting.autoMail" name="proformaAutomail" />
                                 </div>
                             </div>
                         </div>
@@ -503,7 +503,7 @@
                                 <div class="col-xs-5"><label>Enable send sales order via SMS</label></div>
                                 <div class="col-xs-7 p-0">
                                     <div class="form-group clearfix">
-                                        <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="invoiceCreatePaymentEntry" />
+                                        <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="proformaCreatePaymentEntry" />
                                         <!-- <div class="mrT1 max250 mrT3" *ngIf="invoiceSetting.sendInvLinkOnSms">
     <textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control" name="sendInvLinkOnSms" rows="3"></textarea>
 </div> -->
@@ -620,7 +620,7 @@
 
                                 <div class="col-xs-7  p-0">
                                     <div class="form-group mb-0">
-                                        <input type="text" placeholder="Datepicker" class="form-control invoice-lock-date" bsDatepicker [(ngModel)]="invoiceSetting.lockDate" [bsConfig]="{ adaptivePosition: true }">
+                                        <input type="text" placeholder="Datepicker" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker [(ngModel)]="invoiceSetting.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
                                     </div>
                                 </div>
 
@@ -672,17 +672,38 @@
                             </div>
                         </div>
 
-                        <div class="clearfix pdT1">
-                            <div class="row">
-                                <div class="col-xs-5"><label>Custom Invoice#</label></div>
-                                <div class="col-xs-7 p-0">
-                                    <div class="form-group clearfix ">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />
+<!--                        <div class="clearfix pdT1">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-xs-5"><label>Custom Invoice#</label></div>-->
+<!--                                <div class="col-xs-7 p-0">-->
+<!--                                    <div class="form-group clearfix ">-->
+<!--                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
 
-                                    </div>
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                      <div class="clearfix pdT1">
+                        <div class="row">
+                          <div class="col-xs-5"><label>Custom Invoice#</label></div>
+                          <div class="col-xs-7 p-0">
+                            <div class="form-group clearfix ">
+                              <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />
+                              <div class=" d-inline-flex customEstimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">
+                                <div class="d-inline-flex pos-rel">
+                                  <label>Initial No.</label>
+                                  <input type="text" class="form-control text-right initialnumber" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
                                 </div>
+                                <div class="d-inline-flex pos-rel">
+                                  <label style="right:0px;">Prefix</label>
+                                  <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                </div>
+                              </div>
                             </div>
+                          </div>
                         </div>
+                      </div>
 
                         <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                     </div>
