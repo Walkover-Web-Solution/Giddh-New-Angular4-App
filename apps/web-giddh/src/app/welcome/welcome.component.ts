@@ -229,6 +229,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
     if (gstDetails.gstNumber) {
       this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
+      this.createNewCompanyPreparedObj.address = '';
     } else {
       this.createNewCompanyPreparedObj.gstDetails = [];
     }
@@ -239,7 +240,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (obj.gstNumber) {
       this.GstDetailsObj.gstNumber = obj.gstNumber;
       this.GstDetailsObj.addressList[0].stateCode = obj.state;
-      this.GstDetailsObj.addressList[0].address = '';
+      this.GstDetailsObj.addressList[0].address = obj.address;
       this.GstDetailsObj.addressList[0].isDefault = false;
       this.GstDetailsObj.addressList[0].stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
     }
@@ -324,7 +325,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     event.stopPropagation();
   }
-
+  public back() {
+    this._router.navigate(['']);
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

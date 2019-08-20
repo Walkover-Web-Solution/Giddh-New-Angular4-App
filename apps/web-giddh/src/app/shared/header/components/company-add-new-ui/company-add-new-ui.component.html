@@ -35,41 +35,36 @@
                             <span>
                 <label for="country" class="d-block">Country <sup>*</sup></label>
                 <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true"
-                           name="country" [(ngModel)]="company.country" class="pull-left" required
+                           name="country" [(ngModel)]="company.country" class="pull-left select-caret" [required]= 'true'
                            style="width: 100%"></sh-select>
               </span>
 
                         </div>
                         <div class="col-xs-6 mrB3 ">
                             <label for="">Currency  <sup>*</sup></label>
-                            <div class="custom-select pos-rel">
-                                <sh-select name="baseCurrency" [options]="currencySource$ | async" [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"></sh-select>
+                            <div class="custom-select select-caret pos-rel">
+                                <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"></sh-select>
                             </div>
                         </div>
 
                         <div class="col-xs-12 mrB3">
                             <span>
                 <label for="contactNo" class="d-block">Mobile Number <sup>*</sup></label>
-                <div class="d-flex">
-                <sh-select class="pull-left" required style="width: 65px;margin-right: 30px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
+                <div class="d-flex welcome-select">
+                <sh-select class="pull-left select-caret" required style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
                       [(ngModel)]="company.phoneCode"></sh-select>
-                <input type="number" class="form-control pull-right mrR1" required placeholder="9998899988" id="contactNo" autocomplete="off"
+                <input type="number" class="form-control pull-right mrR1" required placeholder="9998899988" id="contactNo" autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)"
                        [(ngModel)]="company.contactNo" name="contactNo" #mobileNoEl/>
                        </div>
               </span>
                         </div>
-
-
                         <div class="col-xs-12 mrT1">
-
                             <button class="btn btn-blue mrL1" style="margin-left: 0 !important;" type="submit" (click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid" [ladda]="isCompanyCreationInProcess$ | async">Next
-              </button>
-
+                            </button>
                         </div>
 
                     </div>
                 </form>
-
             </div>
             <!-- add mailer -->
         </div>
