@@ -1,4 +1,4 @@
-<div class="box clearfix mrT2 mrL2 no-padding" *ngIf="subscriptions?.length">
+<!-- <div class="box clearfix mrT2 mrL2 no-padding" *ngIf="subscriptions?.length">
     <div class="table-responsive">
         <table class="table basic table-bordered mr0">
             <thead>
@@ -26,15 +26,77 @@
         </table>
     </div>
 </div>
-<p class="mrT mrL2 mrB4"><small>* Excluding Tax</small></p>
+<p class="mrT mrL2 mrB4"><small>* Excluding Tax</small></p> -->
 
-<div class="clearfix mrT2 mrL2">
+<div class="clearfix mrT2">
+    <div class="row">
+        <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+                <label>Select Subscribed Plan</label>
+                <div class="select-style">
+                    <select name="">
+                        <option value="">Trial Plan</option>
+                        <option value="">Professional Plan 1</option>
+                        <option value="">Professional Plan 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 col-sm-6 text-right xs-left">
+            <button type="button" class="btn btn-green mt-2">Buy New Plan</button>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="table-responsive">
+                <table class="table table-no-border mb-0">
+                    <tr>
+                        <th>Subscription ID</th>
+                        <td>8978</td>
+                    </tr>
+                    <tr>
+                        <th> Subscription Price</th>
+                        <td>4000/- pa</td>
+                    </tr>
+                    <tr>
+                        <th>Total Companies</th>
+                        <td>2 out of 10</td>
+                    </tr>
+                    <tr>
+                        <th>Transactions Limit</th>
+                        <td>40,000</td>
+                    </tr>
+                    <tr>
+                        <th>Validity</th>
+                        <td>Yearly</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="clearfix mb-2">
+                <button type="button" class="btn btn-primary">Change Plan</button>
+                <button type="button" class="btn btn-blue">Payment Log</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix mrT2 relative">
+    <div class="transection-popup mb-1">
+        <p>You have crossed transactions limit of your </p>
+        <p><strong>Professional Plan subscribed on 01/09/2018!</strong></p>
+        <p><small>Please renew your plan or pay now to continue subscription.</small></p>
+    </div>
+
     <h2 class="subscription-title" *ngIf="subscriptions">Professional Plan ({{ subscriptions[0].subscribedOn }})</h2>
     <div class="row">
-        <div class="col-xs-7 transaction-list">
-            <div class="box clearfix mrT2 mrL2 no-padding">
+        <div class="col-sm-7 transaction-list">
+            <div class="box clearfix mrT2 no-padding">
                 <div class="table-responsive">
-                    <table class="table basic table-bordered mr0">
+                    <table class="table basic mr0 subscription-table">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -46,7 +108,7 @@
                         <tbody *ngIf="transactions">
                             <tr *ngFor="let transaction of transactions">
                                 <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
-                                <td>{{ transaction.totalTransactionCount }} <span class="text-light">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span></td>
+                                <td>{{ transaction.totalTransactionCount }} <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span></td>
                                 <td>{{ transaction.transactionBalance }}</td>
                                 <td>{{ transaction.additionalCharges }}</td>
                             </tr>
@@ -66,7 +128,7 @@
         </div>
 
 
-        <div class="col-xs-5 transaction-list">
+        <div class="col-sm-5 transaction-list">
             <div class="box2 clearfix mrT2">
                 <div class="head-title">
                     <h3>Companies Name + Total Transactions (till today)</h3>
@@ -128,3 +190,7 @@
     </div>
 </ng-template>
 <!-- Modal end -->
+
+
+
+<subscriptions-plans></subscriptions-plans>

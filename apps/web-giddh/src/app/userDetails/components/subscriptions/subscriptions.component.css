@@ -9,5 +9,29 @@
 }
 .transaction-list .campanien-list {
   min-height: 0;
-
+}
+.subscription-table th {
+  padding: 15px !important;
+  font-family: 'LatoWebMedium' !important;
+}
+.subscription-table tbody tr td, .head-title {
+  border: 0px;
+  font-size: 15px;
+  padding: 10px 15px !important;
+}
+.transection-popup {
+  position: absolute;
+  right: 0;
+  top: -60px;
+  background: #FFF7F7;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 3px;
+  border: 1px solid #E01B1B;
+}
+@media only screen and (max-width: 767px) {
+  .transection-popup {
+    position: relative;
+    top: 0px;
+  }
 }
