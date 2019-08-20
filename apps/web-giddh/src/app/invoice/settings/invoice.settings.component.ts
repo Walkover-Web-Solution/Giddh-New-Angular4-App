@@ -242,6 +242,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     } else {
       this.formToSave.invoiceSettings.autoPaid = 'never';
     }
+
+    if(this.formToSave.invoiceSettings.lockDate){
+      this.formToSave.invoiceSettings.lockDate= moment(this.formToSave.invoiceSettings.lockDate).format('DD-MM-YYYY');
+    }
     this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
     this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     // }
