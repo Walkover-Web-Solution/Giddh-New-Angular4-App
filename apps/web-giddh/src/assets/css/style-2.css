@@ -285,6 +285,18 @@ input {
 .ml-5 {
     margin-left: 50px;
 }
+.ml-05 {
+    margin-left: 5px;
+}
+.mr-05 {
+    margin-right: 5px;
+}
+.mt-05 {
+    margin-top: 5px;
+}
+.mb-05 {
+    margin-bottom: 5px;
+}
 
 .mt-27 {
     margin-top: 27px;
@@ -965,6 +977,15 @@ modal-container.modal.fade.show {
 
 .form_box .btn {
     width: 73px;
+}
+.table-no-border tr th, .table-no-border tr td {
+    padding: 6px 0 !important;
+    border: 0px !important;
+    font-weight: normal;
+    font-size: 14px;
+}
+.table-no-border tr th {
+    color: #9B9B9B;
 }
 
 
@@ -7608,12 +7629,18 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
 }
 
-@media(max-width: 767px) {
+@media only screen and (max-width: 767px) {
     #export-body label {
         padding-bottom: 5px;
     }
     .company-box .inner-company-box>ul>li>span {
         width: 100px;
+    }
+    .xs-center {
+        text-align: center;
+    }
+    .xs-left {
+        text-align: left;
     }
 }
 
