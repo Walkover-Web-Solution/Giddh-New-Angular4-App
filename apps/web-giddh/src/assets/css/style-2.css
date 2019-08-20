@@ -7411,6 +7411,23 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .company_gst:last-child {
     border-bottom: none;
 }
+.welcome-select .menu {
+    width: 120px !important;
+}
+.select-caret:after, .select-caret .form-control:after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    display: block;
+    border-top: 5px solid #bfbfbf;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+}
+
 
 @media(max-width:1440px) {
     .font-xxlarge {

@@ -28,7 +28,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item.subscriptionId}}
+                                                            -
                                                         </p>
                                                     </div>
                                                 </div>
@@ -41,7 +41,10 @@
                     </span>
                                                     </div>
                                                     <div class="col-xs-6">
-                                                        <p>
+                                                        <p *ngIf="item?.planDetails?.amount">
+                                                            {{item?.planDetails?.amount}}
+                                                        </p>
+                                                        <p *ngIf="!item?.planDetails?.amount">
                                                             FREE
                                                         </p>
                                                     </div>
@@ -56,7 +59,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{item?.planDetails?.totalCompanies}}
+                                                            {{item?.planDetails?.companiesLimit}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -114,7 +117,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item.subscriptionId}}
+                                                            -
                                                         </p>
                                                     </div>
                                                 </div>
@@ -142,7 +145,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{item?.planDetails?.totalCompanies}}
+                                                            {{item?.planDetails?.companiesLimit}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -277,7 +280,7 @@
                         </div>
                     </div>
 
-                   <!-- <div class="col-sm-3">
+                    <div class="col-sm-3">
                         <div class="activation-key">
                             <label>Activation Key</label>
                             <input type="text" name="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
@@ -285,7 +288,7 @@
                         <div class="activation-btn">
                             <button class="btn btn-green mrT1" disabled> Activate</button>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
             </div>
 
