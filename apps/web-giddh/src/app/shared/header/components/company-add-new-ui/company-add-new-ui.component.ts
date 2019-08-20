@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { LocationService } from '../../../../services/location.service';
@@ -27,7 +27,7 @@ import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModel
   styleUrls: ['./company-add-new-ui.component.css']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
@@ -63,6 +63,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     contriesWithCodes.map(c => {
       this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
+    _.uniqBy(this.countryPhoneCode, 'value');
+    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
+      return {
+        value: value,
+        label: this.countryPhoneCode.find(s => s.value === value).label
+      };
+    });
+    this.countryPhoneCode = ss;
     this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       this.currencies = [];
       if (data) {
@@ -107,6 +115,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         }, 500);
       }
     });
+  }
+  public ngAfterViewInit() {
+    _.uniqBy(this.countryPhoneCode, 'value');
   }
 
   /**
