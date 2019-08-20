@@ -224,7 +224,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-      this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+      if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+        this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+      }
     }
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
     if (gstDetails.gstNumber) {
@@ -326,7 +328,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     event.stopPropagation();
   }
   public back() {
-    this._router.navigate(['']);
+    //this._router.navigate(['']);
+    this._router.navigate(['new-user']);
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);

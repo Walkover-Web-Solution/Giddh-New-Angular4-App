@@ -14,7 +14,7 @@
             </div>
             <div class="col-sm-2">
                 <div class="back-btn">
-                    <button class="btn btn-default" routerLink="/pages/select-plan">Back</button>
+                    <button class="btn btn-default" routerLink="/select-plan">Back</button>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
                             <textarea class="form-control" name="address" [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5" cols="12"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" (click)="autoRenewSelected($event)" [(ngModel)]="billingDetailsObj.autorenew"><label class="mrL1">Renew subscription automatically</label>
+                            <input type="checkbox" (click)="autoRenewSelected($event)"><label class="mrL1">Renew subscription automatically</label>
                         </div>
                         <div class="form-group">
                             <button type="button" id="rzp-button1" (click)="payWithRazor()" disabled class="btn btn-success">Pay Now</button>
@@ -66,7 +66,7 @@
 
                     <div class="your-account">
 
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-xs-6">
                                 <span>
                   Subscription ID
@@ -74,10 +74,10 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans.subscriptionId}}
+                                    -
                                 </p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <!--  -->
                         <div class="row">
@@ -88,7 +88,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.planDetails?.amount}}/- pa
+                                    {{selectedPlans?.planDetails?.amount | number}}/- pa
                                 </p>
                             </div>
                         </div>
@@ -101,8 +101,8 @@
                 </span>
                             </div>
                             <div class="col-xs-6">
-                                <p class="">
-                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
+                                <p>
+                                    {{selectedPlans?.planDetails?.companiesLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.planDetails?.transactionLimit}}
+                                    {{selectedPlans?.planDetails?.transactionLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.expiry}}
+                                    {{selectedPlans?.planDetails?.durationUnit}}
                                 </p>
                             </div>
                         </div>
