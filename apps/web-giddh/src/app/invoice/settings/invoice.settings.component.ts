@@ -99,7 +99,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public initSettingObj() {
     this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
-
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;

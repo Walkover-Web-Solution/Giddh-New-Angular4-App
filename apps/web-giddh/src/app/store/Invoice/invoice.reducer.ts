@@ -312,6 +312,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         newState.settings.invoiceSettings = form.invoiceSettings;
         newState.settings.companyCashFreeSettings = form.companyCashFreeSettings;
         newState.settings.companyEmailSettings = form.companyEmailSettings;
+        newState.settings.estimateSettings = form.estimateSettings;
+        newState.settings.proformaSettings = form.proformaSettings;
         return Object.assign({}, state, newState);
       }
       return state;
