@@ -10,7 +10,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 
 @Component({
@@ -67,7 +67,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     private _toasty: ToasterService,
     private _reconcileAction: GstReconcileActions,
     private _invoicePurchaseActions: InvoicePurchaseActions,
-    private _gstReconcileActions: GstReconcileActions
+    private _gstReconcileActions: GstReconcileActions,
+    private activatedRoute: ActivatedRoute
   ) {
     this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
     this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -91,6 +92,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
+    this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+      this.currentPeriod = {
+        from: params['from'],
+      to: params['to']
+    };
+      this.store.dispatch(this._gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
+      this.selectedGst = params['return_type'];
+    });
   }
 
   public pullFromGstIn(ev) {
@@ -215,6 +224,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         to: this.currentPeriod.to,
         gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO'
       }));
+    }
+    if (this.selectedGst === 'gstr3b') {
+      let gsp;
+      gsp = this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO';
+      this.fileGstr3B(gsp);
     }
   }
 
