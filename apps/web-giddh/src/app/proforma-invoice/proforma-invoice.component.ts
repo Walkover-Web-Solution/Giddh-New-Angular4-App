@@ -614,7 +614,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
-            this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount;
+            this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount || 0;
 
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
             // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
@@ -1132,7 +1132,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.voucherNumber = response.body.voucherDetails.voucherNumber;
           this.invoiceNo = this.voucherNumber;
           this.accountUniqueName = response.body.accountDetails.uniqueName;
-          this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+          if (this.isPurchaseInvoice) {
+            this._toasty.successToast(`Entry created successfully`);
+          } else {
+            this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
+          }
           this.postResponseAction(this.invoiceNo);
         } else {
           this._toasty.errorToast(response.message, response.code);
