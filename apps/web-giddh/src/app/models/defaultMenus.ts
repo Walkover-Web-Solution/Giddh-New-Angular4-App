@@ -10,7 +10,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 
   {type: 'MENU', name: 'Debit Note', uniqueName: '/pages/invoice/preview/debit note', additional: {tab: 'debit note', tabIndex: 0}},
   {type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note', additional: {tab: 'credit note', tabIndex: 1}},
-  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
+  {type: 'MENU', name: 'Invoice > Pending', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
   {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
   {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
   {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
@@ -52,8 +52,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/purchase/create'},
   {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/sales/cash'},
-  {type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/credit-note/create'},
-  {type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/debit-note/create'},
+  {type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note'},
+  {type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note'},
 
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
