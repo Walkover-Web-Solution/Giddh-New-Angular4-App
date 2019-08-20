@@ -7,7 +7,7 @@
 
       <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
               aria-controls="dropdown-basic">
-        {{invoiceType | titlecase}}
+        {{invoiceType | titlecase}} <small *ngIf="invoiceType==='estimates'">(Beta)</small>
         <span class="caret" *ngIf="!isUpdateMode"></span>
       </button>
 

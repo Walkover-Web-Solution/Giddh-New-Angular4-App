@@ -75,7 +75,7 @@ export const VOUCHER_TYPE_LIST: any[] = [
     value: VoucherTypeEnum.generateEstimate,
     label: 'Estimates',
     additional: {
-      label: 'Estimates'
+      label: 'Estimates (Beta)'
     }
   }
 ];
