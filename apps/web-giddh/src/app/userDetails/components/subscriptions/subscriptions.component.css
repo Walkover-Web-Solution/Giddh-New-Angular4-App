@@ -1,10 +1,10 @@
 .transaction-list .box {
-  height: 280px;
+  height: 400px;
   overflow-y: auto;
 }
 .campanien-list ul {
   list-style-type: none;
-  height: 188px;
+  height: 300px;
   overflow-y: auto;
 }
 .transaction-list .campanien-list {
@@ -17,7 +17,8 @@
 .subscription-table tbody tr td, .head-title {
   border: 0px;
   font-size: 15px;
-  padding: 10px 15px !important;
+  padding: 15px !important;
+  font-family: inherit !important;
 }
 .transection-popup {
   position: absolute;
