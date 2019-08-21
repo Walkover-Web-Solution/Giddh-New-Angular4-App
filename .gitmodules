@@ -10,3 +10,4 @@
 [submodule "lionfapp"]
 	path = lionfapp
 	url = https://github.com/Walkover-Web-Solution/lionfapp.git
+	branch = staging
