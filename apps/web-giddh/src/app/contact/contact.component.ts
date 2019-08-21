@@ -28,6 +28,7 @@ import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
+import { GeneralActions } from '../actions/general/general.actions';
 
 
 const CustomerType = [
@@ -222,7 +223,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
     private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute, private _router : Router) {
+    private _route: ActivatedRoute, private _generalAction: GeneralActions) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -403,9 +404,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       case 2: // go to sales or purchase
         this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
         if (this.purchaseOrSales === 'purchase') {
-          this.goToRoute('purchase/create', '', account.uniqueName);
+          this.goToRoute('proforma-invoice/invoice/purchase', '', account.uniqueName);
         } else {
-          this.goToRoute('sales', '', account.uniqueName);
+          let isCashInvoice = account.uniqueName === 'cash';
+          this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
         }
         break;
       case 3: // send sms
@@ -453,6 +455,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+    this._generalAction.setAppTitle('');
 
   }
 

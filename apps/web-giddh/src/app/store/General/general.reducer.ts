@@ -28,6 +28,7 @@ export interface GeneralState {
   smartCombinedList: IUlist[];
   smartList: IUlist[];
   sideMenuBarOpen: boolean;
+  headerTitle: string;
 }
 
 const initialState: GeneralState = {
@@ -38,7 +39,8 @@ const initialState: GeneralState = {
   flattenGroups: [],
   smartCombinedList: [],
   smartList: [],
-  sideMenuBarOpen: false
+  sideMenuBarOpen: false,
+  headerTitle: ''
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -315,6 +317,12 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
     case GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE: {
       return {
         ...state, sideMenuBarOpen: action.payload
+      }
+    }
+
+    case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
+      return {
+        ...state, headerTitle: action.payload
       }
     }
 
