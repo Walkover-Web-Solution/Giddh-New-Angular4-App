@@ -5345,8 +5345,8 @@ table input[type="number"] {
 }
 
 .btn-link {
-    /* color: #10aae0; */
-    color: #2262D1;
+    color: #10aae0;
+    /* color: #2262D1; */
 }
 
 typeahead-container .dropdown-menu li.active>a,
@@ -7458,10 +7458,30 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     top: 50%;
     right: 10px;
 }
+.welcome-header hr {
+  border-top-color: #B3B4B5;
+}
+.btn-group-voucher-type label {
+padding-bottom: 0 !important;
+padding-left: 0 !important;
+}
+.welcome-header hr {
+  border-top-color: #B3B4B5;
+}
+
+.icon-pointer .fa.fa-long-arrow-up {
+  color: #000;
+  opacity: 0.3;
+}
+
 .red-text{
   color: #ff0000;
 }
-@media (max-width: 1440px) {
+
+
+
+/* responsive */
+@media(max-width:1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
@@ -7696,11 +7716,3 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
 }
 
-.welcome-header hr {
-    border-top-color: #B3B4B5;
-}
-
-.icon-pointer .fa.fa-long-arrow-up {
-    color: #000;
-    opacity: 0.3;
-}
