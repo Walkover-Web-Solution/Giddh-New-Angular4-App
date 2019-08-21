@@ -82,6 +82,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   // }
 
   public createCompany(item: CreateCompanyUsersPlan) {
+    this.store.dispatch(this.companyActions.selectedPlan(item));
     if (!this.createNewCompanyPreObj) {
       this._route.navigate(['new-user']);
     } else {
