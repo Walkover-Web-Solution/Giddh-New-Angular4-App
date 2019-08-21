@@ -10,6 +10,7 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { StateDetailsRequest, CreateCompanyUsersPlan } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { ReplaySubject } from 'rxjs';
+import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
   selector: 'onboarding-component',
@@ -21,6 +22,7 @@ import { ReplaySubject } from 'rxjs';
 export class OnboardingComponent implements OnInit, AfterViewInit {
   @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
   @ViewChild('supportTab') public supportTab: TabsetComponent;
+  public sideMenu: { isopen: boolean } = { isopen: true };
   public loadAPI: Promise<any>;
   public CompanySettingsObj: any = {};
   public selectedPlans: CreateCompanyUsersPlan;
@@ -30,7 +32,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions,
-    private companyActions: CompanyActions
+    private companyActions: CompanyActions,
+    private generalActions: GeneralActions
   ) {
     this._window.nativeWindow.superformIds = ['Jkvq'];
   }
@@ -101,6 +104,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
       }
 
     }
+  }
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
+    this.store.dispatch(this.generalActions.setSideMenuBarState(event));
   }
 
   public closeModal() {
