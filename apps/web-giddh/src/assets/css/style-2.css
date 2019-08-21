@@ -7412,6 +7412,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     border-bottom: none;
 }
 
+.selectCustomerName .scrollable-content > .item {
+  height: 48px !important;
+}
 @media(max-width:1440px) {
     .font-xxlarge {
         font-size: 20px;
