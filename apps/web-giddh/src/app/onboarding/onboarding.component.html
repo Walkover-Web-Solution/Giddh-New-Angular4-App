@@ -11,8 +11,8 @@
                     <h1 class="borderbtm">Try things out</h1>
                     <ul class="manage_invoice">
                         <li>
-                            <!-- <i class="icon-Create-Invoice"></i> pages/proforma-invoice/invoice/sales-->
-                            <a [routerLink]="['/pages','proforma-invoice', 'invoice', 'sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                            <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
+                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
                         </li>
                         <li>
                             <!-- <i class="icon-Add-customer"></i> -->
@@ -38,7 +38,7 @@
 
                     <div class="your-account">
                         <h1 class="borderbtm m-t-50">Your Account</h1>
-                        <div class="row">
+                        <div class="row" *ngIf="selectedPlans?.subscriptionId">
                             <div class="col-xs-6">
                                 <span>
                                     Subscription ID
@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans.subscriptionId}}
+                                    {{selectedPlans?.subscriptionId}}
                                 </p>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-xs-6" *ngIf="selectedPlans?.planDetails?.amount">
                                 <p class="success-text">
-                                    {{selectedPlans?.planDetails?.amount}}/- pa
+                                    {{selectedPlans?.planDetails?.amount | number}}
                                 </p>
                             </div>
                             <div class="col-xs-6" *ngIf="!selectedPlans?.planDetails?.amount">
@@ -76,8 +76,11 @@
                                 </span>
                             </div>
                             <div class="col-xs-6">
-                                <p>
-                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
+                                <p *ngIf="selectedPlans?.planDetails?.amount">
+                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit | number}}
+                                </p>
+                                <p *ngIf="!selectedPlans?.planDetails?.amount">
+                                    {{selectedPlans?.planDetails?.companiesLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -90,7 +93,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.planDetails?.transactionLimit}}
+                                    {{selectedPlans?.planDetails?.transactionLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -102,8 +105,11 @@
                                 </span>
                             </div>
                             <div class="col-xs-6">
-                                <p>
+                                <p *ngIf="selectedPlans?.planDetails?.amount">
                                     {{selectedPlans?.expiry}}
+                                </p>
+                                <p *ngIf="!selectedPlans?.planDetails?.amount">
+                                    {{selectedPlans?.planDetails?.duration }} {{ selectedPlans?.planDetails?.durationUnit}}
                                 </p>
                             </div>
                         </div>
