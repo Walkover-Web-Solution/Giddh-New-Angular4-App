@@ -29,6 +29,44 @@
   border-radius: 3px;
   border: 1px solid #E01B1B;
 }
+.subscription-dropdown {
+  /* overflow: hidden; */
+  display: block;
+  clear: both;
+  padding-bottom: 25px;
+}
+.subscription-dropdown .btn {
+  border: 1px solid #C4C0C0;
+  width: 285px;
+  text-align: left;
+}
+.subscription-dropdown .btn .caret {
+  margin-top: 9px;
+  float: right;
+}
+.subscription-dropdown .dropdown-menu {
+  width: 285px;
+  margin-top: 9px;
+}
+.subscription-dropdown .dropdown-menu li {
+  padding: 5px 4px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.subscription-dropdown li a {
+  display: block;
+  align-items: center;
+  position: relative;
+  padding-right: 60px;
+}
+.subscription-dropdown .dropdown-menu li a span {
+  position: absolute;
+  top: 40%;
+  right: 8px;
+}
+
+
+
+
 @media only screen and (max-width: 767px) {
   .transection-popup {
     position: relative;
