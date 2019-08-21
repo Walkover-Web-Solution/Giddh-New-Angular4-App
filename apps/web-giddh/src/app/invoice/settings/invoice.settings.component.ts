@@ -106,7 +106,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.estimateSetting = _.cloneDeep(setting.estimateSettings);
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
         this.proformaSetting = _.cloneDeep(setting.proformaSettings);
-        this.isAutoPaidOn = this.invoiceSetting.autoPaid === 'runtime';
+        this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
 
         // using last state to compare data before dispatching action
         this.invoiceLastState = _.cloneDeep(setting.invoiceSettings);
@@ -232,13 +232,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     };
     delete this.formToSave.sendThroughGmail;
     delete this.formToSave.razorPayform; // delete razorPay before sending form
-    // if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-    //   this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
-    // } else {
-    //   this.formToSave.invoiceSettings.lockDate = null;
-    // }
+    if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
+      this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+    }
 
-    if (this.isAutoPaidOn) {
+    if (this.formToSave.invoiceSettings.autoPaid) {
       this.formToSave.invoiceSettings.autoPaid = 'runtime';
     } else {
       this.formToSave.invoiceSettings.autoPaid = 'never';
