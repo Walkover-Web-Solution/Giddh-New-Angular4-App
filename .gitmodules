@@ -7,3 +7,7 @@
 	url = https://github.com/Walkover-Web-Solution/Nativemobile.git
 	branch = master
 
+[submodule "lionfapp"]
+	path = lionfapp
+	url = https://github.com/Walkover-Web-Solution/lionfapp.git
+	branch = staging
