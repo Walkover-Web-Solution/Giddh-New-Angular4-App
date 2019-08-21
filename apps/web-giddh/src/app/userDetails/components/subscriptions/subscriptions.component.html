@@ -1,14 +1,59 @@
-<!-- <div class="clearfix mrT2">
+<div class="clearfix mrT2">
     <div class="row">
         <div class="col-md-3 col-sm-6">
             <div class="form-group">
-                <label>Select Subscribed Plan</label>
-                <div class="select-style">
-                    <select name="">
-                        <option value="">Trial Plan</option>
-                        <option value="">Professional Plan 1</option>
-                        <option value="">Professional Plan 3</option>
-                    </select>
+                <label class="d-block mb-1">Select Subscribed Plan</label>
+                <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
+                    <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                            aria-controls="dropdown-basic">
+                        Button dropdown <span class="caret"></span>
+                    </button>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                        role="menu" aria-labelledby="button-basic">
+                        <li role="menuitem">
+                            <a href="javascript:void(0)">
+                                <div class="clearfix">
+                                    <p>Trial Plan </p>
+                                    <p>Subscribed on 01/05/19</p>
+                                    <p>Companies: 4 out of 10</p>
+                                </div>
+                                <span class="text-danger">Expired</span>
+                            </a>
+                        </li>
+                        <li role="menuitem">
+                            <a href="javascript:void(0)">
+                                <div class="clearfix">
+                                    <p>Trial Plan </p>
+                                    <p>Subscribed on 01/05/19</p>
+                                    <p>Companies: 4 out of 10</p>
+                                </div>
+                                <span class="text-danger">Expired</span>
+                            </a>
+                        </li>
+
+                        <li role="menuitem">
+                            <a href="javascript:void(0)">
+                                <div class="clearfix">
+                                    <p>Trial Plan </p>
+                                    <p>Subscribed on 01/05/19</p>
+                                    <p>Companies: 4 out of 10</p>
+                                </div>
+                                <span class="text-success">Expired</span>
+                            </a>
+                        </li>
+
+                        <li role="menuitem">
+                            <a href="javascript:void(0)">
+                                <div class="clearfix">
+                                    <p>Trial Plan </p>
+                                    <p>Subscribed on 01/05/19</p>
+                                    <p>Companies: 4 out of 10</p>
+                                </div>
+                                <span class="text-success">Expired</span>
+                            </a>
+                        </li>
+                        
+                    </ul>
                 </div>
             </div>
         </div>
@@ -91,10 +136,6 @@
                 <p><small>* Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction</small></p>
                 <p><small>* Each month includes previous month's transactions</small></p>
             </div>
-
-            <div class="mrT5">
-                <a href="#" class="btn btn-danger">Cancel Subscription</a>
-            </div>
         </div>
 
 
@@ -116,12 +157,12 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 
 
 
 <!-- Modal start -->
-<!-- <ng-template #template>
+ <ng-template #template>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -136,7 +177,7 @@
                     <h3 class="">Plan:</h3> {{ modalRef.content.subscription.plan.planName }} ({{ modalRef.content.subscription.subscribedOn }})
                 </li>
                 <li>
-                    <h3 class="">Status:</h3> <a href="#" class="text-green">{{ subscriptionStatus[modalRef.content.subscription.status] }}</a>
+                    <h3 class="">Status:</h3> <a href="javascript:void(0)" class="text-green">{{ subscriptionStatus[modalRef.content.subscription.status] }}</a>
                 </li>
             </ul>
         </div>
@@ -161,9 +202,9 @@
         </div>
 
     </div>
-</ng-template> -->
+</ng-template>
 <!-- Modal end -->
 
 
 
-<subscriptions-plans></subscriptions-plans>
+<!-- <subscriptions-plans></subscriptions-plans> -->
