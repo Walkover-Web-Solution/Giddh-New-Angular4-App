@@ -116,7 +116,7 @@ export class InvoiceSettings {
   autoMail: boolean;
   autoEntryAndInvoice: boolean;
   showSeal: boolean;
-  autoPaid: string;
+  autoPaid: any;
   createPaymentEntry: boolean;
   email?: any;
   emailVerified?: any;
