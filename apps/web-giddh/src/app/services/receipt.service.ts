@@ -10,6 +10,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { RECEIPT_API } from './apiurls/recipt.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { UserDetails } from '../models/api-models/loginModels';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable()
 export class ReceiptService implements OnInit {
@@ -18,7 +19,7 @@ export class ReceiptService implements OnInit {
 
   constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
               private _httpClient: HttpClient, private errorHandler: ErrorHandler,
-              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private _loaderService: LoaderService) {
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
 
