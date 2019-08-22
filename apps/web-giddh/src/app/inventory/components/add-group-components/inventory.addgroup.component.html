@@ -48,7 +48,7 @@
                       [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-success" (click)="updateGroup()">Update
               </button>
               <button type="submit" class="btn btn-danger" [ladda]="isDeleteGroupInProcess$ | async"
-                      (click)="removeGroup()" [disabled]="defaultGrpActive">Delete
+                      (click)="removeGroup()" *ngIf="canDeleteGroup" [disabled]="defaultGrpActive">Delete
               </button>
             </div>
           </div>
