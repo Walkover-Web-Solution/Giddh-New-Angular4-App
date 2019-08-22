@@ -66,7 +66,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
-  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
+  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: {tab: 'aging-report', tabIndex: 1}},
 
   {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
   {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}},

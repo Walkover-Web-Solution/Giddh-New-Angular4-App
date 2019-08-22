@@ -146,10 +146,10 @@ export class GeneralActions {
     }
   }
 
-  public setAppTitle(val: string) {
+  public setAppTitle(uniqueName: string, additional?: { tab: string, tabIndex: number }) {
     return {
       type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
-      payload: val
+      payload: {uniqueName, additional}
     }
   }
 

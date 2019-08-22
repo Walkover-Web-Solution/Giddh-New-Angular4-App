@@ -488,11 +488,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
 
     this.store.pipe(select(s => s.general.headerTitle)).subscribe(menu => {
-      let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-        return item.uniqueName.toLocaleLowerCase() === menu.toLowerCase();
-      });
-      if (menuItem) {
-        this.doEntryInDb('menus', menuItem);
+      if (menu) {
+        let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+          if (menu.additional && item.additional) {
+            return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+          }
+          return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+        });
+        if (menuItem) {
+          this.doEntryInDb('menus', menuItem);
+        }
       }
     });
   }
