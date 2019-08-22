@@ -1,3 +1,4 @@
+<div *ngIf="!isOn">
 <div class="clearfix mrT2">
     <div class="row">
         <div class="col-md-3 col-sm-6">
@@ -91,9 +92,8 @@
             </div>
 
             <div class="clearfix mb-2">
-                <button type="button" class="btn btn-primary">Change Plan</button>
+                <button type="button" class="btn btn-primary" (click)="isOn= true">Change Plan</button>
                 <button type="button" class="btn btn-blue">Payment Log</button>
-                
             </div>
         </div>
     </div>
@@ -158,6 +158,7 @@
         </div>
     </div>
 </div>
+</div>
 
 
 
@@ -205,6 +206,9 @@
 </ng-template>
 <!-- Modal end -->
 
+<!-- <div *ngIf="!isOn">dfadfsasdf</div>
+
+<button label="Results" (click)="isOn= true">Results</button> -->
 
 
-<!-- <subscriptions-plans></subscriptions-plans> -->
+<subscriptions-plans *ngIf="isOn"></subscriptions-plans>
