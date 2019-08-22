@@ -176,7 +176,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public filterVoucherVersions(showMore: boolean) {
-    this.filteredVoucherVersions = this.voucherVersions.slice(0, showMore ? 14 : 2);
+    this.filteredVoucherVersions = this.voucherVersions.slice(0, showMore ? 15 : 3);
     this.moreLogsDisplayed = showMore;
   }
 
