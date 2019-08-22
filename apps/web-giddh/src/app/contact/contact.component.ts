@@ -447,6 +447,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
 
     this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
+
+    if (this.activeTab !== 'aging-report') {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+    } else {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+    }
   }
 
   public setActiveTab(tabName: 'customer' | 'aging-report' | 'vendor', type: string) {
