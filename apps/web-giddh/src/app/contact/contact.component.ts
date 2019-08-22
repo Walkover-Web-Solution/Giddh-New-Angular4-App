@@ -351,15 +351,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.staticTabs.tabs[0].active = true;
           }
         }
-
-        // save last state with active tab
-        let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
-
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
       }
     });
 
@@ -454,12 +445,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
-    // this.store.dispatch(this._generalAction.setAppTitle('/pages/contact/' + (tabName === 'aging' ? 'customer' : tabName), {tab: tabName, tabIndex: tabName === 'aging' ? 1 : 0}));
-    if (tabName !== 'aging-report') {
-      this.router.navigate(['/pages/contact/' + tabName], {queryParams: {tab: tabName, tabIndex: 0}, replaceUrl: true});
-    } else {
-      this.router.navigate(['/pages/contact/aging-report'], {queryParams: {tab: 'aging-report', tabIndex: 1}, replaceUrl: true});
-    }
+
+    this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
   }
 
   public setActiveTab(tabName: 'customer' | 'aging-report' | 'vendor', type: string) {
@@ -468,9 +455,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     if (tabName === 'vendor') {
       this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
+
+    if (this.activeTab !== 'aging-report') {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+    } else {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+    }
   }
 
   public ngOnDestroy() {
+    if (this.activeTab !== 'aging-report') {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+    } else {
+      this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+    }
+
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -1082,6 +1081,17 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   * */
   private registerAccount() {
     this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
+  }
+
+  private setStateDetails(url) {
+    // save last state with active tab
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = `contact/${url}`;
+
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
 }
