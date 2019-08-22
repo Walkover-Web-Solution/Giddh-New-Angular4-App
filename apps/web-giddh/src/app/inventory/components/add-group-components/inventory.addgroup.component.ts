@@ -39,6 +39,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public defaultGrpActive: boolean = false;
   public manageInProcess$: Observable<any>;
+  public canDeleteGroup:boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -136,6 +137,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
           this.addGroupForm.patchValue({name: '', uniqueName: '', isSubGroup: false});
         }
         this.parentStockSearchString = '';
+      }
+      if(a && a.stocks.length>0){
+        this.canDeleteGroup=false;
+      }else {
+        this.canDeleteGroup=true;
       }
     });
 
