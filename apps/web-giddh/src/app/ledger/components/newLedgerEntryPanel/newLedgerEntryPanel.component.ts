@@ -326,7 +326,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
-    this.currentTxn.tax = ((totalPercentage * (this.currentTxn.amount - this.currentTxn.discount)) / 100);
+    this.currentTxn.tax = ((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100);
     this.calculateTotal();
   }
 
@@ -341,7 +341,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
-      this.currentTxn.total = giddhRoundOff((total + ((total * this.currentTxn.tax) / 100)), 2);
+      this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), 2);
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     this.calculateCompoundTotal();
@@ -402,16 +402,43 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         .reduce((pv, cv) => {
           return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
         }, 0) || 0;
-
+    }
+    let taxTotal = 0;
+    if (this.taxControll) {
+      taxTotal = this.taxControll.taxRenderData.filter(f => f.isChecked)
+        .reduce((pv, cv) => {
+          return Number(pv) + Number(cv.amount)
+        }, 0) || 0;
     }
     // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
+    // p = total
+    // a = amount
+    // x= fixed discount
+    // y = percentage discount
+    // t = percentage taz
+    //   P = A - D + (A- D )*T/100;
+    // D = X + A*Y/100;
+    // Y = A*Y/100
+    // P = A  - (X + A*Y/100) +  (A - (X + A*Y/100))* T/100
+    //
+    // P = A  - (X + A*Y/100) + T;
+    // A - X - A*Y/100 + T  = P
+    // A - AY/100 = P +X -T
+    // A*(100- Y)/100 = P + X - T
+    // A  = (P + X - T)*100/ (100- Y)
+    // this.currentTxn.amount = giddhRoundOff((Number(this.currentTxn.total)+ fixDiscount - Number(this.currentTxn.tax)) * 100 / (100 - percentageDiscount),2)
 
-    this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(this.currentTxn.tax)) /
-      (1 - 0.01 * percentageDiscount + 0.01 * Number(this.currentTxn.tax) - 0.0001 * percentageDiscount * Number(this.currentTxn.tax))), 2);
+    this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), 2);
 
     if (this.discountControl) {
       this.discountControl.ledgerAmount = this.currentTxn.amount;
       this.discountControl.change();
+    }
+
+    if (this.taxControll) {
+      this.taxControll.taxTotalAmount = this.currentTxn.amount;
+      this.taxControll.change();
     }
 
     if (this.currentTxn.selectedAccount) {

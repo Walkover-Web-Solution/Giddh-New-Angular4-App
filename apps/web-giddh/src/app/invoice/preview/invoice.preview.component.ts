@@ -832,7 +832,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.itemStateChanged(item, true);
         return item;
       });
-      // this.insertItemsIntoArr();
     }
   }
 
