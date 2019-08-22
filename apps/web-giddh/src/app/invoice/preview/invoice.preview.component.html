@@ -31,7 +31,7 @@
         <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
              style="margin-bottom: 10px;display: inline-block !important;">
 
-          <button dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
+          <button dropdownToggle type="button" class="btn spcl_dropdown btn-default dropdown-toggle"
                   aria-controls="dropdown-basic" *ngIf="!isMobileView">
             More
             <span class="caret"></span>
@@ -83,9 +83,9 @@
                 <button class="btn btn-blue">+ New Invoice</button>
               </div> -->
 
-      <button class="btn btn-orange mr-1" [disabled]="this.selectedInvoicesList.length!==1"
+      <button class="btn btn-orange mr-1"
               (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
-              *ngIf="selectedVoucher === 'sales'">Export
+              *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length" data-spinner-size="20px">Export
       </button>
 
       <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
@@ -242,10 +242,7 @@
 
       </th>
 
-      <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%
-
-
-">
+      <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
         <div class="mh18_img" style="display: flex;justify-content: center">
           #
         </div>
@@ -350,9 +347,9 @@
       </td>
 
       <td>{{item.voucherDate}}</td>
-      <td>{{item.grandTotal | giddhCurrency}}</td>
-      <td>{{item.balanceDue | giddhCurrency}}</td>
-      <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+      <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+      <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
+      <td >{{item.dueDate ? item.dueDate : '-' }}</td>
 
       <!--for not cancelled status-->
       <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">

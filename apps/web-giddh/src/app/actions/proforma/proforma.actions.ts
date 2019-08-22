@@ -148,7 +148,7 @@ export class ProformaActions {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
         } else {
-          this._toasty.successToast('Sales Order Generated Successfully');
+          this._toasty.successToast('Proforma Generated Successfully');
         }
         return this.generateProformaFromEstimateResponse(response);
       })
