@@ -166,7 +166,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '10-12-2018';
   private smartCombinedList$: Observable<any>;
 
   /**
@@ -435,6 +434,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.navigationEnd = true;
         if (a instanceof NavigationEnd) {
           this.adjustNavigationBar();
+          let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+            return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+          });
+          if (menuItem) {
+            this.doEntryInDb('menus', menuItem);
+          }
         }
       }
     });
@@ -479,6 +484,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this._generalService.invalidMenuClicked.subscribe(data => {
       if (data) {
         this.onItemSelected(data.next, data);
+      }
+    });
+
+    this.store.pipe(select(s => s.general.headerTitle)).subscribe(menu => {
+      if (menu) {
+        let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+          if (menu.additional && item.additional) {
+            return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+          }
+          return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+        });
+        if (menuItem) {
+          this.doEntryInDb('menus', menuItem);
+        }
       }
     });
   }

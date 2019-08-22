@@ -216,7 +216,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     if (additionalParams) {
       url = `${url}${additionalParams}`;
     }
-
     if (isElectron) {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
       url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;

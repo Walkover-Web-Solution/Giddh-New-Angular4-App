@@ -10,10 +10,10 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 
   {type: 'MENU', name: 'Debit Note', uniqueName: '/pages/invoice/preview/debit note', additional: {tab: 'debit note', tabIndex: 0}},
   {type: 'MENU', name: 'Credit Note', uniqueName: '/pages/invoice/preview/credit note', additional: {tab: 'credit note', tabIndex: 1}},
-  {type: 'MENU', name: 'Invoice > Pending', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
-  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
-  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
-  {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
+  {type: 'MENU', name: 'Invoice > Pending', uniqueName: '/pages/invoice/preview/pending', additional: {tab: 'pending', tabIndex: 2}},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/templates', additional: {tab: 'templates', tabIndex: 3}},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/settings', additional: {tab: 'settings', tabIndex: 4}},
+  {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/recurring', additional: {tab: 'recurring', tabIndex: 1}},
   {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
   {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: {tab: 'proformas', tabIndex: 0}},
@@ -54,8 +54,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
   {type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase'},
   {type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash'},
-  {type: 'MENU', name: 'Proforma Invoice', uniqueName: 'pages/proforma-invoice/invoice/proformas'},
-  {type: 'MENU', name: 'Estimate (Beta)', uniqueName: 'pages/proforma-invoice/invoice/estimates'},
+  {type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas'},
+  {type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates'},
   {type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note'},
   {type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note'},
 
@@ -66,7 +66,8 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
   {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
-  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
+  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: {tab: 'aging-report', tabIndex: 1}},
+
   {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
   {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}},
   {type: 'MENU', name: 'Reports', uniqueName: '/pages/reports'}
