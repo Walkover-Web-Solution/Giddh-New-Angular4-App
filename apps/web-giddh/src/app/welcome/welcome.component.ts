@@ -224,11 +224,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-      this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+      if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+        this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+      }
     }
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
     if (gstDetails.gstNumber) {
       this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
+      this.createNewCompanyPreparedObj.address = '';
     } else {
       this.createNewCompanyPreparedObj.gstDetails = [];
     }
@@ -239,7 +242,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (obj.gstNumber) {
       this.GstDetailsObj.gstNumber = obj.gstNumber;
       this.GstDetailsObj.addressList[0].stateCode = obj.state;
-      this.GstDetailsObj.addressList[0].address = '';
+      this.GstDetailsObj.addressList[0].address = obj.address;
       this.GstDetailsObj.addressList[0].isDefault = false;
       this.GstDetailsObj.addressList[0].stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
     }
@@ -324,7 +327,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     event.stopPropagation();
   }
-
+  public back() {
+    //this._router.navigate(['']);
+    this._router.navigate(['new-user']);
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

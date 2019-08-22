@@ -95,8 +95,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
       this.currentPeriod = {
         from: params['from'],
-      to: params['to']
-    };
+        to: params['to']
+      };
       this.store.dispatch(this._gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
       this.selectedGst = params['return_type'];
     });

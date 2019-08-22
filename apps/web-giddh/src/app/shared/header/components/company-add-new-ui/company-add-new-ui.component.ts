@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { LocationService } from '../../../../services/location.service';
@@ -27,7 +27,7 @@ import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModel
   styleUrls: ['./company-add-new-ui.component.css']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
@@ -45,6 +45,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public currencySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
   public countryPhoneCode: IOption[] = [];
+  public isMobileNumberValid: boolean = false;
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -62,6 +63,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     contriesWithCodes.map(c => {
       this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
+    _.uniqBy(this.countryPhoneCode, 'value');
+    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
+      return {
+        value: value,
+        label: this.countryPhoneCode.find(s => s.value === value).label
+      };
+    });
+    this.countryPhoneCode = ss;
     this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
       this.currencies = [];
       if (data) {
@@ -93,12 +102,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'proforma-invoice/invoice/sales';
         this._generalService.companyUniqueName = this.company.uniqueName;
-        if(prevTab !== 'user-details'){
+        if (prevTab !== 'user-details') {
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
         // this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
         setTimeout(() => {
-          if(prevTab !== 'user-details'){
+          if (prevTab !== 'user-details') {
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
             this._route.navigate([isNewUSer ? 'welcome' : '/pages/proforma-invoice/invoice/sales']);
           }
@@ -107,29 +116,33 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
       }
     });
   }
+  public ngAfterViewInit() {
+    _.uniqBy(this.countryPhoneCode, 'value');
+  }
 
   /**
    * createCompany
    */
   public createCompany(mobileNoEl) {
-    let mobNoPattern = /^\d+$/;
 
-    if (!mobNoPattern.test(this.company.contactNo)) {
-      this._toaster.errorToast('please add valid mobile no', 'Error');
+    if (!this.isMobileNumberValid) {
+      this._toaster.errorToast('Invalid Contact number', 'Error');
       if (mobileNoEl) {
         mobileNoEl.focus();
       }
       return;
-    }
-    this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
-    this.company.isBranch = this.createBranch;
-    this._generalService.createNewCompany = this.company;
-    this.closeCompanyModal.emit();
-    this._route.navigate(['welcome']);
+    } else {
 
-    //this.store.dispatch(this.companyActions.CreateCompany(this.company));
-    //this.store.dispatch(this.companyActions.GetApplicableTaxes());
-    // this.fireSocketCompanyCreateRequest();
+      this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
+      this.company.isBranch = this.createBranch;
+      this._generalService.createNewCompany = this.company;
+      this.closeCompanyModal.emit();
+      this._route.navigate(['welcome']);
+
+      //this.store.dispatch(this.companyActions.CreateCompany(this.company));
+      //this.store.dispatch(this.companyActions.GetApplicableTaxes());
+      this.fireSocketCompanyCreateRequest();
+    }
   }
 
   public fireSocketCompanyCreateRequest() {
@@ -194,6 +207,18 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public makeMeCaptialize(companyName: string) {
     if (companyName) {
       this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
+    }
+  }
+  public isValidMobileNumber(ele: HTMLInputElement) {
+    if (ele.value) {
+      if (ele.value.length > 9 && ele.value.length < 16) {
+        ele.classList.remove('error-box');
+        this.isMobileNumberValid = true;
+      } else {
+        this.isMobileNumberValid = false;
+        this._toaster.errorToast('Invalid Contact number');
+        ele.classList.add('error-box');
+      }
     }
   }
 

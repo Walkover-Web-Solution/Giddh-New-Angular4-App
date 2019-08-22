@@ -1,5 +1,5 @@
-<div id="main" class="welcome-container">
-    <!-- <app-header></app-header> -->
+<div id="main" [ngClass]="{'menu_open':sideMenu.isopen}" class="welcome-container">
+    <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>
     <layout-main>
         <!-- <div class="welcome-header">
             <h2>Welcome To Giddh! </h2>
@@ -11,8 +11,8 @@
                     <h1 class="borderbtm">Try things out</h1>
                     <ul class="manage_invoice">
                         <li>
-                            <!-- <i class="icon-Create-Invoice"></i> -->
-                            <a [routerLink]="['/pages','sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                            <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
+                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
                         </li>
                         <li>
                             <!-- <i class="icon-Add-customer"></i> -->
@@ -38,7 +38,7 @@
 
                     <div class="your-account">
                         <h1 class="borderbtm m-t-50">Your Account</h1>
-                        <div class="row">
+                        <div class="row" *ngIf="selectedPlans?.subscriptionId">
                             <div class="col-xs-6">
                                 <span>
                                     Subscription ID
@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans.subscriptionId}}
+                                    {{selectedPlans?.subscriptionId}}
                                 </p>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-xs-6" *ngIf="selectedPlans?.planDetails?.amount">
                                 <p class="success-text">
-                                    {{selectedPlans?.planDetails?.amount}}/- pa
+                                    {{selectedPlans?.planDetails?.amount | number}}
                                 </p>
                             </div>
                             <div class="col-xs-6" *ngIf="!selectedPlans?.planDetails?.amount">
@@ -76,8 +76,11 @@
                                 </span>
                             </div>
                             <div class="col-xs-6">
-                                <p>
-                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit}}
+                                <p *ngIf="selectedPlans?.planDetails?.amount">
+                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit | number}}
+                                </p>
+                                <p *ngIf="!selectedPlans?.planDetails?.amount">
+                                    {{selectedPlans?.planDetails?.companiesLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -90,7 +93,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <p>
-                                    {{selectedPlans?.planDetails?.transactionLimit}}
+                                    {{selectedPlans?.planDetails?.transactionLimit | number}}
                                 </p>
                             </div>
                         </div>
@@ -102,8 +105,11 @@
                                 </span>
                             </div>
                             <div class="col-xs-6">
-                                <p>
+                                <p *ngIf="selectedPlans?.planDetails?.amount">
                                     {{selectedPlans?.expiry}}
+                                </p>
+                                <p *ngIf="!selectedPlans?.planDetails?.amount">
+                                    {{selectedPlans?.planDetails?.duration }} {{ selectedPlans?.planDetails?.durationUnit}}
                                 </p>
                             </div>
                         </div>
@@ -186,47 +192,36 @@
                     </div>
                 </div>
             </div>
-            <br><br><br>
 
-            <h1 class="borderbtm">Become an expert in 15 mins.</h1>
-            <span>request a demo:</span>
-            <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>
-            <br>
-            <span class="m-t-41">or call:</span>
-            <a class="text-dark" href="tel:022-68210057">022-68210057</a>
-            <span class="m-t-41 m-b-10">or visit:</span>
-            <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
-          </div>
-
-
-  </layout-main>
-  <!-- <app-footer></app-footer> -->
+        </div>
+    </layout-main>
+    <!-- <app-footer></app-footer> -->
 </div>
 
 <!--delete company modal  -->
 <div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="left">Talk to Sales</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
-      </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="left">Talk to Sales</h3>
+                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
+            </div>
 
-      <div class="modal-body custom-body">
-        <div class="" id="settingTab">
-          <tabset #supportTab>
-            <tab heading="Arrange a Demo">
-              <div class="argdemo">
-                <p>Choose your preferred time to schedule a demo with an expert. </p>
-                <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>
-              </div>
-            </tab>
-            <tab heading="Drop us Mail">
-              <div id="Jkvq" class="talktosale-superform"></div>
-            </tab>
-          </tabset>
+            <div class="modal-body custom-body">
+                <div class="" id="settingTab">
+                    <tabset #supportTab>
+                        <tab heading="Arrange a Demo">
+                            <div class="argdemo">
+                                <p>Choose your preferred time to schedule a demo with an expert. </p>
+                                <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>
+                            </div>
+                        </tab>
+                        <tab heading="Drop us Mail">
+                            <div id="Jkvq" class="talktosale-superform"></div>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

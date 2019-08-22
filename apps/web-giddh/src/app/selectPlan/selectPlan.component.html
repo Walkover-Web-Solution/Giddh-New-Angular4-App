@@ -20,7 +20,7 @@
                                             {{item?.planDetails?.name}}
                                             <div class="your-account">
 
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
                       Subscription ID
@@ -28,10 +28,10 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item.subscriptionId}}
+                                                            -
                                                         </p>
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <!--  -->
                                                 <div class="row">
@@ -41,7 +41,10 @@
                     </span>
                                                     </div>
                                                     <div class="col-xs-6">
-                                                        <p>
+                                                        <p *ngIf="item?.planDetails?.amount">
+                                                            {{item?.planDetails?.amount | number}}
+                                                        </p>
+                                                        <p *ngIf="!item?.planDetails?.amount">
                                                             FREE
                                                         </p>
                                                     </div>
@@ -56,7 +59,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{item?.planDetails?.totalCompanies}}
+                                                            {{item?.planDetails?.companiesLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -69,7 +72,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.transactionLimit}}
+                                                            {{item?.planDetails?.transactionLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -82,7 +85,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.durationUnit}}
+                                                            {{item?.planDetails?.duration }} {{item?.planDetails?.durationUnit}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -90,7 +93,6 @@
                                                 <div class="row">
                                                     <div class="col-xs-12">
                                                         <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);" [ladda]="isCompanyCreationInProcess$ | async">Select Plan</button>
-                                                        <!-- [routerLink]="['/pages/billing-detail']" [ladda]="isCompanyCreationInProcess$ | async" -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,7 +108,7 @@
                                             {{item?.planDetails?.name}}
                                             <div class="your-account">
 
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
                       Subscription ID
@@ -114,10 +116,10 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item.subscriptionId}}
+                                                            -
                                                         </p>
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <!--  -->
                                                 <div class="row">
@@ -128,7 +130,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.amount}}/- pa
+                                                            {{item?.planDetails?.amount | number}}/- pa
                                                         </p>
                                                     </div>
                                                 </div>
@@ -142,7 +144,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{item?.planDetails?.totalCompanies}}
+                                                            {{item?.planDetails?.companiesLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -155,7 +157,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.transactionLimit}}
+                                                            {{item?.planDetails?.transactionLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -168,14 +170,14 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.durationUnit}}
+                                                            {{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-success mrT1 mrB2" [routerLink]="['/pages/billing-detail']">Buy Plan</button>
+                                                        <button class="btn btn-success mrT1 mrB2" (click)="buyPlanClicked(item)">Buy Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,7 +190,7 @@
                         </div>
                         <div class="row">
                             <ng-container *ngFor="let paidItem of SubscriptionPlans">
-                                <ng-container *ngIf="paidItem?.subscriptionId">
+                                <ng-container *ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
 
                                     <div class="col-sm-4">
                                         <div class="select-plan-block">
@@ -217,7 +219,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{paidItem?.planDetails?.amount}}/- pa
+                                                            {{paidItem?.planDetails?.amount | number}}/- pa
                                                         </p>
                                                     </div>
                                                 </div>
@@ -231,7 +233,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{ paidItem?.totalCompanies}} out of {{ paidItem?.planDetails?.companiesLimit}}
+                                                            {{ paidItem?.totalCompanies | number}} out of {{ paidItem?.planDetails?.companiesLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -244,7 +246,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{paidItem?.planDetails?.transactionLimit}}
+                                                            {{paidItem?.planDetails?.transactionLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -264,7 +266,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" disabled (click)="paidPlanSelected(paidItem)" [routerLink]="['/pages/billing-detail']">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" disabled (click)="createCompany(paidItem)">Select Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -277,7 +279,7 @@
                         </div>
                     </div>
 
-                   <!-- <div class="col-sm-3">
+                    <div class="col-sm-3">
                         <div class="activation-key">
                             <label>Activation Key</label>
                             <input type="text" name="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
@@ -285,7 +287,7 @@
                         <div class="activation-btn">
                             <button class="btn btn-green mrT1" disabled> Activate</button>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
             </div>
 

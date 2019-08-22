@@ -231,7 +231,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     };
     delete this.formToSave.sendThroughGmail;
     delete this.formToSave.razorPayform; // delete razorPay before sending form
-
     if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
       this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
     }
