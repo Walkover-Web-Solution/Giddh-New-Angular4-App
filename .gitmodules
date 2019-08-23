@@ -1,7 +1,3 @@
-[submodule "website"]
-	path = website
-	url = https://github.com/Walkover-Web-Solution/Giddh-Website.git
-
 [submodule "Nativemobile"]
 	path = Nativemobile
 	url = https://github.com/Walkover-Web-Solution/Nativemobile.git
