@@ -23,6 +23,9 @@
                                         <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
                                     </a>
                                 </li>
+                                <li *ngIf="!subscriptions.length">
+                                    No results found
+                                </li>
                             </ng-container>
                             <!-- <li role="menuitem">
                                 <a href="javascript:void(0)">
