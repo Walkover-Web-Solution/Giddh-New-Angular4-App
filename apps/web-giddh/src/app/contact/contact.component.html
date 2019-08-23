@@ -153,24 +153,24 @@
         <div class="">
           <div class="custumerRightWrap clearfix">
             <div class="text-right">
-              <h4 class="mb-1 pdR2">Result Total</h4>
+              <h4 class="mb-1 pr-3">Result Total</h4>
             </div>
 
             <div class="bg-white clearfix">
-              <div class="customer-right">
-                <table>
+              <div class="bg-white customer-right clearfix" style="width: 100%;">
+                <table style="float: right; width: auto;" class="text-right">
                   <tr>
                     <td>
                       <p>Sales</p>
-                      <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                      <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
                     </td>
                     <td>
                       <p>Receipts</p>
-                      <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                      <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
                     </td>
                     <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                      <h3>{{getTotalDue() | giddhCurrency}}/-</h3>
                     </td>
 
                   </tr>
