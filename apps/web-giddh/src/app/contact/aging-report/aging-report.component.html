@@ -72,33 +72,27 @@
 <div class="result-total">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-6">
-        <div class="customer-footer-box">
 
-        </div>
-      </div>
-
-      <div class="col-md-6">
         <div class="custumerRightWrap">
-          <div class="text-right xs-left pl-2">
-            <h4 class="mb-1">Result Total </h4>
+          <div class="text-right xs-left pl-2 pr-2">
+            <h4 class="mb-1 pr-1">Result Total </h4>
           </div>
-          <div class="bg-white customer-right">
-            <table>
+          <div class="bg-white customer-right clearfix" style="width: 100%;">
+            <table style="float: right; width: auto;" class="text-right">
               <tr>
                 <td>
                   <p>Upcoming</p>
-                  <h3>{{getFutureTotalDue()| giddhCurrency }}</h3>
+                  <h3>{{getFutureTotalDue()| giddhCurrency }}/</h3>
                 </td>
 
                 <td>
                   <p>Due</p>
-                  <h3>{{getTotalDue()| giddhCurrency}}</h3>
+                  <h3>{{getTotalDue()| giddhCurrency}}/</h3>
                 </td>
               </tr>
             </table>
           </div>
-        </div>
+
       </div>
     </div>
   </div>
