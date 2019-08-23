@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { GeneralService } from '../../../services/general.service';
@@ -11,6 +11,7 @@ import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'subscriptions-plans',
@@ -25,10 +26,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   public currentCompany: any;
   public SubscriptionRequestObj: SubscriptionRequest = {
     planUniqueName: '',
-    subscriptionUnqiueName: '',
+    subscriptionId: '',
     userUniqueName: '',
     licenceKey: ''
   };
+  public isUpdateCompanyInProgress$: Observable<boolean>;
+  public isUpdateCompanySuccess$: Observable<boolean>;
+
   @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -36,7 +40,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   constructor(private modalService: BsModalService, private _generalService: GeneralService,
     private _authenticationService: AuthenticationService, private store: Store<AppState>,
     private _route: Router, private companyActions: CompanyActions,
-    private settingsProfileActions: SettingsProfileActions) {
+    private settingsProfileActions: SettingsProfileActions,
+    private _toast: ToasterService) {
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && !_.isEmpty(o)) {
@@ -44,6 +49,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.currentCompany = companyInfo.name;
       }
     });
+    this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+    this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -54,7 +62,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     if (this._generalService.user) {
       this.logedInUser = this._generalService.user;
     }
-
+    this.isUpdateCompanySuccess$.subscribe(p => {
+      if (p) {
+        this._toast.successToast("Plan changed successfully");
+      }
+    });
 
   }
   public ngOnDestroy() { }
@@ -80,7 +92,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   public choosePlan(plan: CreateCompanyUsersPlan) {
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
     if (plan.subscriptionId) { // bought plan
-      this.SubscriptionRequestObj.subscriptionUnqiueName = plan.subscriptionId;
+      this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
       this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
     } else if (!plan.subscriptionId) { // free plan
       this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;

@@ -266,7 +266,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" disabled (click)="createCompany(paidItem)">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" [ladda]="isCompanyCreationInProcess$ | async" (click)="createCompany(paidItem)">Select Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
