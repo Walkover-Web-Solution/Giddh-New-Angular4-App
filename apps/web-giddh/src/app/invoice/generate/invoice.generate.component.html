@@ -232,16 +232,17 @@
 
 
   </tbody>
-  <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
-  <tr>
-    <td colspan="8">
-      <!--loading-->
-      <div class="no-data mrT2 d-flex"
-           style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-        <div class="giddh-spinner vertical-center-spinner"></div>
-      </div>
-    </td>
-  </tr>
+  <!-- -->
+  <tbody *ngIf="(isGetAllRequestInProcess$ | async)" id="centerAlign">
+    <tr>
+      <td colspan="8">
+        <!--loading-->
+        <div class="no-data mrT2 d-flex"
+          style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+          <div class="giddh-spinner vertical-center-spinner"></div>
+        </div>
+      </td>
+    </tr>
   </tbody>
 
 </table>
