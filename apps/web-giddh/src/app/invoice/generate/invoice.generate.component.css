@@ -190,6 +190,11 @@ tfoot {
   background-color: transparent;
 }
 }
+@media(max-width:768px){
+  #centerAlign td {
+    padding: 0 !important;
+}
+}
 @media(max-width:550px){
   .form-group button, .form-group .input-group {
     width: 48%;
@@ -204,4 +209,8 @@ tfoot {
   .form-group button, .form-group .input-group {
     width: 100%;
   }
+  div#dp-parent {
+    margin-bottom: 0;
+    width: 200px;
+}
 }

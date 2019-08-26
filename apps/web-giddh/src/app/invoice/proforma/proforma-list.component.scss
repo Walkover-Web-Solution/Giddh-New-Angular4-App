@@ -142,3 +142,34 @@
 .icon-pointer .activeTextColor {
   color: #ff5200;
 }
+.date-advanceSearch{
+  justify-content: space-between;
+}
+.mobileSearch{
+  display: none;
+  margin-bottom: 15px;
+}
+@media(max-width:767px){
+  .mobileSearch{
+    display: block;
+  }
+  .mobileSearch .input-container input{
+    font-size: 13px;
+  }
+
+}
+@media(max-width:500px){
+  .date-advanceSearch{
+   display: block;
+  }
+  .form-group div {
+
+    display: block;
+}
+.form-group.mrR1.d-flex {
+  justify-content: space-between;
+}
+.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-blue{
+  width: 100%;
+}
+}

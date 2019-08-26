@@ -83,6 +83,7 @@ input.form-control.send-alert {
   position: absolute;
   top:-24px;
   right: 15px;    font-size: 12px;color:#666666;
+  text-align: right;
 }
 
 .initialnumber {
@@ -135,5 +136,13 @@ span.viasocket a{
 
   margin-top: 5px;
 }
-
+.btn-wrapper{
+  padding:0 15px;
+}
+.integratdeEmail{
+  margin-left: 30px;
+}
+.customEstimation {
+  margin-top: 30px;
+}
 }

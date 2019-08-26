@@ -232,7 +232,8 @@
 
 
   </tbody>
-  <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+  <!-- -->
+  <tbody *ngIf="(isGetAllRequestInProcess$ | async)" id="centerAlign">
     <tr>
       <td colspan="8">
         <!--loading-->
