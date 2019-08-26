@@ -18,6 +18,7 @@ import { UserDetailsPipe } from './userDetails.pipe';
 import { UserDetailsCompanyComponent } from './components/company/user-details-company.component'
 ;import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -30,7 +31,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserDetailsComponent,
     SubscriptionsComponent,
     UserDetailsPipe,
-    UserDetailsCompanyComponent
+    UserDetailsCompanyComponent,
+    SubscriptionsPlansComponent
   ],
   exports: [],
   imports: [

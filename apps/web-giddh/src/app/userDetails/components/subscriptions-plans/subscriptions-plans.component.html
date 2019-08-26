@@ -1,0 +1,354 @@
+<div class="welcome-msg pt-2 ">
+    <div class="row">
+        <div class="col-md-9">
+            <p class="mb-2">Hi {{logedInUser?.name}} !</p>
+            <p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong></p>
+        </div>
+        <div class="col-md-3 text-right xs-left">
+            <a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+        </div>
+    </div>
+    <div class="choose-ur-plan">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="row">
+                    <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
+                        <!-- Free plans -->
+                        <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
+                            <div class="col-sm-4">
+                                <div class="select-plan-block">
+                                    {{item?.planDetails?.name}}
+                                    <div class="your-account">
+
+                                        <!-- <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <span>
+                      Subscription ID
+                    </span>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <p>
+                                                            -
+                                                        </p>
+                                                    </div>
+                                                </div> -->
+
+                                        <!--  -->
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Price
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p *ngIf="item?.planDetails?.amount">
+                                                    {{item?.planDetails?.amount | number}}
+                                                </p>
+                                                <p *ngIf="!item?.planDetails?.amount">
+                                                    FREE
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!--  -->
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Total Companies
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p class="">
+                                                    {{item?.planDetails?.companiesLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Transactions Limit
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{item?.planDetails?.transactionLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Renewal
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{item?.planDetails?.duration }} {{item?.planDetails?.durationUnit}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);" [ladda]="this.isUpdateCompanyInProgress$ | async">Select Plan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </ng-container>
+                        <!-- new plan after free -->
+                        <ng-container *ngIf="item?.planDetails?.amount">
+                            <div class="col-sm-4">
+                                <div class="select-plan-block">
+                                    {{item?.planDetails?.name}}
+                                    <div class="your-account">
+
+                                        <!-- <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <span>
+                      Subscription ID
+                    </span>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <p>
+                                                            -
+                                                        </p>
+                                                    </div>
+                                                </div> -->
+
+                                        <!--  -->
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Price
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{item?.planDetails?.amount | number}}/- pa
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!--  -->
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Total Companies
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p class="">
+                                                    {{item?.planDetails?.companiesLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Transactions Limit
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{item?.planDetails?.transactionLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Renewal
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="btn btn-success mrT1 mrB2" (click)="buyPlanClicked(item)">Buy Plan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngFor="let paidItem of SubscriptionPlans">
+                        <ng-container *ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
+
+                            <div class="col-sm-4">
+                                <div class="select-plan-block">
+                                    {{paidItem?.planDetails?.name}}
+                                    <div class="your-account">
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription ID
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{paidItem.subscriptionId}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!--  -->
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Price
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{paidItem?.planDetails?.amount | number}}/- pa
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!--  -->
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Total Companies
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p class="">
+                                                    {{ paidItem?.totalCompanies | number}} out of {{ paidItem?.planDetails?.companiesLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Transactions Limit
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{paidItem?.planDetails?.transactionLimit | number}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <span>
+                      Subscription Renewal
+                    </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <p>
+                                                    {{paidItem?.expiry}}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(paidItem)" [ladda]="this.isUpdateCompanyInProgress$ | async">Select Plan</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="activation-key">
+                    <label>Activation Key</label>
+                    <input type="text" name="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
+                </div>
+                <div class="activation-btn">
+                    <button class="btn btn-green mrT1" disabled> Activate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="note-wrap">
+        <p>Note:</p>
+        <p>* revenue more than 12 and less than 20 lacs</p>
+    </div>
+</div>
+
+
+
+<!-- asid bar start -->
+<!-- <div class="aside-overlay"></div>
+  <div class="accountAsideMenuState2">
+    <div class="aside-pane">
+      <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+      <div class="aside-header mb-">
+          <h3 class="aside-title">Payment Log</h3>
+      </div>
+      <div class="aside-body">
+        <div class="select-plan-block pt-2">
+          <p class="mb-2">Plan 2 <span class="text-light">(Current Plan)</span></p>
+          <div class="your-account">
+          <div class="row">
+          <div class="col-xs-6">
+          <span> Subscription ID </span></div>
+          <div class="col-xs-6">
+          <p> 8978 </p></div></div>
+          <div class="row">
+            <div class="col-xs-6">
+            <span> Subscription Price </span></div>
+            <div class="col-xs-6">
+            <p> - 4000/- pa </p></div>
+          </div>
+          <div class="row">
+          <div class="col-xs-6">
+          <span> Total Companies </span></div>
+          <div class="col-xs-6">
+          <p class="">
+          2 out of 10 </p></div></div>
+          <div class="row">
+            <div class="col-xs-6">
+            <span> Transactions Limit </span></div>
+            <div class="col-xs-6">
+            <p> 40,000 </p></div></div>
+            <div class="row">
+            <div class="col-xs-6">
+            <span> Subscription Renewal </span></div>
+            <div class="col-xs-6">
+            <p> Yearly </p></div></div>
+            <div class="row mt-1">
+            <div class="col-xs-12">
+              <ul class="payment-log-list mt-3">
+                <li>17-10-2018, plan subscribed paid $2,000 by 83XXXXXXXXX98</li>
+                <li>05-10-2018, amount $2,000 paid by 83XXXXXXXXX98</li>
+                <li>27-09-2018, plan subscribed paid $2,000 by 83XXXXXXXXX98</li>
+              </ul>
+            </div>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div> -->
+<!-- asid bar end -->

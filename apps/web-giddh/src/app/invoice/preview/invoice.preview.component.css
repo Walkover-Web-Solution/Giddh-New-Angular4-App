@@ -415,6 +415,12 @@ td.card-header.clearfix {
 .icon-pointer .activeTextColor {
   color: #ff5200;
 }
-.btn-dropdown-ddl-newinv{
-  padding: 8.5px 16px!important;
+
+.btn-dropdown-ddl-newinv {
+  padding: 6px 16px !important;
+}
+
+button.btn.btn-orange.ladda-button {
+  height: 33px;
+  padding: 6px 16px;
 }

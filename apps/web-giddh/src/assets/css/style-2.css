@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /* @font-face {
     font-family: 'icomoon';
     src: url('../fonts/main-icomoon/icomoon.eot');
@@ -6,6 +7,7 @@
     font-weight: normal;
     font-style: normal;
 } */
+
 
 /* @font-face {
   font-family: 'icomoon';
@@ -18,24 +20,25 @@
   font-style: normal;
 } */
 
+
 /* @import "../fonts/main-icomoon/style.css"; */
+
 
 /* css start */
 
-
-[class^="icon-"], [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+[class^="icon-"],
+[class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -156,8 +159,6 @@
 
 /* end MDB tweaks */
 
-
-
 .bg-none {
     background: none !important;
 }
@@ -165,7 +166,6 @@
 .relative {
     position: relative;
 }
-
 
 
 /* css end */
@@ -284,6 +284,22 @@ input {
 
 .ml-5 {
     margin-left: 50px;
+}
+
+.ml-05 {
+    margin-left: 5px;
+}
+
+.mr-05 {
+    margin-right: 5px;
+}
+
+.mt-05 {
+    margin-top: 5px;
+}
+
+.mb-05 {
+    margin-bottom: 5px;
 }
 
 .mt-27 {
@@ -965,6 +981,18 @@ modal-container.modal.fade.show {
 
 .form_box .btn {
     width: 73px;
+}
+
+.table-no-border tr th,
+.table-no-border tr td {
+    padding: 6px 0 !important;
+    border: 0px !important;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.table-no-border tr th {
+    color: #9B9B9B;
 }
 
 
@@ -7411,10 +7439,13 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .company_gst:last-child {
     border-bottom: none;
 }
+
 .welcome-select .menu {
     width: 120px !important;
 }
-.select-caret:after, .select-caret .form-control:after {
+
+.select-caret:after,
+.select-caret .form-control:after {
     content: '';
     width: 0px;
     height: 0px;
@@ -7428,14 +7459,13 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     right: 10px;
 }
 
-
-@media(max-width:1440px) {
+@media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     .top-aging-table-top .top-aging-table-top1 {
         top: 38px;
     }
@@ -7487,14 +7517,14 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
         transition: all 0.2s ease-out;
     }
     .onMobileView tbody td {
-        border: 0!important;
+        border: 0 !important;
         display: block;
-        padding: 5px 10px 5px 50%!important;
+        padding: 5px 10px 5px 50% !important;
         position: relative;
         text-align: left;
-        height: auto!important;
-        min-height: 30px!important;
-        word-wrap: inherit!important;
+        height: auto !important;
+        min-height: 30px !important;
+        word-wrap: inherit !important;
         max-width: 100%;
         white-space: inherit;
     }
@@ -7594,7 +7624,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
     .noRecords.onMobileView td {
         text-align: center !important;
-        padding: 5px 10px 5px 0%!important;
+        padding: 5px 10px 5px 0% !important;
     }
     .table-responsive {
         padding: 0 3px;
@@ -7602,13 +7632,13 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
 }
 
-@media(max-width: 1280px) {
+@media (max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
 }
 
-@media(max-width: 767px) {
+@media (max-width: 767px) {
     #export-body label {
         padding-bottom: 5px;
     }
@@ -7617,7 +7647,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
 }
 
-@media(max-width: 575px) {
+@media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
     }
@@ -7626,7 +7656,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     }
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
     .invoce-controll .nav-tabs>li {
         float: none;
         display: inline-block;
@@ -7657,7 +7687,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     user-select: none;
 }
 
-@media(max-width: 360px) {
+@media (max-width: 360px) {
     .pagination-sm>li>a,
     .pagination-sm>li>span {
         padding: 5px 8px;
@@ -7666,4 +7696,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 
 .welcome-header hr {
     border-top-color: #B3B4B5;
+}
+
+.icon-pointer .fa.fa-long-arrow-up {
+    color: #000;
+    opacity: 0.3;
 }

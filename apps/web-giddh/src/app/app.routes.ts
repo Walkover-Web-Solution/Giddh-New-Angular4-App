@@ -19,15 +19,15 @@ import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 
 export const ROUTES: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '404', component: NotFoundComponent },
-  { path: 'create-invoice', loadChildren: './create/create.module#CreateModule' },
-  { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated] },
-  { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
-  { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
-  { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '404', component: NotFoundComponent},
+  {path: 'create-invoice', loadChildren: './create/create.module#CreateModule'},
+  {path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated]},
+  {path: 'signup', loadChildren: './signup/signup.module#SignupModule'},
+  {path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full'},
+  {path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full'},
   // { path: 'success', component: SuccessComponent },
-  { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+  {path: 'home', redirectTo: 'pages/home', pathMatch: 'full'},
   // { path: 'magic', loadChildren: './magic-link/magicLink.module#MagicLinkModule' },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
@@ -62,6 +62,7 @@ export const ROUTES: Routes = [
   { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
   { path: 'select-plan', component: SelectPlanComponent },
   { path: 'billing-detail', component: BillingDetailComponent },
+  { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -99,11 +100,11 @@ export const ROUTES: Routes = [
       { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
 
 
-      { path: '**', redirectTo: 'home', pathMatch: 'full' }
+      {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
     ]
   },
   // { path: '**', redirectTo: 'login', pathMatch: 'full', canActivate: [CheckIfPublicPath] },
-  { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
+  {path: '**', pathMatch: 'full', component: PublicPageHandlerComponent},
 ];

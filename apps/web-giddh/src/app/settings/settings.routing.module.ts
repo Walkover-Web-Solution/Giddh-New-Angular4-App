@@ -7,7 +7,10 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: SettingsComponent, canActivate: [NeedsAuthentication]
+        path: '', component: SettingsComponent, canActivate: [NeedsAuthentication], redirectTo: 'taxes'
+      },
+      {
+        path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],

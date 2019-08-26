@@ -47,6 +47,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
+import { GeneralService } from '../services/general.service';
 
 const THEAD_ARR_READONLY = [
   {
@@ -255,7 +256,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _breakpointObserver: BreakpointObserver,
     private _cdr: ChangeDetectorRef,
     private proformaActions: ProformaActions,
-    private _ledgerService: LedgerService
+    private _ledgerService: LedgerService,
+    private _generalService: GeneralService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -375,6 +377,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       } else {
         // for edit mode direct from @Input
         if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
+          this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
           this.getVoucherDetailsFromInputs();
         }
       }
@@ -2408,6 +2411,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
   }
 
   public ngOnDestroy() {
