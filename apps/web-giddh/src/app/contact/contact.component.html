@@ -162,15 +162,15 @@
                   <tr>
                     <td>
                       <p>Sales</p>
-                      <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                      <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
                     </td>
                     <td>
                       <p>Receipts</p>
-                      <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                      <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
                     </td>
                     <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                      <h3>{{getTotalDue() | giddhCurrency}}/-</h3>
                     </td>
 
                   </tr>
@@ -190,7 +190,7 @@
   <!-- endregion -->
 
   <!-- region Aging Report -->
-  <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+  <tab heading="Aging Report" (select)="tabSelected('aging')" [active]="activeTab === 'aging'">
     <!--    <div *ngIf="activeTab === 'aging'">-->
     <aging-report></aging-report>
     <!--    </div>-->
