@@ -109,4 +109,31 @@ span.viasocket a{
 .invoice-lock-date{
   width: 152px;
 }
+.showOnMobile{
+  display: none;
+}
+@media(max-width:767px){
+  .hideOnMobile{
+    display: none;
+  }
+  #invoice-setting .showOnMobile {
+    display: inline-block;
+    float: left;
+    width: 20px;
+    top: 4px;
+}
+.paymentGateway{
+  margin-left: 15px;
+  margin-top: 5px;
+}
+#invoice-setting label {
 
+  float: left;
+  width: 88%;
+}
+.form-group.clearfix.max150 {
+
+  margin-top: 5px;
+}
+
+}

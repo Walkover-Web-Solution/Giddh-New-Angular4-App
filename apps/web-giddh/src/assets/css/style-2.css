@@ -7619,6 +7619,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 767px) {
+  #invoice-setting ul.nav.nav-tabs {
+    border-bottom: none !important;
+  }
   #export-body label {
     padding-bottom: 5px;
   }
