@@ -15,9 +15,9 @@
 
                     <form class="col-xs-12" autocomplete="off">
 
-                        <div class="row">
-                            <h4 class="clearfix bdrB">General <span>(These settings will be applicable on Estimates, Proforma and Invoices) </span>
-                            </h4>
+            <div class="row">
+              <h4 class="clearfix bdrB">General <span>(These settings will be applicable on Estimates, Proformas and Invoices) </span>
+              </h4>
 
                             <div class="clearfix">
 
@@ -120,8 +120,8 @@
 
                             <div class="clearfix pdT1">
 
-                                <div class="row">
-                                    <div class="col-xs-5"><label>Enable Proforma Invoices</label></div>
+                <div class="row">
+                  <div class="col-xs-5"><label>Enable Proforma Invoices</label></div>
 
                                     <div class="col-xs-7">
                                         <div class="form-group clearfix">
@@ -155,8 +155,8 @@
 
                 <div class="box clearfix mb-2">
 
-          <h4 class="clearfix bdrB">Email/SMS <span>(These settings will be applicable on Estimates, Proformas and Invoices)</span>
-          </h4>
+                    <h4 class="clearfix bdrB">Email/SMS <span>(These settings will be applicable on Estimates, Sales Order and Invoices)</span>
+                    </h4>
 
                     <div class="clearfix">
 
@@ -318,9 +318,10 @@
 
                                     <div class="col-xs-2 p-0">
 
-                                        <div class="">
-                                            <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'"> Proformas
-                                        </div>
+                    <div class="">
+                      <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio"
+                             [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'"> Proformas
+                    </div>
 
                                     </div>
 
@@ -401,17 +402,17 @@
         </tab>
         <!-- endregion -->
 
-        <!-- region sales order tab -->
-        <tab>
-            <ng-template tabHeading>
-                <span class="icon-sales-order"></span> Proformas
-            </ng-template>
+    <!-- region sales order tab -->
+    <tab>
+      <ng-template tabHeading>
+        <span class="icon-sales-order"></span> Proformas
+      </ng-template>
 
             <div class="estimate-tab sales-order-tab">
 
                 <div class="box clearfix mb-2">
 
-                    <h4 class="clearfix bdrB">Proforma Invoice <span></span></h4>
+          <h4 class="clearfix bdrB">Proforma Invoice <span></span></h4>
 
                     <div class="clearfix">
 
@@ -498,27 +499,28 @@
                             </div>
                         </div>
 
-                        <div class="clearfix pdT1">
-                            <div class="row">
-                                <div class="col-xs-5"><label>Enable send proforma via SMS</label></div>
-                                <div class="col-xs-7 p-0">
-                                    <div class="form-group clearfix">
-                                        <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="proformaCreatePaymentEntry" />
-                                        <!-- <div class="mrT1 max250 mrT3" *ngIf="invoiceSetting.sendInvLinkOnSms">
-    <textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control" name="sendInvLinkOnSms" rows="3"></textarea>
+            <div class="clearfix pdT1">
+              <div class="row">
+                <div class="col-xs-5"><label>Enable send proforma via SMS</label></div>
+                <div class="col-xs-7 p-0">
+                  <div class="form-group clearfix">
+                    <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left"
+                           name="proformaCreatePaymentEntry"/>
+                    <!-- <div class="mrT1 max250 mrT3" *ngIf="invoiceSetting.sendInvLinkOnSms">
+<textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control" name="sendInvLinkOnSms" rows="3"></textarea>
 </div> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-<!--                      will  use in v2 -->
-<!--                        <div class="clearfix pdT1">-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-xs-5"><label>Custom Proforma#</label></div>-->
-<!--                                <div class="col-xs-7 p-0">-->
-<!--                                    <div class="form-group clearfix ">-->
-<!--                                        <input type="checkbox" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
+            <!--                      will  use in v2 -->
+            <!--                        <div class="clearfix pdT1">-->
+            <!--                            <div class="row">-->
+            <!--                                <div class="col-xs-5"><label>Custom Proforma#</label></div>-->
+            <!--                                <div class="col-xs-7 p-0">-->
+            <!--                                    <div class="form-group clearfix ">-->
+            <!--                                        <input type="checkbox" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
 
 <!--                                    </div>-->
 <!--                                </div>-->
@@ -660,12 +662,13 @@
                             </div>
                         </div>
 
-                        <div class="clearfix pdT1">
-                            <div class="row">
-                                <div class="col-xs-5"><label>Enable send proforma via SMS</label></div>
-                                <div class="col-xs-7 p-0">
-                                    <div class="form-group clearfix">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left" name="autoEntryVoucherAndEmail" />
+            <div class="clearfix pdT1">
+              <div class="row">
+                <div class="col-xs-5"><label>Enable send proforma via SMS</label></div>
+                <div class="col-xs-7 p-0">
+                  <div class="form-group clearfix">
+                    <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left"
+                           name="autoEntryVoucherAndEmail"/>
 
                                     </div>
                                 </div>

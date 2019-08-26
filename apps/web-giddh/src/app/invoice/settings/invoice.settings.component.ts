@@ -207,7 +207,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Update Form
    */
-  public UpdateForm(form) {
+  public UpdateForm(form = {}) {
 
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
