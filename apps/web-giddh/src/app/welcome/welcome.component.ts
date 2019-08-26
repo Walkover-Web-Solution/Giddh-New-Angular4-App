@@ -41,7 +41,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedstateName: string = '';
   public selectedCountry = '';
   //public gstKeyDownSubject$: Subject<any> = new Subject<any>();
-  public isGstValid: boolean;
+  public isGstValid: boolean = true;
   public countrySource: IOption[] = [];
   public currencies: IOption[] = [];
   public countryPhoneCode: IOption[] = [];

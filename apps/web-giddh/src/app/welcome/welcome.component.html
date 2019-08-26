@@ -63,13 +63,14 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">GSTIN  <sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder="" />
+                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder=""
+                                />
 
                             </div>
                         </div>
                         <div class="col-xs-12 mrB3">
                             <div class="form-group form-custom ">
-                                <label>State</label><br>
+                                <label>State<sup class="text-danger">*</sup></label><br>
                                 <div class="mrB2 ">
                                     <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state" [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
                                 </div>
@@ -96,7 +97,7 @@
                     </ng-container>
                     <div class="col-xs-12 mrB3 " *ngIf="selectedBusinesstype === 'Registered'">
                         <div class="clearfix ">
-                            <label for="address " class="d-block ">Company Address <sup >*</sup></label>
+                            <label for="address " class="d-block ">Company Address <sup class="text-danger" >*</sup></label>
                             <textarea placeholder="Address " class="form-control mrT1 " name="address" required id="address" [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
@@ -111,7 +112,7 @@
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-default" (click)="back()">Back</button>
-                        <button type="submit " class="btn btn-blue  " (click)="submit() " [disabled]="welcomeForm.invalid">
+                        <button type="submit " class="btn btn-blue  " (click)="submit() " [disabled]="welcomeForm.invalid || !isGstValid">
                             Next
                         </button>
                     </div>
