@@ -14,7 +14,7 @@
         <!-- ledger header -->
         <div class="col-md-12">
             <div class="row">
-                <div class="col-xs-2">
+                <div class="col-sm-2">
                     <div class="row">
                         <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                         <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -30,12 +30,12 @@
                 <!--&lt;!&ndash;<button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>&ndash;&gt;-->
                 <!--</div>-->
                 <!--</div>-->
-                <div class="col-xs-4">
+                <div class="col-sm-4">
                     <!--<div class="row">-->
                     <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
                     <!--</div>-->
                 </div>
-                <div class="col-xs-6 pull-right text-right C-flex-end">
+                <div class="col-sm-6 pull-right text-right C-flex-end">
                     <div class="d-flex">
 
                         <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
@@ -477,7 +477,7 @@
                         <!--debit transaction if no forwardedBalance -->
 
                         <!--debit transaction loop over transactions -->
-                        <tr vr-item tabindex="-1" class="ledger-row" container="body"
+                        <tr vr-item tabindex="-1" class="ledger-row sadik" container="body"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -488,7 +488,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
@@ -501,7 +501,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-6">
+                            <td class="col-xs-6" data-title="Particular">
                                 <div class="d-flex align-items-center" style="justify-content: space-between">
 
                                     <div class="ellp">
@@ -525,7 +525,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="col-xs-3 pos-rel text-right">
+                            <td class="col-xs-3 pos-rel text-right" data-title="Date">
                                 {{ txn.amount | giddhCurrency }}
                             </td>
                         </tr>
