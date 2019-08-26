@@ -81,7 +81,7 @@
                 </div>
               </tab>
 
-              <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')"
+              <tab heading="Pending" (select)="tabChanged('pending');"
                    [active]="activeTab === 'pending'">
                 <div *ngIf="activeTab === 'pending'">
                   <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
