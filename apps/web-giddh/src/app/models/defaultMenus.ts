@@ -49,6 +49,9 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
 
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
   // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
+  { type: 'MENU', name: 'Import', uniqueName: '/pages/import' },
+  { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
+  { type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding' },
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
 
@@ -65,13 +68,13 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   {type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling'},
   {type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync'},
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
-  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
-  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
-  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: {tab: 'aging-report', tabIndex: 1}},
-
-  {type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: {tab: 'profile', tabIndex: 1}},
-  {type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: {tab: 'api', tabIndex: 0}},
-  {type: 'MENU', name: 'Reports', uniqueName: '/pages/reports'}
+  { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
+  { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
+  { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 } },
+  { type: 'MENU', name: 'User-Details > Subscriptions', uniqueName: '/pages/user-details', additional: { tab: 'subscriptions', tabIndex: 3 } },
+  { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: { tab: 'profile', tabIndex: 1 } },
+  { type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: { tab: 'api', tabIndex: 0 } },
+  { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports' }
 ];
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',

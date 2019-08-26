@@ -24,7 +24,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   public logedInUser: UserDetails;
   public SubscriptionRequestObj: SubscriptionRequest = {
     planUniqueName: '',
-    subscriptionUnqiueName: '',
+    subscriptionId: '',
     userUniqueName: '',
     licenceKey: ''
   };
@@ -86,9 +86,16 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     if (!this.createNewCompanyPreObj) {
       this._route.navigate(['new-user']);
     } else {
-      this.SubscriptionRequestObj.planUniqueName = item.planDetails.uniqueName;
-      this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
-      this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+      if (item.subscriptionId) {
+        this.SubscriptionRequestObj.subscriptionId = item.subscriptionId;
+        this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+        this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+      } else {
+        this.SubscriptionRequestObj.planUniqueName = item.planDetails.uniqueName;
+        this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+        this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+      }
+
 
     }
   }

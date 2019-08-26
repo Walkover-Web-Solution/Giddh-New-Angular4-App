@@ -157,20 +157,20 @@
             </div>
 
             <div class="bg-white clearfix">
-              <div class="customer-right">
-                <table>
+              <div class="customer-right clearfix" style="width: 100%;">
+                <table style="float: right; width: auto;" class="text-right">
                   <tr>
                     <td>
                       <p>Sales</p>
-                      <h3>{{getTotalSales() |giddhCurrency }}</h3>
+                      <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
                     </td>
                     <td>
                       <p>Receipts</p>
-                      <h3>{{getTotalReceipts() | giddhCurrency}}</h3>
+                      <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
                     </td>
                     <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue() | giddhCurrency}}</h3>
+                      <h3>{{getTotalDue() | giddhCurrency}}/-</h3>
                     </td>
 
                   </tr>

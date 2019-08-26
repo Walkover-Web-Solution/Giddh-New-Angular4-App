@@ -193,7 +193,7 @@ export class BankTransferRequest {
 }
 export class SubscriptionRequest {
   planUniqueName: string;
-  subscriptionUnqiueName: string;
+  subscriptionId: string;
   userUniqueName: string;
   licenceKey: string;
 }

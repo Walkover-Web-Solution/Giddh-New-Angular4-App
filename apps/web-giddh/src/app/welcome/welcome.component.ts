@@ -65,7 +65,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     isBranch: false,
     subscriptionRequest: {
       planUniqueName: '',
-      subscriptionUnqiueName: '',
+      subscriptionId: '',
       userUniqueName: '',
       licenceKey: ''
     },
