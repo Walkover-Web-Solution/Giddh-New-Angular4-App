@@ -10,6 +10,8 @@ import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { takeUntil, take } from 'rxjs/operators';
+import { ActivatedRoute, Router, Route } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'billing-details',
@@ -37,9 +39,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
   public isGstValid: boolean;
 
   public payAmount: number;
+  public fromSubscription: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute) {
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
       if (data) {
@@ -51,6 +54,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     }, (err) => {
       // console.log(err);
     });
+    this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
   }
 
   public ngOnInit() {
@@ -116,9 +120,15 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+  public backToSubscriptions() {
+    this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } }); //  routerLink="/pages/user-details?tab=profile&tabIndex=1"
+  }
 
 
-  public payWithRazor() {
+  public payWithRazor(billingDetail: NgForm) {
+
+    console.log(billingDetail);
+
     let options: any = {
       key: 'rzp_live_rM2Ub3IHfDnvBq',
       amount: this.payAmount, // 2000 paise = INR 20

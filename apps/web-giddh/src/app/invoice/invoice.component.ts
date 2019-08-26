@@ -24,13 +24,6 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
           border-bottom: 2px solid #ff5f00 !important;
       }
 
-      /
-      /
-      .invoce-controll ::ng-deep.nav > li > a {
-      / / border-bottom: 2 px solid transparent !important;
-      / /
-      }
-
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 28px;
           padding: 8px 0px 0 15px !important;

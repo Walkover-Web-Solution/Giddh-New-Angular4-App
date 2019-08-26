@@ -146,6 +146,13 @@ export class GeneralActions {
     }
   }
 
+  public setAppTitle(uniqueName: string, additional?: { tab: string, tabIndex: number }) {
+    return {
+      type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
+      payload: {uniqueName, additional}
+    }
+  }
+
   public resetSmartList(): CustomActions {
     return {
       type: GENERAL_ACTIONS.RESET_SMART_LIST
