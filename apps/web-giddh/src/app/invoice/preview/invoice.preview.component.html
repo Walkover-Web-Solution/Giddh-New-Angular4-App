@@ -322,8 +322,7 @@
 
         <td>
           <div style="position: relative" class="d-flex">
-            <a href="javascript:void(0);" class="btn-link-2"
-              (click)="onSelectInvoice(item, i)">{{item.voucherNumber}}</a>
+            <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
             <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
             <!--               tooltip="Invoice sent" placement="left"/>-->
           </div>
@@ -352,6 +351,20 @@
             [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
             [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
           </div>
+        </td>
+
+        <td>{{item.voucherDate}}</td>
+        <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+        <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
+        <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+
+        <!--for not cancelled status-->
+        <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
+          <div class="d-flex" style="align-items: center">
+            <div class="flex-fill">
+              <span
+                [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+            </div>
         </td>
 
         <td>{{item.voucherDate}}</td>
@@ -427,7 +440,7 @@
           <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
         </td>
 
-        <td><a style="cursor: pointer" (click)="onSelectInvoice(item, i)">
+        <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
             {{item.voucherNumber }}</a></td>
         <td>{{item.account.name}}</td>
         <td>{{item.voucherDate}}</td>
@@ -490,7 +503,7 @@
             </div>
             <div class="col-xs-6 p-0">
               <div style="position:relative;">
-                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item, i)">
+                <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
                   {{item.voucherNumber }}</a>
                 <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
 tooltip="Invoice sent" placement="left" />-->
