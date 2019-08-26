@@ -1,20 +1,21 @@
-<div *ngIf="!isPlanShow">
-    <div class="clearfix mrT2">
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="form-group">
-                    <label class="d-block mb-1">Select Subscribed Plan</label>
-                    <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
-                        <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
-                       {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
-                    </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                            <ng-container *ngFor="let item of subscriptions">
-                                <li role="menuitem" class="cursor-pointer">
+<ng-container *ngIf="this.subscriptions.length">
+    <div *ngIf="!isPlanShow">
+        <div class="clearfix mrT2">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="form-group">
+                        <label class="d-block mb-1">Select Subscribed Plan</label>
+                        <div class="btn-group d-block subscription-dropdown mb-2" dropdown>
+                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic">
+                           {{seletedUserPlans?.planDetails?.name}} <span class="caret"></span>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                                <li *ngIf="subscriptions.length==0">No results found</li>
+                                <li *ngFor="let item of subscriptions" role="menuitem" class="cursor-pointer">
                                     <a (click)="selectedSubscriptionPlan(item);">
                                         <div class="clearfix">
                                             <p><strong>{{item?.planDetails?.name}}</strong> </p>
-                                            <!-- {{moment(item?.createdAt).format(GIDDH_DATE_FORMAT)}} -->
+
                                             <p>Subscribed on {{item?.startedAt}} </p>
                                             <p>Companies: {{item?.totalCompanies}} out of {{item?.planDetails?.companiesLimit}} </p>
                                         </div>
@@ -23,147 +24,116 @@
                                         <span class="text-danger" *ngIf="item?.status==='expired'">{{item?.status | titlecase}}</span>
                                     </a>
                                 </li>
-                                <li *ngIf="!subscriptions.length">
-                                    No results found
-                                </li>
-                            </ng-container>
-                            <!-- <li role="menuitem">
-                                <a href="javascript:void(0)">
-                                    <div class="clearfix">
-                                        <p>Trial Plan </p>
-                                        <p>Subscribed on 01/05/19</p>
-                                        <p>Companies: 4 out of 10</p>
-                                    </div>
-                                    <span class="text-danger">Expired</span>
-                                </a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a href="javascript:void(0)">
-                                    <div class="clearfix">
-                                        <p>Trial Plan </p>
-                                        <p>Subscribed on 01/05/19</p>
-                                        <p>Companies: 4 out of 10</p>
-                                    </div>
-                                    <span class="text-success">Expired</span>
-                                </a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a href="javascript:void(0)">
-                                    <div class="clearfix">
-                                        <p>Trial Plan </p>
-                                        <p>Subscribed on 01/05/19</p>
-                                        <p>Companies: 4 out of 10</p>
-                                    </div>
-                                    <span class="text-success">Expired</span>
-                                </a>
-                            </li> -->
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9 col-sm-6 text-right xs-left">
-                <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="table-responsive">
-                    <table class="table table-no-border mb-0">
-                        <tr>
-                            <th>Subscription ID</th>
-                            <td>{{seletedUserPlans?.subscriptionId}}</td>
-                        </tr>
-                        <tr>
-                            <th> Subscription Price</th>
-                            <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
-                        </tr>
-                        <tr>
-                            <th>Total Companies</th>
-                            <td>{{ seletedUserPlans?.totalCompanies | number}} out of {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
-                        </tr>
-                        <tr>
-                            <th>Transactions Limit</th>
-                            <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
-                        </tr>
-                        <tr>
-                            <th> Validity</th>
-                            <td>{{seletedUserPlans?.planDetails?.duration}} {{seletedUserPlans?.planDetails?.durationUnit}}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="clearfix mb-2">
-                    <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button>
-                    <button type="button" (click)="isPlanShow=true" class="btn btn-blue">Payment Log</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="clearfix mrT2 relative">
-        <div class="transection-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
-            <p>You have crossed transactions limit of your </p>
-            <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
-            <p><small>Please renew your plan or pay now to continue subscription.</small></p>
-        </div>
-
-        <h2 class="subscription-title" *ngIf="subscriptions">Professional Plan <span *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2>
-        <div class="row">
-            <div class="col-sm-7 transaction-list">
-                <div class="box clearfix mrT2 no-padding">
-                    <div class="table-responsive">
-                        <table class="table basic mr0 subscription-table">
-                            <thead>
-                                <tr>
-                                    <!-- <th>Date</th> <span class="text-light-2">(previous+current)</span>-->
-                                    <th>Transactions</th>
-                                    <th>Balance</th>
-                                    <th>Additional Charges</th>
-                                </tr>
-                            </thead>
-                            <tbody *ngIf="seletedUserPlans">
-                                <tr>
-                                    <!-- <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
-                                    <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
-                                    <!-- <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span> -->
-                                    <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
-                                    <td>{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="mrT2">
-                    <p><small>* Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction</small></p>
-                    <p><small>* Each month includes previous month's transactions</small></p>
-                </div>
-            </div>
-
-
-            <div class="col-sm-5 transaction-list">
-                <div class="box2 clearfix mrT2">
-                    <div class="head-title">
-                        <h3>Companies Name + Total Transactions (till today)</h3>
-                    </div>
-                    <div class="clearfix">
-                        <div class="mt-1 mb-1 mr-2 ml-2">
-                            <input type="search" class="form-control" placeholder="Search Company">
-                        </div>
-                        <div class="campanien-list" *ngIf="subscriptions">
-                            <ul>
-                                <li *ngFor="let company of seletedUserPlans?.companiesWithTransactions "><a href="javascript:void(0)" (click)="openModal(template, company, subscriptions[0])">{{company.name}}<span>{{company.transactions}}</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-9 col-sm-6 text-right xs-left">
+                    <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="table-responsive">
+                        <table class="table table-no-border mb-0">
+                            <tr>
+                                <th>Subscription ID</th>
+                                <td>{{seletedUserPlans?.subscriptionId}}</td>
+                            </tr>
+                            <tr>
+                                <th> Subscription Price</th>
+                                <td>{{seletedUserPlans?.planDetails?.amount | number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Companies</th>
+                                <td>{{ seletedUserPlans?.totalCompanies | number}} out of {{ seletedUserPlans?.planDetails?.companiesLimit | number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Transactions Limit</th>
+                                <td>{{seletedUserPlans?.planDetails?.transactionLimit | number}}</td>
+                            </tr>
+                            <tr>
+                                <th> Validity</th>
+                                <td>{{seletedUserPlans?.planDetails?.duration}} {{seletedUserPlans?.planDetails?.durationUnit}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="clearfix mb-2">
+                        <button type="button" class="btn btn-primary" (click)="isPlanShow=true">Change Plan</button>
+                        <button type="button" (click)="isPlanShow=true" class="btn btn-blue">Payment Log</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="clearfix mrT2 relative">
+            <div class="transection-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
+                <p>You have crossed transactions limit of your </p>
+                <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
+                <p><small>Please renew your plan or pay now to continue subscription.</small></p>
+            </div>
+
+            <h2 class="subscription-title" *ngIf="subscriptions">Professional Plan <span *ngIf="seletedUserPlans?.startedAt">({{seletedUserPlans?.startedAt}})</span></h2>
+            <div class="row">
+                <div class="col-sm-7 transaction-list">
+                    <div class="box clearfix mrT2 no-padding">
+                        <div class="table-responsive">
+                            <table class="table basic mr0 subscription-table">
+                                <thead>
+                                    <tr>
+                                        <!-- <th>Date</th> <span class="text-light-2">(previous+current)</span>-->
+                                        <th>Transactions</th>
+                                        <th>Balance</th>
+                                        <th>Additional Charges</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="seletedUserPlans">
+                                    <tr>
+                                        <!-- <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
+                                        <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}</td>
+                                        <!-- <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span> -->
+                                        <td>{{ seletedUserPlans?.balance? seletedUserPlans?.balance: 0 }}</td>
+                                        <td>{{ seletedUserPlans?.additionalCharges? seletedUserPlans?.additionalCharges: 0 }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mrT2">
+                        <p><small>* Additional charges on transactions above 40,000 @ 0.10 Rs. per transaction</small></p>
+                        <p><small>* Each month includes previous month's transactions</small></p>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-5 transaction-list">
+                    <div class="box2 clearfix mrT2">
+                        <div class="head-title">
+                            <h3>Companies Name + Total Transactions (till today)</h3>
+                        </div>
+                        <div class="clearfix">
+                            <div class="mt-1 mb-1 mr-2 ml-2">
+                                <input type="search" class="form-control" [(ngModel)]="srchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
+                            </div>
+                            <div class="campanien-list" *ngIf="subscriptions">
+                                <ul>
+                                    <li *ngFor="let company of selectedPlanCompanies "><a href="javascript:void(0)" (click)="openModal(template, company, subscriptions[0])">{{company.name}}<span>{{company.transactions}}</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<div *ngIf="!this.subscriptions.length">
+    <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+        <div class="giddh-spinner vertical-center-spinner"></div>
     </div>
 </div>
 
