@@ -363,8 +363,11 @@
           <div class="d-flex" style="align-items: center">
             <div class="flex-fill">
               <span
-                [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+                [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}
+              </span>
             </div>
+          </div>
+
         </td>
 
         <td>{{item.voucherDate}}</td>
