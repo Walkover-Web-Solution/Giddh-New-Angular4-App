@@ -359,21 +359,8 @@
         <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
         <!--for not cancelled status-->
-        <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
-          <div class="d-flex" style="align-items: center">
-            <div class="flex-fill">
-              <span
-                [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}
-              </span>
-            </div>
-          </div>
 
-        </td>
 
-        <td>{{item.voucherDate}}</td>
-        <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
-        <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
-        <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
         <!--for not cancelled status-->
         <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
