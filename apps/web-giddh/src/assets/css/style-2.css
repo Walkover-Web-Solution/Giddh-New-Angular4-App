@@ -1735,7 +1735,7 @@ input[type="checkbox"]:after {
 }
 
 .noBrdRdsModal .modal-header > .close {
-  top: -7px;
+  top: 0px;
 }
 
 .tab-pane input[type=search]:after {
@@ -7421,6 +7421,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 768px) {
+
   .justify-content-sm-start {
     justify-content: left !important;
 }
@@ -7615,6 +7616,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding: 0 3px;
     border: none;
   }
+  td.text-center.empty_table {
+    padding:  5px 10px 5px 0%  !important;
+    text-align: center;
+}
 }
 
 @media (max-width: 1280px) {
@@ -7644,6 +7649,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 
   .accountAsideMenuState2 #close {
     right: 267px;
+  }
+  .custom-tabs  .top_bar {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 
