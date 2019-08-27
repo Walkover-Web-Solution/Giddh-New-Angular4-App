@@ -133,6 +133,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
+      _.uniqBy(this.states, 'value');
       this.statesSource$ = observableOf(this.states);
     }, (err) => {
       // console.log(err);
@@ -284,6 +285,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
+        _.uniqBy(s, 'value');
         statesEle.setDisabledState(false);
 
         if (s) {

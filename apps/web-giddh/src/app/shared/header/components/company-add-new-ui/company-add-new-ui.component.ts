@@ -84,6 +84,10 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
 
   public ngOnInit() {
     this.logedInuser = this._generalService.user;
+    if (this._generalService.createNewCompany) {
+      this.company = this._generalService.createNewCompany;
+      this.isMobileNumberValid = true;
+    }
     this._generalService.createNewCompany = null;
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
