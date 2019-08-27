@@ -26,19 +26,20 @@
 
 /* css start */
 
-[class^="icon-"],
-[class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -7466,106 +7467,123 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 768px) {
-    .top-aging-table-top .top-aging-table-top1 {
-        top: 38px;
-    }
-    .top-aging-table-box {
-        text-align: left;
-        margin-bottom: 10px;
-    }
-    .paginationWrapper {
-        margin-top: 20px;
-        border: none;
-        background-color: transparent;
-        padding: 0;
-    }
-    .overlayBg:after {
-        position: fixed;
-        content: '';
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        top: 0;
-        z-index: 4;
-    }
-    .onMobileView tbody tr {
-        box-shadow: 0 0px 5px rgba(0, 0, 0, .1);
-        background: #fff;
-        border-bottom: 1px solid #dfdfdf;
-        cursor: pointer;
-        display: block;
-        padding: 5px 0 10px 0px;
-        margin: 22px auto 0;
-        width: 100%;
-        max-width: 100%;
-    }
-    .onMobileView table {
-        background: transparent;
-        margin-bottom: 0;
-        width: 100%;
-    }
-    .onMobileView table thead {
-        display: none;
-    }
-    .onMobileView table {
-        max-width: 100%;
-        width: 99%;
-        margin: 0 auto 0;
-        max-height: 500px;
-        overflow-y: scroll;
-        position: relative;
-        transition: all 0.2s ease-out;
-    }
-    .onMobileView tbody td {
-        border: 0 !important;
-        display: block;
-        padding: 5px 10px 5px 50% !important;
-        position: relative;
-        text-align: left;
-        height: auto !important;
-        min-height: 30px !important;
-        word-wrap: inherit !important;
-        max-width: 100%;
-        white-space: inherit;
-    }
-    .onMobileView tbody td:after {
-        content: '';
-        width: calc(100% - 30px);
-        display: block;
-        margin: 0 auto;
-        height: 1px;
-        background: transparent;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -6px;
-    }
-    .onMobileView tbody td:before {
-        color: rgba(0, 0, 0, .55);
-        font-size: 14px;
-        content: attr(data-title);
-        display: table-cell;
-        font-weight: 500;
-        height: 100%;
-        left: 27px;
-        margin: auto;
-        position: absolute;
-        vertical-align: middle;
-        white-space: nowrap;
-        width: 40%;
-        text-align: left;
-    }
-    .onMobileView .table-bordered>tfoot>tr>td {
-        border: none;
-    }
-    .onMobileView th {
-        display: none;
-    }
-    .onMobileView.basic>tbody>tr:hover td,
-    .onMobileView .basic>tbody>tr:hover td {
-        background: transparent;
-    }
-    /* .tab-container .nav.nav-tabs {
+  .justify-content-sm-start {
+    justify-content: left !important;
+}
+  .top-aging-table-top .top-aging-table-top1 {
+    top: 38px;
+  }
+
+  .top-aging-table-box {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .overlayBg:after {
+    position: fixed;
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    z-index: 4;
+  }
+
+  .onMobileView tbody tr {
+    box-shadow: 0 0px 5px rgba(0, 0, 0, .1);
+    background: #fff;
+    border-bottom: 1px solid #dfdfdf;
+    cursor: pointer;
+    display: block;
+    padding: 5px 0 10px 0px;
+    margin: 22px auto 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .onMobileView table {
+    background: transparent;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .onMobileView table thead {
+    display: none;
+  }
+
+  .onMobileView table {
+    max-width: 100%;
+    width: 99%;
+    margin: 0 auto 0;
+    max-height: 500px;
+    overflow-y: scroll;
+    position: relative;
+    transition: all 0.2s ease-out;
+  }
+
+  .onMobileView tbody td {
+    border: 0 !important;
+    display: block;
+    padding: 5px 10px 5px 50% !important;
+    position: relative;
+    text-align: left;
+    height: auto !important;
+    min-height: 30px !important;
+    word-wrap: inherit !important;
+    max-width: 100%;
+    white-space: inherit;
+  }
+
+  .onMobileView tbody td:after {
+    content: '';
+    width: calc(100% - 30px);
+    display: block;
+    margin: 0 auto;
+    height: 1px;
+    background: transparent;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -6px;
+  }
+
+  .onMobileView tbody td:before {
+    color: rgba(0, 0, 0, .55);
+    font-size: 14px;
+    content: attr(data-title);
+    display: table-cell;
+    font-weight: 500;
+    height: 100%;
+    left: 27px;
+    margin: auto;
+    position: absolute;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 40%;
+    text-align: left;
+  }
+
+  .onMobileView .table-bordered > tfoot > tr > td {
+    border: none;
+  }
+
+  .onMobileView th {
+    display: none;
+  }
+
+  .onMobileView.basic > tbody > tr:hover td,
+  .onMobileView .basic > tbody > tr:hover td {
+    background: transparent;
+  }
+
+  /* .tab-container .nav.nav-tabs {
     margin: 0;
     padding: 10px 0px 0;
     white-space: nowrap;
@@ -7573,63 +7591,76 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 100%;
     overflow-y: hidden;
   } */
-    .tab-container .nav-tabs>li {
-        float: none;
-        display: inline-block;
-        cursor: grab;
-    }
-    #settingTab .tab-container .nav.nav-tabs {
-        margin: 0;
-        padding: 10px 0px 0;
-        white-space: nowrap;
-        display: inline-block;
-        width: 100%;
-        overflow-y: hidden;
-    }
-    #settingTab .tab-container .nav-tabs>li {
-        float: none;
-        display: inline-block;
-        cursor: grab;
-    }
-    .nav-tabs>li {
-        float: left;
-        margin-bottom: 0px;
-    }
-    #settingTab .tab-integraton .nav.nav-tabs {
-        overflow: auto;
-        white-space: initial;
-        width: 100%;
-        max-width: 210px;
-        margin: 0 auto;
-        display: block;
-    }
-    #settingTab .tab-integraton .nav-tabs>li {
-        width: 100px;
-        margin-bottom: 20px;
-        margin-right: 10px;
-    }
-    #settingTab .tab-integraton .nav-tabs>li:nth-child(2n) {
-        margin-right: 0 !important;
-    }
-    #settingTab .tab-integraton .nav-tabs>li>a {
-        width: 90px;
-        height: 90px;
-        font-size: 14px;
-    }
-    .onMobileView.table-bordered {
-        border: none;
-    }
-    .noRecords.onMobileView td:before {
-        display: none !important;
-    }
-    .noRecords.onMobileView td {
-        text-align: center !important;
-        padding: 5px 10px 5px 0% !important;
-    }
-    .table-responsive {
-        padding: 0 3px;
-        border: none;
-    }
+  .tab-container .nav-tabs > li {
+    float: none;
+    display: inline-block;
+    cursor: grab;
+  }
+
+  #settingTab .tab-container .nav.nav-tabs {
+    margin: 0;
+    padding: 10px 0px 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
+    overflow-y: hidden;
+  }
+
+  #settingTab .tab-container .nav-tabs > li {
+    float: none;
+    display: inline-block;
+    cursor: grab;
+  }
+
+  .nav-tabs > li {
+    float: left;
+    margin-bottom: 0px;
+  }
+
+  #settingTab .tab-integraton .nav.nav-tabs {
+    overflow: auto;
+    white-space: initial;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li {
+    width: 100px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li:nth-child(2n) {
+    margin-right: 0 !important;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li > a {
+    width: 90px;
+    height: 90px;
+    font-size: 14px;
+  }
+
+  .onMobileView.table-bordered {
+    border: none;
+    background:transparent;
+    margin-top: 0;
+  }
+
+  .noRecords.onMobileView td:before {
+    display: none !important;
+  }
+
+  .noRecords.onMobileView td {
+    text-align: center !important;
+    padding: 5px 10px 5px 0% !important;
+  }
+
+  .table-responsive {
+    padding: 0 3px;
+    border: none;
+  }
 }
 
 @media (max-width: 1280px) {
@@ -7639,12 +7670,17 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 767px) {
-    #export-body label {
-        padding-bottom: 5px;
-    }
-    .company-box .inner-company-box>ul>li>span {
-        width: 100px;
-    }
+  #invoice-setting ul.nav.nav-tabs {
+    border-bottom: none !important;
+  }
+  #export-body label {
+    padding-bottom: 5px;
+  }
+
+  .company-box .inner-company-box > ul > li > span {
+    width: 100px;
+  }
+
 }
 
 @media (max-width: 575px) {
@@ -7701,4 +7737,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .icon-pointer .fa.fa-long-arrow-up {
     color: #000;
     opacity: 0.3;
+}
+span.red-text {
+  color: red;
 }
