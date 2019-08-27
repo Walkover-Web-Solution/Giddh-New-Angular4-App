@@ -252,9 +252,15 @@ tr.aging-table-top td {
   border-color: #E7E7E8;
   box-shadow: none !important;
 }
+.customer-right  table{
+  float: right; width: auto;
+}
 
 
 @media(max-width:768px){
+  .custumerRightWrap h4.mb-1.pdR2 {
+    margin-bottom: 0;
+}
   tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
     border-bottom: none !important;
   }
@@ -295,6 +301,9 @@ tr.aging-table-top td {
 
 }
 @media(max-width:575px){
+  .custumerRightWrap h4.mb-1.pdR2 {
+    margin-bottom: 10px;
+}
   .customer-right {
     background: #fff;
     padding: 0 15px;
