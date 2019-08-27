@@ -177,7 +177,7 @@ tfoot {
 .form-group button, .form-group .input-group {
   width: 48.5%;
   float: left;
-  display: inline-block !important;
+
   margin-bottom: 10px;
   min-height: 40px;
 }
@@ -188,6 +188,11 @@ tfoot {
   margin-top: 20px;
   border: none;
   background-color: transparent;
+}
+}
+@media(max-width:768px){
+  #centerAlign td {
+    padding: 0 !important;
 }
 }
 @media(max-width:550px){
@@ -204,4 +209,8 @@ tfoot {
   .form-group button, .form-group .input-group {
     width: 100%;
   }
+  div#dp-parent {
+    margin-bottom: 0;
+    width: 200px;
+}
 }

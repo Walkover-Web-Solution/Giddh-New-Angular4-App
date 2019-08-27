@@ -114,7 +114,9 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         let queryParams = result[1];
 
         if (params) {
-          this.selectedVoucherType = params.voucherType;
+          if (params.voucherType === 'sales' || params.voucherType === 'debit note' || params.voucherType === 'credit note') {
+            this.selectedVoucherType = params.voucherType;
+          }
 
           if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {

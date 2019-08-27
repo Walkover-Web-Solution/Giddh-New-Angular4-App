@@ -525,7 +525,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="col-xs-3 pos-rel text-right" data-title="Date">
+                            <td class="col-xs-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.amount | giddhCurrency }}
                             </td>
                         </tr>
@@ -673,13 +673,13 @@
                             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="creditSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td class="col-xs-6">B/F Balance</td>
-                            <td class="col-xs-3 text-right">
+                            <td data-title="B/F Balance" class="col-xs-6">B/F Balance</td>
+                            <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                                     {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
@@ -717,7 +717,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
@@ -732,7 +732,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-6">
+                            <td class="col-xs-6" data-title="Particular">
                                 <div class="d-flex align-items-center" style="justify-content: space-between">
                                     <div class="ellp">
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -757,7 +757,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-3 pos-rel text-right">
+                            <td data-title="Amount" class="col-xs-3 pos-rel text-right">
                                 {{txn.amount | giddhCurrency}}
                             </td>
                         </tr>
