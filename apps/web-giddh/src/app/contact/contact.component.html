@@ -11,7 +11,7 @@
 
             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown
               [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
-              [placement]="'left'">
+              [placement]="'right'">
               <i dropdownToggle class="icon-options pd cp fs20"></i>
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                 <!-- <li role="menuitem">
@@ -524,7 +524,7 @@
                 <label></label>
                 <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
                   [(ngModel)]="account.isSelected"
-                  [ngClass]="{'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length}" />
+                  [ngClass]="{'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
               </span> {{account.name}}
               <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                 <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
@@ -676,7 +676,7 @@
             </td>
 
           </tr>
-
+          <!---->
           <tr *ngIf="!(sundryDebtorsAccounts).length ">
             <td colspan="11" class="text-center empty_table ">
               <h1>No Record Found !!</h1>
@@ -694,7 +694,7 @@
                 <label></label>
                 <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
                   [(ngModel)]="account.isSelected "
-                  [ngClass]="{ 'checkbox_visible': selectedCheckedContacts.length, 'pos-abs': !selectedCheckedContacts.length} " />
+                  [ngClass]="{ 'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
               </span>{{account.name}}
               <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                 <a id="edit-model-basic2" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
