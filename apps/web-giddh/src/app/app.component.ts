@@ -11,7 +11,8 @@ import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
+import {reassignNavigationalArray} from './models/defaultMenus'
+import { DbService } from './services/db.service';
 /**
  * App Component
  * Top Level Component
@@ -41,6 +42,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   public isElectron: boolean = false;
   public tagManagerUrl: SafeUrl;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public isMobileSite: boolean;
 
   public sidebarStatusChange(event) {
     this.sideMenu.isopen = event;
@@ -59,7 +61,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
               private _generalService: GeneralService,
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private dbServices :DbService
               // private comapnyActions: CompanyActions,
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
@@ -85,6 +88,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     });
 
     this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
+
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileSite = s;
+    });
   }
 
 
@@ -108,11 +115,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
 
-      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
-        // need to save last state
-        const redirectState = this.getLastStateFromUrl(evt.url);
-        localStorage.setItem('lastState', redirectState);
-        return window.location.reload(true);
+      if ((evt instanceof NavigationStart) && !isElectron) {
+        if(!this.isMobileSite){
+          console.log(window.location.href);
+          if(window.location.href.startsWith('m.')){
+            this.dbServices.clearAllData();
+            reassignNavigationalArray(true);
+            this._generalService.setIsMobileView(true);
+          }else{
+            reassignNavigationalArray(false);
+          }
+        }
+        if(this.newVersionAvailableForWebApp){
+          // need to save last state
+          const redirectState = this.getLastStateFromUrl(evt.url);
+          localStorage.setItem('lastState', redirectState);
+          return window.location.reload(true);
+        }
       }
       if (!(evt instanceof NavigationEnd)) {
         return;
