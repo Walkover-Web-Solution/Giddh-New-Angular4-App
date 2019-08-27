@@ -7421,6 +7421,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 768px) {
+  .justify-content-sm-start {
+    justify-content: left !important;
+}
   .top-aging-table-top .top-aging-table-top1 {
     top: 38px;
   }
@@ -7595,6 +7598,8 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 
   .onMobileView.table-bordered {
     border: none;
+    background:transparent;
+    margin-top: 0;
   }
 
   .noRecords.onMobileView td:before {
@@ -7619,6 +7624,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 @media (max-width: 767px) {
+  #invoice-setting ul.nav.nav-tabs {
+    border-bottom: none !important;
+  }
   #export-body label {
     padding-bottom: 5px;
   }
@@ -7626,6 +7634,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
   }
+
 }
 
 @media (max-width: 575px) {
