@@ -117,7 +117,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
       if ((evt instanceof NavigationStart) && !isElectron) {
         if(!this.isMobileSite){
-          console.log(window.location.href);
           if(window.location.href.startsWith('m.')){
             this.dbServices.clearAllData();
             reassignNavigationalArray(true);
