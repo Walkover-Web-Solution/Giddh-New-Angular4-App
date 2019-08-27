@@ -385,16 +385,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
-    //   && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
-    //   this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
-    //     if (data && data.length) {
-    //       this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
-    //       let creditorsString = 'currentliabilities, sundrycreditors';
-    //       this.purchaseOrSales = this.accInfo.uNameStr.indexOf(creditorsString) > -1 ? 'purchase' : 'sales';
-    //     }
-    //   });
-    // }
   }
 
   public performActions(type: number, account: any, event?: any) {
