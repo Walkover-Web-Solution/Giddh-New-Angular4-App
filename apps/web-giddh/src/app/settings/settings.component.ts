@@ -94,8 +94,10 @@ export class SettingsComponent implements OnInit {
     // });
 
     this._route.params.subscribe(params => {
-      this.activeTab = params['type'];
-      this.setStateDetails(this.activeTab);
+      if (params['type'] && this.activeTab !== params['type']) {
+        this.activeTab = params['type'];
+      }
+      // this.setStateDetails(this.activeTab);
     });
 
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
@@ -166,6 +168,7 @@ export class SettingsComponent implements OnInit {
   public tabChanged(tab: string) {
     this.setStateDetails(tab);
     this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+    this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
   }
 
   private saveGmailAuthCode(authCode: string) {
@@ -221,7 +224,7 @@ export class SettingsComponent implements OnInit {
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'settings/' + type;
+    stateDetailsRequest.lastState = 'pages/settings/' + type;
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
