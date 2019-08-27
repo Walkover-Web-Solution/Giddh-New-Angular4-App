@@ -7738,3 +7738,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: #000;
     opacity: 0.3;
 }
+span.red-text {
+  color: red;
+}
