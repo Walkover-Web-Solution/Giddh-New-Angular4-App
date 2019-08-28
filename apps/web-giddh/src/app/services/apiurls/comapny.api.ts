@@ -20,6 +20,7 @@ export const COMPANY_API = {
   BUSINESS_TYPE_LIST: 'business-type',
   BUSINESS_NATURE_LIST: 'business-nature',
   APPLICABLE_TAXES: 'default-taxes',
+  RAZORPAY_ORDERID: 'subscription/generateOrder?amount=:amount&currency=:currency',
 
   GET_OTP: 'company/:companyUniqueName/bank/generateotp?urn=:urn',
   CONFIRM_OTP: 'company/:companyUniqueName/bank/transactionWithOtp',

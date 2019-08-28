@@ -60,7 +60,7 @@ export interface SessionState {
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
-  createCompanyRequestObj: CompanyCreateRequest
+  createCompanyUserStoreRequestObj: CompanyCreateRequest
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
 }
 
@@ -111,7 +111,7 @@ const sessionInitialState: SessionState = {
   userLoginState: userLoginStateEnum.notLoggedIn,
   currencies: null,
   todaySelected: false,
-  createCompanyRequestObj: null,
+  createCompanyUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null
 };
 
@@ -565,6 +565,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         d.isCompanyCreationInProcess = false;
         d.isCompanyCreationSuccess = true;
         d.isCompanyCreated = true;
+        d.createCompanyUserStoreRequestObj = null;
+        d.userSelectedSubscriptionPlan = null;
         d.companies.push(companyResp.body);
         return Object.assign({}, state, d);
       } else {
@@ -578,6 +580,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     }
     case CompanyActions.USER_SELECTED_PLANS:
       return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
+    case CompanyActions.USER_CAREATE_COMPANY:
+      return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
