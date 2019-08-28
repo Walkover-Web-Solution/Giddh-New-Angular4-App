@@ -86,12 +86,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     });
     if (this.subscriptionPrice && this.UserCurrency) {
       this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
-        if (res) {
-          this.payAmount = res.amount;
-          this.orderId = res.id;
+        if (res.status === 'success') {
+          this.payAmount = res.body.amount;
+          this.orderId = res.body.id;
           console.log('OrderId', this.orderId, 'amnt', this.payAmount);
         }
-
       });
     }
 
