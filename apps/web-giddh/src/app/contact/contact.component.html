@@ -817,8 +817,9 @@
                 (click)="openPaymentAside(account)">Pay Now
               </button>
               <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
-                (click)="redirectAddPayment(account)">Add Bank Detail
+                    (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
               </button>
+
             </td>
           </tr>
 
