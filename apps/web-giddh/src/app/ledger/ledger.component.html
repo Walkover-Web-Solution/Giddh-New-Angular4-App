@@ -35,13 +35,13 @@
                     <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
                     <!--</div>-->
                 </div>
-                <div class="col-sm-6 pull-right text-right C-flex-end">
-                    <div class="d-flex">
+                <div class="col-sm-6 text-right C-flex-end xs-pl-0 xs-pr-0">
+                    <div class="d-flex xs-width-100">
 
                         <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
 
                             <span class="d-flex" style="margin-right: 10px;">
-                                <button class="btn btn-link" style="margin-right: -3px;"
+                                <button class="btn btn-link xs-pl-0" style="margin-right: -3px;"
                                     (click)="onOpenAdvanceSearch()">Advance Search</button>
                                 <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
                                     *ngIf="isAdvanceSearchImplemented" style="margin-right: 7px;">
@@ -477,7 +477,7 @@
                         <!--debit transaction if no forwardedBalance -->
 
                         <!--debit transaction loop over transactions -->
-                        <tr vr-item tabindex="-1" class="ledger-row sadik" container="body"
+                        <tr vr-item tabindex="-1" class="ledger-row" container="body"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -534,7 +534,7 @@
                 </table>
 
                 <!--blank ledger-->
-                <table class="width100" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
+                <table class="width100 h-table amount-total" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
                         <tr *ngFor="let txn of lc.blankLedger.transactions;">
@@ -543,7 +543,7 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row" container="body">
 
-                                            <td class="col-xs-3">
+                                            <td class="col-xs-3" data-title="Date">
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                                                         <!--<input type="checkbox"/>-->
@@ -558,7 +558,7 @@
 
                                                 </div>
                                             </td>
-                                            <td class="col-xs-6 select2-parent select2-ledger" (click)="bs.hide();"
+                                            <td data-title="Particular" class="col-xs-6 select2-parent select2-ledger" (click)="bs.hide();"
                                                 (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shDebit
@@ -610,7 +610,7 @@
 
                                             </td>
 
-                                            <td class="col-xs-4 pos-rel">
+                                            <td data-title="Amount" class="col-xs-4 pos-rel">
                                                 <input class="form-control alR" type="text" decimalDigitsDirective
                                                     [DecimalPlaces]="2" [(ngModel)]="txn.amount"
                                                     (input)="needToReCalculate.next(true)"

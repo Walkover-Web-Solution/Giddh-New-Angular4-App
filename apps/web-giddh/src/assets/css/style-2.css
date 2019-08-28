@@ -22,7 +22,6 @@
 
 /* css start */
 
-
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
@@ -2160,6 +2159,7 @@ input[type="checkbox"]:after {
   justify-content: center;
   align-items: center;
 }
+
 
 @media only screen and (max-width: 1400px) {
   .template_list {
@@ -7639,7 +7639,15 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
   }
-
+  .xs-pl-0 {
+    padding-left: 0px;
+  }
+  .xs-pr-0 {
+    padding-right: 0px;
+  }
+  .xs-width-100 {
+    width: 100%;
+  }
 }
 
 @media (max-width: 575px) {
