@@ -10,7 +10,20 @@ export var NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
   {type: 'MENU', name: 'Settings > Permission', uniqueName: '/pages/settings', additional: {tab: 'permission', tabIndex: 5}},
   {type: 'MENU', name: 'Settings > Branch', uniqueName: '/pages/settings', additional: {tab: 'branch', tabIndex: 6}},
   {type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings', additional: {tab: 'tag', tabIndex: 7}},
-  {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}}
+  {type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings', additional: {tab: 'trigger', tabIndex: 8}},
+
+  {type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}},
+  {type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}},
+  {type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/customer', additional: {tab: 'aging-report', tabIndex: 1}},
+
+  {type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'pending', tabIndex: 2}},
+  {type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'templates', tabIndex: 3}},
+  {type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'settings', tabIndex: 4}},
+  {type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'recurring', tabIndex: 1}},
+  {type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: {tab: 'sales', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: {tab: 'estimates', tabIndex: 0}},
+  {type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: {tab: 'proformas', tabIndex: 0}}
 ];
 export var NAVIGATION_ITEM_LIST : IUlist[]= [];
 export var NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
@@ -88,9 +101,7 @@ export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'invento
   'ledger'];
 
 export var DEFAULT_MENUS: IUlist[] = []
-export var DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
-
-]
+export var DEFAULT_MENUS_RESPONSIVE: IUlist[] = []
 export var DEFAULT_MENUS_ORIGINAL: IUlist[] = [
   {
     type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, pIndex: 3
