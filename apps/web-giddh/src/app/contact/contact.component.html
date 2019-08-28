@@ -419,7 +419,7 @@
                      (ngModelChange)="toggleAllSelection(allSelectionModel)"/>
             </span>
           <span>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</span>
-            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
             </ng-container>
         </th>
 
