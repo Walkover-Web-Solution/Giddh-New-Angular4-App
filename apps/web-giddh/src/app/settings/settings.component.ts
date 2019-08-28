@@ -65,37 +65,11 @@ export class SettingsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // let companyUniqueName = null;
-    // this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    // let stateDetailsRequest = new StateDetailsRequest();
-    // stateDetailsRequest.companyUniqueName = companyUniqueName;
-    // stateDetailsRequest.lastState = 'settings';
-    //
-    // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    // this.selectTab(0);
-    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-      // if (val && val.tab && val.tabIndex) {
-      //   this.selectTab(val.tabIndex);
-      //   if (val.subTab) {
-      //     this.selectedChildTab = val.subTab;
-      //   }
-      // } else if (val.tab === 'integration' && val.code) {
-      //   this.saveGmailAuthCode(val.code);
-      //   // this.selectTab(1);
-      // }
-    });
-
-    // this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((e) => {
-    //   if (e instanceof NavigationEnd && e.url === '/settings?tab=permission&tabIndex=5' && e.urlAfterRedirects.includes(e.url)) {
-    //     if (this.staticTabs.tabs[5]) {
-    //       this.staticTabs.tabs[5].active = true;
-    //     }
-    //   }
-    // });
 
     this._route.params.subscribe(params => {
-      this.activeTab = params['type'];
-      this.setStateDetails(this.activeTab);
+      if (params['type'] && this.activeTab !== params['type']) {
+        this.activeTab = params['type'];
+      }
     });
 
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
@@ -166,6 +140,7 @@ export class SettingsComponent implements OnInit {
   public tabChanged(tab: string) {
     this.setStateDetails(tab);
     this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+    this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
   }
 
   private saveGmailAuthCode(authCode: string) {
@@ -221,7 +196,7 @@ export class SettingsComponent implements OnInit {
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'settings/' + type;
+    stateDetailsRequest.lastState = 'pages/settings/' + type;
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }

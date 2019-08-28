@@ -40,6 +40,9 @@
   max-width: 1171px;
   width: 100%;
 }
+.customer-right  table{
+  float: right; width: auto;
+}
 @media(min-width:769px){
   .onMobileView > .top-aging-table-top {
     display: none;
@@ -47,6 +50,9 @@
 }
 
 @media(max-width:768px){
+  .custumerRightWrap h4.mb-1.pdR2 {
+    margin-bottom: 0;
+}
   .contact-main .table-aging-report {
     margin-top: 0 !important;
   }
@@ -65,10 +71,69 @@
   padding-top: 10px;
 }
 .custumerRightWrap {
-
   padding-bottom: 10px;
+  padding: 0 15px 10px;
 }
 
+}
+@media(max-width:575px){
+  .custumerRightWrap h4.mb-1.pdR2 {
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+.customer-right  table{
+  float: none; width: 100%;
+  text-align: left;
+}
+.customer-right table tr td{
+  padding: 0 15px;
+}
+.customer-right table tr td p {
+  font-size: 14px;
+  margin-bottom: 2px;
+  float: left;
+  width: 110px;
+
+}
+.customer-right table tr td h3 {
+  font-size: 14px;
+  padding-bottom: 7px;
+}
+.customer-right table tr td {
+
+  margin-bottom:5px;
+}
+.customer-right table tr td {
+  padding: 0px 5px;
+  color: #707070;
+  width: 100%;
+  display: block;
+
+}
+.customer-right {
+background: #fff;
+padding: 0;
+float: none;
+}
+.custumerRightWrap .text-right {
+text-align: left !important;
+padding-left: 5px !important;
+}
+.customer-right table tr td p {
+
+font-size: 14px;
+  margin-bottom: 2px;
+  float: left;
+  width: 110px
+}
+.customer-right table tr td h3 {
+font-size: 14px;
+}
+.top-aging-table-top {
+
+  padding:3px !important;
+  font-size: 14px;
+}
 }
 @media(max-width:540px){
   .wrapsearchingAging .max250 {
@@ -93,32 +158,7 @@
 }
 
 @media(max-width:375px){
-  .customer-right table tr td {
-    padding: 0px 5px;
-    color: #707070;
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-}
-.customer-right {
-  background: #fff;
-  padding: 0;
-  float: none;
-}
-.custumerRightWrap .text-right {
-  text-align: left !important;
-  padding-left: 5px !important;
-}
-.customer-right table tr td p {
 
-  font-size: 14px;
-    margin-bottom: 2px;
-    float: left;
-    width: 110px
-}
-.customer-right table tr td h3 {
-  font-size: 14px;
-}
 }
 @media(max-width:320px){
   .wrapsearchingAging .max250 {
