@@ -16,8 +16,8 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 
 const PaymentGateway = [
-  { value: 'razorpay', label: 'razorpay' },
-  { value: 'cashfree', label: 'cashfree' }
+  {value: 'razorpay', label: 'razorpay'},
+  {value: 'cashfree', label: 'cashfree'}
 ];
 
 @Component({
@@ -89,7 +89,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       let linkAccount: IOption[] = [];
       if (data) {
         data.forEach(f => {
-          linkAccount.push({ label: f.name, value: f.uniqueName });
+          linkAccount.push({label: f.name, value: f.uniqueName});
         });
         this.linkAccountDropDown = linkAccount;
       }
@@ -207,7 +207,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Update Form
    */
-  public UpdateForm(form) {
+  public UpdateForm(form = null) {
 
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
@@ -245,7 +245,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     // }
 
-    if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
+    if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
       this.saveRazorPay(this.razorpayObj, form);
     }
     // } else {
