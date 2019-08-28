@@ -442,8 +442,9 @@ ul.sub-list {
     margin-bottom: 6px;
 }
 
-.tab-integraton .nav-tabs>li {
-    margin-right: 25px;
+.tab-integraton .nav-tabs > li {
+  margin-right: 25px;
+  margin-bottom: 5px;
 }
 
 .tab-integraton .form-group label {
