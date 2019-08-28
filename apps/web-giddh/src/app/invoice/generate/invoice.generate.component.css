@@ -179,7 +179,7 @@ tfoot {
   float: left;
   display: inline-block !important;
   margin-bottom: 10px;
-  min-height: 40px;
+  min-height: 34px;
 }
 .form-inline .d-flex, .form-inline .form-group{
   margin: 0 !important;
@@ -208,9 +208,11 @@ tfoot {
 @media(max-width:375px){
   .form-group button, .form-group .input-group {
     width: 100%;
+    margin-bottom: 0;
+    margin-top: 10px;
   }
   div#dp-parent {
     margin-bottom: 0;
-    width: 200px;
+       width: 100%;;
 }
 }

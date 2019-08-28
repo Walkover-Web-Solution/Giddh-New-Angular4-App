@@ -442,8 +442,9 @@ ul.sub-list {
     margin-bottom: 6px;
 }
 
-.tab-integraton .nav-tabs>li {
-    margin-right: 25px;
+.tab-integraton .nav-tabs > li {
+  margin-right: 25px;
+  margin-bottom: 5px;
 }
 
 .tab-integraton .form-group label {
@@ -7801,7 +7802,12 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-header hr {
     border-top-color: #B3B4B5;
 }
+@media(min-width:768px){
+  .basic > tbody > tr > td, .basic > thead > tr > th {
 
+    white-space: nowrap;
+}
+}
 .icon-pointer .fa.fa-long-arrow-up {
     color: #000;
     opacity: 0.3;
