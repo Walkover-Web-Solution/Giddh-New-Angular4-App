@@ -1075,13 +1075,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  //Redirect to add payment module
-  private redirectAddPayment(account: any) {
-    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
-    this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-  }
-
-
   /*
   * Register Account navigation
   * */
