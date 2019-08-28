@@ -28,7 +28,7 @@
 .icon-pointer {
   position: absolute;
   right: 10px;
-  top: 26%;
+  top: 31%;
 }
 .icon-pointer.iconSearch{
   top: 30%;
@@ -401,4 +401,42 @@ tr.aging-table-top td {
   .onDesktopView.btn-group{
     display: block;
   }
+}
+
+
+.td_in_searchBox div {
+  display: flex;
+}
+
+.td_in_searchBox div span {
+  flex: 1 1 auto;
+  padding-left: 8px;
+}
+
+.td_in_searchBox div i {
+  margin-top: 3px;
+  color: #8080808c;
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.td_in_searchBox {
+  padding: 0px !important;
+  position: relative;
+}
+.td_in_searchBox .input-container {
+  position: relative;
+}
+.td_in_searchBox .input-container input {
+  min-height: 38px;
+  width: 100%;
+  padding: 8px;
+  padding-right: 40px;
+  border: 0px;
+}
+
+.td_in_searchBox .input-container i {
+  position: absolute;
+  right: 0px;
+  top: 9px;
 }
