@@ -565,8 +565,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         d.isCompanyCreationInProcess = false;
         d.isCompanyCreationSuccess = true;
         d.isCompanyCreated = true;
-        d.createCompanyUserStoreRequestObj = null;
-        d.userSelectedSubscriptionPlan = null;
         d.companies.push(companyResp.body);
         return Object.assign({}, state, d);
       } else {

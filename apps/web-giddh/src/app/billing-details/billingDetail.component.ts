@@ -15,6 +15,7 @@ import { NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
+import { WindowRefService } from '../theme/universal-list/service';
 
 @Component({
   selector: 'billing-details',
@@ -49,7 +50,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
   public fromSubscription: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService) {
     this.store.dispatch(this._generalActions.getAllState());
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -162,6 +163,35 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     }
     console.log('create company Obj', this.createNewCompany);
     // this.createPaidPlanCompany(paymentId); //  after payment done then you will get paymentId pass this parameter in  createPaidPlanCompany method
+
+    let options = {
+      key: 'rzp_live_rM2Ub3IHfDnvBq', // Enter the Key ID generated from the Dashboard
+      amount: '29935', // Amount is in currency subunits. Default currency is INR. Hence, 29935 refers to 29935 paise or INR 299.35.
+      currency: 'INR',
+      name: 'Acme Corp',
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+      },
+      prefill: {
+        name: 'Gaurav Kumar',
+        email: 'gaurav.kumar@example.com'
+      },
+      notes: {
+        address: 'note value'
+      },
+      theme: {
+        color: '#F37254'
+      }
+    };
+    let rzp1 = new this.winRef.nativeWindow.Razorpay(options);
+    // document.getElementById('rzp-button1').onclick = function (e) {
+    rzp1.open();
+    // }
+
+
+
+
+
 
     // let options: any = {
     //   key: 'rzp_live_rM2Ub3IHfDnvBq',
