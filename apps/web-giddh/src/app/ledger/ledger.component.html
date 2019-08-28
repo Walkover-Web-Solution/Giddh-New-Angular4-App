@@ -984,20 +984,25 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 col-xs-6">
-                <h1>Total Transactions
-                    <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
-            async)?.creditTransactionsCount}}</span>
-                </h1>
-                <span class="mrT1 mrR2 ">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-                <span class="mrT1 mrR2 ">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+                <div class="ledger-state-box">
+                    <h1>Total Transactions
+                        <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
+                        async)?.creditTransactionsCount}}</span>
+                    </h1>
+                    <span class="mrT1 mrR2 ">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+                    <span class="mrT1 mrR2 ">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+                </div>
             </div>
             <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1>Opening Balance</h1>
                 <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}
                     {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
+        </div>
 
             <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1 class=" primary_clr">Net Total
                     <span
                         *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">Credit</span>
@@ -1015,12 +1020,15 @@
                 <h1 class="mrT font16">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h1>
                 <h1 class="mrT font16">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h1>
             </div>
+        </div>
 
             <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1>Closing Balance</h1>
                 <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
                     {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
+        </div>
         </div>
 
     </div>

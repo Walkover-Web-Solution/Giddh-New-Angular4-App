@@ -198,6 +198,9 @@ sh-select:focus {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
+.amount-total {
+    background: #efefef;
+}
 
 
 @media (min-width: 1200px) {
@@ -240,5 +243,8 @@ sh-select:focus {
     .ledger_book .h-table tbody .ledger-row {
         width: 100%;
         border-bottom: 1px solid #ccc;
+    }
+    .ledger-state-box {
+        margin-bottom: 20px;
     }
 }
