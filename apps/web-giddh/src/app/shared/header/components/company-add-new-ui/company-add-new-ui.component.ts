@@ -153,7 +153,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.socketCompanyRequest.CompanyName = this.company.name;
     this.socketCompanyRequest.Timestamp = Date.now();
     this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-    this.socketCompanyRequest.MobileNo = this.company.contactNo;
+    this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
     this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
   }
 
