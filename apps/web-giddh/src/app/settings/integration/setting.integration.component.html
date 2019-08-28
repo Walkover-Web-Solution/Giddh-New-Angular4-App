@@ -7,7 +7,7 @@
 
       <div class="box clearfix">
         <h3 class="fs20 mrB2">MSG91</h3>
-        <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="">
+        <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="smsForm">
           <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup">
             <div class="row">
               <div class="form-group col-sm-4 col-md-3">
@@ -25,7 +25,7 @@
                   name="senderId" required />
               </div>
               <div class="form-group col-sm-4 col-md-3">
-                <div class="">
+                <div class="empty-label">
                   <label>&nbsp;</label>
                   <br>
                   <button type="submit" class="btn btn-success mrR1" [disabled]="smsFormObjCtrl.invalid">Save</button>
@@ -70,7 +70,7 @@
               <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject"
                 name="subject" required />
             </div>
-            <div class="form-group col-sm-4 col-md-3">
+            <div class="form-group col-sm-4 col-md-3 empty-label">
 
               <label>&nbsp;</label>
               <br>
@@ -128,7 +128,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group col-sm-4 col-xs-12 mrT1" id="inlnImg">
+              <div class="form-group col-sm-4 col-xs-12 mrT1 empty-label" id="inlnImg">
                 <label>&nbsp;</label>
                 <br>
                 <input type="checkbox" [(ngModel)]="razorPayObj.autoCapturePayment" name="autoCapturePayment" />
@@ -188,7 +188,7 @@
                     </sh-select>
                   </div>
                 </div>
-                <div class="form-group col-sm-4 col-xs-12 mrT1">
+                <div class="form-group col-sm-4 col-xs-12 mrT1 empty-label">
                   <label>&nbsp;</label>
                   <br>
                   <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment"
@@ -245,7 +245,7 @@
                       (selected)="selectCashfreeAccount($event, autoCollectObj)"></sh-select>
                   </div>
                 </div>
-                <div class="form-group col-sm-4 col-xs-12 mrT1">
+                <div class="form-group col-sm-4 col-xs-12 mrT1 empty-label">
                   <label>&nbsp;</label>
                   <br>
                   <input type="checkbox" [(ngModel)]="autoCollectObj.autoCapturePayment"
@@ -445,9 +445,9 @@
       </div>
       <div *ngIf="openNewRegistration" class="box clearfix">
         <h3 class="fs20 mrB2">ICICI Bank</h3>
-        <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)" class="">
+        <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)" class="row">
           <div class="form-group col-sm-2 col-md-2">
-            <div class="row">
+            <div class="">
               <label>Corporate ID <span class="required">*</span></label>
               <br>
               <input type="text" placeholder="Enter Corporate ID" class="form-control" [ngModel]="paymentFormObj.corpId"
@@ -476,7 +476,7 @@
             </sh-select>
           </div>
           <div class="form-group col-sm-3 col-md-3">
-            <div class="row">
+            <div class="empty-label">
               <label>&nbsp;</label>
               <br>
               <button type="submit" class="btn btn-success mrR1" [disabled]="paymentForm.invalid">Submit</button>

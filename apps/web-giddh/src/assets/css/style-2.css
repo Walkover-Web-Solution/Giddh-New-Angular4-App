@@ -1661,11 +1661,12 @@ p.table-email {
   color: #ff5f00;
 }
 
-.basic > tbody > tr > td,
-.basic > thead > tr > th {
-  font-weight: 400;
-  padding: 8px 14px;
-  text-transform: capitalize;
+.basic>tbody>tr>td,
+.basic>thead>tr>th {
+    font-weight: 400;
+    padding: 8px 14px;
+    text-transform: capitalize;
+    white-space: nowrap;
 }
 
 
@@ -7414,10 +7415,63 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .company_gst:last-child {
   border-bottom: none;
 }
-
+.custom-select input.form-control.selectedVal.cp {
+  padding-right: 0 !important;
+}
+.basic > thead > tr > th {
+  border-right: 1px solid #c6c4c4;
+}
 @media (max-width: 1440px) {
   .font-xxlarge {
     font-size: 20px;
+  }
+}
+
+@media(max-width:1024px){
+
+  #settingTab .tab-container .nav.nav-tabs {
+    margin: 0;
+    padding: 10px 0px 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
+    overflow-y: hidden;
+  }
+
+  #settingTab .tab-container .nav-tabs > li {
+    float: none;
+    display: inline-block;
+    cursor: grab;
+  }
+
+  .nav-tabs > li {
+    float: left;
+    margin-bottom: 0px;
+  }
+
+  #settingTab .tab-integraton .nav.nav-tabs {
+    overflow: auto;
+    white-space: initial;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li {
+    width: 100px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li:nth-child(2n) {
+    margin-right: 0 !important;
+  }
+
+  #settingTab .tab-integraton .nav-tabs > li > a {
+    width: 90px;
+    height: 90px;
+    font-size: 14px;
   }
 }
 
@@ -7620,6 +7674,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   td.text-center.empty_table {
     padding:  5px 10px 5px 0%  !important;
     text-align: center;
+}
+.basic>tbody>tr>td,
+.basic>thead>tr>th {
+    white-space: initial;
 }
 }
 
