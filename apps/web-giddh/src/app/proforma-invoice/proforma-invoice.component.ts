@@ -31,7 +31,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, isEqual } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -621,7 +621,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount || 0;
-
+            this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
             // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
             //   if (obj.depositEntry) {
@@ -1325,7 +1325,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
       return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
     }, 0);
-    
+
     //Save the Grand Total for Edit
     if(calculatedGrandTotal > 0)
     {
@@ -1334,7 +1334,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-    
+
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -1987,6 +1987,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           return;
         }
       }
+
+      delete data.accountDetails.billingDetails['stateName'];
+      delete data.accountDetails.shippingDetails['stateName'];
     }
 
     // replace /n to br for (shipping and billing)
