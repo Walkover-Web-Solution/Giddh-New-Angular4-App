@@ -7458,7 +7458,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     top: 50%;
     right: 10px;
 }
-
+.red-text{
+  color: #ff0000;
+}
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
