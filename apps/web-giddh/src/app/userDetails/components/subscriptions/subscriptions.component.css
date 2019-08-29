@@ -1,13 +1,99 @@
 .transaction-list .box {
-  height: 280px;
-  overflow-y: auto;
+    height: 400px;
+    overflow-y: auto;
 }
-.campanien-list ul {
-  list-style-type: none;
-  height: 188px;
-  overflow-y: auto;
-}
-.transaction-list .campanien-list {
-  min-height: 0;
 
+.campanien-list ul {
+    list-style-type: none;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.transaction-list .campanien-list {
+    min-height: 0;
+}
+
+.subscription-table th {
+    padding: 15px !important;
+    font-family: 'LatoWebMedium' !important;
+}
+
+.subscription-table tbody tr td,
+.head-title {
+    border: 0px;
+    font-size: 15px;
+    padding: 15px !important;
+    font-family: inherit !important;
+}
+
+.transection-popup {
+    position: absolute;
+    right: 0;
+    top: -60px;
+    background: #FFF7F7;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 3px;
+    border: 1px solid #E01B1B;
+}
+
+.subscription-dropdown {
+    /* overflow: hidden; */
+    display: block;
+    clear: both;
+    padding-bottom: 25px;
+}
+
+.subscription-dropdown .btn {
+    border: 1px solid #C4C0C0;
+    width: 342px;
+    text-align: left;
+}
+
+.subscription-dropdown .btn .caret {
+    margin-top: 9px;
+    float: right;
+}
+
+.subscription-dropdown .dropdown-menu {
+    width: 342px;
+    margin-top: 9px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.subscription-dropdown .dropdown-menu li {
+    padding: 5px 4px;
+    border-bottom: 1px solid #e6e6e6;
+    transition: .5s all ease;
+}
+
+.subscription-dropdown li a {
+    display: block;
+    align-items: center;
+    position: relative;
+    padding-right: 60px;
+}
+
+.subscription-dropdown li:hover a,
+.subscription-dropdown li:hover {
+    background: #f1f1f1;
+    color: #FF5F00;
+}
+
+.subscription-dropdown li:hover a strong {
+    color: #FF5F00;
+}
+
+.subscription-dropdown .dropdown-menu li a span {
+    position: absolute;
+    top: 40%;
+    right: 8px;
+}
+
+@media only screen and (max-width: 767px) {
+    .transection-popup {
+        position: relative;
+        top: 0px;
+    }
 }

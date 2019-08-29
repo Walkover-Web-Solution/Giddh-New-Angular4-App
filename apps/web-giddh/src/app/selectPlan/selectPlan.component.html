@@ -85,7 +85,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.duration }} {{item?.planDetails?.durationUnit}}
+                                                            {{item?.planDetails?.duration }} {{item?.planDetails?.durationUnit}}(s)
                                                         </p>
                                                     </div>
                                                 </div>
@@ -130,7 +130,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.amount | number}}/- pa
+                                                            {{item?.planDetails?.amount | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -170,7 +170,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}
+                                                            {{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)
                                                         </p>
                                                     </div>
                                                 </div>
@@ -219,7 +219,7 @@
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{paidItem?.planDetails?.amount | number}}/- pa
+                                                            {{paidItem?.planDetails?.amount | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -266,7 +266,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" disabled (click)="createCompany(paidItem)">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2" [ladda]="isCompanyCreationInProcess$ | async" (click)="createCompany(paidItem)">Select Plan</button>
                                                     </div>
                                                 </div>
                                             </div>

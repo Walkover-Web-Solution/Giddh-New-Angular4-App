@@ -18,6 +18,7 @@ import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Router } from '@angular/router';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -63,7 +64,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
               private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
-              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions) {
+              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions) {
   }
 
   ngOnInit() {
@@ -130,12 +131,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public toggleEditMode() {
+    this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
     this.showEditMode = !this.showEditMode;
-    // this.toggleBodyClass();
   }
 
   public onCancel() {
     this.performActionAfterClose();
+    // this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
     this.closeEvent.emit(true);
   }
 
@@ -264,15 +266,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
   }
 
-  public goToInvoice(type?:string) {
+  public goToInvoice(type?: string) {
     // remove fixed class because we are navigating to invoice generate page where user can scroll the page
     document.querySelector('body').classList.remove('fixed');
-    if(type==='cash'){
+    if (type === 'cash') {
       this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
-    }else{
+    } else {
       this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
     }
   }
+
   public ngOnDestroy(): void {
     this.performActionAfterClose();
     this.destroyed$.next(true);

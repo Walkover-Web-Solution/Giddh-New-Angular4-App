@@ -1,6 +1,6 @@
 import { CompanyService } from '../services/companyService.service';
 import { BulkEmailRequest } from '../models/api-models/Search';
-import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
@@ -27,26 +27,27 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
+import { GeneralActions } from '../actions/general/general.actions';
+import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 
 
 const CustomerType = [
-{ label: 'Customer', value: 'customer' },
-{ label: 'Vendor', value: 'vendor' }
+  { label: 'Customer', value: 'customer' },
+  { label: 'Vendor', value: 'vendor' }
 ];
 
 export interface PayNowRequest {
-accountUniqueName: string;
-amount: number;
-description: string;
+  accountUniqueName: string;
+  amount: number;
+  description: string;
 }
 
 @Component({
-selector: 'contact-detail',
-templateUrl: './contact.component.html',
-styleUrls: ['./contact.component.scss'],
-animations: [
-trigger('slideInOut', [
+  selector: 'contact-detail',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.scss'],
+  animations: [
+    trigger('slideInOut', [
       state('in', style({
         transform: 'translate3d(0, 0, 0)'
       })),
@@ -221,8 +222,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute, private _router : Router) {
+    private _cdRef: ChangeDetectorRef, private _breakpointObserver: BreakpointObserver,
+    private _route: ActivatedRoute, private _generalAction: GeneralActions,
+    private _router: Router) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -336,32 +338,43 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       });
 
 
-    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-      if (val && val.tab && val.tabIndex) {
-        let tabIndex = Number(val.tabIndex);
-        if (this.staticTabs && this.staticTabs.tabs) {
-          if (val.tab === 'aging-report' && tabIndex === 1) {
-            this.setActiveTab('aging', '');
-            this.staticTabs.tabs[tabIndex].active = true;
-          } else if (val.tab === 'vendor' && tabIndex === 0) {
-            this.setActiveTab('vendor', 'sundrycreditors');
-            this.staticTabs.tabs[tabIndex].active = true;
+    combineLatest([this._route.params, this._route.queryParams])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(result => {
+        let params = result[0];
+        let queryParams = result[1];
+
+        if (params) {
+          if (params['type'] === 'customer') {
+            this.setActiveTab(params['type'], 'sundrydebtors')
+          } else if (params['type'] === 'vendor') {
+            this.setActiveTab(params['type'], 'sundrycreditors')
           } else {
-            this.setActiveTab('customer', 'sundrydebtors');
-            this.staticTabs.tabs[0].active = true;
+            this.setActiveTab('aging-report', '');
+          }
+          if (queryParams && queryParams.tab) {
+
           }
         }
+      });
 
-        // save last state with active tab
-        let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `contact/${this.activeTab}?tab=${this.activeTab}&tabIndex=${tabIndex}`;
-
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-      }
-    });
+    // this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+    //   if (val && val.tab && val.tabIndex) {
+    //     let tabIndex = Number(val.tabIndex);
+    //     if (this.staticTabs && this.staticTabs.tabs) {
+    //       if (val.tab === 'aging-report' && tabIndex === 1) {
+    //         this.setActiveTab('aging-report', '');
+    //         this.staticTabs.tabs[tabIndex].active = true;
+    //       } else if (val.tab === 'vendor' && tabIndex === 0) {
+    //         this.setActiveTab('vendor', 'sundrycreditors');
+    //         this.staticTabs.tabs[tabIndex].active = true;
+    //       } else {
+    //         this.setActiveTab('customer', 'sundrydebtors');
+    //         this.staticTabs.tabs[0].active = true;
+    //       }
+    //     }
+    //   }
+    // });
 
     this.store
       .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
@@ -374,16 +387,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
-    //   && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
-    //   this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
-    //     if (data && data.length) {
-    //       this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
-    //       let creditorsString = 'currentliabilities, sundrycreditors';
-    //       this.purchaseOrSales = this.accInfo.uNameStr.indexOf(creditorsString) > -1 ? 'purchase' : 'sales';
-    //     }
-    //   });
-    // }
   }
 
   public performActions(type: number, account: any, event?: any) {
@@ -403,9 +406,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       case 2: // go to sales or purchase
         this.purchaseOrSales = this.activeTab === 'customer' ? 'sales' : 'purchase';
         if (this.purchaseOrSales === 'purchase') {
-          this.goToRoute('purchase/create', '', account.uniqueName);
+          this.goToRoute('proforma-invoice/invoice/purchase', '', account.uniqueName);
         } else {
-          this.goToRoute('sales', '', account.uniqueName);
+          let isCashInvoice = account.uniqueName === 'cash';
+          this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`, '', account.uniqueName);
         }
         break;
       case 3: // send sms
@@ -448,23 +452,45 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   // public closeModel(account: any) {
   //     this.modalUniqueName = '';
   // }
-  public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
+  public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
     this.searchStr = '';
     this.selectedCheckedContacts = [];
-    this.activeTab = tabName;
-    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
+    if (tabName !== this.activeTab) {
+      this.activeTab = tabName;
+      this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, null, 'true', 20, '');
 
+      this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
+
+      if (this.activeTab !== 'aging-report') {
+        this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+      } else {
+        this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+      }
+      this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+    }
   }
 
-  public setActiveTab(tabName: 'customer' | 'aging' | 'vendor', type: string) {
+  public setActiveTab(tabName: 'customer' | 'aging-report' | 'vendor', type: string) {
     this.tabSelected(tabName);
     this.searchStr = '';
     if (tabName === 'vendor') {
       this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
     }
+
+    // if (this.activeTab !== 'aging-report') {
+    //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+    // } else {
+    //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+    // }
   }
 
   public ngOnDestroy() {
+    // if (this.activeTab !== 'aging-report') {
+    //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
+    // } else {
+    //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
+    // }
+
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -502,7 +528,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleBodyClass();
   }
 
-  public togglePaymentPane(event?){
+  public togglePaymentPane(event?) {
     if (event) {
       event.preventDefault();
     }
@@ -1063,18 +1089,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
-  //Redirect to add payment module
-  private redirectAddPayment(account: any){
-    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
-    this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-  }
 
 
   /*
   * Register Account navigation
   * */
   private registerAccount() {
-    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
+    this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
+  }
+
+  private setStateDetails(url) {
+    // save last state with active tab
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = `contact/${url}`;
+
+    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
   }
 
 }

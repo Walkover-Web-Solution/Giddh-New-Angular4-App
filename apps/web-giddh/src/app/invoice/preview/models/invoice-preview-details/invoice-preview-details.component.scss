@@ -34,6 +34,7 @@
 .invoice-sidebar {
   background-color: #fff;
   padding: 0;
+  height: 100vh;
 
 }
 
@@ -483,3 +484,51 @@ label.labeled {
 .btn-dropdown-ddl-newinv{
   padding: 8.5px 16px!important;
 }
+@media(max-width:1024px){
+  .invoice-search-box{
+    display: block;
+  }
+  .invoice-search-box input{
+
+    width: 100%;
+}
+  .invoice-search-box button {
+    margin-left: 0;
+    padding: 5px 16px;
+    vertical-align: top;
+    margin-top: 4px;
+    width: 100%;
+}
+.dropdown-toggle.btn-blue {
+  padding: 6px 8px;
+}
+.invoice-sidebar .singleInvoiceDetail {
+  padding: 4px 15px;
+
+}
+}
+@media(max-width:768px){
+.invoice-modal-content:after , .invoice-modal-content{
+  top: 121px;
+}
+
+}
+@media(max-width:767px){
+  .invoice-sidebar {
+    background-color: #fff;
+    padding: 0;
+    height: 26vh;
+}
+.invoiceDetail-header .edit-change-status .edit-action-btn-grps{
+  float:  left !important;
+}
+.invoiceDetail-header .edit-change-status {
+  padding-top: 10px;
+}
+}
+@media(max-width:375px){
+  .invoice-modal-content:after , .invoice-modal-content{
+    top: 148px;
+  }
+
+  }

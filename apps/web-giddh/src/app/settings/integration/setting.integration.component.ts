@@ -54,7 +54,9 @@ margin-top: 0;
 margin: 0;
 display: none;
 }
-
+ .empty-label label , .empty-label br{
+  display:none;
+}
 }
 `]
 })
@@ -90,7 +92,7 @@ export class SettingIntegrationComponent implements OnInit {
   private isSellerUpdate: Observable<boolean> = observableOf(false);
   @Input() private selectedTabParent: number;
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
-//variable holding account Info
+  //variable holding account Info
   public registeredAccount;
   public openNewRegistration: boolean;
   public selecetdUpdateIndex: number;
@@ -180,10 +182,10 @@ export class SettingIntegrationComponent implements OnInit {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.accounts$ = observableOf(accounts);
@@ -237,7 +239,7 @@ export class SettingIntegrationComponent implements OnInit {
   public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-    this.razorPayObj.account = {name: null, uniqueName: null};
+    this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 

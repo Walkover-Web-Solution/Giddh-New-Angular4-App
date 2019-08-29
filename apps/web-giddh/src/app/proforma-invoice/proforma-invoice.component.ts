@@ -31,7 +31,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, isEqual } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -47,6 +47,7 @@ import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recipt';
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
+import { GeneralService } from '../services/general.service';
 
 const THEAD_ARR_READONLY = [
   {
@@ -173,6 +174,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public calculatedRoundOff: number = 0;
+
+
   // modals related
   public modalConfig: ModalOptions = {
     animated: true,
@@ -255,7 +259,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _breakpointObserver: BreakpointObserver,
     private _cdr: ChangeDetectorRef,
     private proformaActions: ProformaActions,
-    private _ledgerService: LedgerService
+    private _ledgerService: LedgerService,
+    private _generalService: GeneralService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -375,6 +380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       } else {
         // for edit mode direct from @Input
         if (this.accountUniqueName && this.invoiceNo && this.invoiceType) {
+          this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
           this.getVoucherDetailsFromInputs();
         }
       }
@@ -615,7 +621,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount || 0;
-
+            this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
             // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
             //   if (obj.depositEntry) {
@@ -1300,6 +1306,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
     this.invFormData.voucherDetails.balanceDue =
       ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+      this.invFormData.voucherDetails.balanceDue =  this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
   public calculateSubTotal() {
@@ -1313,9 +1320,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public calculateGrandTotal() {
-    this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
+
+    let calculatedGrandTotal = 0;
+    calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
       return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
     }, 0);
+
+    //Save the Grand Total for Edit
+    if(calculatedGrandTotal > 0)
+    {
+      this.calculatedRoundOff =  Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+      calculatedGrandTotal = calculatedGrandTotal +  this.calculatedRoundOff;
+    }
+
+    this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
+
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -1968,6 +1987,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           return;
         }
       }
+
+      delete data.accountDetails.billingDetails['stateName'];
+      delete data.accountDetails.shippingDetails['stateName'];
     }
 
     // replace /n to br for (shipping and billing)
@@ -2408,6 +2430,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
   }
 
   public ngOnDestroy() {
