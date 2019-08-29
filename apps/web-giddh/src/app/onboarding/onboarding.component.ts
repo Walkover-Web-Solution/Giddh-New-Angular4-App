@@ -27,7 +27,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   public CompanySettingsObj: any = {};
   // public selectedPlans: CreateCompanyUsersPlan;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  public imgPath: string = '';
   constructor(
     private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
     private store: Store<AppState>,
@@ -39,7 +39,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
-
+    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
     // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
     //   this.selectedPlans = res;

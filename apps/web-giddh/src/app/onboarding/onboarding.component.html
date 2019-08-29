@@ -12,19 +12,20 @@
                     <ul class="manage_invoice">
                         <li>
                             <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
-                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="../../assets/images/create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                            <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
                         </li>
                         <li>
                             <!-- <i class="icon-Add-customer"></i> -->
-                            <a [routerLink]="['/pages','contact']"> <img src="../../assets/images/add-customer.svg" alt="" class="mrR1"> Add a customer</a>
+                            <a [routerLink]="['/pages','contact']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mrR1"> Add a customer</a>
                         </li>
                         <li>
                             <!-- <i class="icon-Invite-Accountant"></i> -->
-                            <a [routerLink]="['/pages','settings']"> <img src="../../assets/images/updateGST.svg" alt="" class="mrR1"> Update your GST settings </a>
+                            <a [routerLink]="['/pages','settings']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update your GST settings </a>
                         </li>
                         <li>
 
-                            <a href="javascript:void 0" (click)="goTo('settings')"> <img src="../../assets/images/configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account </a>
+                            <a href="javascript:void 0" (click)="goTo('settings')"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account
+                            </a>
                         </li>
                     </ul>
                     <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
@@ -33,8 +34,9 @@
                     </p>
                     <!--<button class="btn btn-sync">Sync with Tally</button>-->
                     <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
-                        Sync With Tally
-                    </a>
+            Sync With Tally
+          </a>
+
                     <div class="mt-2 right_section">
                         <h1 class="borderbtm">Have a question to ask?</h1>
                         <span>request a demo:</span>
@@ -52,8 +54,6 @@
                                     <img src="assets/images/Schedule.png" alt="">
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
 
@@ -65,15 +65,15 @@
                         <span>Inventory type</span>
                         <div class="pdB1 clearfix">
                             <label class="radio-inline pd0 w100">
-                                <input type="radio" class="radio_theme cp"
-                                    [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                            </label>
+                <input type="radio" class="radio_theme cp"
+                  [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                  (change)="updateInventorySetting(true)" name="inventoryType" />Product
+              </label>
                             <label class="radio-inline pd0 mrL2">
-                                <input type="radio" class="radio_theme cp"
-                                    [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                                    (change)="updateInventorySetting(false)" name="inventoryType" />Service
-                            </label>
+                <input type="radio" class="radio_theme cp"
+                  [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                  (change)="updateInventorySetting(false)" name="inventoryType" />Service
+              </label>
                         </div>
                         <br><br><br>
 

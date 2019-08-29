@@ -23,25 +23,8 @@
       </div>
 
     </form>
-    <div class="mobileSearch mrB1">
-      <div class="row">
-        <div class="col-sm-6 col-xs-6">
-          <div class="input-container">
-            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
-              name="voucherNumberInput" [formControl]="voucherNumberInput" />
-          </div>
-        </div>
-        <div class="col-sm-6 col-xs-6">
-          <div class="input-container">
-            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
-              name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
-          </div>
-        </div>
 
-
-      </div>
-    </div>
-    <div class="d-flex">
+    <div class="d-flex addInvoice">
 
 
       <div style="height: 30px; " *ngIf="selectedItems.length > 0">
@@ -140,319 +123,417 @@
     </div>
   </div>
 
-  <table class="table basic table-bordered mrT2 invoice-table desktopTable">
-
-    <!--sales-->
-    <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
-      <tr>
-
-        <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
-
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-          </div>
-
-        </th>
-
-        <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            #
-          </div>
-        </th>
-
-        <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
-          (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-
-          <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
-           formControl: voucherNumberInput}"></ng-container>
-
-        </th>
-
-        <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-        <div [hidden]="showProformaSearch">
-            <span> Proforma/<br>Purchase Order #</span>
-            <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+  <div class="mobileSearch mrB1">
+    <div class="row">
+      <div class="col-sm-6 col-xs-6">
+        <div class="input-container">
+          <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput"
+            [formControl]="voucherNumberInput" />
         </div>
-
-        <div class="input-container" [hidden]="!showProformaSearch">
-            <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <div class="input-container">
+          <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
+            name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
         </div>
-
-    </th> -->
-
-        <th width="19%" class="td_in_searchBox" #searchCustomerContainer
-          (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-
-          <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
-          title: 'Customer'}"></ng-container>
-
-        </th>
-
-        <th width="10%">
-          <div class="d-flex">
-            <div class="flex-fill">Invoice Date</div>
-
-            <div class="icon-pointer">
-
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-        <th width="12%">
-
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1"> Total Amt.</div>
-
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-        <th width="12%">
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1"> Balance Due</div>
-
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-        <th width="10%">
-          <div class="d-flex">
-
-            <div class="flex-fill">Due Date</div>
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-        <th width="10%">
-          <div class="d-flex">
-            <div class="flex-fill">Status</div>
-          </div>
-        </th>
-
-      </tr>
-    </thead>
-
-    <!--non sales-->
-    <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
-      <tr>
-
-        <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
-
-          <div class="mh18_img" style="display: flex;justify-content: center">
-            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-          </div>
-
-        </th>
-
-        <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
-          <div class="mh18_img" style="display: flex;justify-content: center">
-            #
-          </div>
-        </th>
-
-        <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
-          (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-
-          <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
-          title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"></ng-container>
-
-        </th>
-
-        <th width="25%" class="td_in_searchBox" #searchCustomerContainer
-          (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-
-          <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
-          title: 'Customer'}"></ng-container>
-
-        </th>
-
-        <th>
-          <div class="d-flex">
-            <div class="flex-fill">Date</div>
-
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-        <th>
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1">Total amount</div>
-
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
-            </div>
-          </div>
-        </th>
-
-      </tr>
-    </thead>
-
-    <!--sales-->
-    <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-      (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
-
-      <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
-
-        <td class="mh18_img"
-          *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
-            <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
-          </div>
-          <!--<div *ngIf="item.hasGenerationErr">-->
-          <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
-          <!--</div>-->
-        </td>
-
-        <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-          <div style="justify-content: center;display: flex">{{ i + 1}} </div>
-        </td>
-
-        <td>
-          <div style="position: relative" class="d-flex">
-            <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
-            <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
-            <!--               tooltip="Invoice sent" placement="left"/>-->
-          </div>
-
-          <span *ngIf="item.dueDays !== null">
-
-            <small class="text-danger" *ngIf="item.dueDays > 0">
-              Overdue by {{ item.dueDays }} Days
-            </small>
-
-            <small class="text-danger" *ngIf="item.dueDays === 0">
-              Overdue by Today
-            </small>
+      </div>
 
 
-          </span>
-
-        </td>
-
-        <!-- <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td> -->
-
-        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
-          (clickOutside)="modalUniqueName = ''">
-          {{item.account.name}}
-          <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-            [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
-            [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
-          </div>
-        </td>
-
-        <td>{{item.voucherDate}}</td>
-        <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
-        <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
-        <td>{{item.dueDate ? item.dueDate : '-' }}</td>
-
-        <!--for not cancelled status-->
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="moreExportBtn d-flex">
 
 
+          <div style="height: 30px; " *ngIf="selectedItems.length > 0">
 
-        <!--for not cancelled status-->
-        <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp" *ngIf="item.balanceStatus !== 'cancel'">
-          <div class="d-flex" style="align-items: center">
-            <div class="flex-fill">
-              <span
-                [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
-            </div>
+            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+              style="margin-bottom: 10px;display: inline-block !important;">
 
-            <div class="click-dropdwon">
+              <button dropdownToggle type="button" class="btn spcl_dropdown btn-default dropdown-toggle"
+                aria-controls="dropdown-basic">
+                More
+                <span class="caret"></span>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
 
-              <i class="fa fa-ellipsis-v"
-                *ngIf="hoveredItemForAction === item.uniqueName || clickedHoveredItemForAction === item.uniqueName"></i>
-
-              <ul *ngIf="clickedHoveredItemForAction === item.uniqueName">
-
-                <li (click)="onPerformAction(item, 'paid')">
-                  <a class="cp" href="javascript:void(0)">paid</a>
+                <li role="menuitem">
+                  <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
+                    *ngIf="selectedVoucher === 'sales'">
+                    Generate E-way Bill</a>
                 </li>
 
-                <li (click)="onPerformAction(item, 'unpaid')">
-                  <a class="cp" href="javascript:void(0)">unpaid</a>
+                <li role="menuitem">
+                  <a class="dropdown-item cp" href="javascript:void(0)" (click)="onDeleteBtnClick()">Delete</a>
                 </li>
 
-                <li (click)="onPerformAction(item, 'hold')">
-                  <a class="cp" href="javascript:void(0)">Hold</a>
-                </li>
-
-                <li (click)="onPerformAction(item, 'cancel')">
-                  <a class="cp" href="javascript:void(0)">Cancel</a>
-                </li>
 
               </ul>
             </div>
           </div>
 
-        </td>
 
-        <!--for cancelled status-->
-        <td *ngIf="item.balanceStatus === 'cancel'">
-          <span>{{ item.balanceStatus}}</span>
-        </td>
+          <button class="btn btn-orange mr-1" (click)="exportCsvDownload()"
+            [ladda]="exportInvoiceRequestInProcess$ | async"
+            *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length" data-spinner-size="20px">Export
+          </button>
 
-      </tr>
-    </tbody>
-
-    <!--non sales-->
-    <tbody
-      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'"
-      (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
-      (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
-
-      <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
-
-        <td class="mh18_img"
-          *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-          <div class="mh18_img" style="justify-content: center;display: flex">
-            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
-            <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+          <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+            <button id="ddl-newinv" dropdownToggle type="button"
+              class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
+              + New Invoice <span class="caret"></span>
+            </button>
+            <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="ddl-newinv">
+              <li role="menuitem">
+                <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
+              </li>
+              <li role="menuitem">
+                <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales Invoice</a>
+              </li>
+            </ul>
           </div>
-          <!--<div *ngIf="item.hasGenerationErr">-->
-          <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
-          <!--</div>-->
-        </td>
 
-        <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-          <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
-        </td>
+          <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
+          <!--        &lt;!&ndash; *ngIf="showExportButton" (this is removed from export btn for showing this button) &ndash;&gt;-->
+          <!--        -->
+          <!--        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>-->
+          <!--      </div>-->
 
-        <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
-            {{item.voucherNumber }}</a></td>
-        <td>{{item.account.name}}</td>
-        <td>{{item.voucherDate}}</td>
-        <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
 
-      </tr>
-
-    </tbody>
-
-    <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
-      <tr>
-        <td colspan="8">
-          <!--loading-->
-          <div class="no-data mrT2 d-flex"
-            style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-            <div class="giddh-spinner vertical-center-spinner"></div>
+          <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
+            <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr.
+              Note
+            </button>
           </div>
-        </td>
-      </tr>
-    </tbody>
 
-  </table>
+          <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
+            <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr.
+              Note
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <perfect-scrollbar [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
+    <table class="table basic table-bordered mrT2 invoice-table desktopTable">
+
+      <!--sales-->
+      <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
+        <tr>
+
+          <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
+
+            <div class="mh18_img" style="justify-content: center;display: flex">
+              <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+              <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+            </div>
+
+          </th>
+
+          <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
+            <div class="mh18_img" style="justify-content: center;display: flex">
+              #
+            </div>
+          </th>
+
+          <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+
+            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
+             formControl: voucherNumberInput}"></ng-container>
+
+          </th>
+
+          <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
+          <div [hidden]="showProformaSearch">
+              <span> Proforma/<br>Purchase Order #</span>
+              <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
+          </div>
+
+          <div class="input-container" [hidden]="!showProformaSearch">
+              <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
+          </div>
+
+      </th> -->
+
+          <th width="19%" class="td_in_searchBox" #searchCustomerContainer
+            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+
+            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
+            title: 'Customer'}"></ng-container>
+
+          </th>
+
+          <th width="10%">
+            <div class="d-flex">
+              <div class="flex-fill">Invoice Date</div>
+
+              <div class="icon-pointer">
+
+                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+          <th width="12%">
+
+            <div class="d-flex">
+              <div class="flex-fill text-right pr-1"> Total Amt.</div>
+
+              <div class="icon-pointer">
+                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+          <th width="12%">
+            <div class="d-flex">
+              <div class="flex-fill text-right pr-1"> Balance Due</div>
+
+              <div class="icon-pointer">
+                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+          <th width="10%">
+            <div class="d-flex">
+
+              <div class="flex-fill">Due Date</div>
+              <div class="icon-pointer">
+                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+          <th width="10%">
+            <div class="d-flex">
+              <div class="flex-fill">Status</div>
+            </div>
+          </th>
+
+        </tr>
+      </thead>
+
+      <!--non sales-->
+      <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales'">
+        <tr>
+
+          <th style="min-width:50px; width: 4%" *ngIf="selectedItems.length > 0">
+
+            <div class="mh18_img" style="display: flex;justify-content: center">
+              <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+              <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+            </div>
+
+          </th>
+
+          <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
+            <div class="mh18_img" style="display: flex;justify-content: center">
+              #
+            </div>
+          </th>
+
+          <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
+            (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+
+            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
+            title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"></ng-container>
+
+          </th>
+
+          <th width="25%" class="td_in_searchBox" #searchCustomerContainer
+            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+
+            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
+            title: 'Customer'}"></ng-container>
+
+          </th>
+
+          <th>
+            <div class="d-flex">
+              <div class="flex-fill">Date</div>
+
+              <div class="icon-pointer">
+                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+          <th>
+            <div class="d-flex">
+              <div class="flex-fill text-right pr-1">Total amount</div>
+
+              <div class="icon-pointer">
+                <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
+              </div>
+            </div>
+          </th>
+
+        </tr>
+      </thead>
+
+      <!--sales-->
+      <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+        *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
+
+        <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
+
+          <td class="mh18_img"
+            *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
+            <div class="mh18_img" style="justify-content: center;display: flex">
+              <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
+              <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+            </div>
+            <!--<div *ngIf="item.hasGenerationErr">-->
+            <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
+            <!--</div>-->
+          </td>
+
+          <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
+            <div style="justify-content: center;display: flex">{{ i + 1}} </div>
+          </td>
+
+          <td>
+            <div style="position: relative" class="d-flex">
+              <a href="javascript:void(0);" class="btn-link-2"
+                (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+              <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
+              <!--               tooltip="Invoice sent" placement="left"/>-->
+            </div>
+
+            <span *ngIf="item.dueDays !== null">
+
+              <small class="text-danger" *ngIf="item.dueDays > 0">
+                Overdue by {{ item.dueDays }} Days
+              </small>
+
+              <small class="text-danger" *ngIf="item.dueDays === 0">
+                Overdue by Today
+              </small>
+
+
+            </span>
+
+          </td>
+
+          <!-- <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td> -->
+
+          <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+            (clickOutside)="modalUniqueName = ''">
+            {{item.account.name}}
+            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+              [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
+              [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+            </div>
+          </td>
+
+          <td>{{item.voucherDate}}</td>
+          <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+          <td class="text-right">{{item.balanceDue | giddhCurrency}}</td>
+          <td>{{item.dueDate ? item.dueDate : '-' }}</td>
+
+
+
+
+          <!--for not cancelled status-->
+          <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp"
+            *ngIf="item.balanceStatus !== 'cancel'">
+            <div class="d-flex" style="align-items: center">
+              <div class="flex-fill">
+                <span
+                  [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+              </div>
+
+              <div class="click-dropdwon">
+
+                <i class="fa fa-ellipsis-v"
+                  *ngIf="hoveredItemForAction === item.uniqueName || clickedHoveredItemForAction === item.uniqueName"></i>
+
+                <ul *ngIf="clickedHoveredItemForAction === item.uniqueName">
+
+                  <li (click)="onPerformAction(item, 'paid')">
+                    <a class="cp" href="javascript:void(0)">paid</a>
+                  </li>
+
+                  <li (click)="onPerformAction(item, 'unpaid')">
+                    <a class="cp" href="javascript:void(0)">unpaid</a>
+                  </li>
+
+                  <li (click)="onPerformAction(item, 'hold')">
+                    <a class="cp" href="javascript:void(0)">Hold</a>
+                  </li>
+
+                  <li (click)="onPerformAction(item, 'cancel')">
+                    <a class="cp" href="javascript:void(0)">Cancel</a>
+                  </li>
+
+                </ul>
+              </div>
+            </div>
+
+          </td>
+
+          <!--for cancelled status-->
+          <td *ngIf="item.balanceStatus === 'cancel'">
+            <span>{{ item.balanceStatus}}</span>
+          </td>
+
+        </tr>
+      </tbody>
+
+      <!--non sales-->
+      <tbody
+        *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'"
+        (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+
+        <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
+
+          <td class="mh18_img"
+            *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
+            <div class="mh18_img" style="justify-content: center;display: flex">
+              <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
+              <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+            </div>
+            <!--<div *ngIf="item.hasGenerationErr">-->
+            <!--<i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>-->
+            <!--</div>-->
+          </td>
+
+          <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
+            <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
+          </td>
+
+          <td><a style="cursor: pointer" (click)="onSelectInvoice(item)">
+              {{item.voucherNumber }}</a></td>
+          <td>{{item.account.name}}</td>
+          <td>{{item.voucherDate}}</td>
+          <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+
+        </tr>
+
+      </tbody>
+
+      <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
+        <tr>
+          <td colspan="8">
+            <!--loading-->
+            <div class="no-data mrT2 d-flex"
+              style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+              <div class="giddh-spinner vertical-center-spinner"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </perfect-scrollbar>
 
 
   <ng-container
