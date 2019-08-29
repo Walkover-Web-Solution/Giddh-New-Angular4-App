@@ -149,7 +149,9 @@ class AppDatabase extends Dexie {
             if (isSmallScreen && duplicateIndex > 7) {
               duplicateIndex = this.smallScreenHandler(duplicateIndex);
             }
-
+            if(this.clonedMenus.length === 0){
+              this.clonedMenus = DEFAULT_MENUS;
+            }
             arr[originalDuplicateIndex] = arr[duplicateIndex];
             arr[duplicateIndex] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[duplicateIndex].pIndex});
           }

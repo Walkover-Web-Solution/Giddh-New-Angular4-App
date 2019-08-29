@@ -101,7 +101,17 @@ export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'invento
   'ledger'];
 
 export var DEFAULT_MENUS: IUlist[] = []
-export var DEFAULT_MENUS_RESPONSIVE: IUlist[] = []
+export var DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
+  {
+    type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, pIndex: 3
+  },
+  {
+    type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: {tab: 'sales', tabIndex: 0}
+  },
+  {
+    type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}, isRemoved: false, pIndex: 4
+  }
+]
 export var DEFAULT_MENUS_ORIGINAL: IUlist[] = [
   {
     type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: {tab: 'customer', tabIndex: 0}, isRemoved: false, pIndex: 3
