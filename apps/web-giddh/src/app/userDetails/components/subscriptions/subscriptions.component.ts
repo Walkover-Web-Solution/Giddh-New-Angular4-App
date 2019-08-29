@@ -54,6 +54,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
       if (this.subscriptions.length > 0) {
         this.seletedUserPlans = this.subscriptions[0];
+        if(this.seletedUserPlans.companiesWithTransactions)
         this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
       }
     });
@@ -63,6 +64,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public ngAfterViewInit() {
     if (this.subscriptions) {
       this.seletedUserPlans = this.subscriptions[0];
+      if(this.seletedUserPlans.companiesWithTransactions)
       this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
   }
@@ -70,6 +72,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public selectedSubscriptionPlan(subsciption: SubscriptionsUser) {
     if (subsciption) {
       this.seletedUserPlans = subsciption;
+      if(this.seletedUserPlans.companiesWithTransactions)
       this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
   }

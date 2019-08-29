@@ -219,12 +219,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.createNewCompany.userBillingDetails = billingDetail.value;
     }
     console.log('create company Obj', this.createNewCompany);
-    this.options.amount = this.payAmount * 100;
     this.razorpay.open();
 
   }
 
-  public createPaidPlanCompany(paymentId: string) {
+  public createPaidPlanCompany(paymentId: any) {
     if (paymentId) {
       this.createNewCompany.paymentId = paymentId;
     }
@@ -233,6 +232,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     let s = document.createElement('script');
+    let that = this;
     s.src = 'https://checkout.razorpay.com/v1/checkout.js';
     s.type = 'text/javascript';
     document.body.appendChild(s);
@@ -240,9 +240,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U
       image: 'https://i.imgur.com/n5tjHFD.png',//'data:image/png;base64,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',
       handler: function (res) {
-      this.createPaidPlanCompany(res.razorpay_payment_id)
+        that.createPaidPlanCompany(res.razorpay_payment_id);
       },
-      amount: (this.payAmount * 100),
+      amount:this.razorpayAmount,
       currency: "INR",
       name: 'GIDDH',
       description: 'Walkover Solutions Pvt. Ltd.',
