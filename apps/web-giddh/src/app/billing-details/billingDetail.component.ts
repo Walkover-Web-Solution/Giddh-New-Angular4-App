@@ -43,7 +43,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public isGstValid: boolean;
 
   public subscriptionPrice: any = '';
-  public payAmount: number;
+  public razorpayAmount: any;
   public orderId: string;
   public UserCurrency: string = '';
   public fromSubscription: boolean = false;
@@ -118,18 +118,20 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       if (res) {
         this.createNewCompany = res;
         this.UserCurrency = this.createNewCompany.baseCurrency;
+        this.orderId = this.createNewCompany.orderId;
+        this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
       }
       console.log('billing', this.createNewCompany);
     });
-    if (this.subscriptionPrice && this.UserCurrency) {
-      this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
-        if (res.status === 'success') {
-          this.payAmount = res.body.amount;
-          this.orderId = res.body.id;
-          console.log('OrderId', this.orderId, 'amnt', this.payAmount);
-        }
-      });
-    }
+    // if (this.subscriptionPrice && this.UserCurrency) {
+    //   this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+    //     if (res.status === 'success') {
+    //       this.payAmount = res.body.amount;
+    //       this.orderId = res.body.id;
+    //       console.log('OrderId', this.orderId, 'amnt', this.payAmount);
+    //     }
+    //   });
+    // }
 
     // @ts-ignore
     // setTimeout(() => {
@@ -139,6 +141,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     //   this.bankList = response.methods.netbanking // response.methods.netbanking contains list of all banks
     // })
 
+  }
+  public getPayAmountForTazorPay(amt: any) {
+    return amt * 100;
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {
@@ -212,7 +217,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     if (billingDetail.valid && this.createNewCompany) {
       this.createNewCompany.userBillingDetails = billingDetail.value;
-      this.createNewCompany.amountPaid = this.payAmount;
     }
     console.log('create company Obj', this.createNewCompany);
     this.options.amount = this.payAmount * 100;
