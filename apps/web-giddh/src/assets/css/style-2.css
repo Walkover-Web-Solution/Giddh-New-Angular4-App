@@ -7648,6 +7648,13 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   .xs-width-100 {
     width: 100%;
   }
+  .ledger_book .left-col-new .entry-modal {
+    width: 100%;
+  }
+  .ledger_book .right-col-new .entry-modal {
+    width: 100%;
+    left: 0%;
+  }
 }
 
 @media (max-width: 575px) {
@@ -7697,6 +7704,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   user-select: none;
 }
 
+/* .ledger_book .h-table tbody .ledger-row td {
+
+} */
 @media (max-width: 360px) {
   .pagination-sm > li > a,
   .pagination-sm > li > span {

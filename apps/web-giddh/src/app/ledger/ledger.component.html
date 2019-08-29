@@ -96,6 +96,15 @@
         </div>
         <!-- ledger header end -->
 
+        <div class="tabs">
+            <ul class="nav nav-pills">
+                <li role="presentation" [ngClass]="'isActive: active ? inactive'"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
+                <li role="presentation"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
+            </ul>
+        </div>
+          
+
+
         <!--bank ledgers-->
         <div class="clearfix"></div>
         <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
@@ -402,7 +411,7 @@
                     <th class="col-xs-6">
                         <b>{{lc.ledgerUnderStandingObj.text.dr}}</b>
                     </th>
-                    <th class="col-xs-6">
+                    <th class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
                     </th>
                 </tr>
@@ -415,7 +424,7 @@
             #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])"
             (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
             <!--debit transaction-->
-            <div hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+            <div *ngIf="Shown" hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -641,13 +650,25 @@
 
                     </tbody>
                 </table>
-
             </div>
             <!--debit transaction-->
 
             <!--credit transaction-->
-            <div class="right-col-new" hr-item
+            
+
+            <div *ngIf="isHide" class="right-col-new" hr-item
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+
+                <table class="col-xs-12 ledger-head hidden-lg hidden-md hidden-sm">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-12">
+                                <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+
                 <!--credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
@@ -771,7 +792,7 @@
                     <tbody>
                         <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="$event.stopPropagation()">
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
-                                <table class="width100">
+                                <table class="width100 h-table">
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row" container="body" (keydown)="$event.stopPropagation()">
 
@@ -779,7 +800,7 @@
                                             <!---->
                                             <!--</td>-->
 
-                                            <td class="col-xs-3">
+                                            <td class="col-xs-3" data-title="Date">
 
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
@@ -794,7 +815,7 @@
                                                 </div>
 
                                             </td>
-                                            <td class="col-xs-6 select2-parent select2-ledger" (click)="bsd.hide()"
+                                            <td class="col-xs-6 select2-parent select2-ledger" data-title="Particular" (click)="bsd.hide()"
                                                 (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shCredit
@@ -841,19 +862,15 @@
                                                 <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                                                     <li>Create New Account</li>
                                                 </ul>
-
-
                                             </td>
 
-                                            <td class="col-xs-3 pos-rel">
+                                            <td class="col-xs-3 pos-rel" data-title="Amount">
                                                 <input class="form-control alR" type="text" decimalDigitsDirective
                                                     [DecimalPlaces]="2" [(ngModel)]="txn.amount"
                                                     (input)="needToReCalculate.next(true)"
                                                     (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
-
                                         </tr>
-
                                     </tbody>
                                 </table>
 
