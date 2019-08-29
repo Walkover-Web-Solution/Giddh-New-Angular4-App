@@ -436,7 +436,7 @@
           <div class="clearfix">
 
             <div class="row headingName">
-              <div class="col-xs-5 lh34"><label>Heading Name</label></div>
+              <div class="col-xs-5 lh34"><label>Heading Name<span class="red-text">*</span></label></div>
               <div class="col-xs-7">
                 <div class="row">
                   <div class="">
@@ -644,10 +644,11 @@
                 </div>
 
                 <div class="col-xs-7  p-0">
-                  <div class="form-group mb-0">
-                    <input type="text" placeholder="Datepicker" class="form-control invoice-lock-date"
-                      name="invoiceLockDate" bsDatepicker [(ngModel)]="invoiceSetting.lockDate"
+                  <div class="form-group date-pickerInvoice invoice-lock-date  mb-0">
+                    <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker
+                      [(ngModel)]="invoiceSetting.lockDate"
                       [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
+                    <span class="icon-calender "></span>
                   </div>
                 </div>
 
