@@ -44,7 +44,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
   public isGstValid: boolean;
 
   public subscriptionPrice: any = '';
-  public payAmount: any;
+  public razorpayAmount: any;
   public orderId: string;
   public UserCurrency: string = '';
   public fromSubscription: boolean = false;
@@ -82,19 +82,24 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       if (res) {
         this.createNewCompany = res;
         this.UserCurrency = this.createNewCompany.baseCurrency;
+        this.orderId = this.createNewCompany.orderId;
+        this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
       }
       console.log('billing', this.createNewCompany);
     });
-    if (this.subscriptionPrice && this.UserCurrency) {
-      this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
-        if (res.status === 'success') {
-          this.payAmount = res.body.amount;
-          this.orderId = res.body.id;
-          console.log('OrderId', this.orderId, 'amnt', this.payAmount);
-        }
-      });
-    }
+    // if (this.subscriptionPrice && this.UserCurrency) {
+    //   this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+    //     if (res.status === 'success') {
+    //       this.payAmount = res.body.amount;
+    //       this.orderId = res.body.id;
+    //       console.log('OrderId', this.orderId, 'amnt', this.payAmount);
+    //     }
+    //   });
+    // }
 
+  }
+  public getPayAmountForTazorPay(amt: any) {
+    return amt * 100;
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {
@@ -165,9 +170,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     }
     if (billingDetail.valid && this.createNewCompany) {
       this.createNewCompany.userBillingDetails = billingDetail.value;
-      this.createNewCompany.amountPaid = this.payAmount;
     }
-    console.log('create company Obj', this.createNewCompany);
+    console.log('this.razorpayAmount', this.razorpayAmount);
     // this.createPaidPlanCompany(paymentId); //  after payment done then you will get paymentId pass this parameter in  createPaidPlanCompany method
 
     // let options = {
