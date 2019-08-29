@@ -30,29 +30,29 @@
                     <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                         <div class="form-group">
                             <label>Billing Name <span class="red-text">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="billingDetailsObj.name">
+                            <input type="text" required class="form-control" id="name" name="name" [(ngModel)]="billingDetailsObj.name">
                         </div>
                         <div class="form-group">
                             <label>Email ID <span class="red-text">*</span></label>
-                            <input type="email" name="email" id="email" [(ngModel)]="billingDetailsObj.email" class="form-control">
+                            <input type="email" required name="email" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="billingDetailsObj.email" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Mobile Number <span class="red-text">*</span></label>
+                            <label>Mobile Number</label>
                             <input type="text" id="mobile" class="form-control" name="mobile" [(ngModel)]="billingDetailsObj.mobile">
                         </div>
 
                         <div class="form-group">
-                            <label>GSTIN <span class="red-text">*</span></label>
+                            <label>GSTIN</label>
                             <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (blur)="checkGstNumValidation(gstinNumberField);" (keyup)="getStateCode(gstinNumberField, states)"
                                 placeholder="">
                         </div>
                         <div class="form-group">
-                            <label>State <span class="red-text">*</span></label>
+                            <label>State</label>
                             <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
 
                         </div>
                         <div class="form-group">
-                            <label>Address<span class="red-text">*</span></label>
+                            <label>Addres</label>
                             <textarea class="form-control" name="address" id="address" [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5" cols="12"></textarea>
                         </div>
                         <div class="form-group">

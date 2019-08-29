@@ -152,11 +152,21 @@
 @media(max-width:767px){
   .mobileSearch{
     display: block;
+    margin-bottom: 0 !important;
   }
   .mobileSearch .input-container input{
     font-size: 13px;
   }
-
+  .mobileSearch button.btn.btn-blue {
+    width: 100%;
+    margin-top: 10px !important;
+}
+.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-blue{
+display: none;
+}
+.input-grp-dateRangePicker .form-group {
+  margin-bottom: 10px;
+}
 }
 @media(max-width:500px){
   .date-advanceSearch{
@@ -166,10 +176,6 @@
 
     display: block;
 }
-.form-group.mrR1.d-flex {
-  justify-content: space-between;
-}
-.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-blue{
-  width: 100%;
-}
+
+
 }

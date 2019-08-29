@@ -98,11 +98,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
       this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
       this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
     }
-    // if(item.subscriptionId) {
-
-    // }
-
-    console.log(plan);
   }
 
 }

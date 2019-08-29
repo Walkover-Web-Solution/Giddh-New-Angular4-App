@@ -6,7 +6,7 @@ import { BsDropdownConfig, ModalDirective, TabDirective, TabsetComponent } from 
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import * as _ from '../lodash-optimized';
@@ -154,14 +154,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnInit() {
 
-    let companyUniqueName = null;
     this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'inventory';
     document.querySelector('body').classList.add('inventorypage');
-    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
 
@@ -180,7 +175,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     // }
     this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       if (s instanceof NavigationEnd) {
-        this.activeTabIndex = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;
+        let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;
+        if (this.activeTabIndex !== index) {
+          this.activeTabIndex = index;
+          this.saveLastState();
+        }
       }
     })
   }
@@ -209,7 +208,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
           this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
           this.activeView = 'group';
           this.firstDefaultActiveGroup = firstElement.uniqueName;
-          this.firstDefaultActiveGroupName=firstElement.name;
+          this.firstDefaultActiveGroupName = firstElement.name;
           this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
           this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
         }
@@ -372,5 +371,16 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isAllSelected$ = observableOf(false);
       }
     });
+  }
+
+  private saveLastState() {
+    let companyUniqueName = null;
+    let state = this.activeTabIndex === 0 ? 'inventory' : this.activeTabIndex === 1 ? 'inventory/jobwork' : 'inventory/manufacturing';
+    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = `/pages/${state}`;
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 }

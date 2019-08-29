@@ -54,6 +54,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
       if (this.subscriptions.length > 0) {
         this.seletedUserPlans = this.subscriptions[0];
+        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
       }
     });
 

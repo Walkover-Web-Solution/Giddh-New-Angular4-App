@@ -14,6 +14,7 @@ import { NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
+import { WindowRefService } from '../theme/universal-list/service';
 
 @Component({
   selector: 'billing-details',
@@ -42,15 +43,16 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public isGstValid: boolean;
 
   public subscriptionPrice: any = '';
-  public payAmount: any;
+  public payAmount: number;
   public orderId: string;
   public UserCurrency: string = '';
   public fromSubscription: boolean = false;
   public bankList: any;
   public razorpay: any;
+  public options: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService) {
     this.store.dispatch(this._generalActions.getAllState());
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -181,6 +183,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.billingDetailsObj.state = '';
     }
   }
+  public validateEmail(emailStr) {
+    let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(emailStr);
+  }
 
   public autoRenewSelected(event) {
     if (event) {
@@ -200,43 +206,17 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   public payWithRazor(billingDetail: NgForm) {
-
-    console.log(billingDetail.value);
+    if (!(this.validateEmail(billingDetail.value.email))) {
+      this._toasty.warningToast('Enter valid Email ID', 'Warning');
+      return false;
+    }
     if (billingDetail.valid && this.createNewCompany) {
       this.createNewCompany.userBillingDetails = billingDetail.value;
       this.createNewCompany.amountPaid = this.payAmount;
     }
     console.log('create company Obj', this.createNewCompany);
-    // this.createPaidPlanCompany(paymentId); //  after payment done then you will get paymentId pass this parameter in  createPaidPlanCompany method
-
-    let options = {
-      key: 'rzp_live_ILgsfZCZoFIKMb',
-      amount: '100',
-      name: 'Merchant Name',
-      description: 'Fine tshirt',
-      image: 'https://i.imgur.com/n5tjHFD.png',
-      handler: (a) => {
-        debugger
-      },
-      modal: {
-        handleback: true
-      }
-    };
-
-    this.razorpay.open(options)
-
-
-    // this.razorpay.open(options);
-
-    // this.razorpay.on('payment.success', function (resp) {
-    //     alert(resp.razorpay_payment_id),
-    //     alert(resp.razorpay_order_id),
-    //     alert(resp.razorpay_signature)
-    // }); // will pass payment ID, order ID, and Razorpay signature to success handler.
-
-    // this.razorpay.on('payment.error', function (resp) {
-    //   alert(resp.error.description)
-    // }); // will pass error object to error handler
+    this.options.amount = this.payAmount * 100;
+    this.razorpay.open();
 
   }
 
@@ -252,11 +232,20 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     s.src = 'https://checkout.razorpay.com/v1/checkout.js';
     s.type = 'text/javascript';
     document.body.appendChild(s);
+    this.options = {
+      key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U
+      image: 'https://i.imgur.com/n5tjHFD.png',//'data:image/png;base64,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',
+      handler: function (res) {
+      this.createPaidPlanCompany(res.razorpay_payment_id)
+      },
+      amount: (this.payAmount * 100),
+      currency: "INR",
+      name: 'GIDDH',
+      description: 'Walkover Solutions Pvt. Ltd.',
+      
+    };
     setTimeout(() => {
-      this.razorpay = new (window as any).Razorpay({
-        key: 'rzp_test_QS3CQB90ukHDIF', //rzp_test_yJEJrE3vJK4Q7U
-        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAAtCAMAAAAwerGLAAAAA3NCSVQICAjb4U/gAAAAXVBMVEX////HPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyB24UK9AAAAH3RSTlMAEREiIjMzRERVVWZmd3eIiJmZqqq7u8zM3d3u7v//6qauNwAAAAlwSFlzAAAK8AAACvABQqw0mAAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAA/BJREFUWIXdme2CqiAQhlsjInN1ouSYy3r/l3lAvpFK0raz5/1FSPgwwMyAm81/oe2xObVte2oO23ejzNSuuX47XZtl3Kik5aQS1xTpYlHZ4vPat9+xzrsn+0LA+mEYIKgkwETdQOTzEjpRxAuRt1NkqdPHU72RYVQIDaqycMWFzIevJLNYJM8ZG5XSktHyIDXXpKi+LIdubiBLHZ/rstIrIRBzpN1S6JPH2DZSbRY1DLyK68gDaLYQ2tn5fDB1H8d2NrU06hB7ghnQ3QLmgzVyuH73f8yDB+sahgTgDGj2PPPW7MHPySMzBdf7PgQLFB5Xvhb6rMC+9olnR03d3O+ipDBxuS+F3muuFLOjzg+OL4Vub60NJe1YTtn9vhJ6p/fgrecfOh3JjoyvhG4eTf9x4vZEOGMMAiACF/ejqIAxRkNoVFPGLn0MjUXTy8THP5Iy5Dmjhc4bBgaSDcv3+t6jAD4YWWjMbJ0PPcZ6oa7IYt4qOx7uNPlUTcxPYUFeEUtGNqUagsETxuwB1HMDLaMPBaARtFPeQlGT/zVjXDv3fskyoo6WFmvDvRYJWCoLhbc8xH84MSPyoTktEYZUPL2r5v42HHX1J6M30bfzLOmgO1tyGxGJUu1IHbReFXJ4Wcv6NCN2tF4bYrNk8PJlC125fNRBX9yKT3oPMsSZ9wO1E2hUi/1c+zujSUJXKWgPykJLQxvfkoRGi6G1b/BTzRhavatMQXt7ykL7DdN+eik0tRu6TkK73AgSaxqnoGF16GhNV54bsk42GFhvdk3v5cOGVYL2r4eOvEfvQdsYF3gPOdnSf0l3bTM7A4087xVAm+GtA30I/DT2Hb7pPfTTajJ6GTum0Bvu3m+hiTeSdaDDiEgCaP2iKCJuEJVoXd05agtN3VgsdMGdqdfxHmFmkYS+lZ1AYCrmOhijH2J2M48OicneSsmPLXTv3poH3fiTn1oeUZYnUji4iNxivCFSTZCk4iVBBnDomd4cvRxLodKijul8pQPZjSxV8j9YTk9HJmnsHYX59HQjRvl0zb0Wyrwm61PWsr9UQsSRoxa/VP/UTSm4xCnH1MHJZerywpNLHUyFyh0IaKk/EHl3xCnG/FJb61XdaOGCdlDhcXK00KY0xRzo8IzogovqJDojcj3RjCVuvX5S4Wk8DOPRaRy7JxvUZeZmqyq690DgEqb43iM490lXlrN71tX8GyYU7BdwMfsNmn+XxyPovBPHupp9awr+7ovO2z+uuffTYh335nxAcp3r6pr7JQDzgdfS0xKqwsRbdeObSxPfLGE/aGbeV7xAM79uFWCx6duZN/O/I2J5twTVv4A8Sn+xbX7PF9vfob+6UM+V7KGTkAAAAABJRU5ErkJggg==',
-      });
+      this.razorpay = new (window as any).Razorpay(this.options);
     }, 1000);
   }
 }

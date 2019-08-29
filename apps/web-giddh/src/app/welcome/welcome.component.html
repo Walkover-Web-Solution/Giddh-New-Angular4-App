@@ -63,8 +63,8 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">GSTIN  <sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder=""
-                                />
+                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" [(ngModel)]="companyProfileObj.gstNumber"
+                                    placeholder="Enter GSTIN" />
 
                             </div>
                         </div>
