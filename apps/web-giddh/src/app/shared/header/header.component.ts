@@ -1048,13 +1048,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
   public goToSelectPlan(plan: string) {
     this.modalService.hide(1);
-    if (plan === 'select') {
-      this.router.navigate(['select-plan']);
-    } else {
-      this.router.navigate(['select-plan']);
-    }
-    this.modalService.hide(1);
-    this.router.navigate(['billing-detail']);
+    this.router.navigate(['select-plan']);
   }
   // public closeCrossedTxLimitModel(template1: TemplateRef<any>) {
   //   // this.expiredPlan.hide();

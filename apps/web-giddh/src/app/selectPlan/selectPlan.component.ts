@@ -12,6 +12,7 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { UserDetails } from '../models/api-models/loginModels';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { CompanyService } from '../services/companyService.service';
 
 @Component({
   selector: 'app-select-plan',
@@ -29,6 +30,8 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     licenceKey: ''
   };
   public SubscriptionPlans: CreateCompanyUsersPlan[] = [];
+  public subscriptionPrice: any = '';
+  public UserCurrency: string = '';
 
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
@@ -38,10 +41,10 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
   // private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
   //     private _router: Route, private _generalService: GeneralService, private _toasty: ToasterService,private companyActions: CompanyActions
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _route: Router, private _authenticationService: AuthenticationService, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _companyService: CompanyService, private _route: Router, private _authenticationService: AuthenticationService, private companyActions: CompanyActions) {
 
     // this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-    //   console.log(res);
+
     //   this.SubscriptionPlans = res.body;
     // });
 
@@ -52,6 +55,9 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         this.createNewCompanyPreObj = res;
+        if (this.createNewCompanyPreObj.baseCurrency) {
+          this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
+        }
       }
       console.log('select plan', this.createNewCompanyPreObj);
     });
@@ -61,6 +67,9 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
     if (this._generalService.createNewCompany) {
       this.createNewCompanyPreObj = this._generalService.createNewCompany;
+      if (this.createNewCompanyPreObj.baseCurrency) {
+        this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
+      }
     }
     this.logedInUser = this._generalService.user;
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
@@ -76,15 +85,30 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   }
 
   public buyPlanClicked(plan: any) {
+    this.subscriptionPrice = plan.planDetails.amount;
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
     this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
-    if (this.createNewCompanyPreObj) {
-      this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+    if (this.subscriptionPrice && this.UserCurrency) {
+      this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+        if (res.status === 'success') {
+          this.createNewCompanyPreObj.amountPaid = res.body.amount;
+          this.createNewCompanyPreObj.orderId = res.body.id;
+
+
+
+          if (this.createNewCompanyPreObj) {
+            this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+          }
+          this.store.dispatch(this.companyActions.selectedPlan(plan));
+          this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreObj));
+          this._generalService.createNewCompany = this.createNewCompanyPreObj;
+          this._route.navigate(['billing-detail']);
+        } else {
+          return;
+        }
+      });
     }
-    this.store.dispatch(this.companyActions.selectedPlan(plan));
-    this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreObj));
-    this._generalService.createNewCompany = this.createNewCompanyPreObj;
-    this._route.navigate(['billing-detail']);
+
   }
 
   // public paidPlanSelected(plan: CreateCompanyUsersPlan) {

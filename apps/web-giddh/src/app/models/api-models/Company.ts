@@ -243,6 +243,8 @@ export class CompanyCreateRequest {
   nameAlias?: string;
   paymentId?: string;
   amountPaid?: string;
+  orderId?: string;
+
 }
 
 export class CreateCompanyUsersPlan {
