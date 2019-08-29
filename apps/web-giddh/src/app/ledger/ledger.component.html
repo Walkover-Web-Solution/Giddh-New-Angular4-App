@@ -444,13 +444,13 @@
                             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td class="col-xs-6">B/F Balance</td>
-                            <td class="col-xs-3 text-right">
+                            <td data-title="Particular" class="col-xs-6">B/F Balance</td>
+                            <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
                                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount  | giddhCurrency }}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'"
@@ -534,7 +534,7 @@
                 </table>
 
                 <!--blank ledger-->
-                <table class="width100 h-table amount-total" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
+                <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
                         <tr *ngFor="let txn of lc.blankLedger.transactions;">

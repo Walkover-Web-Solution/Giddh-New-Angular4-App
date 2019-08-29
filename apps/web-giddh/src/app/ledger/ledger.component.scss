@@ -1,5 +1,4 @@
-.form-control,
-input {
+.form-control, input {
     color: #4d4d4d;
 }
 .notfound-option {
@@ -198,9 +197,6 @@ sh-select:focus {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
-.amount-total {
-    background: #efefef;
-}
 
 
 @media (min-width: 1200px) {
@@ -246,5 +242,20 @@ sh-select:focus {
     }
     .ledger-state-box {
         margin-bottom: 20px;
+    }
+    .amount-total {
+        background: #efefef;
+    }
+    .pageCount {
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        position: relative;
+    }
+    .ledger-stat {
+        margin: 0px 0 0;
+    }
+    .ledger_book {
+        margin-bottom: 100px;
     }
 }
