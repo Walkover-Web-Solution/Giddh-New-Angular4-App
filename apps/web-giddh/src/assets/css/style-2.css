@@ -7700,7 +7700,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     border-top-color: #B3B4B5;
 }
 
+.agingPage .icon-pointer .fa.fa-long-arrow-up {
+    color: #a9a9a9;
+}
 .icon-pointer .fa.fa-long-arrow-up {
-    color: #000;
-    opacity: 0.3;
+  color: #a9a9a9;
 }

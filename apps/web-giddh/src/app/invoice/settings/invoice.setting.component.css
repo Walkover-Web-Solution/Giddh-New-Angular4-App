@@ -108,5 +108,13 @@ span.viasocket a{
 }
 .invoice-lock-date{
   width: 152px;
+  position: relative;
 }
+.invoice-lock-date .icon-calender{
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  color: #666666;
+  font-size: 16px;
 
+}
