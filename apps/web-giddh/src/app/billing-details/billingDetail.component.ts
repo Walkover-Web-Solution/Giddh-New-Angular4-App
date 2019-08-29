@@ -1,26 +1,26 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {GeneralService} from '../services/general.service';
-import {BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States} from '../models/api-models/Company';
-import {UserDetails} from '../models/api-models/loginModels';
-import {IOption} from '../theme/sales-ng-virtual-select/sh-options.interface';
-import {select, Store} from '@ngrx/store';
-import {AppState} from '../store';
-import {ToasterService} from '../services/toaster.service';
-import {ShSelectComponent} from '../theme/ng-virtual-select/sh-select.component';
-import {take, takeUntil} from 'rxjs/operators';
-import {ActivatedRoute, Router} from '@angular/router';
-import {NgForm} from '@angular/forms';
-import {CompanyService} from '../services/companyService.service';
-import {GeneralActions} from '../actions/general/general.actions';
-import {CompanyActions} from '../actions/company.actions';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { GeneralService } from '../services/general.service';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States } from '../models/api-models/Company';
+import { UserDetails } from '../models/api-models/loginModels';
+import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store';
+import { ToasterService } from '../services/toaster.service';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { CompanyService } from '../services/companyService.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'billing-details',
   templateUrl: 'billingDetail.component.html',
   styleUrls: ['billingDetail.component.scss']
 })
-export class BillingDetailComponent implements OnInit, OnDestroy {
+export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public logedInuser: UserDetails;
   public billingDetailsObj: BillingDetails = {
@@ -83,9 +83,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
 
       // method specific fields
       bank: 'HDFC',
-      
+
     };
- 
+
 
     this.razorpay.createPayment(data);
 
@@ -130,14 +130,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     }
 
     // @ts-ignore
-    this.razorpay = new Razorpay({
-      key: 'rzp_test_QS3CQB90ukHDIF', //rzp_test_yJEJrE3vJK4Q7U
-      image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAAtCAMAAAAwerGLAAAAA3NCSVQICAjb4U/gAAAAXVBMVEX////HPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyB24UK9AAAAH3RSTlMAEREiIjMzRERVVWZmd3eIiJmZqqq7u8zM3d3u7v//6qauNwAAAAlwSFlzAAAK8AAACvABQqw0mAAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAA/BJREFUWIXdme2CqiAQhlsjInN1ouSYy3r/l3lAvpFK0raz5/1FSPgwwMyAm81/oe2xObVte2oO23ejzNSuuX47XZtl3Kik5aQS1xTpYlHZ4vPat9+xzrsn+0LA+mEYIKgkwETdQOTzEjpRxAuRt1NkqdPHU72RYVQIDaqycMWFzIevJLNYJM8ZG5XSktHyIDXXpKi+LIdubiBLHZ/rstIrIRBzpN1S6JPH2DZSbRY1DLyK68gDaLYQ2tn5fDB1H8d2NrU06hB7ghnQ3QLmgzVyuH73f8yDB+sahgTgDGj2PPPW7MHPySMzBdf7PgQLFB5Xvhb6rMC+9olnR03d3O+ipDBxuS+F3muuFLOjzg+OL4Vub60NJe1YTtn9vhJ6p/fgrecfOh3JjoyvhG4eTf9x4vZEOGMMAiACF/ejqIAxRkNoVFPGLn0MjUXTy8THP5Iy5Dmjhc4bBgaSDcv3+t6jAD4YWWjMbJ0PPcZ6oa7IYt4qOx7uNPlUTcxPYUFeEUtGNqUagsETxuwB1HMDLaMPBaARtFPeQlGT/zVjXDv3fskyoo6WFmvDvRYJWCoLhbc8xH84MSPyoTktEYZUPL2r5v42HHX1J6M30bfzLOmgO1tyGxGJUu1IHbReFXJ4Wcv6NCN2tF4bYrNk8PJlC125fNRBX9yKT3oPMsSZ9wO1E2hUi/1c+zujSUJXKWgPykJLQxvfkoRGi6G1b/BTzRhavatMQXt7ykL7DdN+eik0tRu6TkK73AgSaxqnoGF16GhNV54bsk42GFhvdk3v5cOGVYL2r4eOvEfvQdsYF3gPOdnSf0l3bTM7A4087xVAm+GtA30I/DT2Hb7pPfTTajJ6GTum0Bvu3m+hiTeSdaDDiEgCaP2iKCJuEJVoXd05agtN3VgsdMGdqdfxHmFmkYS+lZ1AYCrmOhijH2J2M48OicneSsmPLXTv3poH3fiTn1oeUZYnUji4iNxivCFSTZCk4iVBBnDomd4cvRxLodKijul8pQPZjSxV8j9YTk9HJmnsHYX59HQjRvl0zb0Wyrwm61PWsr9UQsSRoxa/VP/UTSm4xCnH1MHJZerywpNLHUyFyh0IaKk/EHl3xCnG/FJb61XdaOGCdlDhcXK00KY0xRzo8IzogovqJDojcj3RjCVuvX5S4Wk8DOPRaRy7JxvUZeZmqyq690DgEqb43iM490lXlrN71tX8GyYU7BdwMfsNmn+XxyPovBPHupp9awr+7ovO2z+uuffTYh335nxAcp3r6pr7JQDzgdfS0xKqwsRbdeObSxPfLGE/aGbeV7xAM79uFWCx6duZN/O/I2J5twTVv4A8Sn+xbX7PF9vfob+6UM+V7KGTkAAAAABJRU5ErkJggg==',
-    });
-    this.razorpay.once('ready', function (response) {
-      console.log(response.methods);
-      this.bankList = response.methods.netbanking // response.methods.netbanking contains list of all banks
-    })
+    // setTimeout(() => {
+    // }, 1000);
+    // this.razorpay.once('ready', function (response) {
+    //   console.log(response.methods);
+    //   this.bankList = response.methods.netbanking // response.methods.netbanking contains list of all banks
+    // })
 
   }
 
@@ -212,42 +210,21 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     // this.createPaidPlanCompany(paymentId); //  after payment done then you will get paymentId pass this parameter in  createPaidPlanCompany method
 
     let options = {
-      amount: this.payAmount, // in currency subunits. Here 1000 = 1000 paise, which equals to ₹10
-      currency: this.UserCurrency, // Default is INR. We support more than 90 currencies.
-      email: this.billingDetailsObj.email,
-      contact: this.billingDetailsObj.mobile,
-      description:`${''} Subscription for Giddh`,
-      notes: {
-        address: this.createNewCompany.userBillingDetails.address //this.selectedCompany.address
+      key: 'rzp_live_ILgsfZCZoFIKMb',
+      amount: '100',
+      name: 'Merchant Name',
+      description: 'Fine tshirt',
+      image: 'https://i.imgur.com/n5tjHFD.png',
+      handler: (a) => {
+        debugger
       },
-      order_id: this.orderId,
-      method: 'netbanking',
-    
+      modal: {
+        handleback: true
+      }
     };
 
-    options = {
-
-    amount: "100", //  = INR 1
-    name: "Acme Corp",
-    description: "A Wild Sheep Chase is the third novel by Japanese author Haruki Murakami",
-    Image: "https://cdn.razorpay.com/logos/7K3b6d18wHwKzL_medium.png",
-    handler: function (response){
-        alert(response.razorpay_payment_id);
-    },
-    prefill: {
-        "name": "Gaurav Kumar",
-        "email": "gaurav.kumar@example.com"
-    },
-    notes: {
-        "address": "note value"
-    },
-    theme: {
-        "color": "#6A59CE"
-    }
-  };
-   
     this.razorpay.open(options)
- 
+
 
     // this.razorpay.open(options);
 
@@ -268,5 +245,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       this.createNewCompany.paymentId = paymentId;
     }
     this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
+  }
+
+  ngAfterViewInit(): void {
+    let s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.type = 'text/javascript';
+    document.body.appendChild(s);
+    setTimeout(() => {
+      this.razorpay = new (window as any).Razorpay({
+        key: 'rzp_test_QS3CQB90ukHDIF', //rzp_test_yJEJrE3vJK4Q7U
+        image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAAtCAMAAAAwerGLAAAAA3NCSVQICAjb4U/gAAAAXVBMVEX////HPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyDHPBMjHyB24UK9AAAAH3RSTlMAEREiIjMzRERVVWZmd3eIiJmZqqq7u8zM3d3u7v//6qauNwAAAAlwSFlzAAAK8AAACvABQqw0mAAAABh0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzT7MfTgAAA/BJREFUWIXdme2CqiAQhlsjInN1ouSYy3r/l3lAvpFK0raz5/1FSPgwwMyAm81/oe2xObVte2oO23ejzNSuuX47XZtl3Kik5aQS1xTpYlHZ4vPat9+xzrsn+0LA+mEYIKgkwETdQOTzEjpRxAuRt1NkqdPHU72RYVQIDaqycMWFzIevJLNYJM8ZG5XSktHyIDXXpKi+LIdubiBLHZ/rstIrIRBzpN1S6JPH2DZSbRY1DLyK68gDaLYQ2tn5fDB1H8d2NrU06hB7ghnQ3QLmgzVyuH73f8yDB+sahgTgDGj2PPPW7MHPySMzBdf7PgQLFB5Xvhb6rMC+9olnR03d3O+ipDBxuS+F3muuFLOjzg+OL4Vub60NJe1YTtn9vhJ6p/fgrecfOh3JjoyvhG4eTf9x4vZEOGMMAiACF/ejqIAxRkNoVFPGLn0MjUXTy8THP5Iy5Dmjhc4bBgaSDcv3+t6jAD4YWWjMbJ0PPcZ6oa7IYt4qOx7uNPlUTcxPYUFeEUtGNqUagsETxuwB1HMDLaMPBaARtFPeQlGT/zVjXDv3fskyoo6WFmvDvRYJWCoLhbc8xH84MSPyoTktEYZUPL2r5v42HHX1J6M30bfzLOmgO1tyGxGJUu1IHbReFXJ4Wcv6NCN2tF4bYrNk8PJlC125fNRBX9yKT3oPMsSZ9wO1E2hUi/1c+zujSUJXKWgPykJLQxvfkoRGi6G1b/BTzRhavatMQXt7ykL7DdN+eik0tRu6TkK73AgSaxqnoGF16GhNV54bsk42GFhvdk3v5cOGVYL2r4eOvEfvQdsYF3gPOdnSf0l3bTM7A4087xVAm+GtA30I/DT2Hb7pPfTTajJ6GTum0Bvu3m+hiTeSdaDDiEgCaP2iKCJuEJVoXd05agtN3VgsdMGdqdfxHmFmkYS+lZ1AYCrmOhijH2J2M48OicneSsmPLXTv3poH3fiTn1oeUZYnUji4iNxivCFSTZCk4iVBBnDomd4cvRxLodKijul8pQPZjSxV8j9YTk9HJmnsHYX59HQjRvl0zb0Wyrwm61PWsr9UQsSRoxa/VP/UTSm4xCnH1MHJZerywpNLHUyFyh0IaKk/EHl3xCnG/FJb61XdaOGCdlDhcXK00KY0xRzo8IzogovqJDojcj3RjCVuvX5S4Wk8DOPRaRy7JxvUZeZmqyq690DgEqb43iM490lXlrN71tX8GyYU7BdwMfsNmn+XxyPovBPHupp9awr+7ovO2z+uuffTYh335nxAcp3r6pr7JQDzgdfS0xKqwsRbdeObSxPfLGE/aGbeV7xAM79uFWCx6duZN/O/I2J5twTVv4A8Sn+xbX7PF9vfob+6UM+V7KGTkAAAAABJRU5ErkJggg==',
+      });
+    }, 1000);
   }
 }
