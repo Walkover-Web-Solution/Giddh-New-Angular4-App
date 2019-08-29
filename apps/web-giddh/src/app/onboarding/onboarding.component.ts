@@ -25,7 +25,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   public sideMenu: { isopen: boolean } = { isopen: true };
   public loadAPI: Promise<any>;
   public CompanySettingsObj: any = {};
-  public selectedPlans: CreateCompanyUsersPlan;
+  // public selectedPlans: CreateCompanyUsersPlan;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -41,9 +41,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
 
 
-    this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
-      this.selectedPlans = res;
-    });
+    // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
+    //   this.selectedPlans = res;
+    // });
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();

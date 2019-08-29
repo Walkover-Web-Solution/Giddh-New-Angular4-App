@@ -35,86 +35,26 @@
                     <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
                         Sync With Tally
                     </a>
+                    <div class="mt-2 right_section">
+                        <h1 class="borderbtm">Have a question to ask?</h1>
+                        <span>request a demo:</span>
+                        <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <span class="m-t-30">or call:</span>
+                                <a class="text-dark" href="tel:022-68210057">022-68210057</a>
+                                <span class="m-t-30 m-b-10">or visit:</span>
+                                <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="scheduleImg">
+                                    <img src="assets/images/Schedule.png" alt="">
+                                </div>
+                            </div>
 
-                    <div class="your-account">
-                        <h1 class="borderbtm m-t-50">Your Account</h1>
-                        <div class="row" *ngIf="selectedPlans?.subscriptionId">
-                            <div class="col-xs-6">
-                                <span>
-                                    Subscription ID
-                                </span>
-                            </div>
-                            <div class="col-xs-6">
-                                <p>
-                                    {{selectedPlans?.subscriptionId}}
-                                </p>
-                            </div>
-                        </div>
-                        <!--  -->
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <span>
-                                   Subscription Price
-                                </span>
-                            </div>
-                            <div class="col-xs-6" *ngIf="selectedPlans?.planDetails?.amount">
-                                <p class="success-text">
-                                    {{selectedPlans?.planDetails?.amount | number}}
-                                </p>
-                            </div>
-                            <div class="col-xs-6" *ngIf="!selectedPlans?.planDetails?.amount">
-                                <p class="success-text">
-                                    FREE
-                                </p>
-                            </div>
-                        </div>
-                        <!--  -->
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <span>
-                                   Total Companies
-                                </span>
-                            </div>
-                            <div class="col-xs-6">
-                                <p *ngIf="selectedPlans?.planDetails?.amount">
-                                    {{ selectedPlans?.totalCompanies}} out of {{ selectedPlans?.planDetails?.companiesLimit | number}}
-                                </p>
-                                <p *ngIf="!selectedPlans?.planDetails?.amount">
-                                    {{selectedPlans?.planDetails?.companiesLimit | number}}
-                                </p>
-                            </div>
-                        </div>
-                        <!--  -->
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <span>
-                                    Transactions Limit
-                                </span>
-                            </div>
-                            <div class="col-xs-6">
-                                <p>
-                                    {{selectedPlans?.planDetails?.transactionLimit | number}}
-                                </p>
-                            </div>
-                        </div>
-                        <!--  -->
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <span>
-                                   Subscription Renewal
-                                </span>
-                            </div>
-                            <div class="col-xs-6">
-                                <p *ngIf="selectedPlans?.planDetails?.amount">
-                                    {{selectedPlans?.expiry}}
-                                </p>
-                                <p *ngIf="!selectedPlans?.planDetails?.amount">
-                                    {{selectedPlans?.planDetails?.duration }} {{ selectedPlans?.planDetails?.durationUnit}}(s)
-                                </p>
-                            </div>
-                        </div>
 
-                        <button class="btn btn-default mrT1 mrB2">Buy Plan</button>
+                        </div>
                     </div>
 
 
@@ -170,25 +110,7 @@
                             </div>
                         </div>
 
-                        <h1 class="borderbtm">Have a question to ask?</h1>
-                        <span>request a demo:</span>
-                        <button class="btn btn-success m-t-10" (click)="openScheduleModal()">Schedule Now</button>
-                        <br>
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <span class="m-t-41">or call:</span>
-                                <a class="text-dark" href="tel:022-68210057">022-68210057</a>
-                                <span class="m-t-41 m-b-10">or visit:</span>
-                                <a href="http://faq.giddh.com" target="_blank" class="text-dark">faq.giddh.com</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="scheduleImg">
-                                    <img src="assets/images/Schedule.png" alt="">
-                                </div>
-                            </div>
 
-
-                        </div>
                     </div>
                 </div>
             </div>
