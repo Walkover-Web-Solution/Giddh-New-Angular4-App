@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { GeneralService } from '../services/general.service';
@@ -48,8 +48,14 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.createNewCompanyPreObj = res;
+      }
+      console.log('select plan', this.createNewCompanyPreObj);
+    });
     this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-      console.log(res);
       this.SubscriptionPlans = res.body;
     });
 
@@ -70,8 +76,15 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   }
 
   public buyPlanClicked(plan: any) {
-    this._route.navigate(['billing-detail']);
+    this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+    this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
+    if (this.createNewCompanyPreObj) {
+      this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+    }
     this.store.dispatch(this.companyActions.selectedPlan(plan));
+    this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreObj));
+    this._generalService.createNewCompany = this.createNewCompanyPreObj;
+    this._route.navigate(['billing-detail']);
   }
 
   // public paidPlanSelected(plan: CreateCompanyUsersPlan) {

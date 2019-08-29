@@ -5,7 +5,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, 
 import { IOption } from '../theme/ng-select/option.interface';
 import { States, CompanyRequest, CompanyCreateRequest, GstDetail } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
@@ -90,6 +90,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       autorenew: ''
     },
     nameAlias: '',
+    paymentId: '',
+    amountPaid: ''
   };
   public GstDetailsObj: GstDetail = {
     gstNumber: '',
@@ -133,6 +135,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
+      _.uniqBy(this.states, 'value');
       this.statesSource$ = observableOf(this.states);
     }, (err) => {
       // console.log(err);
@@ -168,20 +171,19 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.createNewCompany = res;
+        this.company = this.createNewCompany;
+        this.prepareWelcomeForm();
+      }
+      console.log('welcome billing', this.createNewCompany);
+    });
 
     if (this._generalService.createNewCompany) {
       this.createNewCompany = this._generalService.createNewCompany;
       this.company = this.createNewCompany;
-      if (this.company) {
-        this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
-        this.createNewCompanyPreparedObj.phoneCode = this.company.phoneCode ? this.company.phoneCode : '';
-        this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
-        this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName ? this.company.uniqueName : '';
-        this.createNewCompanyPreparedObj.isBranch = this.company.isBranch ? this.company.isBranch : '';
-        this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
-        this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
-        this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
-      }
+      this.prepareWelcomeForm();
     }
 
     this.updateProfileSuccess$.subscribe(s => {
@@ -215,6 +217,18 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public skip() {
     this._router.navigate(['/onboarding']);
+  }
+  public prepareWelcomeForm() {
+    if (this.company) {
+      this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
+      this.createNewCompanyPreparedObj.phoneCode = this.company.phoneCode ? this.company.phoneCode : '';
+      this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
+      this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName ? this.company.uniqueName : '';
+      this.createNewCompanyPreparedObj.isBranch = this.company.isBranch ? this.company.isBranch : '';
+      this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
+      this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+      this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
+    }
   }
 
   public submit() {
@@ -284,6 +298,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
+        _.uniqBy(s, 'value');
         statesEle.setDisabledState(false);
 
         if (s) {

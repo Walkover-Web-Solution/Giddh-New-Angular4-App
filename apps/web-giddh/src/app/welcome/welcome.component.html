@@ -34,7 +34,7 @@
                         <span>
                            <label for="contactNo" class="d-block">Mobile Number <sup class="text-danger">*</sup></label>
                          <div class="d-flex">
-                               <sh-select class="pull-left select-caret" [disabled]="createNewCompanyPreparedObj.phoneCode" style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
+                               <sh-select class="pull-left select-caret" [disabled]="createNewCompanyPreparedObj.phoneCode" style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode"
                       [(ngModel)]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                        <input type="number" class="form-control pull-right mrR1 select-caret"  required [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988" id="contactNo" autocomplete="off"
                        [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl/>
@@ -63,8 +63,8 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">GSTIN  <sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" placeholder=""
-                                />
+                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" [(ngModel)]="companyProfileObj.gstNumber"
+                                    placeholder="Enter GSTIN" />
 
                             </div>
                         </div>

@@ -173,7 +173,13 @@ export class CompanyService {
       return data;
     }));
   }
-
+  //Get razorPay paymentID
+  public getRazorPayOrderId(amount: any, currency: any): Observable<BaseResponse<any, any>> {
+    return this._http.get(this.config.apiUrl + COMPANY_API.RAZORPAY_ORDERID.replace(':amount', amount).replace(':currency', currency)).pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
     if (stateDetails.companyUniqueName) {
