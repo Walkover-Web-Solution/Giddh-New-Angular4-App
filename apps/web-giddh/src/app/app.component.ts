@@ -13,6 +13,8 @@ import { ReplaySubject } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {reassignNavigationalArray} from './models/defaultMenus'
 import { DbService } from './services/db.service';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+
 /**
  * App Component
  * Top Level Component
@@ -62,7 +64,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService,
               private sanitizer: DomSanitizer,
-              private dbServices :DbService
+              private dbServices :DbService,
+              private breakpointObserver: BreakpointObserver
               // private comapnyActions: CompanyActions,
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
@@ -92,9 +95,35 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this._generalService.isMobileSite.subscribe(s => {
       this.isMobileSite = s;
     });
+    this.breakpointObserver.observe([
+      '(max-width: 1024px)'
+        ]).subscribe(result => {
+          if (result.matches) {
+            this.changeOnMobileView(true);
+          } else {
+            // if necessary:
+            this.changeOnMobileView(false);
+          }
+        });
   }
 
-
+  private changeOnMobileView(isMobile){
+    if(isMobile){
+      if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+        localStorage.setItem('isMobileSiteGiddh', 'true');
+        this.dbServices.clearAllData();
+        this.router.navigate(['settings']);
+      }
+      reassignNavigationalArray(isMobile);
+    }else{
+      if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+        localStorage.setItem('isMobileSiteGiddh', 'false');
+        this.dbServices.clearAllData();
+      }
+      reassignNavigationalArray(isMobile);
+    }
+    this._generalService.setIsMobileView(isMobile);
+  }
   public ngOnInit() {
     this.sideBarStateChange(true);
     // Need to implement for Web app only
@@ -116,20 +145,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.router.events.subscribe((evt) => {
 
       if ((evt instanceof NavigationStart) && !isElectron) {
-          if(window.location.href.startsWith('http://m.')){
-            if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
-              localStorage.setItem('isMobileSiteGiddh', 'true');
-              this.dbServices.clearAllData();
-            }
-            reassignNavigationalArray(true);
-            this._generalService.setIsMobileView(true);
-          }else{
-            if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
-              localStorage.setItem('isMobileSiteGiddh', 'false');
-              this.dbServices.clearAllData();
-            }
-            reassignNavigationalArray(false);
-          }
         if(this.newVersionAvailableForWebApp){
           // need to save last state
           const redirectState = this.getLastStateFromUrl(evt.url);

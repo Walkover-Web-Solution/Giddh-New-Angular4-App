@@ -291,6 +291,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this._generalService.isMobileSite.subscribe(s => {
       this.isMobileSite = s;
+       this.menuItemsFromIndexDB = DEFAULT_MENUS;
+       this.accountItemsFromIndexDB= DEFAULT_AC;
     });
   }
 
