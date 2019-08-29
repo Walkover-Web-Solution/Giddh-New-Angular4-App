@@ -2,7 +2,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
@@ -32,7 +32,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public proformaSetting: ProformaSettings = new ProformaSettings();
   public estimateSetting: EstimateSettings = new EstimateSettings();
   public webhooks: InvoiceWebhooks[];
-  public invoiceWebhook : InvoiceWebhooks[];
+  public invoiceWebhook: InvoiceWebhooks[];
   public estimateWebhook: InvoiceWebhooks[];
   public invoiceLastState: InvoiceSettings;
   public webhookLastState: InvoiceWebhooks[];
@@ -99,7 +99,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public initSettingObj() {
     this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
-
         this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
 
         this.settingResponse = setting;
@@ -127,11 +126,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.proformaWebhook.push(_.cloneDeep(this.webhookMock));
 
 
-        if(webhookArray.length>0 ){
-          this.webhooks=webhookArray;
-        }else{
+        if (webhookArray.length > 0) {
+          this.webhooks = webhookArray;
+        } else {
           // adding blank webhook row on load
-          this.webhooks=[_.cloneDeep(this.webhookMock)];
+          this.webhooks = [_.cloneDeep(this.webhookMock)];
         }
 
 
@@ -172,8 +171,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Add New Webhook
    */
-  public addNewWebhook(webhook, entityType?:string) {
-    webhook['entity']=entityType;
+  public addNewWebhook(webhook, entityType?: string) {
+    webhook['entity'] = entityType;
     let objToSave = _.cloneDeep(webhook);
     if (!objToSave.url || !objToSave.triggerAt) {
       this._toasty.warningToast("Last row can't be blank.");
@@ -208,14 +207,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   /**
    * Update Form
    */
-  public UpdateForm(form) {
+  public UpdateForm(form = null) {
 
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
     // if (!_.isEqual(form, this.invoiceLastState)) {
     // if (!_.isEqual(form, this.invoiceLastState)) {
 
-    if (this.webhooks && this.webhooks.length>0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
+    if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
       this.webhooks.splice(this.webhooks.length - 1);
     }
     // perform operation to update 'invoice' webhooks
@@ -241,11 +240,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     } else {
       this.formToSave.invoiceSettings.autoPaid = 'never';
     }
+
     this.formToSave.companyCashFreeSettings = _.cloneDeep(this.companyCashFreeSettings);
     this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     // }
 
-    if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
+    if (!_.isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
       this.saveRazorPay(this.razorpayObj, form);
     }
     // } else {

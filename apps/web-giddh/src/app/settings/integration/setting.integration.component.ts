@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -20,9 +20,9 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import {TabsetComponent} from "ngx-bootstrap";
-import {CompanyActions} from "../../actions/company.actions";
-import {IRegistration} from "../../models/interfaces/registration.interface";
+import { TabsetComponent } from "ngx-bootstrap";
+import { CompanyActions } from "../../actions/company.actions";
+import { IRegistration } from "../../models/interfaces/registration.interface";
 
 export declare const gapi: any;
 
@@ -46,17 +46,19 @@ export declare const gapi: any;
 
 }
 
-    @media(max-width:767px){
-     #inlnImg {
-        margin-top: 0;
-    }
-    #inlnImg label , .inlnImg label {
-      margin: 0;
-      display: none;
-  }
-
-    }
-  `]
+@media(max-width:767px){
+#inlnImg {
+margin-top: 0;
+}
+#inlnImg label , .inlnImg label {
+margin: 0;
+display: none;
+}
+ .empty-label label , .empty-label br{
+  display:none;
+}
+}
+`]
 })
 export class SettingIntegrationComponent implements OnInit {
 
@@ -112,7 +114,7 @@ export class SettingIntegrationComponent implements OnInit {
 
   public ngOnInit() {
     //logic to switch to payment tab if coming from vedor tabs add payment
-    if(this.selectedTabParent){
+    if (this.selectedTabParent) {
       this.selectTab(this.selectedTabParent);
     }
     // getting all page data of integration page
@@ -126,7 +128,7 @@ export class SettingIntegrationComponent implements OnInit {
         this.emailFormObj = o.emailForm;
       }
       //set payment form data
-      if(o.paymentForm){
+      if (o.paymentForm) {
         this.paymentFormObj = o.paymentForm;
       }
       // set razor pay form data
@@ -175,10 +177,10 @@ export class SettingIntegrationComponent implements OnInit {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({label: item.name, value: item.uniqueName});
+            bankAccounts.push({ label: item.name, value: item.uniqueName });
           }
         });
         this.accounts$ = observableOf(accounts);
@@ -209,9 +211,9 @@ export class SettingIntegrationComponent implements OnInit {
     this.store.dispatch(this._companyActions.getAllRegistrations());
 
     this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-      if(o.account) {
+      if (o.account) {
         this.registeredAccount = o.account;
-        if(this.registeredAccount && this.registeredAccount.length === 0 ){
+        if (this.registeredAccount && this.registeredAccount.length === 0) {
           this.openNewRegistration = true;
         }
       }
@@ -232,7 +234,7 @@ export class SettingIntegrationComponent implements OnInit {
   public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-    this.razorPayObj.account = {name: null, uniqueName: null};
+    this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 
@@ -501,7 +503,7 @@ export class SettingIntegrationComponent implements OnInit {
     this.paymentFormObj = new PaymentClass();
     this.openNewRegistration = true;
   }
-  public deRegisterForm(regAcc: IRegistration){
+  public deRegisterForm(regAcc: IRegistration) {
     this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
   }
 

@@ -27,7 +27,7 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 
 
 const CustomerType = [
@@ -221,8 +221,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute, private _router : Router) {
+    private _cdRef: ChangeDetectorRef, private _breakpointObserver: BreakpointObserver,
+    private _route: ActivatedRoute, private _router: Router) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -502,7 +502,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleBodyClass();
   }
 
-  public togglePaymentPane(event?){
+  public togglePaymentPane(event?) {
     if (event) {
       event.preventDefault();
     }
@@ -1063,18 +1063,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
-  //Redirect to add payment module
-  private redirectAddPayment(account: any){
-    this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
-    this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-  }
-
 
   /*
   * Register Account navigation
   * */
   private registerAccount() {
-    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
+    this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
   }
 
 }
