@@ -151,31 +151,31 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 
     // subscribe createStockSuccess for resting form
     this.removeStockSuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isAddStockOpen) {
         this.closeAsidePane();
       }
     });
 
     this.removeGroupSuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isAddGroupOpen) {
         this.closeAsidePane();
       }
     });
 
     this.UpdateStockSuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isAddStockOpen) {
         this.closeAsidePane();
       }
     });
 
     this.UpdateGroupSuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isAddGroupOpen) {
         this.closeAsidePane();
       }
     });
 
     this.MoveStockSuccess$.subscribe(s => {
-      if (s) {
+      if (s && this.isAddStockOpen) {
         this.closeAsidePane();
       }
     });
