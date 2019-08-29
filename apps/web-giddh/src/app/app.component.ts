@@ -116,15 +116,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.router.events.subscribe((evt) => {
 
       if ((evt instanceof NavigationStart) && !isElectron) {
-        if(!this.isMobileSite){
-          if(window.location.href.startsWith('m.')){
-            this.dbServices.clearAllData();
+          if(window.location.href.startsWith('http://m.')){
+            if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+              localStorage.setItem('isMobileSiteGiddh', 'true');
+              this.dbServices.clearAllData();
+            }
             reassignNavigationalArray(true);
             this._generalService.setIsMobileView(true);
           }else{
+            if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+              localStorage.setItem('isMobileSiteGiddh', 'false');
+              this.dbServices.clearAllData();
+            }
             reassignNavigationalArray(false);
           }
-        }
         if(this.newVersionAvailableForWebApp){
           // need to save last state
           const redirectState = this.getLastStateFromUrl(evt.url);
