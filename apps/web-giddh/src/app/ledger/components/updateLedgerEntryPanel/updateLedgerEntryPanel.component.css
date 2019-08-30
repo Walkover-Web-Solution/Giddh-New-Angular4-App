@@ -80,3 +80,16 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding: 0px !important;
 }
 
+
+@media only screen and (max-width: 767px) {
+    .ledger_book .h-table tbody .ledger-row td {
+        padding-left: 80px !important;
+    }
+    .card-table tbody tr td {
+        padding-left: 70px !important;        
+    }
+    .ledger-footer-1 {
+        position: absolute;
+        bottom: 0;
+    }
+}

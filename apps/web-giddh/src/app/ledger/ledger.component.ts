@@ -218,16 +218,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerTxnBalance$ = this.store.select(p => p.ledger.ledgerTransactionsBalance).pipe(takeUntil(this.destroyed$));
   }
 
-  isActive: boolean = true;
-  inactive: boolean = false;
+  // id: boolean =true;
+  // addClass(id: any) {
+  //   this.id = id;
+  // }
+
+
 
 
   Shown: boolean = true;
   isHide: boolean = false;
+
+  condition: boolean = true;
+  condition2: boolean = false;
+
   toggleShow() {
-
+    this.condition= this.condition ?false:true;
+    this.condition2= this.condition ?false:true;
     
-
     this.Shown = this.Shown ?false:true;
     this.isHide = this.isHide ?false:true;
   }

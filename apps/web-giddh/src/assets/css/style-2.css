@@ -965,120 +965,6 @@ modal-container.modal.fade.show {
 }
 
 
-/*.menu_open .table_width-small {*/
-
-
-/*  max-width: 1226px;*/
-
-
-/*  width: 100%;*/
-
-
-/*}*/
-
-
-/*.table_width-small {*/
-
-
-/*  max-width: 1296px;*/
-
-
-/*  width: 100%;*/
-
-
-/*}*/
-
-
-/*@media (max-width: 1440px) {*/
-
-
-/*  .menu_open .table_width-small {*/
-
-
-/*    max-width: 1072px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*  .table_width-small {*/
-
-
-/*    max-width: 1140px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*}*/
-
-
-/*@media (max-width: 1366px) {*/
-
-
-/*  .menu_open .table_width-small {*/
-
-
-/*    max-width: 1047px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*  .table_width-small {*/
-
-
-/*    max-width: 1115px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*}*/
-
-
-/*@media (max-width: 1280px) {*/
-
-
-/*  .menu_open .table_width-small {*/
-
-
-/*    max-width: 1016px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*  .table_width-small {*/
-
-
-/*    max-width: 1085px;*/
-
-
-/*    width: 100%;*/
-
-
-/*  }*/
-
-
-/*}*/
-
-
 /* my css end */
 
 
@@ -1224,7 +1110,6 @@ header .navbar {
 }
 
 .ledgHead {
-  float: left;
   width: 100%;
 }
 
@@ -5652,6 +5537,7 @@ table td[class*=col-]:last-child {
 .ledger-footer-1 {
   position: absolute;
   bottom: 0;
+  width: 100%;
 }
 
 .ledger-head th {
@@ -5828,6 +5714,7 @@ table td[class*=col-]:last-child {
 .custom-tabs {
   background: #eee;
   border-bottom: 1px solid #ddd;
+  clear: both;
 }
 
 
@@ -7632,9 +7519,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   #invoice-setting ul.nav.nav-tabs {
     border-bottom: none !important;
   }
-  #export-body label {
+  /* #export-body label {
     padding-bottom: 5px;
-  }
+  } */
 
   .company-box .inner-company-box > ul > li > span {
     width: 100px;
@@ -7654,6 +7541,30 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   .ledger_book .right-col-new .entry-modal {
     width: 100%;
     left: 0%;
+  }
+  .card-table tbody tr td {
+    display: block;
+    width: 100%;
+    min-width: 100%;
+    position: relative;
+    padding-left: 60px !important;
+    border-bottom: 0px !important;
+  }
+  .card-table tbody tr td:after {
+    content: attr(data-title);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-weight: bold;
+  }
+  .card-table thead {
+    display: none;
+}
+
+  
+
+  .card-table, .card-table tbody, .card-table tbody tr {
+    display: block;
   }
 }
 

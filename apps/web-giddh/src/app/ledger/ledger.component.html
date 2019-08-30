@@ -12,8 +12,7 @@
     <div class="ledgHead transactions-page mrT3 pos-rel">
 
         <!-- ledger header -->
-        <div class="col-md-12">
-            <div class="row">
+            <div class="clearfix">
                 <div class="col-sm-2">
                     <div class="row">
                         <!-- (hideDaterangepicker)="selectedDate($event)"  -->
@@ -93,16 +92,14 @@
                     </div>
                 </div>
             </div>
-        </div>
         <!-- ledger header end -->
 
-        <div class="tabs">
-            <ul class="nav nav-pills">
-                <li role="presentation" [ngClass]="'isActive: active ? inactive'"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
-                <li role="presentation"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
+        <div class="custom-tabs mt-2 mb-2 hidden-lg hidden-md hidden-sm">
+            <ul class="nav nav-tabs pt-0">
+                <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
+                <li role="presentation" [className]="condition2 ? 'active' : ''" (click)="addClass(id=2)"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
             </ul>
         </div>
-          
 
 
         <!--bank ledgers-->
@@ -408,7 +405,7 @@
         <table class="col-xs-12 ledger-head mrT1">
             <thead>
                 <tr>
-                    <th class="col-xs-6">
+                    <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.dr}}</b>
                     </th>
                     <th class="col-xs-6 hidden-xs">
@@ -424,7 +421,7 @@
             #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])"
             (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
             <!--debit transaction-->
-            <div *ngIf="Shown" hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+            <div [ngClass]="Shown ? 'active' : ''" hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -656,7 +653,7 @@
             <!--credit transaction-->
             
 
-            <div *ngIf="isHide" class="right-col-new" hr-item
+            <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <table class="col-xs-12 ledger-head hidden-lg hidden-md hidden-sm">

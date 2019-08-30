@@ -5357,3 +5357,44 @@ form#groupDetailForm {
     padding: 3px 8px !important;
 }
 }
+
+
+/*  */
+@media only screen and (max-width: 767px) {
+  .ledger_book .h-table tbody .ledger-row td {
+      position: relative;
+      display: block;
+      width: 100%;
+      max-width: 100% !important;
+      border: 0px;
+      text-align: left;
+  }
+  .ledger_book .h-table tbody .ledger-row td:after {
+      content: attr(data-title);
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-weight: bold;
+  }
+  .left-col-new, .right-col-new {
+      width: 100%;
+      float: none;
+      display: none;
+      height: initial;
+  }
+  .left-col-new.active, .right-col-new.active {
+      display: block;
+  }
+  .transactions-page .left-col-new, .transactions-page .right-col-new {
+      padding-bottom: 20px;
+  }
+  .ledger_book .h-table tbody .ledger-row {
+      width: 100%;
+      border-bottom: 1px solid #ccc;
+  }
+  .ledger-head thead tr th.active {
+    display: block !important;
+    width: 100%;
+  }
+  
+}
