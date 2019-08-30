@@ -179,7 +179,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.company = this.createNewCompany;
         this.prepareWelcomeForm();
       }
-      console.log('welcome billing', this.createNewCompany);
     });
 
     if (this._generalService.createNewCompany) {
