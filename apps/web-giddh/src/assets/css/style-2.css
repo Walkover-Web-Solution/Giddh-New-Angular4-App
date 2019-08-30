@@ -7485,13 +7485,13 @@ color: #a9a9a9;
   color: #ff0000;
 }
 
-#settingTab .nav>li>a:focus, #settingTab .nav>li>a:hover {
-  background: #fff !important;
-  border-top: 1px solid #cbcbcb!important;
-  border-left: 1px solid #cbcbcb!important;
-  border-right: 1px solid #cbcbcb!important;
+#invoice-setting .nav>li>a:focus, #invoice-setting .nav>li>a:hover {
+  background: transparent !important;
+  border: 1px solid #cbcbcb!important;
 }
-
+#invoice-setting .nav>li>a.active{
+  border: 1px solid #ff5f00 !important;
+}
 /* responsive */
 @media(max-width:1440px) {
     .font-xxlarge {
