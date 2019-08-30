@@ -83,13 +83,12 @@ export class AccountsAction {
           return {type: 'EmptyAction'};
         }
         this._toasty.successToast(action.payload.body, action.payload.status);
-        let accName = null;
         this.store.pipe(take(1)).subscribe((s) => {
-          if (s.groupwithaccounts.activeGroup) {
-            accName = s.groupwithaccounts.activeAccount.uniqueName;
+          if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
+            return this.getAccountDetails(s.groupwithaccounts.activeAccount.uniqueName);
           }
         });
-        return this.getAccountDetails(accName);
+        return {type: 'EmptyAction'};
       }));
 
   @Effect()
