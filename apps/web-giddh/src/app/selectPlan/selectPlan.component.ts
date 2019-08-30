@@ -36,8 +36,11 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
   public isCompanyCreationInProcess$: Observable<boolean>;
+  public isRefreshing$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
+  public isCreateAndSwitchCompanyInProcess: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
 
   // private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
   //     private _router: Route, private _generalService: GeneralService, private _toasty: ToasterService,private companyActions: CompanyActions
@@ -59,7 +62,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
           this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
         }
       }
-      console.log('select plan', this.createNewCompanyPreObj);
     });
     this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
       this.SubscriptionPlans = res.body;
@@ -76,7 +78,15 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
+    this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+    this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
+      this.isCreateAndSwitchCompanyInProcess = isINprocess;
+    });
+    this.isRefreshing$.pipe(takeUntil(this.destroyed$)).subscribe(isInpro => {
+      this.isCreateAndSwitchCompanyInProcess = isInpro;
+    });
 
   }
   public ngOnDestroy() {
