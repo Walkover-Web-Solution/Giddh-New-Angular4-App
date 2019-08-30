@@ -7498,6 +7498,12 @@ span.red-text {
   color: red;
 }
 
+#settingTab .nav>li>a:focus, #settingTab .nav>li>a:hover {
+  background: #fff !important;
+  border-top: 1px solid #cbcbcb!important;
+  border-left: 1px solid #cbcbcb!important;
+  border-right: 1px solid #cbcbcb!important;
+}
 
 /* responsive */
 
