@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ReplaySubject, of as observableOf, Observable } from 'rxjs';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { CompanyCreateRequest, States, BillingDetails, CreateCompanyUsersPlan } from '../models/api-models/Company';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
-import { WindowRef } from '../shared/helpers/window.object';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
-import { State, Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
-import { takeUntil, take } from 'rxjs/operators';
-import { ActivatedRoute, Router, Route } from '@angular/router';
+import { take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -22,7 +21,7 @@ import { WindowRefService } from '../theme/universal-list/service';
   templateUrl: 'billingDetail.component.html',
   styleUrls: ['billingDetail.component.scss']
 })
-export class BillingDetailComponent implements OnInit, OnDestroy {
+export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public logedInuser: UserDetails;
   public billingDetailsObj: BillingDetails = {
@@ -48,6 +47,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
   public orderId: string;
   public UserCurrency: string = '';
   public fromSubscription: boolean = false;
+  public bankList: any;
+  public razorpay: any;
+  public options: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService) {
@@ -64,6 +66,40 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       // console.log(err);
     });
     this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
+  }
+
+
+  public payNow() {
+    // has to be placed within user initiated context, such as click, in order for popup to open.
+
+    let data = {
+      amount: 1000, // in currency subunits. Here 1000 = 1000 paise, which equals to ₹10
+      currency: "INR",// Default is INR. We support more than 90 currencies.
+      email: 'gaurav.kumar@example.com',
+      contact: '9123456780',
+      notes: {
+        address: 'Ground Floor, SJR Cyber, Laskar Hosur Road, Bengaluru',
+      },
+      order_id: this.orderId,
+      method: 'netbanking',
+
+      // method specific fields
+      bank: 'HDFC',
+
+    };
+
+
+    this.razorpay.createPayment(data);
+
+    this.razorpay.on('payment.success', function (resp) {
+      alert(resp.razorpay_payment_id),
+        alert(resp.razorpay_order_id),
+        alert(resp.razorpay_signature)
+    }); // will pass payment ID, order ID, and Razorpay signature to success handler.
+
+    this.razorpay.on('payment.error', function (resp) {
+      alert(resp.error.description)
+    }); // will pass error object to error handler
   }
 
   public ngOnInit() {
@@ -87,16 +123,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       }
       console.log('billing', this.createNewCompany);
     });
-    // if (this.subscriptionPrice && this.UserCurrency) {
-    //   this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
-    //     if (res.status === 'success') {
-    //       this.payAmount = res.body.amount;
-    //       this.orderId = res.body.id;
-    //       console.log('OrderId', this.orderId, 'amnt', this.payAmount);
-    //     }
-    //   });
-    // }
-
   }
   public getPayAmountForTazorPay(amt: any) {
     return amt * 100;
@@ -118,6 +144,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       ele.classList.remove('error-box');
     }
   }
+
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
     let gstVal: string = gstNo.value;
     this.billingDetailsObj.gstin = gstVal;
@@ -154,10 +181,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
       console.log(this.billingDetailsObj);
     }
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public backToSubscriptions() {
     this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
   }
@@ -171,38 +200,48 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     if (billingDetail.valid && this.createNewCompany) {
       this.createNewCompany.userBillingDetails = billingDetail.value;
     }
-    console.log('this.razorpayAmount', this.razorpayAmount);
-    // this.createPaidPlanCompany(paymentId); //  after payment done then you will get paymentId pass this parameter in  createPaidPlanCompany method
+    console.log('create company Obj', this.createNewCompany);
+    this.razorpay.open();
 
-    // let options = {
-    //   key: 'rzp_live_rM2Ub3IHfDnvBq', // Enter the Key ID generated from the Dashboard
-    //   amount: '29935', // Amount is in currency subunits. Default currency is INR. Hence, 29935 refers to 29935 paise or INR 299.35.
-    //   currency: 'INR',
-    //   name: 'Acme Corp',
-    //   handler: function (response) {
-    //     alert(response.razorpay_payment_id);
-    //   },
-    //   prefill: {
-    //     name: 'Gaurav Kumar',
-    //     email: 'gaurav.kumar@example.com'
-    //   },
-    //   notes: {
-    //     address: 'note value'
-    //   },
-    //   theme: {
-    //     color: '#F37254'
-    //   }
-    // };
-    // let rzp1 = new this.winRef.nativeWindow.Razorpay(options);
-    // document.getElementById('rzp-button1').onclick = function (e) {
-    // rzp1.open();
-    // }
   }
 
-  public createPaidPlanCompany(paymentId: string) {
-    if (paymentId) {
-      this.createNewCompany.paymentId = paymentId;
+  public createPaidPlanCompany(razorPay_response: any) {
+    if (razorPay_response) {
+      this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
+      this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
     }
     this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
+  }
+
+  ngAfterViewInit(): void {
+    let s = document.createElement('script');
+    let that = this;
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.type = 'text/javascript';
+    document.body.appendChild(s);
+    this.options = {
+      key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U    // rzp_live_rM2Ub3IHfDnvBq     //'https://i.imgur.com/n5tjHFD.png'
+      image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAk1BMVEUAAAAgICCvIAAoKCivIAArKyWvIACuIAAoKCirIAApKSasIwArKCitIwApKSesIgApKSmtIgCtIgAqKiitIgArKSmtIgAqKSmsIgAqKiitIgArKSisIwAqKSmsIwAqKimsIwArKSisIwArKSitIwCsIgArKiitIgCtIgAqKSmtIgArKimtIgArKSisIgArKimtIwCLeJzxAAAAL3RSTlMAEBAgIDAwP0BAUF9gYG9vcHB/gICPj5CQn5+goK+vsLC/v8DAz9DQ3+Dg7+/w8HQisAwAAALGSURBVFjDrZjreqIwEIaR4iFV1oJsdVvXIgWTjRi4/6tbah91JkxCwu78bNP3mfnmwEyDwGKzZVoUou1MFEW6nAVjLFof6laz+rCOPDHLQ2uww9KdEqZ1azGRhm4cO+Ya4toBw6rWwSo2xHltHe3VnqqqdbbKksBZ3XpYbayruPW02Jkj9xljXbJDxrK9dCT1ODLTVIgy6UBi2pOSTDArtWc9nSKsszTWCcNe1XrucN4zW41kuArwL3fInYF5wRR8vTMKxAd7MuTwPTMExh16G5EqOmruNCMQKbn/FGRMOs6aECSvDgmHnOcyI5JcO+bdWAWi1xvSZ65LvVNyOpM+weXX5gD95fepAX331SjJSIeQSwmKTPp+RCWKrR6TMj1xdTencaBeNoP1F4+PDMYWA/f2/qA9kKUcLxEUqQQg5g9iACT+D6gKHsIbBsj05/F4Pv7+8UR94h9/DUAkZnFsbvaLQDmDtg2w87MbiAjtvcG2soQmLWJvG90WJrG5Lf2LHqc5T4zptxTkqQ9qNoaCzC0tQjjUuWRskVgf4RaFvgxlToCmNY+RTxK0MY2RQJlEOg2CHrIoNGq12EhO80FGltuG/2Bo2vAH1Vn4gQpNXtMH8oUETY0fSPjJRipNKc4fSqHbcqsMSwQV2wu1REhirYHBPfU5J3KtuW1aIXBJwGGy0jmXKbWcqfvfJHAjDM16A05FrX5BwE2k1QUKTXO4aT1GpMl9SF4eFYQ4uGbQwi7QIjl53rx/bjdgNrLauLDj4No2tR7P6CnXx7jCJ7n5qBHooYosK8p339FnVjF0ZhGHn0i1V7NUjDshO9ZbOp93zkfzefom/uWoHXUcd74rH4yynBsRd+dw+8q5c+XsBncnJ6e4y1aWDCqlEsejLpM2jExC9+Uwzk2YPPb9Z12S90JUeeJ9HXzXVZyV5TVMXuZZbD1T/wJZ67NdEouQRAAAAABJRU5ErkJggg==',
+      handler: function (res) {
+        that.createPaidPlanCompany(res);
+        console.log('razorpay_res', res);
+        console.log('razorpay_res', res.razorpay_payment_id);
+        console.log('razorpay_res', res.razorpay_signature);
+        console.log('razorpay_res', res.razorpay_order_id);
+
+      },
+      order_id: this.orderId,
+      theme: {
+        color: '#F37254'
+      },
+      amount: this.razorpayAmount,
+      currency: this.UserCurrency,
+      name: 'GIDDH',
+      description: 'Walkover Web Solutions Pvt. Ltd.',
+
+    };
+    setTimeout(() => {
+      this.razorpay = new (window as any).Razorpay(this.options);
+    }, 1000);
   }
 }

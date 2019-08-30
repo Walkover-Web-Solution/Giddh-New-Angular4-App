@@ -284,8 +284,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
+        if(res.subscription) {
         this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-        this.selectedPlanStatus = res.subscription.status;
+         this.selectedPlanStatus = res.subscription.status;
+        }
         this.activeCompany = res;
         console.log('activeCompany', this.activeCompany);
       }
