@@ -113,10 +113,10 @@ export class ReportsDetailsComponent implements OnInit {
       let mdyTo = item.to.split('-');
       let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
       if (dateDiff <= 8) {
-        if (this.monthNames.indexOf(this.selectedMonth) === parseInt(mdyFrom[1])) {
+        if ((this.monthNames.indexOf(this.selectedMonth) + 1) === parseInt(mdyFrom[1])) {
           this.salesRegisterTotal.sales += item.creditTotal;
           this.salesRegisterTotal.returns += item.debitTotal;
-          this.salesRegisterTotal.netSales += item.closingBalance.amount;
+          this.salesRegisterTotal.netSales = item.closingBalance.amount;
           this.salesRegisterTotal.cumulative += item.balance.amount;
           this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
           reportsModel.particular = 'Week' + weekCount++;
@@ -125,14 +125,14 @@ export class ReportsDetailsComponent implements OnInit {
       } else if (dateDiff <= 31) {
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
-        this.salesRegisterTotal.netSales += item.closingBalance.amount;
+        this.salesRegisterTotal.netSales = item.closingBalance.amount;
         this.salesRegisterTotal.cumulative += item.balance.amount;
 
         reportsModel.particular = this.monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2];
         indexMonths++;
         reportsModelCombined.sales += item.creditTotal;
         reportsModelCombined.returns += item.debitTotal;
-        reportsModelCombined.netSales += item.closingBalance.amount;
+        reportsModelCombined.netSales = item.closingBalance.amount;
         reportsModelCombined.cumulative += item.balance.amount;
         reportModelArray.push(reportsModel);
         if (indexMonths % 3 === 0) {
@@ -145,7 +145,7 @@ export class ReportsDetailsComponent implements OnInit {
       } else if (dateDiff <= 93) {
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
-        this.salesRegisterTotal.netSales += item.closingBalance.amount;
+        this.salesRegisterTotal.netSales = item.closingBalance.amount;
         this.salesRegisterTotal.cumulative += item.balance.amount;
 
         reportsModel.particular = this.formatParticular(mdyTo, mdyFrom, index, this.monthNames);
