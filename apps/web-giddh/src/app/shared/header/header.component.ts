@@ -177,7 +177,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
   private smartCombinedList$: Observable<any>;
-
+  public isMobileSite: boolean;
   /**
    *
    */
@@ -306,7 +306,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.createNewCompanyUser = res;
       }
     });
-
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileSite = s;
+       this.menuItemsFromIndexDB = DEFAULT_MENUS;
+       this.accountItemsFromIndexDB= DEFAULT_AC;
+    });
   }
 
   public ngOnInit() {

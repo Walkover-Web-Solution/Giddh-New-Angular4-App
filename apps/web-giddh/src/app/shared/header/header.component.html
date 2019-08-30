@@ -52,29 +52,29 @@
                     <li>
                         <!-- [routerLink]="['/settings']" [queryParams]="" -->
                         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
-              Users (Permission)</a>
+                             Users (Permission)</a>
                     </li>
-                    <li>
+                    <li *ngIf="!isMobileSite">
                         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up Data</a>
                     </li>
                     <!-- #dropdown="bs-dropdown" -->
                     <!--  -->
-                    <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+                    <li *ngIf="!isMobileSite" dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
                         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-              Switch company
-              <span class="glyphicon glyphicon-menu-right"></span>
-            </a>
+                             Switch company
+                            <span class="glyphicon glyphicon-menu-right"></span>
+                        </a>
 
                         <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
                             <!-- <li class="create-company clearfix" [style.padding.px]="0">
-<button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
-Create Company
-</button>
-<button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
-<i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-</button>
-</li>
--->
+                                    <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+                                    Create Company
+                                    </button>
+                                    <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+                                    <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                    </button>
+                                </li>
+                                -->
 
                             <div class="input-group">
 
@@ -129,7 +129,7 @@ Create Company
 
                     <li role="separator" class="divider" style="width:100%"></li>
 
-                    <li class="mrB1">
+                    <li class="mrB1" *ngIf="!isMobileSite">
                         <a [tooltip]="userEmail" placement="top" href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
                             <span class="user_circle pull-left" *ngIf="!userAvatar">
                                 <span>{{userName | uppercase}}</span>
@@ -142,7 +142,7 @@ Create Company
                             </div>
                         </a>
                     </li>
-                    <li>
+                    <li *ngIf="!isMobileSite">
                         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
                     </li>
                     <li>
@@ -213,7 +213,7 @@ Create Company
 
                 <!-- Accounts menu -->
                 <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-                    <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" placement="bottom" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+                    <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
                     <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
                     <li *ngFor="let acc of accountItemsFromIndexDB">
                         <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}" (click)="analyzeAccounts($event, acc)" [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
@@ -224,7 +224,7 @@ Create Company
                             </span>
                         </a>
                     </li>
-                    <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
+                    <h6 *ngIf="!isMobileSite" class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts" placement="right">Show more...</h6>
                 </ul>
 
                 <!-- Main menu -->
@@ -236,9 +236,9 @@ Create Company
                             <span class="label">{{menu.name}}</span>
                         </a>
                     </li>
-                    <li id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
+                    <li *ngIf="!isMobileSite" id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true" (mouseleave)="showOtherMenu = false">
                         <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
-              class="fa fa-angle-right pull-right"></i></a>
+                         class="fa fa-angle-right pull-right"></i></a>
                     </li>
 
                 </ul>
@@ -372,8 +372,8 @@ Create Company
                     </ul>
 
 
-                    <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
-          </button>
+                    <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
+                    </button>
                     <div class="btn-group cp mrL1 d-inline-block" dropdown>
                         <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
