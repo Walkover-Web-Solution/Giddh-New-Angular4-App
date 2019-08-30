@@ -91,7 +91,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     nameAlias: '',
     paymentId: '',
-    amountPaid: ''
+    amountPaid: '',
+    razorpaySignature: ''
   };
   public GstDetailsObj: GstDetail = {
     gstNumber: '',

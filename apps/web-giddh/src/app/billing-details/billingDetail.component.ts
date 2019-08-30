@@ -58,7 +58,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
-          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(this.states);
@@ -70,7 +70,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
   public payNow() {
-// has to be placed within user initiated context, such as click, in order for popup to open.
+    // has to be placed within user initiated context, such as click, in order for popup to open.
 
     let data = {
       amount: 1000, // in currency subunits. Here 1000 = 1000 paise, which equals to ₹10
@@ -123,24 +123,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       }
       console.log('billing', this.createNewCompany);
     });
-    // if (this.subscriptionPrice && this.UserCurrency) {
-    //   this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
-    //     if (res.status === 'success') {
-    //       this.payAmount = res.body.amount;
-    //       this.orderId = res.body.id;
-    //       console.log('OrderId', this.orderId, 'amnt', this.payAmount);
-    //     }
-    //   });
-    // }
-
-    // @ts-ignore
-    // setTimeout(() => {
-    // }, 1000);
-    // this.razorpay.once('ready', function (response) {
-    //   console.log(response.methods);
-    //   this.bankList = response.methods.netbanking // response.methods.netbanking contains list of all banks
-    // })
-
   }
   public getPayAmountForTazorPay(amt: any) {
     return amt * 100;
@@ -206,7 +188,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public backToSubscriptions() {
-    this._route.navigate(['pages', 'user-details'], {queryParams: {tab: 'subscriptions', tabIndex: 3}});
+    this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
   }
 
 
@@ -223,9 +205,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   }
 
-  public createPaidPlanCompany(paymentId: any) {
-    if (paymentId) {
-      this.createNewCompany.paymentId = paymentId;
+  public createPaidPlanCompany(razorPay_response: any) {
+    if (razorPay_response) {
+      this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
+      this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
     }
     this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
   }
@@ -237,16 +220,25 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     s.type = 'text/javascript';
     document.body.appendChild(s);
     this.options = {
-      key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U
-      image: 'https://i.imgur.com/n5tjHFD.png',//'data:image/png;base64,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',
+      key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U    // rzp_live_rM2Ub3IHfDnvBq     //'https://i.imgur.com/n5tjHFD.png'
+      image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAk1BMVEUAAAAgICCvIAAoKCivIAArKyWvIACuIAAoKCirIAApKSasIwArKCitIwApKSesIgApKSmtIgCtIgAqKiitIgArKSmtIgAqKSmsIgAqKiitIgArKSisIwAqKSmsIwAqKimsIwArKSisIwArKSitIwCsIgArKiitIgCtIgAqKSmtIgArKimtIgArKSisIgArKimtIwCLeJzxAAAAL3RSTlMAEBAgIDAwP0BAUF9gYG9vcHB/gICPj5CQn5+goK+vsLC/v8DAz9DQ3+Dg7+/w8HQisAwAAALGSURBVFjDrZjreqIwEIaR4iFV1oJsdVvXIgWTjRi4/6tbah91JkxCwu78bNP3mfnmwEyDwGKzZVoUou1MFEW6nAVjLFof6laz+rCOPDHLQ2uww9KdEqZ1azGRhm4cO+Ya4toBw6rWwSo2xHltHe3VnqqqdbbKksBZ3XpYbayruPW02Jkj9xljXbJDxrK9dCT1ODLTVIgy6UBi2pOSTDArtWc9nSKsszTWCcNe1XrucN4zW41kuArwL3fInYF5wRR8vTMKxAd7MuTwPTMExh16G5EqOmruNCMQKbn/FGRMOs6aECSvDgmHnOcyI5JcO+bdWAWi1xvSZ65LvVNyOpM+weXX5gD95fepAX331SjJSIeQSwmKTPp+RCWKrR6TMj1xdTencaBeNoP1F4+PDMYWA/f2/qA9kKUcLxEUqQQg5g9iACT+D6gKHsIbBsj05/F4Pv7+8UR94h9/DUAkZnFsbvaLQDmDtg2w87MbiAjtvcG2soQmLWJvG90WJrG5Lf2LHqc5T4zptxTkqQ9qNoaCzC0tQjjUuWRskVgf4RaFvgxlToCmNY+RTxK0MY2RQJlEOg2CHrIoNGq12EhO80FGltuG/2Bo2vAH1Vn4gQpNXtMH8oUETY0fSPjJRipNKc4fSqHbcqsMSwQV2wu1REhirYHBPfU5J3KtuW1aIXBJwGGy0jmXKbWcqfvfJHAjDM16A05FrX5BwE2k1QUKTXO4aT1GpMl9SF4eFYQ4uGbQwi7QIjl53rx/bjdgNrLauLDj4No2tR7P6CnXx7jCJ7n5qBHooYosK8p339FnVjF0ZhGHn0i1V7NUjDshO9ZbOp93zkfzefom/uWoHXUcd74rH4yynBsRd+dw+8q5c+XsBncnJ6e4y1aWDCqlEsejLpM2jExC9+Uwzk2YPPb9Z12S90JUeeJ9HXzXVZyV5TVMXuZZbD1T/wJZ67NdEouQRAAAAABJRU5ErkJggg==',
       handler: function (res) {
-        that.createPaidPlanCompany(res.razorpay_payment_id);
+        that.createPaidPlanCompany(res);
+        console.log('razorpay_res', res);
+        console.log('razorpay_res', res.razorpay_payment_id);
+        console.log('razorpay_res', res.razorpay_signature);
+        console.log('razorpay_res', res.razorpay_order_id);
+
       },
-      amount:this.razorpayAmount,
-      currency: "INR",
+      order_id: this.orderId,
+      theme: {
+        color: '#F37254'
+      },
+      amount: this.razorpayAmount,
+      currency: this.UserCurrency,
       name: 'GIDDH',
-      description: 'Walkover Solutions Pvt. Ltd.',
-      
+      description: 'Walkover Web Solutions Pvt. Ltd.',
+
     };
     setTimeout(() => {
       this.razorpay = new (window as any).Razorpay(this.options);

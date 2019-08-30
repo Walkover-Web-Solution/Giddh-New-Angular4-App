@@ -244,6 +244,7 @@ export class CompanyCreateRequest {
   paymentId?: string;
   amountPaid?: string;
   orderId?: string;
+  razorpaySignature?: string;
 
 }
 
