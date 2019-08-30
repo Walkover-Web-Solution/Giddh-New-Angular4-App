@@ -83,13 +83,12 @@ export class AccountsAction {
           return {type: 'EmptyAction'};
         }
         this._toasty.successToast(action.payload.body, action.payload.status);
-        let accName = null;
         this.store.pipe(take(1)).subscribe((s) => {
-          if (s.groupwithaccounts.activeGroup) {
-            accName = s.groupwithaccounts.activeAccount.uniqueName;
+          if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
+            return this.getAccountDetails(s.groupwithaccounts.activeAccount.uniqueName);
           }
         });
-        return this.getAccountDetails(accName);
+        return {type: 'EmptyAction'};
       }));
 
   @Effect()
@@ -539,8 +538,8 @@ export class AccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
-            this.store.dispatch(this._generalActions.getFlattenAccount());
-            this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+          this.store.dispatch(this._generalActions.getFlattenAccount());
+          this.store.dispatch(this._generalActions.getFlattenGroupsReq());
           this._toasty.successToast(action.payload.body, '');
           let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
           this._generalServices.eventHandler.next({name: eventsConst.accountMerged, payload: data});
