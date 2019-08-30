@@ -562,13 +562,14 @@
     </div>
     <div class="modal-body pd-2 font-14">
         <div class="clearfix mb-3">
-            <p>Your 7 days FREE trial ended on 14/02/2019. We hope you enjoyed using Giddh Accounting Software as much as we loved building it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
+            <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. We hope you enjoyed using Giddh Accounting Software as much as we loved building
+                it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
         </div>
         <div class="clearfix">
             <ul class="list-inline">
                 <!-- [routerLink]="['select-plan']" -->
-                <li><button class="btn btn-green" (click)="goToSelectPlan(select);">Renew Plan</button></li>
-                <li><button class="btn btn-green" (click)="goToSelectPlan(select);">Change Plan</button></li>
+                <li><button class="btn btn-green" (click)="goToSelectPlan();">Renew Plan</button></li>
+                <li><button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button></li>
                 <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRef.hide();"> Contact Us</a></li>
             </ul>
         </div>
@@ -584,12 +585,12 @@
     </div>
     <div class="modal-body pd-2 font-14">
         <div class="clearfix mb-3">
-            <p class="mb-2">You have crossed the transactions limit of your assigned plan <strong>Professional Plan 2</strong> subscribed on 01/05/2019.</p>
+            <p class="mb-2">You have crossed the transactions limit of your assigned plan <strong>{{subscribedPlan.planDetails.name}}</strong> subscribed on {{subscribedPlan.startedAt}}.</p>
             <p>To continue your accounting with Giddh, Please renew your current plan or switch to another one. Contact us for more assistance.</p>
         </div>
         <div class="clearfix">
             <ul class="list-inline">
-                <li><button class="btn btn-blue" (click)="goToSelectPlan(buy);">Buy Plan</button></li>
+                <li><button class="btn btn-blue" (click)="goToSelectPlan();">Buy Plan</button></li>
                 <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRef.hide();"> Contact Us</a></li>
             </ul>
         </div>
