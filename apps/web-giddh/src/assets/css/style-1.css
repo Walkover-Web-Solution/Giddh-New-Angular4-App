@@ -5027,7 +5027,7 @@ border-bottom: 1px solid #e0e0e0;
   color: #ff5f00;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid #ff5f00;
+  border-bottom: 2px solid #ff5f00;
 }
 
 .select2-parent .select2-container--default .select2-selection--single {
