@@ -243,6 +243,9 @@ export class CompanyCreateRequest {
   nameAlias?: string;
   paymentId?: string;
   amountPaid?: string;
+  orderId?: string;
+  razorpaySignature?: string;
+
 }
 
 export class CreateCompanyUsersPlan {

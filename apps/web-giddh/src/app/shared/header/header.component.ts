@@ -284,8 +284,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
+        if(res.subscription) {
         this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-        this.selectedPlanStatus = res.subscription.status;
+         this.selectedPlanStatus = res.subscription.status;
+        }
         this.activeCompany = res;
         console.log('activeCompany', this.activeCompany);
       }
@@ -1048,13 +1050,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
   public goToSelectPlan(plan: string) {
     this.modalService.hide(1);
-    if (plan === 'select') {
-      this.router.navigate(['select-plan']);
-    } else {
-      this.router.navigate(['select-plan']);
-    }
-    this.modalService.hide(1);
-    this.router.navigate(['billing-detail']);
+    this.router.navigate(['select-plan']);
   }
   // public closeCrossedTxLimitModel(template1: TemplateRef<any>) {
   //   // this.expiredPlan.hide();

@@ -70,11 +70,11 @@
       </div>
       <!-- endregion -->
 
-      <div class="col-sm-8 col-xs-12 pd0 invoice-detailWrapper">
+      <div class="col-sm-8 col-xs-12 pd0 invoice-detailWrapper" #invoiceDetailWrapper>
 
         <perfect-scrollbar>
 
-          <div class="invoice-detail">
+          <div class="invoice-detail" #invoicedetail>
 
             <div class="invoiceDetail-header">
 
@@ -243,7 +243,7 @@
 
           </div>
 
-          <div class="invoice-image-section">
+          <div class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
 
             <div class="pos-rel" *ngIf="isVoucherDownloading">
               <div class="loader"></div>
