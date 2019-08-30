@@ -7472,8 +7472,18 @@ padding-left: 0 !important;
 .custom-select input.form-control.selectedVal.cp {
   padding-right: 0 !important;
 }
+.welcome-container  .selectBox .custom-select input.form-control.selectedVal.cp , .welcome-container  .selectBox  input , .welcome-container  .selectBox textarea{
+  color: #333;
+}
 .basic > thead > tr > th {
   border-right: 1px solid #c6c4c4;
+}
+
+.welcome-container  input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+.btn-group.btn-block.invoice-btn .btn-block {
+  color: rgba(0,0,0,0.4);
 }
 /* responsive */
 
