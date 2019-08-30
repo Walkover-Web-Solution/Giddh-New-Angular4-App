@@ -338,6 +338,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
       if (parmas['invoiceType']) {
+        if (this.invoiceType !== parmas['invoiceType']) {
+          this.invoiceType = parmas['invoiceType'];
+          this.prepareInvoiceTypeFlags();
+          this.saveStateDetails();
+          this.resetInvoiceForm(this.invoiceForm);
+          this.makeCustomerList();
+        }
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
         this.saveStateDetails();
@@ -1412,6 +1419,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
           }
         });
+      } else {
+        // assign taxes for non stock accounts
+        txn.applicableTaxes = o.applicableTaxes;
       }
 
       txn.accountName = o.name;
