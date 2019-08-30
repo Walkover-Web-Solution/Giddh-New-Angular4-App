@@ -34,8 +34,7 @@
 .invoice-sidebar {
   background-color: #fff;
   padding: 0;
-  height: 100vh;
-
+  height: calc(100vh - 155px);
 }
 
 .d-flex {
