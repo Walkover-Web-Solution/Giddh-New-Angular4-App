@@ -20,9 +20,10 @@
 .item {
   /* padding: 4px; */
   cursor: pointer;
-  white-space: nowrap;
+  white-space: inherit;
   display: table;
   width: 100%;
+  word-break: break-word;
 }
 
 .item:hover {

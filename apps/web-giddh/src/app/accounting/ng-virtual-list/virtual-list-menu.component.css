@@ -20,7 +20,8 @@
 .item {
   /* padding: 4px; */
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: normal;
   display: table;
   width: 100%;
   text-transform: capitalize;
