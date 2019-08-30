@@ -74,7 +74,7 @@ export const NAVIGATION_ITEM_LIST: IUlist[] = [
   { type: 'MENU', name: 'User-Details > Subscriptions', uniqueName: '/pages/user-details', additional: { tab: 'subscriptions', tabIndex: 3 } },
   { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: { tab: 'profile', tabIndex: 1 } },
   { type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: { tab: 'api', tabIndex: 0 } },
-  { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports' }
+  { type: 'MENU', name: 'Reports > sales', uniqueName: '/pages/reports/reports-details' }
 ];
 export const HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',
   'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',

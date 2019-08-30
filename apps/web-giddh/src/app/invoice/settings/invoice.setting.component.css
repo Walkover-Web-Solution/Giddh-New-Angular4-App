@@ -109,9 +109,18 @@ span.viasocket a{
 }
 .invoice-lock-date{
   width: 152px;
+  position: relative;
 }
 .showOnMobile{
   display: none;
+}
+.invoice-lock-date .icon-calender{
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  color: #666666;
+  font-size: 16px;
+
 }
 @media(max-width:767px){
   .hideOnMobile{
@@ -146,3 +155,4 @@ span.viasocket a{
   margin-top: 30px;
 }
 }
+
