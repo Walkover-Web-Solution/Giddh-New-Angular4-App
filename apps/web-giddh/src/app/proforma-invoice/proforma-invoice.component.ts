@@ -174,6 +174,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public calculatedRoundOff: number = 0;
+
+
   // modals related
   public modalConfig: ModalOptions = {
     animated: true,
@@ -1310,6 +1313,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
     this.invFormData.voucherDetails.balanceDue =
       ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+      this.invFormData.voucherDetails.balanceDue =  this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
   public calculateSubTotal() {
@@ -1323,9 +1327,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public calculateGrandTotal() {
-    this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
+
+    let calculatedGrandTotal = 0;
+    calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
       return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
     }, 0);
+
+    //Save the Grand Total for Edit
+    if(calculatedGrandTotal > 0)
+    {
+      this.calculatedRoundOff =  Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+      calculatedGrandTotal = calculatedGrandTotal +  this.calculatedRoundOff;
+    }
+
+    this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
+
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {

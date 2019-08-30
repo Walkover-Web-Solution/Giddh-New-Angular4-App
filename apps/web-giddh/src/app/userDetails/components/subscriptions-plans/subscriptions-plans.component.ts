@@ -32,6 +32,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   };
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isUpdateCompanySuccess$: Observable<boolean>;
+  public isSwitchPlanInProcess: boolean = false;
 
   @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -51,7 +52,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     });
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
     this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
@@ -66,6 +66,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
       if (p) {
         this._toast.successToast("Plan changed successfully");
       }
+    });
+    this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+      this.isSwitchPlanInProcess = inProcess;
     });
 
   }
@@ -98,11 +101,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
       this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
       this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
     }
-    // if(item.subscriptionId) {
-
-    // }
-
-    console.log(plan);
   }
 
 }

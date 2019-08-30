@@ -217,7 +217,7 @@ export class BillingDetails {
   gstin: string;
   state: string;
   address: string;
-  autorenew: string;
+  autorenew: any;
 }
 
 export class CompanyCreateRequest {
@@ -241,6 +241,11 @@ export class CompanyCreateRequest {
   taxes?: string[];
   userBillingDetails?: BillingDetails;
   nameAlias?: string;
+  paymentId?: string;
+  amountPaid?: string;
+  orderId?: string;
+  razorpaySignature?: string;
+
 }
 
 export class CreateCompanyUsersPlan {

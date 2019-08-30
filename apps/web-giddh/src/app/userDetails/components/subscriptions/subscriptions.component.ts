@@ -5,7 +5,7 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
-import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
+import { SubscriptionsUser, CompaniesWithTransaction } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
 
 @Component({
@@ -18,8 +18,9 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public subscriptions: SubscriptionsUser[] = [];
   public subscriptions$: Observable<SubscriptionsUser[]>;
   public seletedUserPlans: SubscriptionsUser;
+  public selectedPlanCompanies: CompaniesWithTransaction[];
   public isPlanShow: boolean = false;
-
+  public srchString = '';
   public transactions: any;
   public companies: any;
   public companyTransactions: any;
@@ -53,6 +54,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
       if (this.subscriptions.length > 0) {
         this.seletedUserPlans = this.subscriptions[0];
+        if(this.seletedUserPlans.companiesWithTransactions)
+        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
       }
     });
 
@@ -61,12 +64,16 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public ngAfterViewInit() {
     if (this.subscriptions) {
       this.seletedUserPlans = this.subscriptions[0];
+      if(this.seletedUserPlans.companiesWithTransactions)
+      this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
   }
 
   public selectedSubscriptionPlan(subsciption: SubscriptionsUser) {
     if (subsciption) {
       this.seletedUserPlans = subsciption;
+      if(this.seletedUserPlans.companiesWithTransactions)
+      this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
   }
   public isSubscriptionPlanShow(event: any) {
@@ -78,6 +85,14 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public filterCompanyList(ev) {
+    let companies: CompaniesWithTransaction[] = [];
+    companies = this.seletedUserPlans.companiesWithTransactions;
+    let filterd = companies.filter((cmp) => {
+      return cmp.name.toLowerCase().includes(ev.toLowerCase());
+    });
+    this.selectedPlanCompanies = filterd;
   }
 
   // public getSubscriptionList() {

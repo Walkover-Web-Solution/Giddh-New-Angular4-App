@@ -45,6 +45,7 @@ export class CompanyActions {
   public static GET_TAX = 'GroupTax';
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
   public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
+  public static USER_CAREATE_COMPANY = 'USER_CAREATE_COMPANY';
   public static GET_REGISTRATION_ACCOUNT_RESPONSE = 'GET_REGISTRATION_ACCOUNT_RESPONSE';
   public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
@@ -173,8 +174,8 @@ export class CompanyActions {
            * if user is signed up on their own take him to sales module
            */
           if (this._generalService.user.isNewUser) {
-            // stateDetailsObj.lastState = 'sales';
-            stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
+            stateDetailsObj.lastState = 'onboarding';
+            // stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
           } else {
             stateDetailsObj.lastState = 'home';
           }
@@ -396,6 +397,12 @@ export class CompanyActions {
   public selectedPlan(value: CreateCompanyUsersPlan): CustomActions {
     return {
       type: CompanyActions.USER_SELECTED_PLANS,
+      payload: value
+    };
+  }
+  public userStoreCreateCompany(value: CompanyCreateRequest): CustomActions {
+    return {
+      type: CompanyActions.USER_CAREATE_COMPANY,
       payload: value
     };
   }

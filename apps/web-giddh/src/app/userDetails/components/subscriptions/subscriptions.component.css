@@ -48,6 +48,7 @@
     border: 1px solid #C4C0C0;
     width: 342px;
     text-align: left;
+    background: white;
 }
 
 .subscription-dropdown .btn .caret {

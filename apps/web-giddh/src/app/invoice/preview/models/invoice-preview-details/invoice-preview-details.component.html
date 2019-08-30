@@ -5,7 +5,7 @@
     <div class="">
 
       <!-- region sidebar -->
-      <div class="col-sm-4 pd0" style="z-index:200;">
+      <div class="col-sm-4  col-xs-12 pd0" style="z-index:200;">
 
         <div class="invoice-sidebarWrapper">
 
@@ -13,12 +13,12 @@
             <input type="text" placeholder="search" #searchElement>
 
             <div class="btn-group" dropdown *ngIf="voucherType === 'sales'" [autoClose]="true">
-              <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv"
-                      aria-controls="dropdown-basic3">
+              <button id="button-basic2" dropdownToggle type="button"
+                class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
                 + New Invoice <span class="caret"></span>
               </button>
-              <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small"
-                  role="menu" aria-labelledby="button-basic2">
+              <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
+                aria-labelledby="button-basic2">
                 <li role="menuitem">
                   <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash Invoice</a>
                 </li>
@@ -28,26 +28,26 @@
               </ul>
             </div>
 
-            <button class="btn btn-blue" *ngIf="voucherType !== 'sales'" (click)="goToInvoice()">+ New {{voucherType | voucherTypeToNamePipe}}</button>
+            <button class="btn btn-blue" *ngIf="voucherType !== 'sales'" (click)="goToInvoice()">+ New
+              {{voucherType | voucherTypeToNamePipe}}</button>
           </div>
 
-          <ul class="invoice-sidebar" style="height: 100vh">
+          <ul class="invoice-sidebar">
             <perfect-scrollbar>
               <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData"
-                  [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}"
-                  (click)="selectVoucher(item)">
+                [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}" (click)="selectVoucher(item)">
 
                 <div class="row">
 
                   <div class="col-xs-7">
 
                     <div class="invoice-number-date">
-                  <span class="inoviceNumber">
-                    {{item?.voucherNumber}}
-                  </span>
+                      <span class="inoviceNumber">
+                        {{item?.voucherNumber}}
+                      </span>
                       <span class="inoviceDate">
-                    | {{item?.voucherDate}}
-                  </span>
+                        | {{item?.voucherDate}}
+                      </span>
                     </div>
 
                     <div class="invoiceHolderName">
@@ -70,27 +70,28 @@
       </div>
       <!-- endregion -->
 
-      <div class="col-sm-8 pd0 invoice-detailWrapper">
+      <div class="col-sm-8 col-xs-12 pd0 invoice-detailWrapper" #invoiceDetailWrapper>
 
         <perfect-scrollbar>
 
-          <div class="invoice-detail">
+          <div class="invoice-detail" #invoicedetail>
 
             <div class="invoiceDetail-header">
 
               <div class="clearfix">
 
-                <div class="col-xs-6 pd0">
-                  <div class="invoice-num-holder"><h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
+                <div class="col-sm-4 col-xs-12 pd0">
+                  <div class="invoice-num-holder">
+                    <h3 class="invoice-num"> {{selectedItem?.voucherNumber}}</h3>
                     <p class="acc-holderName">{{selectedItem?.account.name}}</p>
                   </div>
                 </div>
 
-                <div class="col-xs-6 pd0">
+                <div class="col-sm-8 col-xs-12 pd0">
                   <div class="edit-change-status">
 
                     <span class="close-modal cp pull-right" (click)="onCancel()">
-                    <img src="assets/images/multiply.svg"></span>
+                      <img src="assets/images/multiply.svg"></span>
 
                     <!-- region for proforma and estimates -->
                     <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="only4ProformaEstimates">
@@ -100,20 +101,20 @@
                       </label>
 
                       <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
-                              aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus === 'submitted'"
-                      >Change Status <span class="caret"></span>
+                        aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
+                        <span class="caret"></span>
                       </button>
 
                       <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                          aria-labelledby="button-basic">
+                        aria-labelledby="button-basic">
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('accepted')"><a
-                          class="dropdown-item">Accepted</a></li>
+                            class="dropdown-item">Accepted</a></li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('decline')"><a
-                          class="dropdown-item">Declined</a></li>
+                            class="dropdown-item">Declined</a></li>
 
                         <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
-                            *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                          *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
                           <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
                         </li>
 
@@ -122,7 +123,7 @@
                         </li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('expired')"><a
-                          class="dropdown-item">Expired</a></li>
+                            class="dropdown-item">Expired</a></li>
                       </ul>
 
                     </div>
@@ -136,23 +137,23 @@
                       </label>
 
                       <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle"
-                              aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
+                        aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
                         Status <span class="caret"></span>
                       </button>
 
                       <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
-                          aria-labelledby="button-basic2">
+                        aria-labelledby="button-basic2">
                         <li class="cp" role="menuitem" (click)="receivePaymentPopup.toggle()"><a
-                          class="dropdown-item">Paid</a></li>
+                            class="dropdown-item">Paid</a></li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('unpaid')"><a
-                          class="dropdown-item">Unpaid</a></li>
+                            class="dropdown-item">Unpaid</a></li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('hold')"><a
-                          class="dropdown-item">Hold</a></li>
+                            class="dropdown-item">Hold</a></li>
 
                         <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('cancel')"><a
-                          class="dropdown-item">Cancel</a></li>
+                            class="dropdown-item">Cancel</a></li>
                       </ul>
 
                     </div>
@@ -160,25 +161,28 @@
 
                     <div class="edit-action-btn-grps pull-right">
                       <span>
-                        <a href="javascript:void 0" tooltip="Edit" placement="top" (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                        <a href="javascript:void 0" tooltip="Edit" placement="top" (click)="toggleEditMode()"><i
+                            class="fa fa-pencil"></i></a>
                       </span>
 
                       <span class="pos-rel">
-                        <a href="javascript:void 0" tooltip="Send Email" placement="top" (click)="showEmailSendModal.toggle()"><i
-                          class="fa fa-envelope-o"></i></a>
+                        <a href="javascript:void 0" tooltip="Send Email" placement="top"
+                          (click)="showEmailSendModal.toggle()"><i class="fa fa-envelope-o"></i></a>
                       </span>
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0" tooltip="Print" placement="top" (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                        <a href="javascript:void 0" tooltip="Print" placement="top" (click)="printVoucher()"><i
+                            class="fa fa-print"></i></a>
                       </span>
 
                       <span [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
-                        <a href="javascript:void 0" tooltip="Download" placement="top" (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="javascript:void 0" tooltip="Download" placement="top" (click)="downloadPdf()"><i
+                            class="fa fa-file-pdf-o"></i></a>
                       </span>
 
                       <span>
-                        <a href="javascript:void 0" tooltip="Delete" placement="top" (click)="deleteConfirmationModel.toggle()"><i
-                          class="fa fa-trash"></i></a>
+                        <a href="javascript:void 0" tooltip="Delete" placement="top"
+                          (click)="deleteConfirmationModel.toggle()"><i class="fa fa-trash"></i></a>
                       </span>
                     </div>
 
@@ -193,11 +197,12 @@
               <div class="clearfix">
 
                 <div class="col-sm-4 pd0"
-                     *ngIf="selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel'">
+                  *ngIf="selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel'">
                   <div class="single-paymentDetail">
                     <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                     <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
-                    <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a></div>
+                    <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a>
+                  </div>
                 </div>
 
 
@@ -206,7 +211,8 @@
                     <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
                     <p class="payment-content">You can now email this invoice to your customer or mark it as
                       sent. </p>
-                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a></div>
+                    <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a>
+                  </div>
                 </div>
               </div>
 
@@ -237,7 +243,7 @@
 
           </div>
 
-          <div class="invoice-image-section">
+          <div class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
 
             <div class="pos-rel" *ngIf="isVoucherDownloading">
               <div class="loader"></div>
@@ -250,8 +256,7 @@
             </div>
 
             <ng2-pdfjs-viewer [hidden]="isVoucherDownloading || isVoucherDownloadError"
-                              [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false"
-                              [download]="false">
+              [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false" [download]="false">
             </ng2-pdfjs-viewer>
           </div>
 
@@ -280,12 +285,9 @@
       </div>
 
       <div class="invoice-editBody">
-        <proforma-invoice-component
-          [accountUniqueName]="selectedItem.account.uniqueName"
-          [invoiceNo]="selectedItem.voucherNumber"
-          [invoiceType]="voucherType"
-          (cancelVoucherUpdate)="toggleEditMode()"
-        ></proforma-invoice-component>
+        <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
+          [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType" (cancelVoucherUpdate)="toggleEditMode()">
+        </proforma-invoice-component>
       </div>
 
     </div>
@@ -297,8 +299,7 @@
 
 <!-- region send email modal-->
 <div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
-     [config]="{keyboard:true, ignoreBackdropClick: true}"
-     tabindex="-1">
+  [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
   <div class="modal-dialog semdMailModal">
     <div class="modal-content">
 
@@ -362,11 +363,9 @@
       <!--      </div>-->
       <!-- endregion -->
 
-      <app-send-email-invoice-component
-        [voucherType]="voucherType"
-        (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()"
-        (cancelEvent)="showEmailSendModal.hide()"
-      ></app-send-email-invoice-component>
+      <app-send-email-invoice-component [voucherType]="voucherType"
+        (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" (cancelEvent)="showEmailSendModal.hide()">
+      </app-send-email-invoice-component>
 
     </div>
   </div>
@@ -375,27 +374,23 @@
 
 <!-- region delete confirmation model -->
 <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-     tabindex="-1">
+  tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <confirm-modal
-        [body]="'Are you sure want to delete this voucher'"
+      <confirm-modal [body]="'Are you sure want to delete this voucher'"
         (cancelCallBack)="deleteConfirmationModel.toggle()"
-        (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"
-      ></confirm-modal>
+        (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
     </div>
   </div>
 </div>
 <!-- endregion -->
 
 <!-- region receive payment popup -->
-<div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-     tabindex="-1">
+<div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <invoice-payment-model
-        (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()"
-      ></invoice-payment-model>
+      <invoice-payment-model (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
+      </invoice-payment-model>
     </div>
   </div>
 </div>

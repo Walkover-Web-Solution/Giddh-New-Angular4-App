@@ -11,7 +11,9 @@ import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import { DbService } from './services/db.service';
+import {reassignNavigationalArray} from './models/defaultMenus'
 /**
  * App Component
  * Top Level Component
@@ -59,7 +61,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
               private _generalService: GeneralService,
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private breakpointObserver: BreakpointObserver,
+              private dbServices :DbService
               // private comapnyActions: CompanyActions,
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
@@ -85,8 +89,31 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     });
 
     this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
+
+    this.breakpointObserver.observe([
+      '(max-width: 1024px)'
+        ]).subscribe(result => {
+          this.changeOnMobileView(result.matches);
+        });
+
   }
 
+  private changeOnMobileView(isMobile){
+    if(isMobile){
+      if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+        localStorage.setItem('isMobileSiteGiddh', 'true');
+        this.dbServices.clearAllData();
+        //this.router.navigate(['settings']);
+      }
+    }else{
+      if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+        localStorage.setItem('isMobileSiteGiddh', 'false');
+        this.dbServices.clearAllData();
+      }
+    }
+    reassignNavigationalArray(isMobile);
+    this._generalService.setIsMobileView(isMobile);
+  }
 
   public ngOnInit() {
     this.sideBarStateChange(true);

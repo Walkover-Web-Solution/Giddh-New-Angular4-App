@@ -915,6 +915,18 @@
                   <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
                   </div>
                 </div>
+                <div class="tableRow" *ngIf="calculatedRoundOff > 0 || calculatedRoundOff < 0">
+
+                  <div class="tableCell">
+                    Round Off
+                    <!-- {{invFormData.voucherDetails.roundOff && invFormData.voucherDetails.roundOff.balanceType && invFormData.voucherDetails.roundOff.balanceType === 'CREDIT' ? '(-)' : '(+)'}} -->
+                  </div>
+
+                  <div class="tableCell figureCell">
+                    {{calculatedRoundOff | number:'1.2-2'}}
+                  </div>
+
+                </div>
 
                 <div class="tableRow">
 

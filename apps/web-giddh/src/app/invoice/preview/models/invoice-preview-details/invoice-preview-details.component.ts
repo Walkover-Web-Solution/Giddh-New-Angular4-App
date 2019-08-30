@@ -31,6 +31,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @ViewChild('searchElement') public searchElement: ElementRef;
   @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
   @ViewChild('showEmailSendModal') public showEmailSendModal: ModalDirective;
+  @ViewChild('invoiceDetailWrapper') invoiceDetailWrapperView: ElementRef;
+  @ViewChild('invoicedetail') invoiceDetailView: ElementRef;
 
   @Input() public items: InvoicePreviewDetailsVm[];
   @Input() public selectedItem: InvoicePreviewDetailsVm;
@@ -59,6 +61,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public voucherVersions: ProformaVersionItem[] = [];
   public filteredVoucherVersions: ProformaVersionItem[] = [];
   public ckeditorContent;
+  public invoiceDetailWrapperHeight:number
+  public invoiceDetailViewHeight:number;
+  public invoiceImageSectionViewHeight:number;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -128,6 +133,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.detectChanges();
       }))
+
+    this.invoiceDetailWrapperHeight=this.invoiceDetailWrapperView.nativeElement.offsetHeight
+    this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
+    this.invoiceImageSectionViewHeight=this.invoiceDetailWrapperHeight-this.invoiceDetailViewHeight-90;
   }
 
   public toggleEditMode() {

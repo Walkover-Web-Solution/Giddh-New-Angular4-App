@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
@@ -20,6 +20,7 @@ import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -31,6 +32,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
+  @ViewChild('companyForm') public companyForm: NgForm;
   @Input() public createBranch: boolean = false;
 
   public countrySource: IOption[] = [];
@@ -84,6 +86,10 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
 
   public ngOnInit() {
     this.logedInuser = this._generalService.user;
+    if (this._generalService.createNewCompany) {
+      this.company = this._generalService.createNewCompany;
+      this.isMobileNumberValid = true;
+    }
     this._generalService.createNewCompany = null;
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
@@ -100,7 +106,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         });
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'proforma-invoice/invoice/sales';
+        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'onboarding';
         this._generalService.companyUniqueName = this.company.uniqueName;
         if (prevTab !== 'user-details') {
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
@@ -109,10 +115,17 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         setTimeout(() => {
           if (prevTab !== 'user-details') {
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-            this._route.navigate([isNewUSer ? 'welcome' : '/pages/proforma-invoice/invoice/sales']);
+            this._route.navigate([isNewUSer ? 'welcome' : 'onboarding']);
           }
           this.closeModal();
         }, 500);
+      }
+    });
+    this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
+      if (a && a !== '') {
+        if (a === this.company.uniqueName) {
+          this.companyForm.reset();
+        }
       }
     });
   }
@@ -149,7 +162,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.socketCompanyRequest.CompanyName = this.company.name;
     this.socketCompanyRequest.Timestamp = Date.now();
     this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-    this.socketCompanyRequest.MobileNo = this.company.contactNo;
+    this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
     this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
   }
 
