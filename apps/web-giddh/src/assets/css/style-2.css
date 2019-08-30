@@ -1306,7 +1306,10 @@ header .navbar {
     background: #d9d9d9;
     color: #333333;
 }
-
+#actionPane .btn-default {
+  background: #E6E6E6;
+  color: #333;
+}
 
 /*btn end*/
 
