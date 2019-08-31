@@ -237,4 +237,18 @@ sh-select:focus {
     .ledger_book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
+    .ledger_book .h-table {
+        overflow: hidden;
+        display: block;
+    }
+    .ledger_book .h-table tbody {
+        display: block;
+    }
+    .ledger_book .h-table tbody tr {
+        display: block;
+        height: inherit !important;
+    }
+    .ledger_book .h-table tbody tr td {
+        width: 100% !important;
+    }
 }

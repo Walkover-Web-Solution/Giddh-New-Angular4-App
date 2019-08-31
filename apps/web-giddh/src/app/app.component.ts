@@ -95,16 +95,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this._generalService.isMobileSite.subscribe(s => {
       this.isMobileSite = s;
     });
-    this.breakpointObserver.observe([
-      '(max-width: 1024px)'
-        ]).subscribe(result => {
-          if (result.matches) {
-            this.changeOnMobileView(true);
-          } else {
-            // if necessary:
-            this.changeOnMobileView(false);
-          }
-        });
+    // this.breakpointObserver.observe([
+    //   '(max-width: 1024px)'
+    //     ]).subscribe(result => {
+    //       if (result.matches) {
+    //         this.changeOnMobileView(true);
+    //       } else {
+    //         // if necessary:
+    //         this.changeOnMobileView(false);
+    //       }
+    //     });
   }
 
   private changeOnMobileView(isMobile){
