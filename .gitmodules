@@ -1,9 +1,10 @@
-[submodule "website"]
-	path = website
-	url = https://github.com/Walkover-Web-Solution/Giddh-Website.git
-
 [submodule "Nativemobile"]
 	path = Nativemobile
 	url = https://github.com/Walkover-Web-Solution/Nativemobile.git
 	branch = master
-
+[submodule "website"]
+	path = website
+	url = https://github.com/Walkover-Web-Solution/Giddh-Website.git
+[submodule "lionfapp"]
+	path = lionfapp
+	url = https://github.com/Walkover-Web-Solution/lionfapp.git

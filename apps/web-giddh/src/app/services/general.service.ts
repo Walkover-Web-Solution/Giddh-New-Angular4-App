@@ -15,6 +15,7 @@ export class GeneralService {
   public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
   public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+
   get user(): UserDetails {
     return this._user;
   }
@@ -59,6 +60,7 @@ export class GeneralService {
 
   public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
   public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   private _user: UserDetails;
   private _createNewCompany: CompanyCreateRequest;
 

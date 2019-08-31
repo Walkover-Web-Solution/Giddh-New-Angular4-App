@@ -224,6 +224,9 @@
                 <div style="padding: 10px 0 10px 10px;" *ngIf="moreLogsDisplayed">
                   <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
                 </div>
+                <div style="padding: 10px 0 10px 10px;" *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
+                  <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
+                </div>
 
                 <ul>
                   <li *ngFor="let log of filteredVoucherVersions">
@@ -235,9 +238,7 @@
                   </li>
                 </ul>
 
-                <div style="padding: 10px 0 10px 10px;" *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
-                  <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
-                </div>
+
               </div>
             </div>
 
