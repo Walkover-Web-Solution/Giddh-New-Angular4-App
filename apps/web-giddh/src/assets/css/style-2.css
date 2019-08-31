@@ -1297,7 +1297,7 @@ header .navbar {
 }
 
 .btn-default {
-    background: #e5e5e5;
+    background: #ccc;
     color: #333333;
 }
 
@@ -1306,7 +1306,10 @@ header .navbar {
     background: #d9d9d9;
     color: #333333;
 }
-
+#actionPane .btn-default {
+  background: #E6E6E6;
+  color: #333;
+}
 
 /*btn end*/
 
@@ -5490,7 +5493,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 }
 
 .form-group sup {
-    font-size: 19px;
+    font-size: 14px;
     top: 0;
     color: red;
 }
@@ -7485,6 +7488,17 @@ padding-left: 0 !important;
 .btn-group.btn-block.invoice-btn .btn-block {
   color: rgba(0,0,0,0.4);
 }
+.agingPage .icon-pointer .fa.fa-long-arrow-up {
+  color: #a9a9a9;
+}
+.icon-pointer .fa.fa-long-arrow-up {
+color: #a9a9a9;
+}
+span.red-text {
+  color: red;
+}
+
+
 /* responsive */
 
 
@@ -7828,11 +7842,4 @@ padding-left: 0 !important;
 
     white-space: nowrap;
 }
-}
-.icon-pointer .fa.fa-long-arrow-up {
-    color: #000;
-    opacity: 0.3;
-}
-span.red-text {
-  color: red;
 }

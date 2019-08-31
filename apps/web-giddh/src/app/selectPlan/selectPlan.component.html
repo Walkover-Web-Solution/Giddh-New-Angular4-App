@@ -5,11 +5,22 @@
     </div>
     <hr />
     <div class="welcome-msg">
-      <p>Hi {{logedInUser?.name}} !</p>
-      <p>You belong to the following plan. Please select the plan in which you wish to create new company <strong>
-          "{{createNewCompanyPreObj?.name}}"</strong>.</p>
+      <div class="row">
+        <div class="col-md-9">
+          <p>Hi {{logedInUser?.name}} !</p>
+          <p>You belong to the following plan. Please select the plan in which you wish to create new company
+            "{{createNewCompanyPreObj?.name}}".</p>
 
-      <div class="choose-ur-plan">
+        </div>
+        <div class="col-md-3">
+          <div class="col-md-3 pull-right xs-left">
+            <a [routerLink]="['/welcome']" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="!isCreateAndSwitchCompanyInProcess" class="choose-ur-plan">
         <div class="row">
           <div class="col-sm-9">
             <div class="row">
@@ -293,6 +304,12 @@
               <button class="btn btn-green mrT1" disabled> Activate</button>
             </div>
           </div>
+        </div>
+      </div>
+      <div *ngIf="isCreateAndSwitchCompanyInProcess">
+        <div class="no-data mrT2 d-flex"
+          style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+          <div class="giddh-spinner vertical-center-spinner"></div>
         </div>
       </div>
 

@@ -444,7 +444,7 @@
           <td (click)="clickedHoveredItemForAction = item.uniqueName" class="cp"
             *ngIf="item.balanceStatus !== 'cancel'">
             <div class="d-flex" style="align-items: center">
-              <div class="flex-fill">
+              <div class="flex-fill selectAction">
                 <span
                   [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
               </div>
@@ -614,7 +614,7 @@ tooltip="Invoice sent" placement="left" />-->
           </td>
         </tr>
         <tr>
-          <td class="row" *ngIf="item.balanceStatus !== 'cancel'">
+          <td class="row">
             <div class="col-xs-6 p-0">
               <div class="d-flex">
                 <div class="flex-fill"><strong>Invoice Date</strong></div>
@@ -627,14 +627,15 @@ tooltip="Invoice sent" placement="left" />-->
                 {{item.voucherDate}}
               </div>
             </div>
+
             <div class="col-xs-6 p-0">
               <div class="d-flex">
                 <div class="flex-fill"><strong>Status</strong></div>
-
               </div>
-              <div class="cp">
+
+              <div class="cp" *ngIf="item.balanceStatus !== 'cancel'">
                 <div class="d-flex" style="align-items: center">
-                  <div class="flex-fill">
+                  <div class="flex-fill selectAction">
                     <span
                       [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
                   </div>
@@ -667,6 +668,7 @@ tooltip="Invoice sent" placement="left" />-->
                   </div>
                 </div>
               </div>
+
               <div *ngIf="item.balanceStatus === 'cancel'">
                 <span>{{ item.balanceStatus}}</span>
               </div>

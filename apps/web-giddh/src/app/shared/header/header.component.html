@@ -1,6 +1,6 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen}">
 
-  <div class="menu_wrapper" *ngIf="(selectedCompany | async)">
+  <div class="menu_wrapper">
     <ul class="main-company-name">
       <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
       <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false"
@@ -37,9 +37,9 @@
 <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
-    <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-        {{ cmp.name }}
-    </li>
+  <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+      {{ cmp.name }}
+  </li>
 </perfect-scrollbar>
 </ul>
 </li>
@@ -59,13 +59,14 @@
               (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
               Users (Permission)</a>
           </li>
-          <li>
+          <li *ngIf="!isMobileSite">
             <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up Data</a>
           </li>
           <!-- #dropdown="bs-dropdown" -->
           <!--  -->
-          <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
-            (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+          <li *ngIf="!isMobileSite" dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
+            [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
+            (onShown)="switchCompanyMenuShown()">
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
@@ -73,14 +74,14 @@
 
             <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
               <!-- <li class="create-company clearfix" [style.padding.px]="0">
-<button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
-Create Company
-</button>
-<button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
-<i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-</button>
-</li>
--->
+                                  <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+                                  Create Company
+                                  </button>
+                                  <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+                                  <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                  </button>
+                              </li>
+                              -->
 
               <div class="input-group">
 
@@ -144,7 +145,7 @@ Create Company
 
           <li role="separator" class="divider" style="width:100%"></li>
 
-          <li class="mrB1">
+          <li class="mrB1" *ngIf="!isMobileSite">
             <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
               <span class="user_circle pull-left" *ngIf="!userAvatar">
@@ -158,7 +159,7 @@ Create Company
               </div>
             </a>
           </li>
-          <li>
+          <li *ngIf="!isMobileSite">
             <a href="javascript:void(0)"
               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
           </li>
@@ -234,8 +235,8 @@ Create Company
 
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" placement="bottom" class="fa fa-plus cp"
-              (click)="showManageGroupsModal()"></i></h6>
+          <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
+              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
             <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
@@ -248,8 +249,8 @@ Create Company
               </span>
             </a>
           </li>
-          <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts"
-            placement="right">Show more...</h6>
+          <h6 *ngIf="!isMobileSite" class="mrT cp hover-orange" (click)="showNavigationModal()" container="body"
+            tooltip="Search accounts" placement="right">Show more...</h6>
         </ul>
 
         <!-- Main menu -->
@@ -263,7 +264,7 @@ Create Company
               <span class="label">{{menu.name}}</span>
             </a>
           </li>
-          <li id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
+          <li *ngIf="!isMobileSite" id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
             (mouseleave)="showOtherMenu = false">
             <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
                 class="fa fa-angle-right pull-right"></i></a>
@@ -340,7 +341,6 @@ Create Company
             <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
             <li><a (click)="analyzeOtherMenus('gstfiling')">GSTR</a></li>
             <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
-            <li><a (click)="analyzeOtherMenus('reports')">Reports</a></li>
           </ul>
 
         </div>
@@ -378,10 +378,10 @@ Create Company
 <div class="ledger_search form-inline">
 <div class="form-group">
 <div class="input-group">
-  <input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-  <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-      <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
-  </div>
+<input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+<div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+    <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+</div>
 </div>
 </div>
 </div>
@@ -407,8 +407,8 @@ Create Company
           </ul>
 
 
-          <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']"
-            (click)="showManageGroupsModal()">Manage Groups & A/c
+          <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm"
+            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
           </button>
           <div class="btn-group cp mrL1 d-inline-block" dropdown>
             <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
@@ -614,14 +614,16 @@ Create Company
   </div>
   <div class="modal-body pd-2 font-14">
     <div class="clearfix mb-3">
-      <p>Your 7 days FREE trial ended on 14/02/2019. We hope you enjoyed using Giddh Accounting Software as much as we
-        loved building it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
+      <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}}
+        {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. We hope you enjoyed using Giddh
+        Accounting Software as much as we loved building
+        it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
     </div>
     <div class="clearfix">
       <ul class="list-inline">
         <!-- [routerLink]="['select-plan']" -->
-        <li><button class="btn btn-green" (click)="goToSelectPlan(select);">Renew Plan</button></li>
-        <li><button class="btn btn-green" (click)="goToSelectPlan(select);">Change Plan</button></li>
+        <li><button class="btn btn-green" (click)="goToSelectPlan();">Renew Plan</button></li>
+        <li><button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button></li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
             (click)="openScheduleModal();modelRef.hide();"> Contact Us</a></li>
       </ul>
@@ -638,14 +640,14 @@ Create Company
   </div>
   <div class="modal-body pd-2 font-14">
     <div class="clearfix mb-3">
-      <p class="mb-2">You have crossed the transactions limit of your assigned plan <strong>Professional Plan 2</strong>
-        subscribed on 01/05/2019.</p>
+      <p class="mb-2">You have crossed the transactions limit of your assigned plan
+        <strong>{{subscribedPlan.planDetails.name}}</strong> subscribed on {{subscribedPlan.startedAt}}.</p>
       <p>To continue your accounting with Giddh, Please renew your current plan or switch to another one. Contact us for
         more assistance.</p>
     </div>
     <div class="clearfix">
       <ul class="list-inline">
-        <li><button class="btn btn-blue" (click)="goToSelectPlan(buy);">Buy Plan</button></li>
+        <li><button class="btn btn-blue" (click)="goToSelectPlan();">Buy Plan</button></li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
             (click)="openScheduleModal();modelRef.hide();"> Contact Us</a></li>
       </ul>

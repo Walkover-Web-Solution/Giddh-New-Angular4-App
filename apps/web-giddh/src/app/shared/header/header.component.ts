@@ -31,6 +31,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 
 @Component({
   selector: 'app-header',
@@ -45,6 +46,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   public imgPath: string = '';
+  public subscribedPlan: SubscriptionsUser;
   public isLedgerAccSelected: boolean = false;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
@@ -175,7 +177,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
   private smartCombinedList$: Observable<any>;
-
+  public isMobileSite: boolean;
   /**
    *
    */
@@ -284,10 +286,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     })).pipe(takeUntil(this.destroyed$));
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
-        this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
-        this.selectedPlanStatus = res.subscription.status;
+        if (res.subscription) {
+          this.subscribedPlan = res.subscription;
+          this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+          this.selectedPlanStatus = res.subscription.status;
+        }
         this.activeCompany = res;
-        console.log('activeCompany', this.activeCompany);
       }
     });
 
@@ -301,9 +305,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (res) {
         this.createNewCompanyUser = res;
       }
-      console.log('heaadere user', this.createNewCompanyUser);
     });
-
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileSite = s;
+       this.menuItemsFromIndexDB = DEFAULT_MENUS;
+       this.accountItemsFromIndexDB= DEFAULT_AC;
+    });
   }
 
   public ngOnInit() {
@@ -1046,14 +1053,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
     this.modelRef = this.modalService.show(template);
   }
-  public goToSelectPlan(plan: string) {
+  public goToSelectPlan() {
     this.modalService.hide(1);
-    this.router.navigate(['select-plan']);
+    // this.router.navigate(['billing-detail']);
+    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
   }
-  // public closeCrossedTxLimitModel(template1: TemplateRef<any>) {
-  //   // this.expiredPlan.hide();
-  //   // this.modelRef = this.modalService.hide(template1);
-  // }
 
   public onRight(nodes) {
     if (nodes.currentVertical) {

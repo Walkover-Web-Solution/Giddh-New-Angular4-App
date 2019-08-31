@@ -91,7 +91,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     },
     nameAlias: '',
     paymentId: '',
-    amountPaid: ''
+    amountPaid: '',
+    razorpaySignature: ''
   };
   public GstDetailsObj: GstDetail = {
     gstNumber: '',
@@ -178,7 +179,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.company = this.createNewCompany;
         this.prepareWelcomeForm();
       }
-      console.log('welcome billing', this.createNewCompany);
     });
 
     if (this._generalService.createNewCompany) {
@@ -228,7 +228,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.isBranch = this.company.isBranch ? this.company.isBranch : '';
       this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
       this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
-      this.createNewCompanyPreparedObj.taxes = this.company.baseCurrency ? this.company.baseCurrency : '';
     }
   }
 
