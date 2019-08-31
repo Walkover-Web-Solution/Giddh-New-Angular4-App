@@ -29,7 +29,8 @@
                     </div>
                 </div>
                 <div class="col-md-9 col-sm-6 text-right xs-left">
-                    <button type="button" (click)="isPlanShow=true" class="btn btn-blue mt-2">Pay Now</button>
+                    <!-- *ngIf="seletedUserPlans?.additionalCharges >0" -->
+                    <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="GoToBillingDetails();" class="btn btn-blue mt-2">Pay Now</button>
                     <button type="button" (click)="isPlanShow=true" class="btn btn-green mt-2">Buy New Plan</button>
                 </div>
             </div>
