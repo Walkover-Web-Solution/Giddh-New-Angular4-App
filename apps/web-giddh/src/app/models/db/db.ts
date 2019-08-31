@@ -69,6 +69,9 @@ class AppDatabase extends Dexie {
 
   public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen): Promise<any> {
     return this.companies.get(key).then((res: CompAidataModel) => {
+      if(!res){
+        return;
+      }
       let arr: IUlist[] = res.aidata[entity];
       let isFound = false;
 
@@ -120,6 +123,10 @@ class AppDatabase extends Dexie {
                 then add it to menu at specific position and then mark that item as removed in default menu
                */
               let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
+              if(sorted.length === 0){
+                sorted = DEFAULT_MENUS;
+                this.clonedMenus = DEFAULT_MENUS;
+              }
               // index where menu should be added
               let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
 
@@ -145,7 +152,9 @@ class AppDatabase extends Dexie {
             if (isSmallScreen && duplicateIndex > 7) {
               duplicateIndex = this.smallScreenHandler(duplicateIndex);
             }
-
+            if(this.clonedMenus.length === 0){
+              this.clonedMenus = DEFAULT_MENUS;
+            }
             arr[originalDuplicateIndex] = arr[duplicateIndex];
             arr[duplicateIndex] = Object.assign({}, model, {isRemoved: false, pIndex: this.clonedMenus[duplicateIndex].pIndex});
           }

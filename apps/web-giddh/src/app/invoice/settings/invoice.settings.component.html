@@ -720,7 +720,7 @@
                 <div class="col-xs-12 col-sm-5">
                   <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail"
                     class="showOnMobile" />
-                  <label>Auto mail when updated</label>
+                  <label>Auto Paid</label>
                 </div>
                 <div class="col-xs-12 col-sm-7 form-group ">
                   <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail"
@@ -1010,7 +1010,7 @@
 
   <div class="btn-group mrT2" role="group" aria-label="Basic example">
     <button type="button" class="btn btn-success mrR1" (click)="UpdateForm()">Save</button>
-    <button type="button" class="btn btn-danger">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="resetForm()">Cancel</button>
   </div>
 
 </ng-template>

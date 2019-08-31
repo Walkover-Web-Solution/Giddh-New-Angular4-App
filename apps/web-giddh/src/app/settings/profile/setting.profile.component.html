@@ -2,26 +2,26 @@
   <div class="row">
     <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-11">
       <div class="row">
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <label>Company Name</label><br>
           <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name"
             name="name" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
           <!-- (keydown)="keyDownSubject$.next($event)" -->
         </div>
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <label>Unique Name</label><br>
           <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control"
             [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName"
             (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
         </div>
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <label>Email Address</label><br>
           <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email"
             name="email" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <label>Contact No.</label>
           <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo"
             #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
@@ -32,7 +32,7 @@
     (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
 </div> -->
         </div>
-        <div class="col-lg-3 col-md-4 col-xs-12 pd0">
+        <div class="col-lg-3 col-sm-4 col-xs-12 pd0">
           <div class="form-group col-xs-4 pdR0">
             <label>Currency</label><br>
             <div class="custom-select pos-rel">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div> -->
-        <div class="col-lg-3 col-md-4 col-xs-12">
+        <div class="col-lg-3 col-sm-4 col-xs-12">
           <div class="row">
             <div class="col-xs-12">
               <div class="form-group clearfix">
@@ -91,13 +91,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <label>Address</label><br>
           <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control"
             [(ngModel)]="companyProfileObj.address" name="address"
             (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
         </div>
-        <div class="form-group col-lg-3 col-md-4 col-xs-12">
+        <div class="form-group col-lg-3 col-sm-4 col-xs-12">
           <div class="clearfix">
             <div class="form-group">
               <label>Country</label><br>
@@ -115,10 +115,10 @@
                 [hidden]="countryIsIndia" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
             </div>
           </div>
-          <div class="form-group">
+          <div class="">
             <div class="row">
               <div class="col-xs-6">
-                <div class="form-group">
+                <div class="">
                   <label>City</label><br>
                   <input [ngbTypeahead]="dataSource" type="text" [resultTemplate]="rt"
                     (selectItem)="typeaheadOnSelect($event)" [(ngModel)]="companyProfileObj.city" class="form-control"
@@ -131,7 +131,7 @@
                 </div>
               </div>
               <div class="col-xs-6">
-                <div class="form-group">
+                <div class="">
                   <label>Pincode</label><br>
                   <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode"
                     name="pincode" (blur)="savePincode($event)" />
@@ -140,9 +140,9 @@
             </div>
           </div>
         </div>
-        <div class=" col-lg-3 col-md-4 col-xs-12 ">
+        <div class=" col-lg-3 col-sm-4 col-xs-12 ">
           <div class="row ">
-            <div class="form-group col-xs-6 ">
+            <div class="form-group col-xs-12 col-sm-6 ">
               <label>Digits After Decimal</label><br>
               <div class="custom-select pos-rel ">
                 <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true "
@@ -151,7 +151,7 @@
               </div>
               <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
             </div>
-            <div class="form-group col-xs-6 ">
+            <div class="form-group col-xs-12 col-sm-6 ">
               <label>Number System</label><br>
               <div class="custom-select pos-rel ">
                 <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
@@ -208,7 +208,7 @@
           <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst"
             [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
             <div class="row">
-              <div class="col-lg-3 col-md-4 col-xs-12">
+              <div class="col-lg-3 col-sm-4 col-xs-12">
                 <div class="row">
                   <div class="col-xs-12">
                     <div class="form-group">
@@ -240,7 +240,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-lg-3 col-md-4 col-xs-12">
+              <div class="col-lg-3 col-sm-4 col-xs-12">
                 <div class="form-group">
                   <label>Address</label><br>
                   <textarea rows="4" type="text" placeholder="Address" class="form-control"

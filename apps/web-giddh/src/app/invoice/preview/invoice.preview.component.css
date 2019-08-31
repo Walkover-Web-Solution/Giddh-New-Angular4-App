@@ -207,9 +207,10 @@ td.card-header.clearfix {
 
 .card #inovice_td {
   border-bottom: 1px solid #ddd !important;
-  padding-bottom: 17px;
+  padding-bottom: 10px;
   background-color: #f9f9f9;
   border-top: 1px solid #ddd !important;
+  padding-top: 10px;
 }
 
 .card .overDueDate {
@@ -277,6 +278,25 @@ td.card-header.clearfix {
   display: none;
   margin-bottom: 15px;
 }
+
+.icon-pointer {
+  cursor: pointer;
+}
+
+.icon-pointer .activeTextColor {
+  color: #ff5200;
+}
+
+.btn-dropdown-ddl-newinv {
+  padding: 6px 16px !important;
+}
+
+button.btn.btn-orange.ladda-button {
+  height: 33px;
+  padding: 6px 16px;
+  overflow: inherit;
+}
+
 @media (max-width: 768px) {
   .mobileTable {
     display: block;
@@ -370,11 +390,20 @@ td.card-header.clearfix {
 @media(max-width:767px){
   .mobileSearch{
     display: block;
+    margin-bottom: 0;
   }
   .mobileSearch .input-container input{
     font-size: 13px;
   }
-
+.addInvoice{
+  display: none;
+}
+.moreExportBtn{
+  margin-top: 10px;
+}
+.input-grp-dateRangePicker .form-group {
+  margin-bottom: 10px;
+}
 }
 @media (max-width: 500px) {
   .invoce-controll .nav.nav-tabs {
@@ -386,9 +415,6 @@ td.card-header.clearfix {
     display: block;
   }
 
-  .date-advanceSearch .form-group {
-    justify-content: space-between;
-  }
 
   .date-advanceSearch .btn-wrapper button {
     float: left;
@@ -429,22 +455,11 @@ td.card-header.clearfix {
   .date-advanceSearch .input-group {
     width: 140px;
   }
+  .btn-dropdown-ddl-newinv {
+    padding: 6px 10px !important;
+  }
+  .mobileSearch .input-container input{
+    letter-spacing: -0.99px;
+  }
 }
 
-
-.icon-pointer {
-  cursor: pointer;
-}
-
-.icon-pointer .activeTextColor {
-  color: #ff5200;
-}
-
-.btn-dropdown-ddl-newinv {
-  padding: 6px 16px !important;
-}
-
-button.btn.btn-orange.ladda-button {
-  height: 33px;
-  padding: 6px 16px;
-}

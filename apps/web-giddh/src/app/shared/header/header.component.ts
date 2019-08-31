@@ -168,7 +168,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private activeCompanyForDb: ICompAidata;
   private indexDBReCreationDate: string = '10-12-2018';
   private smartCombinedList$: Observable<any>;
-
+  public isMobileSite: boolean;
   /**
    *
    */
@@ -289,6 +289,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
     this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
 
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileSite = s;
+       this.menuItemsFromIndexDB = DEFAULT_MENUS;
+       this.accountItemsFromIndexDB= DEFAULT_AC;
+    });
   }
 
   public ngOnInit() {
@@ -369,7 +374,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // sort group list by name
           acList = sortBy(acList, ['name']);
 
-          combinedList = concat(menuList, grpList, acList);
+          
+          if(!this.isMobileSite){
+            combinedList = concat(menuList, grpList, acList);
+          }else{
+            combinedList = menuList;
+          }
+
           this.store.dispatch(this._generalActions.setCombinedList(combinedList));
         }
       });
