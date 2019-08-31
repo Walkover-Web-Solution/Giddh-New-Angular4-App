@@ -15,7 +15,6 @@ export class GeneralService {
   public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
   public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   get user(): UserDetails {
     return this._user;
