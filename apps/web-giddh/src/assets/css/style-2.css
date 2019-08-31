@@ -7498,7 +7498,13 @@ span.red-text {
   color: red;
 }
 
-
+#invoice-setting .nav>li>a:focus, #invoice-setting .nav>li>a:hover {
+  background: transparent !important;
+  border: 1px solid #cbcbcb!important;
+}
+#invoice-setting .nav>li>a.active{
+  border: 1px solid #ff5f00 !important;
+}
 /* responsive */
 
 
