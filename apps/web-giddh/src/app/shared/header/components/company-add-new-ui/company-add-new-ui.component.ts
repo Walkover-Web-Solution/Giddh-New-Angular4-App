@@ -123,8 +123,12 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     });
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
       if (a && a !== '') {
-        if (a === this.company.uniqueName) {
-          this.companyForm.reset();
+        if (a.includes(this.company.uniqueName.substring(0, 8))) {
+          this.company.name = '';
+          this.company.country = '';
+          this.company.baseCurrency = '';
+          this.company.contactNo = '';
+          this.company.phoneCode = '';
         }
       }
     });
