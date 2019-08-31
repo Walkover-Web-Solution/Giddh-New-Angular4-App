@@ -160,11 +160,20 @@ export var DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
   },
   {
     type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: {tab: 'vendor', tabIndex: 0}, isRemoved: false, pIndex: 4
+  },
+  {
+    type: 'MENU', name: 'Settings', uniqueName: '/pages/settings'
   }
 ]
 
 export var DEFAULT_AC = []
-export var DEFAULT_AC_RESPONSIVE = []
+export var DEFAULT_AC_RESPONSIVE = [
+  {type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash'},
+  {type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales'},
+  {type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases'},
+  {type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves'},
+  {type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge'}
+]
 
 export var DEFAULT_GROUPS = [];
 export var DEFAULT_GROUPS_RESPONSIVE = [];
