@@ -12,9 +12,8 @@
     <div class="ledgHead transactions-page mrT3 pos-rel">
 
         <!-- ledger header -->
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-xs-2">
+            <div class="clearfix">
+                <div class="col-sm-2">
                     <div class="row">
                         <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                         <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -30,18 +29,18 @@
                 <!--&lt;!&ndash;<button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>&ndash;&gt;-->
                 <!--</div>-->
                 <!--</div>-->
-                <div class="col-xs-4">
+                <div class="col-sm-4">
                     <!--<div class="row">-->
                     <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
                     <!--</div>-->
                 </div>
-                <div class="col-xs-6 pull-right text-right C-flex-end">
-                    <div class="d-flex">
+                <div class="col-sm-6 text-right C-flex-end xs-pl-0 xs-pr-0">
+                    <div class="d-flex xs-width-100">
 
                         <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
 
                             <span class="d-flex" style="margin-right: 10px;">
-                                <button class="btn btn-link" style="margin-right: -3px;"
+                                <button class="btn btn-link xs-pl-0" style="margin-right: -3px;"
                                     (click)="onOpenAdvanceSearch()">Advance Search</button>
                                 <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
                                     *ngIf="isAdvanceSearchImplemented" style="margin-right: 7px;">
@@ -93,8 +92,15 @@
                     </div>
                 </div>
             </div>
-        </div>
         <!-- ledger header end -->
+
+        <div class="custom-tabs mt-2 mb-2 hidden-lg hidden-md hidden-sm">
+            <ul class="nav nav-tabs pt-0">
+                <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
+                <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
+            </ul>
+        </div>
+
 
         <!--bank ledgers-->
         <div class="clearfix"></div>
@@ -118,7 +124,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="nopad bdrL bdrR" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bdrR hidden-xs" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr class="splBg">
@@ -135,7 +141,7 @@
                                 </table>
                             </td>
                             <!-- main left td end here -->
-                            <td class="nopad bdrL bdrR" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bdrR hidden-xs" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr class="splBg">
@@ -399,10 +405,10 @@
         <table class="col-xs-12 ledger-head mrT1">
             <thead>
                 <tr>
-                    <th class="col-xs-6">
+                    <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.dr}}</b>
                     </th>
-                    <th class="col-xs-6">
+                    <th class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
                     </th>
                 </tr>
@@ -415,12 +421,12 @@
             #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])"
             (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
             <!--debit transaction-->
-            <div hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+            <div [ngClass]="Shown ? 'active' : ''" hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <!--debit transaction header-->
-                <table class="width100 h-table">
+                <table class="width100 h-table table-head hidden-xs">
                     <thead>
                         <tr class="t-h-bg1">
                             <th class="col-xs-3">
@@ -444,13 +450,13 @@
                             <!--<input type="checkbox" [(ngModel)]="debitSelectAll" (click)="selectAllEntries($event, 'debit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td class="col-xs-6">B/F Balance</td>
-                            <td class="col-xs-3 text-right">
+                            <td data-title="Particular" class="col-xs-6">B/F Balance</td>
+                            <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'" class="">{{
                                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount  | giddhCurrency }}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'"
@@ -488,7 +494,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
@@ -501,7 +507,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-6">
+                            <td class="col-xs-6" data-title="Particular">
                                 <div class="d-flex align-items-center" style="justify-content: space-between">
 
                                     <div class="ellp">
@@ -525,7 +531,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="col-xs-3 pos-rel text-right">
+                            <td class="col-xs-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.amount | giddhCurrency }}
                             </td>
                         </tr>
@@ -534,7 +540,7 @@
                 </table>
 
                 <!--blank ledger-->
-                <table class="width100" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
+                <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
                         <tr *ngFor="let txn of lc.blankLedger.transactions;">
@@ -543,7 +549,7 @@
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row" container="body">
 
-                                            <td class="col-xs-3">
+                                            <td class="col-xs-3" data-title="Date">
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                                                         <!--<input type="checkbox"/>-->
@@ -558,7 +564,7 @@
 
                                                 </div>
                                             </td>
-                                            <td class="col-xs-6 select2-parent select2-ledger" (click)="bs.hide();"
+                                            <td data-title="Particular" class="col-xs-6 select2-parent select2-ledger" (click)="bs.hide();"
                                                 (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shDebit
@@ -610,7 +616,7 @@
 
                                             </td>
 
-                                            <td class="col-xs-4 pos-rel">
+                                            <td data-title="Amount" class="col-xs-4 pos-rel">
                                                 <input class="form-control alR" type="text" decimalDigitsDirective
                                                     [DecimalPlaces]="2" [(ngModel)]="txn.amount"
                                                     (input)="needToReCalculate.next(true)"
@@ -641,15 +647,27 @@
 
                     </tbody>
                 </table>
-
             </div>
             <!--debit transaction-->
 
             <!--credit transaction-->
-            <div class="right-col-new" hr-item
+            
+
+            <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+
+                <table class="col-xs-12 ledger-head hidden-lg hidden-md hidden-sm">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-12">
+                                <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+
                 <!--credit transaction header-->
-                <table class="width100 h-table">
+                <table class="width100 h-table hidden-xs">
                     <thead>
                         <tr class="t-h-bg1">
                             <th class="col-xs-3">
@@ -673,13 +691,13 @@
                             <!--<input type="checkbox" [(ngModel)]="creditSelectAll" (click)="selectAllEntries($event,'credit')">-->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
                                 <input type="checkbox" [(ngModel)]="creditSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td class="col-xs-6">B/F Balance</td>
-                            <td class="col-xs-3 text-right">
+                            <td data-title="B/F Balance" class="col-xs-6">B/F Balance</td>
+                            <td data-title="Amount" class="col-xs-3 text-right">
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                                     {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
@@ -717,7 +735,7 @@
                             <!---->
                             <!--</td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
@@ -732,7 +750,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-6">
+                            <td class="col-xs-6" data-title="Particular">
                                 <div class="d-flex align-items-center" style="justify-content: space-between">
                                     <div class="ellp">
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -757,7 +775,7 @@
                                 </div>
 
                             </td>
-                            <td class="col-xs-3 pos-rel text-right">
+                            <td data-title="Amount" class="col-xs-3 pos-rel text-right">
                                 {{txn.amount | giddhCurrency}}
                             </td>
                         </tr>
@@ -771,7 +789,7 @@
                     <tbody>
                         <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="$event.stopPropagation()">
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
-                                <table class="width100">
+                                <table class="width100 h-table">
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row" container="body" (keydown)="$event.stopPropagation()">
 
@@ -779,7 +797,7 @@
                                             <!---->
                                             <!--</td>-->
 
-                                            <td class="col-xs-3">
+                                            <td class="col-xs-3" data-title="Date">
 
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
@@ -794,7 +812,7 @@
                                                 </div>
 
                                             </td>
-                                            <td class="col-xs-6 select2-parent select2-ledger" (click)="bsd.hide()"
+                                            <td class="col-xs-6 select2-parent select2-ledger" data-title="Particular" (click)="bsd.hide()"
                                                 (mousedown)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [idEl]="txn.id" #shCredit
@@ -841,19 +859,15 @@
                                                 <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                                                     <li>Create New Account</li>
                                                 </ul>
-
-
                                             </td>
 
-                                            <td class="col-xs-3 pos-rel">
+                                            <td class="col-xs-3 pos-rel" data-title="Amount">
                                                 <input class="form-control alR" type="text" decimalDigitsDirective
                                                     [DecimalPlaces]="2" [(ngModel)]="txn.amount"
                                                     (input)="needToReCalculate.next(true)"
                                                     (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
-
                                         </tr>
-
                                     </tbody>
                                 </table>
 
@@ -979,25 +993,30 @@
 
 <!--total section -->
 <!-- commented due to API  -->
-<section class="ledger-stat  mrT3"
+<section class="ledger-stat mrT3"
     *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
     <div class="container">
         <div class="row">
-            <div class="col-xs-3">
-                <h1>Total Transactions
-                    <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
-            async)?.creditTransactionsCount}}</span>
-                </h1>
-                <span class="mrT1 mrR2 ">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-                <span class="mrT1 mrR2 ">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+            <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
+                    <h1>Total Transactions
+                        <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
+                        async)?.creditTransactionsCount}}</span>
+                    </h1>
+                    <span class="mrT1 mrR2 ">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+                    <span class="mrT1 mrR2 ">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+                </div>
             </div>
-            <div class="col-xs-3">
+            <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1>Opening Balance</h1>
                 <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}
                     {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
+        </div>
 
-            <div class="col-xs-3">
+            <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1 class=" primary_clr">Net Total
                     <span
                         *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">Credit</span>
@@ -1015,12 +1034,15 @@
                 <h1 class="mrT font16">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h1>
                 <h1 class="mrT font16">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h1>
             </div>
+        </div>
 
-            <div class="col-xs-3">
+            <div class="col-sm-3 col-xs-6">
+                <div class="ledger-state-box">
                 <h1>Closing Balance</h1>
                 <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
                     {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
+        </div>
         </div>
 
     </div>

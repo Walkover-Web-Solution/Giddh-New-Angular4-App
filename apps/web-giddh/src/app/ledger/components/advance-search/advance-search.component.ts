@@ -31,7 +31,8 @@ const COMPARISON_FILTER = [
 
 @Component({
   selector: 'advance-search-model',
-  templateUrl: './advance-search.component.html'
+  templateUrl: './advance-search.component.html',
+  styleUrls: ['./advance-search.component.scss']
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {

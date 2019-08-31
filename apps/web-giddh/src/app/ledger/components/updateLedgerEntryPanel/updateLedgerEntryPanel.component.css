@@ -80,3 +80,59 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding: 0px !important;
 }
 
+
+
+
+@media only screen and (max-width: 767px) {
+    .ledger_book .h-table tbody .ledger-row td {
+        padding-left: 80px !important;
+    }
+    .card-table tbody tr td {
+        padding-left: 70px !important;        
+    }
+    .ledger-footer-1 {
+        position: absolute;
+        bottom: 0;
+    }
+
+
+
+    /*  */
+    .total-detail-table tbody tr td {
+        padding: 8px 0;
+    }
+    .total-detail-table > tbody > tr {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .qty-unit {
+        width: 90%;
+    }
+    .table-plus {
+        width: 10%;
+        text-align: center;
+    }
+    .price {
+        width: 40%;
+    }
+    .equal-2, .table-minus {
+        width: 10%;
+        text-align: center;
+    }
+    .amount {
+        width: 40%;
+    }
+    .entrypanel:before {
+        display: none;
+    }
+    .total-amn {
+        width: 100%;
+    }
+    .xs-table-block {
+        width: 100%;
+        display: block;
+    }
+    .xs-table-block tbody tr td {
+        display: block;
+    }
+}

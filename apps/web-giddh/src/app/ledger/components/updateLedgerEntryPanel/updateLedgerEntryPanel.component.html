@@ -42,23 +42,32 @@
     <!-- <div class="row">
 <h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>
 </div> -->
-    <div class="ledgHead entry-popup mrT1">
-      <table class="col-xs-12 ledger-head">
+    <div class="ledgHead entry-popup">
+      <table class="col-xs-12 ledger-head mrT1 hidden-xs">
         <thead>
         <tr>
-          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
-          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
+          <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.dr}}</th>
+          <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}</th>
         </tr>
         </thead>
       </table>
+
+      <div class="custom-tabs mt-2 mb-2 hidden-lg hidden-md hidden-sm">
+          <ul class="nav nav-tabs pt-0">
+              <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
+              <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
+          </ul>
+      </div>
+      
       <div class="ledger_book">
         <!-- debit -->
-        <div class="left-col-new bdrR">
-          <table class="width100">
-            <thead>
+        <div class="left-col-new bdrR" [ngClass]="Shown ? 'active' : ''">
+         
+          <table class="width100 card-table">
+          <thead class="hidden-xs">
             <tr class="t-h-bg1">
               <th class="col-xs-2" style="border-top:none">
-                                    <span class="cursor-pointer">
+                    <span class="cursor-pointer">
                     Date
                   </span>
               </th>
@@ -72,19 +81,18 @@
               </th>
             </tr>
             </thead>
-          </table>
-          <table class="width100">
+
             <tbody class="ledger-main">
             <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
               <ng-container *ngIf="txn.type === 'DEBIT'">
-                <td class="col-xs-2">
+                <td class="col-xs-2" data-title="Date">
                   <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                          [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                          [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
                          placeholder="date">
                 </td>
 
-                <td id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
+                <td data-title="Paticular" id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
 
                   <ng-template [ngIf]="!txn.isDiscount">
                     <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
@@ -125,7 +133,7 @@
 
                 </td>
 
-                <td class="col-xs-2">
+                <td class="col-xs-2" data-title="Amount">
                   <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective
                          [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
@@ -143,7 +151,7 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                 </td>
-                <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                <td data-title="Amount" class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
                   <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input"
                          decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
@@ -154,13 +162,46 @@
             </tr>
             </tbody>
           </table>
+
+          <!-- debit -->
+        <table class="ledger-footer-1">
+
+            <tbody>
+            <tr class="total_col">
+              <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
+                                  <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
+                                        [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
+                    C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
+                <!-- <ng-template #understandingTextCr>
+  {{ vm.ledgerUnderStandingObj.balanceText.cr }}
+  </ng-template> -->
+              </td>
+            </tr>
+  
+            <tr class="total_col">
+              <!-- reckoning -->
+              <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
+                                  <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
+                    {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
+                                    <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
+                  </span>
+              </td>
+            </tr>
+  
+            </tbody>
+  
+          </table>
+          <!-- debit -->
+
+          
         </div>
         <!-- debit -->
 
         <!-- credit -->
-        <div class="right-col-new">
-          <table class="width100">
-            <thead>
+        <div class="right-col-new" [ngClass]="isHide ? 'active' : 'right-col-new'">
+
+          <table class="width100 card-table">
+            <thead class="xs-hidden">
             <tr class="t-h-bg1">
               <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
@@ -174,23 +215,20 @@
               <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
             </tr>
             </thead>
-          </table>
-
-          <table class="width100">
 
             <tbody class="ledger-main">
 
-            <tr class="" *ngFor="let txn of vm.selectedLedger.transactions">
+            <tr *ngFor="let txn of vm.selectedLedger.transactions">
 
               <ng-container *ngIf="txn.type == 'CREDIT'">
 
-                <td class="col-xs-2">
+                <td data-title="Date" class="col-xs-2">
                   <input class="form-control" autocomplete="off" name="datepic" type="text"
                          [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
                          #cbs='bsDatepicker' bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                 </td>
 
-                <td id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
+                <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
 
                   <ng-template [ngIf]="!txn.isDiscount">
 
@@ -233,7 +271,7 @@
 
                 </td>
 
-                <td class="col-xs-2">
+                <td data-title="Amount" class="col-xs-2">
 
                   <input class="form-control" type="text" [(ngModel)]="txn.amount" [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
@@ -255,7 +293,7 @@
 
                 </td>
 
-                <td class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                <td data-title="Amount" class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
 
                   <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount" [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
@@ -273,43 +311,15 @@
         <!-- credit -->
 
         <!-- totals -->
-        <!-- debit -->
-        <table class=" ledger-footer-1 pull-left" style="width:50%;left:0;bottom:0;margin-right: 1px">
-
-          <tbody>
-          <tr class="total_col">
-            <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
-                                      [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
-                  C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
-              <!-- <ng-template #understandingTextCr>
-{{ vm.ledgerUnderStandingObj.balanceText.cr }}
-</ng-template> -->
-            </td>
-          </tr>
-
-          <tr class="total_col">
-            <!-- reckoning -->
-            <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
-                                  <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
-                </span>
-            </td>
-          </tr>
-
-          </tbody>
-
-        </table>
-        <!-- debit -->
+        
 
         <!-- credit -->
-        <table class=" ledger-footer-1" style="width:50%;right:0;bottom:0;float:right">
+        <table class="ledger-footer-1">
 
           <tbody>
 
           <tr class="total_col">
-            <td colspan="12" class="col-xs-12  text-right h32" style="padding-right:10px !important">
+            <td colspan="12" class="col-xs-12  text-right h32">
                                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_clr pd2" [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
                     {{vm.compoundTotal | giddhCurrency}}</span>
@@ -342,17 +352,17 @@
     <!-- new entry -->
     <div class="entrypanel mrT2 pull-left width100">
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-md-6">
           <div>
             <!-- amount and discount container -->
             <ng-container *ngIf="vm.showNewEntryPanel">
               <div class="">
 
-                <table class="width100">
+                <table class="width100 total-detail-table">
                   <tbody>
 
                   <tr>
-                    <td *ngIf="vm.stockTrxEntry" class="">
+                    <td *ngIf="vm.stockTrxEntry" class="qty-unit">
 
                       <table>
 
@@ -386,13 +396,13 @@
 
                     </td>
 
-                    <td *ngIf="vm.stockTrxEntry">
+                    <td class="table-plus" *ngIf="vm.stockTrxEntry">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">x</label>
                     </td>
 
                     <ng-template [ngIf]="vm.stockTrxEntry">
-                      <td class="text-right" class="pItem">
+                      <td class="text-right price pItem">
                         <label>Price</label>
                         <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)"
                                (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective
@@ -401,24 +411,24 @@
                       </td>
                     </ng-template>
 
-                    <td *ngIf="vm.stockTrxEntry">
+                    <td class="equal-2" *ngIf="vm.stockTrxEntry">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">=</label>
                     </td>
 
-                    <td class="text-right pItem">
+                    <td class="text-right pItem amount">
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (focus)="hideDiscountTax()"
                              (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
                     </td>
 
-                    <td>
+                    <td class="table-minus">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">-</label>
                     </td>
 
-                    <td class="text-right pItem">
+                    <td class="text-right pItem price">
                                                 <span auto-close="outsideClick">
                           <update-ledger-discount #discount
                                                   [discountAccountsDetails]="vm.discountArray"
@@ -430,12 +440,12 @@
                         </span>
                     </td>
 
-                    <td class="text-center" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                    <td class="text-center equal-2" *ngIf="(vm.companyTaxesList$ | async)?.length">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">+</label>
                     </td>
 
-                    <td class="pos-rel dropdown-container pItem" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                    <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
                                                 <span auto-close="outsideClick">
                           <update-ledger-tax-control
                             #tax
@@ -450,13 +460,13 @@
                         </span>
                     </td>
 
-                    <td class="text-center">
+                    <td class="text-center equal-2">
                       <label class="d-block">&nbsp;</label>
                       <label class="fs20">=</label>
                     </td>
 
 
-                    <td class="text-right pItem" style="min-width: 85px;" (resized)="onResized($event)">
+                    <td class="text-right pItem total-amn" style="min-width: 85px;" (resized)="onResized($event)">
                       <label class="primary_clr">Total</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
@@ -513,7 +523,7 @@
 
         </div>
 
-        <div class="col-xs-6">
+        <div class="col-md-6">
 
           <table class="width100">
             <tbody>
@@ -533,7 +543,7 @@
 
           <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
 
-            <table>
+            <table class="xs-table-block">
 
               <tr>
                 <td class="select2-parent pdR1">
@@ -583,7 +593,7 @@
 
             </table>
 
-            <table class="mrT1">
+            <table class="mrT1 xs-table-block">
 
               <tbody>
               <tr>
