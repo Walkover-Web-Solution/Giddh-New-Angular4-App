@@ -2,7 +2,7 @@ import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplayS
 
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 //import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { cloneDeep } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -174,7 +174,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public selectedAcc: boolean = false;
   public customerCountryName: string = '';
   public useCustomInvoiceNumber: boolean;
-  public exceptTaxTypes:string[];
+  public exceptTaxTypes: string[];
 
   constructor(
     private modalService: BsModalService,
@@ -193,7 +193,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _settingsProfileActions: SettingsProfileActions,
     private _ledgerService: LedgerService,
-    private _salesActions: SalesActions
+    private _salesActions: SalesActions,
+    private cdr: ChangeDetectorRef
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -214,7 +215,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-    this.exceptTaxTypes=['tdsrc', 'tdspay','tcspay', 'tcsrc'];
+    this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
     // bind state sources
     this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
@@ -229,6 +230,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   }
 
   @Input() public isPurchaseInvoice: boolean = false;
+  @Input() public isCreditNote: boolean = false;
+  @Input() public isDebitNote: boolean = false;
   public isCashInvoice: boolean = false;
   @Input() public accountUniqueName: string = '';
 
@@ -421,20 +424,19 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }));
       }
 
-      if(this.isSalesInvoice || this.isCashInvoice){
+      if (this.isSalesInvoice || this.isCashInvoice) {
         this.exceptTaxTypes.push('InputGST');
-        this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
-          return ele!=='GST';
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'GST';
         })
       }
 
-      if(this.isPurchaseInvoice){
+      if (this.isPurchaseInvoice) {
         this.exceptTaxTypes.push('GST');
-        this.exceptTaxTypes=this.exceptTaxTypes.filter(ele=>{
-          return ele!=='InputGST';
+        this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+          return ele !== 'InputGST';
         })
       }
-
     });
 
     // get account details and set it to local var
@@ -823,6 +825,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     this.selectedPageLabel = label;
     this.isSalesInvoice = this.selectedPage === 'Sales';
     this.isPurchaseInvoice = this.selectedPage === 'Purchase';
+    this.isCreditNote = this.selectedPage === 'Credit Note';
+    this.isDebitNote = this.selectedPage === 'Debit Note';
     this.isCashInvoice = false;
     this.makeCustomerList();
     this.toggleFieldForSales = (!(this.selectedPage === VOUCHER_TYPE_LIST[2].value || this.selectedPage === VOUCHER_TYPE_LIST[1].value));
@@ -1281,7 +1285,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
               if (data.status === 'success') {
                 let o = _.cloneDeep(data.body);
                 txn.applicableTaxes = [];
-                txn.sku_and_customfields=null;
+                txn.sku_and_customfields = null;
                 // description with sku and custom fields
                 if ((itm.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
                   let description = [];
@@ -1712,7 +1716,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
     let newItem = {...item};
-    newItem.additional = newItem.additional || {email: '', mobileNo: ''};
+    if (!newItem.additional) {
+      newItem.additional = {email: '', mobileNo: ''};
+    } else {
+      newItem.additional.email = newItem.additional.email || '';
+      newItem.additional.mobileNo = newItem.additional.mobileNo || '';
+    }
     return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
   }
 
@@ -1804,7 +1813,12 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
   public ngOnChanges(s: SimpleChanges) {
     if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
       this.pageChanged('Purchase', 'Purchase');
-      this.isSalesInvoice = false;
+    }
+    if (s && s['isDebitNote'] && s['isDebitNote'].currentValue) {
+      this.pageChanged('Debit Note', 'Debit Note');
+    }
+    if (s && s['isCreditNote'] && s['isCreditNote'].currentValue) {
+      this.pageChanged('Credit Note', 'Credit Note');
     }
 
     // if (s && s['accountUniqueName'] && s['accountUniqueName'].currentValue) {
@@ -1814,8 +1828,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name=event.label;
-      this.invFormData.accountDetails.uniqueName=event.value;
+      this.invFormData.accountDetails.name = event.label;
+      this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';

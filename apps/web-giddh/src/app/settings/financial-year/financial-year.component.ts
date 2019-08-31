@@ -122,7 +122,7 @@ export class FinancialYearComponent implements OnInit {
         // });
         // this.yearOptions = _.cloneDeep(yearOptions);
       } else if (_.isNull(o)) {
-        // this.store.dispatch(this._companyActions.RefreshCompanies()); // for G0-1477
+        // this.store.dispatch(this._companyActions.RefreshCompanies()); // for card G0-1477
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();

@@ -65,8 +65,8 @@
     <div class="row">
       <div class="col-sm-6 col-xs-6">
         <div class="input-container">
-          <input type="text" placeholder="Search Estimate No." class=" form-control" #searchBox
-            [formControl]="voucherNumberInput" />
+          <input type="text" placeholder="{{voucherType === 'proformas' ? 'Serach Proforma #' : 'Search Estimate #'}}"
+            class=" form-control" #searchBox [formControl]="voucherNumberInput" />
         </div>
       </div>
       <div class="col-sm-6 col-xs-6">
@@ -118,7 +118,7 @@
             (clickOutside)="clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')">
 
             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showVoucherNoSearch,
-          title: voucherType === 'proformas' ? 'Proforma No. #' : 'Estimates No. #',
+          title: voucherType === 'proformas' ? 'Proforma #' : 'Estimate #',
           fieldName: 'voucherNumber',
            formControl: voucherNumberInput}"></ng-container>
 
@@ -207,7 +207,7 @@
         </td> -->
 
 
-          <td data-title="Estimates No. #">
+          <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma #' : 'Estimates #'}} ">
             <div style="position: relative" class="d-flex">
               <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
               <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
@@ -232,7 +232,8 @@
             </div>
           </td>
 
-          <td data-title="Estimate Date">{{item.invoiceDate}}</td>
+          <td attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">{{item.invoiceDate}}
+          </td>
           <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td>
           <td class="" data-title="Expiry Date">{{item.expiryDate}}</td>
           <td data-title="Status">{{ item.status }}</td>
@@ -305,81 +306,82 @@
       </tfoot>
 
     </table>
-  </div>
-  <!-- </perfect-scrollbar> -->
 
-  <!--No Entry-->
-  <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-  </div>
+    <!--No Entry-->
+    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
+      <h1>No Entry found in sales!</h1>
+      <h1>Have to do some sales before creating invoice</h1>
+    </div>
 
-  <!--no data-->
-  <div class="no-data" *ngIf="voucherData && voucherData.results.length === 0 && !(isGetAllInProcess$ | async)">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
-  </div>
+    <!--no data-->
+    <div class="no-data" *ngIf="voucherData && voucherData.results.length === 0 && !(isGetAllInProcess$ | async)">
+      <h1>No entries found within given criteria.</h1>
+      <h1>Do search with some other dates</h1>
+    </div>
 
-  <!--loading-->
-  <div class="no-data mrT2 d-flex" *ngIf="(isGetAllInProcess$ | async)"
-    style="justify-content: center;align-items: center">
-    <div class="giddh-spinner vertical-center-spinner"></div>
-  </div>
+    <!--loading-->
+    <div class="no-data mrT2 d-flex" *ngIf="(isGetAllInProcess$ | async)"
+      style="justify-content: center;align-items: center">
+      <div class="giddh-spinner vertical-center-spinner"></div>
+    </div>
 
-</div>
-
-<!-- region search template -->
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-
-  <div [hidden]="show">
-    <span> {{ title }}</span>
-    <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
   </div>
 
-  <div class="input-container" [hidden]="!show">
-    <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+  <!-- region search template -->
+  <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+
+    <div [hidden]="show">
+      <span> {{ title }}</span>
+      <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+
+    <div class="input-container" [hidden]="!show">
+      <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+    </div>
+
+  </ng-template>
+  <!-- endregion -->
+
+  <!-- region sort icon template -->
+  <ng-template #sortTemplate let-column="column">
+
+    <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy !== column"
+      (click)="sortButtonClicked('asc', column)"
+      [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
+    </div>
+
+    <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
+      (click)="sortButtonClicked('desc', column)"
+      [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
+    </div>
+
+    <div class="fa fa-long-arrow-down"
+      *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
+      (click)="sortButtonClicked('asc', column)"
+      [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">
+    </div>
+
+  </ng-template>
+  <!-- endregion -->
+
+  <!-- region invoice-preview-details -->
+  <div *ngIf="selectedVoucher">
+    <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
+      [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting"
+      [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction"
+      (closeEvent)="selectedVoucher = null;toggleBodyClass()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+      (deleteVoucher)="deleteVoucher()" (sendEmail)="sendEmail($event)" (refreshDataAfterVoucherUpdate)="getAll()"
+      (updateVoucherAction)="updateVoucherAction($event)"></invoice-preview-details-component>
   </div>
+  <!-- endregion -->
 
-</ng-template>
-<!-- endregion -->
-
-<!-- region sort icon template -->
-<ng-template #sortTemplate let-column="column">
-
-  <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy !== column"
-    (click)="sortButtonClicked('asc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}"></div>
-
-  <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
-    (click)="sortButtonClicked('desc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}"></div>
-
-  <div class="fa fa-long-arrow-down"
-    *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
-    (click)="sortButtonClicked('asc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}"></div>
-
-</ng-template>
-<!-- endregion -->
-
-<!-- region invoice-preview-details -->
-<div *ngIf="selectedVoucher">
-  <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
-    [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting"
-    [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction"
-    (closeEvent)="selectedVoucher = null;toggleBodyClass()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
-    (deleteVoucher)="deleteVoucher()" (sendEmail)="sendEmail($event)" (refreshDataAfterVoucherUpdate)="getAll()"
-    (updateVoucherAction)="updateVoucherAction($event)"></invoice-preview-details-component>
-</div>
-<!-- endregion -->
-
-<!--advance_search Modal-->
-<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-  <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
-    <div class="modal-content">
-      <invoice-advance-search-component [type]="'proforma'" [request]="advanceSearchFilter"
-        (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
-      </invoice-advance-search-component>
+  <!--advance_search Modal-->
+  <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+    <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
+      <div class="modal-content">
+        <invoice-advance-search-component [type]="'proforma'" [request]="advanceSearchFilter"
+          (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+        </invoice-advance-search-component>
+      </div>
     </div>
   </div>
-</div>

@@ -1,12 +1,12 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ToasterService }  from 'apps/web-giddh/src/app/services/toaster.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { PermissionDataService }  from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -15,9 +15,10 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsTagsComponent } from './tags/tags.component';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
+import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -39,6 +40,7 @@ export class SettingsComponent implements OnInit {
   public isCompanyProfileUpdated: boolean = false;
   //variable to hold sub tab value inside any tab e.g. integration -> payment
   public selectedChildTab: number;
+  public activeTab: string;
 
   public get shortcutEnabled() {
     return document.activeElement === document.body;
@@ -54,7 +56,8 @@ export class SettingsComponent implements OnInit {
     public _route: ActivatedRoute,
     private router: Router,
     private _authenticationService: AuthenticationService,
-    private _toast: ToasterService
+    private _toast: ToasterService,
+    private _generalActions: GeneralActions
   ) {
     this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -62,31 +65,10 @@ export class SettingsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'settings';
 
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    // this.selectTab(0);
-    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-      if (val && val.tab && val.tabIndex) {
-        this.selectTab(val.tabIndex);
-        if(val.subTab){
-          this.selectedChildTab = val.subTab;
-        }
-      } else if (val.tab === 'integration' && val.code) {
-        this.saveGmailAuthCode(val.code);
-        // this.selectTab(1);
-      }
-    });
-
-    this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((e) => {
-      if (e instanceof NavigationEnd && e.url === '/settings?tab=permission&tabIndex=5' && e.urlAfterRedirects.includes(e.url)) {
-        if (this.staticTabs.tabs[5]) {
-          this.staticTabs.tabs[5].active = true;
-        }
+    this._route.params.subscribe(params => {
+      if (params['type'] && this.activeTab !== params['type']) {
+        this.activeTab = params['type'];
       }
     });
 
@@ -155,6 +137,12 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  public tabChanged(tab: string) {
+    this.setStateDetails(tab);
+    this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+    this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
+  }
+
   private saveGmailAuthCode(authCode: string) {
     const dataToSave = {
       code: authCode,
@@ -201,6 +189,16 @@ export class SettingsComponent implements OnInit {
         GOOGLE_CLIENT_SECRET: '8htr7iQVXfZp_n87c99-jm7a'
       };
     }
+  }
+
+  private setStateDetails(type) {
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'pages/settings/' + type;
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
 }

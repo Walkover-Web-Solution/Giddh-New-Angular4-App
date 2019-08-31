@@ -16,9 +16,9 @@ import {CompanyActions} from "../company.actions";
 @Injectable()
 export class SettingsIntegrationActions {
 
-  @Effect()
-  public GetSMSKey$: Observable<Action> = this.action$
-    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY).pipe(
+@Effect()
+public GetSMSKey$: Observable<Action> = this.action$
+.ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.GetSMSKey()),
       map(res => this.validateResponse<SmsKeyClass, string>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
@@ -81,9 +81,9 @@ export class SettingsIntegrationActions {
         let data: BaseResponse<string, string> = response.payload;
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
-          this.store.dispatch(this._companyAction.getAllRegistrations());
         } else {
-          this.toasty.successToast(data.body, '');
+          let responseData = JSON.parse(data.body);
+          this.toasty.successToast(responseData.message, '');
         }
         return {type: 'EmptyAction'};
 

@@ -30,17 +30,17 @@ export declare const gapi: any;
   selector: 'setting-integration',
   templateUrl: './setting.integration.component.html',
   styles: [`
-    #inlnImg img {
-      max-height: 18px;
-    }
+#inlnImg img {
+max-height: 18px;
+}
 
-    .fs18 {
-      font-weight: bold;
-    }
+.fs18 {
+font-weight: bold;
+}
 
-    .pdBth20 {
-      padding: 0 20px;
-    }
+.pdBth20 {
+padding: 0 20px;
+}
 
 @media(max-waidth:768px){
 
@@ -85,6 +85,7 @@ export class SettingIntegrationComponent implements OnInit {
   public amazonSellerRes: AmazonSellerClass[];
   public isGmailIntegrated$: Observable<boolean>;
   public isPaymentAdditionSuccess$: Observable<boolean>;
+  public isPaymentUpdationSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private isSellerAdded: Observable<boolean> = observableOf(false);
@@ -93,7 +94,9 @@ export class SettingIntegrationComponent implements OnInit {
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
   //variable holding account Info
   public registeredAccount;
-  openNewRegistration: boolean;
+  public openNewRegistration: boolean;
+  public selecetdUpdateIndex: number;
+
   constructor(
     private router: Router,
     private store: Store<AppState>,
@@ -110,6 +113,8 @@ export class SettingIntegrationComponent implements OnInit {
     this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
     this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
     this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
+    this.isPaymentUpdationSuccess$ = this.store.select(s => s.settings.isPaymentUpdationSuccess).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -501,13 +506,17 @@ export class SettingIntegrationComponent implements OnInit {
 
   public openNewRegistartionForm() {
     this.paymentFormObj = new PaymentClass();
+    //logic to get all registered account for integration tab
+    this.store.dispatch(this._companyActions.getAllRegistrations());
     this.openNewRegistration = true;
   }
+
   public deRegisterForm(regAcc: IRegistration) {
     this.store.dispatch(this.settingsIntegrationActions.RemovePaymentInfo(regAcc.iciciCorporateDetails.URN));
   }
 
-  public updateICICDetails(regAcc: IRegistration) {
+  public updateICICDetails(regAcc: IRegistration, index) {
+    this.selecetdUpdateIndex = index;
     let requestData = {
       URN: regAcc.iciciCorporateDetails.URN,
       accountUniqueName: regAcc.account.uniqueName

@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 
-import { take, takeUntil } from 'rxjs/operators';
+import { distinct, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';

@@ -11,10 +11,9 @@ import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import {reassignNavigationalArray} from './models/defaultMenus'
-import { DbService } from './services/db.service';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-
+import { DbService } from './services/db.service';
+import {reassignNavigationalArray} from './models/defaultMenus'
 /**
  * App Component
  * Top Level Component
@@ -44,7 +43,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   public isElectron: boolean = false;
   public tagManagerUrl: SafeUrl;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public isMobileSite: boolean;
 
   public sidebarStatusChange(event) {
     this.sideMenu.isopen = event;
@@ -64,8 +62,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
               private _cdr: ChangeDetectorRef,
               private _versionCheckService: VersionCheckService,
               private sanitizer: DomSanitizer,
-              private dbServices :DbService,
-              private breakpointObserver: BreakpointObserver
+              private breakpointObserver: BreakpointObserver,
+              private dbServices :DbService
               // private comapnyActions: CompanyActions,
               // private activatedRoute: ActivatedRoute, 
               // private location: Location
@@ -92,19 +90,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileSite = s;
-    });
-    // this.breakpointObserver.observe([
-    //   '(max-width: 1024px)'
-    //     ]).subscribe(result => {
-    //       if (result.matches) {
-    //         this.changeOnMobileView(true);
-    //       } else {
-    //         // if necessary:
-    //         this.changeOnMobileView(false);
-    //       }
-    //     });
+    this.breakpointObserver.observe([
+      '(max-width: 1024px)'
+        ]).subscribe(result => {
+          this.changeOnMobileView(result.matches);
+        });
+
   }
 
   private changeOnMobileView(isMobile){
@@ -112,18 +103,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
         localStorage.setItem('isMobileSiteGiddh', 'true');
         this.dbServices.clearAllData();
-        this.router.navigate(['settings']);
+        //this.router.navigate(['settings']);
       }
-      reassignNavigationalArray(isMobile);
     }else{
       if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
         localStorage.setItem('isMobileSiteGiddh', 'false');
         this.dbServices.clearAllData();
       }
-      reassignNavigationalArray(isMobile);
     }
+    reassignNavigationalArray(isMobile);
     this._generalService.setIsMobileView(isMobile);
   }
+
   public ngOnInit() {
     this.sideBarStateChange(true);
     // Need to implement for Web app only
@@ -144,13 +135,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this._cdr.detectChanges();
     this.router.events.subscribe((evt) => {
 
-      if ((evt instanceof NavigationStart) && !isElectron) {
-        if(this.newVersionAvailableForWebApp){
-          // need to save last state
-          const redirectState = this.getLastStateFromUrl(evt.url);
-          localStorage.setItem('lastState', redirectState);
-          return window.location.reload(true);
-        }
+      if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        // need to save last state
+        const redirectState = this.getLastStateFromUrl(evt.url);
+        localStorage.setItem('lastState', redirectState);
+        return window.location.reload(true);
       }
       if (!(evt instanceof NavigationEnd)) {
         return;

@@ -26,6 +26,7 @@ export class IntegrationPageClass {
   public paymentGateway: CashfreeClass;
   public amazonSeller: AmazonSellerClass[];
   public paymentForm : PaymentClass;
+
 }
 
 export class SmsKeyClass {
@@ -78,6 +79,6 @@ export class AmazonSellerClass {
 export class PaymentClass {
   public corpId : string;
   public userId :string;
-  public accountNo : number;
+  public accountNo : string;
   public accountUniqueName : string;
 }

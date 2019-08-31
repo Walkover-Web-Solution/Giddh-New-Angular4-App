@@ -10,6 +10,8 @@ import { SalesComponent } from './sales.component';
         path: '', component: SalesComponent, canActivate: [NeedsAuthentication],
         children: [
           {path: 'purchase', component: SalesComponent, canActivate: [NeedsAuthentication]},
+          {path: 'credit-note', component: SalesComponent, canActivate: [NeedsAuthentication]},
+          {path: 'debit-note', component: SalesComponent, canActivate: [NeedsAuthentication]},
         ]
       },
       {path: ':accUniqueName', component: SalesComponent, canActivate: [NeedsAuthentication]},

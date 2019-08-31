@@ -9,7 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -31,6 +31,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 
 @Component({
   selector: 'app-header',
@@ -45,6 +46,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
   public moment = moment;
   public imgPath: string = '';
+  public subscribedPlan: SubscriptionsUser;
   public isLedgerAccSelected: boolean = false;
 
   @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
@@ -65,13 +67,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
   @ViewChild('supportTab') public supportTab: TabsetComponent;
   @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
+  @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
+  @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
+  @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
+
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    {name: 'ENGLISH', value: 'en'},
-    {name: 'DUTCH', value: 'nl'}
+    { name: 'ENGLISH', value: 'en' },
+    { name: 'DUTCH', value: 'nl' }
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -123,8 +129,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = {isopen: false};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: false };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -161,12 +167,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public showOtherMenu: boolean = false;
   public isLargeWindow: boolean = false;
   public isCompanyProifleUpdate$: Observable<boolean> = observableOf(false);
+  public selectedPlanStatus: string;
+  public isSubscribedPlanHaveAdditnlChrgs: any;
+  public activeCompany: any;
+  public createNewCompanyUser: CompanyCreateRequest;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
   private activeCompanyForDb: ICompAidata;
-  private indexDBReCreationDate: string = '10-12-2018';
   private smartCombinedList$: Observable<any>;
   public isMobileSite: boolean;
   /**
@@ -275,20 +284,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
+    this.selectedCompany.subscribe((res: any) => {
+      if (res) {
+        if (res.subscription) {
+          this.subscribedPlan = res.subscription;
+          this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
+          this.selectedPlanStatus = res.subscription.status;
+        }
+        this.activeCompany = res;
+      }
+    });
+
+
 
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
-    // this is not needed because we are already refreshing compnies array when we update company profile
-    // this.isCompanyProifleUpdate$.subscribe(a => {
-    //   if (a) {
-    //     this.selectedCompany = this.store.select(p => p.settings.profile).pipe(take(1));
-    //     // this.branchUniqueName = this.store.select(p => console).pipe(take(1));
-    //   }
-    // });
-
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
     this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
-
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.createNewCompanyUser = res;
+      }
+    });
     this._generalService.isMobileSite.subscribe(s => {
       this.isMobileSite = s;
        this.menuItemsFromIndexDB = DEFAULT_MENUS;
@@ -321,7 +338,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-
+    if (this.selectedPlanStatus === 'expired') {
+      this.openExpiredPlanModel(this.expiredPlanModel);
+    }
+    if (this.isSubscribedPlanHaveAdditnlChrgs) {
+      this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+    }
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
@@ -374,13 +396,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // sort group list by name
           acList = sortBy(acList, ['name']);
 
-          
-          if(!this.isMobileSite){
-            combinedList = concat(menuList, grpList, acList);
-          }else{
-            combinedList = menuList;
-          }
-
+          combinedList = concat(menuList, grpList, acList);
           this.store.dispatch(this._generalActions.setCombinedList(combinedList));
         }
       });
@@ -446,6 +462,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.navigationEnd = true;
         if (a instanceof NavigationEnd) {
           this.adjustNavigationBar();
+          let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+            return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+          });
+          if (menuItem) {
+            this.doEntryInDb('menus', menuItem);
+          }
         }
       }
     });
@@ -492,6 +514,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.onItemSelected(data.next, data);
       }
     });
+
+    this.store.pipe(select(s => s.general.headerTitle)).subscribe(menu => {
+      if (menu) {
+        let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+          if (menu.additional && item.additional) {
+            return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+          }
+          return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+        });
+        if (menuItem) {
+          this.doEntryInDb('menus', menuItem);
+        }
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -521,7 +557,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isDateRangeSelected) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
-          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
+          this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
           this.isDateRangeSelected = true;
           const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
           const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -591,7 +627,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     if (o) {
-      menu = {...menu, ...o};
+      menu = { ...menu, ...o };
     } else {
       try {
         menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -612,7 +648,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb('menus', menu);
 
     if (menu.additional) {
-      this.router.navigate([pageName], {queryParams: menu.additional});
+      this.router.navigate([pageName], { queryParams: menu.additional });
     } else {
       this.router.navigate([pageName]);
     }
@@ -891,7 +927,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment(), moment()]);
-      this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
+      this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
       let dates = {
         fromDate: null,
         toDate: null,
@@ -961,7 +997,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (item.uniqueName.includes('?')) {
           item.uniqueName = item.uniqueName.split('?')[0];
         }
-        this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
+        this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
       } else {
         this.router.navigate([item.uniqueName]);
       }
@@ -1009,6 +1045,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public closeModal() {
     this.talkSalesModal.hide();
     this._generalService.talkToSalesModal.next(false);
+  }
+  public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
+    this.modelRef = this.modalService.show(template);
+  }
+
+  public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
+    this.modelRef = this.modalService.show(template);
+  }
+  public goToSelectPlan() {
+    this.modalService.hide(1);
+    // this.router.navigate(['billing-detail']);
+    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
   }
 
   public onRight(nodes) {
@@ -1167,7 +1215,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     );
 
     this.subscriptions.push(_combine);
-    let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
+    let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
     this.modelRef = this.modalService.show(this.navigationModal, config);
   }
 

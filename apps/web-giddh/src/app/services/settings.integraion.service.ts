@@ -13,10 +13,10 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 @Injectable()
 export class SettingsIntegrationService {
 
-  private user: UserDetails;
-  private companyUniqueName: string;
+private user: UserDetails;
+private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
@@ -89,7 +89,7 @@ export class SettingsIntegrationService {
   public updatePaymentKey(model): Observable<BaseResponse<string, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPADTE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+    return this._http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPADTE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
       let data: BaseResponse<string, any> = res;
       data.request = model;
       return data;

@@ -78,28 +78,30 @@ export interface SettingsState {
   isGmailIntegrated: boolean;
   profileRequest: boolean;
   isPaymentAdditionSuccess:  boolean;
+  isPaymentUpdationSuccess: boolean;
 }
 
 export const initialState: SettingsState = {
-  integration: new IntegrationPageClass(),
-  profile: {},
-  inventory: {},
-  profileRequest: false,
-  updateProfileSuccess: false,
-  updateProfileInProgress: false,
-  linkedAccounts: {},
-  financialYears: null,
-  usersWithCompanyPermissions: null,
-  branches: null,
-  tags: null,
-  parentCompany: null,
-  triggers: null,
-  discount: discountInitialState,
-  refreshCompany: false,
-  amazonState: AmazonInititalState,
-  isGmailIntegrated: false,
-  isPaymentAdditionSuccess :false
-};
+integration: new IntegrationPageClass(),
+    profile: {},
+    inventory: {},
+    profileRequest: false,
+    updateProfileSuccess: false,
+    updateProfileInProgress: false,
+    linkedAccounts: {},
+    financialYears: null,
+    usersWithCompanyPermissions: null,
+    branches: null,
+    tags: null,
+    parentCompany: null,
+    triggers: null,
+    discount: discountInitialState,
+    refreshCompany: false,
+    amazonState: AmazonInititalState,
+    isGmailIntegrated: false,
+    isPaymentAdditionSuccess :false,
+    isPaymentUpdationSuccess: false
+  };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
   let newState = _.cloneDeep(state);
@@ -149,6 +151,14 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return state;
+    case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
+      let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
+      if (crtpytUpres.status === 'success') {
+        //newState.integration.paymentForm = crtpytUpres.request;
+        newState.isPaymentUpdationSuccess = true;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     case SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE:
       let getRzrPayRes: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
       if (getRzrPayRes.status === 'success') {
@@ -192,7 +202,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
-        updateProfileSuccess: true,
+        updateProfileSuccess: false,
         profileRequest: true
       });
     }

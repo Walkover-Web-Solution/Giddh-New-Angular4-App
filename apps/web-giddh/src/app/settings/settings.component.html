@@ -3,43 +3,60 @@
      [config]="{ignoreHost:true}"
      (onShortcutPress)="selectTabByShortcut($event)">
   <div class="row">
+
     <div class="col-xs-12" id="settingTab">
+
       <tabset #staticTabs>
-        <tab heading="Taxes">
+
+        <tab heading="Taxes" [active]="activeTab === 'taxes'" (select)="tabChanged('taxes')">
           <setting-taxes></setting-taxes>
         </tab>
-        <tab heading="Integration" (select)="integrationSelected($event)">
+
+        <tab heading="Integration" (select)="integrationSelected($event); tabChanged('integration')"
+             [active]="activeTab === 'integration'">
           <setting-integration #integrationComponent selectedTabParent="{{selectedChildTab}}"></setting-integration>
         </tab>
-        <tab heading="Linked Accounts" (select)="linkedAccountSelected($event)">
+
+        <tab heading="Linked Accounts" (select)="linkedAccountSelected($event); tabChanged('linked-accounts')"
+             [active]="activeTab === 'linked-accounts'">
           <setting-linked-accounts #eBankComp></setting-linked-accounts>
         </tab>
-        <tab heading="Profile" (select)="profileSelected($event)">
+
+        <tab heading="Profile" (select)="profileSelected($event); tabChanged('profile')"
+             [active]="activeTab === 'profile'">
           <setting-profile #profileComponent></setting-profile>
           <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save"
                 style="float: right;"><i class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...</span>
           <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save"
                 style="float: right;"><i class="glyphicon glyphicon-check mrR fs14"></i>Saved</span>
         </tab>
-        <tab heading="Financial Year" (select)="financialYearSelected($event)">
+
+        <tab heading="Financial Year" (select)="financialYearSelected($event); tabChanged('financial-year')"
+             [active]="activeTab === 'financial-year'">
           <financial-year #financialYearComp></financial-year>
         </tab>
+
         <!-- Arpit: Sagar told me to remove this condition from permission tab -->
         <!-- *ngIf="isUserSuperAdmin" -->
-        <tab (select)="permissionTabSelected($event)" heading="Permission">
+
+        <tab (select)="permissionTabSelected($event); tabChanged('permission')" heading="Permission"
+             [active]="activeTab === 'permission'">
           <setting-permission #permissionComp></setting-permission>
         </tab>
-        <tab heading="Branch">
+
+        <tab heading="Branch" [active]="activeTab === 'branch'" (select)="tabChanged('branch')">
           <setting-branch></setting-branch>
         </tab>
-        <tab heading="Tags" (select)="tagsTabSelected($event)">
+
+        <tab heading="Tags" (select)="tagsTabSelected($event);tabChanged('tag')" [active]="activeTab === 'tag'">
           <setting-tags #tagComp></setting-tags>
         </tab>
-        <tab heading="Trigger">
+
+        <tab heading="Trigger" [active]="activeTab === 'trigger'" (select)="tabChanged('trigger')">
           <setting-trigger></setting-trigger>
         </tab>
 
-        <tab heading="Discount">
+        <tab heading="Discount" [active]="activeTab === 'discount'" (select)="tabChanged('discount')">
           <setting-discount></setting-discount>
         </tab>
         <!--  commented due to under discussion
@@ -48,7 +65,9 @@
         <tab heading="" (select)="tagsTabSelected($event)">
           <setting-bunch #bunchComp></setting-bunch>
         </tab>
+
       </tabset>
+
     </div>
   </div>
 </div>

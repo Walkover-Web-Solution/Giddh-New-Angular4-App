@@ -18,19 +18,19 @@ export const initialState: AgingReportState = {
   setDueRangeRequestInFlight: false,
   setDueRangeOpen: false,
   agingDropDownoptions: {
-    fourth: 40,
-    fifth: 80,
-    sixth: 120
+  fourth: 40,
+  fifth: 80,
+  sixth: 120
   },
   getAgingReportRequestInFlight: false,
   data: null,
   dueAmountReportRequest: {
-    totalDueAmountGreaterThan: false,
-    totalDueAmountLessThan: false,
-    totalDueAmountEqualTo: false,
-    totalDueAmount: 0,
-    includeTotalDueAmount: false,
-    name: [],
+  totalDueAmountGreaterThan: false,
+  totalDueAmountLessThan: false,
+  totalDueAmountEqualTo: false,
+  totalDueAmount: 0,
+  includeTotalDueAmount: false,
+  name: [],
   },
   noData: true
 };

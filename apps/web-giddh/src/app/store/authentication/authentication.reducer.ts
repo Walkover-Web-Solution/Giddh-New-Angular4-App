@@ -1,4 +1,4 @@
-import { ICurrencyResponse } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -8,7 +8,7 @@ import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsRespo
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
 
 /**
@@ -60,6 +60,8 @@ export interface SessionState {
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
+  createCompanyUserStoreRequestObj: CompanyCreateRequest
+  userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
 }
 
 /**
@@ -108,17 +110,19 @@ const sessionInitialState: SessionState = {
   isRefreshing: false,
   userLoginState: userLoginStateEnum.notLoggedIn,
   currencies: null,
-  todaySelected: false
+  todaySelected: false,
+  createCompanyUserStoreRequestObj: null,
+  userSelectedSubscriptionPlan: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
 
   switch (action.type) {
     case LoginActions.RESET_NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: false};
+      return { ...state, needsToRedirectToLedger: false };
     }
     case LoginActions.NEEDS_TO_REDIRECT_TO_LEDGER: {
-      return {...state, needsToRedirectToLedger: true};
+      return { ...state, needsToRedirectToLedger: true };
     }
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {
@@ -332,19 +336,19 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       return Object.assign({}, state, {
         isLoginWithPasswordInProcess: true
       });
-      case LoginActions.LoginWithPasswdResponse: {
-        let res: BaseResponse<any, any> = action.payload;
-        if (res.status === 'success') {
-          if (!res.body.user.isVerified) {
-            return Object.assign({}, state, {
-              isLoginWithPasswordInProcess: false,
-              isLoginWithPasswordSuccessNotVerified: true,
-              user: res.body
-            });
-          }
+    case LoginActions.LoginWithPasswdResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        if (!res.body.user.isVerified) {
+          return Object.assign({}, state, {
+            isLoginWithPasswordInProcess: false,
+            isLoginWithPasswordSuccessNotVerified: true,
+            user: res.body
+          });
         }
-        return state;
       }
+      return state;
+    }
     case LoginActions.SignupWithPasswdRequest:
       return Object.assign({}, state, {
         isSignupWithPasswordInProcess: true,
@@ -534,9 +538,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return s;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
+      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, {isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false});
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
@@ -549,6 +553,33 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
+    // create new Company
+    case CompanyActions.CREATE_NEW_COMPANY:
+      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
+    case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
+    case CompanyActions.CREATE_NEW_COMPANY_RESPONSE: {
+      let companyResp: BaseResponse<CompanyResponse, CompanyCreateRequest> = action.payload;
+      if (companyResp.status === 'success') {
+        let d = _.cloneDeep(state);
+        d.isCompanyCreationInProcess = false;
+        d.isCompanyCreationSuccess = true;
+        d.isCompanyCreated = true;
+        d.companies.push(companyResp.body);
+        return Object.assign({}, state, d);
+      } else {
+        let d = _.cloneDeep(state);
+        d.isCompanyCreationInProcess = false;
+        d.isCompanyCreationSuccess = false;
+        d.isCompanyCreated = false;
+        return Object.assign({}, state, d);
+      }
+      // return state;
+    }
+    case CompanyActions.USER_SELECTED_PLANS:
+      return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
+    case CompanyActions.USER_CAREATE_COMPANY:
+      return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
@@ -629,7 +660,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       if (response.status === 'success') {
         let d = _.cloneDeep(state);
         localStorage.setItem('currencyDesimalType', response.body.balanceDecimalPlaces);
-         localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
+        localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
         let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
         if (currentCompanyIndx !== -1) {
           d.companies[currentCompanyIndx].country = response.body.country;

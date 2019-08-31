@@ -109,6 +109,51 @@ span.viasocket a{
 }
 .invoice-lock-date{
   width: 152px;
+  position: relative;
+}
+.showOnMobile{
+  display: none;
+}
+.invoice-lock-date .icon-calender{
+  position: absolute;
+  right: 10px;
+  top: 25%;
+  color: #666666;
+  font-size: 16px;
+
+}
+@media(max-width:767px){
+  .hideOnMobile{
+    display: none;
+  }
+  #invoice-setting .showOnMobile {
+    display: inline-block;
+    float: left;
+    width: 20px;
+    top: 4px;
+}
+.paymentGateway{
+  margin-left: 15px;
+  margin-top: 5px;
+}
+#invoice-setting label {
+
+  float: left;
+  width: 88%;
+}
+.form-group.clearfix.max150 {
+
+  margin-top: 5px;
+}
+.btn-wrapper{
+  padding:0 15px;
+}
+.integratdeEmail{
+  margin-left: 30px;
+}
+.customEstimation {
+  margin-top: 30px;
+}
 }
 .showOnMobile{
   display: none;

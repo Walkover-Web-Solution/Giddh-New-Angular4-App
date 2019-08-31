@@ -1,14 +1,14 @@
-import { INameUniqueName } from "../api-models/Inventory";
+
 
 export interface IRegistration {
   iciciCorporateDetails :{
-    corpId: string,
-    userId: string,
-    accountNo: number,
-    URN: string
+  corpId: string,
+  userId: string,
+  accountNo: string,
+  URN: string
   },
   account : {
-    name :string,
-    uniqueName : string
+  name :string,
+  uniqueName : string
   }
 }

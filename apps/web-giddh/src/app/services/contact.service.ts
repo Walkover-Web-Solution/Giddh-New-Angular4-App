@@ -14,9 +14,9 @@ import {ContactAdvanceSearchModal} from "../models/api-models/Contact";
 
 @Injectable()
 export class ContactService {
-  private companyUniqueName: string;
+private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
               private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 

@@ -1,75 +1,101 @@
 .welcome-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
 }
 
 .welcome-container hr {
-  background: #707070;
+    background: #707070;
 }
 
 .welcome-container form {
-  flex: 0;
+    flex: 0;
 }
 
 .form-group {
-  z-index: unset !important;
+    z-index: unset !important;
 }
 
 ::ng-deep.input-group .form-control {
-
-  z-index: unset;
+    z-index: unset;
 }
 
 .z-index-2 {
-  position: relative;
-  z-index: 2;
+    position: relative;
+    z-index: 2;
 }
 
 .welcome-container form label {
-  font-size: 14px;
-  color: #707070;
+    font-size: 14px;
+    color: #707070;
 }
 
 .box {
-  background: rgba(255, 255, 255, 0.5);
-  padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 30px 40px;
 }
 
 .form-custom {
-  margin-bottom: 20px !important;
-  // margin-top:23px !important;
+    margin-bottom: 20px !important;
+    // margin-top:23px !important;
 }
 
 .width350 {
-  width: 350px;
-  margin: auto;
+    width: 350px;
+    margin: auto;
 }
 
 .welcome_outer hr {
-  border: 0.5px solid #707070;
+    border: 0.5px solid #707070;
 }
 
 .skip {
-  color: #10AAE0;
-  margin-left: 16px;
-}
-
-.btn-default {
-  color: #2FAB4A;
+    color: #10AAE0;
+    margin-left: 16px;
 }
 
 .btn-default:hover {
-  background: #E6E6E6;
+    background: #E6E6E6;
 }
 
-::ng-deep sh-select .header.open > input[type="text"], ::ng-deep sh-select .header.open > input[type="text"]:focus {
-  width: 100%;
+::ng-deep sh-select .header.open>input[type="text"],
+ ::ng-deep sh-select .header.open>input[type="text"]:focus {
+    width: 100%;
 }
 
-.box {
+.welcome-container {
+    max-width: 400px;
+    margin: 0 auto;
 }
 
+.addCmpnyAddrs p {
+    color: #10AAE0;
+    font-size: 12px;
+}
 
+.change-preference {
+    font-size: 14px;
+    color: #707070;
+}
 
+.welcome-container .btn-blue {
+    width: 100%;
+}
+
+.btn-default {
+    background: #ccc;
+    color: #333;
+}
+.welcome-container p.welcome_title {
+  font-size: 14px;
+  color: #9B9B9B;
+  margin-top: 25px;
+
+}
+.form-control[disabled], .form-control[readonly],  fieldset[disabled] {
+  color:#707070 !important;
+}
+.welcome-container  sup {
+  top: 0;
+}

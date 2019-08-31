@@ -207,7 +207,7 @@ td.card-header.clearfix {
 
 .card #inovice_td {
   border-bottom: 1px solid #ddd !important;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   background-color: #f9f9f9;
   border-top: 1px solid #ddd !important;
   padding-top: 10px;
@@ -266,10 +266,6 @@ td.card-header.clearfix {
   justify-content: space-between;
 }
 
-#dropdown-ddl-newinv{
-  left: auto !important;
-  right: 0 !important;
-}
 /*::ng-deep #dateRangePickerParent .daterangepicker {*/
 /*  top: 100px !important;*/
 /*  left: 15px !important;*/
