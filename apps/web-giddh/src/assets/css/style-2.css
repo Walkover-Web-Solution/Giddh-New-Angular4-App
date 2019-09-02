@@ -7225,6 +7225,9 @@ div#getGroupModal {
 .mailbox .modal-dialog.semdMailModal {
     width: 100%;
     max-width: 695px;
+    margin: 20px auto;
+    padding: 0 15px;
+
 }
 
 .billing-address.disabled .stateField .form-control {
