@@ -12,6 +12,8 @@ import { takeUntil } from "rxjs/operators";
 import * as moment from 'moment/moment';
 import { ReplaySubject } from "rxjs";
 import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
+import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
+import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'reports-details-component',
@@ -23,7 +25,7 @@ export class ReportsDetailsComponent implements OnInit {
   bsValue = new Date();
   public reportRespone: ReportsModel[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public activeFinacialYr;
+  public activeFinacialYr: ActiveFinancialYear;
   public salesRegisterTotal: ReportsModel = new ReportsModel();
   public monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -82,14 +84,16 @@ export class ReportsDetailsComponent implements OnInit {
     endDate: moment(),
     // parentEl: '#dateRangeParent'
   };
+  public financialOptions: IOption[] = [];
+  public selectedCompany: CompanyResponse;
+  private interval: any;
+  public currentActiveFinacialYear: IOption;
   // @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
   ngOnInit() {
   }
 
   constructor(private router: Router, private store: Store<AppState>, private companyActions: CompanyActions, private companyService: CompanyService, private _toaster: ToasterService) {
     this.setCurrentFY();
-    this.populateRecords('monthly');
-    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
   }
 
   public goToDashboard() {
@@ -113,7 +117,6 @@ export class ReportsDetailsComponent implements OnInit {
       let mdyTo = item.to.split('-');
       let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
       if (dateDiff <= 8) {
-        if ((this.monthNames.indexOf(this.selectedMonth) + 1) === parseInt(mdyFrom[1])) {
           this.salesRegisterTotal.sales += item.creditTotal;
           this.salesRegisterTotal.returns += item.debitTotal;
           this.salesRegisterTotal.netSales = item.closingBalance.amount;
@@ -121,7 +124,6 @@ export class ReportsDetailsComponent implements OnInit {
           this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
           reportsModel.particular = 'Week' + weekCount++;
           reportModelArray.push(reportsModel);
-        }
       } else if (dateDiff <= 31) {
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
@@ -184,22 +186,40 @@ export class ReportsDetailsComponent implements OnInit {
       });
     })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
       if (selectedCmp) {
-        let activeFinancialYear = selectedCmp.activeFinancialYear;
-        if (activeFinancialYear) {
-          this.activeFinacialYr = activeFinancialYear;
-        }
+        this.selectedCompany = selectedCmp;
+        this.financialOptions = selectedCmp.financialYears.map(q => {
+          return {label: q.uniqueName, value: q.uniqueName};
+        });
+        this.currentActiveFinacialYear = this.financialOptions[0];
+        this.activeFinacialYr = selectedCmp.activeFinancialYear;
+        this.populateRecords('monthly');
+        this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
       }
     });
   }
-
+  public selectFinancialYearOption(v: IOption) {
+    if (v.value) {
+      let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
+      this.activeFinacialYr = financialYear;
+      this.populateRecords(this.interval, this.selectedMonth);
+    } 
+  }
   public populateRecords(interval, month?) {
+    this.interval = interval;
+    let startDate = this.activeFinacialYr.financialYearStarts.toString();
+    let endDate = this.activeFinacialYr.financialYearEnds.toString();
     if (month) {
       this.selectedMonth = month;
+      let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth)+1);
+      startDate = startEndDate.firstDay;
+      endDate = startEndDate.lastDay;
+    }else{
+      this.selectedMonth = null;
     }
     this.selectedType = interval.charAt(0).toUpperCase() + interval.slice(1);
     let request: ReportsRequestModel = {
-      to: this.activeFinacialYr.financialYearEnds,
-      from: this.activeFinacialYr.financialYearStarts,
+      to: endDate,
+      from: startDate,
       interval: interval,
     }
     this.companyService.getSalesRegister(request).subscribe((res) => {
@@ -234,5 +254,28 @@ export class ReportsDetailsComponent implements OnInit {
       });
 
     }
+  }
+
+  public getDateFromMonth(selectedMonth){
+    let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
+    let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
+
+    let startDate;
+
+    if(mdyFrom[1] > selectedMonth){
+      startDate = '01-'+(selectedMonth - 1)+'-'+mdyTo[2];
+    }else{
+      startDate = '01-'+(selectedMonth - 1)+'-'+mdyFrom[2];
+    }
+    let startDateSplit = startDate.split('-');
+    let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
+    // GET THE MONTH AND YEAR OF THE SELECTED DATE.
+    let month = dt.getMonth(),
+    year = dt.getFullYear();
+
+    // GET THE FIRST AND LAST DATE OF THE MONTH.
+    let firstDay = new Date(year, month, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    let lastDay = new Date(year, month + 1, 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    return { firstDay, lastDay };
   }
 }
