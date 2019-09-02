@@ -7666,6 +7666,9 @@ span.red-text {
   .card-table, .card-table tbody, .card-table tbody tr {
     display: block;
   }
+  .onMobileView ,   .onMobileView tbody {
+  display: block;
+  }
 
 }
 
