@@ -17,6 +17,8 @@ import { SalesRegisterComponent } from './components/sales-register-component/sa
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { ReportsDashboardComponent } from './components/report-dashboard/reports.dashboard.component';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { FormsModule } from '@angular/forms';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -37,8 +39,7 @@ import { ReportsDashboardComponent } from './components/report-dashboard/reports
     DatepickerModule,
     BsDropdownModule,
     Daterangepicker,
-    PaginationModule,
-    
+    PaginationModule
   ],
   providers: [],
   imports: [
@@ -48,8 +49,9 @@ import { ReportsDashboardComponent } from './components/report-dashboard/reports
     CommonModule,
     ChartModule,
     BsDropdownModule,
-    PaginationModule
-    
+    PaginationModule,
+    ShSelectModule,
+    FormsModule
   ]
 })
 
