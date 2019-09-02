@@ -383,7 +383,7 @@ button.btn.btn-orange.ladda-button {
   }
 }
 
-@media(max-width:767px){
+@media(max-width:768px){
   .mobileSearch{
     display: block;
     margin-bottom: 0;
@@ -428,7 +428,7 @@ button.btn.btn-orange.ladda-button {
     padding: 10px 0;
   }
   .date-advanceSearch .input-group {
-    width: 48%;
+    width: 49%;
 }
 }
 
@@ -443,13 +443,33 @@ button.btn.btn-orange.ladda-button {
   }
   .smallLoading{
     padding-left: 0;
+    color: #333333;
+    font-size: 12px;
+    position: relative;
+    top: 2px;
     padding-right: 0;
   }
 }
+@media(max-width:360px){
+  .input-grp-dateRangePicker .d-flex {
+    flex-direction: column;
+}
+.date-advanceSearch .input-group {
+  width: 100%;
+}
+.input-grp-dateRangePicker .btn {
+  padding-left: 0;
+  padding-top: 10px;
+  padding-bottom: 0;
+}
+.smallLoading{
+  top: 5px;
 
+}
+}
 @media (max-width: 320px) {
   .date-advanceSearch .input-group {
-    width: 140px;
+    width: 144px;
   }
   .btn-dropdown-ddl-newinv {
     padding: 6px 10px !important;

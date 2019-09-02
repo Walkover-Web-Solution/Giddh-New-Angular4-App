@@ -44,6 +44,9 @@ padding: 0 20px;
 
 @media(max-waidth:768px){
 
+  .empty-label label , .empty-label br{
+    display:none;
+  }
 }
 
 @media(max-width:767px){
@@ -54,9 +57,7 @@ margin-top: 0;
 margin: 0;
 display: none;
 }
- .empty-label label , .empty-label br{
-  display:none;
-}
+
 }
 `]
 })
