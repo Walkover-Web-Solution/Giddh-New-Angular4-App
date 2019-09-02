@@ -281,7 +281,7 @@
       <td data-title="Interval">{{ col.duration || '-'  }}</td>
       <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
       <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
-      <td data-title="Status">{{ col.status || '-'  }}</td>
+      <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
       <td data-title="Invoice Amt">{{ col.voucherTotal | giddhCurrency   }}</td>
     </tr>
   </tbody>
