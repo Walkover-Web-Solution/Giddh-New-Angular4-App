@@ -1,21 +1,21 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+  novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
   <div class="container-fluid mrT1">
     <div class="row">
-      <div class="form-group col-xs-6">
+      <div class="form-group col-xs-12 col-sm-6">
         <label>Group Name</label>
         <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
       </div>
-      <div class="form-group col-xs-6">
+      <div class="form-group col-xs-12 col-sm-6">
         <label>Unique Name</label>
         <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')" textCaseChangeDirective
-               UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
+          UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
       </div>
     </div>
 
     <div class="row">
       <!-- <div class="form-group col-xs-6"  *ngIf=" uniqueName === 'currentassets' || uniqueName==='currentliabilities' " >
-        
+
         <div style="max-width:130px" class="pItem text-right" (click)="$event.stopPropagation()"
               (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
@@ -25,20 +25,20 @@
             </ledger-discount>
           </div>
       </div>  -->
-      <div class="form-group col-xs-6" *ngIf="!((activeGroup$ | async)?.fixed)">
+      <div class="form-group col-xs-12 col-sm-6" *ngIf="!((activeGroup$ | async)?.fixed)">
         <label for="" class="some">Balance for Trigger</label>
         <div class="" [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
           <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount"
-                 placeholder="00.00"/>
+            placeholder="00.00" />
           <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
             'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-               *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
+            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
           </div>
           <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
             'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-               *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
+            *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
           </div>
         </div>
       </div>
@@ -48,18 +48,18 @@
     <div class="form-group clearfix">
       <label>Description</label>
       <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-                formControlName="description"></textarea>
+        formControlName="description"></textarea>
     </div>
 
     <div class="form-group text-right">
 
       <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-              (click)="showDeleteGroupModal()">DELETE
+        (click)="showDeleteGroupModal()">DELETE
       </button>
 
       <button class="btn btn-primary" type="submit" *ngIf="(showEditGroup$ | async)"
-              [ladda]="isUpdateGroupInProcess$ | async"
-              [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
+        [ladda]="isUpdateGroupInProcess$ | async"
+        [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
       </button>
 
     </div>
@@ -74,19 +74,19 @@
   <form name="moveGroupForm" class="col-xs-12 " novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
     <label class="d-block">Move to group</label>
     <span>
-        <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
-                   [isFilterEnabled]="true" class="pull-left" style="width: calc(100% - 92px);">
-            <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
-            <ng-template #optionTemplate let-option="option">
-                <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
-                    <div class="item">{{ option.label }}</div>
-                    <div class="item_unq">{{ option.value }}</div>
-                </a>
-            </ng-template>
-        </sh-select>
-      </span>
+      <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
+        [isFilterEnabled]="true" class="pull-left" style="width: calc(100% - 92px);">
+        <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
+        <ng-template #optionTemplate let-option="option">
+          <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
+            <div class="item">{{ option.label }}</div>
+            <div class="item_unq">{{ option.value }}</div>
+          </a>
+        </ng-template>
+      </sh-select>
+    </span>
     <span class="pull-right"><button type="submit" class="btn btn-primary"
-                                     [disabled]="moveGroupForm.invalid">Move</button></span>
+        [disabled]="moveGroupForm.invalid">Move</button></span>
 
   </form>
 </div>
@@ -97,8 +97,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <confirm-modal [title]="'Delete Group'"
-                     [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
-                     (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
+        [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
+        (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
       </confirm-modal>
     </div>
   </div>
