@@ -69,7 +69,7 @@ class AppDatabase extends Dexie {
 
   public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen): Promise<any> {
     return this.companies.get(key).then((res: CompAidataModel) => {
-      if(!res){
+      if (!res) {
         return;
       }
       let arr: IUlist[] = res.aidata[entity];
@@ -83,19 +83,15 @@ class AppDatabase extends Dexie {
         } else {
 
           let duplicateIndex: number;
-          if (model.uniqueName === '/pages/invoice/preview/sales' && model.additional && model.additional.tabIndex === 0) {
-            duplicateIndex = -1;
-          } else {
-            duplicateIndex = arr.findIndex(s => {
-              if (model.additional) {
-                if (s.additional) {
-                  return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
-                }
-              } else {
-                return s.uniqueName === model.uniqueName;
+          duplicateIndex = arr.findIndex(s => {
+            if (model.additional) {
+              if (s.additional) {
+                return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
               }
-            });
-          }
+            } else {
+              return s.uniqueName === model.uniqueName;
+            }
+          });
 
           // if duplicate item found then skip it
           if (duplicateIndex === -1) {
@@ -123,7 +119,7 @@ class AppDatabase extends Dexie {
                 then add it to menu at specific position and then mark that item as removed in default menu
                */
               let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
-              if(sorted.length === 0){
+              if (sorted.length === 0) {
                 sorted = DEFAULT_MENUS;
                 this.clonedMenus = DEFAULT_MENUS;
               }
@@ -152,7 +148,7 @@ class AppDatabase extends Dexie {
             if (isSmallScreen && duplicateIndex > 7) {
               duplicateIndex = this.smallScreenHandler(duplicateIndex);
             }
-            if(this.clonedMenus.length === 0){
+            if (this.clonedMenus.length === 0) {
               this.clonedMenus = DEFAULT_MENUS;
             }
             arr[originalDuplicateIndex] = arr[duplicateIndex];

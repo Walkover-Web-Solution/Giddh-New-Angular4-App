@@ -121,8 +121,16 @@ export class InvoiceComponent implements OnInit, OnDestroy {
           if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {
-                // this.staticTabs.tabs[queryParams.tabIndex].active = true;
-                this.tabChanged(queryParams.tab);
+                /*
+                  set active tab to null because we want to reload the tab component
+                  case :-
+                          when invoice preview details is on then if someone clicks on sidemenu or navigate using cmd + g then we need to
+                          reload the component
+                 */
+                this.activeTab = null;
+                setTimeout(() => {
+                  this.tabChanged(queryParams.tab);
+                }, 500);
               }
             }
           } else {
