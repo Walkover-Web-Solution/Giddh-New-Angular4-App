@@ -86,7 +86,7 @@ export class UserDetails {
   name: string;
   uniqueName: string;
   email: string;
-  signUpOn: string;
+  signUpOn?: string;
   mobileno?: any;
 }
 
