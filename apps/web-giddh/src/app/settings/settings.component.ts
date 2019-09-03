@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -57,7 +58,8 @@ export class SettingsComponent implements OnInit {
     private router: Router,
     private _authenticationService: AuthenticationService,
     private _toast: ToasterService,
-    private _generalActions: GeneralActions
+    private _generalActions: GeneralActions,
+    private settingsIntegrationActions: SettingsIntegrationActions,
   ) {
     this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -165,6 +167,7 @@ export class SettingsComponent implements OnInit {
       } else {
         this._toast.errorToast(res.message, res.code);
       }
+      this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
 
       // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
     });
