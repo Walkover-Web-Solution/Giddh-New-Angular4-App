@@ -72,6 +72,13 @@ export class SettingsComponent implements OnInit {
       }
     });
 
+    this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val.tab === 'integration' && val.code) {
+        this.saveGmailAuthCode(val.code);
+        this.activeTab = val.tab;
+      }
+    });
+
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
       if (yes) {
         this.isCompanyProfileUpdated = true;
@@ -159,7 +166,7 @@ export class SettingsComponent implements OnInit {
         this._toast.errorToast(res.message, res.code);
       }
 
-      this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+      // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
     });
   }
 
