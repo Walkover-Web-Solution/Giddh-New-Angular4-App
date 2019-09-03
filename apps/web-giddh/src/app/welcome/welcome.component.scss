@@ -65,7 +65,7 @@
 }
 
 .welcome-container {
-    max-width: 400px;
+    max-width: 380px;
     margin: 0 auto;
 }
 
@@ -84,18 +84,6 @@
 }
 
 .btn-default {
-    background: #ccc;
+    background: #e5e5e5;
     color: #333;
-}
-.welcome-container p.welcome_title {
-  font-size: 14px;
-  color: #9B9B9B;
-  margin-top: 25px;
-
-}
-.form-control[disabled], .form-control[readonly],  fieldset[disabled] {
-  color:#707070 !important;
-}
-.welcome-container  sup {
-  top: 0;
 }

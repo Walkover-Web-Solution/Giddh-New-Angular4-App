@@ -7,7 +7,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { SubscriptionsUser, CompaniesWithTransaction } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'subscriptions',
@@ -36,7 +35,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
   constructor(private store: Store<AppState>,
     private _subscriptionsActions: SubscriptionsActions,
-    private modalService: BsModalService, private _route: Router) {
+    private modalService: BsModalService) {
 
     this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
     this.subscriptions$ = this.store.select(s => s.subscriptions.subscriptions)
@@ -55,29 +54,26 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
       if (this.subscriptions.length > 0) {
         this.seletedUserPlans = this.subscriptions[0];
-        if (this.seletedUserPlans.companiesWithTransactions)
-          this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+        if(this.seletedUserPlans.companiesWithTransactions)
+        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
       }
     });
 
 
   }
   public ngAfterViewInit() {
-    if (this.subscriptions.length > 0) {
+    if (this.subscriptions) {
       this.seletedUserPlans = this.subscriptions[0];
-      if (this.seletedUserPlans.companiesWithTransactions)
-        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+      if(this.seletedUserPlans.companiesWithTransactions)
+      this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
-  }
-  public GoToBillingDetails() {
-    this._route.navigate(['billing-detail']);
   }
 
   public selectedSubscriptionPlan(subsciption: SubscriptionsUser) {
     if (subsciption) {
       this.seletedUserPlans = subsciption;
-      if (this.seletedUserPlans.companiesWithTransactions)
-        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+      if(this.seletedUserPlans.companiesWithTransactions)
+      this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
     }
   }
   public isSubscriptionPlanShow(event: any) {

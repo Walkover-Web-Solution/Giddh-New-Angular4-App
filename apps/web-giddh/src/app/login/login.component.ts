@@ -24,15 +24,13 @@ import { userLoginStateEnum } from "../models/user-login-state";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
-
   public isLoginWithMobileSubmited$: Observable<boolean>;
   @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
   @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
   // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
-
+ 
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
@@ -76,13 +74,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public showLinkedInButton = false;
   // tslint:disable-next-line:no-empty
   constructor(private _fb: FormBuilder,
-    private store: Store<AppState>,
-    private router: Router,
-    private loginAction: LoginActions,
-    private authService: AuthService,
-    @Inject(DOCUMENT) private document: Document,
-    private _toaster: ToasterService,
-    private _authService: AuthenticationService
+              private store: Store<AppState>,
+              private router: Router,
+              private loginAction: LoginActions,
+              private authService: AuthService,
+              @Inject(DOCUMENT) private document: Document,
+              private _toaster: ToasterService,
+              private _authService: AuthenticationService
   ) {
     this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {

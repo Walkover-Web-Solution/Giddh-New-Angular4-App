@@ -52,9 +52,3 @@
   color: #ff5e01;
   background: #f4f5f8;
 }
-@media(max-width:414px){
-  .template-grid {
-    background: #fafafa;
-    max-width:100%;
-  }
-}

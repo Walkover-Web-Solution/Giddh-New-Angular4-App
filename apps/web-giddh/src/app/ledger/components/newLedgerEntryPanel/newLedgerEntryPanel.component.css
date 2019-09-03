@@ -1,12 +1,15 @@
 .primary_color {
   color: #d35f29 !important;
 }
+
 .ledger-panel {
   overflow: visible;
 }
+
 .ledger-panel table tbody tr td a {
   color: #333;
 }
+
 .pItem {
   padding: 0 4px;
 }
@@ -15,8 +18,3 @@
   overflow-y: scroll;
 }
 
-@media only screen and (max-width: 767px) {
-  .ledger-panel .btn {
-    margin-bottom: 13px;
-  }
-}

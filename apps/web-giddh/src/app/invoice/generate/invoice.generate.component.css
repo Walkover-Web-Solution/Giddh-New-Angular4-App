@@ -177,7 +177,7 @@ tfoot {
 .form-group button, .form-group .input-group {
   width: 48.5%;
   float: left;
-
+  display: inline-block !important;
   margin-bottom: 10px;
   min-height: 34px;
 }
