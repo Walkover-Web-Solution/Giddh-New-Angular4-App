@@ -3393,7 +3393,7 @@ select.form-control {
 
 .grp_list {
     padding: 40px 0 60px;
-    min-height: 100%;
+    min-height: 100vh;
     overflow-y: auto;
     height: 100%;
     padding-bottom: 60px;
@@ -7391,6 +7391,18 @@ span.red-text {
 #invoice-setting .nav>li>a.active{
   border: 1px solid #ff5f00 !important;
 }
+#groupDetailForm .btn {
+  width: auto;
+}
+.welcome-header hr {
+  border-top-color: #B3B4B5;
+}
+.no-select {
+-moz-user-select: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
 /* responsive */
 
 
@@ -7611,6 +7623,10 @@ span.red-text {
     padding:  5px 10px 5px 0%  !important;
     text-align: center;
 }
+#middleBody .horizontal-form, .view_forms .horizontal-form {
+  max-width: 100%;
+  width: 100%;
+}
 }
 
 @media (max-width: 1280px) {
@@ -7672,7 +7688,9 @@ span.red-text {
   .onMobileView ,   .onMobileView tbody {
   display: block;
   }
-
+.blank-label{
+  display: none;
+}
 }
 
 @media (max-width: 575px) {
@@ -7744,15 +7762,7 @@ span.red-text {
     padding: 5px 10px 5px 53% !important;
   }
 }
-.welcome-header hr {
-    border-top-color: #B3B4B5;
-}
-.no-select {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+
 
 
 @media only screen and (max-width: 1400px) {
@@ -7803,7 +7813,7 @@ span.red-text {
 }
 
 
-@media(max-width:991px) {
+@media(max-width:1024px) {
   .form-bg {
     width: 100%;
   }
@@ -7849,4 +7859,46 @@ span.red-text {
   .usesr-last-list > li {
     display: inline-block;
   }
+  .col_wrapper:first-child .grp_list {
+    padding-top: 0;
 }
+.col_wrapper:nth-child(1) li a {
+  text-transform: uppercase;
+  padding: 4px 15px !important;
+}
+.bgWhiteMo{
+  background-color:#fff;
+}
+.breadcrumbs {
+  border-top: 1px solid #ccc;
+}
+#getGroupModal #middleBody {
+  height: 100%;
+}
+div#getGroupModal {
+  height: 100%;
+}
+.grp_list {
+
+  min-height: 100%;
+}
+.col_wrapper:nth-child(1) {
+  background: transparent;
+}
+
+.grp_list:nth-child(2) {
+  background-color: #fff;
+}
+.col_wrapper.left-account-opration:nth-child(3), .col_wrapper.left-account-opration:nth-child(2) {
+  border-top: 1px solid #ddd;
+}
+.mangeAccountPopup.modal {
+  background-color: #f4f5f8;
+  opacity: 1;
+}
+.mangeAccountPopup .modal-content.fullScreenMy {
+  box-shadow: none;
+  border: none;
+}
+}
+
