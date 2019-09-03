@@ -123,21 +123,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
-
-
-  Shown: boolean = true;
-  isHide: boolean = false;
-  condition: boolean = true;
-  condition2: boolean = false;
-
-  toggleShow() {
-    this.condition= this.condition ?false:true;
-    this.condition2= this.condition ?false:true;
-    this.Shown = this.Shown ?false:true;
-    this.isHide = this.isHide ?false:true;
-  }
-
-
   public ngOnInit() {
 
     this.showAdvanced = false;

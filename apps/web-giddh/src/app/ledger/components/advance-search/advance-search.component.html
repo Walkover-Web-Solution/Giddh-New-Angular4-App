@@ -8,10 +8,10 @@
         <form action="" [formGroup]="advanceSearchForm">
             <div class="clearfix">
                 <div class="row mb-2">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Date Range</label>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="input-group">
                             <input autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control" (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required formControlName="bsRangeValue" [bsConfig]="bsConfig">
                             <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
@@ -22,13 +22,13 @@
                 </div>
 
                 <div class="row mb-2">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Merge Accounts</label>
                         <p>
                             <small>you can merge multiple accounts; further filters will depend on this.</small>
                         </p>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="form-group">
                             <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('accountUniqueNames')" (selected)="onDDElementSelect('accountUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
                         </div>
@@ -36,13 +36,13 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Merge Group</label>
                         <p>
                             <small>you can merge multiple groups; further filters will depend on this.</small>
                         </p>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="form-group">
                             <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')" (selected)="onDDElementSelect('groupUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
                         </div>
@@ -52,15 +52,15 @@
 
             <div class="clearfix mrT2 pdT2 bdrT mb-1">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Particulars</label>
                         <p>
                             <small>By default all accounts are selected</small>
                         </p>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="row">
-                            <div class="xs-pr-0 col-sm-3 col-xs-4">
+                            <div class="col-xs-3">
                                 <div class="checkbox square-switch">
                                     <input type="checkbox" id="includeParticulars" formControlName="includeParticulars" />
                                     <label for="includeParticulars">
@@ -69,7 +69,7 @@
                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-9 col-xs-8 col-xs-9">
+                            <div class="col-xs-9">
                                 <div class="form-group">
                                     <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
                                 </div>
@@ -81,15 +81,15 @@
 
             <div class="clearfix mb-1">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Voucher Type</label>
                         <p>
                             <small>By default all vouchers are selected</small>
                         </p>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="row">
-                            <div class="xs-pr-0 col-sm-3 col-xs-4">
+                            <div class="col-xs-3">
                                 <div class="checkbox square-switch">
                                     <input type="checkbox" id="includeVouchers" formControlName="includeVouchers" />
                                     <label for="includeVouchers">
@@ -98,7 +98,7 @@
                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-9 col-xs-8 col-xs-9">
+                            <div class="col-xs-9">
                                 <div class="form-group">
                                     <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
                                 </div>
@@ -110,10 +110,10 @@
 
             <div class="clearfix mb-1">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Amount</label>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group">
@@ -132,10 +132,10 @@
 
             <div class="clearfix mb-1">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5">
                         <label for="">Show cancelled entries</label>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7">
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group">
@@ -162,12 +162,12 @@
                 <div class="clearfix mrT2">
                     <div class="row">
                         <div class="mrB1 clearfix">
-                            <div class="col-sm-5">
+                            <div class="col-xs-5">
                                 <label for="">Inventory</label>
                             </div>
-                            <div class="col-sm-7" formGroupName="inventory">
+                            <div class="col-xs-7" formGroupName="inventory">
                                 <div class="row">
-                                    <div class="xs-pr-0 col-sm-3 col-xs-4">
+                                    <div class="col-xs-3">
 
                                         <div class="checkbox square-switch">
                                             <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
@@ -177,7 +177,7 @@
                         </label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-9 col-xs-8">
+                                    <div class="col-xs-9">
                                         <div class="form-group">
                                             <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
                                         </div>
@@ -211,10 +211,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col-xs-5">
                             <label for="">Cheque Details</label>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-xs-7">
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
@@ -230,10 +230,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col-xs-5">
                             <label for="">Description</label>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-xs-7">
                             <div class="form-group">
                                 <input type="text" formControlName="description" placeholder="Description" class="form-control">
                             </div>
