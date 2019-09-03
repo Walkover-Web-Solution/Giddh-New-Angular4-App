@@ -432,13 +432,9 @@ a[vr-item]:focus {
     padding: 2px 9px;
 }
 
-@media(max-width:375px){
-  .universal_date li.dateRangPicker, .universal_date .header-date {
-    display: block ;
-}
-button#AddManage {
-  position: absolute;
-  right: 15px;
-  bottom: 10px;
-}
+
+@media(max-width:991px) {
+    .modal-liq90 {
+        width: 100% !important;
+    }
 }

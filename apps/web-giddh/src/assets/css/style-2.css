@@ -7753,3 +7753,100 @@ span.red-text {
   -ms-user-select: none;
   user-select: none;
 }
+
+
+@media only screen and (max-width: 1400px) {
+  .template_list {
+    width: 25%;
+  }
+  .font-xxlarge {
+    font-size: 20px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .multi-select input.form-control {
+    padding-right: 18px !important;
+  }
+}
+@media only screen and (max-width: 1130px) {
+  #accountSearch {
+    width: 150px !important;
+  }
+  .accounts-side-bar {
+    width: 272px;
+  }
+  #user-dropdown {
+    width: 46px;
+  }
+}
+@media only screen and (max-width: 1030px) {
+  .header-container {
+    position: relative;
+  }
+  body.unresponsive {
+    padding-top: 0;
+  }
+}
+@media only screen and (max-width: 1160px) {
+  .template_list {
+    width: 33.33%;
+  }
+}
+@media(max-width:500px){
+  .invoce-controll .nav-tabs>li {
+    float: none;
+  }
+  .daterangepicker.dropdown-menu {
+    max-width: 198px !important;
+    z-index: 3001;
+  }
+}
+
+
+@media(max-width:991px) {
+  .form-bg {
+    width: 100%;
+  }
+  .col_wrapper:nth-child(1) {
+    position: relative;
+    height: auto;
+    width: 100%;
+  }
+  .grp_col {
+    float: none;
+    width: 100%;
+  }
+  .grp_list .list-item {
+    display: inline-block;
+  }
+  .col_wrapper {
+    white-space: initial;
+  }
+  .col_wrapper:nth-child(2) {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .grp_list {
+    padding: 0px;
+    background: #f4f5f8;
+    width: 100%;
+    display: block;
+  }
+  .usesr-last-list > li:last-child {
+    height: inherit !important;
+  }
+  .xs-left {
+    text-align: left !important;
+  }
+  .form_box.form-bg {
+    height: auto !important;
+    min-height: auto;
+  }
+  .left-account-opration {
+    height: initial !important;
+    width: 100%;
+  }
+  .usesr-last-list > li {
+    display: inline-block;
+  }
+}
