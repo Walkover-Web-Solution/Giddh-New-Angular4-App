@@ -15,6 +15,7 @@ import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { WindowRefService } from '../theme/universal-list/service';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
   selector: 'billing-details',
@@ -58,7 +59,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions) {
     this.store.dispatch(this._generalActions.getAllState());
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -198,13 +199,29 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.razorpay.open();
 
   }
+  public patchProfile(obj) {
+    this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+  }
 
   public createPaidPlanCompany(razorPay_response: any) {
     if (razorPay_response) {
       this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
       this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
+      let reQuestob = {
+        subscriptionRequest: this.SubscriptionRequestObj,
+        paymentId: razorPay_response.razorpay_payment_id,
+        razorpaySignature: razorPay_response.razorpay_signature
+      };
+
+      if (!this.fromSubscription) {
+        this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
+      } else {
+        this.patchProfile(reQuestob);
+      }
     }
     this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
+    this.cdRef.detectChanges();
+
   }
 
   ngAfterViewInit(): void {
