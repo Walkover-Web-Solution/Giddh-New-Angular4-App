@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States } from '../models/api-models/Company';
@@ -50,9 +50,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public bankList: any;
   public razorpay: any;
   public options: any;
+  public isCompanyCreationInProcess$: Observable<boolean>;
+  public isRefreshing$: Observable<boolean>;
+  public isCreateAndSwitchCompanyInProcess: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef) {
     this.store.dispatch(this._generalActions.getAllState());
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -69,7 +72,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public ngOnInit() {
-
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
+    this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
     this.logedInuser = this._generalService.user;
     if (this._generalService.createNewCompany) {
       this.createNewCompanyFinalObj = this._generalService.createNewCompany;
@@ -88,6 +92,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
       }
     });
+    this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
+      this.isCreateAndSwitchCompanyInProcess = isINprocess;
+    });
+    this.isRefreshing$.pipe(takeUntil(this.destroyed$)).subscribe(isInpro => {
+      this.isCreateAndSwitchCompanyInProcess = isInpro;
+    });
+    this.cdRef.detectChanges();
   }
   public getPayAmountForTazorPay(amt: any) {
     return amt * 100;
@@ -174,6 +185,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
     }
     this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
+    this.cdRef.detectChanges();
+
   }
 
   ngAfterViewInit(): void {
@@ -183,7 +196,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     s.type = 'text/javascript';
     document.body.appendChild(s);
     this.options = {
-      key: 'rzp_live_rM2Ub3IHfDnvBq', //rzp_test_yJEJrE3vJK4Q7U    // rzp_live_rM2Ub3IHfDnvBq     //'https://i.imgur.com/n5tjHFD.png'
+      key: 'rzp_live_rM2Ub3IHfDnvBq',   // rzp_live_rM2Ub3IHfDnvBq   // rzp_test_QS3CQB90ukHDIF //rzp_live_rM2Ub3IHfDnvBq  //'https://i.imgur.com/n5tjHFD.png'
       image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAk1BMVEUAAAAgICCvIAAoKCivIAArKyWvIACuIAAoKCirIAApKSasIwArKCitIwApKSesIgApKSmtIgCtIgAqKiitIgArKSmtIgAqKSmsIgAqKiitIgArKSisIwAqKSmsIwAqKimsIwArKSisIwArKSitIwCsIgArKiitIgCtIgAqKSmtIgArKimtIgArKSisIgArKimtIwCLeJzxAAAAL3RSTlMAEBAgIDAwP0BAUF9gYG9vcHB/gICPj5CQn5+goK+vsLC/v8DAz9DQ3+Dg7+/w8HQisAwAAALGSURBVFjDrZjreqIwEIaR4iFV1oJsdVvXIgWTjRi4/6tbah91JkxCwu78bNP3mfnmwEyDwGKzZVoUou1MFEW6nAVjLFof6laz+rCOPDHLQ2uww9KdEqZ1azGRhm4cO+Ya4toBw6rWwSo2xHltHe3VnqqqdbbKksBZ3XpYbayruPW02Jkj9xljXbJDxrK9dCT1ODLTVIgy6UBi2pOSTDArtWc9nSKsszTWCcNe1XrucN4zW41kuArwL3fInYF5wRR8vTMKxAd7MuTwPTMExh16G5EqOmruNCMQKbn/FGRMOs6aECSvDgmHnOcyI5JcO+bdWAWi1xvSZ65LvVNyOpM+weXX5gD95fepAX331SjJSIeQSwmKTPp+RCWKrR6TMj1xdTencaBeNoP1F4+PDMYWA/f2/qA9kKUcLxEUqQQg5g9iACT+D6gKHsIbBsj05/F4Pv7+8UR94h9/DUAkZnFsbvaLQDmDtg2w87MbiAjtvcG2soQmLWJvG90WJrG5Lf2LHqc5T4zptxTkqQ9qNoaCzC0tQjjUuWRskVgf4RaFvgxlToCmNY+RTxK0MY2RQJlEOg2CHrIoNGq12EhO80FGltuG/2Bo2vAH1Vn4gQpNXtMH8oUETY0fSPjJRipNKc4fSqHbcqsMSwQV2wu1REhirYHBPfU5J3KtuW1aIXBJwGGy0jmXKbWcqfvfJHAjDM16A05FrX5BwE2k1QUKTXO4aT1GpMl9SF4eFYQ4uGbQwi7QIjl53rx/bjdgNrLauLDj4No2tR7P6CnXx7jCJ7n5qBHooYosK8p339FnVjF0ZhGHn0i1V7NUjDshO9ZbOp93zkfzefom/uWoHXUcd74rH4yynBsRd+dw+8q5c+XsBncnJ6e4y1aWDCqlEsejLpM2jExC9+Uwzk2YPPb9Z12S90JUeeJ9HXzXVZyV5TVMXuZZbD1T/wJZ67NdEouQRAAAAABJRU5ErkJggg==',
       handler: function (res) {
         that.createPaidPlanCompany(res);
