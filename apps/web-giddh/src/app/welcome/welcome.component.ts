@@ -184,7 +184,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._generalService.createNewCompany) {
       this.createNewCompany = this._generalService.createNewCompany;
       this.company = this.createNewCompany;
+      if (this.company.contactNo.toString().includes('-')) {
+        let contact = this.company.contactNo.split('-');
+        this.company.contactNo = contact[1];
+      }
       this.prepareWelcomeForm();
+    } else {
+      this.back();
     }
 
     this.updateProfileSuccess$.subscribe(s => {

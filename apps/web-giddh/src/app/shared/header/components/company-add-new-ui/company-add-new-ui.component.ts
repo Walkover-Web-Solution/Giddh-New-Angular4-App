@@ -88,6 +88,10 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.logedInuser = this._generalService.user;
     if (this._generalService.createNewCompany) {
       this.company = this._generalService.createNewCompany;
+      if (this.company.contactNo.toString().includes('-')) {
+        let contact = this.company.contactNo.split('-');
+        this.company.contactNo = contact[1];
+      }
       this.isMobileNumberValid = true;
     }
     this._generalService.createNewCompany = null;
@@ -122,7 +126,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
       }
     });
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-      if (a && a !== '') {
+      if (a && a !== '' && this.company) {
         if (a.includes(this.company.uniqueName.substring(0, 8))) {
           this.company.name = '';
           this.company.country = '';
