@@ -210,9 +210,12 @@ export class LoginActions {
          for application menu set up in localstorage */
 
         let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
-        if (!JSON.parse(isNewMenuSetted)) {
+        let isMenuUpdated = localStorage.getItem('isMenuUpdated');
+
+        if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
           this._dbService.clearAllData();
           localStorage.setItem('isNewMenuSetted', true.toString());
+          localStorage.setItem('isMenuUpdated', true.toString());
         }
 
         let cmpUniqueName = '';
