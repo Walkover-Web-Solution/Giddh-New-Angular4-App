@@ -101,7 +101,6 @@
             </ul>
         </div>
 
-
         <!--bank ledgers-->
         <div class="clearfix"></div>
         <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
@@ -422,7 +421,7 @@
             (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
             <!--debit transaction-->
             <div [ngClass]="Shown ? 'active' : ''" hr-item (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
-                class="left-col-new"
+                class="left-col-new bdrR"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <!--debit transaction header-->
@@ -461,6 +460,8 @@
                                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount  | giddhCurrency }}</span>
                                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'"
                                     class="">0</span>
+
+                                    
                             </td>
                         </tr>
                         <!--debit transaction if forwardedBalance -->
@@ -533,6 +534,8 @@
                             </td>
                             <td class="col-xs-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.amount | giddhCurrency }}
+                                
+                                <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
                             </td>
                         </tr>
                         <!--debit transaction loop over transactions -->
