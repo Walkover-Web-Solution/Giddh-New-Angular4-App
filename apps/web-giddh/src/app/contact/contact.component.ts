@@ -28,12 +28,11 @@ import { createSelector } from 'reselect';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { GeneralActions } from '../actions/general/general.actions';
-import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -308,10 +307,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -466,7 +465,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
       }
-      this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+      this.router.navigate(['pages/contact/', tabName], {replaceUrl: true});
     }
   }
 
@@ -504,7 +503,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public updateCustomerAcc(openFor: 'customer' | 'vendor', account?: any) {
     this.activeAccountDetails = account;
     this.isUpdateAccount = true;
-    this.selectedGroupForCreateAcc = openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+    this.selectedGroupForCreateAcc = account ? account.groupUniqueName : openFor === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
     this.toggleAccountAsidePane();
   }
 
@@ -1011,11 +1010,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-    sortBy: string = '', order: string = 'asc') {
+                      sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
@@ -1095,7 +1094,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   * Register Account navigation
   * */
   private registerAccount() {
-    this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
+    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
   }
 
   private setStateDetails(url) {
