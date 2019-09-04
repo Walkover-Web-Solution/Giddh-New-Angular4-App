@@ -156,7 +156,12 @@
 .pl-5 {
     padding-left: 50px !important;
 }
-
+.pr-15 {
+    padding-right: 15px;
+}
+.pl-15 {
+    padding-left: 15px;
+}
 
 /* end MDB tweaks */
 
@@ -994,6 +999,15 @@ modal-container.modal.fade.show {
 
 .table-no-border tr th {
     color: #9B9B9B;
+}
+.price-input {
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fff;
+    padding: 1px 2px;
+    display: inline-block;
+    max-width: 90px;
+    min-width: 70px;
 }
 
 /* my css end */
@@ -1902,11 +1916,19 @@ input[type="checkbox"]:after {
 .pt-07 {
     padding-top: 7px;
 }
-
+.font-10 {
+    font-size: 10px;
+}
+.font-12 {
+    font-size: 12px !important;
+}
 .font-14 {
     font-size: 14px;
 }
 
+.font-16 {
+    font-size: 16px !important;
+}
 .font-22 {
     font-size: 22px;
 }
@@ -5521,11 +5543,11 @@ typeahead-container .dropdown-menu li.active>a>a {
     padding: 0px !important;
 }
 
-table th[class*=col-]:last-child,
+/* table th[class*=col-]:last-child,
 .ledger-main tr td:last-child,
 table td[class*=col-]:last-child {
     border-right: 0 !important;
-}
+} */
 
 .total_col td {
     border: 0 !important;

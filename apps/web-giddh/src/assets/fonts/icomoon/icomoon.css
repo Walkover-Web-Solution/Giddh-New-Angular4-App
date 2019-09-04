@@ -24,8 +24,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-payment:before {
-  content: "\e900";
+.icon-switch-icon:before {
+  content: "\e934";
+}
+.icon-rupees:before {
+  content: "\e935";
 }
 .icon-log:before {
   content: "\e001";
@@ -71,6 +74,9 @@
 }
 .icon-journal:before {
   content: "\e016";
+}
+.icon-payment:before {
+  content: "\e900";
 }
 .icon-edit-ico:before {
   content: "\e901";

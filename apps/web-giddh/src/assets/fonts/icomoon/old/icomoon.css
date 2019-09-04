@@ -24,8 +24,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-estimate1:before {
-  content: "\e903";
+.icon-payment:before {
+  content: "\e900";
 }
 .icon-log:before {
   content: "\e001";
@@ -71,6 +71,18 @@
 }
 .icon-journal:before {
   content: "\e016";
+}
+.icon-edit-ico:before {
+  content: "\e901";
+}
+.icon-copy-icon:before {
+  content: "\e902";
+}
+.icon-divide-ico:before {
+  content: "\e903";
+}
+.icon-estimate1:before {
+  content: "\e904";
 }
 .icon-invoice-icon:before {
   content: "\e905";
@@ -186,15 +198,6 @@
 .icon-train:before {
   content: "\e92a";
 }
-.icon-folderminus:before {
-  content: "\f2332";
-}
-.icon-folderplus:before {
-  content: "\f2333";
-}
-.icon-folder:before {
-  content: "\f2334";
-}
 .icon-file:before {
   content: "\e92b";
 }
@@ -215,7 +218,6 @@
 }
 .icon-hand_icon:before {
   content: "\e931";
-  color: #535353;
 }
 .icon-users:before {
   content: "\e932";
@@ -223,12 +225,12 @@
 .icon-folder1:before {
   content: "\e933";
 }
-.icon-edit-ico:before {
-  content: "\e900";
+.icon-folderminus:before {
+  content: "\f2332";
 }
-.icon-copy-icon:before {
-  content: "\e901";
+.icon-folderplus:before {
+  content: "\f2333";
 }
-.icon-divide-ico:before {
-  content: "\e902";
+.icon-folder:before {
+  content: "\f2334";
 }

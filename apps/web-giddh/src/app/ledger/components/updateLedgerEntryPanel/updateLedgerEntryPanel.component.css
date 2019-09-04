@@ -79,7 +79,33 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .no-padding {
     padding: 0px !important;
 }
+.amnt-total {
+    font-size: 12px;
+    color: #999999;
+    padding-left: 5px;
+}
+.total_col span.bdrT {
+    width: 150px;
+    display: inline-block;
+    padding: 2px 0;
+}
+/* .ledger-main .form-control {
+    height: 26px;
+} */
 
+.ledger_book {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+.left-col-new, .right-col-new {
+    width: 100%;
+    padding-bottom: 100px;
+    height: initial;
+}
+.ledgHead.entry-popup table td:last-child {
+    border-right: 0px;
+}
 
 
 
@@ -94,7 +120,9 @@ ng-select .select_drop i.fa.fa-caret-up::before {
         position: absolute;
         bottom: 0;
     }
-
+    .ledger_book {
+        display: block;
+    }
 
 
     /*  */
@@ -115,7 +143,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     .price {
         width: 40%;
     }
-    .equal-2, .table-minus {
+    .equal-2, .table-minus { 
         width: 10%;
         text-align: center;
     }

@@ -76,7 +76,7 @@
                 Amount
                 <span *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span>
               </th>
-              <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">
+              <th class="col-xs-2 text-right" style="border-top:none" *ngIf="isMultiCurrencyAvailable">
                 Amount
               </th>
             </tr>
@@ -150,8 +150,9 @@
                         (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
+                    <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
                 </td>
-                <td data-title="Amount" class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                <td data-title="Amount" class="col-xs-2 pos-rel text-right" *ngIf="isMultiCurrencyAvailable">
                   <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input"
                          decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
@@ -168,7 +169,7 @@
 
             <tbody>
             <tr class="total_col">
-              <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
+              <td colspan="12" class="col-xs-12 text-right h32">
                                   <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                     C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
@@ -180,11 +181,12 @@
   
             <tr class="total_col">
               <!-- reckoning -->
-              <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                  <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
+              <td colspan="12" class="col-xs-12 text-right h32">
+                                  <span class="bdrT pr-1 pl-1 width-200">
                     {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
                                     <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
                   </span>
+                  <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">$454</p>
               </td>
             </tr>
   
@@ -212,7 +214,7 @@
               <th class="col-xs-2" style="border-top:none">Amount <span
                 *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span>
               </th>
-              <th class="col-xs-2" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
+              <th class="col-xs-2 text-right" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
             </tr>
             </thead>
 
@@ -291,9 +293,11 @@
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
 
+                    <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
+
                 </td>
 
-                <td data-title="Amount" class="col-xs-2 pos-rel" *ngIf="isMultiCurrencyAvailable">
+                <td data-title="Amount" class="col-xs-2 pos-rel text-right" *ngIf="isMultiCurrencyAvailable">
 
                   <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount" [disabled]="txn.isDiscount"
                          (click)="addBlankTrx('CREDIT', txn, $event)" decimalDigitsDirective [DecimalPlaces]="2"
@@ -307,8 +311,7 @@
             </tr>
             </tbody>
           </table>
-        </div>
-        <!-- credit -->
+
 
         <!-- totals -->
         
@@ -334,15 +337,20 @@
 
             <!-- reckoning -->
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
+                                <span class="bdrT">
                   {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | giddhCurrency }}
                 </span>
+                <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
             </td>
           </tr>
 
           </tbody>
 
         </table>
+        
+        </div>
+        <!-- credit -->
+
 
       </div>
 
@@ -350,7 +358,7 @@
 
     <!-- transactions -->
     <!-- new entry -->
-    <div class="entrypanel mrT2 pull-left width100">
+    <div class="entrypanel pull-left width100 pt-1">
       <div class="row">
         <div class="col-md-6">
           <div>
@@ -408,6 +416,7 @@
                                (change)="vm.inventoryPriceChanged($event.target.value)" decimalDigitsDirective
                                [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate"
                                class="form-control text-right"/>
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice"><i class="icon-rupees font-10"></i> 3259.56</p>
                       </td>
                     </ng-template>
 
@@ -419,8 +428,9 @@
                     <td class="text-right pItem amount">
                       <label class="primary_clr">Amount</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
-                             [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (focus)="hideDiscountTax()"
-                             (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
+                        [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)" (focus)="hideDiscountTax()"
+                        (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount"/>
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice"><i class="icon-rupees font-10"></i> 3259.56</p>    
                     </td>
 
                     <td class="table-minus">
@@ -429,15 +439,16 @@
                     </td>
 
                     <td class="text-right pItem price">
-                                                <span auto-close="outsideClick">
-                          <update-ledger-discount #discount
-                                                  [discountAccountsDetails]="vm.discountArray"
-                                                  [ledgerAmount]="vm.selectedLedger.actualAmount"
-                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
-                                                  (hideOtherPopups)="hideTax()"
+                      <span auto-close="outsideClick">
+                        <update-ledger-discount #discount
+                        [discountAccountsDetails]="vm.discountArray"
+                        [ledgerAmount]="vm.selectedLedger.actualAmount"
+                        (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
+                        (hideOtherPopups)="hideTax()"
                           >
                           </update-ledger-discount>
                         </span>
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice"><i class="icon-rupees font-10"></i> 3259.56</p>                            
                     </td>
 
                     <td class="text-center equal-2" *ngIf="(vm.companyTaxesList$ | async)?.length">
@@ -446,7 +457,7 @@
                     </td>
 
                     <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
-                                                <span auto-close="outsideClick">
+                        <span auto-close="outsideClick">
                           <update-ledger-tax-control
                             #tax
                             [taxes]="vm.companyTaxesList$ | async"
@@ -458,6 +469,7 @@
                             (hideOtherPopups)="hideDiscount()"
                             (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice"><i class="icon-rupees font-10"></i> 3259.56</p>
                     </td>
 
                     <td class="text-center equal-2">
@@ -465,14 +477,13 @@
                       <label class="fs20">=</label>
                     </td>
 
-
                     <td class="text-right pItem total-amn" style="min-width: 85px;" (resized)="onResized($event)">
                       <label class="primary_clr">Total</label>
                       <input type="text" name="" class="form-control text-right" decimalDigitsDirective
                              [DecimalPlaces]="2" [(ngModel)]="vm.grandTotal" (paste)="vm.inventoryTotalChanged($event)"
                              (blur)="vm.inventoryTotalChanged($event)"/>
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice"><i class="icon-rupees font-10"></i> 3259.56</p>
                     </td>
-
 
                   </tr>
 
@@ -534,7 +545,7 @@
                 <button class="no-btn pdL0">&nbsp; More Details</button>
               </td>
               <td class="text-right">
-                <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
+                <span class="primary_clr">Total in INR: {{vm.compoundTotal | giddhCurrency}}</span>
               </td>
             </tr>
 
@@ -647,14 +658,28 @@
                 </div>
               </div>
               <div class="pull-right">
+                <span>Total in USD: $454</span>
+              </div>
+            </div>
+
+            <div class="clearfix mb-2">
+              <div class="pull-left pl-15">
+                <ul class="list-inline font-14" *ngIf="totalPrice">
+                  <li>1 USD</li>
+                  <li><a href="javascript:void(0)" class="text-light"><i class="icon-switch-icon"></i></a></li>
+                  <li><input type="text" class="price-input" placeholder="71.9034"> INR</li>
+                </ul>
+              </div>
+              <div class="pull-right pr-15">
                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                   <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect
-                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
+                          [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                   <label for="invoiceFile" class="cp fs16">
                     <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                 </label>
               </div>
             </div>
+
             <div class="col-xs-12 pdT1">
               <div class="pull-right">
                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
@@ -664,6 +689,8 @@
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
     </div>
