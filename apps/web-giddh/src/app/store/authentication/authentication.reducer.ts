@@ -1,4 +1,4 @@
-import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -63,7 +63,7 @@ export interface SessionState {
   createCompanyUserStoreRequestObj: CompanyCreateRequest;
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
   currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
-  currentCompanyCurrency: string;
+  currentCompanyCurrency: CompanyCountry;
 }
 
 /**
@@ -116,7 +116,7 @@ const sessionInitialState: SessionState = {
   createCompanyUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null,
   currentCompanySubscriptionPlan: null,
-  currentCompanyCurrency: ''
+  currentCompanyCurrency: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {

@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
@@ -408,7 +408,7 @@ export class CompanyActions {
       payload: value
     };
   }
-  public setCurrentCompanyCurrency(value: string): CustomActions {
+  public setCurrentCompanyCurrency(value: CompanyCountry): CustomActions {
     return {
       type: CompanyActions.CURRENT_COMPANY_CURRENCY,
       payload: value
