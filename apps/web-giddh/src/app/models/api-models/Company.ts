@@ -262,6 +262,9 @@ export class CreateCompanyUsersPlan {
   balance?: number;
   expiry?: string;
   startedAt?: string;
+  companiesWithTransactions?: any;
+  companyTotalTransactions?: any;
+  totalTransactions?: number;
 }
 
 export class PlanDetails {
