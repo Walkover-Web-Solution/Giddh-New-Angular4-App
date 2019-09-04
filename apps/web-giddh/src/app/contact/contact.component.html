@@ -192,7 +192,7 @@
   <!-- region Aging Report -->
   <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
     <!--    <div *ngIf="activeTab === 'aging'">-->
-    <aging-report></aging-report>
+    <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
     <!--    </div>-->
   </tab>
   <!-- endregion -->
