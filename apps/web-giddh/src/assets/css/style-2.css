@@ -3395,7 +3395,7 @@ select.form-control {
 
 .grp_list {
     padding: 40px 0 60px;
-    min-height: 100vh;
+    min-height: 100%;
     overflow-y: auto;
     height: 100%;
     padding-bottom: 60px;
