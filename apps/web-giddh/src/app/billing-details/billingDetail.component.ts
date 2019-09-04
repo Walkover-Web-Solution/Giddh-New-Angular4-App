@@ -54,12 +54,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isRefreshing$: Observable<boolean>;
   public isCreateAndSwitchCompanyInProcess: boolean = true;
+  public isUpdateCompanyInProgress$: Observable<boolean>;
   public SubscriptionRequestObj: SubscriptionRequest = {
     planUniqueName: '',
     subscriptionId: '',
     userUniqueName: '',
     licenceKey: ''
   };
+  public ChangePaidPlanAMT: any = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions) {
@@ -75,6 +77,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }, (err) => {
       // console.log(err);
     });
+    this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
     this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
   }
 
@@ -91,19 +94,30 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.subscriptionPrice = this.selectedPlans.planDetails.amount;
       }
     });
-    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-      if (res) {
-        this.createNewCompany = res;
-        this.UserCurrency = this.createNewCompany.baseCurrency;
-        this.orderId = this.createNewCompany.orderId;
-        this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
-      }
-    });
+    if (this.fromSubscription) {
+      this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+        if (res) {
+          this.UserCurrency = res;
+        }
+      });
+    } else {
+      this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+        if (res) {
+          this.createNewCompany = res;
+          this.UserCurrency = this.createNewCompany.baseCurrency;
+          this.orderId = this.createNewCompany.orderId;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        }
+      });
+    }
     this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
       this.isCreateAndSwitchCompanyInProcess = isINprocess;
     });
     this.isRefreshing$.pipe(takeUntil(this.destroyed$)).subscribe(isInpro => {
       this.isCreateAndSwitchCompanyInProcess = isInpro;
+    });
+    this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+      this.isCreateAndSwitchCompanyInProcess = inProcess;
     });
     this.cdRef.detectChanges();
     if (this.fromSubscription) {
@@ -173,15 +187,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     if (this.subscriptionPrice && this.UserCurrency) {
       this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
         if (res.status === 'success') {
-          this.createNewCompany.amountPaid = res.body.amount;
-          this.createNewCompany.orderId = res.body.id;
+          this.ChangePaidPlanAMT = res.body.amount;
+          this.orderId = res.body.id;
           if (this.createNewCompany) {
             this.createNewCompany.subscriptionRequest = this.SubscriptionRequestObj;
           }
           this.store.dispatch(this.companyActions.selectedPlan(plan));
-          this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompany));
-          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
-          this._generalService.createNewCompany = this.createNewCompany;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.ChangePaidPlanAMT);
+          this.ngAfterViewInit();
         } else {
           this._toasty.errorToast(res.message);
         }
@@ -216,18 +229,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public createPaidPlanCompany(razorPay_response: any) {
     if (razorPay_response) {
-      this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
-      this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
-      let reQuestob = {
-        subscriptionRequest: this.SubscriptionRequestObj,
-        paymentId: razorPay_response.razorpay_payment_id,
-        razorpaySignature: razorPay_response.razorpay_signature,
-        amountPaid: this.createNewCompany.amountPaid
-      };
-
       if (!this.fromSubscription) {
+        this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
+        this.createNewCompany.razorpaySignature = razorPay_response.razorpay_signature;
         this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompany));
       } else {
+        let reQuestob = {
+          subscriptionRequest: this.SubscriptionRequestObj,
+          paymentId: razorPay_response.razorpay_payment_id,
+          razorpaySignature: razorPay_response.razorpay_signature,
+          amountPaid: this.ChangePaidPlanAMT,
+          userBillingDetails: this.billingDetailsObj
+        };
         this.patchProfile(reQuestob);
       }
     }
@@ -260,5 +273,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     setTimeout(() => {
       this.razorpay = new (window as any).Razorpay(this.options);
     }, 1000);
+    console.log('this.razorpayAmount', this.razorpayAmount, this.UserCurrency);
   }
+
 }

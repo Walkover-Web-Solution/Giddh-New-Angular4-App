@@ -60,9 +60,10 @@ export interface SessionState {
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
-  createCompanyUserStoreRequestObj: CompanyCreateRequest
+  createCompanyUserStoreRequestObj: CompanyCreateRequest;
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
   currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
+  currentCompanyCurrency: string;
 }
 
 /**
@@ -114,7 +115,8 @@ const sessionInitialState: SessionState = {
   todaySelected: false,
   createCompanyUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null,
-  currentCompanySubscriptionPlan: null
+  currentCompanySubscriptionPlan: null,
+  currentCompanyCurrency: ''
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -582,6 +584,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
     case CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS:
       return Object.assign({}, state, { currentCompanySubscriptionPlan: action.payload });
+    case CompanyActions.CURRENT_COMPANY_CURRENCY:
+      return Object.assign({}, state, { currentCompanyCurrency: action.payload });
     case CompanyActions.USER_CAREATE_COMPANY:
       return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
     case CompanyActions.REFRESH_COMPANIES:
