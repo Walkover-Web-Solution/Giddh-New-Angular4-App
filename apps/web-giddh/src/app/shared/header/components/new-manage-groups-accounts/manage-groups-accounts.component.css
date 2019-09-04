@@ -1,0 +1,9 @@
+@media(max-width:767px){
+  .searchAccount{
+    float: none !important;
+  }
+  .searchBar .form-control{
+    position: relative;
+    top:10px;
+  }
+}

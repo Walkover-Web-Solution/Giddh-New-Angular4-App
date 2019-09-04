@@ -37,9 +37,9 @@
 <ul class="dropdown-menu user_dropdown" *ngIf="companies$ | async">
 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="true">
 
-  <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
-      {{ cmp.name }}
-  </li>
+    <li class="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+        {{ cmp.name }}
+    </li>
 </perfect-scrollbar>
 </ul>
 </li>
@@ -51,7 +51,8 @@
           </li>
 
           <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">Settings</a>
+            <a href="javascript:void(0)"
+              (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
           </li>
           <li>
             <!-- [routerLink]="['/settings']" [queryParams]="" -->
@@ -59,14 +60,13 @@
               (click)="analyzeMenus($event, '/pages/settings', { tab: 'permission', tabIndex: 5 })">Manage
               Users (Permission)</a>
           </li>
-          <li *ngIf="!isMobileSite">
+          <li>
             <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back up Data</a>
           </li>
           <!-- #dropdown="bs-dropdown" -->
           <!--  -->
-          <li *ngIf="!isMobileSite" dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
-            [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
-            (onShown)="switchCompanyMenuShown()">
+          <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
+            (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
@@ -74,14 +74,14 @@
 
             <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
               <!-- <li class="create-company clearfix" [style.padding.px]="0">
-                                  <button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
-                                  Create Company
-                                  </button>
-                                  <button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
-                                  <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
-                                  </button>
-                              </li>
-                              -->
+<button id="createCompanyBtn" class="btn-link pd0" (click)="showAddCompanyModal()">
+Create Company
+</button>
+<button id="refreshCompanyBtn" class="btn-link pull-right" (click)="refreshCompanies($event)">
+<i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+</button>
+</li>
+-->
 
               <div class="input-group">
 
@@ -145,7 +145,7 @@
 
           <li role="separator" class="divider" style="width:100%"></li>
 
-          <li class="mrB1" *ngIf="!isMobileSite">
+          <li class="mrB1">
             <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
               <span class="user_circle pull-left" *ngIf="!userAvatar">
@@ -159,7 +159,7 @@
               </div>
             </a>
           </li>
-          <li *ngIf="!isMobileSite">
+          <li>
             <a href="javascript:void(0)"
               (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
           </li>
@@ -223,7 +223,7 @@
         <span class="input-group-addon" id="">
           <i class="icon-search"></i>
         </span>
-        <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
+        <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
       </div>
 
     </ul>
@@ -235,8 +235,8 @@
 
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
-              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+          <h6 class="mrB1">ACCOUNTS <i tooltip="Create account" placement="bottom" class="fa fa-plus cp"
+              (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
             <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
@@ -249,8 +249,8 @@
               </span>
             </a>
           </li>
-          <h6 *ngIf="!isMobileSite" class="mrT cp hover-orange" (click)="showNavigationModal()" container="body"
-            tooltip="Search accounts" placement="right">Show more...</h6>
+          <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts"
+            placement="right">Show more...</h6>
         </ul>
 
         <!-- Main menu -->
@@ -264,7 +264,7 @@
               <span class="label">{{menu.name}}</span>
             </a>
           </li>
-          <li *ngIf="!isMobileSite" id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
+          <li id="other" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
             (mouseleave)="showOtherMenu = false">
             <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
                 class="fa fa-angle-right pull-right"></i></a>
@@ -514,8 +514,8 @@
 </header>
 
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy"
-  role="dialog" (onShown)="onShown()">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
+  class="modal fade fullScreenMy mangeAccountPopup" role="dialog" (onShown)="onShown()">
   <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
