@@ -22,7 +22,9 @@ import { GhSortByPipeModule } from '../shared/helpers/pipes/ghSortByPipe/ghSortB
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
-import { PaymentAsideComponent } from './payment-aside/payment-aside.component';//payemnt aside component
+import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+//payemnt aside component
 
 
 // const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -68,6 +70,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     Ng2OrderModule,
     PerfectScrollbarModule,
     GhSortByPipeModule,
+    GenericAsideMenuAccountModule,
   ],
   entryComponents: [
     PaginationComponent
