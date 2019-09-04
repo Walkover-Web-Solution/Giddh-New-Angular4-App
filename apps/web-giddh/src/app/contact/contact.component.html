@@ -533,7 +533,7 @@
 
                         <ul class="list-unstyled">
 
-                          <li class="li-link">
+                          <li class="li-link" *ngIf="!isMobileScreen">
                             <a href="javascript: void 0" (click)="performActions(1, account)">Go to
                               Ledger</a>
                           </li>
@@ -703,7 +703,7 @@
 
                         <ul class="list-unstyled">
 
-                          <li class="li-link">
+                          <li class="li-link" *ngIf="!isMobileScreen">
                             <a href="javascript: void 0" (click)="performActions(1, account)">Go to
                               Ledger</a>
                           </li>
@@ -714,7 +714,7 @@
                           </li>
 
                           <li class="li-link">
-                            <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send
+                            <a href="javascript: void 0" (click)="performActions(3, account, $event )">Send
                               SMS</a>
                           </li>
 
