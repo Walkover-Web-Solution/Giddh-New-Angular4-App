@@ -160,7 +160,7 @@
                     <!-- endregion -->
 
                     <div class="edit-action-btn-grps pull-right">
-                      <span>
+                      <span *ngIf = "!isMobileView">
                         <a href="javascript:void 0" tooltip="Edit" placement="top" (click)="toggleEditMode()"><i
                             class="fa fa-pencil"></i></a>
                       </span>

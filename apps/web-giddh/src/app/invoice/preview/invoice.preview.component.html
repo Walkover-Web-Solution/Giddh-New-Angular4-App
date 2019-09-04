@@ -87,9 +87,8 @@
       <button class="btn btn-orange mr-1" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
         *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length" data-spinner-size="20px">Export
       </button>
-
       <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-        <button id="ddl-newinv" dropdownToggle type="button"
+        <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView"
           class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
           + New Invoice <span class="caret"></span>
         </button>
@@ -178,7 +177,7 @@
             *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length" data-spinner-size="20px">Export
           </button>
 
-          <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+          <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales' && !isMobileView" [autoClose]="true">
             <button id="ddl-newinv" dropdownToggle type="button"
               class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
               + New Invoice <span class="caret"></span>

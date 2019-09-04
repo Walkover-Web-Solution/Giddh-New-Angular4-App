@@ -54,7 +54,7 @@
         </button>
       </div>
 
-      <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
+      <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
         <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New Estimates
         </button>
       </div>
@@ -80,7 +80,7 @@
 
     </div>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12" *ngIf ="!isMobileView">
         <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
           <button class="btn btn-blue" (click)="goToInvoice('proformas')">+ New Proforma
           </button>
