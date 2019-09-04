@@ -153,24 +153,29 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
       }
       return;
     } else {
-
+      let companies = null;
+      this.companies$.pipe(take(1)).subscribe(c => companies = c);
       this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
       this.company.isBranch = this.createBranch;
       this._generalService.createNewCompany = this.company;
       this.closeCompanyModal.emit();
       this._route.navigate(['welcome']);
-
       //this.store.dispatch(this.companyActions.CreateCompany(this.company));
       //this.store.dispatch(this.companyActions.GetApplicableTaxes());
-      this.fireSocketCompanyCreateRequest();
-    }
+      if (companies) {
+        if (companies.length === 0) {
+          this.fireSocketCompanyCreateRequest();
+        }
+      }
   }
+}
 
   public fireSocketCompanyCreateRequest() {
     this.socketCompanyRequest.CompanyName = this.company.name;
     this.socketCompanyRequest.Timestamp = Date.now();
     this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
     this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
+    this.socketCompanyRequest.Name = this._generalService.user.name;
     this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
   }
 

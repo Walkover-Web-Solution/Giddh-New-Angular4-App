@@ -36,11 +36,11 @@
 .ledgHead .ledger-main td[class*=col-] {
     padding: 0px !important;
 }
-table th[class*=col-]:last-child,
-.ledger-main tr td:last-child,
-table td[class*=col-]:last-child {
-    border-right: 0 !important;
-}
+// table th[class*=col-]:last-child,
+// .ledger-main tr td:last-child,
+// table td[class*=col-]:last-child {
+//     border-right: 0 !important;
+// }
 .total_col td {
     border: 0 !important;
 }
@@ -196,6 +196,11 @@ sh-select:focus {
 .notfound-option.active {
     background: #efeff1 !important;
     padding: 2px 5px !important;
+}
+.amnt-total {
+    font-size: 12px;
+    color: #999999;
+    padding-left: 5px;
 }
 
 

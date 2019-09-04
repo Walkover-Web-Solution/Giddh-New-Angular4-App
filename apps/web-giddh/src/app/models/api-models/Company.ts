@@ -21,6 +21,7 @@ export class SocketNewCompanyRequest {
   public MobileNo: string;
   public LoggedInEmailID: string;
   public Timestamp: number;
+  public Name : string;
 }
 
 export class StateDetailsRequest {
