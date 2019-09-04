@@ -210,7 +210,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       let reQuestob = {
         subscriptionRequest: this.SubscriptionRequestObj,
         paymentId: razorPay_response.razorpay_payment_id,
-        razorpaySignature: razorPay_response.razorpay_signature
+        razorpaySignature: razorPay_response.razorpay_signature,
+        amountPaid: this.createNewCompany.amountPaid
       };
 
       if (!this.fromSubscription) {
