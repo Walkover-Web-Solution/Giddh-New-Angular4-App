@@ -288,6 +288,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (res) {
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+          if (res.baseCurrency) {
+            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(res.baseCurrency));
+          }
           this.subscribedPlan = res.subscription;
           this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
           this.selectedPlanStatus = res.subscription.status;

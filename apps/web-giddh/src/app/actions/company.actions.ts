@@ -46,6 +46,7 @@ export class CompanyActions {
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
   public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
   public static CURRENT_COMPANY_SUBSCRIPTIONS_PLANS = 'CURRENT_COMPANY_SUBSCRIPTIONS_PLANS';
+  public static CURRENT_COMPANY_CURRENCY = 'CURRENT_COMPANY_CURRENCY';
   public static USER_CAREATE_COMPANY = 'USER_CAREATE_COMPANY';
   public static GET_REGISTRATION_ACCOUNT_RESPONSE = 'GET_REGISTRATION_ACCOUNT_RESPONSE';
   public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
@@ -404,6 +405,12 @@ export class CompanyActions {
   public setCurrentCompanySubscriptionPlan(value: CreateCompanyUsersPlan): CustomActions {
     return {
       type: CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS,
+      payload: value
+    };
+  }
+  public setCurrentCompanyCurrency(value: string): CustomActions {
+    return {
+      type: CompanyActions.CURRENT_COMPANY_CURRENCY,
       payload: value
     };
   }
