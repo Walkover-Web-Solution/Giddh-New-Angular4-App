@@ -287,6 +287,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
         if (res.subscription) {
+          this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+          if (res.baseCurrency) {
+            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(res.baseCurrency));
+          }
           this.subscribedPlan = res.subscription;
           this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
           this.selectedPlanStatus = res.subscription.status;
@@ -308,8 +312,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
     this._generalService.isMobileSite.subscribe(s => {
       this.isMobileSite = s;
-       this.menuItemsFromIndexDB = DEFAULT_MENUS;
-       this.accountItemsFromIndexDB= DEFAULT_AC;
+      this.menuItemsFromIndexDB = DEFAULT_MENUS;
+      this.accountItemsFromIndexDB = DEFAULT_AC;
     });
   }
 
