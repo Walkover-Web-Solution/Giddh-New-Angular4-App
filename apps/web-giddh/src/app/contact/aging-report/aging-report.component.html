@@ -161,7 +161,7 @@
           <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
         </th>
 
-        <th>Upcoming Due
+        <th class="text-right pr-3">Upcoming Due
           <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}">
           </ng-container>
         </th>
@@ -188,7 +188,7 @@
           <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}"></ng-container>
         </th>
 
-        <th>Total Due
+        <th class="text-right pr-3">Total Due
           <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}">
           </ng-container>
         </th>
@@ -208,7 +208,7 @@
           <td attr.data-title="0 - {{ (agingDropDownoptions$| async)?.fourth }} Days" class="text-right">
             {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
           <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}}
-          -{{((agingDropDownoptions$| async)?.fifth)}} Days'> <span
+          -{{((agingDropDownoptions$| async)?.fifth)}} Days' class="text-right"> <span
               (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
           </td>
           <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}}
