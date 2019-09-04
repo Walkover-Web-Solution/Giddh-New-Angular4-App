@@ -70,7 +70,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
   public GoToBillingDetails() {
-    this._route.navigate(['billing-detail']);
+    this._route.navigate(['billing-detail', 'buy-plan']);
   }
 
   public selectedSubscriptionPlan(subsciption: SubscriptionsUser) {

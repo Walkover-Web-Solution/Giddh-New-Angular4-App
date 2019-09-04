@@ -44,7 +44,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
   // private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
   //     private _router: Route, private _generalService: GeneralService, private _toasty: ToasterService,private companyActions: CompanyActions
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _companyService: CompanyService, private _route: Router, private _authenticationService: AuthenticationService, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _companyService: CompanyService, private _route: Router, private _authenticationService: AuthenticationService, private companyActions: CompanyActions, private _toasty: ToasterService) {
 
     // this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
 
@@ -114,7 +114,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
           this._generalService.createNewCompany = this.createNewCompanyPreObj;
           this._route.navigate(['billing-detail']);
         } else {
-          return;
+          this._toasty.errorToast(res.message);
         }
       });
     }
