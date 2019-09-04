@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States } from '../models/api-models/Company';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
@@ -53,6 +53,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isRefreshing$: Observable<boolean>;
   public isCreateAndSwitchCompanyInProcess: boolean = true;
+  public SubscriptionRequestObj: SubscriptionRequest = {
+    planUniqueName: '',
+    subscriptionId: '',
+    userUniqueName: '',
+    licenceKey: ''
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef) {
@@ -99,6 +105,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.isCreateAndSwitchCompanyInProcess = isInpro;
     });
     this.cdRef.detectChanges();
+    if (this.fromSubscription) {
+      this.prepareSelectedPlanFromSubscriptions(this.selectedPlans)
+    }
   }
   public getPayAmountForTazorPay(amt: any) {
     return amt * 100;
@@ -154,6 +163,28 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public autoRenewSelected(event) {
     if (event) {
       this.billingDetailsObj.autorenew = event.target.checked;
+    }
+  }
+  public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
+    this.subscriptionPrice = plan.planDetails.amount;
+    this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
+    this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
+    if (this.subscriptionPrice && this.UserCurrency) {
+      this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+        if (res.status === 'success') {
+          this.createNewCompany.amountPaid = res.body.amount;
+          this.createNewCompany.orderId = res.body.id;
+          if (this.createNewCompany) {
+            this.createNewCompany.subscriptionRequest = this.SubscriptionRequestObj;
+          }
+          this.store.dispatch(this.companyActions.selectedPlan(plan));
+          this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompany));
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+          this._generalService.createNewCompany = this.createNewCompany;
+        } else {
+          this._toasty.errorToast(res.message);
+        }
+      });
     }
   }
 
