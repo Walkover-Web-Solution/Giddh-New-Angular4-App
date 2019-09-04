@@ -1019,6 +1019,8 @@ modal-container.modal.fade.show {
     color: rgba(0, 0, 0, 0.3);
 }
 
+
+
 .form-control:focus {
     outline: none;
     border-color: #f7b995 !important;
@@ -7371,6 +7373,7 @@ padding-left: 0 !important;
 .welcome-container  input::placeholder {
   color: rgba(0, 0, 0, 0.4) !important;
 }
+
 .btn-group.btn-block.invoice-btn .btn-block {
   color: rgba(0,0,0,0.4);
 }
@@ -7402,6 +7405,10 @@ span.red-text {
 -webkit-user-select: none;
 -ms-user-select: none;
 user-select: none;
+}
+.tooltip-inner{
+ word-break: break-word !important;
+ white-space: normal !important;
 }
 /* responsive */
 

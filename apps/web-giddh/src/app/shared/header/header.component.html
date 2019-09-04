@@ -51,7 +51,8 @@
           </li>
 
           <li>
-            <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/settings')">Settings</a>
+            <a href="javascript:void(0)"
+              (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
           </li>
           <li>
             <!-- [routerLink]="['/settings']" [queryParams]="" -->
@@ -222,7 +223,7 @@ Create Company
         <span class="input-group-addon" id="">
           <i class="icon-search"></i>
         </span>
-        <input type="text" class="form-control" placeholder="Jump to Account" aria-describedby="">
+        <input type="text" class="form-control jumpToAccount" placeholder="Jump to Account" aria-describedby="">
       </div>
 
     </ul>
