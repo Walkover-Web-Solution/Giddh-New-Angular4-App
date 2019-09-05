@@ -95,23 +95,27 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.subscriptionPrice = this.selectedPlans.planDetails.amount;
       }
     });
-    if (this.fromSubscription) {
-      this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe((res: CompanyCountry) => {
-        if (res) {
-          this.UserCurrency = res.baseCurrency;
-          this.companyCountry = res.country
-        }
-      });
-    } else {
-      this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-        if (res) {
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (!res.isBranch && !res.city) {
           this.createNewCompany = res;
           this.UserCurrency = this.createNewCompany.baseCurrency;
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
         }
-      });
-    }
+      }
+    });
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch && res.city) {
+          this.createNewCompany = res;
+          this.UserCurrency = this.createNewCompany.baseCurrency;
+          this.orderId = this.createNewCompany.orderId;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        }
+      }
+    });
+
     this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
       this.isCreateAndSwitchCompanyInProcess = isINprocess;
     });

@@ -9,7 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest, CompanyCountry } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -76,8 +76,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -129,8 +129,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -182,6 +182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     baseCurrency: '',
     country: ''
   }
+
   /**
    *
    */
@@ -304,7 +305,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeCompany = res;
       }
     });
-
 
 
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -439,7 +439,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return;
         }
       } else {
-        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).includes(lastState.replace('pages/', '')));
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName
+          .substring(7, page.uniqueName.length)
+          .includes(lastState.replace('pages/', '')));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
@@ -464,23 +466,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-    this.router.events.subscribe(a => {
-      if (a instanceof NavigationStart) {
-        this.navigationEnd = false;
-      }
-      if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
-        this.navigationEnd = true;
-        if (a instanceof NavigationEnd) {
-          this.adjustNavigationBar();
-          let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-            return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
-          });
-          if (menuItem) {
-            this.doEntryInDb('menus', menuItem);
+    this.router.events
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(a => {
+        if (a instanceof NavigationStart) {
+          this.navigationEnd = false;
+        }
+        if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
+          this.navigationEnd = true;
+          if (a instanceof NavigationEnd) {
+            this.adjustNavigationBar();
+            let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+              return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+            });
+            if (menuItem) {
+              this.doEntryInDb('menus', menuItem);
+            }
           }
         }
-      }
-    });
+      });
 
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
@@ -567,7 +571,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isDateRangeSelected) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
-          this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
           this.isDateRangeSelected = true;
           const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
           const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -637,7 +641,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     if (o) {
-      menu = { ...menu, ...o };
+      menu = {...menu, ...o};
     } else {
       try {
         menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -658,7 +662,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb('menus', menu);
 
     if (menu.additional) {
-      this.router.navigate([pageName], { queryParams: menu.additional });
+      this.router.navigate([pageName], {queryParams: menu.additional});
     } else {
       this.router.navigate([pageName]);
     }
@@ -937,7 +941,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment(), moment()]);
-      this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+      this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
       let dates = {
         fromDate: null,
         toDate: null,
@@ -975,7 +979,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
-      this.showNavigationModal();
+      if (this.companyList.length > 0) {
+        this.showNavigationModal();
+      }
     }
 
     // window.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -1007,7 +1013,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (item.uniqueName.includes('?')) {
           item.uniqueName = item.uniqueName.split('?')[0];
         }
-        this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
+        this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
       } else {
         this.router.navigate([item.uniqueName]);
       }
@@ -1056,6 +1062,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.talkSalesModal.hide();
     this._generalService.talkToSalesModal.next(false);
   }
+
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
     this.modelRef = this.modalService.show(template);
   }
@@ -1063,10 +1070,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
     this.modelRef = this.modalService.show(template);
   }
+
   public goToSelectPlan() {
     this.modalService.hide(1);
     // this.router.navigate(['billing-detail']);
-    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
+    this.router.navigate(['pages', 'user-details'], {queryParams: {tab: 'subscriptions', tabIndex: 3}});
   }
 
   public onRight(nodes) {
@@ -1225,7 +1233,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     );
 
     this.subscriptions.push(_combine);
-    let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+    let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
     this.modelRef = this.modalService.show(this.navigationModal, config);
   }
 
