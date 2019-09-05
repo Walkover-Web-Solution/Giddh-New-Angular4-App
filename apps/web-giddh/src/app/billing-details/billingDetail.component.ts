@@ -86,12 +86,25 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     });
     this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-        this.createNewCompany = res;
-        this.UserCurrency = this.createNewCompany.baseCurrency;
-        this.orderId = this.createNewCompany.orderId;
-        this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        if (!res.isBranch && !res.city) {
+          this.createNewCompany = res;
+          this.UserCurrency = this.createNewCompany.baseCurrency;
+          this.orderId = this.createNewCompany.orderId;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        }
       }
     });
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch && res.city) {
+          this.createNewCompany = res;
+          this.UserCurrency = this.createNewCompany.baseCurrency;
+          this.orderId = this.createNewCompany.orderId;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        }
+      }
+    });
+
     this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
       this.isCreateAndSwitchCompanyInProcess = isINprocess;
     });

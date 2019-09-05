@@ -57,9 +57,21 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
     this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-        this.createNewCompanyPreObj = res;
-        if (this.createNewCompanyPreObj.baseCurrency) {
-          this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
+        if (!res.isBranch && !res.city) {
+          this.createNewCompanyPreObj = res;
+          if (this.createNewCompanyPreObj.baseCurrency) {
+            this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
+          }
+        }
+      }
+    });
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch && res.city) {
+          this.createNewCompanyPreObj = res;
+          if (this.createNewCompanyPreObj.baseCurrency) {
+            this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
+          }
         }
       }
     });
@@ -104,14 +116,14 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
           this.createNewCompanyPreObj.amountPaid = res.body.amount;
           this.createNewCompanyPreObj.orderId = res.body.id;
 
-
-
           if (this.createNewCompanyPreObj) {
             this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
           }
-          this.store.dispatch(this.companyActions.selectedPlan(plan));
-          this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreObj));
-          this._generalService.createNewCompany = this.createNewCompanyPreObj;
+          if (!this.createNewCompanyPreObj.isBranch && !this.createNewCompanyPreObj.city) {
+            this.store.dispatch(this.companyActions.selectedPlan(plan));
+            this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreObj));
+            this._generalService.createNewCompany = this.createNewCompanyPreObj;
+          }
           this._route.navigate(['billing-detail']);
         } else {
           this._toasty.errorToast(res.message);

@@ -50,6 +50,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public businessTypeList: any = [];
   public businessNatureList: any = [];
   public selectedTaxes: string[] = [];
+  public isbranch: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
     keyboard: true,
@@ -175,9 +176,22 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-        this.createNewCompany = res;
-        this.company = this.createNewCompany;
-        this.prepareWelcomeForm();
+        if (!res.isBranch && !res.city) {
+          this.isbranch = res.isBranch;
+          this.createNewCompany = res;
+          this.company = this.createNewCompany;
+          this.prepareWelcomeForm();
+        }
+      }
+    });
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch && res.city) {
+          this.isbranch = res.isBranch;
+          this.createNewCompany = res;
+          this.company = this.createNewCompany;
+          this.prepareWelcomeForm();
+        }
       }
     });
 
@@ -190,7 +204,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       this.prepareWelcomeForm();
     } else {
-      this.back();
+      //this.back();
     }
 
     this.updateProfileSuccess$.subscribe(s => {
@@ -231,7 +245,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.phoneCode = this.company.phoneCode ? this.company.phoneCode : '';
       this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
       this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName ? this.company.uniqueName : '';
-      this.createNewCompanyPreparedObj.isBranch = this.company.isBranch ? this.company.isBranch : '';
+      this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
       this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
       this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
     }
@@ -349,9 +363,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     event.stopPropagation();
   }
-  public back() {
+  public back(isbranch: boolean) {
     //this._router.navigate(['']);
-    this._router.navigate(['new-user']);
+    if (isbranch) {
+      this._router.navigate(['pages', 'settings', 'branch']);  // <!-- pages/settings/branch -->
+    } else {
+      this._router.navigate(['new-user']);
+    }
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);

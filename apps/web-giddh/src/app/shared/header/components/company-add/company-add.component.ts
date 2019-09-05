@@ -6,7 +6,7 @@ import { SignupWithMobile, VerifyMobileModel, UserDetails } from '../../../../mo
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
@@ -95,15 +95,24 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-    this.isMobileVerified = this.store.select(s => {
-      if (s.session.user) {
-        if (s.session.user.user.mobileNo) {
-          return s.session.user.user.mobileNo !== null;
-        } else {
-          return s.session.user.user.contactNo !== null;
+
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch) {
+          this.company = res;
         }
       }
-    }).pipe(takeUntil(this.destroyed$));
+    });
+
+    // this.isMobileVerified = this.store.select(s => {
+    //   if (s.session.user) {
+    //     if (s.session.user.user.mobileNo) {
+    //       return s.session.user.user.mobileNo !== null;
+    //     } else {
+    //       return s.session.user.user.contactNo !== null;
+    //     }
+    //   }
+    // }).pipe(takeUntil(this.destroyed$));
     this.logedInusers = this._generalService.user;
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.dataSource = (text$: Observable<any>): Observable<any> => {
@@ -131,18 +140,18 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }));
     };
 
-    this.isMobileVerified.subscribe(p => {
-      if (p) {
-        // this.wizard.next();
-        this.showMobileVarifyMsg = true;
-      }
-    });
-    this.isCompanyCreated$.subscribe(s => {
-      if (s) {
-        //  this._route.navigate(['sales']);
-        this.closeModal();
-      }
-    });
+    // this.isMobileVerified.subscribe(p => {
+    //   if (p) {
+    //     // this.wizard.next();
+    //     this.showMobileVarifyMsg = true;
+    //   }
+    // });
+    // this.isCompanyCreated$.subscribe(s => {
+    //   if (s) {
+    //     //  this._route.navigate(['sales']);
+    //     this.closeModal();
+    //   }
+    // });
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -169,23 +178,23 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   /**
    * addNumber
    */
-  public addNumber() {
-    let model = new SignupWithMobile();
-    model.mobileNumber = this.phoneNumber;
-    model.countryCode = Number(this.selectedCountry);
-    this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
-  }
+  // public addNumber() {
+  //   let model = new SignupWithMobile();
+  //   model.mobileNumber = this.phoneNumber;
+  //   model.countryCode = Number(this.selectedCountry);
+  //   this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
+  // }
 
   /**
    * verifyNumber
    */
-  public verifyNumber() {
-    let model = new VerifyMobileModel();
-    model.mobileNumber = this.phoneNumber;
-    model.oneTimePassword = this.verificationCode;
-    model.countryCode = Number(this.selectedCountry);
-    this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
-  }
+  // public verifyNumber() {
+  //   let model = new VerifyMobileModel();
+  //   model.mobileNumber = this.phoneNumber;
+  //   model.oneTimePassword = this.verificationCode;
+  //   model.countryCode = Number(this.selectedCountry);
+  //   this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
+  // }
 
   /**
    * createCompany
@@ -201,7 +210,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
     this.company.isBranch = this.createBranch;
     this._generalService.createNewCompany = this.company;
-    this.closeCompanyModal.emit();
+    this.store.dispatch(this.companyActions.userStoreCreateBranch(this.company));
+    this.closeModal();
     this._route.navigate(['welcome']);
   }
 

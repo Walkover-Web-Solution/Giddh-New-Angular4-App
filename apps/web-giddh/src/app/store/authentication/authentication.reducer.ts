@@ -60,7 +60,8 @@ export interface SessionState {
   isCompanyCreated: boolean;
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
-  createCompanyUserStoreRequestObj: CompanyCreateRequest
+  createCompanyUserStoreRequestObj: CompanyCreateRequest;
+  createBranchUserStoreRequestObj: CompanyCreateRequest
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
 }
 
@@ -112,6 +113,7 @@ const sessionInitialState: SessionState = {
   currencies: null,
   todaySelected: false,
   createCompanyUserStoreRequestObj: null,
+  createBranchUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null
 };
 
@@ -578,8 +580,13 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     }
     case CompanyActions.USER_SELECTED_PLANS:
       return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
+
     case CompanyActions.USER_CAREATE_COMPANY:
       return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
+
+    case CompanyActions.USER_CAREATE_BRANCH:
+      return Object.assign({}, state, { createBranchUserStoreRequestObj: action.payload });
+
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
