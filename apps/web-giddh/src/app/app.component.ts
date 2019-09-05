@@ -36,10 +36,10 @@ import { reassignNavigationalArray } from './models/defaultMenus'
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-// tslint:disable-next-line:no-empty
+  // tslint:disable-next-line:no-empty
 
-  public sideMenu: { isopen: boolean } = {isopen: true};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: true };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isProdMode: boolean = false;
   public isElectron: boolean = false;
   public tagManagerUrl: SafeUrl;
@@ -58,16 +58,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   private newVersionAvailableForWebApp: boolean = false;
 
   constructor(private store: Store<AppState>,
-              private router: Router,
-              private _generalService: GeneralService,
-              private _cdr: ChangeDetectorRef,
-              private _versionCheckService: VersionCheckService,
-              private sanitizer: DomSanitizer,
-              private breakpointObserver: BreakpointObserver,
-              private dbServices: DbService
-              // private comapnyActions: CompanyActions,
-              // private activatedRoute: ActivatedRoute,
-              // private location: Location
+    private router: Router,
+    private _generalService: GeneralService,
+    private _cdr: ChangeDetectorRef,
+    private _versionCheckService: VersionCheckService,
+    private sanitizer: DomSanitizer,
+    private breakpointObserver: BreakpointObserver,
+    private dbServices: DbService
+    // private comapnyActions: CompanyActions,
+    // private activatedRoute: ActivatedRoute,
+    // private location: Location
   ) {
     this.isProdMode = AppUrl === 'https://giddh.com/';
     this.isElectron = isElectron;
@@ -75,7 +75,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
         a.isNewUser = true;
-        this._generalService.user = {...ss.user.user, ...a};
+        this._generalService.user = { ...ss.user.user, ...a };
         if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
           this._generalService.sessionId = ss.user.session.id;
         }
@@ -101,15 +101,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private changeOnMobileView(isMobile) {
 
-      if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
-        localStorage.setItem('isMobileSiteGiddh', 'true');
-        this.dbServices.clearAllData();
-        //this.router.navigate(['settings']);
-      }else if (localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
-        localStorage.setItem('isMobileSiteGiddh', 'false');
-        this.dbServices.clearAllData();
-        this.router.navigate(['settings']);
-      }
+    if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
+      localStorage.setItem('isMobileSiteGiddh', 'true');
+      this.dbServices.clearAllData();
+      //this.router.navigate(['settings']);
+    } else if (localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
+      localStorage.setItem('isMobileSiteGiddh', 'false');
+      this.dbServices.clearAllData();
+      this.router.navigate(['settings']);
+    }
     reassignNavigationalArray(isMobile);
     this._generalService.setIsMobileView(isMobile);
   }
