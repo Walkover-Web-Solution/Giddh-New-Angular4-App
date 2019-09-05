@@ -249,7 +249,7 @@ Create Company
               </span>
             </a>
           </li>
-          <h6 class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts"
+          <h6 *ngIf="!isMobileSite" class="mrT cp hover-orange" (click)="showNavigationModal()" container="body" tooltip="Search accounts"
             placement="right">Show more...</h6>
         </ul>
 

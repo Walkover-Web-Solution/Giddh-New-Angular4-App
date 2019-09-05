@@ -82,7 +82,7 @@
     padding-left: 15px;
 }
 .customer-right  table{
-  float: none; width: 100%;
+  float: none !important; width: 100% !important;
   text-align: left;
 }
 .customer-right table tr td{
