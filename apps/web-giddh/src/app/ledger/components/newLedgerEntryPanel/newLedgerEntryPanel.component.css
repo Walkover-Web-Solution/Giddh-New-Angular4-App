@@ -19,4 +19,9 @@
   .ledger-panel .btn {
     margin-bottom: 13px;
   }
+  .xs-d-block {
+    display: block;
+    float: none;
+    width: 100%;
+  }
 }

@@ -281,13 +281,13 @@
           </div>
   
           <div class="clearfix">
-            <p class="primary_clr">Total in INR: <i class="icon-rupees font-12"></i> 32564.97</p>
+            <p class="primary_clr" *ngIf="totalPrice">Total in INR: <i class="icon-rupees font-12"></i> 32564.97</p>
           </div>
         </div>
       </div>
 
       <div class="clearfix">
-        <div class="pull-left pl-15">
+        <div class="pull-left pl-15" *ngIf="totalPrice">
           <ul class="list-inline font-14">
             <li>1 USD</li>
             <li>
@@ -311,7 +311,7 @@
         <button [hidden]="isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
           Reset
         </button>
-        <div class="pull-right">
+        <div class="pull-right xs-d-block">
           <button [hidden]="isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('DEBIT',$event)">Add
             to DR
           </button>
