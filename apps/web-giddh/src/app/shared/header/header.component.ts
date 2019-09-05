@@ -9,7 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest, CompanyCountry } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -182,6 +182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     baseCurrency: '',
     country: ''
   }
+
   /**
    *
    */
@@ -465,23 +466,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-    this.router.events.subscribe(a => {
-      if (a instanceof NavigationStart) {
-        this.navigationEnd = false;
-      }
-      if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
-        this.navigationEnd = true;
-        if (a instanceof NavigationEnd) {
-          this.adjustNavigationBar();
-          let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-            return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
-          });
-          if (menuItem) {
-            this.doEntryInDb('menus', menuItem);
+    this.router.events
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(a => {
+        if (a instanceof NavigationStart) {
+          this.navigationEnd = false;
+        }
+        if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
+          this.navigationEnd = true;
+          if (a instanceof NavigationEnd) {
+            this.adjustNavigationBar();
+            let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+              return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+            });
+            if (menuItem) {
+              this.doEntryInDb('menus', menuItem);
+            }
           }
         }
-      }
-    });
+      });
 
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
