@@ -979,7 +979,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
-      this.showNavigationModal();
+      if (this.companyList.length > 0) {
+        this.showNavigationModal();
+      }
     }
 
     // window.addEventListener('keyup', (e: KeyboardEvent) => {

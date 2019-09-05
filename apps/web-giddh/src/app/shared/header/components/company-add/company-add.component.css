@@ -83,3 +83,21 @@
     /* clear: both; */
     /* float: none; */
 }
+
+.giddh_logo_welcome img {
+    max-width: 140px;
+    margin: 10px auto;
+    display: block;
+}
+
+.add-companyDetail p {
+    max-width: 300px;
+    margin: 0 auto !important;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+#shareModal .btn.btn-blue {
+    width: 100%;
+}

@@ -48,6 +48,7 @@ export class CompanyActions {
   public static CURRENT_COMPANY_SUBSCRIPTIONS_PLANS = 'CURRENT_COMPANY_SUBSCRIPTIONS_PLANS';
   public static CURRENT_COMPANY_CURRENCY = 'CURRENT_COMPANY_CURRENCY';
   public static USER_CAREATE_COMPANY = 'USER_CAREATE_COMPANY';
+  public static USER_CAREATE_BRANCH = 'USER_CAREATE_BRANCH';
   public static GET_REGISTRATION_ACCOUNT_RESPONSE = 'GET_REGISTRATION_ACCOUNT_RESPONSE';
   public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
@@ -143,6 +144,7 @@ export class CompanyActions {
         // is brahch set
         if (response.request.isBranch) {
           //
+          this.store.dispatch(this.userStoreCreateBranch(null));
           let branchUniqueName: any[] = [];
           branchUniqueName.push(response.request.uniqueName);
           let dataToSend = { childCompanyUniqueNames: branchUniqueName };
@@ -417,6 +419,12 @@ export class CompanyActions {
   public userStoreCreateCompany(value: CompanyCreateRequest): CustomActions {
     return {
       type: CompanyActions.USER_CAREATE_COMPANY,
+      payload: value
+    };
+  }
+  public userStoreCreateBranch(value: CompanyCreateRequest): CustomActions {
+    return {
+      type: CompanyActions.USER_CAREATE_BRANCH,
       payload: value
     };
   }
