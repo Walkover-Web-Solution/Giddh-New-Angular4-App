@@ -5154,13 +5154,10 @@ strong {
   border-radius: 2px;
 }
 
-#main {
-  /* padding-top: 54px; */
-}
-
 bs-daterangepicker-container,
 bs-datepicker-container {
   z-index: 1600;
+
 }
 
 .stock-grp-list li:focus,
@@ -5403,5 +5400,12 @@ form#groupDetailForm {
     display: block !important;
     width: 100%;
   }
+
+
+  bs-daterangepicker-container, bs-datepicker-container {
+    overflow-y: auto;
+    height: 300px;
+  }
+
 
 }
