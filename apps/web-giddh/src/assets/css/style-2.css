@@ -7433,10 +7433,14 @@ span.red-text {
 -ms-user-select: none;
 user-select: none;
 }
-.tooltip-inner{
+
+
+.tooltip-inner {
  word-break: break-word !important;
  white-space: normal !important;
 }
+
+
 /* responsive */
 
 
