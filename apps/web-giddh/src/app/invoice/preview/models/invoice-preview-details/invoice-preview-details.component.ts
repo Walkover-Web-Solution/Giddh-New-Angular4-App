@@ -19,7 +19,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Router } from '@angular/router';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'invoice-preview-details-component',
   templateUrl: './invoice-preview-details.component.html',
@@ -64,12 +64,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public invoiceDetailWrapperHeight:number
   public invoiceDetailViewHeight:number;
   public invoiceImageSectionViewHeight:number;
-
+  public isMobileView = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
               private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
-              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions) {
+              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions,
+              private _breakPointObservar: BreakpointObserver) {
+                this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
+                  this.isMobileView = res.matches;
+                });
   }
 
   ngOnInit() {

@@ -9,7 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest, CompanyCountry } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -178,6 +178,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private activeCompanyForDb: ICompAidata;
   private smartCombinedList$: Observable<any>;
   public isMobileSite: boolean;
+  public companyCountry: CompanyCountry = {
+    baseCurrency: '',
+    country: ''
+  }
   /**
    *
    */
@@ -287,6 +291,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
         if (res.subscription) {
+          this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+          if (res.baseCurrency) {
+            this.companyCountry.baseCurrency = res.baseCurrency;
+            this.companyCountry.country = res.country;
+            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+          }
           this.subscribedPlan = res.subscription;
           this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
           this.selectedPlanStatus = res.subscription.status;

@@ -1,4 +1,4 @@
-import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -63,6 +63,8 @@ export interface SessionState {
   createCompanyUserStoreRequestObj: CompanyCreateRequest;
   createBranchUserStoreRequestObj: CompanyCreateRequest
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
+  currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
+  currentCompanyCurrency: CompanyCountry;
 }
 
 /**
@@ -114,7 +116,9 @@ const sessionInitialState: SessionState = {
   todaySelected: false,
   createCompanyUserStoreRequestObj: null,
   createBranchUserStoreRequestObj: null,
-  userSelectedSubscriptionPlan: null
+  userSelectedSubscriptionPlan: null,
+  currentCompanySubscriptionPlan: null,
+  currentCompanyCurrency: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -581,6 +585,10 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     case CompanyActions.USER_SELECTED_PLANS:
       return Object.assign({}, state, { userSelectedSubscriptionPlan: action.payload });
 
+    case CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS:
+      return Object.assign({}, state, { currentCompanySubscriptionPlan: action.payload });
+    case CompanyActions.CURRENT_COMPANY_CURRENCY:
+      return Object.assign({}, state, { currentCompanyCurrency: action.payload });
     case CompanyActions.USER_CAREATE_COMPANY:
       return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
 
