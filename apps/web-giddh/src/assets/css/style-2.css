@@ -5196,12 +5196,13 @@ ng-select>div>div.single>div.clear:hover {
 }
 
 .input-group .input-group-btn .btn {
-    background: #fff;
+    /*background: #fff;*/
     border-left: 0px;
 }
 
 .input-group .input-group-btn .btn:hover {
     color: #28ab00 !important;
+    background: #fff;
 }
 
 ng-select .select_drop {
