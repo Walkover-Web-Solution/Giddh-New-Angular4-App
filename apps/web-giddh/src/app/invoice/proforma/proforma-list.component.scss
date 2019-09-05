@@ -149,6 +149,22 @@
   display: none;
   margin-bottom: 15px;
 }
+ul.selectActionDropdown {
+  list-style: none;
+}
+.selectActionDropdown a {
+  color: #333;
+  font-size: 14px;
+  padding: 5px 10px;
+  display: block;
+}
+.selectActionDropdown a:hover{
+  background-color: #e5e5e5;
+  color: #ff5f00;
+}
+.dropdown-toggle{
+  color: #333;
+}
 @media(max-width:768px){
   .mobileSearch{
     display: block;

@@ -178,7 +178,7 @@ export class CompanyActions {
            * if user is signed up on their own take him to sales module
            */
           if (this._generalService.user.isNewUser) {
-            stateDetailsObj.lastState = 'onboarding';
+            stateDetailsObj.lastState = 'pages/onboarding';
             // stateDetailsObj.lastState = isNewUser ? 'onboarding' : 'sales';
           } else {
             stateDetailsObj.lastState = 'home';

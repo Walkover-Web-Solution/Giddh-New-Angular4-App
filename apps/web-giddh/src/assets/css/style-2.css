@@ -7458,10 +7458,12 @@ span.red-text {
     user-select: none;
 }
 
+
 .tooltip-inner {
-    word-break: break-word !important;
-    white-space: normal !important;
+ word-break: break-word !important;
+ white-space: normal !important;
 }
+
 
 
 /* responsive */
