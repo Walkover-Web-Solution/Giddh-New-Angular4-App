@@ -2,8 +2,8 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { Store } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -15,21 +15,21 @@ import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 export const IsyncData = [
-  {label: 'Debtors', value: 'debtors'},
-  {label: 'Creditors', value: 'creditors'},
-  {label: 'Inventory', value: 'inventory'},
-  {label: 'Taxes', value: 'taxes'},
-  {label: 'Bank', value: 'bank'}
+  { label: 'Debtors', value: 'debtors' },
+  { label: 'Creditors', value: 'creditors' },
+  { label: 'Inventory', value: 'inventory' },
+  { label: 'Taxes', value: 'taxes' },
+  { label: 'Bank', value: 'bank' }
 ];
 
 @Component({
   selector: 'setting-branch',
   templateUrl: './branch.component.html',
   styleUrls: ['./branch.component.css'],
-  providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
+  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
-export class BranchComponent implements OnInit, OnDestroy {
+export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('branchModal') public branchModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
@@ -46,6 +46,7 @@ export class BranchComponent implements OnInit, OnDestroy {
   public confirmationMessage: string = '';
   public parentCompanyName: string = null;
   public selectedBranch: string = null;
+  public isBranch: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -114,10 +115,23 @@ export class BranchComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     console.log('branch component');
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch) {
+          this.isBranch = res.isBranch;
+        }
+      }
+    });
+  }
+  public ngAfterViewInit() {
+    if (this.isBranch) {
+      this.openCreateCompanyModal()
+    }
   }
 
   public openCreateCompanyModal() {
     this.loadAddCompanyComponent();
+    this.hideAddBranchModal();
     this.addCompanyModal.show();
   }
 
@@ -183,19 +197,19 @@ export class BranchComponent implements OnInit, OnDestroy {
       if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
         this.selectedCompaniesUniquename.push(cmp.uniqueName);
       } if (cmp.name) {
-          this.selectedCompaniesName.push(cmp);
+        this.selectedCompaniesName.push(cmp);
       }
     } else {
       let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
       this.selectedCompaniesUniquename.splice(indx, 1);
-       let idx = this.selectedCompaniesName.indexOf(cmp);
+      let idx = this.selectedCompaniesName.indexOf(cmp);
       this.selectedCompaniesName.splice(idx, 1);
     }
     this.isAllCompaniesSelected();
   }
 
   public createBranches() {
-    let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
+    let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
     this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
     this.hideAddBranchModal();
   }
@@ -220,10 +234,10 @@ export class BranchComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
   public getAllBranches() {
-   this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-   this.store.dispatch(this.settingsBranchActions.GetALLBranches());
-   this.store.dispatch(this.settingsBranchActions.GetParentCompany());
- }
+    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetParentCompany());
+  }
 
   private isAllCompaniesSelected() {
     this.companies$.pipe(take(1)).subscribe((companies) => {

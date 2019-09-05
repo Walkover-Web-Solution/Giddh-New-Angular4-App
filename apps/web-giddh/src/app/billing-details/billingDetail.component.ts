@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest } from '../models/api-models/Company';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest, CompanyCountry } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
@@ -47,6 +47,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public razorpayAmount: any;
   public orderId: string;
   public UserCurrency: string = '';
+  public companyCountry: string = '';
   public fromSubscription: boolean = false;
   public bankList: any;
   public razorpay: any;
@@ -94,22 +95,27 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.subscriptionPrice = this.selectedPlans.planDetails.amount;
       }
     });
-    if (this.fromSubscription) {
-      this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-        if (res) {
-          this.UserCurrency = res;
-        }
-      });
-    } else {
-      this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-        if (res) {
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (!res.isBranch && !res.city) {
           this.createNewCompany = res;
           this.UserCurrency = this.createNewCompany.baseCurrency;
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
         }
-      });
-    }
+      }
+    });
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch && res.city) {
+          this.createNewCompany = res;
+          this.UserCurrency = this.createNewCompany.baseCurrency;
+          this.orderId = this.createNewCompany.orderId;
+          this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+        }
+      }
+    });
+
     this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
       this.isCreateAndSwitchCompanyInProcess = isINprocess;
     });
@@ -239,7 +245,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           paymentId: razorPay_response.razorpay_payment_id,
           razorpaySignature: razorPay_response.razorpay_signature,
           amountPaid: this.ChangePaidPlanAMT,
-          userBillingDetails: this.billingDetailsObj
+          userBillingDetails: this.billingDetailsObj,
+          country: this.companyCountry
         };
         this.patchProfile(reQuestob);
       }

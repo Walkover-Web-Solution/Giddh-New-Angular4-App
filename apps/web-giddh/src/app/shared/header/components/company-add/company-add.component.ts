@@ -1,12 +1,12 @@
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { LocationService } from '../../../../services/location.service';
-import { CompanyRequest, CompanyResponse } from '../../../../models/api-models/Company';
-import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
-import { Observable, ReplaySubject } from 'rxjs';
+import { CompanyRequest, CompanyResponse, CompanyCreateRequest } from '../../../../models/api-models/Company';
+import { SignupWithMobile, VerifyMobileModel, UserDetails } from '../../../../models/api-models/loginModels';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../../../services/general.service';
+
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
@@ -32,8 +33,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @Input() public createBranch: boolean = false;
 
-  public company: CompanyRequest = new CompanyRequest();
+  public company: CompanyCreateRequest = new CompanyCreateRequest();
   public phoneNumber: string;
+  public countrySource: IOption[] = [];
+
   public verificationCode: string;
   public showVerificationBox: Observable<boolean>;
   public isMobileVerified: Observable<boolean>;
@@ -45,19 +48,45 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public dataSourceBackup: any;
   public country: string;
-  public countryCodeList: IOption[] = [];
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryPhoneCode: IOption[] = [];
+  public isMobileNumberValid: boolean = false;
   public selectedCountry: string;
   public isCitySelectedByDropdown: boolean = false;
+  public logedInusers: UserDetails;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
-              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-              private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+    });
+    // Country phone Code
+    contriesWithCodes.map(c => {
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
+    });
+    _.uniqBy(this.countryPhoneCode, 'value');
+    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
+      return {
+        value: value,
+        label: this.countryPhoneCode.find(s => s.value === value).label
+      };
+    });
+    this.countryPhoneCode = ss;
+    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+      this.currencies = [];
+      if (data) {
+        data.map(d => {
+          this.currencies.push({ label: d.code, value: d.code });
+        });
+      }
+      this.currencySource$ = observableOf(this.currencies);
     });
   }
 
@@ -66,16 +95,25 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-    this.setCountryCode({value: 'India'});
-    this.isMobileVerified = this.store.select(s => {
-      if (s.session.user) {
-        if (s.session.user.user.mobileNo) {
-          return s.session.user.user.mobileNo !== null;
-        } else {
-          return s.session.user.user.contactNo !== null;
+
+    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (res.isBranch) {
+          this.company = res;
         }
       }
-    }).pipe(takeUntil(this.destroyed$));
+    });
+
+    // this.isMobileVerified = this.store.select(s => {
+    //   if (s.session.user) {
+    //     if (s.session.user.user.mobileNo) {
+    //       return s.session.user.user.mobileNo !== null;
+    //     } else {
+    //       return s.session.user.user.contactNo !== null;
+    //     }
+    //   }
+    // }).pipe(takeUntil(this.destroyed$));
+    this.logedInusers = this._generalService.user;
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.dataSource = (text$: Observable<any>): Observable<any> => {
       return text$.pipe(
@@ -102,18 +140,18 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }));
     };
 
-    this.isMobileVerified.subscribe(p => {
-      if (p) {
-        // this.wizard.next();
-        this.showMobileVarifyMsg = true;
-      }
-    });
-    this.isCompanyCreated$.subscribe(s => {
-      if (s) {
-      //  this._route.navigate(['sales']);
-        this.closeModal();
-      }
-    });
+    // this.isMobileVerified.subscribe(p => {
+    //   if (p) {
+    //     // this.wizard.next();
+    //     this.showMobileVarifyMsg = true;
+    //   }
+    // });
+    // this.isCompanyCreated$.subscribe(s => {
+    //   if (s) {
+    //     //  this._route.navigate(['sales']);
+    //     this.closeModal();
+    //   }
+    // });
   }
 
   public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -126,26 +164,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }
       });
     }, 400);
-
-    // this.dataSourceBackup.forEach(item => {
-    //   if (item.address_components[0].long_name === e.item) {
-    //     // set country and state values
-    //     try {
-    //       item.address_components.forEach(address => {
-    //         let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-    //         let countryIdx = _.indexOf(address.types, 'country');
-    //         if (stateIdx !== -1) {
-    //           this.company.state = address.long_name;
-    //         }
-    //         if (countryIdx !== -1) {
-    //           this.company.country = address.long_name;
-    //         }
-    //       });
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   }
-    // });
   }
 
   public onChangeCityName() {
@@ -160,32 +178,41 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   /**
    * addNumber
    */
-  public addNumber() {
-    let model = new SignupWithMobile();
-    model.mobileNumber = this.phoneNumber;
-    model.countryCode = Number(this.selectedCountry);
-    this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
-  }
+  // public addNumber() {
+  //   let model = new SignupWithMobile();
+  //   model.mobileNumber = this.phoneNumber;
+  //   model.countryCode = Number(this.selectedCountry);
+  //   this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
+  // }
 
   /**
    * verifyNumber
    */
-  public verifyNumber() {
-    let model = new VerifyMobileModel();
-    model.mobileNumber = this.phoneNumber;
-    model.oneTimePassword = this.verificationCode;
-    model.countryCode = Number(this.selectedCountry);
-    this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
-  }
+  // public verifyNumber() {
+  //   let model = new VerifyMobileModel();
+  //   model.mobileNumber = this.phoneNumber;
+  //   model.oneTimePassword = this.verificationCode;
+  //   model.countryCode = Number(this.selectedCountry);
+  //   this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
+  // }
 
   /**
    * createCompany
    */
+  // public createCompany() {
+  //   console.log(this.company.nameAlias);
+  //   this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
+  //   this.company.isBranch = this.createBranch;
+  //   this.store.dispatch(this.companyActions.CreateCompany(this.company));
+  // }
   public createCompany() {
-    console.log(this.company.nameAlias);
-    this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
+
+    this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
     this.company.isBranch = this.createBranch;
-    this.store.dispatch(this.companyActions.CreateCompany(this.company));
+    this._generalService.createNewCompany = this.company;
+    this.store.dispatch(this.companyActions.userStoreCreateBranch(this.company));
+    this.closeModal();
+    this._route.navigate(['welcome']);
   }
 
   public closeModal() {
@@ -237,13 +264,13 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   /**
    * setCountryCode
    */
-  public setCountryCode(model: Partial<IOption>) {
-    if (model.value) {
-      let country = this.countryCodeList.filter((obj) => obj.value === model.value);
-      this.country = country[0].value;
-      this.selectedCountry = country[0].label;
-    }
-  }
+  // public setCountryCode(model: Partial<IOption>) {
+  //   if (model.value) {
+  //     let country = this.countryCodeList.filter((obj) => obj.value === model.value);
+  //     this.country = country[0].value;
+  //     this.selectedCountry = country[0].label;
+  //   }
+  // }
 
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
