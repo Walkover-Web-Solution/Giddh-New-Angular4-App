@@ -270,12 +270,18 @@ export class ReportsDetailsComponent implements OnInit {
     let startDateSplit = startDate.split('-');
     let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
     // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-    let month = dt.getMonth(),
+    let month = (dt.getMonth() +1).toString(),
     year = dt.getFullYear();
 
     // GET THE FIRST AND LAST DATE OF THE MONTH.
-    let firstDay = new Date(year, month, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-    let lastDay = new Date(year, month + 1, 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    if(parseInt(month) < 10){
+      month = '0' + month;
+    }
+    let firstDay = '01-'+(month)+'-'+year;
+    let lastDay = new Date(year, parseInt(month),0).getDate()+'-'+month+'-'+year;
+
     return { firstDay, lastDay };
   }
 }
