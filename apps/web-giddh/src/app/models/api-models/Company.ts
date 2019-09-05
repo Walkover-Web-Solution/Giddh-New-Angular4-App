@@ -21,7 +21,7 @@ export class SocketNewCompanyRequest {
   public MobileNo: string;
   public LoggedInEmailID: string;
   public Timestamp: number;
-  public Name : string;
+  public Name: string;
 }
 
 export class StateDetailsRequest {
@@ -262,6 +262,9 @@ export class CreateCompanyUsersPlan {
   balance?: number;
   expiry?: string;
   startedAt?: string;
+  companiesWithTransactions?: any;
+  companyTotalTransactions?: any;
+  totalTransactions?: number;
 }
 
 export class PlanDetails {
@@ -284,4 +287,10 @@ export class UserDetail {
   email: string;
   signUpOn: string;
   mobileno?: any;
+}
+
+export class CompanyCountry {
+  baseCurrency: string;
+  country: string;
+
 }
