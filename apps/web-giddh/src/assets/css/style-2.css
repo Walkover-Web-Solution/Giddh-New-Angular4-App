@@ -1570,6 +1570,7 @@ header .navbar {
     vertical-align: middle !important;
     font-size: 14px;
     word-break: break-word;
+    white-space: nowrap;
 }
 
 p.table-email {
@@ -1694,17 +1695,20 @@ input[type="checkbox"]:after {
 }
 
 .btn-success {
-    background: #e5e5e5;
-    color: #28ab00;
-}
-
-.btn-success:hover,
-.btn-success:disabled {
-    background: #28ab00;
+    background: #2DAA4A;
     color: #fff;
 }
 
-.btn-success:disabled,
+.btn-success:hover{
+    background: #078D26;
+    color: #fff;
+}
+.btn-success:disabled{
+  color:rgba(255,255,255,0.8);
+  background: #A5D9B3;
+
+}
+
 .btn-default:disabled,
 .btn-danger:disabled {
     opacity: 0.5;
@@ -7468,7 +7472,7 @@ user-select: none;
     overflow: auto;
     white-space: initial;
     width: 100%;
-    max-width: 210px;
+    max-width: 230px;
     margin: 0 auto;
     display: block;
   }
@@ -7538,12 +7542,16 @@ user-select: none;
     background: transparent;
     margin-bottom: 0;
     width: 100%;
+    display: block;
   }
-
+  .onMobileView table tbody{
+    display: block;
+    width: 100%;
+  }
   .onMobileView table thead {
     display: none;
   }
-
+/*
   .onMobileView table {
     max-width: 100%;
     width: 99%;
@@ -7552,7 +7560,7 @@ user-select: none;
     overflow-y: scroll;
     position: relative;
     transition: all 0.2s ease-out;
-  }
+  } */
 
   .onMobileView tbody td {
     border: 0 !important;
@@ -7655,6 +7663,12 @@ user-select: none;
 #middleBody .horizontal-form, .view_forms .horizontal-form {
   max-width: 100%;
   width: 100%;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  white-space: initial !important;
+}
+  .onMobileView tbody td::first-letter {
+    text-transform: uppercase;
 }
 }
 
@@ -7836,7 +7850,7 @@ user-select: none;
     float: none;
   }
   .daterangepicker.dropdown-menu {
-    max-width: 198px !important;
+    max-width: 100% !important;
     z-index: 3001;
   }
 }
@@ -7877,6 +7891,9 @@ user-select: none;
   .xs-left {
     text-align: left !important;
   }
+  .custumerRightWrap .text-right.xs-left {
+    text-align: right !important;
+}
   .form_box.form-bg {
     height: auto !important;
     min-height: auto;

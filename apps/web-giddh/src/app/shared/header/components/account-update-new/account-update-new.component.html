@@ -187,7 +187,7 @@
           <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')" textCaseChangeDirective
             UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
         </div>
-        <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
+        <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
           <!-- [ngClass]="{'row':!isMultipleCurrency || addAccountForm.get('country').value.countryCode === 'IN'}" -->
           <div class="">
             <label for="">Opening Balance</label>
@@ -207,7 +207,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group" [ngClass]="{'col-xs-3':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
+        <div class="form-group" [ngClass]="{'col-xs-3':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
