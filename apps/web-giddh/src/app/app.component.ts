@@ -101,15 +101,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private changeOnMobileView(isMobile) {
 
-    if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
-      localStorage.setItem('isMobileSiteGiddh', 'true');
-      this.dbServices.clearAllData();
-      //this.router.navigate(['settings']);
-    } else if (localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
-      localStorage.setItem('isMobileSiteGiddh', 'false');
-      this.dbServices.clearAllData();
-      this.router.navigate(['settings']);
-    }
+      if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
+        localStorage.setItem('isMobileSiteGiddh', 'true');
+        // this.dbServices.clearAllData();
+        //this.router.navigate(['settings']);
+      }else if (localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
+        localStorage.setItem('isMobileSiteGiddh', 'false');
+        this.dbServices.clearAllData();
+        this.router.navigate(['/pages/settings']);
+      }
     reassignNavigationalArray(isMobile);
     this._generalService.setIsMobileView(isMobile);
   }

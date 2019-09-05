@@ -51,7 +51,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
   // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
-  {type: 'MENU', name: 'Onboarding', uniqueName: '/onboarding'},
+  {type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding'},
 
 
   {type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales'},
