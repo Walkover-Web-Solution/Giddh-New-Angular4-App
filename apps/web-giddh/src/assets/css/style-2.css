@@ -4513,7 +4513,7 @@ label {
     display: block;
     height: 200px;
     overflow: auto;
-    padding: 0 0 40px 0;
+    /* padding: 0 0 40px 0; */
 }
 
 .dropdown-container .dropdown-menu li label {

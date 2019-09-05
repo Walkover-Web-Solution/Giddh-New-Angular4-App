@@ -545,7 +545,7 @@
                 <button class="no-btn pdL0">&nbsp; More Details</button>
               </td>
               <td class="text-right">
-                <span class="primary_clr">Total in INR: {{vm.compoundTotal | giddhCurrency}}</span>
+                <span class="primary_clr" *ngIf="totalPrice">Total in INR: {{vm.compoundTotal | giddhCurrency}}</span>
               </td>
             </tr>
 
@@ -663,7 +663,7 @@
             </div>
 
             <div class="clearfix mb-2">
-              <div class="pull-left pl-15">
+              <div class="pull-left pl-15" *ngIf="totalPrice">
                 <ul class="list-inline font-14" *ngIf="totalPrice">
                   <li>1 USD</li>
                   <li><a href="javascript:void(0)" class="text-light"><i class="icon-switch-icon"></i></a></li>
