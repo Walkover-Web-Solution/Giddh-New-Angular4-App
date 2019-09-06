@@ -311,6 +311,8 @@ ul.selectActionDropdown {
 .addInvoice .dropdown-toggle {
   color: #fff;
 }
+
+
 @media (max-width: 768px) {
   .mobileTable {
     display: block;
