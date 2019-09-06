@@ -1,7 +1,7 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -11,52 +11,53 @@ import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
 @Component({
   selector: 'aside-menu-account',
   styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      max-width:480px;
-      width: 100%;
-      z-index: 1045;
-    }
-
-
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      max-width:480px;
-      width: 100%;
-    }
-    @media(max-width:575px){
       :host {
-        max-width:275px;
-        width: 100%;
+          position: fixed;
+          left: auto;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          max-width: 480px;
+          width: 100%;
+          z-index: 1045;
       }
 
-    }
+
+      :host.in #close {
+          display: block;
+          position: fixed;
+          left: -41px;
+          top: 0;
+          z-index: 5;
+          border: 0;
+          border-radius: 0;
+      }
+
+      :host .container-fluid {
+          padding-left: 0;
+          padding-right: 0;
+      }
+
+      :host .aside-pane {
+          max-width: 480px;
+          width: 100%;
+      }
+
+      @media (max-width: 575px) {
+          :host {
+              max-width: 275px;
+              width: 100%;
+          }
+
+      }
   `],
   templateUrl: './aside.menu.account.component.html'
 })
@@ -70,13 +71,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
 
-  public flatAccountWGroupsList$: Observable<IOption[]>;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Group',
-    allowClear: true
-  };
+  public flatGroupsOptions: IOption[];
   public isGstEnabledAcc: boolean = true; // true only for groups will not under other
   public isHsnSacEnabledAcc: boolean = false; // true only for groups under revenuefromoperations || otherincome || operatingcost || indirectexpenses
   public fetchingAccUniqueName$: Observable<boolean>;
@@ -86,7 +81,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public activeAccount$: Observable<AccountResponseV2>;
   public isDebtorCreditor: boolean = true; // in case of sundrycreditors or sundrydebtors
   public activeGroup$: Observable<GroupResponse>;
-  public groupsList: IOption[];
   public virtualAccountEnable$: Observable<any>;
   public showVirtualAccount: boolean = false;
   public showBankDetail: boolean = false;
@@ -94,31 +88,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public updateAccountIsSuccess$: Observable<boolean>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public accountDetails: any = '';
-
-
   public breadcrumbUniquePath: string[] = [];
-
-
-
-
-
-
-
+  private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private groups = [
-    { label: 'Sundry Debtors', value: 'sundrydebtors' },
-    { label: 'Sundry Creditors', value: 'sundrycreditors' },
-    { label: 'Discount', value: 'discount' },
-  ];
 
   constructor(
     private store: Store<AppState>,
     private groupService: GroupService,
     private accountsAction: AccountsAction,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-
+    private _generalActions: GeneralActions
   ) {
     // account-add component's property
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
@@ -131,22 +112,17 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).pipe(takeUntil(this.destroyed$));
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-
-
+    this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
-    this.flatAccountWGroupsList$ = observableOf(this.groups);
+    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
     if (this.isUpdateAccount && this.activeAccountDetails) {
       this.accountDetails = this.activeAccountDetails;
       this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
       this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
     }
-    if (this.activeGroupUniqueName === 'sundrycreditors') {
-      this.showBankDetail = true;
-    } else {
-      this.showBankDetail = false;
-    }
+    this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
@@ -157,6 +133,18 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             this.showVirtualAccount = false;
           }
         });
+      }
+    });
+    this.flattenGroups$.subscribe(flattenGroups => {
+      if (flattenGroups) {
+        let items: IOption[] = flattenGroups.filter(grps => {
+          return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+        }).map(m => {
+          return {
+            value: m.groupUniqueName, label: m.groupName
+          }
+        });
+        this.flatGroupsOptions = items;
       }
     });
   }
@@ -170,6 +158,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     this.ngOnDestroy();
     this.closeAsideEvent.emit(event);
   }
+
   public showDeleteAccountModal() {
     this.deleteAccountModal.show();
   }
@@ -190,11 +179,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     this.getUpdateList.emit(activeGrpName);
 
   }
+
   public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
     this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
     this.hideDeleteAccountModal();
     this.getUpdateList.emit(this.activeGroupUniqueName);
   }
+
   public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
     obj = _.map(rawList, (item: any) => {
@@ -207,6 +198,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     });
     return obj;
   }
+
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
     listofUN = _.map(rawList, (listItem) => {
@@ -217,7 +209,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -229,6 +221,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     });
     return _.flatten(listofUN);
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

@@ -1,4 +1,4 @@
-import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan } from './../../models/api-models/Company';
+import { ICurrencyResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -61,9 +61,10 @@ export interface SessionState {
   userLoginState: userLoginStateEnum;
   currencies: ICurrencyResponse[];
   createCompanyUserStoreRequestObj: CompanyCreateRequest;
+  createBranchUserStoreRequestObj: CompanyCreateRequest
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
   currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
-  currentCompanyCurrency: string;
+  currentCompanyCurrency: CompanyCountry;
 }
 
 /**
@@ -114,9 +115,10 @@ const sessionInitialState: SessionState = {
   currencies: null,
   todaySelected: false,
   createCompanyUserStoreRequestObj: null,
+  createBranchUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null,
   currentCompanySubscriptionPlan: null,
-  currentCompanyCurrency: ''
+  currentCompanyCurrency: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -588,6 +590,10 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       return Object.assign({}, state, { currentCompanyCurrency: action.payload });
     case CompanyActions.USER_CAREATE_COMPANY:
       return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
+
+    case CompanyActions.USER_CAREATE_BRANCH:
+      return Object.assign({}, state, { createBranchUserStoreRequestObj: action.payload });
+
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,

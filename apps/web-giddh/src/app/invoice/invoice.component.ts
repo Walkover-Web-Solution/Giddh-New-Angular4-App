@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   styles: [`
       .invoice-bg {
@@ -91,11 +91,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   public selectedVoucherType: VoucherTypeEnum;
   public activeTab: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  public isMobileView = false;
   constructor(private store: Store<AppState>,
               private companyActions: CompanyActions,
               private router: Router,
-              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
+              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
+                this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
+                  this.isMobileView = res.matches;
+                });
     //
   }
 
@@ -114,8 +117,16 @@ export class InvoiceComponent implements OnInit, OnDestroy {
           if (queryParams && queryParams.tab) {
             if (queryParams.tab && queryParams.tabIndex) {
               if (this.staticTabs && this.staticTabs.tabs) {
-                // this.staticTabs.tabs[queryParams.tabIndex].active = true;
-                this.tabChanged(queryParams.tab);
+                /*
+                  set active tab to null because we want to reload the tab component
+                  case :-
+                          when invoice preview details is on then if someone clicks on sidemenu or navigate using cmd + g then we need to
+                          reload the component
+                 */
+                this.activeTab = null;
+                setTimeout(() => {
+                  this.tabChanged(queryParams.tab);
+                }, 500);
               }
             }
           } else {

@@ -192,7 +192,7 @@
   <!-- region Aging Report -->
   <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
     <!--    <div *ngIf="activeTab === 'aging'">-->
-    <aging-report></aging-report>
+    <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
     <!--    </div>-->
   </tab>
   <!-- endregion -->
@@ -373,7 +373,7 @@
 <!--endregion-->
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc" *ngIf="accountAsideMenuState === 'in'">
+<div class="abc " *ngIf="accountAsideMenuState === 'in'">
   <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails"
     [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2 transinherit"
     [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
@@ -381,7 +381,7 @@
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-<div class="abc" *ngIf="paymentAsideMenuState === 'in'">
+<div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
   <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment"
     (closeAsideEvent)="togglePaymentPane($event)">
   </payment-aside>
@@ -417,35 +417,35 @@
               <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
                 (ngModelChange)="toggleAllSelection(allSelectionModel)" />
             </span>
-          <span>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</span>
+            <span>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</span>
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
             </ng-container>
-        </th>
+          </th>
 
-        <th>Parent group
+          <th>Parent group
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}">
             </ng-container>
-        </th>
+          </th>
 
-        <th class="text-right  pr-3">Opening
+          <th class="text-right  pr-3">Opening
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
             </ng-container>
-        </th>
+          </th>
 
-        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
-          </ng-container>
-        </th>
+          <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
+            </ng-container>
+          </th>
 
-        <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
-          </ng-container>
-        </th>
+          <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
+            </ng-container>
+          </th>
 
-        <th class="text-right  pr-3"> Closing
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
-          </ng-container>
-        </th>
+          <th class="text-right  pr-3"> Closing
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
+            </ng-container>
+          </th>
 
           <th *ngIf="showFieldFilter.email">
             <div class="d-flex">
@@ -461,15 +461,15 @@
 
           <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
-        <th *ngIf="showFieldFilter.gstin">GSTIN
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstin'}">
-          </ng-container>
-        </th>
+          <th *ngIf="showFieldFilter.gstin">GSTIN
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstin'}">
+            </ng-container>
+          </th>
 
-        <th *ngIf="showFieldFilter.state">State
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
-          </ng-container>
-        </th>
+          <th *ngIf="showFieldFilter.state">State
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
+            </ng-container>
+          </th>
 
           <th *ngIf="showFieldFilter.comment">Comment</th>
 
@@ -532,7 +532,7 @@
 
                           <ul class="list-unstyled">
 
-                            <li class="li-link">
+                            <li class="li-link" *ngIf="!isMobileScreen">
                               <a href="javascript: void 0" (click)="performActions(1, account)">Go to
                                 Ledger</a>
                             </li>
@@ -702,18 +702,18 @@
 
                           <ul class="list-unstyled">
 
-                            <li class="li-link">
+                            <li class="li-link" *ngIf="!isMobileScreen">
                               <a href="javascript: void 0" (click)="performActions(1, account)">Go to
                                 Ledger</a>
                             </li>
 
-                            <li class="li-link">
+                            <li class="li-link" *ngIf="!isMobileScreen">
                               <a href="javascript: void 0" (click)="performActions(2, account)">Generate
                                 Invoice</a>
                             </li>
 
                             <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(3, account, $even )">Send
+                              <a href="javascript: void 0" (click)="performActions(3, account, $event )">Send
                                 SMS</a>
                             </li>
 
@@ -817,7 +817,7 @@
                 (click)="openPaymentAside(account)">Pay Now
               </button>
               <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
-                    (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
               </button>
             </td>
           </tr>
@@ -860,18 +860,17 @@
 </ng-template>
 
 
-
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
   <div class="icon-pointer cp">
     <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col"
-         [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+      [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
     <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
-         *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+      *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
     <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
-         (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
+      (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
   </div>
 </ng-template>
 <!-- endregion -->

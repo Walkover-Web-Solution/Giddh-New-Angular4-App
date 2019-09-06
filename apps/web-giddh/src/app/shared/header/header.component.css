@@ -108,8 +108,13 @@ a[vr-item]:focus {
     position: relative;
     top: -2px;
 }
-
-
+.account-search .form-control::-webkit-input-placeholder,
+.account-search .form-control::-webkit-input-placeholder,
+.account-search .form-control::-moz-placeholder,
+.account-search .form-control:-ms-input-placeholder,
+.account-search .form-control:-moz-placeholder {
+    color: #b7b7b7 !important;
+}
 /* .left_fixed_header.open,
 .left_fixed_header:hover {
   width: 210px;
@@ -139,6 +144,7 @@ a[vr-item]:focus {
     text-transform: capitalize;
     position: relative;
 }
+
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left_fixed_header li {
@@ -432,6 +438,12 @@ a[vr-item]:focus {
     padding: 2px 9px;
 }
 
+
+@media(max-width:991px) {
+    .modal-liq90 {
+        width: 100% !important;
+    }
+}
 @media(max-width:375px){
   .universal_date li.dateRangPicker, .universal_date .header-date {
     display: block ;

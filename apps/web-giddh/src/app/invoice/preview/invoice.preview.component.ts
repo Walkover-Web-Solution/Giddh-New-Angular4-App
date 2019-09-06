@@ -225,7 +225,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
 
-    this._breakPointObservar.observe(['(max-width:768px)']).subscribe(res => {
+    this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
       this.isMobileView = res.matches;
     });
 

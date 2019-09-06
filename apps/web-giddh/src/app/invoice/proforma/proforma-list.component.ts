@@ -16,7 +16,7 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createSelector } from "reselect";
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'app-proforma-list-component',
   templateUrl: './proforma-list.component.html',
@@ -126,9 +126,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   private isUpdateVoucherActionSuccess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  public isMobileView = false;
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-              private router: Router, private _cdr: ChangeDetectorRef) {
+              private router: Router, private _cdr: ChangeDetectorRef,  private _breakPointObservar: BreakpointObserver) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -138,6 +138,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
     this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+
+    this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
+      this.isMobileView = res.matches;
+    });
   }
 
   ngOnInit() {

@@ -1013,7 +1013,7 @@ position: relative; */
 
 #getGroupModal {
   height: 100%;
-  overflow: hidden;
+  overflow: inherit;
 }
 
 #addMngGrpScrBar {
@@ -2753,6 +2753,9 @@ background: #ff5e01;
   .modal-liq90 {
     width: 900px;
   }
+  .mangeAccountPopup .modal-liq90 {
+    width: 100%;
+}
 }
 
 
@@ -5151,13 +5154,10 @@ strong {
   border-radius: 2px;
 }
 
-#main {
-  /* padding-top: 54px; */
-}
-
 bs-daterangepicker-container,
 bs-datepicker-container {
   z-index: 1600;
+
 }
 
 .stock-grp-list li:focus,
@@ -5322,7 +5322,9 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 body.fixed {
   overflow-y: hidden;
 }
-
+#blankLedgerContainer tbody tr:empty {
+  display: none;
+}
 #getGroupModal {
   height: 100vh;
 }
@@ -5334,6 +5336,15 @@ form#groupDetailForm {
 .mobileHeader{
   display: none;
 }
+#getGroupModal #middleBody {
+  height: 100%;
+}
+.select2-ledger .menu .item {
+  white-space: initial;
+}
+
+
+/* responsive */
 
 @media (min-width: 768px) {
     .form-inline.financial-selectYear .form-group {
@@ -5358,6 +5369,19 @@ form#groupDetailForm {
 }
 }
 
+@media only screen and (max-width: 1024px) {
+  .left-col-new.active, .right-col-new.active {
+    display: block;
+  }
+  .left-col-new, .right-col-new {
+    width: 100%;
+    float: none;
+    display: none;
+    height: initial;
+  }
+}
+
+
 
 /*  */
 @media only screen and (max-width: 767px) {
@@ -5376,15 +5400,8 @@ form#groupDetailForm {
       top: 10px;
       font-weight: bold;
   }
-  .left-col-new, .right-col-new {
-      width: 100%;
-      float: none;
-      display: none;
-      height: initial;
-  }
-  .left-col-new.active, .right-col-new.active {
-      display: block;
-  }
+  
+  
   .transactions-page .left-col-new, .transactions-page .right-col-new {
       padding-bottom: 20px;
   }
@@ -5396,5 +5413,13 @@ form#groupDetailForm {
     display: block !important;
     width: 100%;
   }
-  
+
+
+  bs-daterangepicker-container, bs-datepicker-container {
+    overflow-y: auto;
+    height: 300px;
+    box-shadow: 0 0 10px 0 #aaa;
+  }
+
+
 }

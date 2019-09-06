@@ -9,7 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyResponse, CompanyCreateRequest } from '../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -178,6 +178,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private activeCompanyForDb: ICompAidata;
   private smartCombinedList$: Observable<any>;
   public isMobileSite: boolean;
+  public CurrentCmpPlanAmount: any;
+  public companyCountry: CompanyCountry = {
+    baseCurrency: '',
+    country: ''
+  }
+
   /**
    *
    */
@@ -289,8 +295,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
           if (res.baseCurrency) {
-            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(res.baseCurrency));
+            this.companyCountry.baseCurrency = res.baseCurrency;
+            this.companyCountry.country = res.country;
+            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
           }
+
+          this.CurrentCmpPlanAmount = res.subscription.planDetails.amount;
           this.subscribedPlan = res.subscription;
           this.isSubscribedPlanHaveAdditnlChrgs = res.subscription.additionalCharges;
           this.selectedPlanStatus = res.subscription.status;
@@ -298,7 +308,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeCompany = res;
       }
     });
-
 
 
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -433,7 +442,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return;
         }
       } else {
-        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName.substring(7, page.uniqueName.length).includes(lastState.replace('pages/', '')));
+        const lastStateName = NAVIGATION_ITEM_LIST.find((page) => page.uniqueName
+          .substring(7, page.uniqueName.length)
+          .includes(lastState.replace('pages/', '')));
         if (lastStateName) {
           return this.selectedPage = lastStateName.name;
         } else if (lastState.includes('ledger/')) {
@@ -458,23 +469,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-    this.router.events.subscribe(a => {
-      if (a instanceof NavigationStart) {
-        this.navigationEnd = false;
-      }
-      if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
-        this.navigationEnd = true;
-        if (a instanceof NavigationEnd) {
-          this.adjustNavigationBar();
-          let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
-            return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
-          });
-          if (menuItem) {
-            this.doEntryInDb('menus', menuItem);
+    this.router.events
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(a => {
+        if (a instanceof NavigationStart) {
+          this.navigationEnd = false;
+        }
+        if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
+          this.navigationEnd = true;
+          if (a instanceof NavigationEnd) {
+            this.adjustNavigationBar();
+            let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+              return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+            });
+            if (menuItem) {
+              this.doEntryInDb('menus', menuItem);
+            }
           }
         }
-      }
-    });
+      });
 
     this.loadAPI = new Promise((resolve) => {
       this.loadScript();
@@ -969,7 +982,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
       event.preventDefault();
       event.stopPropagation();
-      this.showNavigationModal();
+      if (this.companyList.length > 0) {
+        this.showNavigationModal();
+      }
     }
 
     // window.addEventListener('keyup', (e: KeyboardEvent) => {
@@ -1050,6 +1065,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.talkSalesModal.hide();
     this._generalService.talkToSalesModal.next(false);
   }
+
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
     this.modelRef = this.modalService.show(template);
   }
@@ -1057,6 +1073,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
     this.modelRef = this.modalService.show(template);
   }
+
   public goToSelectPlan() {
     this.modalService.hide(1);
     // this.router.navigate(['billing-detail']);

@@ -496,7 +496,7 @@ label.labeled {
     padding: 5px 16px;
     vertical-align: top;
     margin-top: 4px;
-    width: 100%;
+
 }
 .dropdown-toggle.btn-blue {
   padding: 6px 8px;
@@ -505,6 +505,28 @@ label.labeled {
   padding: 4px 15px;
 
 }
+}
+
+@media(max-width:991px){
+  .invoice-sidebar .invoice-number-date span.inoviceDate {
+    display: block;
+    position: relative;
+    margin-left: -6px;
+  }
+  .invoice-sidebar .invoice-number-date span.inoviceDate:before{
+    position: absolute;
+    content: '';
+    background-color: #fff;
+    width: 3px;
+    height: 12px;
+    top: 3px;
+
+  }
+  .invoice-sidebar li.activeItem .invoice-number-date span.inoviceDate:before{
+    background-color: #f0f0f0;
+  }
+
+
 }
 @media(max-width:768px){
 .invoice-modal-content:after , .invoice-modal-content{

@@ -80,6 +80,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
+
+  totalPrice: boolean = false;
+  
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public discountAccountsList$: Observable<IDiscountList[]>;

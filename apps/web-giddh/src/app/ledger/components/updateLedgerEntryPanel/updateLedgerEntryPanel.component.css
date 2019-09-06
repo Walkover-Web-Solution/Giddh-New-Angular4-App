@@ -79,4 +79,115 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .no-padding {
     padding: 0px !important;
 }
+.amnt-total {
+    font-size: 12px;
+    color: #999999;
+    padding-left: 5px;
+}
+.total_col span.bdrT {
+    width: 150px;
+    display: inline-block;
+    padding: 2px 0;
+}
+/* .ledger-main .form-control {
+    height: 26px;
+} */
+
+.ledger_book {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+.left-col-new, .right-col-new {
+    width: 100%;
+    padding-bottom: 100px;
+    height: initial;
+}
+.ledgHead.entry-popup table td:last-child {
+    border-right: 0px;
+}
+.custom-tabs {
+    display: none !important;
+}
+
+
+@media only screen and (max-width: 1024px) {
+    .ledger_book {
+        display: block;
+    }
+    .left-col-new, .right-col-new {
+        width: 100% !important;
+        float: left;
+        height: initial;
+        display: none;
+    }
+    .custom-tabs {
+        display: block !important;
+    }
+    .left-col-new.active, .right-col-new.active {
+        display: block !important;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .ledger_book .h-table tbody .ledger-row td {
+        padding-left: 80px !important;
+    }
+    .card-table tbody tr td {
+        padding-left: 70px !important;        
+    }
+    .ledger-footer-1 {
+        position: absolute;
+        bottom: 0;
+    }
+    
+
+
+    /*  */
+    .total-detail-table tbody tr td {
+        padding: 8px 0;
+    }
+    .total-detail-table > tbody > tr {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .qty-unit {
+        width: 90%;
+    }
+    .qty-unit table {
+        width: 100%;
+    }
+    .qty-unit table td.text-right.width40 {
+        padding-right: 20px !important;
+    }
+    .table-plus {
+        width: 10%;
+        text-align: center;
+    }
+    .price {
+        width: 40%;
+    }
+    .equal-2, .table-minus { 
+        width: 10%;
+        text-align: center;
+    }
+    .amount {
+        width: 40%;
+    }
+    .entrypanel:before {
+        display: none;
+    }
+    .total-amn {
+        width: 100%;
+    }
+    .xs-table-block {
+        width: 100%;
+        display: block;
+    }
+    .xs-table-block tbody tr td {
+        display: block;
+    }
+
+    
+}
+
 

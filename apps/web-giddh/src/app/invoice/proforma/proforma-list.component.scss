@@ -149,7 +149,23 @@
   display: none;
   margin-bottom: 15px;
 }
-@media(max-width:767px){
+ul.selectActionDropdown {
+  list-style: none;
+}
+.selectActionDropdown a {
+  color: #333;
+  font-size: 14px;
+  padding: 5px 10px;
+  display: block;
+}
+.selectActionDropdown a:hover{
+  background-color: #e5e5e5;
+  color: #ff5f00;
+}
+.dropdown-toggle{
+  color: #333;
+}
+@media(max-width:768px){
   .mobileSearch{
     display: block;
     margin-bottom: 0 !important;
@@ -169,6 +185,21 @@ display: none;
 }
 }
 @media(max-width:500px){
+  .date-advanceSearch .input-group {
+    width: 49%;
+}
+}
+@media(max-width:420px){
+  .smallLoading{
+    padding-left: 0;
+    color: #333333;
+    font-size: 12px;
+    position: relative;
+    top: 2px;
+    padding-right: 0;
+  }
+}
+@media(max-width:500px){
   .date-advanceSearch{
    display: block;
   }
@@ -178,4 +209,21 @@ display: none;
 }
 
 
+}
+@media(max-width:360px){
+  .date-advanceSearch .input-group {
+    width: 100%;
+}
+  .input-grp-dateRangePicker .d-flex {
+    flex-direction: column;
+}
+.input-grp-dateRangePicker .btn {
+  padding-left: 0;
+  padding-top: 10px;
+  padding-bottom: 0;
+}
+.smallLoading{
+  top: 5px;
+
+}
 }

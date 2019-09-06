@@ -12,7 +12,7 @@
           <div class="invoice-search-box">
             <input type="text" placeholder="search" #searchElement>
 
-            <div class="btn-group" dropdown *ngIf="voucherType === 'sales'" [autoClose]="true">
+            <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView" [autoClose]="true">
               <button id="button-basic2" dropdownToggle type="button"
                 class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
                 + New Invoice <span class="caret"></span>
@@ -28,7 +28,7 @@
               </ul>
             </div>
 
-            <button class="btn btn-blue" *ngIf="voucherType !== 'sales'" (click)="goToInvoice()">+ New
+            <button class="btn btn-blue" *ngIf="voucherType !== 'sales' && !isMobileView" (click)="goToInvoice()">+ New
               {{voucherType | voucherTypeToNamePipe}}</button>
           </div>
 
@@ -160,7 +160,7 @@
                     <!-- endregion -->
 
                     <div class="edit-action-btn-grps pull-right">
-                      <span>
+                      <span *ngIf = "!isMobileView">
                         <a href="javascript:void 0" tooltip="Edit" placement="top" (click)="toggleEditMode()"><i
                             class="fa fa-pencil"></i></a>
                       </span>
@@ -244,7 +244,7 @@
 
           </div>
 
-          <div class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
+          <div *ngIf = "!isMobileView" class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
 
             <div class="pos-rel" *ngIf="isVoucherDownloading">
               <div class="loader"></div>

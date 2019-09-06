@@ -82,7 +82,7 @@
     padding-left: 15px;
 }
 .customer-right  table{
-  float: none; width: 100%;
+  float: none !important; width: 100% !important;
   text-align: left;
 }
 .customer-right table tr td{
@@ -164,4 +164,9 @@ font-size: 14px;
   .wrapsearchingAging .max250 {
     max-width:150px !important;
 }
+}
+
+.table-aging-report {
+  min-height: 300px;
+  margin-top:0 !important;
 }

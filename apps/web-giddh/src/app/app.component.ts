@@ -11,9 +11,10 @@ import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
-import {reassignNavigationalArray} from './models/defaultMenus'
+import { reassignNavigationalArray } from './models/defaultMenus'
+
 /**
  * App Component
  * Top Level Component
@@ -25,20 +26,20 @@ import {reassignNavigationalArray} from './models/defaultMenus'
     './app.component.css'
   ],
   template: `
-    <noscript *ngIf="isProdMode && !isElectron">
-      <iframe [src]="tagManagerUrl"
-              height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
-    <router-outlet></router-outlet>    
+      <noscript *ngIf="isProdMode && !isElectron">
+          <iframe [src]="tagManagerUrl"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+      <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
+      <router-outlet></router-outlet>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-// tslint:disable-next-line:no-empty
+  // tslint:disable-next-line:no-empty
 
-  public sideMenu: { isopen: boolean } = {isopen: true};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: true };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isProdMode: boolean = false;
   public isElectron: boolean = false;
   public tagManagerUrl: SafeUrl;
@@ -57,16 +58,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   private newVersionAvailableForWebApp: boolean = false;
 
   constructor(private store: Store<AppState>,
-              private router: Router,
-              private _generalService: GeneralService,
-              private _cdr: ChangeDetectorRef,
-              private _versionCheckService: VersionCheckService,
-              private sanitizer: DomSanitizer,
-              private breakpointObserver: BreakpointObserver,
-              private dbServices :DbService
-              // private comapnyActions: CompanyActions,
-              // private activatedRoute: ActivatedRoute, 
-              // private location: Location
+    private router: Router,
+    private _generalService: GeneralService,
+    private _cdr: ChangeDetectorRef,
+    private _versionCheckService: VersionCheckService,
+    private sanitizer: DomSanitizer,
+    private breakpointObserver: BreakpointObserver,
+    private dbServices: DbService
+    // private comapnyActions: CompanyActions,
+    // private activatedRoute: ActivatedRoute,
+    // private location: Location
   ) {
     this.isProdMode = AppUrl === 'https://giddh.com/';
     this.isElectron = isElectron;
@@ -74,7 +75,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       if (ss.user && ss.user.session && ss.user.session.id) {
         let a = pick(ss.user, ['isNewUser']);
         a.isNewUser = true;
-        this._generalService.user = {...ss.user.user, ...a};
+        this._generalService.user = { ...ss.user.user, ...a };
         if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
           this._generalService.sessionId = ss.user.session.id;
         }
@@ -88,28 +89,25 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       this.IAmLoaded = s;
     });
 
+    
     this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
-
     this.breakpointObserver.observe([
       '(max-width: 1024px)'
-        ]).subscribe(result => {
-          this.changeOnMobileView(result.matches);
-        });
+    ]).subscribe(result => {
+      this.changeOnMobileView(result.matches);
+    });
 
   }
 
-  private changeOnMobileView(isMobile){
+  private changeOnMobileView(isMobile) {
     if(isMobile){
-      if(!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
+      if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
         localStorage.setItem('isMobileSiteGiddh', 'true');
-        this.dbServices.clearAllData();
-        //this.router.navigate(['settings']);
       }
+      this.dbServices.clearAllData();
+      this.router.navigate(['/pages/settings']);
     }else{
-      if(localStorage.getItem('isMobileSiteGiddh') && JSON.parse(localStorage.getItem('isMobileSiteGiddh'))){
-        localStorage.setItem('isMobileSiteGiddh', 'false');
-        this.dbServices.clearAllData();
-      }
+      localStorage.setItem('isMobileSiteGiddh', 'false');
     }
     reassignNavigationalArray(isMobile);
     this._generalService.setIsMobileView(isMobile);
