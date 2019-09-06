@@ -35,7 +35,7 @@
                     <!--</div>-->
                 </div>
                 <div class="col-sm-6 text-right C-flex-end xs-pl-0 xs-pr-0">
-                    <div class="d-flex xs-width-100">
+                    <div class="d-flex xs-width-100 ledger-head-top">
 
                         <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
 
@@ -57,7 +57,7 @@
 
                         </div>
 
-                        <div class="d-flex" *ngIf="checkedTrxWhileHovering.length > 0">
+                        <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
 
                             <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                                 tooltip="Delete" [placement]="'top'">Delete
@@ -76,8 +76,6 @@
                         </div>
 
                         <div class="d-flex">
-
-
                             <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
                                 (click)="showShareLedgerModal()">
                                 <i [tooltip]="'Share Ledger'" [placement]="'right'" class="fa icon-ledger-path"
@@ -94,10 +92,10 @@
             </div>
         <!-- ledger header end -->
 
-        <div class="custom-tabs mt-2 mb-2 hidden-lg hidden-md hidden-sm">
+        <div class="custom-tabs mt-2 mb-2">
             <ul class="nav nav-tabs pt-0">
-                <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Home</a></li>
-                <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">Profile</a></li>
+                <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">DR</a></li>
+                <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)" (click)="toggleShow()">CR</a></li>
             </ul>
         </div>
 
@@ -1161,14 +1159,14 @@
                         <div class="modal_wrap mrB2 text-center">
                             <h2>Select invoice generate option</h2>
                         </div>
-                        <div class="row mrT2">
-                            <div class="col-xs-6">
+                        <div class="row mrT2 ledger-btn">
+                            <div class="col-xs-6 pr-1 pl-1">
                                 <button type="submit" class="btn btn-block btn-success"
                                     (click)="onSelectInvoiceGenerateOption(false)">
                                     Generate Multiple
                                 </button>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-xs-6 pr-1 pl-1">
                                 <button type="submit" class="btn btn-block btn-success"
                                     (click)="onSelectInvoiceGenerateOption(true)">
                                     Generate Compound

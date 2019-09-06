@@ -1,7 +1,7 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
   <div class="wrapper">
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
-      <table class="width100">
+      <table class="width100 total-detail-table">
         <tbody class="">
         <tr *ngIf="currentTxn.selectedAccount">
           <td class="pItem qty-unit" *ngIf="currentTxn.selectedAccount.stock">
@@ -11,7 +11,7 @@
                 <td class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}"
                     style="width:100% !important;">
                   <label style=" margin-right: 6px;">Qty</label>
-                  <input style="width: 92%; margin-right: 5px;" type="text" name="" class="form-control text-right"
+                  <input type="text" name="" class="form-control text-right"
                          (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
                          decimalDigitsDirective [DecimalPlaces]="4"/>
                 </td>
@@ -65,7 +65,7 @@
             <label class="fs20">+</label>
           </td>
           <td *ngIf="(companyTaxesList$ | async)?.length"
-              class="pItem amount pos-rel dropdown-container text-right" (clickOutside)="hideTax()"
+              class="pItem amount pos-rel dropdown-container text-right dropdown-width" (clickOutside)="hideTax()"
               (click)="$event.stopPropagation()"
               (mouseenter)="hideDiscount()">
             <!--tax control component-->
