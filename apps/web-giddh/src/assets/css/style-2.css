@@ -7470,7 +7470,10 @@ span.red-text {
   border: 1px solid #d6d6d6;
   background-color: #eee;
 }
-
+.modal.fade.openPoup.in.show {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
 /* responsive */
 
