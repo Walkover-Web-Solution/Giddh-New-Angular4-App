@@ -70,6 +70,10 @@ export class SettingsComponent implements OnInit {
 
     this._route.params.subscribe(params => {
       if (params['type'] && this.activeTab !== params['type']) {
+        // if active tab is null or undefined then it means component initialized for the first time
+        if (!this.activeTab) {
+          this.setStateDetails(params['type']);
+        }
         this.activeTab = params['type'];
       }
     });
