@@ -24,4 +24,39 @@
     float: none;
     width: 100%;
   }
+
+  .qty-unit {
+    width: 90%;
+  }
+  .table-plus {
+    width: 10%;
+    text-align: center;
+  }
+  .price {
+    width: 40%;
+  }
+  .equal-2, .table-minus {
+    width: 10%;
+    text-align: center;
+  }
+  .amount {
+    width: 40%;
+  }
+  .equal-2, .table-minus {
+    width: 10%;
+    text-align: center;
+  }
+  .total-amn {
+    width: 100%;
+  }
+  .total-detail-table > tbody > tr {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .qty-unit table tr td.text-right {
+    padding-right: 10px;
+  }
+  .xs-mb-1 {
+    margin-bottom: 1px;
+  }
 }

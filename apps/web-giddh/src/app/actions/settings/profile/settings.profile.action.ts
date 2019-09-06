@@ -24,9 +24,9 @@ export class SettingsProfileActions {
         type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
         payload: res
       }, true, {
-        type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-        payload: res
-      })));
+          type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+          payload: res
+        })));
 
   @Effect()
   public UpdateProfile$: Observable<Action> = this.action$
@@ -44,9 +44,9 @@ export class SettingsProfileActions {
         type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
         payload: res
       }, true, {
-        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
-        payload: res
-      })));
+          type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+          payload: res
+        })));
 
   @Effect()
   public UpdateInventory$: Observable<Action> = this.action$
@@ -78,7 +78,7 @@ export class SettingsProfileActions {
           map(response => this.PatchProfileResponse(response)));
       }));
 
-  @Effect({dispatch: false})
+  @Effect({ dispatch: false })
   private PatchProfileResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE).pipe(
       map((response: CustomActions) => {
@@ -106,18 +106,18 @@ export class SettingsProfileActions {
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
         } else {
-          this.store.dispatch(this.companyActions.RefreshCompanies());
+          // this.store.dispatch(this.companyActions.RefreshCompanies()); // commented because if i change refresh then inrefresh will check to change company so there is no need to change company call
           this.toasty.successToast('Inventory settings Updated Successfully.');
         }
         return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
       }));
 
   constructor(private action$: Actions,
-              private toasty: ToasterService,
-              private router: Router,
-              private store: Store<AppState>,
-              private settingsProfileService: SettingsProfileService,
-              private companyActions: CompanyActions) {
+    private toasty: ToasterService,
+    private router: Router,
+    private store: Store<AppState>,
+    private settingsProfileService: SettingsProfileService,
+    private companyActions: CompanyActions) {
   }
 
   public GetProfileInfo(): CustomActions {
@@ -157,11 +157,11 @@ export class SettingsProfileActions {
   public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean): CustomActions {
     return {
       type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
-      payload: {companyUniqueName: response.uniqueName, isMultipleCurrency}
+      payload: { companyUniqueName: response.uniqueName, isMultipleCurrency }
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

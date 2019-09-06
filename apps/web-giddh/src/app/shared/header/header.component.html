@@ -628,7 +628,7 @@ Create Company
       <ul class="list-inline">
         <!-- [routerLink]="['select-plan']" -->
         <li>
-          <button class="btn btn-green" (click)="goToSelectPlan();">Renew Plan</button>
+          <button class="btn btn-green" *ngIf="CurrentCmpPlanAmount"(click)="goToSelectPlan();">Renew Plan</button>
         </li>
         <li>
           <button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button>
