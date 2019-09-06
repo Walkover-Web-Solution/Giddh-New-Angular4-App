@@ -12,6 +12,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
@@ -97,7 +98,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private groupService: GroupService,
     private accountsAction: AccountsAction,
-    private _groupWithAccountsAction: GroupWithAccountsAction
+    private _groupWithAccountsAction: GroupWithAccountsAction,
+    private _generalActions: GeneralActions
   ) {
     // account-add component's property
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
@@ -114,6 +116,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
     if (this.isUpdateAccount && this.activeAccountDetails) {
       this.accountDetails = this.activeAccountDetails;
       this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
