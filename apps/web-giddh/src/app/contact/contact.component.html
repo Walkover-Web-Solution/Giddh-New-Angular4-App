@@ -708,7 +708,7 @@
                               Ledger</a>
                           </li>
 
-                          <li class="li-link">
+                          <li class="li-link" *ngIf="!isMobileScreen">
                             <a href="javascript: void 0" (click)="performActions(2, account)">Generate
                               Invoice</a>
                           </li>
