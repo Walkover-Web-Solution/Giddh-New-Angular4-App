@@ -244,7 +244,7 @@
 
           </div>
 
-          <div class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
+          <div *ngIf = "!isMobileView" class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight">
 
             <div class="pos-rel" *ngIf="isVoucherDownloading">
               <div class="loader"></div>
