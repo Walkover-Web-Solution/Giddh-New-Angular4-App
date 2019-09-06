@@ -7461,11 +7461,17 @@ span.red-text {
 }
 
 
-.tooltip-inner {
+.headerTooltip .tooltip-inner {
  word-break: break-word !important;
- white-space: normal !important;
+ white-space: pre-line !important;
 }
-
+.icon-btn .tooltip-inner {
+  white-space: nowrap !important;
+}
+.icon-btn .btn-xs {
+  border: 1px solid #d6d6d6;
+  background-color: #eee;
+}
 
 
 /* responsive */
@@ -7768,6 +7774,9 @@ span.red-text {
     .accountAsideMenuState2 #close {
         right: 267px;
     }
+    .vendorPayNow .accountAsideMenuState2 #close {
+      right: 312px;
+  }
     .custom-tabs .top_bar {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -7797,7 +7806,11 @@ span.red-text {
         cursor: pointer !important;
     }
 }
-
+@media(max-width:375px){
+  .vendorPayNow .accountAsideMenuState2 #close {
+    right:272px;
+}
+}
 @media (max-width: 360px) {
     .pagination-sm>li>a,
     .pagination-sm>li>span {
@@ -7973,5 +7986,5 @@ span.red-text {
 @media only screen and (max-width: 480px) {
     td.pItem.price .my-dropdown-menu {
         width: 180px !important;
-    } 
+    }
 }
