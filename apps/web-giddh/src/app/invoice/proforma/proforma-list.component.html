@@ -49,7 +49,7 @@
       <!--        </div>-->
       <!-- endregion -->
 
-      <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
+      <div *ngIf="voucherType === 'proformas' && !isMobileView" class="btn-wrapper">
         <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New Proforma
         </button>
       </div>
@@ -86,7 +86,7 @@
           </button>
         </div>
 
-        <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
+        <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
           <button class="btn btn-blue" (click)="goToInvoice('estimates')">+ New Estimates
           </button>
         </div>
