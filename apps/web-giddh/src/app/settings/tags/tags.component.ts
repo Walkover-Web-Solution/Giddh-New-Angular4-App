@@ -14,7 +14,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'setting-tags',
-  templateUrl: './tags.component.html'
+  templateUrl: './tags.component.html',
+  styleUrls: ['./tags.component.scss'],
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
 
