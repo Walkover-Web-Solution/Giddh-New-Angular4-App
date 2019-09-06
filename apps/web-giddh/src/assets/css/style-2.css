@@ -7459,11 +7459,17 @@ span.red-text {
 }
 
 
-.tooltip-inner {
+.headerTooltip .tooltip-inner {
  word-break: break-word !important;
- white-space: normal !important;
+ white-space: pre-line !important;
 }
-
+.icon-btn .tooltip-inner {
+  white-space: nowrap !important;
+}
+.icon-btn .btn-xs {
+  border: 1px solid #d6d6d6;
+  background-color: #eee;
+}
 
 
 /* responsive */
