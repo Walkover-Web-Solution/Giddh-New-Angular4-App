@@ -5322,7 +5322,9 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 body.fixed {
   overflow-y: hidden;
 }
-
+#blankLedgerContainer tbody tr:empty {
+  display: none;
+}
 #getGroupModal {
   height: 100vh;
 }
@@ -5337,6 +5339,11 @@ form#groupDetailForm {
 #getGroupModal #middleBody {
   height: 100%;
 }
+.select2-ledger .menu .item {
+  white-space: initial;
+}
+
+
 /* responsive */
 
 @media (min-width: 768px) {
@@ -5362,6 +5369,19 @@ form#groupDetailForm {
 }
 }
 
+@media only screen and (max-width: 1024px) {
+  .left-col-new.active, .right-col-new.active {
+    display: block;
+  }
+  .left-col-new, .right-col-new {
+    width: 100%;
+    float: none;
+    display: none;
+    height: initial;
+  }
+}
+
+
 
 /*  */
 @media only screen and (max-width: 767px) {
@@ -5380,15 +5400,8 @@ form#groupDetailForm {
       top: 10px;
       font-weight: bold;
   }
-  .left-col-new, .right-col-new {
-      width: 100%;
-      float: none;
-      display: none;
-      height: initial;
-  }
-  .left-col-new.active, .right-col-new.active {
-      display: block;
-  }
+  
+  
   .transactions-page .left-col-new, .transactions-page .right-col-new {
       padding-bottom: 20px;
   }

@@ -58,7 +58,11 @@
     background: #fff;
     color: #808080;
     font-size: 18px;
-    margin: 100px 0 0;
+    margin: 0px 0 0;
+}
+.ledger-stat .row {
+    display: flex;
+    flex-wrap: wrap;
 }
 .icomoon_ico {
     margin-left: 8px;
@@ -83,8 +87,8 @@
 }
 .pageCount {
     overflow: hidden;
-    width: 50%;
-    left: 25%;
+    width: 100% !important;
+    left: 0% !important;
     bottom: 100px;
     background: #fff;
     padding: 5px;
@@ -135,12 +139,14 @@
     border-bottom: 1px solid #c4c6c7;
 }
 .ledger_book {
-    border: 1px solid #ccc;
+    border: 0px solid #ccc;
     clear: both;
     position: relative;
-    background: #fff;
     float: left;
-    width: 100%;    margin-bottom: 100px;
+    width: 100%;    
+    margin-bottom: 30px;
+    background: #fff;
+
 }
 .Width600 {
     position: absolute;
@@ -202,6 +208,19 @@ sh-select:focus {
     color: #999999;
     padding-left: 5px;
 }
+.ledger_book .left-col-new, .ledger_book .right-col-new {
+    background: #fff;
+}
+.left-col-new table.width100.h-table tbody tr td:last-child, .left-col-new table.width100.h-table thead tr th:last-child {
+    border-right: 0px !important;
+}
+.left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
+    border-left: 1px solid #ccc !important;
+}
+.custom-tabs {
+    display: none;
+}
+
 
 
 @media (min-width: 1200px) {
@@ -213,6 +232,10 @@ sh-select:focus {
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
+        max-width: 100%;
+    }
+    .custom-tabs {
+        display: block;
     }
 }
 @media only screen and (max-width: 767px) {
@@ -237,14 +260,14 @@ sh-select:focus {
         margin: 0px 0 0;
     }
     .ledger_book {
-        margin-bottom: 100px;
+        margin-bottom: 30px;
     }
     .ledger_book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
     .ledger_book .h-table {
-        overflow: hidden;
         display: block;
+        clear: both;
     }
     .ledger_book .h-table tbody {
         display: block;
@@ -256,6 +279,32 @@ sh-select:focus {
     .ledger_book .h-table tbody tr td {
         width: 100% !important;
         display: block;
+    }
+    .right-col-new .ledger-head {
+        background: #f7f8fa;
+    }
+    .ledger-row td:empty {
+        display: none !important;
+    }
+    #blankLedgerContainer tbody tr:empty {
+        display: none;
+    }
+    .ledger-head-top {
+        flex-wrap: wrap;
+    }
+    .xs-mb-1 {
+      margin-bottom: 10px;
+    }
+    .ledger-btn .btn {
+        font-size: 12px !important;
+        padding: 6px;
+    }
+    .ledger-btn button.btn {
+        font-size: 12px !important;
+        padding: 6px;
+    }
+    .left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
+        border-left: 0px solid #ccc !important;
     }
 }
 

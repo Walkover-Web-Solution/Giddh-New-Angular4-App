@@ -1915,6 +1915,7 @@ input[type="checkbox"]:after {
 
 .modal.fade .modal-dialog {
     transform: translateY(0px) !important;
+    margin: 10px auto;
 }
 
 .pt-05 {
@@ -5670,6 +5671,7 @@ table td[class*=col-]:last-child {
     background: #fff;
     float: left;
     width: 100%;
+    background: #fff;
 }
 
 .Width600 {
@@ -7689,9 +7691,18 @@ span.red-text {
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
+    
 }
 
+@media (max-width: 1199px) {
+    .ledger_book .left-col-new .entry-modal {
+        width: 100%;
+    }
+}
 @media (max-width: 767px) {
+    .dropdown-width ul.dropdown-menu.pd {
+        min-width: 150px!important;
+    }
     #invoice-setting ul.nav.nav-tabs {
         border-bottom: none !important;
     }
@@ -7707,9 +7718,7 @@ span.red-text {
     .xs-width-100 {
         width: 100%;
     }
-    .ledger_book .left-col-new .entry-modal {
-        width: 100%;
-    }
+    
     .ledger_book .right-col-new .entry-modal {
         width: 100%;
         left: 0%;
@@ -7746,6 +7755,9 @@ span.red-text {
     }
     .blank-label {
         display: none;
+    }
+    .select2-ledger .menu {
+        width: 210px !important;
     }
 }
 
@@ -7957,4 +7969,9 @@ span.red-text {
         box-shadow: none;
         border: none;
     }
+}
+@media only screen and (max-width: 480px) {
+    td.pItem.price .my-dropdown-menu {
+        width: 180px !important;
+    } 
 }

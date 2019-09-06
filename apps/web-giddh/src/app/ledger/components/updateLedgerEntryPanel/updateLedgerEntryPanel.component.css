@@ -106,9 +106,28 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .ledgHead.entry-popup table td:last-child {
     border-right: 0px;
 }
+.custom-tabs {
+    display: none !important;
+}
 
 
-
+@media only screen and (max-width: 1024px) {
+    .ledger_book {
+        display: block;
+    }
+    .left-col-new, .right-col-new {
+        width: 100% !important;
+        float: left;
+        height: initial;
+        display: none;
+    }
+    .custom-tabs {
+        display: block !important;
+    }
+    .left-col-new.active, .right-col-new.active {
+        display: block !important;
+    }
+}
 @media only screen and (max-width: 767px) {
     .ledger_book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
@@ -120,9 +139,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
         position: absolute;
         bottom: 0;
     }
-    .ledger_book {
-        display: block;
-    }
+    
 
 
     /*  */
@@ -169,4 +186,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     .xs-table-block tbody tr td {
         display: block;
     }
+
+    
 }
+
+
