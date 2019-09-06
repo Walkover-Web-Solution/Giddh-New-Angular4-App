@@ -1089,7 +1089,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-
   /*
   * Register Account navigation
   * */
