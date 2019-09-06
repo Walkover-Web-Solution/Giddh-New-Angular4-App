@@ -68,7 +68,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public sundryCreditorsAccountsBackup: any = {};
   public sundryCreditorsAccounts$: Observable<any>;
   public sundryCreditorsAccounts: any[] = [];
-  public activeTab: any = 'customer';
+  public activeTab: any = '';
   public groupUniqueName: any;
   public accountAsideMenuState: string = 'out';
   public paymentAsideMenuState: string = 'out';
