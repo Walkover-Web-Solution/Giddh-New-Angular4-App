@@ -1,0 +1,203 @@
+.right-penal {
+    border-left: 1px solid #C6C6C6;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    top: 54px;
+    width: 280px;
+    padding: 15px;
+    overflow: auto;
+    .card {
+        width: 100%;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        background-color: white;
+        padding: 15px;
+        h2 {
+            font-size: 14px;
+            color: #0C8FE6;
+        }
+        label {
+            color: #666666;
+            font-size: 12px;
+            width: 20%;
+            font-weight: 800;
+        }
+        span {
+            font-size: 12px;
+            color: #333333;
+        }
+    }
+}
+
+.e-way-body {
+    .col-md-3 {
+        display: flex;
+        align-items: center;
+    }
+    .col-md-8 {
+        .input {
+            width: 300px;
+        }
+    }
+}
+
+.list-icon-group {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin-left: -10px;
+    li {
+        // padding: 10px;
+        display: flex;
+        align-items: center;
+        -moz-transition: 1ms all;
+        cursor: pointer;
+        &:hover {
+            // background-color: white;
+            // box-shadow: 2px 2px 5px gainsboro;
+        }
+        img {
+            margin-right: 7px;
+        }
+    }
+}
+
+.list-icon-group {
+    input {
+        display: none;
+    }
+}
+
+.list-icon-group label {
+    padding: 10px;
+    margin-right: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.list-icon-group input:checked+label {
+    background-color: white;
+    box-shadow: 2px 2px 5px gainsboro;
+}
+
+.select-style {
+    width: 300px;
+}
+
+.select-style select {
+    padding: 6px !important;
+    border-radius: 0px;
+}
+
+// modal css start
+.aside-pane {
+    overflow: auto;
+    width: 475px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 0px;
+}
+
+#close {
+    position: fixed;
+    // left: -40px;
+    top: 0;
+    right: 467px;
+    transition: .5s all ease;
+}
+
+.aside-pane.aside-right.out button#close {
+    right: -60px;
+}
+
+.aside-right {
+    font-size: 14px;
+    background: #fff;
+    right: -530px;
+    transition: .5s all ease;
+    z-index: 999;
+}
+
+.bg-white {
+    background: #fff !important;
+}
+
+.aside-right .control-label {
+    padding-left: 20px;
+    text-align: left;
+}
+
+.bg-gray {
+    background: #F7F8FA;
+}
+
+.aside-right .list-icon-group label {
+    margin: 0px !important;
+    vertical-align: middle;
+}
+
+.aside-right .list-icon-group label {
+    padding: 5px 10px;
+    border: 1px solid transparent;
+}
+
+.aside-right .list-icon-group input:checked+label {
+    border: 1px solid #FF5F00;
+    border-radius: 0px;
+}
+
+.aside-pane.aside-right.in {
+    right: 0;
+}
+
+.table-modal tbody td {
+    border-top: 0px solid !important;
+    border-right: 1px solid #C6C6C6;
+}
+
+.table-modal thead th {
+    border-right: 1px solid #C6C6C6 !important;
+}
+
+.table-modal {
+    border-bottom: 1px solid #C6C6C6 !important;
+}
+
+.table-modal tbody tr td button {
+    background: none;
+    border: 0px;
+    color: #C7C7C7;
+    font-size: 16px;
+    padding: 2px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.table-modal tbody tr td .icon-edit {
+    border-bottom: 2px solid #C7C7C7;
+}
+
+.aside-overlay.out {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.aside-overlay.in {
+    visibility: visible;
+    opacity: .6;
+}
+
+.aside-overlay {
+    transition: .5s all ease;
+    z-index: 999;
+}
+
+.icon-pointer .glyphicon:hover {
+    color: #FF5F00 !important;
+}
+
+.icon-pointer .activeTextColor {
+    color: #FF5F00 !important;
+}
