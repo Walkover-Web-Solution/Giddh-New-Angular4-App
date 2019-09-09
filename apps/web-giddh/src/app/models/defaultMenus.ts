@@ -50,6 +50,13 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
   // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
   // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
   {type: 'MENU', name: 'Import', uniqueName: '/pages/import'},
+  {type: 'MENU', name: 'Import > Groups', uniqueName: '/pages/import/group'},
+  {type: 'MENU', name: 'Import > Accounts', uniqueName: '/pages/import/account'},
+  {type: 'MENU', name: 'Import > Inventory', uniqueName: '/pages/import/stock'},
+  {type: 'MENU', name: 'Import > Entries', uniqueName: '/pages/import/entries'},
+  {type: 'MENU', name: 'Import > Trial Balance', uniqueName: '/pages/import/trial-balance'},
+
+
   {type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: {tab: 'Group', tabIndex: 10}},
   {type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding'},
 
