@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { SubscriptionsUser, CompaniesWithTransaction } from '../../../models/api-models/Subscriptions';
 import * as moment from 'moment';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'subscriptions',
@@ -27,24 +27,17 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
   public companyTransactions: any;
   public moment = moment;
   public modalRef: BsModalRef;
-  public subscriptionStatus = {
-    true: 'Active',
-    false: 'Renew'
-  };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
     private _subscriptionsActions: SubscriptionsActions,
-    private modalService: BsModalService, private _route: Router) {
+    private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute) {
 
     this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
     this.subscriptions$ = this.store.select(s => s.subscriptions.subscriptions)
       .pipe(takeUntil(this.destroyed$))
-    //   .subscribe(s => this.companies = s);
-    // this.store.select(s => s.subscriptions.companyTransactions)
-    //   .pipe(takeUntil(this.destroyed$))
-    //   .subscribe(s => this.companyTransactions = s);
+
   }
 
   public ngOnInit() {
@@ -59,7 +52,11 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
           this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
       }
     });
-
+    this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+      if (val.isPlanPage) {
+        this.isPlanShow = true;
+      }
+    });
 
   }
   public ngAfterViewInit() {

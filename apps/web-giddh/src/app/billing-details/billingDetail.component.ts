@@ -126,10 +126,16 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.isCreateAndSwitchCompanyInProcess = inProcess;
     });
     this.cdRef.detectChanges();
-    if (this.fromSubscription) {
-      this.prepareSelectedPlanFromSubscriptions(this.selectedPlans)
+    if (this.fromSubscription && this.selectedPlans) {
+      this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+        if (res) {
+          this.UserCurrency = res.baseCurrency;
+        }
+      });
+      this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
     }
   }
+
   public getPayAmountForTazorPay(amt: any) {
     return amt * 100;
   }
@@ -190,14 +196,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.subscriptionPrice = plan.planDetails.amount;
     this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
     this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
+    if (!this.UserCurrency) {
+      this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+        if (res) {
+          this.UserCurrency = res.baseCurrency;
+        }
+      });
+    }
     if (this.subscriptionPrice && this.UserCurrency) {
       this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
         if (res.status === 'success') {
           this.ChangePaidPlanAMT = res.body.amount;
           this.orderId = res.body.id;
-          if (this.createNewCompany) {
-            this.createNewCompany.subscriptionRequest = this.SubscriptionRequestObj;
-          }
           this.store.dispatch(this.companyActions.selectedPlan(plan));
           this.razorpayAmount = this.getPayAmountForTazorPay(this.ChangePaidPlanAMT);
           this.ngAfterViewInit();
@@ -214,7 +224,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public backToSubscriptions() {
-    this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
+    this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 
 

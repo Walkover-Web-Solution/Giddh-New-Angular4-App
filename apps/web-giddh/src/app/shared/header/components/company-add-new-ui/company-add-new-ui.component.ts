@@ -167,8 +167,8 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
           this.fireSocketCompanyCreateRequest();
         }
       }
+    }
   }
-}
 
   public fireSocketCompanyCreateRequest() {
     this.socketCompanyRequest.CompanyName = this.company.name;
