@@ -158,14 +158,16 @@
 
             <div class="bg-white clearfix">
               <div class="customer-right clearfix" style="width: 100%;">
-                <table style="" class="text-right">
+                <table  class="text-right">
                   <tr>
                     <td>
-                      <p>Sales</p>
+                      <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                      <p *ngIf="activeTab === 'customer'">Sales</p>
                       <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
                     </td>
                     <td>
-                      <p>Receipts</p>
+                      <p *ngIf="activeTab === 'vendor'">Payment</p>
+                      <p *ngIf="activeTab === 'customer'">Receipt</p>
                       <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
                     </td>
                     <td>
