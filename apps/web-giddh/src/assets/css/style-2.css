@@ -7476,6 +7476,10 @@ span.red-text {
   overflow-x: hidden;
   overflow-y: auto;
 }
+.ledger_book .tooltip-inner {
+    word-break: break-word !important;
+    white-space: pre-line !important;
+}
 
 /* responsive */
 
@@ -7700,7 +7704,7 @@ span.red-text {
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
-    
+
 }
 
 @media (max-width: 1199px) {
@@ -7727,7 +7731,7 @@ span.red-text {
     .xs-width-100 {
         width: 100%;
     }
-    
+
     .ledger_book .right-col-new .entry-modal {
         width: 100%;
         left: 0%;
