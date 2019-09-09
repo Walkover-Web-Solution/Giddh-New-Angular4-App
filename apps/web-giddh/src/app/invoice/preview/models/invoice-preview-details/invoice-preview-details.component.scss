@@ -538,7 +538,9 @@ label.labeled {
   .invoice-sidebar {
     background-color: #fff;
     padding: 0;
-    height: 26vh;
+    height: inherit;
+    max-height: 46vmax;
+    overflow-y: auto;
 }
 .invoiceDetail-header .edit-change-status .edit-action-btn-grps{
   float:  left !important;
