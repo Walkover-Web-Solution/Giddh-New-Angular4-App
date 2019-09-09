@@ -161,13 +161,13 @@
                 <table  class="text-right">
                   <tr>
                     <td>
-                      <p *ngIf="activeTab == 'vendor'">Purchase</p>
-                      <p *ngIf="activeTab == 'customer'">Sales</p>
+                      <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                      <p *ngIf="activeTab === 'customer'">Sales</p>
                       <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
                     </td>
                     <td>
-                      <p *ngIf="activeTab == 'vendor'">Payment</p>
-                      <p *ngIf="activeTab == 'customer'">Receipt</p>
+                      <p *ngIf="activeTab === 'vendor'">Payment</p>
+                      <p *ngIf="activeTab === 'customer'">Receipt</p>
                       <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
                     </td>
                     <td>
