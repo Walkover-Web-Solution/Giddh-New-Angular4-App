@@ -139,7 +139,12 @@ export class CompanyActions {
           this._toasty.errorToast(response.message, response.code);
           return { type: 'EmptyAction' };
         }
+        this.store.dispatch({
+          type: 'USER_CAREATE_COMPANY',
+          payload: null
+        });
         this._toasty.successToast('New company created successfully', 'Success');
+
 
         // is brahch set
         if (response.request.isBranch) {
