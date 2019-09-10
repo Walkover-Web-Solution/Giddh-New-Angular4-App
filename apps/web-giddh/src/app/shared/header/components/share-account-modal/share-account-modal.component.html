@@ -9,10 +9,11 @@
       <div class="add_mailer">
 
         <!--share account from-->
-        <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline" autocomplete="off">
+        <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix"
+          autocomplete="off">
           <div class="input-group form-group col-xs-12">
             <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID"
-                   class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
             <div class="input-group-btn">
               <select name="selectedPermission" class="form-control" [(ngModel)]="selectedPermission" required>
                 <option value="">-Select permission-</option>
@@ -21,7 +22,7 @@
                 </option>
               </select>
               <button class="btn btn-success mrL1" type="submit" [disabled]="shareAccountForm.invalid"
-                      (click)="shareAccount()">Share
+                (click)="shareAccount()">Share
               </button>
             </div>
             <!-- /btn-account -->
@@ -33,24 +34,24 @@
           <div class="row">
             <ul class="shared_list">
               <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index" class="clearfix">
-                                <span class="pull-left">
-                                    <small class="Useremail">{{ val.emailId }}</small>
-                                </span>
+                <span class="pull-left">
+                  <small class="Useremail">{{ val.emailId }}</small>
+                </span>
                 <div class="custom-select pos-rel">
                   <select name="selectedPermission_{{i}}" class="form-control cp"
-                          (change)="updatePermission(val, $event)">
+                    (change)="updatePermission(val, $event)">
                     <option [selected]="val.roleUniqueName === permission.uniqueName" [value]="permission.uniqueName"
-                            *ngFor="let permission of allPermissions$ | async">{{permission.name}}
+                      *ngFor="let permission of allPermissions$ | async">{{permission.name}}
                     </option>
                   </select>
                   <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <span class="form-inline">
-                                  <span class="delIcon pull-right">
-                                  <i (click)="unShareAccount(val.uniqueName, val.entityUniqueName)" class="fa fa-trash"
-                                     aria-hidden="true"></i>
-                                  </span>
-                                </span>
+                  <span class="delIcon pull-right">
+                    <i (click)="unShareAccount(val.uniqueName, val.entityUniqueName)" class="fa fa-trash"
+                      aria-hidden="true"></i>
+                  </span>
+                </span>
               </li>
             </ul>
           </div>

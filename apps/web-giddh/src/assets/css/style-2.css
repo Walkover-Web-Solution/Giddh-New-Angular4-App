@@ -7483,6 +7483,9 @@ span.red-text {
 .selectCustomerName .scrollable-content > .item {
   height: 48px !important;
 }
+.add-companyDetail .add_mailer form {
+    padding-bottom: 60px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

@@ -17,7 +17,7 @@
       <!--<h3 class="pdB1">Share with</h3>-->
       <div class="add_mailer">
         <!--create company from-->
-        <form name="form" #createCompanyForm="ngForm" novalidate="" class="" autocomplete="off">
+        <form name="form" #createCompanyForm="ngForm" class="clearfix" novalidate="" class="" autocomplete="off">
           <div class="company-form-body">
 
             <div class="col-xs-12 m-t-50">
@@ -74,7 +74,7 @@
             <div class="col-xs-12 mrB3">
               <span>
                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
-                <div class="d-flex welcome-select">
+                <div class="d-flex welcome-select ">
                   <sh-select class="pull-left select-caret" required style="width: 85px;margin-right: 28px;"
                     name="phoneCode" [placeholder]="+91" [options]="countryPhoneCode" [(ngModel)]="company.phoneCode">
                   </sh-select>
