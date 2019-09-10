@@ -79,12 +79,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
       this.SubscriptionPlans = res.body;
     });
 
-    if (this._generalService.createNewCompany) {
-      this.createNewCompanyPreObj = this._generalService.createNewCompany;
-      if (this.createNewCompanyPreObj.baseCurrency) {
-        this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
-      }
-    }
     this.logedInUser = this._generalService.user;
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
 

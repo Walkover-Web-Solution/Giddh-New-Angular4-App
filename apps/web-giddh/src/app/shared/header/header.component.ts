@@ -351,7 +351,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-    if (this.selectedPlanStatus === 'expired') {
+    if (this.selectedPlanStatus === 'expired') {// active expired
       this.openExpiredPlanModel(this.expiredPlanModel);
     }
     if (this.isSubscribedPlanHaveAdditnlChrgs) {
@@ -1077,7 +1077,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public goToSelectPlan() {
     this.modalService.hide(1);
     // this.router.navigate(['billing-detail']);
-    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
+    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 
   public onRight(nodes) {

@@ -70,7 +70,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
       this.isSwitchPlanInProcess = inProcess;
     });
-
   }
   public ngOnDestroy() { }
 
