@@ -34,7 +34,7 @@
           <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
             <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
-              (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
+                   (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
           </td>
           <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
             <label class="d-block">&nbsp;</label>
@@ -42,7 +42,7 @@
           </td>
           <td class="pItem text-right amount">
             <label class="primary_clr">Amount</label>
-            <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2"
+            <input type="text" name="" prefix="$" mask="comma_separator.2"
                    class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
           </td>
@@ -136,7 +136,8 @@
           <button class="no-btn pdL0">&nbsp;More Details</button>
         </td>
         <td class="text-right">
-          <span class="primary_clr"><!--Compound Total:--> Total in USD: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
+          <span
+            class="primary_clr"><!--Compound Total:--> Total in USD: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
         </td>
       </tr>
       </tbody>
@@ -279,7 +280,7 @@
               <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
             </div>
           </div>
-  
+
           <div class="clearfix">
             <p class="primary_clr" *ngIf="totalPrice">Total in INR: <i class="icon-rupees font-12"></i> 32564.97</p>
           </div>
@@ -296,11 +297,11 @@
             <li><input class="price-input" value="71.9034" type="text"> INR</li>
           </ul>
         </div>
-  
+
         <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
           <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
-                  [uploadInput]="uploadInput"
-                  (uploadOutput)="onUploadOutput($event)">
+                 [uploadInput]="uploadInput"
+                 (uploadOutput)="onUploadOutput($event)">
           <label for="invoiceFile" class="cp fs16">
             <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
         </label>
@@ -319,7 +320,7 @@
             to CR
           </button>
           <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading"
-            [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
+                  [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
           </button>
         </div>
       </div>
@@ -331,7 +332,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
-        (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
+                     (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
       </confirm-modal>
     </div>
   </div>

@@ -603,8 +603,6 @@
       <!--debit transaction-->
 
       <!--credit transaction-->
-
-
       <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
         [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
 
