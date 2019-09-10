@@ -47,8 +47,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public countryPhoneCode: IOption[] = [];
   public currencySource$: Observable<IOption[]> = observableOf([]);
   public taxesList: any = [];
-  public businessTypeList: any = [];
-  public businessNatureList: any = [];
+  public businessTypeList: IOption[] = [];
+  public businessNatureList: IOption[] = [];
   public selectedTaxes: string[] = [];
   public isbranch: boolean = false;
   public modalConfig: ModalOptions = {
@@ -180,6 +180,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isbranch = res.isBranch;
           this.createNewCompany = res;
           this.company = this.createNewCompany;
+          if (this.company.contactNo.toString().includes('-')) {
+            let contact = this.company.contactNo.split('-');
+            this.company.contactNo = contact[1];
+          }
           this.prepareWelcomeForm();
         }
       }
@@ -190,22 +194,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isbranch = res.isBranch;
           this.createNewCompany = res;
           this.company = this.createNewCompany;
+          if (this.company.contactNo.toString().includes('-')) {
+            let contact = this.company.contactNo.split('-');
+            this.company.contactNo = contact[1];
+          }
           this.prepareWelcomeForm();
         }
       }
     });
-
-    if (this._generalService.createNewCompany) {
-      this.createNewCompany = this._generalService.createNewCompany;
-      this.company = this.createNewCompany;
-      if (this.company.contactNo.toString().includes('-')) {
-        let contact = this.company.contactNo.split('-');
-        this.company.contactNo = contact[1];
-      }
-      this.prepareWelcomeForm();
-    } else {
-      //this.back();
-    }
 
     this.updateProfileSuccess$.subscribe(s => {
       if (s) {
@@ -239,6 +235,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public skip() {
     this._router.navigate(['/onboarding']);
   }
+  // public reFillForm() {
+  //   this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
+  //   this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
+  //   this.selectedBusinesstype = this.createNewCompany.bussinessType;
+  //   if (this.selectedBusinesstype === 'Registered') {
+  //     this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+  //   }
+  //   this.companyProfileObj.address = this.createNewCompany.address;
+  // }
   public prepareWelcomeForm() {
     if (this.company) {
       this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
@@ -254,7 +259,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public submit() {
     // this.selectedTaxes = [];
     this.createNewCompanyPreparedObj.bussinessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
-    this.createNewCompanyPreparedObj.bussinessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
+    this.createNewCompanyPreparedObj.bussinessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
@@ -344,11 +349,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     //
     if (event) {
       this.selectedBusinesstype = event.value;
-    }
-  }
-  public selectedbusinessOptions(event) {
-    if (event) {
-      //
     }
   }
   public selectApplicableTaxes(tax, event) {
