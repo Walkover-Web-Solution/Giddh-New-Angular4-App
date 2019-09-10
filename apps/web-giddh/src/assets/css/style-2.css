@@ -7480,7 +7480,9 @@ span.red-text {
     word-break: break-word !important;
     white-space: pre-line !important;
 }
-
+.selectCustomerName .scrollable-content > .item {
+  height: 48px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
