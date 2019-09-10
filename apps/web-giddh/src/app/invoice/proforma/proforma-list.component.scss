@@ -37,10 +37,13 @@
 .td_in_searchBox div {
   display: flex;
 }
+.basic > thead > tr > th {
 
+    padding-left: 14px !important;
+}
 .td_in_searchBox div span {
   flex: 1 1 auto;
-  padding: 8px 0 8px 8px;
+  padding: 8px 0 8px 0;
 }
 
 .td_in_searchBox div i {
