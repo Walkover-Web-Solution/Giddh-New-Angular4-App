@@ -239,8 +239,9 @@
           <td data-title="Status">{{ item.status }}</td>
 
           <!--for not cancelled status-->
+
           <td data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
-            *ngIf="item.action === 'submitted'">
+            *ngIf="item.action === 'submitted' || item.action === 'accepted'">
             <div class="d-flex" style="align-items: center">
               <div class="flex-fill">
                 <span
@@ -326,7 +327,7 @@
           </td>
 
           <!--for cancelled/ declined status-->
-          <td *ngIf="item.action !== 'submitted'" data-title="Action">
+          <td *ngIf="item.action !== 'submitted' && item.action !== 'accepted'" data-title="Action">
             <span>{{ item.action}}</span>
           </td>
 
