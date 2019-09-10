@@ -29,7 +29,7 @@ export class LedgerActions {
     .ofType(LEDGER.GET_TRANSACTION).pipe(
       switchMap((action: CustomActions) => {
         let req: TransactionsRequest = action.payload as TransactionsRequest;
-        return this._ledgerService.GetLedgerTranscations(req.q, req.page, req.count, req.accountUniqueName, req.from, req.to, req.sort, req.reversePage);
+        return this._ledgerService.GetLedgerTranscations(req);
       }), map(res => this.validateResponse<TransactionsResponse, TransactionsRequest>(res, {
         type: LEDGER.GET_TRANSACTION_RESPONSE,
         payload: res
@@ -758,6 +758,7 @@ export class LedgerActions {
       payload: res
     };
   }
+
   // for GET_UNPAID_INVOICE_LIST
   public GetUnpaidInvoiceListAction(request: any): CustomActions {
     return {
@@ -765,12 +766,14 @@ export class LedgerActions {
       payload: {accountUniqueName: request.accountUniqueName, status: request.status}
     };
   }
+
   public GetUnpaidInvoiceListResponse(value: BaseResponse<IUnpaidInvoiceListResponse, any>): CustomActions {
     return {
       type: LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE,
       payload: value
     };
   }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {

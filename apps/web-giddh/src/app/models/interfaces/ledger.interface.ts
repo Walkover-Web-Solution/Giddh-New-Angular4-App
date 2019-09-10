@@ -117,9 +117,15 @@ export interface ITransactionItem {
   type: string;
   unconfirmedEntry: boolean;
   selectedAccount?: IFlattenAccountsResultItem | any;
-  convertedAmount?: string;
+  convertedAmount?: number;
   isChecked?: boolean;
   voucherName?: string;
+  currencyCode?: string;
+  currencySymbol?: string;
+  convertedCurrencyCode?: string;
+  convertedCurrencySymbol: string;
+  companyCurrencyCode?: string;
+  companyCurrencySymbol: string;
 }
 
 /**
