@@ -438,16 +438,40 @@ a[vr-item]:focus {
     padding: 2px 9px;
 }
 
-
+/* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
         width: 100% !important;
     }
 }
+@media(max-width:767px){
+  .mobile_menu_icon {
+    position: absolute;
+    top: 14px;
+    color: #fff;
+    right: -34px;
+    background-color: #303e4e;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 3px 3px 0;
+    display:none;
+}
+.nav-left-bar.open  .mobile_menu_icon{
+  display: flex;
+}
+}
+
 @media(max-width:375px){
   .universal_date li.dateRangPicker, .universal_date .header-date {
     display: block ;
 }
+
+
 button#AddManage {
   position: absolute;
   right: 15px;

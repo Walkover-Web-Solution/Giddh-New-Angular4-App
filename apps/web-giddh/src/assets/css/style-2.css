@@ -7774,6 +7774,17 @@ span.red-text {
     .select2-ledger .menu {
         width: 210px !important;
     }
+        .menu_open {
+    padding-left: 0;
+}
+.menu_open:before {
+    position: absolute;
+    content: '';
+    background: rgba(0,0,0,0.3);
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+}
 }
 
 @media (max-width: 575px) {
@@ -7790,6 +7801,7 @@ span.red-text {
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
 }
 
 @media (max-width: 500px) {
