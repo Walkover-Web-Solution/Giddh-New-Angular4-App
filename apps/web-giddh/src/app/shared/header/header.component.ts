@@ -129,6 +129,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+
   public sideMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
@@ -906,6 +907,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.sideMenu.isopen = event;
     this.companyDropdown.isOpen = false;
     this.menuStateChange.emit(event);
+  }
+
+  public closeSidebarMobile(e) {
+    if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+      this.sideMenu.isopen = false;
+      this.menuStateChange.emit(false);
+    }
+    console.log(e)
   }
 
   public forceCloseSidebar(event) {
