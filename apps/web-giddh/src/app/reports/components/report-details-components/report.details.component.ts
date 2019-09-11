@@ -11,8 +11,8 @@ import { createSelector } from "reselect";
 import { takeUntil } from "rxjs/operators";
 import * as moment from 'moment/moment';
 import { ReplaySubject } from "rxjs";
-import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
+import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 
 @Component({
@@ -112,18 +112,21 @@ export class ReportsDetailsComponent implements OnInit {
       reportsModel.returns = item.debitTotal;
       reportsModel.netSales = item.closingBalance.amount;
       reportsModel.cumulative = item.balance.amount;
+      reportsModel.from = item.from;
+      reportsModel.to = item.to;
+
 
       let mdyFrom = item.from.split('-');
       let mdyTo = item.to.split('-');
       let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
       if (dateDiff <= 8) {
-          this.salesRegisterTotal.sales += item.creditTotal;
-          this.salesRegisterTotal.returns += item.debitTotal;
-          this.salesRegisterTotal.netSales = item.closingBalance.amount;
-          this.salesRegisterTotal.cumulative += item.balance.amount;
-          this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
-          reportsModel.particular = 'Week' + weekCount++;
-          reportModelArray.push(reportsModel);
+        this.salesRegisterTotal.sales += item.creditTotal;
+        this.salesRegisterTotal.returns += item.debitTotal;
+        this.salesRegisterTotal.netSales = item.closingBalance.amount;
+        this.salesRegisterTotal.cumulative += item.balance.amount;
+        this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
+        reportsModel.particular = 'Week' + weekCount++;
+        reportModelArray.push(reportsModel);
       } else if (dateDiff <= 31) {
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
@@ -188,7 +191,7 @@ export class ReportsDetailsComponent implements OnInit {
       if (selectedCmp) {
         this.selectedCompany = selectedCmp;
         this.financialOptions = selectedCmp.financialYears.map(q => {
-          return {label: q.uniqueName, value: q.uniqueName};
+          return { label: q.uniqueName, value: q.uniqueName };
         });
         this.currentActiveFinacialYear = this.financialOptions[0];
         this.activeFinacialYr = selectedCmp.activeFinancialYear;
@@ -202,7 +205,7 @@ export class ReportsDetailsComponent implements OnInit {
       let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
       this.activeFinacialYr = financialYear;
       this.populateRecords(this.interval, this.selectedMonth);
-    } 
+    }
   }
   public populateRecords(interval, month?) {
     this.interval = interval;
@@ -210,10 +213,10 @@ export class ReportsDetailsComponent implements OnInit {
     let endDate = this.activeFinacialYr.financialYearEnds.toString();
     if (month) {
       this.selectedMonth = month;
-      let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth)+1);
+      let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
       startDate = startEndDate.firstDay;
       endDate = startEndDate.lastDay;
-    }else{
+    } else {
       this.selectedMonth = null;
     }
     this.selectedType = interval.charAt(0).toUpperCase() + interval.slice(1);
@@ -256,31 +259,31 @@ export class ReportsDetailsComponent implements OnInit {
     }
   }
 
-  public getDateFromMonth(selectedMonth){
+  public getDateFromMonth(selectedMonth) {
     let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
     let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
 
     let startDate;
 
-    if(mdyFrom[1] > selectedMonth){
-      startDate = '01-'+(selectedMonth - 1)+'-'+mdyTo[2];
-    }else{
-      startDate = '01-'+(selectedMonth - 1)+'-'+mdyFrom[2];
+    if (mdyFrom[1] > selectedMonth) {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyTo[2];
+    } else {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyFrom[2];
     }
     let startDateSplit = startDate.split('-');
     let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
     // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-    let month = (dt.getMonth() +1).toString(),
-    year = dt.getFullYear();
+    let month = (dt.getMonth() + 1).toString(),
+      year = dt.getFullYear();
 
     // GET THE FIRST AND LAST DATE OF THE MONTH.
     //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
     //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-    if(parseInt(month) < 10){
+    if (parseInt(month) < 10) {
       month = '0' + month;
     }
-    let firstDay = '01-'+(month)+'-'+year;
-    let lastDay = new Date(year, parseInt(month),0).getDate()+'-'+month+'-'+year;
+    let firstDay = '01-' + (month) + '-' + year;
+    let lastDay = new Date(year, parseInt(month), 0).getDate() + '-' + month + '-' + year;
 
     return { firstDay, lastDay };
   }

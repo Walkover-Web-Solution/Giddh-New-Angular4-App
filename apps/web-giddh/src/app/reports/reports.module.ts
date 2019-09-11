@@ -19,6 +19,7 @@ import { SalesRegisterDetailsComponent } from './components/sales-register-detai
 import { ReportsDashboardComponent } from './components/report-dashboard/reports.dashboard.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { FormsModule } from '@angular/forms';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -51,7 +52,8 @@ import { FormsModule } from '@angular/forms';
     BsDropdownModule,
     PaginationModule,
     ShSelectModule,
-    FormsModule
+    FormsModule,
+    CurrencyModule
   ]
 })
 
