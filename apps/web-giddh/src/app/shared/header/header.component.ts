@@ -914,7 +914,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.sideMenu.isopen = false;
       this.menuStateChange.emit(false);
     }
-    console.log(e)
   }
 
   public forceCloseSidebar(event) {

@@ -111,6 +111,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public showFieldFilter = {
     name: false,
     due_amount: false,
+    parentGroup: false,
     email: false,
     mobile: false,
 
