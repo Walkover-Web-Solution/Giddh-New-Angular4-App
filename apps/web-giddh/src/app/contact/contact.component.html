@@ -158,7 +158,7 @@
 
             <div class="bg-white clearfix">
               <div class="customer-right clearfix" style="width: 100%;">
-                <table  class="text-right">
+                <table class="text-right">
                   <tr>
                     <td>
                       <p *ngIf="activeTab === 'vendor'">Purchase</p>
@@ -391,7 +391,7 @@
 
 <ng-template #mainTable>
 
-  <div class="onMobileView mobilecardwrapper">
+  <div class="onMobileView mobilecardwrapper vendorPage">
     <table class="table basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
       <thead>
         <tr class="aging-table-top">
@@ -792,8 +792,9 @@
             </td>
             <td class="WordWrap text-right pr-3" data-title="Opening">{{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap text-right pr-3" data-title="Purchase">{{account.debitTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3" data-title="Payment"> {{account.creditTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title=" Purchase"> {{account.creditTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title="Payment">{{account.debitTotal |giddhCurrency}}</td>
+
             <td class="WordWrap text-right pr-3" data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
             </td>
             <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
