@@ -158,6 +158,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
       this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
       this.company.isBranch = this.createBranch;
       this._generalService.createNewCompany = this.company;
+      this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
       this.closeCompanyModal.emit();
       this._route.navigate(['welcome']);
       //this.store.dispatch(this.companyActions.CreateCompany(this.company));

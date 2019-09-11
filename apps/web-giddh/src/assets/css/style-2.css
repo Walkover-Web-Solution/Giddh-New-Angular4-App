@@ -6285,13 +6285,13 @@ perfect-scrollbar>.ps>.ps-overlay {
     /* color: #ff5e01; */
 }
 
-.hamburger_menu button,
-.hamburger_menu button:hover,
-.hamburger_menu button:focus {
+.hamburger_menu button, .hamburger_menu button:hover, .hamburger_menu button:focus, .hamburger_menu button:active {
     padding-left: 0;
     background: transparent;
     outline: none;
     padding-right: 10px;
+    border: none;
+    box-shadow: none;
 }
 
 .hamburger_menu h4 {
@@ -7485,6 +7485,10 @@ span.red-text {
 }
 .add-companyDetail .add_mailer form {
     padding-bottom: 60px;
+}
+.main-company-name .tooltip-inner {
+    white-space: pre-line;
+    word-break: break-word;
 }
 /* responsive */
 
