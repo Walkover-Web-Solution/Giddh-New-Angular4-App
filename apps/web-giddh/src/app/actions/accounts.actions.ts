@@ -55,6 +55,7 @@ export class AccountsAction {
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
   public static DELETE_ACCOUNT = 'AccountDelete';
   public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
+  public static RESET_DELETE_ACCOUNT_FLAGS = 'AccountResetDeleteFlags';
   public static MERGE_ACCOUNT = 'AccountMerge';
   public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
   public static APPLY_ACCOUNT_DISCOUNT = 'ApplyAccountDiscount';
@@ -881,6 +882,12 @@ export class AccountsAction {
       type: AccountsAction.DELETE_ACCOUNT_RESPONSE,
       payload: value
     };
+  }
+
+  public resetDeleteAccountFlags(): CustomActions {
+    return {
+      type: AccountsAction.RESET_DELETE_ACCOUNT_FLAGS
+    }
   }
 
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): CustomActions {

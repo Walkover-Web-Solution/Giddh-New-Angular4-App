@@ -11,20 +11,21 @@ export class SalesRegisterDetailsComponent implements OnInit {
   bsValue = new Date();
 
   items = [
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
-    {date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300},
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
+    { date: '1 Aug 17', account: 'Walkover web solutions pvt. Ltd.', voucherType: 'Sales', Number: 201902043, sales: 2300, return: 2300, netSales: 2300 },
   ];
-  
-  ngOnInit() {
-   
-  }
+
+
   constructor() {
-    
+
+  }
+  ngOnInit() {
+
   }
 }

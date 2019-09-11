@@ -129,6 +129,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     startDate: moment().subtract(30, 'days'),
     endDate: moment()
   };
+
   public sideMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
@@ -351,7 +352,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-    if (this.selectedPlanStatus === 'expired') {
+    if (this.selectedPlanStatus === 'expired') {// active expired
       this.openExpiredPlanModel(this.expiredPlanModel);
     }
     if (this.isSubscribedPlanHaveAdditnlChrgs) {
@@ -908,6 +909,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.menuStateChange.emit(event);
   }
 
+  public closeSidebarMobile(e) {
+    if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
+      this.sideMenu.isopen = false;
+      this.menuStateChange.emit(false);
+    }
+  }
+
   public forceCloseSidebar(event) {
     if (event.target.parentElement.classList.contains('wrapAcList')) {
       return;
@@ -1077,7 +1085,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public goToSelectPlan() {
     this.modalService.hide(1);
     // this.router.navigate(['billing-detail']);
-    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3 } });
+    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 
   public onRight(nodes) {

@@ -20,7 +20,7 @@
                   Invoices) </span>
               </h4>
 
-              <div class="clearfix">
+              <div class="clearfix" *ngIf="false">
 
                 <div class="row">
                   <div class="col-xs-12 col-sm-5 "><label>Default payment gateway</label></div>
@@ -51,8 +51,7 @@
 
               </div>
 
-              <div class="clearfix pdT1">
-
+              <div class="clearfix pdT1" *ngIf="false">
                 <div class="row">
                   <div class="col-xs-12 col-sm-5"><input type="checkbox"
                       [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left"
@@ -69,7 +68,7 @@
               </div>
 
               <!-- region razor-pay-->
-              <div class="clearfix pdT1">
+              <div class="clearfix pdT1" *ngIf="false">
 
                 <div class="row">
                   <div class="col-xs-12 col-sm-5">
@@ -120,7 +119,7 @@
               </div>
               <!-- endregion -->
 
-              <div class="clearfix pdT1">
+              <div class="clearfix pdT1" *ngIf="false">
 
                 <div class="row">
                   <div class="col-xs-12 col-sm-5">
@@ -139,7 +138,7 @@
 
               </div>
 
-              <div class="clearfix pdT1">
+              <div class="clearfix pdT1" *ngIf="false">
 
                 <div class="row">
                   <div class="col-xs-12 col-sm-5">
@@ -736,7 +735,7 @@
                 <div class="col-xs-12 col-sm-5">
                   <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left"
                     name="autoEntryVoucherAndEmail" class="showOnMobile" />
-                  <label>Enable send proforma via SMS</label></div>
+                  <label>Enable send invoice via SMS</label></div>
                 <div class="col-xs-12 col-sm-7 ">
                   <div class="form-group clearfix">
                     <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left"

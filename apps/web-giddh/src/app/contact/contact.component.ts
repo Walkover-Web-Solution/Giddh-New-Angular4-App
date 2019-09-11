@@ -109,14 +109,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public order: string = 'asc';
 
   public showFieldFilter = {
-    name: false,
-    due_amount: false,
+    parentGroup: false,
     email: false,
     mobile: false,
-
     state: false,
     gstin: false,
-    comment: false
+    comment: false,
+    openingBalance: false,
+    debitTotal: false,
+    creditTotal: false,
+    closingBalance: false
   };
   public updateCommentIdx: number = null;
   public searchStr$ = new Subject<string>();
@@ -190,9 +192,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   ];
   public isAllChecked: boolean = false;
   public selectedItems: string[] = [];
-  public totalSales: number[] = [];
-  public totalDue: number[] = [];
-  public totalReceipts: number[] = [];
+  public totalSales: number = 0;
+  public totalDue: number = 0;
+  public totalReceipts: number = 0;
   public Totalcontacts = 0;
   public accInfo: IFlattenAccountsResultItem;
   public purchaseOrSales: 'sales' | 'purchase';
@@ -201,7 +203,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public isAdvanceSearchApplied: boolean = false;
   public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
   public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-
+  public tableColsPan: number = 1;
   private checkboxInfo: any = {
     selectedPage: 1
   };
@@ -274,6 +276,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
       if (showColumnObj) {
         this.showFieldFilter = showColumnObj;
+        this.setTableColspan();
       }
     }
 
@@ -792,19 +795,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.dueAmountReportRequest.page = event.page;
   }
 
-  public getTotalSales() {
-    return this.totalSales.reduce((a, b) => a + b, 0);
-  }
-
-  public getTotalDue() {
-
-    return this.totalDue.reduce((a, b) => a + b, 0);
-  }
-
-  public getTotalReceipts() {
-    return this.totalReceipts.reduce((a, b) => a + b, 0);
-  }
-
   public loadPaginationComponent(s) {
     let transactionData = null;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
@@ -1019,15 +1009,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
       if (res.status === 'success') {
-        this.totalDue = [];
-        this.totalSales = [];
-        this.totalReceipts = [];
+        this.totalDue = res.body.closingBalance.amount || 0;
+        this.totalSales = (this.activeTab === 'customer' ?  res.body.creditTotal : res.body.debitTotal) || 0;
+        this.totalReceipts =(this.activeTab === 'customer' ?  res.body.debitTotal : res.body.creditTotal) || 0;
         this.selectedAllContacts = [];
         this.Totalcontacts = 0;
         for (let resp of res.body.results) {
-          this.totalSales.push(resp.debitTotal);
-          this.totalReceipts.push(resp.creditTotal);
-          this.totalDue.push(resp.closingBalance.amount);
           this.selectedAllContacts.push(resp.uniqueName);
         }
 
@@ -1073,12 +1060,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public columnFilter(event, column) {
-    if (event && column) {
-      this.showFieldFilter[column] = event;
-      if (window.localStorage) {
-        localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
-      }
+    // if (event && column) {
+    this.showFieldFilter[column] = event;
+    this.setTableColspan();
+
+    if (window.localStorage) {
+      localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
     }
+    // }
   }
 
   private getCashFreeBalance() {
@@ -1088,6 +1077,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
+  private setTableColspan() {
+    let balancesColsArr = ['openingBalance', 'debitTotal', 'creditTotal'];
+    let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
+    this.tableColsPan = length > 0 ? length + 1 : 1;
+  }
+
 
   /*
   * Register Account navigation
