@@ -489,7 +489,7 @@
           </th>
 
           <th class="text-right  pr-3" *ngIf="showFieldFilter.creditTotal">
-            {{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+            {{ activeTab === 'customer' ? 'Payment' : 'Payment' }}
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
             </ng-container>
           </th>
