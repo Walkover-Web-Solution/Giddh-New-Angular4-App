@@ -44,7 +44,7 @@
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.creditTotal"
                       (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />
-                    Receipts
+                    Payment
                   </a>
                 </li>
 
@@ -467,7 +467,7 @@
               <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
                 (ngModelChange)="toggleAllSelection(allSelectionModel)" />
             </span>
-            <span>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</span>
+            <span>Name</span>
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
             </ng-container>
           </th>
