@@ -6,6 +6,7 @@ import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
 import * as _ from '../../../lodash-optimized';
+import { SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
 export interface ReceiptState {
   vouchers: ReciptResponse;
@@ -22,6 +23,9 @@ export interface ReceiptState {
   voucherNoForDetailsAction: string;
   actionOnInvoiceInProcess: boolean;
   actionOnInvoiceSuccess: boolean;
+  isGetSalesDetailsInProcess: boolean;
+  isGetSalesDetailsSuccess: boolean;
+  SalesRegisteDetailedResponse: SalesRegisteDetailedResponse
 }
 
 const initialState: ReceiptState = {
@@ -38,7 +42,10 @@ const initialState: ReceiptState = {
   voucherNoForDetails: null,
   voucherNoForDetailsAction: null,
   actionOnInvoiceInProcess: false,
-  actionOnInvoiceSuccess: false
+  actionOnInvoiceSuccess: false,
+  isGetSalesDetailsInProcess: false,
+  isGetSalesDetailsSuccess: false,
+  SalesRegisteDetailedResponse: null
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -107,7 +114,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     }
 
     case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
-      let vouchers = {...state.vouchers};
+      let vouchers = { ...state.vouchers };
       let result = action.payload as BaseResponse<VoucherClass, GenericRequestForGenerateSCD>;
       return {
         ...state,
@@ -198,7 +205,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return {...state, ...newState};
+      return { ...state, ...newState };
     }
 
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
@@ -209,7 +216,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return {...state, ...newState};
+      return { ...state, ...newState };
     }
     case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
       return Object.assign({}, state, {
@@ -244,6 +251,24 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         voucherNoForDetails: null,
         voucherNoForDetailsAction: null
       }
+    }
+    case INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS: {
+      return Object.assign({}, state, {
+        isGetSalesDetailsInProcess: true,
+        isGetSalesDetailsSuccess: false
+      });
+    }
+
+    case INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let res: BaseResponse<string, SalesRegisteDetailedResponse> = action.payload;
+      if (res.status === 'success') {
+        newState.isGetSalesDetailsInProcess = false;
+        newState.isGetSalesDetailsSuccess = true;
+        newState.SalesRegisteDetailedResponse = res.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
 
     default:
