@@ -673,11 +673,11 @@
             <td class="WordWrap text-right pr-3 " data-title="Opening" *ngIf="showFieldFilter.openingBalance">
               {{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap text-right pr-3" data-title=" Sales" *ngIf="showFieldFilter.debitTotal">
-              {{account.debitTotal |giddhCurrency}}</td>
-
-            <td class="WordWrap text-right pr-3" data-title="Receipts" *ngIf="showFieldFilter.creditTotal">
+            <td class="WordWrap text-right pr-3" data-title=" Sales" *ngIf="showFieldFilter.creditTotal">
               {{account.creditTotal |giddhCurrency}}</td>
+
+            <td class="WordWrap text-right pr-3" data-title=" Receipts" *ngIf="showFieldFilter.debitTotal">
+              {{account.debitTotal |giddhCurrency}}</td>
 
 
 
