@@ -86,6 +86,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   public showBankDetail: boolean = false;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
+  public deleteAccountSuccess$: Observable<boolean>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public accountDetails: any = '';
   public breadcrumbUniquePath: string[] = [];
@@ -111,6 +112,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).pipe(takeUntil(this.destroyed$));
     this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).pipe(takeUntil(this.destroyed$));
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+    this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
   }
@@ -147,6 +149,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.flatGroupsOptions = items;
       }
     });
+
+    this.deleteAccountSuccess$.subscribe(res => {
+      if (res) {
+        this.getUpdateList.emit(this.activeGroupUniqueName);
+        this.store.dispatch(this.accountsAction.resetDeleteAccountFlags());
+      }
+    });
   }
 
   public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
@@ -168,15 +177,11 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
   }
 
   public deleteAccount() {
-    // debugger;
-    let activeAccUniqueName = null;
-    this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-
     let activeGrpName = this.activeGroupUniqueName;
 
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+    this.store.dispatch(this.accountsAction.deleteAccount(this.activeAccountDetails.uniqueName, activeGrpName));
     this.hideDeleteAccountModal();
-    this.getUpdateList.emit(activeGrpName);
+    // this.getUpdateList.emit(activeGrpName);
 
   }
 
