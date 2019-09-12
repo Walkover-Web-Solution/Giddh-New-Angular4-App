@@ -1,158 +1,239 @@
-<div class="clearfix">
-    <div class="responsive mt-2">
-    <table class="table basic table-bordered table-middle">
-    <thead>
-    <tr>
-    <th>
-      <div  class="d-flex">
-        <div class="flex-fill pr-1">
-          Date
-        </div>
-        <div class="icon-pointer">
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-        </div>
-      </div>
-    </th>
+<div class="form-group pull-left" style="margin-right: 10px;">
 
-    <th class="td_in_searchBox">
-      <div>
-        <span> Account</span><i class="icon-search"></i>
-      </div>
-    </th>
+    <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All" *ngIf="!expand">
+        <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;">
+    </a>
 
-    <th>
-    <div class="d-flex">
-      <div class="flex-fill pr-1">
-        Voucher Type
-      </div>
-      <div class="icon-pointer">
-        <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-        <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-      </div>
-    </div>
-    </th>
+    <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Collapse All" *ngIf="expand">
+        <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;">
+    </a>
 
-    <th class="td_in_searchBox">
-      <div>
-        <span>Voucher No.</span><i class="icon-search"></i>
-      </div>
-      <!-- <div class="input-container">
+</div>
+<ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
+    <div class="clearfix">
+        <div class="responsive mt-2">
+            <table class="table basic table-bordered table-middle">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill pr-1">
+                                    Date
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('date', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('date', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="td_in_searchBox">
+                            <div>
+                                <span> Account</span><i class="icon-search"></i>
+                            </div>
+                        </th>
+
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill pr-1">
+                                    Voucher Type
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('voucherType', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('voucherType', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="td_in_searchBox">
+                            <div>
+                                <span>Voucher No.</span><i class="icon-search"></i>
+                            </div>
+                            <!-- <div class="input-container">
         <input class="w100" placeholder="Search Report No." type="text">
       </div> -->
-    </th>
+                        </th>
 
-    <th>
-      <div  class="d-flex">
-        <div class="flex-fill text-right pr-1">
-            Sales
-        </div>
-        <div class="icon-pointer">
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-        </div>
-      </div>
-      </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Sales
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('creditTotal', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('creditTotal', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
 
-      <th>
-      <div  class="d-flex">
-        <div class="flex-fill text-right pr-1">
-            Return
-        </div>
-        <div class="icon-pointer">
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-        </div>
-      </div>
-      </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Return
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('debitTotal', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('debitTotal', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th *ngIf="expand">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Qty/Unit
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Rate
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('rate', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('rate', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
 
-      <th>
-      <div  class="d-flex">
-        <div class="flex-fill text-right pr-1">
-            Discount
-        </div>
-        <div class="icon-pointer">
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-        </div>
-      </div>
-      </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Discount
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('discountTotal', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('discountTotal', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
 
-      <th>
-      <div  class="d-flex">
-        <div class="flex-fill text-right pr-1">
-            Tax
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Tax
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('taxTotal', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('taxTotal', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex">
+                                <div class="flex-fill text-right pr-1">
+                                    Net Sales
+                                </div>
+                                <div class="icon-pointer">
+                                    <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('netTotal', 'asc')"></div>
+                                    <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('netTotal', 'desc')"></div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (SalesRegisteDetailedResponse$ | async).items">
+                        <td>{{item.date}}</td>
+                        <td>
+                            {{item.account.name}}
+                            <ng-container *ngIf="expand">
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{stock.stock.name}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <!-- <td>{{item.voucherType}}</td> -->
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+                            {{item.voucherType}}
+                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.from" [to]="this.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                            </div>
+                        </td>
+                        <td><a href="#">{{item.voucherNumber}}</a></td>
+                        <td class="text-right">{{item.creditTotal}}
+                            <ng-container *ngIf="expand">
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{stock.amount}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="text-right">{{item.debitTotal}}</td>
+                        <td class="text-right" *ngIf="expand">-
+                            <ng-container *ngIf="expand">
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{stock.quantity}} {{stock.unit.code}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="text-right">-
+                            <ng-container *ngIf="expand">
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{stock.rate}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="text-right">{{item.discountTotal}}</td>
+                        <td class="text-right">{{item.taxTotal}}</td>
+                        <td class="text-right">{{item.netTotal}}</td>
+
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="icon-pointer">
-          <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-          <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+
+        <div class="text-center">
+            <pagination [totalItems]="(SalesRegisteDetailedResponse$ | async).totalItems" [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+                (pageChanged)="pageChanged($event)"></pagination>
         </div>
-      </div>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let item of items">
-    <td>{{item.date}}</td>
-    <td>
-      {{item.account}}
-      <p>Chair</p>
-      <p>Table</p>
-      <p>Desk</p>
-      <p>Chair small</p>
-    </td>
-    <td>{{item.voucherType}}</td>
-    <td><a href="#">{{item.VoucherNumber}}</a></td>
-    <td class="text-right">{{item.sales}}</td>
-    <td class="text-right">{{item.return}}</td>
-    <td class="text-right">{{item.discount}}</td>
-    <td class="text-right">{{item.tax}}</td>
-    </tr>
-    </tbody>
-    </table>
     </div>
 
-    <div class="text-center">
-    <pagination [totalItems]="30"></pagination>
-    </div>
-</div>
 
+    <div class="clearfix sales-ragister">
+        <div class="col-xs-3">
+            <p>Transaction count</p>
+            <p class="text-orange">62</p>
+        </div>
+        <div class="col-xs-9">
+            <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box">
 
-<div class="clearfix sales-ragister">
-  <div class="col-xs-3">
-    <p>Transaction count</p>
-    <p class="text-orange">62</p>
-  </div>
-  <div class="col-xs-9">
-    <div class="clearfix main-sale-register-box">
-      
-      <div class="sale-register-box">
-        <p>Sales</p>
-        <h4>10,10,20,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <p>Return</p>
-        <h4>10,20,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <p>Discount</p>
-        <h4>1,20,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <p>Total Tax</p>
-        <h4>1,20,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <p>Freight</p>
-        <h4>1,20,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <p>Net Sales</p>
-        <h4 class="text-orange">10,20,00,000</h4>
-      </div>
-      <div class="sale-register-box">
-        <a href="#"><img src="assets/images/intercom-chat.png" alt=""></a>
-      </div>
+                <div class="sale-register-box">
+                    <p>Sales</p>
+                    <h4>{{SalesRegisteDetailedItems.creditTotal}}</h4>
+                </div>
+                <div class="sale-register-box">
+                    <p>Return</p>
+                    <h4>{{SalesRegisteDetailedItems.debitTotal}}</h4>
+                </div>
+                <div class="sale-register-box">
+                    <p>Discount</p>
+                    <h4>{{SalesRegisteDetailedItems.discountTotal}}</h4>
+                </div>
+                <div class="sale-register-box">
+                    <p>Total Tax</p>
+                    <h4>{{SalesRegisteDetailedItems.taxTotal}}</h4>
+                </div>
+                <div class="sale-register-box">
+                    <p>Freight</p>
+                    <h4>Freight</h4>
+                </div>
+                <div class="sale-register-box">
+                    <p>Net Sales</p>
+                    <h4 class="text-orange">{{SalesRegisteDetailedItems.netTotal.amount}}</h4>
+                </div>
+                <div class="sale-register-box">
+                    <a href="#"><img src="assets/images/intercom-chat.png" alt=""></a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</ng-container>
+
+<div *ngIf="(isGetSalesDetailsInProcess$ | async)">
+    <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+        <div class="giddh-spinner vertical-center-spinner"></div>
+    </div>
 </div>
