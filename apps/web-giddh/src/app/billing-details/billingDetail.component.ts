@@ -73,6 +73,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         data.map(d => {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
+        _.uniq(this.states);
+        _.uniqBy(this.states, 'lebel');
       }
       this.statesSource$ = observableOf(this.states);
     }, (err) => {
