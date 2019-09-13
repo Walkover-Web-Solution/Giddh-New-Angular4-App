@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
+import { BsDropdownDirective } from 'ngx-bootstrap';
 
 
 @Component({
@@ -24,10 +25,23 @@ export class SalesRegisterExpandComponent implements OnInit {
   public isGetSalesDetailsSuccess$: Observable<boolean>;
   public getDetailedsalesRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+  public monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
   public modalUniqueName: string;
   public imgPath: string;
   public expand: boolean = false;
-
+  public showFieldFilter = {
+    voucherType: true,
+    voucherNo: true,
+    productService: false,
+    qtyRate: false,
+    value: false,
+    discount: false,
+    tax: false
+  };
 
 
   bsValue = new Date();
@@ -814,7 +828,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     }
   ];
 
-  constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute) {
+  constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router) {
 
     this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
     this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
@@ -844,6 +858,9 @@ export class SalesRegisterExpandComponent implements OnInit {
       if (res) {
         this.SalesRegisteDetailedItems = res;
         // this.SalesRegisteDetailedItems.items = this.items;
+        _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+          obj.date = this.getDateToDMY(obj.date);
+        });
       }
     });
   }
@@ -869,5 +886,28 @@ export class SalesRegisterExpandComponent implements OnInit {
   */
   public emitExpand() {
     this.expand = !this.expand;
+  }
+  public columnFilter(event, column) {
+    if (event && column) {
+      this.showFieldFilter[column] = event;
+    }
+  }
+  public hideListItems() {
+    this.filterDropDownList.hide();
+  }
+  public goToDashboard() {
+    this.router.navigate(['/pages/reports']);
+  }
+
+  public getDateToDMY(selecteddate) {
+    let date = selecteddate.split('-');
+    if (date.length === 3) {
+      let month = this.monthNames[parseInt(date[1]) - 1];
+      let year = date[2].substr(2, 4);
+      return date[0] + ' ' + month + ' ' + year;
+    } else {
+      return selecteddate;
+    }
+
   }
 }
