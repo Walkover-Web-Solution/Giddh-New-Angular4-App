@@ -60,7 +60,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.step++;
         this.UploadExceltableResponse = this.excelState.importResponse;
       }
-      this.resetStoreData();
     }
 
     if (this.excelState.importResponse) {

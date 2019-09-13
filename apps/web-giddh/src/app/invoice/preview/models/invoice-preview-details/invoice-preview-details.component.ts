@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 @Component({
   selector: 'invoice-preview-details-component',
   templateUrl: './invoice-preview-details.component.html',
@@ -61,19 +62,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public voucherVersions: ProformaVersionItem[] = [];
   public filteredVoucherVersions: ProformaVersionItem[] = [];
   public ckeditorContent;
-  public invoiceDetailWrapperHeight:number
-  public invoiceDetailViewHeight:number;
-  public invoiceImageSectionViewHeight:number;
+  public invoiceDetailWrapperHeight: number
+  public invoiceDetailViewHeight: number;
+  public invoiceImageSectionViewHeight: number;
   public isMobileView = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
-              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions,
-              private _breakPointObservar: BreakpointObserver) {
-                this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
-                  this.isMobileView = res.matches;
-                });
+    private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions,
+    private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileView = s;
+    });
   }
 
   ngOnInit() {
@@ -138,9 +138,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.detectChanges();
       }))
 
-    this.invoiceDetailWrapperHeight=this.invoiceDetailWrapperView.nativeElement.offsetHeight
+    this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight
     this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
-    this.invoiceImageSectionViewHeight=this.invoiceDetailWrapperHeight-this.invoiceDetailViewHeight-90;
+    this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
   }
 
   public toggleEditMode() {

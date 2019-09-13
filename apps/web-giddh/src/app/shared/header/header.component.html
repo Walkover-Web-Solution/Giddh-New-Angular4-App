@@ -10,7 +10,7 @@
               *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }} )</span>
           </ng-template>
           <span class="icon-dots-three-vertical"></span>
-          <div class="cText" container="body" [tooltip]="CompanyBranchnamealias" placement="bottom">
+          <div class="cText" [tooltip]="CompanyBranchnamealias" placement="bottom">
             <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
                 *ngIf="(selectedCompany | async)?.nameAlias"
                 style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
@@ -21,7 +21,7 @@
 
         <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
           <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-          <li class="pos-rel pdT1" container="body" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
+          <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
               <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
                   *ngIf="(selectedCompany | async)?.nameAlias"

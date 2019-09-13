@@ -7486,6 +7486,10 @@ span.red-text {
 .add-companyDetail .add_mailer form {
     padding-bottom: 60px;
 }
+.main-company-name .tooltip-inner {
+    white-space: pre-line;
+    word-break: break-word;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

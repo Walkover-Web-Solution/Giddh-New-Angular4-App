@@ -34,6 +34,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
+import { GeneralService } from '../../services/general.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -206,7 +207,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions,
     private cdr: ChangeDetectorRef,
     private _breakPointObservar: BreakpointObserver,
-    private _router: Router
+    private _router: Router,
+    private _generalService: GeneralService
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -225,8 +227,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public ngOnInit() {
 
-    this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
-      this.isMobileView = res.matches;
+    this._generalService.isMobileSite.subscribe(s => {
+      this.isMobileView = s;
     });
 
     this.advanceSearchFilter.page = 1;

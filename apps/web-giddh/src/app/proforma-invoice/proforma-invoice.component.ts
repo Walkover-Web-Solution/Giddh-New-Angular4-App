@@ -1014,7 +1014,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return entry;
     });
 
-
+    if (!data.accountDetails.uniqueName) {
+      data.accountDetails.uniqueName = 'cash';
+    }
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniqueName
@@ -1978,7 +1980,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entry.taxes = entry.taxes.filter(tax => tax.isChecked);
       return entry;
     });
-
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniqueName

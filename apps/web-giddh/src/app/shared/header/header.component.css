@@ -437,7 +437,9 @@ a[vr-item]:focus {
     background: #d6d6d6 !important;
     padding: 2px 9px;
 }
-
+.mobile_menu_icon {
+    display: none;
+}
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
