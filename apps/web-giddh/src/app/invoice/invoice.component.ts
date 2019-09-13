@@ -104,8 +104,10 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     private companyActions: CompanyActions,
     private router: Router,
     private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileView = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
     });
   }
 

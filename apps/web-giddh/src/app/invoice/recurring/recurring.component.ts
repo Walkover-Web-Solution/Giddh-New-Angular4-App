@@ -11,6 +11,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsDatepickerDirective } from 'ngx-bootstrap';
 import { GeneralService } from '../../services/general.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'app-recurring',
   templateUrl: './recurring.component.html',
@@ -71,14 +72,13 @@ export class RecurringComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
     private cdr: ChangeDetectorRef,
     private _generalService: GeneralService,
-    private _invoiceActions: InvoiceActions) {
+    private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver) {
     this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
     this.recurringData$.subscribe(p => {
       if (p && p.recurringVoucherDetails) {
         this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
       }
     });
-
   }
 
 
@@ -120,10 +120,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.showCustomerNameSearch = false;
       }
     });
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileScreen = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileScreen = result.matches;
     });
-
   }
 
   public openUpdatePanel(invoice: RecurringInvoice) {

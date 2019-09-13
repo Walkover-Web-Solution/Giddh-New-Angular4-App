@@ -27,6 +27,7 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 
 const CustomerType = [
@@ -224,7 +225,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _groupWithAccountsAction: GroupWithAccountsAction,
     private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
     private _route: ActivatedRoute, private _generalAction: GeneralActions,
-    private _router: Router) {
+    private _router: Router, private _breakPointObservar: BreakpointObserver) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -330,8 +331,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term, this.key, this.order);
         }
       });
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileScreen = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileScreen = result.matches;
     });
 
     combineLatest([this._route.params, this._route.queryParams])
