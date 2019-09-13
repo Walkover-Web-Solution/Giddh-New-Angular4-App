@@ -743,8 +743,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     }
-    model.sort = o.sort;
-    model.sortBy = o.sortBy;
+
     model.from = o.from;
     model.to = o.to;
     model.count = o.count;
@@ -756,6 +755,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         model.to = this.invoiceSearchRequest.to;
       }
     }
+    model.sort = o.sort;
+    model.sortBy = o.sortBy;
     if (o.invoiceNumber) {
       model.voucherNumber = o.invoiceNumber;
     }
