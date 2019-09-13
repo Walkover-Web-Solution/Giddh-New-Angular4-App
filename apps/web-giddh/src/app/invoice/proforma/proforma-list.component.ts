@@ -140,8 +140,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileView = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
     });
   }
 
