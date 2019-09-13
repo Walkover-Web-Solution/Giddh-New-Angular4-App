@@ -30,6 +30,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
+  public monthYear = ["January 2019", "Feburary 2019", "March 2019", "April 2019", "May 2019"]
   public modalUniqueName: string;
   public imgPath: string;
   public expand: boolean = false;
