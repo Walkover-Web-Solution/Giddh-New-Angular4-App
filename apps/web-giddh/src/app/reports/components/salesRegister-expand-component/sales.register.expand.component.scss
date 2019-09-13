@@ -160,11 +160,13 @@ ul.list-unstyled li a {
     margin-right: -13px;
     display: flex;
     align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .responsive {
-    overflow-y: auto;
-    height: 69vh;
+   padding: 0 15px;
 }
 
 #content_wrapper {
@@ -207,4 +209,26 @@ ul#dropdown-nested li .caret {
 
 .reportDropdown {
     left: 100% !important;
+}
+.customeMnthSelect.show {
+    display: inline-block!important;
+}
+.top_bar{
+  padding: 15px;
+}
+
+
+.customeMnthSelect li:hover a.dropdown-item {
+   background-color: #E5E5E5;
+    color: #ff5f00;
+}
+.customeMnthSelect button.btn{
+  background: transparent !important;
+      padding-left: 3px;
+    padding-right: 3px;
+}
+.customeMnthSelect button.btn:active, .customeMnthSelect button.btn:focus, .customeMnthSelect button.btn:hover{
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
