@@ -24,13 +24,14 @@ export class SalesRegisterExpandComponent implements OnInit {
   public isGetSalesDetailsInProcess$: Observable<boolean>;
   public isGetSalesDetailsSuccess$: Observable<boolean>;
   public getDetailedsalesRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
+  public selectedMonth: string;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-  public monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  public monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
-  public monthYear = ["January 2019", "Feburary 2019", "March 2019", "April 2019", "May 2019"]
+  public monthYear: string[] = [];
   public modalUniqueName: string;
   public imgPath: string;
   public expand: boolean = false;
@@ -850,15 +851,13 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.to = params.to;
         this.getDetailedsalesRequestFilter.from = this.from;
         this.getDetailedsalesRequestFilter.to = this.to;
-
       }
     });
     this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+    this.getCurrentMonthYear();
     this.SalesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
-      console.log('this.SalesRegisteDetailedResponse', res);
       if (res) {
         this.SalesRegisteDetailedItems = res;
-        // this.SalesRegisteDetailedItems.items = this.items;
         _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
           obj.date = this.getDateToDMY(obj.date);
         });
@@ -903,12 +902,62 @@ export class SalesRegisterExpandComponent implements OnInit {
   public getDateToDMY(selecteddate) {
     let date = selecteddate.split('-');
     if (date.length === 3) {
-      let month = this.monthNames[parseInt(date[1]) - 1];
+      let month = this.monthNames[parseInt(date[1]) - 1].substr(0, 3);
       let year = date[2].substr(2, 4);
       return date[0] + ' ' + month + ' ' + year;
     } else {
       return selecteddate;
     }
 
+  }
+  public getCurrentMonthYear() {
+    let currentYearFrom = this.from.split('-')[2];
+    let currentYearTo = this.to.split('-')[2];
+    let idx = this.from.split('-');
+    this.monthYear = [];
+    if (currentYearFrom === currentYearTo) {
+      this.monthNames.forEach(element => {
+        this.monthYear.push(element + ' ' + currentYearFrom);
+      });
+    }
+    this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
+
+  }
+  public selectedFilterMonth(monthYridx: string, i) {
+    let date = this.getDateFromMonth(i);
+    this.getDetailedsalesRequestFilter.from = date.firstDay;
+    this.getDetailedsalesRequestFilter.to = date.lastDay;
+    this.selectedMonth = monthYridx;
+    this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+
+  }
+
+  public getDateFromMonth(selectedMonth) {
+    let mdyFrom = this.from.split('-');
+    let mdyTo = this.to.split('-');
+
+    let startDate;
+
+    if (mdyFrom[1] > selectedMonth) {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyTo[2];
+    } else {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyFrom[2];
+    }
+    let startDateSplit = startDate.split('-');
+    let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
+    // GET THE MONTH AND YEAR OF THE SELECTED DATE.
+    let month = (dt.getMonth() + 1).toString(),
+      year = dt.getFullYear();
+
+    // GET THE FIRST AND LAST DATE OF THE MONTH.
+    //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    if (parseInt(month) < 10) {
+      month = '0' + month;
+    }
+    let firstDay = '01-' + (month) + '-' + year;
+    let lastDay = new Date(year, parseInt(month), 0).getDate() + '-' + month + '-' + year;
+
+    return { firstDay, lastDay };
   }
 }
