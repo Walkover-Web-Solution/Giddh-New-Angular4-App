@@ -445,6 +445,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // public openUpdatemodel(account: any) {
+  //   console.log(' open', this.fromDate, this.toDate);
   //   this.modalUniqueName = account.uniqueName;
   // }
   // public closeModel(account: any) {
