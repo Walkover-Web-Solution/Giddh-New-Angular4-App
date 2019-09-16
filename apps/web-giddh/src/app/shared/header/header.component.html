@@ -13,7 +13,7 @@
           <div class="cText" [tooltip]="CompanyBranchnamealias" placement="bottom">
             <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
                 *ngIf="(selectedCompany | async)?.nameAlias"
-                style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
+                style="font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
                 )</span></span>
             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
           </div>
@@ -236,7 +236,7 @@ Create Company
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
           <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
-              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+              container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
             <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"

@@ -7,7 +7,7 @@
     top: 0;
     bottom: 0;
     min-height: 100vh;
-    background: #303E4E;
+    background: #1A237E;
     width: 215px;
     /* padding-bottom: 120px; */
     left: -215px;
@@ -16,27 +16,29 @@
 
 .account-search .input-group-addon {
     background: none;
-    border-color: #5F6E7E;
+    border-color: #fff;
     border-radius: 2px 0 0 2px;
-    color: #B7B7B7;
+    color: #fff;
     /* height: 29px; */
     /* line-height: 14px; */
     font-size: 12px;
     padding-right: 5px;
+        background-color: #5b64c9;
 }
 
 .account-search .input-group-addon i.icon-search {
     position: relative;
     top: 2px;
+    left: -3px;
 }
 
 .account-search .form-control {
     background: none !important;
-    border-color: #5F6E7E;
+    border-color: #fff;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 30px;
-    padding-left: 0px !important;
+    padding-left: 3px !important;
 }
 
 .account-search .form-control:focus {
@@ -50,7 +52,7 @@
 }
 
 .account-search:hover:after {
-    color: #FF5F00;
+    color: #868ee0;
     cursor: pointer;
 }
 
@@ -69,7 +71,7 @@ a[vr-item]:focus {
     right: 4px;
     font-size: 10px;
     line-height: 30px;
-    color: #5F6E7E;
+    color: #fff;
 }
 
 .account-search .form-control:after {
@@ -82,28 +84,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -113,7 +115,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: #b7b7b7 !important;
+    color: #fff !important;
 }
 /* .left_fixed_header.open,
 .left_fixed_header:hover {
@@ -160,7 +162,7 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header>li>a:hover {
-    background: #40505F;
+    background: #5b64c9;
 }
 
 .left_fixed_header>li a.active {
@@ -273,8 +275,8 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header h6 {
-    color: #5F6E7E;
-    font-size: 14px;
+    color: #818af3;
+    font-size: 16px;
     padding-left: 20px;
     padding-right: 20px;
     /* font-family: 'LatoWebBold'; */
@@ -283,21 +285,21 @@ a[vr-item]:focus {
 .left_fixed_header>h6>i {
     float: right;
     font-size: 8px;
-    background: #B7B7B7;
+    background: #5b64c9;
     display: inline-block;
     width: 12px;
     height: 12px;
     text-align: center;
     line-height: 12px;
     border-radius: 2px;
-    color: #303E4E;
+    color: #fff;
     margin-top: 2px;
     /*transition: .1s all ease;*/
 }
 
 .left_fixed_header>h6>i:hover {
     color: #fff;
-    background: #FF5F00;
+    background: #6B73C8;
 }
 
 .nav-tabs {
@@ -318,7 +320,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul>li>a:hover {
-    color: #FF5F00;
+    color: #313a96;
 }
 
 .left-sub-menu ul {
@@ -388,7 +390,7 @@ a[vr-item]:focus {
 
 .nav_wrapper {
     position: relative;
-    background: #303E4E;
+    background: #1A237E;
     height: calc(100vh - 145px);
 }
 
@@ -439,6 +441,9 @@ a[vr-item]:focus {
 }
 .mobile_menu_icon {
     display: none;
+}
+#cmpWrp{
+  background-color: #5b64c9;
 }
 /* responsive */
 @media(max-width:991px) {

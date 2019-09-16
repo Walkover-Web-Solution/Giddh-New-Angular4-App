@@ -315,13 +315,13 @@ input {
 }
 
 .hover-orange:hover {
-    color: #FF5F00 !important;
-    font-family: 'LatoWebBold';
+    color: #bdc3ff !important;
+    /* font-family: 'LatoWebBold'; */
 }
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: #1E67C8;
+    color: #5b64c9;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -331,7 +331,7 @@ input {
 
 .company-list button.btn-link:hover {
     color: #fff;
-    background: #2D9EE0;
+    background: #1A237E;
     text-decoration: none;
 }
 
@@ -1082,7 +1082,7 @@ modal-container.modal.fade.show {
 }
 
 .company-name .cText span {
-    color: #EBECEE;
+    color: #fff;
 }
 
 .acntAccordion .title.active {
@@ -1090,7 +1090,8 @@ modal-container.modal.fade.show {
 }
 
 header .navbar {
-    background-color: #00000014;
+    background-color: #fff;
+    border-bottom: 2px solid #e6e7e8;
 }
 
 
@@ -1552,9 +1553,11 @@ header .navbar {
 }
 
 #companyList li.selected-company span {
-    color: #ff5e01 !important;
+    color: #313a96 !important;
 }
-
+#companyList li.selected-company a:hover span {
+    color: #fff !important;
+}
 .company-name .icon-dots-three-vertical {
     font-size: 18px;
     position: absolute;
@@ -1562,7 +1565,7 @@ header .navbar {
     bottom: 0;
     transform: translateY(-50%);
     right: 16px;
-    color: #B7B7B7;
+    color: #fff;
 }
 
 .basic>tbody>tr>td,
@@ -5867,7 +5870,7 @@ table td[class*=col-]:last-child {
 }
 
 .user_circle {
-    background: #FF5F00;
+    background: #1A237E;
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -5877,7 +5880,7 @@ table td[class*=col-]:last-child {
     line-height: 30px;
     color: #fff;
     font-size: 14px;
-    border: 1px solid #FF5F00;
+    border: 1px solid #1A237E;
     text-transform: uppercase;
 }
 
@@ -6278,7 +6281,7 @@ perfect-scrollbar>.ps>.ps-overlay {
 
 .user_dropdown>li a:hover {
     color: #fff;
-    background: #2D9EE0;
+    background: #5b64c9;
 }
 
 .user_dropdown>li.open>a {
@@ -6298,6 +6301,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
+    color: #1A237E;
 }
 
 .tax-engine .icon {
@@ -7489,6 +7493,9 @@ span.red-text {
 .main-company-name .tooltip-inner {
     white-space: pre-line;
     word-break: break-word;
+}
+.hamburger_menu i.icon-bar {
+    color: #5b64c9;
 }
 /* responsive */
 
