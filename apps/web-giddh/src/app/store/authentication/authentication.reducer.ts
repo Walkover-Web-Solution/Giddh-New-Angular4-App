@@ -64,6 +64,7 @@ export interface SessionState {
   createBranchUserStoreRequestObj: CompanyCreateRequest
   userSelectedSubscriptionPlan: CreateCompanyUsersPlan;
   currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
+  totalNumberOfcompanies: number;
   currentCompanyCurrency: CompanyCountry;
 }
 
@@ -118,7 +119,8 @@ const sessionInitialState: SessionState = {
   createBranchUserStoreRequestObj: null,
   userSelectedSubscriptionPlan: null,
   currentCompanySubscriptionPlan: null,
-  currentCompanyCurrency: null
+  currentCompanyCurrency: null,
+  totalNumberOfcompanies: 0
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -587,8 +589,13 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
 
     case CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS:
       return Object.assign({}, state, { currentCompanySubscriptionPlan: action.payload });
+
+    case CompanyActions.TOTAL_COMPANIES:
+      return Object.assign({}, state, { totalNumberOfcompanies: action.payload });
+
     case CompanyActions.CURRENT_COMPANY_CURRENCY:
       return Object.assign({}, state, { currentCompanyCurrency: action.payload });
+
     case CompanyActions.USER_CAREATE_COMPANY:
       return Object.assign({}, state, { createCompanyUserStoreRequestObj: action.payload });
 
