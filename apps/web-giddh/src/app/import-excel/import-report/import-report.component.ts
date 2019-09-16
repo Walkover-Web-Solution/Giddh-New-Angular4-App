@@ -70,7 +70,12 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     return saveAs(blob, item.fileName);
   }
 
+  private resetStoreData() {
+    this.store.dispatch(this._importActions.resetImportExcelState());
+  }
+
   public ngOnDestroy() {
+    this.resetStoreData();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

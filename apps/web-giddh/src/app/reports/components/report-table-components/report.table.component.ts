@@ -1,11 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import {ILedgersInvoiceResult} from "../../../models/api-models/Invoice";
-import {ReportsModel} from "../../../models/api-models/Reports";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../store";
-import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
-import {ModalDirective} from "ngx-bootstrap";
+import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
+import { ReportsModel } from "../../../models/api-models/Reports";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../store";
+import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
+import { ModalDirective } from "ngx-bootstrap";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,7 +17,7 @@ import {ModalDirective} from "ngx-bootstrap";
 export class ReportsTableComponent implements OnInit {
   @Input() public reportRespone: ReportsModel[];
   @Input() public activeFinacialYr: any;
-  @Input()salesRegisterTotal: any;
+  @Input() salesRegisterTotal: any;
   @ViewChild('mailModal') public mailModal: ModalDirective;
   public messageBody = {
     header: {
@@ -38,9 +39,9 @@ export class ReportsTableComponent implements OnInit {
   public activeTab: any = 'customer';
   public purchaseOrSales: 'sales' | 'purchase';
   ngOnInit() {
-   }
+  }
 
-  constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction,) {
+  constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
   }
   public performActions(type: number, account: any, event?: any) {
 
@@ -110,5 +111,10 @@ export class ReportsTableComponent implements OnInit {
     this.messageBody.btn.set = this.messageBody.btn.email;
     this.messageBody.header.set = this.messageBody.header.email;
     this.mailModal.show();
+  }
+  public GotoDetailedSales(item: ReportsModel) {
+    let from = item.from;
+    let to = item.to;
+    this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to } });
   }
 }

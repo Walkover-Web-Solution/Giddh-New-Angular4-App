@@ -1,61 +1,61 @@
 <div class="responsive">
-  <table class="table basic table-bordered">
-    <thead>
-      <tr>
-        <th>Particular <a href="javascript:void(0)" class="d-inline-block"><i class="pull-right icon-collapse"></i></a>
-        </th>
-        <th class="width-200px">
-          <div class="d-flex">
-            <div class="flex-fill text-right ">
-              Sales
-            </div>
+    <table class="table basic table-bordered">
+        <thead>
+            <tr>
+                <th>Particular <a href="javascript:void(0)" class="d-inline-block"><i class="pull-right icon-collapse"></i></a>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Sales
+                        </div>
 
-          </div>
-        </th>
-        <th class="width-200px">
-          <div class="d-flex">
-            <div class="flex-fill text-right ">
-              Return
-            </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Return
+                        </div>
 
-          </div>
-        </th>
-        <th class="width-200px">
-          <div class="d-flex">
-            <div class="flex-fill text-right ">
-              Net Sales
-            </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Net Sales
+                        </div>
 
-          </div>
-        </th>
-        <th class="width-200px">
-          <div class="d-flex">
-            <div class="flex-fill text-right ">
-              Cumulative
-            </div>
+                    </div>
+                </th>
+                <th class="width-200px">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right ">
+                            Cumulative
+                        </div>
 
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-        <td><a href="javascript:void(0)">{{item.particular}}</a></td>
-        <td class="text-right">{{item.sales}}</td>
-        <td class="text-right">{{item.returns}}</td>
-        <td class="text-right">{{item.cumulative}}</td>
-        <td class="text-right">{{item.netSales}}</td>
-      </tr>
-    </tbody>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
+                <td><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+                <td class="text-right">{{item.sales | giddhCurrency}}</td>
+                <td class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td class="text-right">{{item.cumulative | giddhCurrency}}</td>
+                <td class="text-right">{{item.netSales | giddhCurrency}}</td>
+            </tr>
+        </tbody>
 
-    <tfoot class="bold">
-      <tr>
-        <th><a href="javascript:void(0)">{{salesRegisterTotal.particular}}</a></th>
-        <th class="text-right">{{salesRegisterTotal.sales}}</th>
-        <th class="text-right">{{salesRegisterTotal.returns}}</th>
-        <th class="text-right">{{salesRegisterTotal.cumulative}}</th>
-        <th class="text-right">{{salesRegisterTotal.netSales}}</th>
-      </tr>
-    </tfoot>
-  </table>
+        <tfoot class="bold">
+            <tr>
+                <th><a href="javascript:void(0)">{{salesRegisterTotal.particular }}</a></th>
+                <th class="text-right">{{salesRegisterTotal.sales | giddhCurrency}}</th>
+                <th class="text-right">{{salesRegisterTotal.returns | giddhCurrency}}</th>
+                <th class="text-right">{{salesRegisterTotal.cumulative | giddhCurrency}}</th>
+                <th class="text-right">{{salesRegisterTotal.netSales | giddhCurrency}}</th>
+            </tr>
+        </tfoot>
+    </table>
 </div>

@@ -95,7 +95,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     },
     {
       "value": "PURCHASE",
-      "label": "Purchse",
+      "label": "Purchase",
       "checked": true
     },
     {

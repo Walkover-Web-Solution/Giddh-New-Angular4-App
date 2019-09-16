@@ -1,7 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
-import { UploadExceltableResponse }  from 'apps/web-giddh/src/app/models/api-models/import-excel';
-import { base64ToBlob }  from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
+import { UploadExceltableResponse } from 'apps/web-giddh/src/app/models/api-models/import-excel';
+import { base64ToBlob } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
+import { AppState } from '../../store';
+import { Store } from '@ngrx/store';
+import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 
 @Component({
   selector: 'upload-success',
@@ -9,14 +12,14 @@ import { base64ToBlob }  from 'apps/web-giddh/src/app/shared/helpers/helperFunct
   templateUrl: './upload-success.component.html',
 })
 
-export class UploadSuccessComponent {
+export class UploadSuccessComponent implements OnDestroy {
   @Input() public UploadExceltableResponse: UploadExceltableResponse;
   @Output() public onShowReport: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public onContinueUpload = new EventEmitter();
   public file: File = null;
   public selectedType: string = '';
 
-  constructor() {
+  constructor(private store: Store<AppState>, private _importActions: ImportExcelActions) {
     //
   }
 
@@ -31,6 +34,14 @@ export class UploadSuccessComponent {
     if (this.UploadExceltableResponse.message) {
       this.onShowReport.emit(true);
     }
+  }
+
+  private resetStoreData() {
+    this.store.dispatch(this._importActions.resetImportExcelState());
+  }
+
+  ngOnDestroy(): void {
+    this.resetStoreData();
   }
 
 }

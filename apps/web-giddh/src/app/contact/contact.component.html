@@ -13,27 +13,75 @@
               [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
               [placement]="'right'">
               <i dropdownToggle class="icon-options pd cp fs20"></i>
+
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
-                <!-- <li role="menuitem">
-                    <a class="dropdown-item">
-                        <input type="checkbox" disabled name="field_filter.name" (ngModelChange)="columnFilter($event, 'name')" [(ngModel)]="showFieldFilter.name" /> Name
-                    </a>
-                </li> -->
+
+                <li role="menuitem">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.parentGroup"
+                      (ngModelChange)="columnFilter($event, 'parentGroup')" [(ngModel)]="showFieldFilter.parentGroup" />
+                    Parent Group
+                  </a>
+                </li>
+
+                <li role="menuitem">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.openingBalance"
+                      (ngModelChange)="columnFilter($event, 'openingBalance')"
+                      [(ngModel)]="showFieldFilter.openingBalance" /> Opening
+                  </a>
+                </li>
+
+                <li role="menuitem" *ngIf="activeTab === 'customer'">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.debitTotal"
+                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />
+                    Sales
+                  </a>
+                </li>
+
+                <li role="menuitem" *ngIf="activeTab === 'customer'">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.creditTotal"
+                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />
+                    Receipt
+                  </a>
+                </li>
+
+                <li role="menuitem" *ngIf="activeTab === 'vendor'">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.debitTotal"
+                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />
+                    Purchase
+                  </a>
+                </li>
+
+                <li role="menuitem" *ngIf="activeTab === 'vendor'">
+                  <a class="dropdown-item">
+                    <input type="checkbox" name="field_filter.creditTotal"
+                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />
+                    Payment
+                  </a>
+                </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')"
                       [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')"
                       [(ngModel)]="showFieldFilter.email" /> Email Id</a>
                 </li>
+
                 <li role="menuitem">
                   <a class="dropdown-item">
                     <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')"
                       [(ngModel)]="showFieldFilter.state" /> State</a>
                 </li>
+
                 <!-- <li role="menuitem">
   <a class="dropdown-item">
     <input type="checkbox" name="field_filter.closingBalance"
@@ -58,7 +106,7 @@
 
 
             <div class="form-group max250" *ngIf="activeTab !== 'aging'">
-              <input type="text" placeholder="Name/GSTIN/Email/Mobile" class="form-control" [(ngModel)]="searchStr"
+              <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr"
                 (ngModelChange)="searchStr$.next($event)" style="width:210px" />
             </div>
 
@@ -158,21 +206,21 @@
 
             <div class="bg-white clearfix">
               <div class="customer-right clearfix" style="width: 100%;">
-                <table  class="text-right">
+                <table class="text-right">
                   <tr>
                     <td>
                       <p *ngIf="activeTab === 'vendor'">Purchase</p>
                       <p *ngIf="activeTab === 'customer'">Sales</p>
-                      <h3>{{getTotalSales() |giddhCurrency }}/-</h3>
+                      <h3>{{totalSales |giddhCurrency }}/-</h3>
                     </td>
                     <td>
                       <p *ngIf="activeTab === 'vendor'">Payment</p>
                       <p *ngIf="activeTab === 'customer'">Receipt</p>
-                      <h3>{{getTotalReceipts() | giddhCurrency}}/-</h3>
+                      <h3>{{totalReceipts | giddhCurrency}}/-</h3>
                     </td>
                     <td>
                       <p>Due</p>
-                      <h3>{{getTotalDue() | giddhCurrency}}/-</h3>
+                      <h3>{{totalDue | giddhCurrency}}/-</h3>
                     </td>
 
                   </tr>
@@ -391,13 +439,13 @@
 
 <ng-template #mainTable>
 
-  <div class="onMobileView mobilecardwrapper">
+  <div class="onMobileView mobilecardwrapper vendorPage">
     <table class="table basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
       <thead>
         <tr class="aging-table-top">
           <td></td>
-          <td></td>
-          <td colspan="4" class="text-center top-aging-table-top">
+          <td *ngIf="showFieldFilter.parentGroup"></td>
+          <td [attr.colspan]="tableColsPan" class="text-center top-aging-table-top">
             <p><strong>Due as on </strong> <span class="italic underline">
                 <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                   (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
@@ -419,27 +467,29 @@
               <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel"
                 (ngModelChange)="toggleAllSelection(allSelectionModel)" />
             </span>
-            <span>{{ activeTab === 'customer' ? 'Customer' : 'Vendor' }}</span>
+            <span>Name</span>
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
             </ng-container>
           </th>
 
-          <th>Parent group
+          <th *ngIf="showFieldFilter.parentGroup">Parent group
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}">
             </ng-container>
           </th>
 
-          <th class="text-right  pr-3">Opening
+          <th class="text-right  pr-3" *ngIf="showFieldFilter.openingBalance">Opening
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
             </ng-container>
           </th>
 
-          <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+          <th class="text-right  pr-3" *ngIf="showFieldFilter.debitTotal">
+            {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
             </ng-container>
           </th>
 
-          <th class="text-right  pr-3">{{ activeTab === 'customer' ? 'Receipts' : 'Payment' }}
+          <th class="text-right  pr-3" *ngIf="showFieldFilter.creditTotal">
+            {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
             </ng-container>
           </th>
@@ -618,11 +668,19 @@
               </div>
 
             </td>
-            <td class="WordWrap " data-title="Parent Group">{{account.groupUniqueName}}</td>
-            <td class="WordWrap text-right pr-3 " data-title="Opening">{{account.openingBalance?.amount |giddhCurrency}}
+            <td class="WordWrap " data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+              {{account.groupUniqueName}}</td>
+            <td class="WordWrap text-right pr-3 " data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+              {{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap text-right pr-3" data-title="Sales">{{account.debitTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3" data-title="Receipts">{{account.creditTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title=" Sales" *ngIf="showFieldFilter.creditTotal">
+              {{account.creditTotal |giddhCurrency}}</td>
+
+            <td class="WordWrap text-right pr-3" data-title=" Receipts" *ngIf="showFieldFilter.debitTotal">
+              {{account.debitTotal |giddhCurrency}}</td>
+
+
+
             <td class="WordWrap text-right pr-3" data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
             </td>
             <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">
@@ -787,13 +845,19 @@
 
               </div>
             </td>
-            <td class="WordWrap" data-title="Parent Group">
-              <div class="table-email ">{{account.groupUniqueName}}</div>
+            <td class="WordWrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+              <div class="table-email">{{account.groupUniqueName}}</div>
             </td>
-            <td class="WordWrap text-right pr-3" data-title="Opening">{{account.openingBalance?.amount |giddhCurrency}}
+            <td class="WordWrap text-right pr-3" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+              {{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap text-right pr-3" data-title="Purchase">{{account.debitTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right pr-3" data-title="Payment"> {{account.creditTotal |giddhCurrency}}</td>
+            <td class="WordWrap text-right pr-3" data-title="Purchase" *ngIf="showFieldFilter.creditTotal">
+              {{account.creditTotal |giddhCurrency}}</td>
+
+            <td class="WordWrap text-right pr-3" data-title="Payment" *ngIf="showFieldFilter.debitTotal">
+              {{account.debitTotal |giddhCurrency}}</td>
+
+
             <td class="WordWrap text-right pr-3" data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
             </td>
             <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
