@@ -18,6 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
+
 @Component({
   selector: 'app-proforma-list-component',
   templateUrl: './proforma-list.component.html',
@@ -112,7 +113,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   public showCustomerSearch: boolean = false;
   public customerNameInput: FormControl = new FormControl();
 
-  public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
+  public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public advanceSearchFilter: ProformaFilter = new ProformaFilter();
   public allItemsSelected: boolean = false;
   public hoveredItemUniqueName: string;
@@ -134,8 +135,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public isMobileView = false;
   public selectedAction: string;
+
   constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-    private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+              private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
     this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -149,9 +151,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isGenerateSalesOrderFromEstimateSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateSalesOrderFromEstimateSuccess), takeUntil(this.destroyed$));  
     this.isGenerateInvoiceFromProformaOrEstimatesSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateInvoiceFromProformaOrEstimatesSuccess), takeUntil(this.destroyed$));  
     this.isUpdateProformaActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));    
-
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileView = s;
+    
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
     });
   }
 
@@ -329,6 +333,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       if (res && this.selectedVoucher) {
         this.selectedVoucher = null;
         this.toggleBodyClass();
+        this.getAll();
+      }
+
+      if (res && this.selectedItems.length) {
+        this.selectedItems = [];
         this.getAll();
       }
     });
@@ -555,7 +564,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
       localStorage.removeItem(this.localStorageSelectedDate);
     }
     // reset dateRangePicker
-    this.datePickerOptions = { ...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment() };
+    this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
 
     this.advanceSearchFilter = new ProformaFilter();
     this.advanceSearchFilter.page = 1;
@@ -600,7 +609,25 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public deleteVoucher() {
-    this.store.dispatch(this.proformaActions.deleteProforma(this.prepareCommonRequest(), this.voucherType));
+    // for deleting voucher which is previewed
+    if (this.selectedVoucher) {
+      this.store.dispatch(this.proformaActions.deleteProforma(this.prepareCommonRequest(), this.voucherType));
+    } else {
+      // for deleting voucher which is selected from checkbox
+      let request: ProformaGetRequest = new ProformaGetRequest();
+      let item = this.voucherData.results.find(f => {
+        return this.voucherType === VoucherTypeEnum.generateProforma ?
+          (f.proformaNumber === this.selectedItems[0]) : ((f.estimateNumber === this.selectedItems[0]));
+      });
+      request.accountUniqueName = item.customerUniqueName;
+
+      if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
+        request.proformaNumber = item.proformaNumber;
+      } else {
+        request.estimateNumber = item.estimateNumber;
+      }
+      this.store.dispatch(this.proformaActions.deleteProforma(request, this.voucherType));
+    }
   }
 
   public sendEmail(email: string) {
@@ -640,7 +667,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     obj.uniqueName = obj.voucherNumber;
     obj.grandTotal = invoice.grandTotal;
     obj.voucherType = this.voucherType;
-    obj.account = { name: invoice.customerName, uniqueName: invoice.customerUniqueName };
+    obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
     obj.voucherStatus = invoice.action;
     return obj;
   }

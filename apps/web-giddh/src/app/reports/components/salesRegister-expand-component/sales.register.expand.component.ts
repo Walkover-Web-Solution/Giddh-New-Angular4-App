@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
-import { ActivatedRoute } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
+import { BsDropdownDirective } from 'ngx-bootstrap';
+import { FormControl } from '@angular/forms';
 
 
 @Component({
@@ -23,798 +25,40 @@ export class SalesRegisterExpandComponent implements OnInit {
   public isGetSalesDetailsInProcess$: Observable<boolean>;
   public isGetSalesDetailsSuccess$: Observable<boolean>;
   public getDetailedsalesRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
+  public selectedMonth: string;
+  // public showSearchCustomer: boolean = false;
+  public showSearchInvoiceNo: boolean = false;
+
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  // searching
+  @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
+  // @ViewChild('customerSearch') public customerSearch: ElementRef;
+  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+
+  public voucherNumberInput: FormControl = new FormControl();
+  // public customerNameInput: FormControl = new FormControl();
+  public monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  public monthYear: string[] = [];
   public modalUniqueName: string;
   public imgPath: string;
   public expand: boolean = false;
-
+  public showFieldFilter = {
+    voucherType: true,
+    voucherNo: true,
+    productService: false,
+    qtyRate: false,
+    value: false,
+    discount: false,
+    tax: false
+  };
 
 
   bsValue = new Date();
-  items = [
-    {
-      "account": {
-        "name": "aa",
-        "uniqueName": "aa"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "20190401-1",
-      "creditTotal": 111,
-      "debitTotal": 0,
-      "type": "INVOICE",
-      "uniqueName": "ylre4lecx6zwv2kt4zrwxu7ykfccs0",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": 0,
-      "netTotal": 111,
-      "date": "01-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "104",
-      "creditTotal": 1000,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "0lf1554112537814",
-      "discountTotal": 0,
-      "taxTotal": 180,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 1000,
-      "date": "01-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "105",
-      "creditTotal": 400,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "1241554117954223",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "Fridge",
-            "uniqueName": "fridge"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "Fridge",
-            "uniqueName": "fridge"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "cooler",
-            "uniqueName": "cooler"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "fan",
-            "uniqueName": "fan"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": null,
-      "netTotal": 400,
-      "date": "01-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "106",
-      "creditTotal": 2000,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "xc31554117976723",
-      "discountTotal": 0,
-      "taxTotal": 360,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 2000,
-      "date": "01-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 2",
-        "uniqueName": "customer1"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "SO513",
-      "creditTotal": 22500,
-      "debitTotal": 0,
-      "type": "INVOICE",
-      "uniqueName": "ytq3x0fwj87bbv63xa5573j8whqz0r",
-      "discountTotal": 0,
-      "taxTotal": 4050,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "Fridge",
-            "uniqueName": "fridge"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "Fridge",
-            "uniqueName": "fridge"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "cooler",
-            "uniqueName": "cooler"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "fan",
-            "uniqueName": "fan"
-          },
-          "quantity": 1,
-          "amount": 22500,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": 0,
-      "netTotal": 22500,
-      "date": "02-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 123",
-        "uniqueName": "customer"
-      },
-      "voucherType": "credit note",
-      "voucherNumber": "CR-20190402-1",
-      "creditTotal": 0,
-      "debitTotal": 45000,
-      "type": "VOUCHER",
-      "uniqueName": "ettf7jei836o3bd6585kj2s7zqo3ry",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "AC",
-            "uniqueName": "ac"
-          },
-          "quantity": 1,
-          "amount": 45000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": 0,
-      "netTotal": 45000,
-      "date": "02-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 123",
-        "uniqueName": "customer"
-      },
-      "voucherType": "credit note",
-      "voucherNumber": "CR-20190402-2",
-      "creditTotal": 0,
-      "debitTotal": 25000,
-      "type": "VOUCHER",
-      "uniqueName": "fnmna1e6wqgildqnekpqinbr8fm4ig",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "TV",
-            "uniqueName": "tv"
-          },
-          "quantity": 1,
-          "amount": 25000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "TV",
-            "uniqueName": "tv"
-          },
-          "quantity": 1,
-          "amount": 25000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "TV",
-            "uniqueName": "tv"
-          },
-          "quantity": 1,
-          "amount": 25000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "TV",
-            "uniqueName": "tv"
-          },
-          "quantity": 1,
-          "amount": 25000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": 0,
-      "netTotal": 25000,
-      "date": "02-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 123",
-        "uniqueName": "customer"
-      },
-      "voucherType": "credit note",
-      "voucherNumber": "CR-20190402-3",
-      "creditTotal": 0,
-      "debitTotal": 120,
-      "type": "VOUCHER",
-      "uniqueName": "00t21neawozkl1431jiuaby2mi8dda",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "UNO",
-            "uniqueName": "uno1"
-          },
-          "quantity": 1,
-          "amount": 120,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": 0,
-      "netTotal": 120,
-      "date": "02-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 123",
-        "uniqueName": "customer"
-      },
-      "voucherType": "credit note",
-      "voucherNumber": "CR-20190402-4",
-      "creditTotal": 0,
-      "debitTotal": 45000,
-      "type": "VOUCHER",
-      "uniqueName": "xi13pyc05bat4825hwhrw2gs60kbw3",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [
-        {
-          "stock": {
-            "name": "AC",
-            "uniqueName": "ac"
-          },
-          "quantity": 1,
-          "amount": 45000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "AC",
-            "uniqueName": "ac"
-          },
-          "quantity": 1,
-          "amount": 45000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        },
-        {
-          "stock": {
-            "name": "AC",
-            "uniqueName": "ac"
-          },
-          "quantity": 1,
-          "amount": 45000,
-          "rate": null,
-          "unit": {
-            "code": "nos",
-            "hierarchicalQuantity": 1,
-            "parentStockUnit": null,
-            "quantityPerUnit": 1,
-            "displayQuantityPerUnit": 1,
-            "name": "Number"
-          },
-          "warehouse": null,
-          "stockLocation": null,
-          "hsnNumber": null,
-          "sacNumber": null,
-          "skuCode": null
-        }
-      ],
-      "roundOff": 0,
-      "netTotal": 45000,
-      "date": "02-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "108",
-      "creditTotal": 2000,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "0ql1554288457408",
-      "discountTotal": 0,
-      "taxTotal": 180,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 2000,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "109",
-      "creditTotal": 2000,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "5111554289252058",
-      "discountTotal": 0,
-      "taxTotal": 180,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 2000,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "115",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "rk81554291383789",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "116",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "qtj1554291383905",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "113",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "kmw1554291368418",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "114",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "12x1554291368525",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "111",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "xr71554291368167",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "112",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "u6j1554291368298",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "110",
-      "creditTotal": 600,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "6hv1554291367987",
-      "discountTotal": 0,
-      "taxTotal": 0,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 600,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Customer 123",
-        "uniqueName": "customer"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "120",
-      "creditTotal": 110,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "lcm1554295068351",
-      "discountTotal": 0,
-      "taxTotal": 19.8,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 110,
-      "date": "03-04-2019"
-    },
-    {
-      "account": {
-        "name": "Cash",
-        "uniqueName": "cash"
-      },
-      "voucherType": "sales",
-      "voucherNumber": "121",
-      "creditTotal": 2000,
-      "debitTotal": 0,
-      "type": "ENTRY",
-      "uniqueName": "dl01554296568787",
-      "discountTotal": 0,
-      "taxTotal": 360,
-      "tdsTotal": 0,
-      "tcsTotal": 0,
-      "stocks": [],
-      "roundOff": null,
-      "netTotal": 2000,
-      "date": "03-04-2019"
-    }
-  ];
 
-  constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute) {
+  constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
 
     this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
     this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
@@ -827,6 +71,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
     this.getDetailedsalesRequestFilter.page = 1;
     this.getDetailedsalesRequestFilter.count = 20;
+    this.getDetailedsalesRequestFilter.q = '';
 
 
     this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
@@ -835,20 +80,44 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.to = params.to;
         this.getDetailedsalesRequestFilter.from = this.from;
         this.getDetailedsalesRequestFilter.to = this.to;
-
       }
     });
     this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+    this.getCurrentMonthYear();
     this.SalesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
-      console.log('this.SalesRegisteDetailedResponse', res);
       if (res) {
         this.SalesRegisteDetailedItems = res;
-        // this.SalesRegisteDetailedItems.items = this.items;
+        _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+          obj.date = this.getDateToDMY(obj.date);
+        });
+        if (this.voucherNumberInput.value) {
+          setTimeout(() => {
+            this.invoiceSearch.nativeElement.focus();
+          }, 200);
+        }
+      }
+      setTimeout(() => { this.detectChange() }, 200);
+
+    });
+
+    this.voucherNumberInput.valueChanges.pipe(
+      debounceTime(700),
+      distinctUntilChanged(),
+      takeUntil(this.destroyed$)
+    ).subscribe(s => {
+      this.getDetailedsalesRequestFilter.sort = null;
+      this.getDetailedsalesRequestFilter.sortBy = null;
+      this.getDetailedsalesRequestFilter.q = s;
+      this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+      if (s === '') {
+        this.showSearchInvoiceNo = false;
       }
     });
+
   }
 
   public getDetailedSalesReport(SalesDetailedfilter) {
+    setTimeout(() => { this.detectChange() }, 200);
     this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
   }
   public pageChanged(ev: any): void {
@@ -869,5 +138,117 @@ export class SalesRegisterExpandComponent implements OnInit {
   */
   public emitExpand() {
     this.expand = !this.expand;
+  }
+  public columnFilter(event, column) {
+    if (event && column) {
+      this.showFieldFilter[column] = event;
+    }
+  }
+  public hideListItems() {
+    if (this.filterDropDownList.isOpen) {
+      this.filterDropDownList.hide();
+    }
+  }
+  public goToDashboard(val: boolean) {
+    if (val) {
+      this.router.navigate(['/pages/reports']);
+    } else {
+      this.router.navigate(['/pages/reports', 'reports-details']);
+    }
+  }
+
+  public getDateToDMY(selecteddate) {
+    let date = selecteddate.split('-');
+    if (date.length === 3) {
+      let month = this.monthNames[parseInt(date[1]) - 1].substr(0, 3);
+      let year = date[2].substr(2, 4);
+      return date[0] + ' ' + month + ' ' + year;
+    } else {
+      return selecteddate;
+    }
+
+  }
+  public getCurrentMonthYear() {
+    let currentYearFrom = this.from.split('-')[2];
+    let currentYearTo = this.to.split('-')[2];
+    let idx = this.from.split('-');
+    this.monthYear = [];
+    if (currentYearFrom === currentYearTo) {
+      this.monthNames.forEach(element => {
+        this.monthYear.push(element + ' ' + currentYearFrom);
+      });
+    }
+    this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
+
+  }
+  public selectedFilterMonth(monthYridx: string, i) {
+    let date = this.getDateFromMonth(i);
+    this.getDetailedsalesRequestFilter.from = date.firstDay;
+    this.getDetailedsalesRequestFilter.to = date.lastDay;
+    this.getDetailedsalesRequestFilter.q = '';
+    this.selectedMonth = monthYridx;
+    this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+
+  }
+
+  public getDateFromMonth(selectedMonth) {
+    let mdyFrom = this.from.split('-');
+    let mdyTo = this.to.split('-');
+
+    let startDate;
+
+    if (mdyFrom[1] > selectedMonth) {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyTo[2];
+    } else {
+      startDate = '01-' + (selectedMonth - 1) + '-' + mdyFrom[2];
+    }
+    let startDateSplit = startDate.split('-');
+    let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
+    // GET THE MONTH AND YEAR OF THE SELECTED DATE.
+    let month = (dt.getMonth() + 1).toString(),
+      year = dt.getFullYear();
+
+    // GET THE FIRST AND LAST DATE OF THE MONTH.
+    //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
+    if (parseInt(month) < 10) {
+      month = '0' + month;
+    }
+    let firstDay = '01-' + (month) + '-' + year;
+    let lastDay = new Date(year, parseInt(month), 0).getDate() + '-' + month + '-' + year;
+
+    return { firstDay, lastDay };
+  }
+  public toggleSearch(fieldName: string) {
+    if (fieldName === 'invoiceNumber') {
+      this.showSearchInvoiceNo = true;
+      // this.showSearchCustomer = false;
+
+      setTimeout(() => {
+        this.invoiceSearch.nativeElement.focus();
+      }, 200);
+    }
+    // else if (fieldName === 'customerUniqueName') {
+    //   this.showSearchCustomer = true;
+    //   this.showSearchInvoiceNo = false;
+    //   setTimeout(() => {
+    //     this.customerSearch.nativeElement.focus();
+    //   }, 200);
+    // }
+    else {
+      this.showSearchInvoiceNo = false;
+      // this.showSearchCustomer = false;
+    }
+    this.detectChange();
+  }
+  public clickedOutsideEvent() {
+
+    this.showSearchInvoiceNo = false;
+
+  }
+  detectChange() {
+    if (!this._cd['destroyed']) {
+      this._cd.detectChanges();
+    }
   }
 }

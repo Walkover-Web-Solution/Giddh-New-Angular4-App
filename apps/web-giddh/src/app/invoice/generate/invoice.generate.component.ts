@@ -22,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GeneralService } from '../../services/general.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -151,7 +152,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private invoiceReceiptActions: InvoiceReceiptActions,
     private _cdRef: ChangeDetectorRef,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private _breakPointObservar: BreakpointObserver
   ) {
     // set initial values
     this.ledgerSearchRequest.page = 1;
@@ -160,8 +162,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).pipe(takeUntil(this.destroyed$));
     this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileView = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
     });
   }
 

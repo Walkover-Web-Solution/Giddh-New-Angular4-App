@@ -103,7 +103,7 @@ export class PurchaseInvoiceService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -165,13 +165,13 @@ export class PurchaseInvoiceService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    let  apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
+    let apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
     // if (reqObj.gstType === 'GSTR2') {
     //   apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_EXCEL_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
     // }
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {reqObj};
+      data.queryString = { reqObj };
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
@@ -191,7 +191,7 @@ export class PurchaseInvoiceService {
 
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':error_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {reqObj};
+      data.queryString = { reqObj };
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
@@ -206,7 +206,7 @@ export class PurchaseInvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + PURCHASE_INVOICE_API.SEND_GSTR3B_EMAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':isNeedDetailSheet', reqObj.isNeedDetailSheet).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber).replace(':userEmail', reqObj.email)).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {reqObj};
+      data.queryString = { reqObj };
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }
@@ -303,7 +303,7 @@ export class PurchaseInvoiceService {
     }
     return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
-      data.queryString = {reqObj};
+      data.queryString = { reqObj };
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
   }

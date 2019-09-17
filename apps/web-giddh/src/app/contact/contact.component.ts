@@ -27,11 +27,12 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { createSelector } from 'reselect';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -97,6 +98,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public isICICIIntegrated: boolean = false;
 
   public selectedWhileHovering: string;
   public searchLoader$: Observable<boolean>;
@@ -115,8 +117,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     gstin: false,
     comment: false,
     openingBalance: false,
-    debitTotal: false,
-    creditTotal: false,
+    // debitTotal: false,
+    // creditTotal: false,
     closingBalance: false
   };
   public updateCommentIdx: number = null;
@@ -202,7 +204,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public isAdvanceSearchApplied: boolean = false;
   public advanceSearchRequestModal: ContactAdvanceSearchModal = new ContactAdvanceSearchModal();
   public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-  public tableColsPan: number = 1;
+  public tableColsPan: number = 3;
   private checkboxInfo: any = {
     selectedPage: 1
   };
@@ -224,7 +226,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _groupWithAccountsAction: GroupWithAccountsAction,
     private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
     private _route: ActivatedRoute, private _generalAction: GeneralActions,
-    private _router: Router) {
+    private _router: Router, private _breakPointObservar: BreakpointObserver) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -259,6 +261,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.dueAmountReportData$ = observableOf(data);
     });
+    this.store.dispatch(this._companyActions.getAllRegistrations());
   }
 
   public sort(key, ord = 'asc') {
@@ -309,10 +312,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -330,8 +333,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
           this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, term, this.key, this.order);
         }
       });
-    this._generalService.isMobileSite.subscribe(s => {
-      this.isMobileScreen = s;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileScreen = result.matches;
     });
 
     combineLatest([this._route.params, this._route.queryParams])
@@ -379,6 +384,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         // if (result && this.taxAsideMenuState === 'in') {
         //   this.toggleTaxAsidePane();
         // }
+      });
+
+    this.store
+      .pipe(
+        select(p => p.company.account), takeUntil(this.destroyed$)
+      )
+      .subscribe(res => {
+        if (res && Array.isArray(res)) {
+          this.isICICIIntegrated = res.length > 0;
+        } else {
+          this.isICICIIntegrated = false;
+        }
       });
   }
 
@@ -462,7 +479,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       } else {
         this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
       }
-      this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+      this.router.navigate(['pages/contact/', tabName], {replaceUrl: true});
     }
   }
 
@@ -994,18 +1011,18 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-    sortBy: string = '', order: string = 'asc') {
+                      sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
       if (res.status === 'success') {
         this.totalDue = res.body.closingBalance.amount || 0;
-        this.totalSales = (this.activeTab === 'customer' ?  res.body.creditTotal : res.body.debitTotal) || 0;
-        this.totalReceipts =(this.activeTab === 'customer' ?  res.body.debitTotal : res.body.creditTotal) || 0;
+        this.totalSales = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
+        this.totalReceipts = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
         this.selectedAllContacts = [];
         this.Totalcontacts = 0;
         for (let resp of res.body.results) {
@@ -1073,17 +1090,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private setTableColspan() {
-    let balancesColsArr = ['openingBalance', 'debitTotal', 'creditTotal'];
+    let balancesColsArr = ['openingBalance'];
     let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f)).length;
-    this.tableColsPan = length > 0 ? length + 1 : 1;
+    this.tableColsPan = length > 0 ? 4 : 3;
   }
-
 
   /*
   * Register Account navigation
   * */
   private registerAccount() {
-    this.router.navigate(['settings'], { queryParams: { tab: 'integration', tabIndex: 1, subTab: 4 } });
+    this.router.navigate(['settings'], {queryParams: {tab: 'integration', tabIndex: 1, subTab: 4}});
   }
 
   private setStateDetails(url) {
