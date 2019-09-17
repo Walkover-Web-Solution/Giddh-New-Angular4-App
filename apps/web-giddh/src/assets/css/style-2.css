@@ -41,7 +41,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-
+.middle {
+  vertical-align: middle;
+}
 /* start MDB tweaks */
 
 .pd-1 {
@@ -735,7 +737,9 @@ ul.sub-list {
 .text-lowercase {
     text-transform: lowercase !important;
 }
-
+.text-gray {
+  color: #666666;
+}
 .Advance-Search .input-group-addon {
     border-left: 0px;
     background: none;
