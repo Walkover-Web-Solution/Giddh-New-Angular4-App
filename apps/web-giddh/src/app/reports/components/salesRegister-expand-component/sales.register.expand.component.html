@@ -287,7 +287,7 @@
                     <tr *ngFor=" let item of (SalesRegisteDetailedResponse$ | async).items ">
                         <td>{{item.date}}</td>
 
-                        <td *ngIf="showFieldFilter.voucherType " (dblclick)="modalUniqueName=item.uniqueName " class="cp no-dbl-click-select " (clickOutside)="modalUniqueName='' ">
+                        <td (dblclick)="modalUniqueName=item.uniqueName " class="cp no-dbl-click-select " (clickOutside)="modalUniqueName='' ">
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName===item.uniqueName " account-detail-modal-component [accountUniqueName]="item.account.uniqueName " [from]="this.from " [to]="this.to " [isModalOpen]="modalUniqueName===item.uniqueName ">
                             </div>
@@ -297,7 +297,7 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td>{{item.voucherType}}</td>
+                        <td *ngIf="showFieldFilter.voucherType">{{item.voucherType}}</td>
                         <td *ngIf="showFieldFilter.voucherNo "><a href="javascript:void(0) ">{{item.voucherNumber}}</a></td>
                         <td class="text-right ">{{item.creditTotal | giddhCurrency}}
                             <ng-container *ngIf="expand ">
