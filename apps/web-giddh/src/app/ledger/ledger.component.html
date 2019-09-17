@@ -13,7 +13,7 @@
 
     <!-- ledger header -->
     <div class="clearfix">
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-6">
         <div class="row">
           <!-- (hideDaterangepicker)="selectedDate($event)"  -->
           <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -28,12 +28,22 @@
       <!--&lt;!&ndash;<button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>&ndash;&gt;-->
       <!--</div>-->
       <!--</div>-->
-      <div class="col-sm-4">
+      <div class="col-sm-4 col-xs-6">
+          <span class="mr-1 d-inilne-block font-14">USD</span>
+          <div class="toggle d-inline-block" data-key="disabled">
+              <input type="checkbox" class="toggle-checkbox" id="disabled">
+              <label class="toggle-label" for="disabled">
+                  <span class="toggle-inner"></span>
+                  <span class="toggle-switch"></span>
+              </label>
+          </div>
+          <span class="ml-1 d-inline-block font-14">INR</span>
+
         <!--<div class="row">-->
         <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
         <!--</div>-->
       </div>
-      <div class="col-sm-6 text-right C-flex-end xs-pl-0 xs-pr-0">
+      <div class="col-sm-6 col-xs-12 text-right C-flex-end xs-pl-0 xs-pr-0">
         <div class="d-flex xs-width-100 ledger-head-top">
 
           <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
@@ -424,6 +434,7 @@
                                   (ledgerTxnBalance$ | async)?.forwardedBalance?.amount  | giddhCurrency }}</span>
                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
 
+                <p class="mb-0 amnt-total">$454</p>
 
               </td>
             </tr>
@@ -652,6 +663,7 @@
                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'CREDIT'">
                   {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}</span>
                 <span *ngIf="(ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT'">0</span>
+                <p class="mb-0 amnt-total">$454</p>
               </td>
             </tr>
             <!--credit transaction if forwardedBalance -->
@@ -668,7 +680,8 @@
                   (click)="selectAllEntries($event,'credit')">
               </td>
               <td class="col-xs-6"></td>
-              <td class="col-xs-3"></td>
+              <td class="col-xs-3">
+              </td>
             </tr>
             <!--credit transaction no forwardedBalance -->
 
@@ -722,6 +735,8 @@
               </td>
               <td data-title="Amount" class="col-xs-3 pos-rel text-right">
                 {{txn.amount | giddhCurrency}}
+                <p class="mb-0 amnt-total">$454</p>
+
               </td>
             </tr>
             <!--credit transaction loop over transactions -->

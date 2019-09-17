@@ -81,8 +81,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
 
-  totalPrice: boolean = false;
-  
+  totalPrice: boolean = true;
+
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public discountAccountsList$: Observable<IDiscountList[]>;

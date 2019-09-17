@@ -19,6 +19,14 @@
 .ledgHead table td.pdR25imp {
     padding-right: 25px !important;
 }
+
+.ledgHead table td[class*=col-], .ledgHead table td .select2-container {
+  min-height: 54px;
+  height: 54px;
+  max-height: initial;
+}
+
+
 .ledgHead.entry-popup table td[class*=col-] {
     padding: 0px !important;
     padding-bottom: 1px !important;
@@ -143,7 +151,7 @@
     clear: both;
     position: relative;
     float: left;
-    width: 100%;    
+    width: 100%;
     margin-bottom: 30px;
     background: #fff;
 
@@ -220,7 +228,9 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-
+// .right-col-new table.width100.h-table tbody tr td {
+//   height: 51.5px;
+// }
 
 
 @media (min-width: 1200px) {
@@ -237,6 +247,12 @@ sh-select:focus {
     .custom-tabs {
         display: block;
     }
+    .ledgHead table td[class*=col-], .ledgHead table td .select2-container {
+      min-height: initial;
+      height:  initial;
+      max-height: initial;
+    }
+
 }
 @media only screen and (max-width: 767px) {
     .ledgHead table td[class*=col-],

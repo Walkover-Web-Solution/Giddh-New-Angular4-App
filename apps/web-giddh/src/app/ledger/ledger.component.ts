@@ -218,7 +218,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerTxnBalance$ = this.store.select(p => p.ledger.ledgerTransactionsBalance).pipe(takeUntil(this.destroyed$));
   }
 
-  totalPrice: boolean = false;
+  totalPrice: boolean = true;
 
   Shown: boolean = true;
   isHide: boolean = false;
@@ -228,7 +228,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   toggleShow() {
     this.condition= this.condition ?false:true;
     this.condition2= this.condition ?false:true;
-    
+
     this.Shown = this.Shown ?false:true;
     this.isHide = this.isHide ?false:true;
   }

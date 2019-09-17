@@ -35,6 +35,7 @@
               <label>Price</label>
               <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
                 (keyup)="changePrice($event.target.value)" name="" class="form-control text-right" />
+                <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 3259.56</p>
             </td>
             <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
               <label class="d-block">&nbsp;</label>
@@ -45,6 +46,7 @@
               <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control text-right"
                 [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                 (keyup)="amountChanged();calculateTotal()" />
+                <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 3259.56</p>
             </td>
             <td class="text-center table-minus" *ngIf="(discountAccountsList$ | async)?.length">
               <label class="d-block">&nbsp;</label>
@@ -56,6 +58,7 @@
                 [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
                 (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
               </ledger-discount>
+              <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 00.00</p>
             </td>
             <td class="text-center equal-2"
               *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.length">
@@ -75,6 +78,7 @@
                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
               </tax-control>
+              <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 6512.99</p>
             </td>
             <td class="text-center equal-2">
               <label class="d-block">&nbsp;</label>
@@ -85,6 +89,7 @@
               <label class="primary_clr">Total</label>
               <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
+              <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 39077.96</p>
             </td>
 
           </tr>
@@ -132,8 +137,7 @@
             <button class="no-btn pdL0">&nbsp;More Details</button>
           </td>
           <td class="text-right">
-            <span class="primary_clr">Compound Total: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
-            <!-- Total in USD: -->
+            <span class="primary_clr"><!-- Compound Total: --> Total in USD: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
           </td>
         </tr>
       </tbody>

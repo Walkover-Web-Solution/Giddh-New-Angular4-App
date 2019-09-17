@@ -123,7 +123,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
-  totalPrice: boolean = false;
+  totalPrice: boolean = true;
 
   Shown: boolean = true;
   isHide: boolean = false;
