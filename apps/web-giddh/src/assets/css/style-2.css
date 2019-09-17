@@ -679,15 +679,15 @@ ul.sub-list {
 }
 
 .pagination>li>a {
-    background: #F7F8FA !important;
-    color: #707070 !important;
-    border: 1px solid #707070 !important;
+    background: #fff !important;
+    color: var( --dark-blue) !important;
+    border: 1px solid var( --dark-blue) !important;
 }
 
 .pagination>li.active>a {
-    background: #FF5F00 !important;
+    background:var( --dark-blue) !important;
     color: #fff !important;
-    border: 1px solid #FF5F00 !important;
+    border: 1px solid var( --dark-blue) !important;
 }
 
 .custom-dropdown .dropdown-menu>li>a:hover {
@@ -1046,7 +1046,7 @@ modal-container.modal.fade.show {
 
 .form-control:focus {
     outline: none;
-    border-color: #f7b995 !important;
+    border-color:var(--light-blue) !important;
     box-shadow: none;
 }
 
@@ -1397,7 +1397,7 @@ header .navbar {
     width: 100% !important;
     background: none !important;
     font-size: 12px;
-    height: 26px;
+    height: 33px;
     border: 0px;
     color: #333333;
     padding: 3px !important;
@@ -1407,7 +1407,7 @@ header .navbar {
 .header-date {
     /* background: #E7E7E8 !important; */
     font-size: 12px;
-    height: 27px;
+    height: 33px;
     line-height: 23px;
     padding: 2px 0px;
     border-radius: 2px;
@@ -2437,7 +2437,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid #ff5e01 !important;
+    border: 1px solid var(  --light-blue) !important;
     border-radius: 0 !important;
 }
 
@@ -3658,7 +3658,7 @@ label {
 }
 
 .primary_clr {
-    color: #ff5f00 !important;
+    color: var(--dark-blue01) !important;
 }
 
 .view_forms {
@@ -4869,8 +4869,8 @@ input[type='checkbox'][disabled] {
 }
 
 .basic>thead>tr>th {
-    background: #e5e5e5;
-    color: #262626;
+    background: var(--dark-blue01) !important ;
+    color: #fff;
     border: 0;
     font-family: 'LatoWebbold';
     text-transform: capitalize;
@@ -5270,7 +5270,7 @@ virtual-scroll .scrollable-content .item.selected>a {
 
 virtual-scroll .scrollable-content .item:hover .item,
 .item.hilighted>a>.item {
-    color: #ff5f00;
+    color: var(--dark-blue01);
 }
 
 sh-select .header {
@@ -5286,7 +5286,7 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: #10aae0;
+    color: var(--dark-blue01);
     /* color: #2262D1; */
 }
 
@@ -7516,7 +7516,7 @@ span.red-text {
     word-break: break-word;
 }
 .hamburger_menu i.icon-bar {
-    color: var(--light-blue);
+    color:var(--dark-blue);
 }
 /* responsive */
 

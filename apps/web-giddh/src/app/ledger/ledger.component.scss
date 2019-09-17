@@ -1,3 +1,11 @@
+
+$dark-blue:#000857;
+$dark-blue01:#313a96;
+$light-blue:#5b63b9;
+$light-blue01:#868ee0;
+$light-blue02:#bdc3ff;
+$light-gray:#e6e7e8;
+
 .form-control, input {
     color: #4d4d4d;
 }
@@ -77,7 +85,8 @@
     bottom: 0;
 }
 .ledger-head th {
-    color: rgba(0, 0, 0, 0.4);
+    color:$dark-blue01;
+        padding-left: 0;
 }
 .total_col td {
     border: 0;
@@ -131,21 +140,22 @@
     padding-right: 25px !important;
 }
 .t-h-bg1 th {
-    background: #EAEBED;
-    color: #4d4d4d;
+    background: $dark-blue01;
+    color: #fff;
     border-right: 1px solid #c4c6c7;
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #c4c6c7;
+    border-bottom: 1px solid $dark-blue01;
 }
 .ledger_book {
     border: 0px solid #ccc;
     clear: both;
     position: relative;
     float: left;
-    width: 100%;    
+    width: 100%;
     margin-bottom: 30px;
     background: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
 
 }
 .Width600 {
@@ -220,8 +230,23 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-
-
+.ledgHead .icomoon_ico{
+  color: $dark-blue01;
+}
+ .advancSearchBlock  input{
+   background: $light-gray !important;
+ }
+ .advancSearchBlock   .icon-search{
+    right: 0;
+    top: 0;
+    background-color: $light-blue;
+    padding: 9px;
+    color: #fff;
+}
+#blankLedgerContainer .ledger-main .no-leftBorder {
+    border-left: none !important;
+}
+// reponsive
 
 @media (min-width: 1200px) {
     .container {

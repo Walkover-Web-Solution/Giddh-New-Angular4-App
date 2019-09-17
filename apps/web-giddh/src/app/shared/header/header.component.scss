@@ -1,5 +1,5 @@
 
-$dark-blue:#1A237E;
+$dark-blue:#000857;
 $dark-blue01:#313a96;
 $light-blue:#5b63b9;
 $light-blue01:#868ee0;
@@ -444,13 +444,14 @@ a[vr-item]:focus {
 
 .universal_date li input {
     background:$dark-blue01 !important;
-    padding-left: 27px !important;
-     color: #fff;
+    padding-left: 33px !important;
+    color: #fff;
+    padding-right: 5px !important;
 }
 
 .header-date {
     background:$dark-blue01 !important;
-    padding: 2px 9px;
+    padding: 5px 9px;
     border-radius: 0px 2px 2px 0px;
     color: #fff;
 }
@@ -461,13 +462,12 @@ a[vr-item]:focus {
   background-color:$light-blue;
 }
 .calender-addone{
-background-color:$light-blue;
+background-color: #5b63b9;
     color: #fff;
-    padding: 5px 5px;
-    vertical-align: baseline;
+    padding: 9.5px 8px;
+    vertical-align: bottom;
     font-size: 14px;
     border-radius: 2px 0 0 2px;
-    height: 27px;
     display: inline-flex;
 
     }
@@ -478,16 +478,16 @@ background-color:$light-blue;
     background: $dark-blue01;
     color: #fff;
     position: relative;
-    padding-left: 30px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-left: 33px;
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
  #AddManage .icon-edit-ico{
 
     position: absolute;
     left: 0px;
     background-color: $light-blue;
-    padding: 6.5px 5px;
+    padding:9.5px 6px;
     top: 0px;
     border-radius: 2px 0 0 2px;
     text-align: center;
@@ -496,10 +496,10 @@ background-color:$light-blue;
  span.icon-support.dropdown-toggle {
     background-color: $light-blue;
     color: #fff;
-    padding: 5px;
+    padding: 7px 7px;
     font-size: 17px;
     border-radius: 3px;
-    vertical-align: text-bottom;
+
 }
 
 

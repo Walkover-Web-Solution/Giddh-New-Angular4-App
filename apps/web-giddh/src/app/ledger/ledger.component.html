@@ -33,7 +33,7 @@
         <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
         <!--</div>-->
       </div>
-      <div class="col-sm-6 text-right C-flex-end xs-pl-0 xs-pr-0">
+      <div class="col-sm-6 advancSearchBlock text-right C-flex-end xs-pl-0 xs-pr-0">
         <div class="d-flex xs-width-100 ledger-head-top">
 
           <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
@@ -51,7 +51,7 @@
             <div style="position: relative">
               <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
-              <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
+              <i class="icon-search pos-abs"></i>
             </div>
 
           </div>
@@ -512,7 +512,7 @@
                   <tbody class="ledger-main">
                     <tr class="ledger-row" container="body">
 
-                      <td class="col-xs-3" data-title="Date">
+                      <td class="col-xs-3 no-leftBorder" data-title="Date">
                         <div class="d-flex align-items-center">
                           <span class="ledger-checkbox" style="float: left">
                             <!--<input type="checkbox"/>-->
