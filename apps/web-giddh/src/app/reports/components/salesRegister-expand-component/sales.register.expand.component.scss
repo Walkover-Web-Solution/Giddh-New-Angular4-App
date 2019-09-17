@@ -233,3 +233,28 @@ ul#dropdown-nested li .caret {
   box-shadow: none !important;
   outline: none !important;
 }
+.icon-pointer .glyphicon:hover {
+  color: #FF5F00 !important;
+}
+
+.icon-pointer .activeTextColor {
+  color: #FF5F00 !important;
+  opacity: 1!important;
+}
+
+.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+  line-height: 0.5;
+  height: 8px;
+}
+
+.icon-pointer .font-xxs {
+  font-size: 12px;
+}
+table th{
+  position: relative;
+}
+.icon-pointer{
+  position: absolute;
+    right: 10px;
+    top: 33%;
+}

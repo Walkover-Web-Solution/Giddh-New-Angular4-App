@@ -154,12 +154,8 @@
                 <div class="flex-fill pr-1 ">
                   Date
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'date', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'date', 'desc') "></div>
-                </div>
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'date'}">
+                </ng-container>
               </div>
             </th>
 
@@ -174,12 +170,21 @@
                 <div class="flex-fill pr-1 ">
                   Voucher Type
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'voucherType', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'voucherType', 'desc') "></div>
-                </div>
+
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'voucherType'}">
+                </ng-container>
+
+                <!-- <div class="icon-pointer ">
+                  <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" *ngIf="order !== 'asc' "
+                    (click)="sortbyApi( 'voucherType', 'asc') " [ngClass]="{'activeTextColor': order !== 'asc'}">
+                  </div>
+                  <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs" *ngIf="order === 'asc'"
+                    (click)="sortbyApi( 'voucherType', 'desc') " [ngClass]="{'activeTextColor': order === 'asc'}">
+                  </div>
+                </div> -->
+
+
+
               </div>
             </th>
 
@@ -197,12 +202,11 @@
                 <div class="flex-fill text-right pr-1 ">
                   Sales
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'creditTotal', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'creditTotal', 'desc') "></div>
-                </div>
+
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
+                </ng-container>
+
+
               </div>
             </th>
 
@@ -211,12 +215,9 @@
                 <div class="flex-fill text-right pr-1 ">
                   Return
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'debitTotal', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'debitTotal', 'desc') "></div>
-                </div>
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
+                </ng-container>
+
               </div>
             </th>
             <th *ngIf="expand && showFieldFilter.qtyRate ">
@@ -224,10 +225,9 @@
                 <div class="flex-fill text-right pr-1 ">
                   Qty/Unit
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "></div>
-                </div>
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
+                </ng-container>
+
               </div>
             </th>
             <th>
@@ -235,12 +235,11 @@
                 <div class="flex-fill text-right pr-1 ">
                   Rate
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'rate', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'rate', 'desc') "></div>
-                </div>
+
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'rate'}">
+                </ng-container>
+
+
               </div>
             </th>
 
@@ -249,12 +248,13 @@
                 <div class="flex-fill text-right pr-1 ">
                   Discount
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'discountTotal', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'discountTotal', 'desc') "></div>
-                </div>
+
+
+
+
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'discountTotal'}">
+                </ng-container>
+
               </div>
             </th>
 
@@ -263,12 +263,11 @@
                 <div class="flex-fill text-right pr-1 ">
                   Tax
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'taxTotal', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'taxTotal', 'desc') "></div>
-                </div>
+
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'taxTotal'}">
+                </ng-container>
+
+
               </div>
             </th>
             <th>
@@ -276,12 +275,11 @@
                 <div class="flex-fill text-right pr-1 ">
                   Net Sales
                 </div>
-                <div class="icon-pointer ">
-                  <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'netTotal', 'asc') "></div>
-                  <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs "
-                    (click)="sortbyApi( 'netTotal', 'desc') "></div>
-                </div>
+                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'netTotal'}">
+                </ng-container>
+
+
+
               </div>
             </th>
           </tr>
@@ -396,3 +394,24 @@
     <div class="giddh-spinner vertical-center-spinner "></div>
   </div>
 </div>
+<!-- region sorting template -->
+<ng-template #sortingTemplate let-col>
+  <div class="icon-pointer cp">
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'asc')"
+      *ngIf="getDetailedsalesRequestFilter.sortBy !== col"
+      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
+    </div>
+
+    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'desc')"
+      *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'"
+      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
+    </div>
+
+    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs"
+      *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'"
+      (click)="sortbyApi(col, 'asc')"
+      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'}">
+    </div>
+  </div>
+</ng-template>
+<!-- endregion -->

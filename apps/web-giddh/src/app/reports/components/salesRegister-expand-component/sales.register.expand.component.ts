@@ -829,7 +829,7 @@ export class SalesRegisterExpandComponent implements OnInit {
       "date": "03-04-2019"
     }
   ];
-
+  public order: string = 'desc';
   constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router) {
 
     this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -843,6 +843,8 @@ export class SalesRegisterExpandComponent implements OnInit {
     this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
     this.getDetailedsalesRequestFilter.page = 1;
     this.getDetailedsalesRequestFilter.count = 20;
+    this.getDetailedsalesRequestFilter.sort = 'asc';
+    this.getDetailedsalesRequestFilter.sortBy = 'date';
 
 
     this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
@@ -876,7 +878,7 @@ export class SalesRegisterExpandComponent implements OnInit {
     this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
   }
   public sortbyApi(key, ord) {
-
+    // this.order = ord;
     this.getDetailedsalesRequestFilter.sortBy = key;
     this.getDetailedsalesRequestFilter.sort = ord;
     this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
