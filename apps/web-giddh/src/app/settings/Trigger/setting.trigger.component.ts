@@ -38,8 +38,9 @@ const filterType = [
 ];
 
 const scopeList = [
-  {label: 'Invoice', value: 'invoice'},
-  {label: 'Entry', value: 'entry'},
+   // G0-1393--Invoive and Entry not implemented from API 
+  //{label: 'Invoice', value: 'invoice'},
+  //{label: 'Entry', value: 'entry'},
   {label: 'Closing Balance', value: 'closing balance'}
 ];
 

@@ -2126,6 +2126,11 @@ input[type="checkbox"]:after {
     align-items: center;
 }
 
+.fixed-ng2pdfview iframe {
+    height: 1530px;
+    overflow: hidden;
+}
+
 @media only screen and (max-width: 1400px) {
     .template_list {
         width: 25%;
@@ -6295,7 +6300,10 @@ perfect-scrollbar>.ps>.ps-overlay {
     /* color: #ff5e01; */
 }
 
-.hamburger_menu button, .hamburger_menu button:hover, .hamburger_menu button:focus, .hamburger_menu button:active {
+.hamburger_menu button,
+.hamburger_menu button:hover,
+.hamburger_menu button:focus,
+.hamburger_menu button:active {
     padding-left: 0;
     background: transparent;
     outline: none;
@@ -7471,32 +7479,38 @@ span.red-text {
     user-select: none;
 }
 
-
 .headerTooltip .tooltip-inner {
- word-break: break-word !important;
- white-space: pre-line !important;
+    word-break: break-word !important;
+    white-space: pre-line !important;
 }
+
 .icon-btn .tooltip-inner {
-  white-space: nowrap !important;
+    white-space: nowrap !important;
 }
+
 .icon-btn .btn-xs {
-  border: 1px solid #d6d6d6;
-  background-color: #eee;
+    border: 1px solid #d6d6d6;
+    background-color: #eee;
 }
+
 .modal.fade.openPoup.in.show {
-  overflow-x: hidden;
-  overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
+
 .ledger_book .tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
 }
-.selectCustomerName .scrollable-content > .item {
-  height: 48px !important;
+
+.selectCustomerName .scrollable-content>.item {
+    height: 48px !important;
 }
+
 .add-companyDetail .add_mailer form {
     padding-bottom: 60px;
 }
+
 .main-company-name .tooltip-inner {
     white-space: pre-line;
     word-break: break-word;
@@ -7727,7 +7741,6 @@ span.red-text {
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
-
 }
 
 @media (max-width: 1199px) {
@@ -7735,6 +7748,7 @@ span.red-text {
         width: 100%;
     }
 }
+
 @media (max-width: 767px) {
     .dropdown-width ul.dropdown-menu.pd {
         min-width: 150px!important;
@@ -7754,7 +7768,6 @@ span.red-text {
     .xs-width-100 {
         width: 100%;
     }
-
     .ledger_book .right-col-new .entry-modal {
         width: 100%;
         left: 0%;
@@ -7795,17 +7808,17 @@ span.red-text {
     .select2-ledger .menu {
         width: 210px !important;
     }
-        .menu_open {
-    padding-left: 0;
-}
-.menu_open:before {
-    position: absolute;
-    content: '';
-    background: rgba(0,0,0,0.3);
-    z-index: 2;
-    height: 100%;
-    width: 100%;
-}
+    .menu_open {
+        padding-left: 0;
+    }
+    .menu_open:before {
+        position: absolute;
+        content: '';
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 2;
+        height: 100%;
+        width: 100%;
+    }
 }
 
 @media (max-width: 575px) {
@@ -7816,13 +7829,12 @@ span.red-text {
         right: 267px;
     }
     .vendorPayNow .accountAsideMenuState2 #close {
-      right: 312px;
-  }
+        right: 312px;
+    }
     .custom-tabs .top_bar {
         padding-top: 10px;
         padding-bottom: 10px;
     }
-
 }
 
 @media (max-width: 500px) {
@@ -7848,11 +7860,13 @@ span.red-text {
         cursor: pointer !important;
     }
 }
-@media(max-width:375px){
-  .vendorPayNow .accountAsideMenuState2 #close {
-    right:272px;
+
+@media(max-width:375px) {
+    .vendorPayNow .accountAsideMenuState2 #close {
+        right: 272px;
+    }
 }
-}
+
 @media (max-width: 360px) {
     .pagination-sm>li>a,
     .pagination-sm>li>span {
@@ -8025,6 +8039,7 @@ span.red-text {
         border: none;
     }
 }
+
 @media only screen and (max-width: 480px) {
     td.pItem.price .my-dropdown-menu {
         width: 180px !important;

@@ -239,7 +239,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       let orderedCompanies = _.orderBy(companies, 'name');
       this.companies$ = observableOf(orderedCompanies);
       this.companyList = orderedCompanies;
-
+      this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
       let selectedCmp = companies.find(cmp => {
         if (cmp && cmp.uniqueName) {
           return cmp.uniqueName === uniqueName;
