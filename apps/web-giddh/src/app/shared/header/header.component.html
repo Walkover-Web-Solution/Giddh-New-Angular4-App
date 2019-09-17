@@ -283,7 +283,7 @@ Create Company
       <li>
         <div class="clearfix">
           <ul>
-            <li><a href="#"><strong>General</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>General</strong></a></li>
             <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a></li>
             <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
             </li>
@@ -298,7 +298,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Invoice</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Invoice</strong></a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
@@ -311,7 +311,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Inventory</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
             <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
             <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
             <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li>
@@ -322,7 +322,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Settings</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Settings</strong></a></li>
             <li><a (click)="analyzeOtherMenus('permissions')">Permission</a></li>
             <li><a (click)="analyzeOtherMenus('import/select')">Import Data</a></li>
             <li>
@@ -336,7 +336,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Others</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Others</strong></a></li>
             <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
             <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
             <li><a (click)="analyzeOtherMenus('gstfiling')">GSTR</a></li>
@@ -399,23 +399,29 @@ Create Company
             <li [hidden]="isTodaysDateSelected">
               <button class="btn btn-link" (click)="jumpToToday();">Go back to Today</button>
             </li>
-            <li [hidden]="isTodaysDateSelected">
+            <li [hidden]="isTodaysDateSelected" class="notToday">
+              <span class="icon-calender calender-addone"></span>
               <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
                 [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
                 class="form-control date-range-picker" />
             </li>
             <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
               <label class="btn btn-link">Today</label>
-              <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
+              <span class="icon-calender calender-addone"></span>
+              <label class="header-date">
+                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
             </li>
           </ul>
 
 
           <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm"
-            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
+            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
+              class="icon-edit-ico"></span>Accounts
           </button>
           <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
-            <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
+            <span class="icon-support dropdown-toggle" dropdownToggle></span>
+
+            <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
               aria-labelledby="button-basic" [style.min-width.px]="230">
               <li>

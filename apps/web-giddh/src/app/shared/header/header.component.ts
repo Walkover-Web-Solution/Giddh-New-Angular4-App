@@ -36,7 +36,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public userIsSuperUser: boolean = true; // Protect permission module
