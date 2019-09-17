@@ -5,6 +5,7 @@ table {
 .basic > thead > tr > th {
   // overflow: hidden;
   width: 140px;
+  white-space: inherit;
 }
 
 .basic > thead > tr > th > .heads div:first-child {
