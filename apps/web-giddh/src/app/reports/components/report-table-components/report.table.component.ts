@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { GroupWithAccountsAction } from "../../../actions/groupwithaccounts.actions";
 import { ModalDirective } from "ngx-bootstrap";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class ReportsTableComponent implements OnInit {
   ngOnInit() {
   }
 
-  constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, ) {
+  constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
   }
   public performActions(type: number, account: any, event?: any) {
 
@@ -114,6 +115,6 @@ export class ReportsTableComponent implements OnInit {
   public GotoDetailedSales(item: ReportsModel) {
     let from = item.from;
     let to = item.to;
-
+    this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to } });
   }
 }

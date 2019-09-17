@@ -28,7 +28,7 @@
                      [isAccountNameAvailable$]="isAccountNameAvailable$"
                      [createAccountInProcess$]="createAccountInProcess$"
                      (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
-                     [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                     [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
     </account-add-new>
 
     <account-update-new *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName"

@@ -9,6 +9,7 @@ import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../services/general.service';
 @Component({
   styles: [`
       .invoice-bg {
@@ -100,13 +101,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public isMobileView = false;
   constructor(private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private router: Router,
-              private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver) {
-                this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
-                  this.isMobileView = res.matches;
-                });
-    //
+    private companyActions: CompanyActions,
+    private router: Router,
+    private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
+    });
   }
 
   public ngOnInit() {

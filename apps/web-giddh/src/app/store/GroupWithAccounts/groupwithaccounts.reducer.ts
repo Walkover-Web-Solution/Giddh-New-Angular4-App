@@ -55,6 +55,8 @@ export interface CurrentGroupAndAccountState {
   updateAccountIsSuccess?: boolean;
   moveAccountSuccess?: boolean;
   newlyCreatedAccount: INameUniqueName;
+  isDeleteAccInProcess: boolean;
+  isDeleteAccSuccess: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -110,7 +112,9 @@ const initialState: CurrentGroupAndAccountState = {
   isDeleteGroupInProcess: false,
   isMoveGroupSuccess: false,
   isMoveGroupInProcess: false,
-  isAddAndManageOpenedFromOutside: false
+  isAddAndManageOpenedFromOutside: false,
+  isDeleteAccSuccess: false,
+  isDeleteAccInProcess: false
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -493,6 +497,13 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
         return state;
       }
+    case AccountsAction.DELETE_ACCOUNT:
+      return {
+        ...state,
+        isDeleteAccSuccess: false,
+        isDeleteAccInProcess: true
+      };
+
     case AccountsAction.DELETE_ACCOUNT_RESPONSE:
       let d: BaseResponse<string, any> = action.payload;
       if (d.status === 'success') {
@@ -501,10 +512,17 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
           activeAccount: null,
-          activeGroup: {uniqueName: d.request.groupUniqueName}
+          activeGroup: {uniqueName: d.request.groupUniqueName},
+          isDeleteAccSuccess: true,
+          isDeleteAccInProcess: false
         });
       }
       return state;
+
+    case AccountsAction.RESET_DELETE_ACCOUNT_FLAGS:
+      return {
+        ...state, isDeleteAccSuccess: false, isDeleteAccInProcess: false
+      }
 
     case GroupWithAccountsAction.DELETE_GROUP:
       return {

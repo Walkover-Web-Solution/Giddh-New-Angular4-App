@@ -55,6 +55,7 @@ export class AccountsAction {
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
   public static DELETE_ACCOUNT = 'AccountDelete';
   public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
+  public static RESET_DELETE_ACCOUNT_FLAGS = 'AccountResetDeleteFlags';
   public static MERGE_ACCOUNT = 'AccountMerge';
   public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
   public static APPLY_ACCOUNT_DISCOUNT = 'ApplyAccountDiscount';
@@ -538,8 +539,8 @@ export class AccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
-            this.store.dispatch(this._generalActions.getFlattenAccount());
-            this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+          this.store.dispatch(this._generalActions.getFlattenAccount());
+          this.store.dispatch(this._generalActions.getFlattenGroupsReq());
           this._toasty.successToast(action.payload.body, '');
           let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
           this._generalServices.eventHandler.next({name: eventsConst.accountMerged, payload: data});
@@ -881,6 +882,12 @@ export class AccountsAction {
       type: AccountsAction.DELETE_ACCOUNT_RESPONSE,
       payload: value
     };
+  }
+
+  public resetDeleteAccountFlags(): CustomActions {
+    return {
+      type: AccountsAction.RESET_DELETE_ACCOUNT_FLAGS
+    }
   }
 
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): CustomActions {

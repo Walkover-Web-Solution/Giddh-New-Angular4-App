@@ -3,119 +3,115 @@
     <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
       <table class="width100 total-detail-table">
         <tbody class="">
-        <tr *ngIf="currentTxn.selectedAccount">
-          <td class="pItem qty-unit" *ngIf="currentTxn.selectedAccount.stock">
-            <table>
-              <tbody>
-              <tr>
-                <td class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}"
-                    style="width:100% !important;">
-                  <label style=" margin-right: 6px;">Qty</label>
-                  <input type="text" name="" class="form-control text-right"
-                         (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
-                         decimalDigitsDirective [DecimalPlaces]="4"/>
-                </td>
-                <td *ngIf="currentTxn.unitRate">
-                  <label>Unit</label>
-                  <select class="form-control" style="width: 78px;" (change)="unitChanged($event.target.value)"
-                          [value]="currentTxn.inventory.unit.code">
-                    <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">{{item.stockUnitCode}}
-                    </option>
-                  </select>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </td>
-          <td class="text-center table-plus" *ngIf="currentTxn.selectedAccount.stock">
-            <label class="d-block">&nbsp;</label>
-            <label class="fs20">x</label>
-          </td>
-          <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
-            <label>Price</label>
-            <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
-                   (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
-          </td>
-          <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
-            <label class="d-block">&nbsp;</label>
-            <label class="fs20">=</label>
-          </td>
-          <td class="pItem text-right amount">
-            <label class="primary_clr">Amount</label>
-            <input type="text" name="" prefix="$" mask="comma_separator.2"
-                   class="form-control text-right" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
-                   (keyup)="amountChanged();calculateTotal()"/>
-          </td>
-          <td class="text-center table-minus" *ngIf="(discountAccountsList$ | async)?.length">
-            <label class="d-block">&nbsp;</label>
-            <label class="fs20">-</label>
-          </td>
-          <!--discount-->
-          <td class="pItem text-right price" (click)="$event.stopPropagation()"
-              (mouseenter)="hideTax()">
-            <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
-                             [ledgerAmount]="currentTxn.amount"
-                             (hideOtherPopups)="hideTax()"
-                             (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
-            </ledger-discount>
-          </td>
-          <td class="text-center equal-2"
+          <tr *ngIf="currentTxn.selectedAccount">
+            <td class="pItem qty-unit" *ngIf="currentTxn.selectedAccount.stock">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}"
+                      style="width:100% !important;">
+                      <label style=" margin-right: 6px;">Qty</label>
+                      <input type="text" name="" class="form-control text-right"
+                        (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
+                        decimalDigitsDirective [DecimalPlaces]="4" />
+                    </td>
+                    <td *ngIf="currentTxn.unitRate">
+                      <label>Unit</label>
+                      <select class="form-control" style="width: 78px;" (change)="unitChanged($event.target.value)"
+                        [value]="currentTxn.inventory.unit.code">
+                        <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">{{item.stockUnitCode}}
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td class="text-center table-plus" *ngIf="currentTxn.selectedAccount.stock">
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">x</label>
+            </td>
+            <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
+              <label>Price</label>
+              <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
+                (keyup)="changePrice($event.target.value)" name="" class="form-control text-right" />
+            </td>
+            <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">=</label>
+            </td>
+            <td class="pItem text-right amount">
+              <label class="primary_clr">Amount</label>
+              <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control text-right"
+                [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
+                (keyup)="amountChanged();calculateTotal()" />
+            </td>
+            <td class="text-center table-minus" *ngIf="(discountAccountsList$ | async)?.length">
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">-</label>
+            </td>
+            <!--discount-->
+            <td class="pItem text-right price" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
+              <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
+                [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
+                (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
+              </ledger-discount>
+            </td>
+            <td class="text-center equal-2"
               *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.length">
-            <label class="d-block">&nbsp;</label>
-            <label class="fs20">+</label>
-          </td>
-          <td *ngIf="(companyTaxesList$ | async)?.length"
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">+</label>
+            </td>
+            <td *ngIf="(companyTaxesList$ | async)?.length"
               class="pItem amount pos-rel dropdown-container text-right dropdown-width" (clickOutside)="hideTax()"
-              (click)="$event.stopPropagation()"
-              (mouseenter)="hideDiscount()">
-            <!--tax control component-->
-            <!-- Login Changes by Sagar  -->
-            <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
-            <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
-                         [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
-                         [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                         [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
-                         (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
-                         (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
-            </tax-control>
-          </td>
-          <td class="text-center equal-2">
-            <label class="d-block">&nbsp;</label>
-            <label class="fs20">=</label>
-          </td>
+              (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
+              <!--tax control component-->
+              <!-- Login Changes by Sagar  -->
+              <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
+              <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
+                [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
+                [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
+                (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
+                (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+              </tax-control>
+            </td>
+            <td class="text-center equal-2">
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">=</label>
+            </td>
 
-          <td class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
-            <label class="primary_clr">Total</label>
-            <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
-                   [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
-          </td>
+            <td class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
+              <label class="primary_clr">Total</label>
+              <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
+                [(ngModel)]="currentTxn.total" (blur)="calculateAmount()" />
+            </td>
 
-        </tr>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <div class="text-right mrB1" style="display: flex;justify-content: flex-end;"
-         *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+      *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
-             *ngIf="!blankLedger.isOtherTaxesApplicable"
-             (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)"/>
+        *ngIf="!blankLedger.isOtherTaxesApplicable"
+        (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
       <p *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
       <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
-           style="margin-right:6px;display: flex;flex-direction: column"
-           [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
+        style="margin-right:6px;display: flex;flex-direction: column"
+        [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
         <label>Other Tax</label>
         <span style="display: flex;align-items: center;">
-            <span>
-              <a href="javascript: void 0"
-                 (click)="toggleOtherTaxesAsidePane(true)">
-                <img src="assets/images/edit-pencilicon.svg">
-              </a>
-            </span>
-            <input class="text-right form-control mrL1" disabled="disabled"
-                   [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"/>
+          <span>
+            <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true)">
+              <img src="assets/images/edit-pencilicon.svg">
+            </a>
           </span>
+          <input class="text-right form-control mrL1" disabled="disabled" [(ngModel)]="blankLedger.otherTaxesSum"
+            name="entry.otherTaxesSum" />
+        </span>
 
       </div>
     </div>
@@ -125,21 +121,21 @@
     </div>
     <div class="clearfix">
       <textarea rows="3" cols="" name="des" class="form-control" placeholder="Description"
-                [(ngModel)]="blankLedger.description"></textarea>
+        [(ngModel)]="blankLedger.description"></textarea>
     </div>
 
     <table class="width100 mrT">
       <tbody>
-      <tr>
-        <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
-          <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-          <button class="no-btn pdL0">&nbsp;More Details</button>
-        </td>
-        <td class="text-right">
-          <span
-            class="primary_clr"><!--Compound Total:--> Total in USD: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
-        </td>
-      </tr>
+        <tr>
+          <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+            <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
+            <button class="no-btn pdL0">&nbsp;More Details</button>
+          </td>
+          <td class="text-right">
+            <span class="primary_clr">Compound Total: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
+            <!-- Total in USD: -->
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -152,19 +148,18 @@
                 <div class="form-group">
                   <label class="default_clr">Voucher Type</label>
                   <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
-                             (selected)="getInvoiveListsData($event)" [notFoundLink]="true"
-                             [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"
-                             [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
+                    (selected)="getInvoiveListsData($event)" [notFoundLink]="true" [placeholder]="'Select Vouchers'"
+                    [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
                 </div>
               </td>
               <!-- <td class="pdL1">
     <span>{{""}}</span>
 </td> -->
               <td class="pdR1"
-                  *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
+                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note' || blankLedger.voucherType == 'pay')">
                 <label class="default_clr">Invoice No.</label>
                 <input type="text" placeholder="Invoice no." class="form-control"
-                       [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"/>
+                  [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
               </td>
               <td class="pdR1" *ngIf="blankLedger.voucherType == 'rcpt'">
                 <div class="form-group">
@@ -178,7 +173,7 @@
                       <li *ngFor="let invoice of invoiceList">
 
                         <input type="checkbox" (click)="selectInvoice(invoice, $event)"
-                               [checked]="invoice.isSelected"/> {{invoice.label}}
+                          [checked]="invoice.isSelected" /> {{invoice.label}}
                       </li>
                     </ul>
                   </div>
@@ -203,31 +198,31 @@
 
           <table class="mrT1">
             <tbody>
-            <tr>
-              <td class="pdR1">
-                <label class="default_clr">Cheque Number</label>
-                <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber"/>
-              </td>
-              <td>
-                <label class="default_clr">Cheque Clearance Date</label>
-                <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
-                       [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
-                       [outsideClick]="true"
-                       [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }"/>
-              </td>
-            </tr>
+              <tr>
+                <td class="pdR1">
+                  <label class="default_clr">Cheque Number</label>
+                  <input type="text" placeholder="XXXX2619" class="form-control"
+                    [(ngModel)]="blankLedger.chequeNumber" />
+                </td>
+                <td>
+                  <label class="default_clr">Cheque Clearance Date</label>
+                  <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
+                    [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
+                    [outsideClick]="true"
+                    [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }" />
+                </td>
+              </tr>
             </tbody>
           </table>
           <table class="mrT1">
             <tbody>
-            <tr>
-              <td class="">
-                <label class="default_clr">Assign Tag</label>
-                <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
-                           [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames"
-                           [ItemHeight]="'auto'"></sh-select>
-              </td>
-            </tr>
+              <tr>
+                <td class="">
+                  <label class="default_clr">Assign Tag</label>
+                  <sh-select [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
+                    [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -243,12 +238,12 @@
           <li class="cp" *ngFor="let entry of matchingEntriesData;" (click)="confirmBankTransactionMap(entry)">
             <table class="table table-bordered mr0">
               <tbody>
-              <tr *ngFor="let txn of entry.transactions;">
-                <td>{{entry.entryDate}}</td>
-                <td>{{txn.particular.name}}</td>
-                <td>{{txn.amount | giddhCurrency}}</td>
-                <td>{{entry.chequeNumber}}</td>
-              </tr>
+                <tr *ngFor="let txn of entry.transactions;">
+                  <td>{{entry.entryDate}}</td>
+                  <td>{{txn.particular.name}}</td>
+                  <td>{{txn.amount | giddhCurrency}}</td>
+                  <td>{{entry.chequeNumber}}</td>
+                </tr>
               </tbody>
             </table>
           </li>
@@ -258,9 +253,9 @@
 
     <div class="row">
       <div class="col-xs-12 pdT1 form-inline text-right"
-           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
+        *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
         <input type="text" class="form-control max100 text-right" name="multicurrency"
-               [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
+          [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2" />
         <label>
           ({{currentTxn.selectedAccount?.currency}})</label>
       </div>
@@ -300,8 +295,7 @@
 
         <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
           <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
-                 [uploadInput]="uploadInput"
-                 (uploadOutput)="onUploadOutput($event)">
+            [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
           <label for="invoiceFile" class="cp fs16">
             <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
         </label>
@@ -344,7 +338,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <confirm-modal [title]="'Map Bank Entry'" [body]="mapBodyContent" (cancelCallBack)="hideConfirmBankTxnMapModal()"
-                     (successCallBack)="mapBankTransaction()">
+        (successCallBack)="mapBankTransaction()">
       </confirm-modal>
     </div>
   </div>
@@ -353,14 +347,9 @@
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <!--<ng-template #otherTaxSidePane let-entry>-->
-<app-aside-menu-sales-other-taxes
-  *ngIf="asideMenuStateForOtherTaxes === 'in'"
-  [class]="asideMenuStateForOtherTaxes"
-  [otherTaxesModal]="blankLedger.otherTaxModal"
-  [@slideInOut]="asideMenuStateForOtherTaxes"
-  [taxes]="companyTaxesList"
+<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
+  [otherTaxesModal]="blankLedger.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
   (closeModal)="toggleOtherTaxesAsidePane(true)"
-  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);"
->
+  (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);">
 </app-aside-menu-sales-other-taxes>
 <!--</ng-template>-->
