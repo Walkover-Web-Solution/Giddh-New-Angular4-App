@@ -23,7 +23,7 @@ import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { IRegistration } from "../models/interfaces/registration.interface";
-import { ReportsRequestModel, ReportsResponseModel, ReportsDetailedRequestModel } from "../models/api-models/Reports";
+import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
 @Injectable()
 export class CompanyService {
@@ -367,23 +367,6 @@ export class CompanyService {
       .replace(':fromDate', encodeURIComponent(request.from))
       .replace(':toDate', encodeURIComponent(request.to))
       .replace(':interval', encodeURIComponent(request.interval))).pipe(map((res) => {
-        let data: BaseResponse<ReportsResponseModel, string> = res;
-        return data;
-      }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
-  }
-
-  /*
-* get detailed registered sales
-* */
-  public getDetailedSalesRegister(request: ReportsDetailedRequestModel) {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_SALES
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':fromDate', encodeURIComponent(request.from))
-      .replace(':toDate', encodeURIComponent(request.to))
-      .replace(':q', encodeURIComponent(request.q))
-      .replace(':sort', encodeURIComponent(request.sort))
-      .replace(':sortBy', encodeURIComponent(request.sortBy))).pipe(map((res) => {
         let data: BaseResponse<ReportsResponseModel, string> = res;
         return data;
       }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
