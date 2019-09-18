@@ -8,15 +8,17 @@
     <div class="dashboard-container">
       <div class="dashboard-notification">
         <div class="white-row">
-          <p>Your plan 1 ended on 10/09/2019. Apply to upgrade your subscription. <span class="clickHere ">Click
+          <p> <span class="icon-traingle-info"></span> Your plan 1 ended on 10/09/2019. Apply to upgrade your
+            subscription. <span class="clickHere ">Click
               here</span></p>
         </div>
         <div class="white-row">
-          <p>GSTR 2A Mismatch report for FY 2018-19 is now available for download. <span class="clickHere ">Visit
+          <p><span class="icon-info-icon"></span> GSTR 2A Mismatch report for FY 2018-19 is now available for download.
+            <span class="clickHere ">Visit
               Reports</span></p>
         </div>
         <div class="white-row">
-          <p>New feature JobWork added <span class="clickHere ">NEW
+          <p><span class="icon-info-icon"></span>New feature JobWork added <span class="clickHere ">NEW
             </span></p>
         </div>
       </div>
@@ -24,17 +26,17 @@
 
 
 
-        <div class="col-xs-4 col-lg-3">
+        <div class="col-xs-4 col-lg-4">
           <!-- <live-accounts #liveaccount></live-accounts> -->
           <toal-overdues-chart #overdues></toal-overdues-chart>
         </div>
 
-        <div class="col-xs-4 col-lg-5">
+        <div class="col-xs-4 col-lg-4">
           <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
         </div>
 
 
-        <div class="col-xs-4">
+        <div class="col-xs-4 col-lg-4">
           <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
         </div>
 

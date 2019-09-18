@@ -4,7 +4,19 @@
     <div class="panel-heading">
       <strong>Total Overdues</strong>
       <div class="pull-right dashboard-filter">
-        <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
+        <div class="btn-group" dropdown>
+          <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
+            This Month <span class="icon-arrow-down"></span>
+          </span>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 

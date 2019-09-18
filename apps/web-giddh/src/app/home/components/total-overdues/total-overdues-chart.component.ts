@@ -17,7 +17,7 @@ import { DashboardService } from '../../../services/dashboard.service';
   templateUrl: 'total-overdues-chart.component.html',
   styleUrls: ['../../home.component.scss'],
   styles: [
-      `
+    `
       .total_amt {
         font-size: 18px;
       }
@@ -29,6 +29,17 @@ import { DashboardService } from '../../../services/dashboard.service';
       .secondary_text {
         color: #d37c59;
       }
+      span.monthDropdown {
+        font-size: 12px;
+        color: #666666;
+        vertical-align: top;
+      }
+      .dashboard-filter .btn-group {
+          display: block;
+      }
+       .dashboard-filter .btn-group i{
+         verticle-align:middle
+       }
     `
   ]
 })
@@ -52,6 +63,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public overDueObj: any = {};
   public ReceivableDurationAmt: number = 0;
   public PaybaleDurationAmt: number = 0;
+
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

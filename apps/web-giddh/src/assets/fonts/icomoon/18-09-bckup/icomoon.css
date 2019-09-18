@@ -24,14 +24,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-traingle-info:before {
-  content: "\e900";
+.icon-switch-icon:before {
+  content: "\e934";
 }
-.icon-collapse-icon:before {
-  content: "\e901";
-}
-.icon-info-icon:before {
-  content: "\e902";
+.icon-rupees:before {
+  content: "\e935";
 }
 .icon-log:before {
   content: "\e001";
@@ -79,166 +76,160 @@
   content: "\e016";
 }
 .icon-payment:before {
-  content: "\e903";
+  content: "\e900";
 }
 .icon-edit-ico:before {
-  content: "\e904";
+  content: "\e901";
 }
 .icon-copy-icon:before {
-  content: "\e905";
+  content: "\e902";
 }
 .icon-divide-ico:before {
-  content: "\e906";
+  content: "\e903";
 }
 .icon-estimate1:before {
-  content: "\e907";
+  content: "\e904";
 }
 .icon-invoice-icon:before {
-  content: "\e908";
+  content: "\e905";
 }
 .icon-sales-order:before {
-  content: "\e909";
+  content: "\e906";
 }
 .icon-card:before {
-  content: "\e90a";
+  content: "\e907";
 }
 .icon-chat2:before {
-  content: "\e90b";
+  content: "\e908";
 }
 .icon-ecomm:before {
-  content: "\e90c";
+  content: "\e909";
 }
 .icon-mail:before {
-  content: "\e90d";
+  content: "\e90a";
 }
 .icon-group:before {
-  content: "\e90e";
+  content: "\e90b";
 }
 .icon-bar:before {
-  content: "\e90f";
+  content: "\e90c";
 }
 .icon-Search:before {
-  content: "\e910";
+  content: "\e90d";
 }
 .icon-add:before {
-  content: "\e911";
+  content: "\e90e";
 }
 .icon-cross:before {
-  content: "\e912";
+  content: "\e90f";
 }
 .icon-inventory:before {
-  content: "\e913";
+  content: "\e910";
 }
 .icon-caret-down:before {
-  content: "\e914";
+  content: "\e911";
 }
 .icon-edit:before {
-  content: "\e915";
+  content: "\e912";
 }
 .icon-arrow-down:before {
-  content: "\e916";
+  content: "\e913";
 }
 .icon-child:before {
-  content: "\e917";
+  content: "\e914";
 }
 .icon-download:before {
-  content: "\e918";
+  content: "\e915";
 }
 .icon-share:before {
-  content: "\e919";
+  content: "\e916";
 }
 .icon-magic_link:before {
-  content: "\e91a";
+  content: "\e917";
 }
 .icon-dropdown:before {
-  content: "\e91b";
+  content: "\e918";
 }
 .icon-plus:before {
-  content: "\e91c";
+  content: "\e919";
 }
 .icon-search:before {
-  content: "\e91d";
+  content: "\e91a";
 }
 .icon-building:before {
-  content: "\e91e";
+  content: "\e91b";
 }
 .icon-options:before {
-  content: "\e91f";
+  content: "\e91c";
 }
 .icon-minus:before {
-  content: "\e920";
+  content: "\e91d";
 }
 .icon-trash:before {
-  content: "\e921";
+  content: "\e91e";
 }
 .icon-checkbox-icon:before {
-  content: "\e922";
+  content: "\e91f";
 }
 .icon-checkboxfill-icon:before {
-  content: "\e923";
+  content: "\e920";
 }
 .icon-dots-three-vertical:before {
-  content: "\e924";
+  content: "\e921";
 }
 .icon-calender:before {
-  content: "\e925";
+  content: "\e922";
 }
 .icon-car:before {
-  content: "\e926";
+  content: "\e923";
 }
 .icon-download1:before {
-  content: "\e927";
+  content: "\e924";
 }
 .icon-edit1:before {
-  content: "\e928";
+  content: "\e925";
 }
 .icon-plane:before {
-  content: "\e929";
+  content: "\e926";
 }
 .icon-read:before {
-  content: "\e92a";
+  content: "\e927";
 }
 .icon-search2:before {
-  content: "\e92b";
+  content: "\e928";
 }
 .icon-ship:before {
-  content: "\e92c";
+  content: "\e929";
 }
 .icon-train:before {
-  content: "\e92d";
+  content: "\e92a";
 }
 .icon-file:before {
-  content: "\e92e";
+  content: "\e92b";
 }
 .icon-link:before {
-  content: "\e92f";
+  content: "\e92c";
 }
 .icon-pass:before {
-  content: "\e930";
+  content: "\e92d";
 }
 .icon-vol:before {
-  content: "\e931";
+  content: "\e92e";
 }
 .icon-support:before {
-  content: "\e932";
+  content: "\e92f";
 }
 .icon-summary:before {
-  content: "\e933";
+  content: "\e930";
 }
 .icon-hand_icon:before {
-  content: "\e934";
+  content: "\e931";
 }
 .icon-users:before {
-  content: "\e935";
+  content: "\e932";
 }
 .icon-folder1:before {
-  content: "\e936";
-}
-.icon-switch-icon:before {
-  content: "\e937";
-}
-.icon-rupees:before {
-  content: "\e938";
+  content: "\e933";
 }
 .icon-folderminus:before {
   content: "\f2332";
