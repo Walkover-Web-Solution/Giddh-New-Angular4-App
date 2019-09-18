@@ -1,3 +1,10 @@
+$dark-blue:#000857;
+$dark-blue01:#313a96;
+$light-blue:#5b63b9;
+$light-blue01:#868ee0;
+$light-blue02:#bdc3ff;
+$light-gray:#e6e7e8;
+
 .dropdown-menu > li > a {
   padding: 2px 10px;
 }
@@ -36,11 +43,11 @@
 }
 
 .icon-pointer .glyphicon:hover {
-  color: #FF5F00 !important;
+  color: #fff !important;
 }
 
 .icon-pointer .activeTextColor {
-  color: #FF5F00 !important;
+  color: #fff !important;
   opacity: 1!important;
 }
 
@@ -80,7 +87,7 @@
   border-right: 0;
   padding: 11px 10px 10px 10px;
   width: 100%;
-  background: #ffece094;
+  background: $light-gray;
 }
 
 .account-detail-custom-title {
@@ -144,7 +151,7 @@ ul.list-unstyled li a {
   }
 
   a:hover {
-    color: #ff4700 !important;
+    color: $dark-blue01 !important;
   }
 }
 
@@ -244,7 +251,7 @@ tr.aging-table-top td {
 
 .moreBtn li:hover {
   background-color: #E5E5E5;
-  color: #ff5f00;
+  color:$dark-blue01;
 }
 
 .btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary {

@@ -28,8 +28,10 @@
 
 :root {
   --light-blue:#5b63b9;
+  --light-blue01:#868ee0;
   --dark-blue:#1A237E;
   --dark-blue01: #313a96;
+  --light-gray:#e6e7e8;
 }
 
 
@@ -466,7 +468,7 @@ ul.sub-list {
 
 .customer-footer-box .numbertotal {
     font-size: 26px;
-    color: #FF5F00;
+    color: var(--dark-blue01);
 }
 
 .customer-footer-box h5 {
@@ -508,11 +510,11 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: #FF5F00;
+    color: var(--dark-blue01);
 }
 
 .custom-tabs .nav.nav-tabs>li.active a:after {
-    background: #FF5F00;
+    background: var(--dark-blue01);
     width: 40px;
     height: 3px;
     display: block;
@@ -570,10 +572,12 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top {
-    background: #E5E5E5;
-    border: 1px solid #b5b5b5 !important;
+    background:var(--light-blue);
+    border: 1px solid var(--light-blue) !important;
 }
-
+.aging-table-top .top-aging-table-top strong, .aging-table-top .top-aging-table-top span .date-range-picker{
+  color: #fff;
+}
 .aging-table-top td {
     border: 0px solid !important;
     background: #f7f8fa;
@@ -1660,7 +1664,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid #ff5f00;
+    border: 2px solid var(--dark-blue01);
     border-top-style: none;
     border-right-style: none;
 }
@@ -2325,8 +2329,8 @@ input[type="checkbox"]:after {
 
 .ranges li.active,
 .ranges li:hover {
-    background: #ff5e01 !important;
-    border: 1px solid #ff5e01 !important;
+    background: var(--light-blue01) !important;
+    border: 1px solid var(--light-blue01) !important;
     color: #fff !important;
 }
 
@@ -6248,7 +6252,7 @@ GST filing
 }
 
 .tax-engine .btn-link {
-    color: #428bca;
+    color:var( --dark-blue01);
     font-weight: 400;
     cursor: pointer;
     border-radius: 0;
@@ -7368,7 +7372,7 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 
 ul#dropdown-nested li:hover a,
 ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
-    color: #FF5F00;
+    color: var( --dark-blue01);
 }
 
 .custumerRightWrap {
