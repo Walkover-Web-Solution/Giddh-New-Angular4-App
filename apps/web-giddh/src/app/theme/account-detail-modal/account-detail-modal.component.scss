@@ -26,6 +26,7 @@
     padding: 11px 10px 10px 10px;
     width: 100%;
     background: #ffece094;
+        white-space: initial;
 }
 
 .account-detail-custom-title {
@@ -79,4 +80,8 @@ ul.list-unstyled li a {
     a:hover {
         color: #ff4700 !important;
     }
+}
+ul.pills {
+
+    white-space: initial;
 }
