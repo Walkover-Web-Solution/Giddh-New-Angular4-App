@@ -40,7 +40,9 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   public companyAddress: string = '';
   public columnsVisibled: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  public isBaseCurrencyRupee = true;
+  public dollarSymbol = '$';
+  public rupeeSymbol = '&#8377';
   constructor(
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions) {
@@ -49,7 +51,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit() {
-  
+
     this.companySetting$.subscribe(a => {
       if (a && a.address) {
         this.companyAddress = _.cloneDeep(a.address);
@@ -106,7 +108,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 
         if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
           this.columnsVisibled++;
-        }    
+        }
       }
     }
   }

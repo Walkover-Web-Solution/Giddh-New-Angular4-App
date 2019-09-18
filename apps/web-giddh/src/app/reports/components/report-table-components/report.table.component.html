@@ -40,7 +40,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td><a (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+                <td><a class="cursor-pointer" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
                 <td class="text-right">{{item.sales | giddhCurrency}}</td>
                 <td class="text-right">{{item.returns | giddhCurrency}}</td>
                 <td class="text-right">{{item.cumulative | giddhCurrency}}</td>

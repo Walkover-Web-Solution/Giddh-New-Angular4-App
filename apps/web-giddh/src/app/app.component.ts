@@ -89,10 +89,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       this.IAmLoaded = s;
     });
 
-    
+
     this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
     this.breakpointObserver.observe([
-      '(max-width: 1024px)'
+      '(max-width: 1023px)'
     ]).subscribe(result => {
       this.changeOnMobileView(result.matches);
     });
@@ -100,13 +100,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private changeOnMobileView(isMobile) {
-    if(isMobile){
+    if (isMobile) {
       if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
         localStorage.setItem('isMobileSiteGiddh', 'true');
       }
       this.dbServices.clearAllData();
       this.router.navigate(['/pages/settings']);
-    }else{
+    } else {
       localStorage.setItem('isMobileSiteGiddh', 'false');
     }
     reassignNavigationalArray(isMobile);

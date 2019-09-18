@@ -34,15 +34,16 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
+import { GeneralService } from '../../services/general.service';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 const COMPARISON_FILTER = [
-  {label: 'Greater Than', value: 'greaterThan'},
-  {label: 'Less Than', value: 'lessThan'},
-  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
-  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
-  {label: 'Equals', value: 'equals'}
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
 ];
 
 @Component({
@@ -52,7 +53,7 @@ const COMPARISON_FILTER = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
+  public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -63,7 +64,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('searchBox') public searchBox: ElementRef;
-  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -95,6 +96,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
   public innerWidth: any;
   public isMobileView = false;
+  public isExported: boolean = false;
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -168,13 +170,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public isExportedInvoices: any[] = [];
   public showMoreBtn: boolean = false;
   public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
   public isFabclicked: boolean = false;
+  public exportInvoiceType: string = '';
 
-  public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
+  public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
   public showInvoiceGenerateModal: boolean = false;
   public appSideMenubarIsOpen: boolean;
 
@@ -206,7 +210,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private invoiceReceiptActions: InvoiceReceiptActions,
     private cdr: ChangeDetectorRef,
     private _breakPointObservar: BreakpointObserver,
-    private _router: Router
+    private _router: Router,
+    private _generalService: GeneralService
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -224,9 +229,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-
-    this._breakPointObservar.observe(['(max-width:1024px)']).subscribe(res => {
-      this.isMobileView = res.matches;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileView = result.matches;
     });
 
     this.advanceSearchFilter.page = 1;
@@ -251,7 +257,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-          accounts.push({label: item.name, value: item.uniqueName});
+          accounts.push({ label: item.name, value: item.uniqueName });
         }
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -554,7 +560,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = objItem;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, { action: actionToPerform }));
       }
     }
   }
@@ -654,7 +660,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   /**
@@ -671,7 +677,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
     }
   }
 
@@ -741,19 +747,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
       toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
     }
-    model.sort = o.sort;
-    model.sortBy = o.sortBy;
+
     model.from = o.from;
     model.to = o.to;
     model.count = o.count;
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
-      model = advanceSearch;
+      //model = advanceSearch;
       if (!model.invoiceDate && !model.dueDate) {
         model.from = this.invoiceSearchRequest.from;
         model.to = this.invoiceSearchRequest.to;
       }
     }
+    model.sort = o.sort;
+    model.sortBy = o.sortBy;
     if (o.invoiceNumber) {
       model.voucherNumber = o.invoiceNumber;
     }
@@ -829,12 +836,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
+    this.selectedInvoicesList = [];
+    this.selectedItems = [];
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item, true);
+        this.selectedInvoicesList.push(item);
+        this.selectedItems.push(item.uniqueName);
+        //  this.itemStateChanged(item, true);
         return item;
       });
+    }
+    if (!this.allItemsSelected) {
+      this.selectedInvoicesList = [];
+      this.selectedItems = [];
+      this.isExported = false;
+    } else {
+      this.isExported = true;
     }
   }
 
@@ -846,7 +864,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
   public clickedOutside(event: Event, el, fieldName: string) {
@@ -909,9 +926,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
       this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
     } else {
-      this.selectedItems.push(item.uniqueName);
-      this.selectedInvoicesList.push(item);
+      this.selectedItems.push(item.uniqueName);  // Array of checked seleted Items uniqueName of the list
+      this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
     }
+    if (this.selectedInvoicesList.length === 1) {
+      this.exportInvoiceType = this.selectedInvoicesList[0].account.uniqueName;
+      this.isExported = true;
+    }
+    this.isExported = this.selectedInvoicesList.every(ele => {
+      return ele.account.uniqueName === this.exportInvoiceType;
+    })
   }
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
@@ -937,8 +961,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
 
-
-    this.sortRequestForUi = {sortBy: '', sort: 'asc'};
+    this.sortRequestForUi = { sortBy: '', sort: 'asc' };
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
@@ -985,9 +1008,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public exportCsvDownload() {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-    let dataTosend = {accountUniqueName: ''};
+    let dataTosend = { accountUniqueName: '' };
     if (this.selectedInvoicesList.length > 0) {
-      dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+
+      dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account.uniqueName;
     } else {
       dataTosend.accountUniqueName = '';
     }

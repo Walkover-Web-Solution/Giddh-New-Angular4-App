@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { INVOICE_ACTIONS } from '../invoice.const';
 import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
+import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -80,15 +81,24 @@ export class InvoiceReceiptActions {
         }
         return this.VoucherPreviewResponse(response);
       }));
-
+  @Effect()
+  private GetSalesRegistedDetails$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS).pipe(
+      switchMap((action: CustomActions) => this._receiptService.getDetailedSalesRegister(action.payload)),
+      map((response: BaseResponse<any, SalesRegisteDetailedResponse>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        }
+        return this.GetSalesRegistedDetailsResponse(response);
+      }));
   constructor(private action$: Actions, private _toasty: ToasterService,
-              private store: Store<AppState>, private _receiptService: ReceiptService) {
+    private store: Store<AppState>, private _receiptService: ReceiptService) {
   }
 
   public UpdateInvoiceReceiptRequest(model: ReciptRequest, accountUniqueName: string): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT,
-      payload: {model, accountUniqueName}
+      payload: { model, accountUniqueName }
     };
   }
 
@@ -108,7 +118,7 @@ export class InvoiceReceiptActions {
   public GetAllInvoiceReceiptRequest(model: InvoiceReceiptFilter, type: string): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT,
-      payload: {body: model, type}
+      payload: { body: model, type }
     };
   }
 
@@ -122,7 +132,7 @@ export class InvoiceReceiptActions {
   public DeleteInvoiceReceiptRequest(model: ReciptDeleteRequest, accountUniqueName: string): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT,
-      payload: {model, accountUniqueName}
+      payload: { model, accountUniqueName }
     };
   }
 
@@ -136,7 +146,7 @@ export class InvoiceReceiptActions {
   public GetVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS,
-      payload: {accountUniqueName, model}
+      payload: { accountUniqueName, model }
     };
   }
 
@@ -156,7 +166,7 @@ export class InvoiceReceiptActions {
   public VoucherPreview(model: DownloadVoucherRequest, accountUniqueName: string) {
     return {
       type: INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST,
-      payload: {model, accountUniqueName}
+      payload: { model, accountUniqueName }
     };
   }
 
@@ -185,7 +195,7 @@ export class InvoiceReceiptActions {
   public setVoucherForDetails(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.INVOICE_SET_VOUCHER_FOR_DETAILS,
-      payload: {voucherNo, action}
+      payload: { voucherNo, action }
     }
   }
 
@@ -194,6 +204,22 @@ export class InvoiceReceiptActions {
       type: INVOICE_RECEIPT_ACTIONS.INVOICE_RESET_VOUCHER_FOR_DETAILS
     }
   }
+
+  // sales report
+  public GetSalesRegistedDetails(requestModel: ReportsDetailedRequestFilter): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS,
+      payload: requestModel
+    };
+  }
+
+  public GetSalesRegistedDetailsResponse(response: BaseResponse<any, SalesRegisteDetailedResponse>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS_RESPONSE,
+      payload: response
+    };
+  }
+
 
   //endregion
 
@@ -206,10 +232,10 @@ export class InvoiceReceiptActions {
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>,
-                                                successAction: CustomActions,
-                                                showToast: boolean = false,
-                                                errorAction: CustomActions = {type: 'EmptyAction'},
-                                                message?: string): CustomActions {
+    successAction: CustomActions,
+    showToast: boolean = false,
+    errorAction: CustomActions = { type: 'EmptyAction' },
+    message?: string): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

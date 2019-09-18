@@ -1,16 +1,17 @@
-import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IOption} from '../../theme/ng-select/ng-select';
-import {FormControl} from '@angular/forms';
-import {RecurringInvoice, RecurringInvoices} from '../../models/interfaces/RecurringInvoice';
-import {Observable, ReplaySubject} from 'rxjs';
-import {AppState} from '../../store';
-import {select, Store} from '@ngrx/store';
-import {InvoiceActions} from '../../actions/invoice/invoice.actions';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IOption } from '../../theme/ng-select/ng-select';
+import { FormControl } from '@angular/forms';
+import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
+import { Observable, ReplaySubject } from 'rxjs';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsDatepickerDirective } from 'ngx-bootstrap';
+import { GeneralService } from '../../services/general.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'app-recurring',
   templateUrl: './recurring.component.html',
@@ -69,31 +70,30 @@ export class RecurringComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private cdr: ChangeDetectorRef,
-              private _breakpointObserver: BreakpointObserver,
-              private _invoiceActions: InvoiceActions) {
+    private cdr: ChangeDetectorRef,
+    private _generalService: GeneralService,
+    private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver) {
     this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
     this.recurringData$.subscribe(p => {
       if (p && p.recurringVoucherDetails) {
         this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
       }
     });
-
   }
 
 
   public ngOnInit() {
     this.invoiceTypeOptions = [
-      {label: 'Active', value: 'active'},
-      {label: 'InActive', value: 'inactive'},
+      { label: 'Active', value: 'active' },
+      { label: 'InActive', value: 'inactive' },
     ];
 
     this.intervalOptions = [
-      {label: 'Weekly', value: 'weekly'},
-      {label: 'Monthly', value: 'monthly'},
-      {label: 'Quarterly', value: 'quarterly'},
-      {label: 'Halfyearly', value: 'halfyearly'},
-      {label: 'Yearly', value: 'yearly'}
+      { label: 'Weekly', value: 'weekly' },
+      { label: 'Monthly', value: 'monthly' },
+      { label: 'Quarterly', value: 'quarterly' },
+      { label: 'Halfyearly', value: 'halfyearly' },
+      { label: 'Yearly', value: 'yearly' }
     ];
     this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
 
@@ -120,13 +120,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.showCustomerNameSearch = false;
       }
     });
-    this._breakpointObserver
-    .observe(['(max-width: 768px)'])
-    .subscribe((state: BreakpointState) => {
-      this.isMobileScreen = state.matches;
+    this._breakPointObservar.observe([
+      '(max-width: 1023px)'
+    ]).subscribe(result => {
+      this.isMobileScreen = result.matches;
     });
-
-
   }
 
   public openUpdatePanel(invoice: RecurringInvoice) {
@@ -134,7 +132,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     this.toggleRecurringAsidePane();
   }
 
-  public pageChanged({page}) {
+  public pageChanged({ page }) {
     //removed for resolution of G0-438 by shehbaz
     //this.cdr.detach();
     this.currentPage = page;
@@ -231,7 +229,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
       sortBy: 'createdAt',
       status: '',
       customerName: '',
-      voucherNumber:'',
+      voucherNumber: '',
       duration: '',
       lastInvoiceDate: ''
     };
@@ -267,7 +265,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
   }
 
   public submit() {
-    const filter = {...this.filter};
+    const filter = { ...this.filter };
     if (filter.lastInvoiceDate) {
       filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format('DD-MM-YYYY');
     }

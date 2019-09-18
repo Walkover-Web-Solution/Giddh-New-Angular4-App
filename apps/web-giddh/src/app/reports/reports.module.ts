@@ -18,8 +18,10 @@ import { SalesRegisterExpandComponent } from './components/salesRegister-expand-
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
 import { ReportsDashboardComponent } from './components/report-dashboard/reports.dashboard.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -53,7 +55,10 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
     PaginationModule,
     ShSelectModule,
     FormsModule,
-    CurrencyModule
+    CurrencyModule,
+    AccountDetailModalModule,
+    ReactiveFormsModule,
+    ClickOutsideModule
   ]
 })
 
