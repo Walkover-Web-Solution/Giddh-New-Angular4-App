@@ -70,3 +70,14 @@ span.icon-info-icon {
     font-size: 18px;
     margin-right: 10px;
 }
+.dropdown-menu{
+      border: 1px solid #5B64C9;
+}
+a.dropdown-item{
+  color:#1A237E;
+}
+
+a.dropdown-item:hover {
+    background-color: #EEEFF9;
+    color: #5B64C9;
+}

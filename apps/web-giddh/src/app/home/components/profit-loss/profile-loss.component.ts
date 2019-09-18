@@ -13,8 +13,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 
 @Component({
-  selector: 'toal-overdues-chart',
-  templateUrl: 'total-overdues-chart.component.html',
+  selector: 'profit-loss',
+  templateUrl: 'profit-loss.component.html',
   styleUrls: ['../../home.component.scss'],
   styles: [
     `
@@ -74,7 +74,7 @@ import { DashboardService } from '../../../services/dashboard.service';
   ]
 })
 
-export class TotalOverduesChartComponent implements OnInit, OnDestroy {
+export class ProfitLossComponent implements OnInit, OnDestroy {
   @Input() public refresh: boolean = false;
 
   // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];

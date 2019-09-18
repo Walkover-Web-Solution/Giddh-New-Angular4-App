@@ -17,7 +17,8 @@ import * as _ from '../lodash-optimized';
 import { API_TO_CALL, CHART_CALLED_FROM } from '../actions/home/home.const';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
-import { AccountService }  from 'apps/web-giddh/src/app/services/account.service';
+import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 
 @Component({
   selector: 'home',  // <home></home>
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('compare') public compare: ComparisionChartComponent;
   @ViewChild('history') public history: HistoryChartComponent;
   @ViewChild('networth') public networth: NetworthChartComponent;
+  @ViewChild('profitloss') public profitloss: ProfitLossComponent;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

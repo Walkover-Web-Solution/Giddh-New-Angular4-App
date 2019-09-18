@@ -2,7 +2,7 @@
   <div class="panel panel-default">
 
     <div class="panel-heading">
-      <strong>Total Overdues</strong>
+      <strong>Profit & Loss</strong>
       <div class="pull-right dashboard-filter">
         <div class="btn-group" dropdown>
           <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
@@ -32,12 +32,12 @@
           <chart [options]="totaloverDueChart" #currentRatio></chart>
           <div class="clearfix mrB2">
             <div class="">
-              <span class="mrB1 dueAmount">Customer Due</span>
+              <span class="mrB1 dueAmount">Total Income</span>
               <span class="total_amt pull-right primary_text"> <span class="icon-rupees"></span>
                 {{ totalRecievable | number:'1.2-2' }}</span>
             </div>
             <div class="clearfix">
-              <small>Pending Invoices</small>
+              <small>Total Receipts</small>
               <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
             </div>
             <!-- <div class="">
@@ -63,12 +63,12 @@
           </div>
           <div class="clearfix mrB2">
             <div class="">
-              <span class="mrB1 dueAmount">Vendor Due</span>
+              <span class="mrB1 dueAmount">Total Expenses</span>
               <span class="total_amt pull-right secondary_text"><span class="icon-rupees"></span>
                 {{ totalPayable | number:'1.2-2' }}</span>
             </div>
             <div class="clearfix">
-              <small>Pending Invoices</small>
+              <small>Total Payment</small>
               <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
             </div>
           </div>
