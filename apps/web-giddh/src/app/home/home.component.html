@@ -5,39 +5,62 @@
 </div> -->
 
   <div class="container-fluid top_bar">
-    <div class="row">
-
-      <div class="col-xs-4 col-lg-3">
-        <!-- <live-accounts #liveaccount></live-accounts> -->
-        <toal-overdues-chart #overdues></toal-overdues-chart>
+    <div class="dashboard-container">
+      <div class="dashboard-notification">
+        <div class="white-row">
+          <p>Your plan 1 ended on 10/09/2019. Apply to upgrade your subscription. <span class="clickHere ">Click
+              here</span></p>
+        </div>
+        <div class="white-row">
+          <p>GSTR 2A Mismatch report for FY 2018-19 is now available for download. <span class="clickHere ">Visit
+              Reports</span></p>
+        </div>
+        <div class="white-row">
+          <p>New feature JobWork added <span class="clickHere ">NEW
+            </span></p>
+        </div>
       </div>
+      <div class="row">
 
-      <div class="col-xs-4 col-lg-5">
-        <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
+
+
+        <div class="col-xs-4 col-lg-3">
+          <!-- <live-accounts #liveaccount></live-accounts> -->
+          <toal-overdues-chart #overdues></toal-overdues-chart>
+        </div>
+
+        <div class="col-xs-4 col-lg-5">
+          <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
+        </div>
+
+
+        <div class="col-xs-4">
+          <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <ratio-analysis-chart #ratio></ratio-analysis-chart>
+        </div>
+
       </div>
-
-
-      <div class="col-xs-4">
-        <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <ratio-analysis-chart #ratio></ratio-analysis-chart>
-      </div>
-
     </div>
+
+
+
+
+
   </div>
 
   <!--<div class="col-xs-6">-->

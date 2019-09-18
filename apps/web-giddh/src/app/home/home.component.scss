@@ -1,5 +1,7 @@
 /*styles for home content only*/
+// @import url('../../assets/css/color.css');
 
+@import '../../assets/css/color.scss';
 .primaryDarkBg {
   background: #005b77;
 }
@@ -42,4 +44,19 @@
 
 :host ::ng-deep perfect-scrollbar {
   height: auto
+}
+// new dashboard css
+.white-row {
+    background-color: #fff;
+    padding: 9px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    box-shadow: 1px 1px 3px #00000029;
+}
+.clickHere{
+  color: $lightTextBlue;
+}
+.dashboard-container {
+    max-width: 935px;
+    width: 100%;
 }
