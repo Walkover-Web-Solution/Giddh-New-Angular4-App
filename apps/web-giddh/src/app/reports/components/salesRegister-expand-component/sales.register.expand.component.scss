@@ -131,6 +131,7 @@ ul.list-unstyled li a {
     display: flex;
     vertical-align: middle;
     align-items: center;
+    padding-right:120px;
 }
 
 .sale-register-box a {
@@ -163,10 +164,11 @@ ul.list-unstyled li a {
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 2;
 }
 
 .responsive {
-   padding: 0 15px;
+    padding: 0 15px;
 }
 
 #content_wrapper {
@@ -210,25 +212,58 @@ ul#dropdown-nested li .caret {
 .reportDropdown {
     left: 100% !important;
 }
+
 .customeMnthSelect.show {
     display: inline-block!important;
 }
-.top_bar{
-  padding: 15px;
-}
 
+.top_bar {
+    padding: 15px;
+}
 
 .customeMnthSelect li:hover a.dropdown-item {
-   background-color: #E5E5E5;
+    background-color: #E5E5E5;
     color: #ff5f00;
 }
-.customeMnthSelect button.btn{
-  background: transparent !important;
-      padding-left: 3px;
+
+.customeMnthSelect button.btn {
+    background: transparent !important;
+    padding-left: 3px;
     padding-right: 3px;
 }
-.customeMnthSelect button.btn:active, .customeMnthSelect button.btn:focus, .customeMnthSelect button.btn:hover{
-  background: transparent !important;
-  box-shadow: none !important;
-  outline: none !important;
+
+.customeMnthSelect button.btn:active,
+.customeMnthSelect button.btn:focus,
+.customeMnthSelect button.btn:hover {
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.icon-pointer .glyphicon:hover {
+    color: #FF5F00 !important;
+}
+
+.icon-pointer .activeTextColor {
+    color: #FF5F00 !important;
+    opacity: 1!important;
+}
+
+.icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
+    line-height: 0.5;
+    height: 8px;
+}
+
+.icon-pointer .font-xxs {
+    font-size: 12px;
+}
+
+table th {
+    position: relative;
+}
+
+.icon-pointer {
+    position: absolute;
+    right: 10px;
+    top: 33%;
 }
