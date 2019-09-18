@@ -137,9 +137,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
-      _.uniqBy(this.states, 'value');
-      _.uniqBy(this.states, 'label');
-      this.statesSource$ = observableOf(this.states);
+      const filteredArr = this.states.reduce((acc, current) => {
+        const x = acc.find(item => item.value === current.value);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
+      this.statesSource$ = observableOf(filteredArr);
     }, (err) => {
       // console.log(err);
     });

@@ -1130,20 +1130,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.depositAccountUniqueName = data.accountDetails.uniqueName;
       }
     } else {
-      if (this.invoiceType === 'cash' ){
-        obj.depositAccountUniqueName = data.accountDetails.uniqueName
-      }else{
         obj.depositAccountUniqueName = '';
-      }
     }
-
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
     if (this.isProformaInvoice || this.isEstimateInvoice) {
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
-      this.salesService.generateGenericItem(obj, this.invoiceType === 'cash' ? this.invoiceType:null).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+      this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
