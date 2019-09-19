@@ -26,36 +26,13 @@ import { reassignNavigationalArray } from './models/defaultMenus'
     './app.component.css'
   ],
   template: `
-      <noscript *ngIf="isProdMode && !isElectron">
-          <iframe [src]="tagManagerUrl"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      </noscript>
+
       <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
       <router-outlet></router-outlet>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-  // tslint:disable-next-line:no-empty
-
-  public sideMenu: { isopen: boolean } = { isopen: true };
-  public companyMenu: { isopen: boolean } = { isopen: false };
-  public isProdMode: boolean = false;
-  public isElectron: boolean = false;
-  public tagManagerUrl: SafeUrl;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  public sidebarStatusChange(event) {
-    this.sideMenu.isopen = event;
-  }
-
-  public sideBarStateChange(event: boolean) {
-    this.sideMenu.isopen = event;
-
-  }
-
-  public IAmLoaded: boolean = false;
-  private newVersionAvailableForWebApp: boolean = false;
 
   constructor(private store: Store<AppState>,
     private router: Router,
@@ -96,6 +73,29 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ]).subscribe(result => {
       this.changeOnMobileView(result.matches);
     });
+
+  }
+  // tslint:disable-next-line:no-empty
+  // <noscript * ngIf="isProdMode && !isElectron" >
+  //   <iframe[src]="tagManagerUrl"
+  // height = "0" width = "0" style = "display:none;visibility:hidden" > </iframe>
+  //   < /noscript>
+  public sideMenu: { isopen: boolean } = { isopen: true };
+  public companyMenu: { isopen: boolean } = { isopen: false };
+  public isProdMode: boolean = false;
+  public isElectron: boolean = false;
+  public tagManagerUrl: SafeUrl;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  public IAmLoaded: boolean = false;
+  private newVersionAvailableForWebApp: boolean = false;
+
+  public sidebarStatusChange(event) {
+    this.sideMenu.isopen = event;
+  }
+
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
 
   }
 
