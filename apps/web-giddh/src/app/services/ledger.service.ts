@@ -57,25 +57,26 @@ export class LedgerService {
   /**
    * get ledger transactions
    */
-  public GetLedgerTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', from: string = '', to: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
+  public GetLedgerTranscations(request: TransactionsRequest): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    let request = new TransactionsRequest();
-    request.q = q;
-    request.accountUniqueName = accountUniqueName;
-    request.count = count;
-    request.from = from;
-    request.page = page;
-    request.reversePage = reversePage;
-    request.sort = sort;
-    request.to = to;
+
     // tslint:disable-next-line:max-line-length
-    return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).pipe(map((res) => {
+    return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':q', encodeURIComponent(request.q || ''))
+      .replace(':page', request.page.toString())
+      .replace(':count', encodeURIComponent(request.count.toString()))
+      .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName))
+      .replace(':from', request.from)
+      .replace(':sort', encodeURIComponent(request.sort))
+      .replace(':to', encodeURIComponent(request.to))
+      .replace(':reversePage', request.reversePage.toString())
+      .replace(':accountCurrency', request.accountCurrency.toString())
+    ).pipe(map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
       data.request = request;
-      data.queryString = {q, page, count, accountUniqueName, from, to, reversePage, sort};
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, {q, page, count, accountUniqueName, from, to, reversePage, sort})));
+    }), catchError((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request)));
   }
 
   /*

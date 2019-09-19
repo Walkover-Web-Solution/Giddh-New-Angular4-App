@@ -342,13 +342,17 @@ export class TransactionVM {
   public taxes: string[];
   public taxesVm?: TaxControlData[];
   public tax?: number;
+  public convertedTax?: number = 0;
   public total: number;
+  public convertedTotal?: number = 0;
   public discounts: LedgerDiscountClass[];
   public discount?: number;
+  public convertedDiscount?: number = 0;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
   public isStock?: boolean = false;
   public inventory?: IInventory | any;
+  public convertedRate?: number = 0;
   public currency?: string;
   public convertedAmount?: number;
   public isChecked: boolean = false;

@@ -188,6 +188,7 @@ export class TransactionsRequest {
   public to: string = '';
   public sort: string = 'asc';
   public reversePage: boolean = false;
+  public accountCurrency: boolean = false;
 }
 
 export interface ReconcileRequest {

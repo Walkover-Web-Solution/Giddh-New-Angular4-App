@@ -18,7 +18,7 @@ import { AccountService } from '../services/account.service';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
@@ -174,7 +174,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-
+  public accCurrency: string;
+  public accCurrencyDetails: ICurrencyResponse;
+  public companyCurrencyDetails: ICurrencyResponse;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;

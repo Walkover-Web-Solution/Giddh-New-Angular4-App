@@ -109,6 +109,9 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
+.total-detail-table tbody tr td {
+  vertical-align: top;
+}
 
 
 @media only screen and (max-width: 1024px) {
@@ -133,13 +136,13 @@ ng-select .select_drop i.fa.fa-caret-up::before {
         padding-left: 80px !important;
     }
     .card-table tbody tr td {
-        padding-left: 70px !important;        
+        padding-left: 70px !important;
     }
     .ledger-footer-1 {
         position: absolute;
         bottom: 0;
     }
-    
+
 
 
     /*  */
@@ -166,7 +169,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     .price {
         width: 40%;
     }
-    .equal-2, .table-minus { 
+    .equal-2, .table-minus {
         width: 10%;
         text-align: center;
     }
@@ -187,7 +190,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
         display: block;
     }
 
-    
+
 }
 
 
