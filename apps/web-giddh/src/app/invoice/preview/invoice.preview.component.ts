@@ -96,6 +96,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
   public innerWidth: any;
   public isMobileView = false;
+  public isExported: boolean = false;
 
   public showCustomerSearch = false;
   public showProformaSearch = false;
@@ -169,11 +170,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public totalSale: number = 0;
   public totalDue: number = 0;
   public selectedInvoicesList: any[] = [];
+  public isExportedInvoices: any[] = [];
   public showMoreBtn: boolean = false;
   public selectedItemForMoreBtn = '';
   public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
   public exportedInvoiceBase64res$: Observable<any>;
   public isFabclicked: boolean = false;
+  public exportInvoiceType: string = '';
 
   public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
   public showInvoiceGenerateModal: boolean = false;
@@ -750,7 +753,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.count = o.count;
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
-      model = advanceSearch;
+      //model = advanceSearch;
       if (!model.invoiceDate && !model.dueDate) {
         model.from = this.invoiceSearchRequest.from;
         model.to = this.invoiceSearchRequest.to;
@@ -833,12 +836,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
+    this.selectedInvoicesList = [];
+    this.selectedItems = [];
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.itemStateChanged(item, true);
+        this.selectedInvoicesList.push(item);
+        this.selectedItems.push(item.uniqueName);
+        //  this.itemStateChanged(item, true);
         return item;
       });
+    }
+    if (!this.allItemsSelected) {
+      this.selectedInvoicesList = [];
+      this.selectedItems = [];
+      this.isExported = false;
+    } else {
+      this.isExported = true;
     }
   }
 
@@ -850,7 +864,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.allItemsSelected = false;
     }
     this.itemStateChanged(item);
-    // console.log('selectedInvoicesList', this.selectedInvoicesList );
   }
 
   public clickedOutside(event: Event, el, fieldName: string) {
@@ -913,9 +926,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
       this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
     } else {
-      this.selectedItems.push(item.uniqueName);
-      this.selectedInvoicesList.push(item);
+      this.selectedItems.push(item.uniqueName);  // Array of checked seleted Items uniqueName of the list
+      this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
     }
+    if (this.selectedInvoicesList.length === 1) {
+      this.exportInvoiceType = this.selectedInvoicesList[0].account.uniqueName;
+      this.isExported = true;
+    }
+    this.isExported = this.selectedInvoicesList.every(ele => {
+      return ele.account.uniqueName === this.exportInvoiceType;
+    })
   }
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
@@ -940,7 +960,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.advanceSearchFilter = new InvoiceFilterClassForInvoicePreview();
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
-
 
     this.sortRequestForUi = { sortBy: '', sort: 'asc' };
     this.invoiceSearchRequest.sort = 'asc';
@@ -991,7 +1010,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
     let dataTosend = { accountUniqueName: '' };
     if (this.selectedInvoicesList.length > 0) {
-      dataTosend.accountUniqueName = this.selectedInvoicesList[0].account.uniqueName;
+
+      dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account.uniqueName;
     } else {
       dataTosend.accountUniqueName = '';
     }

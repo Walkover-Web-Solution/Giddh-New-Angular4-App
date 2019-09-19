@@ -1130,9 +1130,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.depositAccountUniqueName = data.accountDetails.uniqueName;
       }
     } else {
-      obj.depositAccountUniqueName = '';
+        obj.depositAccountUniqueName = '';
     }
-
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
