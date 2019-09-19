@@ -26,14 +26,14 @@
 
 /* css start */
 
-:root {
+/* :root {
   --light-blue:#5b63b9;
   --light-blue01:#868ee0;
   --dark-blue:#1A237E;
   --dark-blue01: #313a96;
   --light-gray:#e6e7e8;
-}
-
+} */
+@import '../css/color.scss';
 
 [class^="icon-"],
 [class*=" icon-"] {
@@ -549,8 +549,9 @@ ul.sub-list {
 }
 
 .aging-table.basic>thead>tr>th {
-    border: 1px solid #b5b5b5 !important;
+    border: 1px solid $dark-blue01 !important;
     position: relative;
+        border-right-color: #ddd !important;
 }
 
 .sorting-box {
@@ -684,14 +685,14 @@ ul.sub-list {
 
 .pagination>li>a {
     background: #fff !important;
-    color: var( --dark-blue) !important;
-    border: 1px solid var( --dark-blue) !important;
+    color: #666666 !important;
+    border: 1px solid $dark-blue01 !important;
 }
 
 .pagination>li.active>a {
-    background:var( --dark-blue) !important;
+    background:$dark-blue01 !important;
     color: #fff !important;
-    border: 1px solid var( --dark-blue) !important;
+    border: 1px solid $dark-blue01 !important;
 }
 
 .custom-dropdown .dropdown-menu>li>a:hover {
@@ -1664,7 +1665,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid var(--dark-blue01);
+    border: 2px solid #fff;
     border-top-style: none;
     border-right-style: none;
 }
@@ -1681,7 +1682,10 @@ input[type="checkbox"]:after {
     cursor: pointer;
     border-radius: 2px;
 }
-
+input[type=checkbox]:checked:after {
+    background-color: $light-blue02;
+    border-color: $light-blue02;
+}
 .tab-pane .list-inline>li {
     padding-left: 0;
     margin-bottom: 5px;
@@ -2441,7 +2445,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid var(  --light-blue) !important;
+    border: 1px solid  $yellow !important;
     border-radius: 0 !important;
 }
 
@@ -4873,7 +4877,7 @@ input[type='checkbox'][disabled] {
 }
 
 .basic>thead>tr>th {
-    background: var(--dark-blue01) !important ;
+    background: $dark-blue01 !important ;
     color: #fff;
     border: 0;
     font-family: 'LatoWebbold';
@@ -5769,7 +5773,7 @@ table td[class*=col-]:last-child {
 } */
 
 .universal_date .btn-link {
-    color:var(--dark-blue) !important;
+    color:$dark-blue00 !important;
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
@@ -6320,7 +6324,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: var(--dark-blue);
+    color: $dark-blue00;
 }
 
 .tax-engine .icon {
@@ -7520,7 +7524,10 @@ span.red-text {
     word-break: break-word;
 }
 .hamburger_menu i.icon-bar {
-    color:var(--dark-blue);
+    color:$dark-blue00;
+}
+.pageCount span {
+    font-size: 14px;
 }
 /* responsive */
 

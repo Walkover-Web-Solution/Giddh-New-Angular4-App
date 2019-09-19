@@ -1,10 +1,13 @@
 
-$dark-blue:#000857;
-$dark-blue01:#313a96;
-$light-blue:#5b63b9;
-$light-blue01:#868ee0;
-$light-blue02:#bdc3ff;
-$light-gray:#e6e7e8;
+// $dark-blue:#000857;
+// $dark-blue01:#313a96;
+// $light-blue:#5b63b9;
+// $light-blue01:#868ee0;
+// $light-blue02:#bdc3ff;
+// $light-gray:#e6e7e8;
+
+
+@import '../../assets/css/color.scss';
 
 .form-control, input {
     color: #4d4d4d;
@@ -87,6 +90,8 @@ $light-gray:#e6e7e8;
 .ledger-head th {
     color:$dark-blue01;
         padding-left: 0;
+
+    padding-bottom: 10px;
 }
 .total_col td {
     border: 0;
@@ -140,7 +145,7 @@ $light-gray:#e6e7e8;
     padding-right: 25px !important;
 }
 .t-h-bg1 th {
-    background: $dark-blue01;
+    background:$dark-blue01;
     color: #fff;
     border-right: 1px solid #c4c6c7;
     padding: 11px !important;
@@ -165,13 +170,10 @@ $light-gray:#e6e7e8;
 .daterange_picker_ledger {
     border: 0;
     background: #f7f8fa !important;
-    text-decoration-line: underline;
-    text-decoration-style: dashed;
+    text-decoration-line: none;
+    text-decoration-style: none;
 }
-.daterange_picker_ledger:hover {
-    border: 1px !important;
-    background: #fff !important;
-}
+
 .C-flex-end {
     display: flex;
     justify-content: flex-end;
@@ -183,7 +185,7 @@ $light-gray:#e6e7e8;
     display: none;
 }
 .h-table tr {
-    height: 42px;
+    height: 45px;
 }
 .dateStep {
     padding: 0 !important;
@@ -231,20 +233,80 @@ sh-select:focus {
     display: none;
 }
 .ledgHead .icomoon_ico{
-  color: $dark-blue01;
+  color: $dark-blue00;
+      width: 28px;
+    height: 28px;
+    border:1px solid $border-blue;
+        padding: 3px;
+    display: flex;
+    justify-content: center;
+    border-top-width: 1px;
 }
  .advancSearchBlock  input{
-   background: $light-gray !important;
+   background: $lightGray !important;
+   height: 28px;
+   border-color: $lightGray !important;
  }
+ .advancSearchBlock  input::placeholder{
+   color: #666666;
+ }
+
+
+
  .advancSearchBlock   .icon-search{
     right: 0;
     top: 0;
-    background-color: $light-blue;
-    padding: 9px;
+    background-color: $border-blue;
+    padding: 6px 9px;
     color: #fff;
 }
 #blankLedgerContainer .ledger-main .no-leftBorder {
     border-left: none !important;
+}
+.ledger-row input[type="checkbox"] {
+    margin-right: 15px;
+}
+.ledger_book .ledger-footer-1 .total_col .border-top {
+    border-top: 1px solid #D9D9D9 !important;
+}
+.ledger_book .ledger-footer-1 .total_col .bdrT{
+ border: none;
+}
+
+.advanceSearchByDate {
+    display: inline-flex;
+    border: 1px solid $border-blue;
+    border-radius:2px;
+    position: relative;
+}
+.advanceSearchByDate:before {
+    position: absolute;
+    content: "";
+    height: 1px;
+    width: 32%;
+    background-color: #C4C4C4;
+    left: -33%;
+    top: 17px;
+}
+.advanceSearchByDate:after {
+    position: absolute;
+    content: "";
+    height: 1px;
+    width: 32%;
+    background-color: #C4C4C4;
+    right: -33%;
+    top: 17px;
+}
+.advanceSearchByDate span{
+  width: 45px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $border-blue;
+}
+.ledger-head {
+    margin-top: 46px;
 }
 // reponsive
 

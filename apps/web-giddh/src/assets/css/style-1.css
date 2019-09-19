@@ -3316,9 +3316,8 @@ ul.pills li:hover {
   height: 32px;
 }
 
-.compoundEntry td,
-.compoundEntry td input {
-  background: #FFF6F1 !important;
+.compoundEntry td, .compoundEntry td input , .compoundEntry td:hover, .compoundEntry td input:hover{
+  background:rgba(254, 205, 81, 0.1) !important;
 }
 
 .uncEntry td,
@@ -5400,8 +5399,8 @@ form#groupDetailForm {
       top: 10px;
       font-weight: bold;
   }
-  
-  
+
+
   .transactions-page .left-col-new, .transactions-page .right-col-new {
       padding-bottom: 20px;
   }

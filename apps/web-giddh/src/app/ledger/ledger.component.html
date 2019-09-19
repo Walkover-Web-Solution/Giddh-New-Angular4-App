@@ -13,11 +13,21 @@
 
     <!-- ledger header -->
     <div class="clearfix">
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-sm-offset-5">
         <div class="row">
+
+
+
           <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-          <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-            (applyDaterangepicker)="selectedDate($event)" class="form-control daterange_picker_ledger" />
+
+          <div class="advanceSearchByDate">
+            <span class="icon-calender "></span>
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+              (applyDaterangepicker)="selectedDate($event)" class="form-control daterange_picker_ledger" />
+          </div>
+
+
+
           <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
           <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
           <!--type="text" ng-model="cDate" options="opts" required="">-->
@@ -28,12 +38,8 @@
       <!--&lt;!&ndash;<button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>&ndash;&gt;-->
       <!--</div>-->
       <!--</div>-->
-      <div class="col-sm-4">
-        <!--<div class="row">-->
-        <!--<h1 class="text-center account_Name fs20">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>-->
-        <!--</div>-->
-      </div>
-      <div class="col-sm-6 advancSearchBlock text-right C-flex-end xs-pl-0 xs-pr-0">
+
+      <div class="col-sm-5 advancSearchBlock text-right C-flex-end xs-pl-0 xs-pr-0">
         <div class="d-flex xs-width-100 ledger-head-top">
 
           <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
@@ -845,7 +851,7 @@
               </td>
             </tr>
             <tr class="total_col">
-              <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
+              <td colspan="12" class="col-xs-12 text-right white h32 border-top" style="padding-right:10px !important;">
                 <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{
                                   lc.reckoningDebitTotal  | giddhCurrency }}</span>
               </td>
@@ -857,7 +863,7 @@
           <tbody>
 
             <tr class="total_col">
-              <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+              <td colspan="12" class="col-xs-12 text-right white h32 " style="padding-right:10px !important">
                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'"
                   [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                   C/F: Dr
@@ -867,7 +873,7 @@
               </td>
             </tr>
             <tr class="total_col">
-              <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
+              <td colspan="12" class="col-xs-12 text-right white h32 border-top" style="padding-right:10px !important;">
                 <span class="bdrT"
                   style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | giddhCurrency }}</span>
               </td>
