@@ -1079,7 +1079,9 @@ modal-container.modal.fade.show {
     max-width: 90px;
     min-width: 70px;
 }
-
+.total-detail-table tbody tr td {
+  vertical-align: top;
+}
 
 /* my css end */
 
