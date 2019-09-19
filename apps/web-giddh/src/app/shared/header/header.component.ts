@@ -182,6 +182,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isMobileSite: boolean;
   public CurrentCmpPlanAmount: any;
   public tagManagerUrl;
+  public isProdMode: boolean = false;
   public companyCountry: CompanyCountry = {
     baseCurrency: '',
     country: ''
@@ -212,7 +213,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _breakpointObserver: BreakpointObserver,
     private _generalService: GeneralService,
   ) {
-
+    this.isProdMode = AppUrl === 'https://giddh.com/';
+    this.isElectron = isElectron;
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
@@ -486,7 +488,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
               return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
             });
-            this.callGoogleTagManager();
+            if (this.isProdMode && !this.isElectron) {
+              this.callGoogleTagManager();
+            }
+
             if (menuItem) {
               this.doEntryInDb('menus', menuItem);
             }
