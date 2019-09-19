@@ -476,12 +476,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
+        let bankaccounts: IOption[] = [];
 
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
           // assign flatten A/c's
-          let bankaccounts: IOption[] = [];
           this.sundryDebtorsAcList = [];
           this.sundryCreditorsAcList = [];
           this.prdSerAcListForDeb = [];
@@ -601,9 +601,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.isLastInvoiceCopied) {
 
               // assign account details uniqueName because we are using accounts uniqueName not name
-              if (obj.accountDetails.uniqueName !== 'cash') {
+              let isBankInvoice = bankaccounts.some(s => s.value === this.accountUniqueName);
+              if (obj.accountDetails.uniqueName !== 'cash' && !isBankInvoice) {
                 obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
               } else {
+                this.isCashInvoice = true;
+                this.isSalesInvoice = false;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
               }
             }
@@ -1130,7 +1133,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.depositAccountUniqueName = data.accountDetails.uniqueName;
       }
     } else {
-        obj.depositAccountUniqueName = '';
+      obj.depositAccountUniqueName = '';
     }
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
@@ -1314,7 +1317,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
     this.invFormData.voucherDetails.balanceDue =
       ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
-      this.invFormData.voucherDetails.balanceDue =  this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+    this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
   public calculateSubTotal() {
@@ -1335,10 +1338,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }, 0);
 
     //Save the Grand Total for Edit
-    if(calculatedGrandTotal > 0)
-    {
-      this.calculatedRoundOff =  Math.round(calculatedGrandTotal) - calculatedGrandTotal;
-      calculatedGrandTotal = calculatedGrandTotal +  this.calculatedRoundOff;
+    if (calculatedGrandTotal > 0) {
+      this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+      calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
