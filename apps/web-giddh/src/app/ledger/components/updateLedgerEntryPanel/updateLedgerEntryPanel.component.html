@@ -612,7 +612,8 @@
                 </div>
               </div>
               <div class="pull-right">
-                <span>Total in USD: $454</span>
+                <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
+                <span *ngIf="totalPrice">Total in USD: $454</span>
               </div>
             </div>
 
