@@ -124,8 +124,6 @@
         <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
         <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
       </td>
-
-<<<<<<< Updated upstream
         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
           <p>
             {{(fieldsAndVisibility.header.billingAddress?.label?.length > 0) ? fieldsAndVisibility.header.billingAddress?.label : 'Billing Address'}}
@@ -145,12 +143,11 @@
           <p>Indore (M.P.) 452000</p>
           <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
         </td>
-=======
             <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+              <ng-container>
               <p>
                 {{(fieldsAndVisibility.header.shippingAddress?.label?.length > 0) ? fieldsAndVisibility.header.shippingAddress?.label : 'Shipping Address'}}
               </p>
-<<<<<<< HEAD
               <p>10/09/2018 </p>
             </ng-container>
           </td>
@@ -173,7 +170,7 @@
             <p>11AAAAAA000Z0A1</p>
           </ng-container>
         </td>
-       
+
       </tr>
       </tbody>
     </table>
@@ -185,26 +182,6 @@
           <p>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}</p>
           <p>10/09/2018</p>
         </td>
-=======
-              <p *ngIf="fieldsAndVisibility.header.customerName?.display">Green Soft Solutions</p>
-              <p>5 A.B. Road</p>
-              <p>Indore (M.P.) 452000</p>
-              <p *ngIf="fieldsAndVisibility.header.shippingState?.display">Madhya Pradesh</p>
-            </td>
-            <td class="text-right"
-              *ngIf="fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display || fieldsAndVisibility.header.attentionTo?.display">
-              <p *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                <strong>Mr. Alok Gangrade</strong>
-              </p>
-              <p *ngIf="fieldsAndVisibility.header.customerEmail?.display">alokgangrade@gmail.com</p>
-              <p *ngIf="fieldsAndVisibility.header.customerMobileNumber?.display">+91 901212XXXX</p>
-            </td>
-          </tr>
-          <tr>
-
-            <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display">&nbsp;</td> -->
->>>>>>> staging
->>>>>>> Stashed changes
 
       </tr>
       <tr>
@@ -237,8 +214,6 @@
             <p>11AAAAAA000Z0A1</p>
           </ng-container>
         </td>
-
-<<<<<<< Updated upstream
       </tr>
       </tbody>
     </table>
@@ -250,9 +225,8 @@
           <p>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}</p>
           <p>10/09/2018</p>
         </td>
-=======
-<<<<<<< HEAD
-        <td 
+
+        <td
          *ngIf="fieldsAndVisibility.header.customField3?.display">
           <p>{{(fieldsAndVisibility.header.Field3?.label?.length > 0) ? fieldsAndVisibility.header.Field3?.label : 'Field 3'}}</p>
           <p>Custom</p>
@@ -453,21 +427,6 @@
               [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;
           </th>
           <!--
-=======
-            <td
-              *ngIf="fieldsAndVisibility.header.trackingNumber?.display && fieldsAndVisibility.header.shippingAddress?.display">
-              <p>
-                {{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}
-              </p>
-              <p>00115467</p>
-            </td>
-            <td *ngIf="fieldsAndVisibility.header.customField1?.display">
-              <p>
-                {{(fieldsAndVisibility.header.customField1?.label?.length > 0) ? fieldsAndVisibility.header.customField1?.label : 'Custom Field1'}}
-              </p>
-              <p>Sample 1</p>
-            </td>
->>>>>>> Stashed changes
 
         <td
           *ngIf="fieldsAndVisibility.header.shippedVia?.display && fieldsAndVisibility.header.shippingAddress?.display">
@@ -537,7 +496,6 @@
           <th *ngIf="fieldsAndVisibility.table.total?.display" class="text-right"
               [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.total?.label?.length > 0) ? fieldsAndVisibility.table.total?.label : 'Total'}}</th>
         </tr>
-        </thead>
         <tbody>
         <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
           <td *ngIf="fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.date?.display"
@@ -658,7 +616,6 @@
           <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">4</td>
           <!--<td *ngIf="fieldsAndVisibility.table.date?.display" class="text-left">10-09- 2017
           </td>-->
-<<<<<<< Updated upstream
           <td class="text-left"
               *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
             *ngIf="fieldsAndVisibility.table.item?.display">Freight Charges</span>
@@ -695,43 +652,6 @@
               [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;
           </th>
           <!--
-=======
-              <td class="text-left"
-                *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
-                  *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2 </span>
-                <p *ngIf="fieldsAndVisibility.table.date?.display"
-                  [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p>
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 <p
-                  [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">(H)</p>
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"><span
-                  [innerHTML]='rupeeSymbol'></span>6000.00
-                <p><span [innerHTML]='dollarSymbol'></span>87.50</p>
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right">-500.00</td>
-              <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right"><span
-                  [innerHTML]='rupeeSymbol'></span>5500.00
-                <p><span [innerHTML]='dollarSymbol'></span>80.20</p>
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.taxes?.display" class="text-right">660.00
-                <p [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">@12.00%</p>
-              </td>
-              <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right"><span
-                  [innerHTML]='rupeeSymbol'></span>6160.00
-                <p><span [innerHTML]='dollarSymbol'></span>89.83</p>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right"
-                [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;
-              </th>
-              <!--
->>>>>>> staging
 >>>>>>> Stashed changes
              <th *ngIf="fieldsAndVisibility.table.date?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">&nbsp;</th>
           -->
