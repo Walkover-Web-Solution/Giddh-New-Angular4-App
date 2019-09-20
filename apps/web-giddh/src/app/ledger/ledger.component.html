@@ -868,7 +868,7 @@
                 <span *ngIf="(ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT'"
                   [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                   C/F: Dr
-                  <span class="primary_clr">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount  | giddhCurrency}}
+                  <span class="digitBlue">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount  | giddhCurrency}}
                   </span>
                 </span>
               </td>

@@ -1084,13 +1084,23 @@ modal-container.modal.fade.show {
 }
 
 .company-name .cText .cName {
-    font-size: 16px;
-    /* font-weight: bold; */
+      font-size: 16px;
+
     text-transform: capitalize;
+    display: inline-flex;
+    width: 26px;
+    height: 26px;
+    background-color: $border-blue;
+    text-align: center;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
 }
 
 .company-name .cText .fyear {
-    font-size: 10px;
+      font-size: 12px;
+    margin-left: 5px;
 }
 
 .company-name .cText span {
@@ -5777,6 +5787,9 @@ table td[class*=col-]:last-child {
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
+    border-bottom: 1px solid $dark-blue00;
+    padding-bottom: 0;
+    border-radius: 0;
 }
 
 .universal_date .btn-link:hover {

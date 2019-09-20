@@ -167,7 +167,7 @@ a[vr-item]:focus {
 .left_fixed_header>li>a:before{
   position: absolute;
   content:'';
-  width: 2px;
+  width: 4px;
   height: 100%;
   left: 0;
   background-color: transparent;
@@ -542,12 +542,31 @@ position: absolute;
   height: 32px;
 }
 
-
+#other a{
+  color: $light-blue02;
+  text-transform: uppercase;
+}
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
         width: 100% !important;
     }
+}
+
+@media(max-width:768px){
+  .mobileHeader .btn-xs {
+    padding: 3px 8px 8px 28px !important;
+}
+span.icon-support.dropdown-toggle{
+  top: 7px;
+}
+.lowerLayerHeader {
+    padding-top: 14px;
+}
+.hamburger_menu button{
+  padding-top: 4px;
+  padding-bottom: 0;
+}
 }
 @media(max-width:767px){
   .mobile_menu_icon {
@@ -572,14 +591,28 @@ position: absolute;
 }
 
 @media(max-width:375px){
-  .universal_date li.dateRangPicker, .universal_date .header-date {
+  .universal_date li.dateRangPicker {
     display: block ;
 }
-
+.universal_date .header-date {
+    display: inline-block ;
+}
 
 button#AddManage {
   position: absolute;
-  right: 15px;
-  bottom: 10px;
+  right: 0;
+  bottom: -23px;
+}
+.universal_date li {
+    display: block;
+    position: relative;
+}
+.universal_date .btn-link{
+      border-bottom: none;
+          display: block;
+    text-align: left;
+}
+.lowerLayerHeader {
+    padding-top:5px;
 }
 }
