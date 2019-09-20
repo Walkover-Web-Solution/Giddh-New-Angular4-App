@@ -95,7 +95,6 @@
     "ngx-bootstrap": "~3.0.1",
     "ngx-clipboard": "^11.1.7",
     "ngx-font-picker": "^6.5.0",
-    "ngx-mask": "^8.0.5",
     "ngx-perfect-scrollbar": "^6.3.1",
     "ngx-toastr": "^9.0.2",
     "ngx-uploader": "^6.0.2",
