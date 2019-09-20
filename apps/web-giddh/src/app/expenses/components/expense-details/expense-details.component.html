@@ -35,6 +35,15 @@
       </li>
     </ul>
   </div>
+
+  <!-- img zoom pls uncomment this code -->
+  <!-- <div class="clearfix img-zoom">
+    <img src="assets/images/upload-img.png" alt="">
+    <a href="#" class="img-close">
+      <i class="icon-cross"></i>
+    </a>
+  </div> -->
+
 </div>
 
 <div class="bg-white p-15">
@@ -75,6 +84,12 @@
       <a href="javascript:void(0)" class="d-inline-block pt-3">Entry against Deptor</a>
     </div>
   </div>
+
+
+  <div class="clearfix">
+    <ledger></ledger>
+  </div>
+
 </div>
 
 
@@ -82,24 +97,15 @@
 <!-- modal start -->
 <ng-template #RejectionReason>
   <div class="modal-header">
-    <h3 class="modal-title pull-left">Filter Data</h3>
+    <h3 class="modal-title pull-left">Rejection Reason</h3>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
 
   <div class="modal-body">
-    <!-- <filter-data></filter-data> -->
-
-    <div class="row mb-2">
-      <div class="col-sm-5">
-      </div>
-      <div class="col-sm-7">
-        <button type="button" class="btn btn-success" (click)="confirm()">Add</button>
-        <button type="button" class="btn btn-danger" (click)="decline()">Cancel</button>
-      </div>
-    </div>
-
+    <app-rejection-reason></app-rejection-reason>
+    <input type="submit" class="btn btn-success" (click)="confirm()">
   </div>
 </ng-template>
 <!-- modal end -->

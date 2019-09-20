@@ -12,6 +12,7 @@ import { FilterListComponent } from './components/filter-list/filter-list.compon
 import { FilterDataComponent } from './components/filter-data/filter-data.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
 import { RejectionReason } from './components/rejection-reason/rejection-reason.component';
+import { LedgerModule } from '../ledger/ledger.module';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { RejectionReason } from './components/rejection-reason/rejection-reason.
     DatepickerModule,
     Daterangepicker,
     ExpensesRoutingModule,
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    LedgerModule
   ],
   exports: [
     ExpensesComponent

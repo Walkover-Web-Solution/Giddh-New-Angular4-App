@@ -2,7 +2,7 @@ import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'rejection-reason',
+  selector: 'app-rejection-reason',
   templateUrl: './rejection-reason.component.html',
   styleUrls: ['./rejection-reason.component.scss'],
 })

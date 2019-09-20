@@ -29,3 +29,28 @@
 .upload-fil ul li .upload-img img {
   max-height: 200px;
 }
+.img-zoom {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+.img-zoom img {
+  max-height: 300px;
+  min-width: 300px;
+}
+.img-zoom .img-close {
+  position: absolute;
+  top: 0;
+  right: -29px;
+  z-index: 99;
+  background: #CBCBCB;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  color: #666666;
+  border-radius: 3px;
+}
+.textarea.form-control {
+  height: 70px;
+}

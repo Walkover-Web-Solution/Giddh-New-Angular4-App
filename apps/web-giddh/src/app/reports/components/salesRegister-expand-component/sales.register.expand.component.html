@@ -1,56 +1,48 @@
 <div class="top_bar clearfix">
-  <div class="form-inline">
-    <div class="dis  mrR1 d-inline-block middle">
-      <div (clickOutside)="hideListItems();" class="btn-group" #filterDropDownList="bs-dropdown" dropdown
-        [autoClose]="false" [placement]="'right'">
-        <i dropdownToggle class="icon-options pd cp fs20"></i>
-        <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
-          <li role="menuitem">
-            <a class="dropdown-item">
-              <input type="checkbox" name="voucherType" (ngModelChange)="columnFilter($event, 'voucherType')"
-                [(ngModel)]="showFieldFilter.voucherType" /> voucher Type</a>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item">
-              <input type="checkbox" name="voucherNo" (ngModelChange)="columnFilter($event, 'voucherNo')"
-                [(ngModel)]="showFieldFilter.voucherNo" /> Voucher No.</a>
-          </li>
-          <!-- <li role="menuitem">
+    <div class="form-inline">
+        <div class="dis  mrR1 d-inline-block middle">
+            <div (clickOutside)="hideListItems();" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" [placement]="'right'">
+                <i dropdownToggle class="icon-options pd cp fs20"></i>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                    <li role="menuitem">
+                        <a class="dropdown-item">
+                            <input type="checkbox" name="voucherType" (ngModelChange)="columnFilter($event, 'voucherType')" [(ngModel)]="showFieldFilter.voucherType" /> voucher Type</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item">
+                            <input type="checkbox" name="voucherNo" (ngModelChange)="columnFilter($event, 'voucherNo')" [(ngModel)]="showFieldFilter.voucherNo" /> Voucher No.</a>
+                    </li>
+                    <!-- <li role="menuitem">
                         <a class="dropdown-item">
                             <input type="checkbox" name="productService" (ngModelChange)="columnFilter($event, 'productService')" [(ngModel)]="showFieldFilter.productService" /> Product/Service</a>
                     </li> -->
-          <li role="menuitem">
-            <a class="dropdown-item">
-              <input type="checkbox" name="qtyRate" (ngModelChange)="columnFilter($event, 'qtyRate')"
-                [(ngModel)]="showFieldFilter.qtyRate" /> Qty-Rate</a>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item">
-              <input type="checkbox" name="discount" (ngModelChange)="columnFilter($event, 'discount')"
-                [(ngModel)]="showFieldFilter.discount" /> Discount
-            </a>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item">
-              <input type="checkbox" name="tax" (ngModelChange)="columnFilter($event, 'tax')"
-                [(ngModel)]="showFieldFilter.tax" /> Tax
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="d-inline-block middle">
-      <ul class="list-inline d-inline-block middle nav-report">
-        <li class="active"><a href="javascript:void(0)" (click)="goToDashboard(true)">Report</a> <span
-            class="d-inline-block pl-1"> ></span></li>
-        <li><a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span
-            class="d-inline-block pl-1"> ></span></li>
-      </ul>
+                    <li role="menuitem">
+                        <a class="dropdown-item">
+                            <input type="checkbox" name="qtyRate" (ngModelChange)="columnFilter($event, 'qtyRate')" [(ngModel)]="showFieldFilter.qtyRate" /> Qty-Rate</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item">
+                            <input type="checkbox" name="discount" (ngModelChange)="columnFilter($event, 'discount')" [(ngModel)]="showFieldFilter.discount" /> Discount
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item">
+                            <input type="checkbox" name="tax" (ngModelChange)="columnFilter($event, 'tax')" [(ngModel)]="showFieldFilter.tax" /> Tax
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="d-inline-block middle">
+            <ul class="list-inline d-inline-block middle nav-report">
+                <li class="active"><a href="javascript:void(0)" (click)="goToDashboard(true)">Report</a> <span class="d-inline-block pl-1"> ></span></li>
+                <li><a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span class="d-inline-block pl-1"> ></span></li>
+            </ul>
 
 
-    </div>
-    <!-- more btn code hide -->
-    <!-- <div class="d-inline-block middle">
+        </div>
+        <!-- more btn code hide -->
+        <!-- <div class="d-inline-block middle">
             <div class="btn-group moreBtn" dropdown>
                 <a id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
                   More <span class="caret"></span>
@@ -62,7 +54,7 @@
                 </ul>
             </div>
         </div> -->
-    <!-- <div class="pull-left header-left">
+        <!-- <div class="pull-left header-left">
 
 
             <div class="form-group max250">
@@ -72,7 +64,7 @@
         </div> -->
 
 
-    <!-- <div class="btn-group" dropdown placement="bottom left">
+        <!-- <div class="btn-group" dropdown placement="bottom left">
       <div class="btn-group" dropdown [autoClose]="true" container="body">
         <button id="button-nested" dropdownToggle type="button" class="btn  dropdown-toggle"
           aria-controls="dropdown-nested">August 2017<span class="caret"></span>
@@ -85,23 +77,20 @@
         </ul>
       </div>
     </div> -->
-    <div class="btn-group customeMnthSelect" dropdown>
-      <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle"
-        aria-controls="dropdown-custom-html">
+        <div class="btn-group customeMnthSelect" dropdown>
+            <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle" aria-controls="dropdown-custom-html">
         {{selectedMonth}} <span class="caret"></span>
       </button>
-      <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
-        aria-labelledby="button-custom-html">
-        <ng-container *ngFor="let item of monthYear; let i=index;">
-          <li role="menuitem"><a class="dropdown-item cursor-pointer"
-              (click)="selectedFilterMonth(item,i+1)">{{item}}</a></li>
-        </ng-container>
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-custom-html">
+                <ng-container *ngFor="let item of monthYear; let i=index;">
+                    <li role="menuitem"><a class="dropdown-item cursor-pointer" (click)="selectedFilterMonth(item,i+1)">{{item}}</a></li>
+                </ng-container>
 
-      </ul>
-    </div>
+            </ul>
+        </div>
 
 
-    <!-- <div class="btn-group" dropdown placement="bottom left">
+        <!-- <div class="btn-group" dropdown placement="bottom left">
             <div class="btn-group" dropdown [autoClose]="true" container="body">
                 <button id="button-nested" dropdownToggle type="button" class="btn  dropdown-toggle" aria-controls="dropdown-nested">select month <span class="caret"></span>
         </button>
@@ -124,46 +113,44 @@
             </div>
         </div> -->
 
-    <div class="form-group" style="margin-right: 10px;">
+        <div class="form-group" style="margin-right: 10px;">
 
-      <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
-        title="Expand All" *ngIf="!expand">
-        <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;">
-      </a>
+            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All" *ngIf="!expand">
+                <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;">
+            </a>
 
-      <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
-        title="Collapse All" *ngIf="expand">
-        <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;">
-      </a>
+            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Collapse All" *ngIf="expand">
+                <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;">
+            </a>
+
+        </div>
+
 
     </div>
-
-
-  </div>
 </div>
 
 <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
-  <div class="clearfix ">
-    <div class="responsive mt-2 ">
-      <table class="table basic table-bordered table-middle ">
-        <thead>
-          <tr>
-            <th>
-              <div class="d-flex ">
-                <div class="flex-fill pr-1 ">
-                  Date
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'date'}">
-                </ng-container>
-              </div>
-            </th>
+    <div class="clearfix ">
+        <div class="responsive mt-2 ">
+            <table class="table basic table-bordered table-middle ">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="d-flex ">
+                                <div class="flex-fill pr-1 ">
+                                    Date
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'date'}">
+                                </ng-container>
+                            </div>
+                        </th>
 
-            <th class="td_in_searchBox ">
-              <div>
-                <span> Account</span>
-              </div>
-            </th>
-            <!-- <th class="td_in_searchBox nowrap" #searchInvoiceContainer1>
+                        <th class="td_in_searchBox ">
+                            <div>
+                                <span> Account</span>
+                            </div>
+                        </th>
+                        <!-- <th class="td_in_searchBox nowrap" #searchInvoiceContainer1>
 
                                 <div [hidden]="showSearchCustomer">
                                     <span> Account</span>
@@ -178,238 +165,221 @@
 
                             </th> -->
 
-            <th *ngIf="showFieldFilter.voucherType ">
-              <div class="d-flex ">
-                <div class="flex-fill pr-1 ">
-                  Voucher Type
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'voucherType'}">
-                </ng-container>
-              </div>
-            </th>
+                        <th *ngIf="showFieldFilter.voucherType ">
+                            <div class="d-flex ">
+                                <div class="flex-fill pr-1 ">
+                                    Voucher Type
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'voucherType'}">
+                                </ng-container>
+                            </div>
+                        </th>
 
-            <!-- <th *ngIf="showFieldFilter.voucherNo " class="td_in_searchBox ">
+                        <!-- <th *ngIf="showFieldFilter.voucherNo " class="td_in_searchBox ">
                             <div>
                                 <span>Voucher No.</span><i class="icon-search "></i>
                             </div>
 
                         </th> -->
 
-            <th *ngIf="showFieldFilter.voucherNo" class="td_in_searchBox nowrap" #searchInvoiceContainer
-              (clickOutside)="clickedOutsideEvent();">
+                        <th *ngIf="showFieldFilter.voucherNo" class="td_in_searchBox nowrap" style="width: 210px;" #searchInvoiceContainer (clickOutside)="clickedOutsideEvent();">
 
-              <div [hidden]="showSearchInvoiceNo">
-                <span>Voucher No</span>
-                <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-              </div>
+                            <div [hidden]="showSearchInvoiceNo">
+                                <span>Voucher No</span>
+                                <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                            </div>
 
 
-              <div class="input-container" [hidden]="!showSearchInvoiceNo">
-                <input type="text" placeholder="Search voucher number" class="w100" #invoiceSearch
-                  [formControl]="voucherNumberInput" />
+                            <div class="input-container" [hidden]="!showSearchInvoiceNo">
+                                <input type="text" placeholder="Search voucher number" class="w100" #invoiceSearch [formControl]="voucherNumberInput" />
 
-              </div>
+                            </div>
 
-            </th>
+                        </th>
 
-            <th>
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Sales
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
-                </ng-container>
-              </div>
-            </th>
+                        <th>
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Sales
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
+                                </ng-container>
+                            </div>
+                        </th>
 
-            <th>
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Return
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
-                </ng-container>
-              </div>
-            </th>
-            <th *ngIf="expand && showFieldFilter.qtyRate ">
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Qty/Unit
-                </div>
+                        <th>
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Return
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
+                                </ng-container>
+                            </div>
+                        </th>
+                        <th *ngIf=" showFieldFilter.qtyRate ">
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Qty/Unit
+                                </div>
 
-              </div>
-            </th>
-            <th *ngIf="expand && showFieldFilter.qtyRate ">
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Rate
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'rate'}">
-                </ng-container>
-              </div>
-            </th>
+                            </div>
+                        </th>
+                        <th *ngIf="showFieldFilter.qtyRate ">
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Rate
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'rate'}">
+                                </ng-container>
+                            </div>
+                        </th>
 
-            <th *ngIf="showFieldFilter.discount ">
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Discount
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'discountTotal'}">
-                </ng-container>
-              </div>
-            </th>
+                        <th *ngIf="showFieldFilter.discount ">
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Discount
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'discountTotal'}">
+                                </ng-container>
+                            </div>
+                        </th>
 
-            <th *ngIf="showFieldFilter.tax ">
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Tax
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'taxTotal'}">
-                </ng-container>
-              </div>
-            </th>
-            <th>
-              <div class="d-flex ">
-                <div class="flex-fill text-right pr-1 ">
-                  Net Sales
-                </div>
-                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'netTotal'}">
-                </ng-container>
+                        <th *ngIf="showFieldFilter.tax ">
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Tax
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'taxTotal'}">
+                                </ng-container>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex ">
+                                <div class="flex-fill text-right pr-1 ">
+                                    Net Sales
+                                </div>
+                                <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'netTotal'}">
+                                </ng-container>
 
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="(SalesRegisteDetailedResponse$ | async).items.length">
-          <tr *ngFor=" let item of (SalesRegisteDetailedResponse$ | async).items ">
-            <td>{{item.date}}</td>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="(SalesRegisteDetailedResponse$ | async).items.length">
+                    <tr *ngFor=" let item of (SalesRegisteDetailedResponse$ | async).items ">
+                        <td>{{item.date}}</td>
 
-            <td (dblclick)="modalUniqueName=item.uniqueName " class="cp no-dbl-click-select "
-              (clickOutside)="modalUniqueName='' ">
-              {{item.account.name}}
-              <div *ngIf="modalUniqueName===item.uniqueName " account-detail-modal-component
-                [accountUniqueName]="item.account.uniqueName " [from]="this.from " [to]="this.to "
-                [isModalOpen]="modalUniqueName===item.uniqueName ">
-              </div>
-              <ng-container *ngIf="expand ">
-                <ng-container *ngFor="let stock of item.stocks ">
-                  <p>{{stock.stock.name}}</p>
-                </ng-container>
-              </ng-container>
-            </td>
-            <td *ngIf="showFieldFilter.voucherType" class="vertcleAlignTop">{{item.voucherType}}</td>
-            <td *ngIf="showFieldFilter.voucherNo " class="vertcleAlignTop"><a
-                href="javascript:void(0) ">{{item.voucherNumber}}</a></td>
-            <td class="text-right ">{{item.creditTotal | giddhCurrency}}
-              <ng-container *ngIf="expand ">
-                <ng-container *ngFor="let stock of item.stocks ">
-                  <p>{{stock.amount | giddhCurrency}}</p>
-                </ng-container>
-              </ng-container>
-            </td>
-            <td class="text-right ">{{item.debitTotal | giddhCurrency}}</td>
-            <td class="text-right " *ngIf="expand && showFieldFilter.qtyRate ">-
-              <ng-container *ngIf="expand ">
-                <ng-container *ngFor="let stock of item.stocks ">
-                  <p>{{stock.quantity | giddhCurrency}} {{stock.unit.code}}</p>
-                </ng-container>
-              </ng-container>
-            </td>
-            <td class="text-right " *ngIf="expand && showFieldFilter.qtyRate">-
-              <ng-container *ngIf="expand ">
-                <ng-container *ngFor="let stock of item.stocks ">
-                  <p>{{stock.rate | giddhCurrency}}</p>
-                </ng-container>
-              </ng-container>
-            </td>
-            <td *ngIf="showFieldFilter.discount " class="text-right ">{{item.discountTotal | giddhCurrency}}</td>
-            <td *ngIf="showFieldFilter.tax " class="text-right ">{{item.taxTotal | giddhCurrency}}</td>
-            <td class="text-right ">{{item.netTotal | giddhCurrency}}</td>
+                        <td (dblclick)="modalUniqueName=item.uniqueName " class="cp no-dbl-click-select " (clickOutside)="modalUniqueName='' ">
+                            {{item.account.name}}
+                            <div *ngIf="modalUniqueName===item.uniqueName " account-detail-modal-component [accountUniqueName]="item.account.uniqueName " [from]="this.from " [to]="this.to " [isModalOpen]="modalUniqueName===item.uniqueName ">
+                            </div>
+                            <ng-container *ngIf="expand ">
+                                <ng-container *ngFor="let stock of item.stocks ">
+                                    <p>{{stock.stock.name}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td *ngIf="showFieldFilter.voucherType" class="vertcleAlignTop">{{item.voucherType}}</td>
+                        <td *ngIf="showFieldFilter.voucherNo " class="vertcleAlignTop"><a href="javascript:void(0) ">{{item.voucherNumber}}</a></td>
+                        <td class="text-right ">{{item.creditTotal | giddhCurrency}}
+                            <ng-container *ngIf="expand ">
+                                <ng-container *ngFor="let stock of item.stocks ">
+                                    <p>{{stock.amount | giddhCurrency}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="text-right ">{{item.debitTotal | giddhCurrency}}</td>
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate ">-
+                            <ng-container *ngIf="expand ">
+                                <ng-container *ngFor="let stock of item.stocks ">
+                                    <p>{{stock.quantity | giddhCurrency}} {{stock.unit.code}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">-
+                            <ng-container *ngIf="expand ">
+                                <ng-container *ngFor="let stock of item.stocks ">
+                                    <p>{{stock.rate | giddhCurrency}}</p>
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                        <td *ngIf="showFieldFilter.discount " class="text-right ">{{item.discountTotal | giddhCurrency}}</td>
+                        <td *ngIf="showFieldFilter.tax " class="text-right ">{{item.taxTotal | giddhCurrency}}</td>
+                        <td class="text-right ">{{item.netTotal | giddhCurrency}}</td>
 
-          </tr>
-        </tbody>
+                    </tr>
+                </tbody>
 
-      </table>
-    </div>
+            </table>
+        </div>
 
-    <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems> 20">
-      <pagination [totalItems]="(SalesRegisteDetailedResponse$ | async).totalItems "
-        [(ngModel)]="getDetailedsalesRequestFilter.page " [maxSize]="5 " class="pagination-sm " [boundaryLinks]="true "
-        [itemsPerPage]="20 " [rotate]="false
+        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems> 20">
+            <pagination [totalItems]="(SalesRegisteDetailedResponse$ | async).totalItems " [(ngModel)]="getDetailedsalesRequestFilter.page " [maxSize]="5 " class="pagination-sm " [boundaryLinks]="true " [itemsPerPage]="20 " [rotate]="false
     " previousText="&#9668; " nextText="&#9658; " (pageChanged)="pageChanged($event) "></pagination>
+        </div>
     </div>
-  </div>
-  <div class="no-data "
-    *ngIf="(SalesRegisteDetailedResponse$ | async).items.length===0 && !(isGetSalesDetailsInProcess$ | async) ">
-    <h1>No entries found within given criteria.</h1>
-    <h1>Do search with some other dates</h1>
-  </div>
-
-
-  <div class="clearfix sales-ragister ">
-    <div class="col-xs-3 ">
-      <p>Transaction count</p>
-      <p class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).totalItems }}</p>
+    <div class="no-data " *ngIf="(SalesRegisteDetailedResponse$ | async).items.length===0 && !(isGetSalesDetailsInProcess$ | async) ">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
     </div>
-    <div class="col-xs-9 ">
-      <div *ngIf="SalesRegisteDetailedItems " class="clearfix main-sale-register-box ">
 
-        <div class="sale-register-box text-right">
-          <p>Sales</p>
-          <h4>{{(SalesRegisteDetailedResponse$ | async).creditTotal | giddhCurrency}}</h4>
+
+    <div class="clearfix sales-ragister ">
+        <div class="col-xs-3 ">
+            <p>Transaction count</p>
+            <p class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).totalItems }}</p>
         </div>
-        <div class="sale-register-box text-right">
-          <p>Return</p>
-          <h4>{{(SalesRegisteDetailedResponse$ | async).debitTotal | giddhCurrency}}</h4>
-        </div>
-        <div class="sale-register-box text-right">
-          <p>Discount</p>
-          <h4>{{(SalesRegisteDetailedResponse$ | async).discountTotal | giddhCurrency}}</h4>
-        </div>
-        <div class="sale-register-box text-right">
-          <p>Total Tax</p>
-          <h4>{{(SalesRegisteDetailedResponse$ | async).taxTotal | giddhCurrency}}</h4>
-        </div>
-        <!-- <div class="sale-register-box ">
+        <div class="col-xs-9 ">
+            <div *ngIf="SalesRegisteDetailedItems " class="clearfix main-sale-register-box ">
+
+                <div class="sale-register-box text-right">
+                    <p>Sales</p>
+                    <h4>{{(SalesRegisteDetailedResponse$ | async).creditTotal | giddhCurrency}}</h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Return</p>
+                    <h4>{{(SalesRegisteDetailedResponse$ | async).debitTotal | giddhCurrency}}</h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Discount</p>
+                    <h4>{{(SalesRegisteDetailedResponse$ | async).discountTotal | giddhCurrency}}</h4>
+                </div>
+                <div class="sale-register-box text-right">
+                    <p>Total Tax</p>
+                    <h4>{{(SalesRegisteDetailedResponse$ | async).taxTotal | giddhCurrency}}</h4>
+                </div>
+                <!-- <div class="sale-register-box ">
                     <p>Freight</p>
                     <h4>Freight</h4>
                 </div> -->
-        <div class="sale-register-box text-right">
-          <p>Net Sales</p>
-          <h4 class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).netTotal.amount | giddhCurrency}}</h4>
-        </div>
-        <!-- <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
+                    <p>Net Sales</p>
+                    <h4 class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).netTotal.amount | giddhCurrency}}</h4>
+                </div>
+                <!-- <div class="sale-register-box ">
                     <a href="# "><img src="assets/images/intercom-chat.png " alt=" "></a>
                 </div> -->
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </ng-container>
 
 <div *ngIf="(isGetSalesDetailsInProcess$ | async) ">
-  <div class="no-data mrT2 d-flex "
-    style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
-    <div class="giddh-spinner vertical-center-spinner "></div>
-  </div>
+    <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+        <div class="giddh-spinner vertical-center-spinner "></div>
+    </div>
 </div>
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-  <div class="icon-pointer cp">
-    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'asc')"
-      *ngIf="getDetailedsalesRequestFilter.sortBy !== col"
-      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
-    </div>
+    <div class="icon-pointer cp">
+        <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'asc')" *ngIf="getDetailedsalesRequestFilter.sortBy !== col" [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
+        </div>
 
-    <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'desc')"
-      *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'"
-      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
-    </div>
+        <div class="fa fa-long-arrow-up text-light-2 d-block font-xxs" (click)="sortbyApi(col, 'desc')" *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'" [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'asc'}">
+        </div>
 
-    <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs"
-      *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'"
-      (click)="sortbyApi(col, 'asc')"
-      [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'}">
+        <div class="fa fa-long-arrow-down text-light-2 d-block font-xxs" *ngIf="getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'" (click)="sortbyApi(col, 'asc')" [ngClass]="{'activeTextColor': getDetailedsalesRequestFilter.sortBy === col && getDetailedsalesRequestFilter.sort === 'desc'}">
+        </div>
     </div>
-  </div>
 </ng-template>
 <!-- endregion -->
