@@ -19,6 +19,9 @@ import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
+import { gstComponent } from './components/gst/gst.component';
+
+
 
 @Component({
   selector: 'home',  // <home></home>
@@ -41,6 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('history') public history: HistoryChartComponent;
   @ViewChild('networth') public networth: NetworthChartComponent;
   @ViewChild('profitloss') public profitloss: ProfitLossComponent;
+  @ViewChild('gst') public gst: gstComponent;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

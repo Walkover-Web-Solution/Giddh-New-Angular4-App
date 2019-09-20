@@ -9,18 +9,19 @@
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
         <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
       </div>
+      <ul class="dashboard-option">
+        <li class="secondryDarkbg"> This Year Total
+          <h3>{{ activeYearTotal | number:'1.2-2' }}</h3>
+        </li>
+        <li class="secondrylightbg"> Last Year Total
+          <h3>{{ lastYearTotal | number:'1.2-2' }}</h3>
+        </li>
+      </ul>
       <div class="chart-div" google-chart chart="myChartObject">
         <perfect-scrollbar [scrollIndicators]="true">
           <chart [options]="options"></chart>
         </perfect-scrollbar>
-        <ul class="dashboard-option">
-          <li class="secondryDarkbg"> This Year Total
-            <h3>{{ activeYearTotal | number:'1.2-2' }}</h3>
-          </li>
-          <li class="secondrylightbg"> Last Year Total
-            <h3>{{ lastYearTotal | number:'1.2-2' }}</h3>
-          </li>
-        </ul>
+
       </div>
 
       <!--<canvas id="pie" class="chart chart-pie" chart-data="chartData"-->

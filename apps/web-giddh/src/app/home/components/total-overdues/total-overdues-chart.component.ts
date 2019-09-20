@@ -22,8 +22,11 @@ import { DashboardService } from '../../../services/dashboard.service';
         font-size: 18px;
       }
 
-      .primary_text {
-        color: #1F2382;
+      .customerDueText {
+        color: #0CB1AF;
+      }
+      .vendorDueText{
+        color:#F85C88;
       }
 
       .secondary_text {
@@ -184,7 +187,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
   public generateCharts() {
     this.totaloverDueChart = {
-      colors: ['#1F2382', '#5B64C9'],
+      colors: ['#F85C88', '#0CB1AF'],
       chart: {
         type: 'pie',
         polar: false,

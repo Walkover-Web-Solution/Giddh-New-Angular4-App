@@ -154,7 +154,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     this.lastYearTotal = _.sum(this.lastYearAccountsRanks);
 
     this.options = {
-      colors: ['#c45022', '#d37c59'],
+      colors: ['#0CB1AF', '#087E7D'],
       chart: {
         type: 'column',
         height: '256px'
@@ -216,7 +216,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   public generateActiveYearString(): INameUniqueName[] {
     let activeStrings: INameUniqueName[] = [];
     this.activeYearAccounts.map(acc => {
-      activeStrings.push({uniqueName: acc.uniqueName, name: acc.groupName});
+      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return activeStrings;
   }
@@ -224,7 +224,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   public generateLastYearString(): INameUniqueName[] {
     let lastStrings: INameUniqueName[] = [];
     this.lastYearAccounts.map(acc => {
-      lastStrings.push({uniqueName: acc.uniqueName, name: acc.groupName});
+      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return lastStrings;
   }

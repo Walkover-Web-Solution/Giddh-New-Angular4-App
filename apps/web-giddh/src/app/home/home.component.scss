@@ -57,7 +57,7 @@
   color: $lightTextBlue;
 }
 .dashboard-container {
-    max-width: 935px;
+    max-width: 1170px;
     width: 100%;
 }
 span.icon-traingle-info {
@@ -80,4 +80,7 @@ a.dropdown-item{
 a.dropdown-item:hover {
     background-color: #EEEFF9;
     color: #5B64C9;
+}
+.dashboard-notification {
+    margin-bottom: 20px;
 }

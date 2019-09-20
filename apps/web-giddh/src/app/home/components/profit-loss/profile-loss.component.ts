@@ -22,13 +22,13 @@ import { DashboardService } from '../../../services/dashboard.service';
         font-size: 18px;
       }
 
-      .primary_text {
-        color: #1F2382;
+      .totalIncomeText {
+        color: #4693F1;
+      }
+      .totalExpensesText{
+        color:#FED46A
       }
 
-      .secondary_text {
-        color: #5B64C9;
-      }
       span.monthDropdown {
         font-size: 12px;
         color: #666666;
@@ -184,7 +184,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
   public generateCharts() {
     this.totaloverDueChart = {
-      colors: ['#1F2382', '#5B64C9'],
+      colors: ['#FED46A', '#4693F1'],
       chart: {
         type: 'pie',
         polar: false,

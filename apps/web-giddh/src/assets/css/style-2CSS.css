@@ -41,6 +41,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* start MDB tweaks */
 
 .pd-1 {
@@ -4458,9 +4459,9 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color:#D9D9D9;
-
-
+    border-color: #d6d6d6;
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #dashboard .panel-default>.panel-heading {
