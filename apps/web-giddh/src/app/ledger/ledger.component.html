@@ -44,22 +44,22 @@
 
           <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
 
-            <span class="d-flex" style="margin-right: 10px;">
-              <button class="btn btn-link xs-pl-0" style="margin-right: -3px;" (click)="onOpenAdvanceSearch()">Advance
-                Search</button>
-              <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
-                style="margin-right: 7px;">
-                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"
-                  tooltip="Reset Filter"></i>
-              </a>
-            </span>
+
 
             <div style="position: relative">
               <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
               <i class="icon-search pos-abs"></i>
             </div>
+            <span class="d-flex icomoon_ico advnceSearchFilter">
 
+              <i class="fa fa-filter" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
+              <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
+                style="margin-right: 7px;">
+                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"
+                  tooltip="Reset Filter"></i>
+              </a>
+            </span>
           </div>
 
           <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
@@ -90,6 +90,7 @@
               [placement]="'right'" (click)="showExportLedgerModal()">
               <i class="icon-ledger-union-5" style="line-height: 0px"></i>
             </a>
+
           </div>
 
         </div>
@@ -928,61 +929,68 @@
 
 <!--total section -->
 <!-- commented due to API  -->
-<section class="ledger-stat mrT3"
-  *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
-  <div class="container">
+<div class="container">
+  <section class="ledger-stat mrT3"
+    *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+
     <div class="row">
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-3 col-xs-6 stat-block">
         <div class="ledger-state-box">
           <h1>Total Transactions
-            <span class="primary_clr">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
+            <span class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
                         async)?.creditTransactionsCount}}</span>
           </h1>
-          <span class="mrT1 mrR2 ">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
-          <span class="mrT1 mrR2 ">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+          <span class=" mrR2 greyTextClr">Debit <span
+              class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
+          <span class=" mrR2 greyTextClr">Credit <span class="digitBlue">
+              {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
         </div>
       </div>
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-3 col-xs-6 stat-block">
         <div class="ledger-state-box">
           <h1>Opening Balance</h1>
-          <h3>{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}
+          <h3 class="digitBlue">{{(ledgerTxnBalance$ | async)?.forwardedBalance?.amount | giddhCurrency}}
             {{ (ledgerTxnBalance$ | async)?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
         </div>
       </div>
 
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-3 col-xs-6 stat-block">
         <div class="ledger-state-box">
-          <h1 class=" primary_clr">Net Total
+          <h1 class=" ">Net Total
             <span
               *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">Credit</span>
             <span
               *ngIf="(ledgerTxnBalance$ | async)?.creditTotal < (ledgerTxnBalance$ | async)?.debitTotal">Debit</span>
           </h1>
-          <h3 class=" primary_clr"
+          <h3 class="digitBlue"
             *ngIf="(ledgerTxnBalance$ | async)?.creditTotal > (ledgerTxnBalance$ | async)?.debitTotal">
             {{(ledgerTxnBalance$ | async)?.creditTotal - (ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}
           </h3>
-          <h3 class=" primary_clr"
+          <h3 class="digitBlue"
             *ngIf="(ledgerTxnBalance$ | async)?.creditTotal < (ledgerTxnBalance$ | async)?.debitTotal">
             {{(ledgerTxnBalance$ | async)?.debitTotal - (ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}
           </h3>
-          <h1 class="mrT font16">Dr Total {{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</h1>
-          <h1 class="mrT font16">Cr Total {{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</h1>
+          <br>
+          <h1 class="mrT font16 greyTextClr">Debit <span
+              class="digitBlue">{{(ledgerTxnBalance$ | async)?.debitTotal | giddhCurrency}}</span></h1>
+          <h1 class="mrT font16 greyTextClr">Credit <span
+              class="digitBlue">{{(ledgerTxnBalance$ | async)?.creditTotal | giddhCurrency}}</span></h1>
         </div>
       </div>
 
-      <div class="col-sm-3 col-xs-6">
+      <div class="col-sm-3 col-xs-6 stat-block">
         <div class="ledger-state-box">
           <h1>Closing Balance</h1>
-          <h3>{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
+          <h3 class="digitBlue">{{(ledgerTxnBalance$ | async)?.closingBalance?.amount | giddhCurrency}}
             {{ (ledgerTxnBalance$ | async)?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
         </div>
       </div>
     </div>
 
-  </div>
 
-</section>
+
+  </section>
+</div>
 <!-- modal sections -->
 
 <!-- aside menu section -->
