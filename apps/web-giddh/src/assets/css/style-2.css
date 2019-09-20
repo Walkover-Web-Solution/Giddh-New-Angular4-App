@@ -7395,7 +7395,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     position: absolute;
-    top: 50%;
+    top: 42%;
     right: 10px;
 }
 
