@@ -57,7 +57,7 @@
                       : 'Invoice Date'}}</strong>
                   </td>
                   <td>
-                    <p> 11-09-2017 </p>
+                    <p> 11/09/2017 </p>
                   </td>
                 </tr>
                 <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
@@ -154,7 +154,7 @@
               <p>
                 {{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}
               </p>
-              <p>10-09-2018 </p>
+              <p>10/09/2018 </p>
             </ng-container>
           </td>
         <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
@@ -186,7 +186,7 @@
         <td
           *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display">
           <p>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}</p>
-          <p>10-09-2018</p>
+          <p>10/09/2018</p>
         </td>
 
         <td
@@ -234,7 +234,6 @@
           <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right"
               [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : '#'}}
           </th>
-          <!-- <th *ngIf="fieldsAndVisibility.table.date?.display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : 'Date'}}</th>-->
           <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"
               class="text-left"
               [ngStyle]="{ 'background-color': inputTemplate.tableColor}">{{(fieldsAndVisibility.table.date?.display && !fieldsAndVisibility.table.item?.display) ? 'Date' : ((fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : 'Item')}}</th>
@@ -282,11 +281,11 @@
           <td class="text-left"
               *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
             *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 1 </span>
-            <p *ngIf="fieldsAndVisibility.table.date?.display"
-               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>
+            <!--<p *ngIf="fieldsAndVisibility.table.date?.display"
+               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>-->
           <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 <p
             [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">(H)</p></td>
-          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
+          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2 No.</td>
           <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"><span [innerHTML]='rupeeSymbol'></span>1000.00
             <p><span [innerHTML] = 'dollarSymbol'></span>15.00</p>
           </td>
@@ -315,11 +314,11 @@
           <td class="text-left"
               *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
             *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2 </span>
-            <p *ngIf="fieldsAndVisibility.table.date?.display"
-               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>
+            <!--<p *ngIf="fieldsAndVisibility.table.date?.display"
+               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>-->
           <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 <p
             [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">(H)</p></td>
-          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Nos
+          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2 No.
           </td>
           <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"><span [innerHTML]='rupeeSymbol'></span>300.00
             <p><span [innerHTML]='dollarSymbol'></span>7.20</p>
@@ -348,11 +347,11 @@
           <td class="text-left"
               *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
             *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 3 </span>
-            <p *ngIf="fieldsAndVisibility.table.date?.display"
-               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>
+            <!--<p *ngIf="fieldsAndVisibility.table.date?.display"
+               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>-->
           <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">12345 <p
             [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">(H)</p></td>
-          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
+          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1 No.
           </td>
           <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"><span [innerHTML]='rupeeSymbol'></span>1500.00
             <p><span [innerHTML]='dollarSymbol'></span>21.90</p>
@@ -381,11 +380,11 @@
           <td class="text-left"
               *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"><span
             *ngIf="fieldsAndVisibility.table.item?.display">Freight Charges</span>
-            <p *ngIf="fieldsAndVisibility.table.date?.display"
-               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>
+            <!--<p *ngIf="fieldsAndVisibility.table.date?.display"
+               [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">10-09- 2017</p></td>-->
           <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">--<p
-            [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}">(H)</p></td>
-          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
+            [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'}"></p></td>
+          <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1 No.
           </td>
           <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"><span [innerHTML]='rupeeSymbol'></span>1030.00
             <p><span [innerHTML]='dollarSymbol'></span>12.00</p>
