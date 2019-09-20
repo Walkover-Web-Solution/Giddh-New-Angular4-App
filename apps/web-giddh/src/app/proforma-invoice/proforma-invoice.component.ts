@@ -608,6 +608,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isCashInvoice = true;
                 this.isSalesInvoice = false;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
+                this.depositAccountUniqueName = obj.accountDetails.uniqueName;
               }
             }
 
@@ -1762,8 +1763,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name = event.label;
-      this.invFormData.accountDetails.uniqueName = event.value;
+      if (this.isCashInvoice) {
+        this.invFormData.accountDetails.name = event.label;
+        this.invFormData.accountDetails.uniqueName = event.value;
+      }
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
