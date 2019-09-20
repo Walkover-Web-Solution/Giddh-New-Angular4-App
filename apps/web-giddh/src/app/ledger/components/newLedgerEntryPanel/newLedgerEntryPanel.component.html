@@ -62,7 +62,7 @@
 
           <td class="pItem text-right amount">
             <label class="primary_clr">Amount</label>
-            <input type="text" name="" class="form-control text-right" prefix="$" mask="comma_separator.1"
+            <input type="text" name="" class="form-control text-right" prefix="$" [mask]="inputMaskFormat"
                    [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
             <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 3259.56</p>

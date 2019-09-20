@@ -42,7 +42,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 import { SalesModule } from '../sales/sales.module';
-import { NgxMaskModule } from 'ngx-mask'
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
 
 @NgModule({
   declarations: [
