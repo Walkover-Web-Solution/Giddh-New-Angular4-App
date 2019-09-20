@@ -131,7 +131,7 @@ ul.list-unstyled li a {
     display: flex;
     vertical-align: middle;
     align-items: center;
-    padding-right:120px;
+
 }
 
 .sale-register-box a {
@@ -266,4 +266,22 @@ table th {
     position: absolute;
     right: 10px;
     top: 33%;
+}
+.vertcleAlignTop{
+  vertical-align: top !important;
+}
+
+@media(max-width:1366px){
+   .main-sale-register-box {
+        padding-right: 70px;
+}
+}
+
+@media(min-width:1367px){
+  .main-sale-register-box {
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    padding-right: 270px;
+}
 }
