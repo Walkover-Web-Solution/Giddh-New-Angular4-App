@@ -297,11 +297,11 @@ export class PurchaseInvoiceService {
     if (reqObj.via && reqObj.via === 'JIO_GST') {
       url = GST_RETURN_API.FILE_JIO_GST_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
     }
-    //  else if (reqObj.via === 'TAXPRO') {
-    //   url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
-    // } else if (reqObj.via === 'VAYANA') {
-    //   url = GST_RETURN_API.FILE_VAYANA_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
-    // }
+    else if (reqObj.via === 'TAXPRO') {
+      url = GST_RETURN_API.FILE_TAX_PRO_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
+    } else if (reqObj.via === 'VAYANA') {
+      url = GST_RETURN_API.FILE_VAYANA_RETURN.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':company_gstin', reqObj.gstNumber);
+    }
     return this._http.get(this.config.apiUrl + url).pipe(map((res) => {
       let data: BaseResponse<any, string> = res;
       data.queryString = { reqObj };

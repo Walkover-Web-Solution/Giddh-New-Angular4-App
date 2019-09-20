@@ -10,7 +10,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -20,7 +20,7 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['filing-header.component.css'],
   providers: [
     {
-      provide: BsDropdownConfig, useValue: {autoClose: true},
+      provide: BsDropdownConfig, useValue: { autoClose: true },
     },
     {
       provide: AlertConfig, useValue: {}
@@ -43,8 +43,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public selectedGst: string = null;
   @Input() public showTaxPro: boolean = false;
   @Input() public isMonthSelected: boolean = false;
-  @Input() public fileReturn: {} = {isAuthenticate: false};
-  @Input() public fileGstr3b: {} = {via: null};
+  @Input() public fileReturn: {} = { isAuthenticate: false };
+  @Input() public fileGstr3b: {} = { via: null };
   @ViewChild('cancelConfirmationModel') public cancelConfirmationModel: ModalDirective;
 
   public gstAuthenticated$: Observable<boolean>;
@@ -103,16 +103,16 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public pullFromGstIn(ev) {
-    if (!this.gstAuthenticated) {
-      this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
-    } else {
-      let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
-      request.from = this.currentPeriod.from;
-      request.to = this.currentPeriod.to;
-      request.refresh = true;
-      request.action = GstReconcileActionsEnum.notfoundonportal;
-      this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
-    }
+    // if (!this.gstAuthenticated) {
+    //   this.isVayanaAuthenticated ? this.fileGstReturn('VAYANA') : this.fileGstReturn('TAXPRO');
+    // } else {
+    let request: GstReconcileInvoiceRequest = new GstReconcileInvoiceRequest();
+    request.from = this.currentPeriod.from;
+    request.to = this.currentPeriod.to;
+    request.refresh = true;
+    request.action = GstReconcileActionsEnum.notfoundonportal;
+    this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
+    //  }
   }
 
   public ngOnChanges(s: SimpleChanges) {
@@ -233,7 +233,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public fileGstr3B(via) {
-    this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({from: this.currentPeriod.from, to: this.currentPeriod.to}, this.activeCompanyGstNumber, via));
+    this.store.dispatch(this._invoicePurchaseActions.FileGSTR3B({ from: this.currentPeriod.from, to: this.currentPeriod.to }, this.activeCompanyGstNumber, via));
   }
 
   public toggleCancelModel() {
