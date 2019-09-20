@@ -10,13 +10,7 @@
   background: #77a1b8;
 }
 
-.secondryDarkbg {
-  background: #c45022;
-}
 
-.secondrylightbg {
-  background: #d37c59;
-}
 
 .defaultDarkBg {
   background: #28283c;
@@ -36,10 +30,7 @@
 
 .dashboard-option li {
   list-style: none;
-  width: 100%;
-  text-align: center;
-  padding: 15px 7px;
-  color: #fff;
+
 }
 
 :host ::ng-deep perfect-scrollbar {

@@ -1,32 +1,87 @@
 <div id="pie-chart">
   <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Revenue</strong>
-      <i class="glyphicon glyphicon-refresh pull-right" (click)="refreshChart()"></i>
-    </div>
-    <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
-        <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
-      </div>
-      <ul class="dashboard-option">
-        <li class="secondryDarkbg"> This Year Total
-          <h3>{{ activeYearTotal | number:'1.2-2' }}</h3>
-        </li>
-        <li class="secondrylightbg"> Last Year Total
-          <h3>{{ lastYearTotal | number:'1.2-2' }}</h3>
-        </li>
-      </ul>
-      <div class="chart-div" google-chart chart="myChartObject">
-        <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="options"></chart>
-        </perfect-scrollbar>
+    <div class="row">
+      <div class="col-sm-9">
+        <div class="leftColumn">
+          <div class="panel-heading clearfix">
+            <div class="btn-group gstDropdown pull-left" dropdown>
+              <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
+                <span class=""> <strong>Sales</strong> </span> <span class="icon-arrow-down mrL1"></span>
+              </span>
+              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                <li role="menuitem"><a class="dropdown-item" href="#">Sales</a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Income </a></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Expenses</a></li>
+
+                <li role="menuitem"><a class="dropdown-item" href="#">Recipt</a>
+                </li>
+                <li role="menuitem"><a class="dropdown-item" href="#">Payment</a>
+                </li>
+              </ul>
+            </div>
+
+
+            <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
+
+            <span class="thisWeek pull-right">This Week <span class="icon-collapse-icon"></span> </span>
+            <ul class="dashboard-option pull-right">
+              <li class="secondryDarkbg"> <span></span> Last Week
+                <!-- <h3>{{ activeYearTotal | number:'1.2-2' }}</h3> -->
+              </li>
+              <li class="secondrylightbg"> <span></span> This Week
+                <!-- <h3>{{ lastYearTotal | number:'1.2-2' }}</h3> -->
+              </li>
+            </ul>
+
+          </div>
+          <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+              <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+              <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+            </div>
+
+            <div class="chart-div" google-chart chart="myChartObject">
+              <perfect-scrollbar [scrollIndicators]="true">
+                <chart [options]="options"></chart>
+              </perfect-scrollbar>
+
+            </div>
+
+            <!--<canvas id="pie" class="chart chart-pie" chart-data="chartData"-->
+            <!--chart-labels="labels" chart-series="series">-->
+            <!--</canvas>-->
+          </div>
+
+        </div>
+
 
       </div>
 
-      <!--<canvas id="pie" class="chart chart-pie" chart-data="chartData"-->
-      <!--chart-labels="labels" chart-series="series">-->
-      <!--</canvas>-->
+      <div class="col-sm-3">
+        <div class="total-sale-detail">
+          <div class="singleSaleDetail">
+            <p>Total Sales (this week)</p>
+            <h3>55,733.00</h3>
+          </div>
+          <div class="singleSaleDetail">
+            <p>Total Sales (last week)</p>
+            <h3>85,700.00</h3>
+          </div>
+          <div class="singleSaleDetail">
+            <p>Highest Sales</p>
+            <h3>25,900.00</h3>
+            <span>Sat (Last week)</span>
+          </div>
+          <div class="singleSaleDetail">
+            <p>Lowest Sales</p>
+            <h3>5,800.00</h3>
+            <span>Tue (This week)</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+
+
   </div>
 </div>

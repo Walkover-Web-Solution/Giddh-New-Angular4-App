@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="panel-body pos-rel">
+    <div class="panel-body pos-rel ratioAnalysisPanelBody">
       <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
         <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
@@ -18,22 +18,22 @@
           <div class="col-xs-3 text-center">
             <chart [options]="currentRatioOption" #currentRatio></chart>
             <h1 class="mrB1">Current Ratio</h1>
-            <small>Current Assets /<br/> Current Liabilities</small>
+            <small>Current Assets /<br /> Current Liabilities</small>
           </div>
           <div class="col-xs-3 text-center">
             <chart [options]="debtOptions" #debtRatio></chart>
             <h1 class="mrB1">Debt Equity Ratio</h1>
-            <small>Current Liab. + <br/> NonCurrent Liab. /<br/> Shareholder's fund</small>
+            <small>Current Liab. + <br /> NonCurrent Liab. /<br /> Shareholder's fund</small>
           </div>
           <div class="col-xs-3 text-center">
             <chart [options]="proprietaryOption" #propreitaryRatio></chart>
             <h1 class="mrB1">Proprietary Ratio</h1>
-            <small>Shareholder's fund /<br/> Total Assets</small>
+            <small>Shareholder's fund /<br /> Total Assets</small>
           </div>
           <div class="col-xs-3 text-center">
             <chart [options]="fixedAssetOption" #fixedAsset></chart>
             <h1 class="mrB1">Fixed Assets Ratio</h1>
-            <small>Fixed Assets/<br/>NonCurrent Liab. + <br/> Shareholder's fund</small>
+            <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
           </div>
 
         </perfect-scrollbar>

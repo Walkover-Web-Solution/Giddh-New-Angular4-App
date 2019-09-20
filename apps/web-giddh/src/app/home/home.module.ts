@@ -19,8 +19,8 @@ import { TotalOverduesChartComponent } from './components/total-overdues/total-o
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
-
-
+import { bankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
+import { crDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 
 export function highchartsFactory() {
   // @ts-ignore
@@ -51,6 +51,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TotalOverduesChartComponent,
     ProfitLossComponent,
     gstComponent,
+    bankAccountsComponent,
+    crDrComponent,
 
   ],
   exports: [HomeComponent],

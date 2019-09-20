@@ -15,7 +15,7 @@ import { AccountChartDataLastCurrentYear } from '../../../models/view-models/Acc
 @Component({
   selector: 'revenue-chart',
   templateUrl: 'revenue-chart.component.html',
-  styleUrls: ['../../home.component.scss']
+  styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
 })
 
 export class RevenueChartComponent implements OnInit, OnDestroy {

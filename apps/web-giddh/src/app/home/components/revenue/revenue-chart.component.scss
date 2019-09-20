@@ -1,0 +1,63 @@
+.secondryDarkbg span {
+  background: #087E7D;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+
+}
+
+.secondrylightbg span {
+  background:#0CB1AF;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+}
+.dashboard-option li {
+    padding-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dashboard-option li.secondryDarkbg{
+   color: #087E7D;
+   font-size: 14px;
+}
+.dashboard-option li.secondrylightbg{
+   color: #0CB1AF;
+   font-size: 14px;
+}
+
+.dashboard-option li h3{
+  color: #666666;
+}
+.leftColumn{
+  border-right:1px solid #ddd;
+  margin: 5px 0;
+
+}
+span.thisWeek {
+    color: #666666;
+    padding-left: 20px;
+}
+.total-sale-detail {
+    text-align: right;
+    padding-right: 11px;
+}
+.total-sale-detail p {
+    font-size: 18px;
+    color: #666;
+}
+.total-sale-detail h3 {
+    font-size: 22px;
+    color: #000000;
+}
+
+.total-sale-detail span{
+   font-size: 18px;
+    color: #000000;
+}
+.singleSaleDetail {
+    padding-top: 30px;
+}
