@@ -208,7 +208,72 @@ input {
     position: relative;
     z-index: 99999;
 }
-
+/* switch on off end */
+.toggle {
+	position: relative;
+	width: 40px;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select: none;
+}
+.toggle-checkbox {
+	display: none;
+}
+.toggle-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #adadad;
+  border-radius: 30px;
+}
+.toggle-inner {
+	display: block;
+	width: 200%;
+	margin-left: -100%;
+	transition: margin 0.3s ease-in 0s;
+}
+.toggle-inner:before,
+.toggle-inner:after {
+  display: block;
+  float: left;
+  width: 50%;
+  height: 11px;
+  padding: 0;
+  line-height: 15px;
+  font-size: 12px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+  background: #f1f1f1;
+}
+.toggle-inner:before {
+	content: "";
+	padding-left: 14px;
+}
+.toggle-inner:after {
+	content: "";
+	padding-right: 14px;
+}
+.toggle-switch {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: #bbbbbb;
+  position: absolute;
+  top: -2px;
+  bottom: 0;
+  right: 28px;
+  border-radius: 30px;
+  transition: all 0.3s ease-in 0s;
+}
+.toggle-checkbox:checked + .toggle-label .toggle-inner {
+	margin-left: 0;
+}
+.toggle-checkbox:checked + .toggle-label .toggle-switch {
+	right: 0px;
+}
+/* switch on off end */
 
 /* my css start */
 
@@ -1015,6 +1080,34 @@ modal-container.modal.fade.show {
     display: inline-block;
     max-width: 90px;
     min-width: 70px;
+}
+.input-search .input-group-addon {
+  background: #fff;
+  border-right: 0px;
+  border-color: #C6C6C6;
+  color: #A9A9A9;
+  font-size: 12px;
+  padding-top: 10px;
+  padding-right: 0px;
+  border-radius: 2px 0px 0px 2px;
+}
+.input-search .form-control {
+  background: #fff;
+  border-radius: 0px 2px 2px 0px !important;
+  border-left: 0px;
+  border-color: #C6C6C6;
+}
+.btn-filter {
+  background: #fff;
+  border: 1px solid #CBCBCB;
+  font-size: 16px;
+  padding: 4px 8px;
+  line-height: initial !important;
+  color: #989898;
+  border-radius: 2px;
+}
+.btn-filter .icon-options {
+  vertical-align: initial;
 }
 
 

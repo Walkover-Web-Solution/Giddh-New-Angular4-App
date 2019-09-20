@@ -1,0 +1,31 @@
+.upload-fil ul {
+  display: flex;
+  list-style-type: none;
+  text-align: center;
+  align-items: center;
+}
+.upload-fil ul > li {
+  padding-right: 15px;
+}
+.upload-fil ul li .upload-img {
+  width: 120px;
+  height: 120px;
+  background: #CBCBCB;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  justify-content: center;
+  font-size: 32px;
+}
+.upload-fil ul li .upload-img > a {
+  color: #999999;
+  display: block;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.upload-fil ul li .upload-img img {
+  max-height: 200px;
+}
