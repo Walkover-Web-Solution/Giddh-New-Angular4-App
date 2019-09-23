@@ -176,6 +176,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
   private modelRef: BsModalRef;
+  private modelRefExpirePlan: BsModalRef;
+  private modelRefCrossLimit: BsModalRef;
+
   private activeCompanyForDb: ICompAidata;
   private smartCombinedList$: Observable<any>;
   public isMobileSite: boolean;
@@ -1075,11 +1078,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-    this.modelRef = this.modalService.show(template);
+    this.modelRefExpirePlan = this.modalService.show(template);
   }
 
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-    this.modelRef = this.modalService.show(template);
+    this.modelRefCrossLimit = this.modalService.show(template);
   }
 
   public goToSelectPlan() {
