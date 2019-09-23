@@ -23,7 +23,7 @@
 
       <!-- region currency toggler -->
       <div class="col-sm-4 col-xs-6" *ngIf="isLedgerAccountAllowsMultiCurrency">
-        <span class="mr-1 d-inilne-block font-14">USD</span>
+        <span class="mr-1 d-inilne-block font-14">{{ accCurrencyDetails?.code }}</span>
         <div class="toggle d-inline-block" data-key="disabled">
           <input type="checkbox" class="toggle-checkbox" id="disabled">
           <label class="toggle-label" for="disabled">
@@ -31,7 +31,7 @@
             <span class="toggle-switch"></span>
           </label>
         </div>
-        <span class="ml-1 d-inline-block font-14">INR</span>
+        <span class="ml-1 d-inline-block font-14">{{ companyCurrencyDetails?.code }}</span>
 
       </div>
       <!-- endregion -->
@@ -469,6 +469,7 @@
               </div>
 
             </td>
+
             <td class="col-xs-6" data-title="Particular">
               <div class="d-flex align-items-center" style="justify-content: space-between">
 
@@ -492,10 +493,12 @@
                   </span>
               </div>
             </td>
-            <td class="col-xs-3 pos-rel text-right" data-title="Amount">
-              {{ txn.amount | giddhCurrency }}
 
-              <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
+            <td class="col-xs-3 pos-rel text-right" data-title="Amount">
+              {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
+
+              <p class="mb-0 amnt-total"
+                 *ngIf="isLedgerAccountAllowsMultiCurrency">{{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount }}</p>
             </td>
           </tr>
           <!-- endregion -->
@@ -703,7 +706,9 @@
               </div>
 
             </td>
+
             <td class="col-xs-6" data-title="Particular">
+
               <div class="d-flex align-items-center" style="justify-content: space-between">
                 <div class="ellp">
                   {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -724,11 +729,13 @@
                        style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                   </span>
               </div>
-
             </td>
+
             <td data-title="Amount" class="col-xs-3 pos-rel text-right">
-              {{txn.amount | giddhCurrency}}
-              <p class="mb-0 amnt-total">$454</p>
+              {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
+              <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount }}
+              </p>
 
             </td>
           </tr>

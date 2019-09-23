@@ -202,7 +202,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
         UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
         let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-        flattenAccountsArray[index] = updatedAccount.body;
+        let accResp = cloneDeep(updatedAccount.body);
+        accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
+        flattenAccountsArray[index] = accResp;
         return {
           ...state,
           groupswithaccounts: groupArray,

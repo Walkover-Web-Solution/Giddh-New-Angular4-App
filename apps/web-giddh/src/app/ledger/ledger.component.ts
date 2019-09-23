@@ -175,7 +175,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
   public isLedgerAccountAllowsMultiCurrency: boolean = true;
-  public accCurrency: string;
   public accCurrencyDetails: ICurrencyResponse;
   public companyCurrencyDetails: ICurrencyResponse;
 
@@ -201,6 +200,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+    this.lc.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
     this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
@@ -565,15 +565,43 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
+    observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$, this.lc.companyProfile$).subscribe(data => {
 
-      if (data[0] && data[1]) {
+      if (data[0] && data[1] && data[2]) {
+        let profile = cloneDeep(data[2]);
+        this.entryUniqueNamesForBulkAction = [];
+        this.needToShowLoader = true;
+
         let stockListFormFlattenAccount: IFlattenAccountsResultItem;
         if (data[1]) {
           stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
         }
+
         let accountDetails: AccountResponse = data[0];
         let parentOfAccount = accountDetails.parentGroups[0];
+
+        this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name);
+        this.accountUniquename = accountDetails.uniqueName;
+
+        if (this.advanceSearchComp) {
+          this.advanceSearchComp.resetAdvanceSearchModal();
+        }
+
+        if (accountDetails.yodleeAdded) {
+          this.getBankTransactions();
+        } else {
+          this.hideEledgerWrap();
+        }
+
+        this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
+        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+
+        this.companyCurrencyDetails = {code: profile.baseCurrency, symbol: profile.baseCurrencySymbol};
+        if (this.isLedgerAccountAllowsMultiCurrency) {
+          this.accCurrencyDetails = {code: accountDetails.currency, symbol: accountDetails.currencySymbol};
+        } else {
+          this.accCurrencyDetails = this.companyCurrencyDetails;
+        }
 
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
@@ -646,43 +674,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
       });
 
-    this.lc.activeAccount$.subscribe(acc => {
-      if (acc) {
-        // need to clear selected entries when account changes
-        this.entryUniqueNamesForBulkAction = [];
-        this.needToShowLoader = true;
-        this.lc.getUnderstandingText(acc.accountType, acc.name);
-        this.accountUniquename = acc.uniqueName;
-        // this.getInvoiveLists({accountUniqueName: acc.uniqueName, status: 'unpaid'});
-
-        if (this.advanceSearchComp) {
-          this.advanceSearchComp.resetAdvanceSearchModal();
-        }
-        // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
-      }
-    });
-
-    // get A/c details
-    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-      if (data) {
-        if (data.yodleeAdded) {
-          this.getBankTransactions();
-        }
-        if (data.parentGroups && data.parentGroups.length) {
-          let findCashOrBankIndx = data.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
-          if (findCashOrBankIndx !== -1) {
-            this.isBankOrCashAccount = true;
-          } else {
-            this.isBankOrCashAccount = false;
-          }
-        }
-        // if (data.currency) {
-        //   this.accountBaseCurrency = data.currency;
-        // }
-      } else {
-        this.hideEledgerWrap();
-      }
-    });
+    // this.lc.activeAccount$.subscribe(acc => {
+    //   if (acc) {
+    //     // need to clear selected entries when account changes
+    //     this.entryUniqueNamesForBulkAction = [];
+    //     this.needToShowLoader = true;
+    //     this.lc.getUnderstandingText(acc.accountType, acc.name);
+    //     this.accountUniquename = acc.uniqueName;
+    //
+    //     if (this.advanceSearchComp) {
+    //       this.advanceSearchComp.resetAdvanceSearchModal();
+    //     }
+    //
+    //     if (acc.yodleeAdded) {
+    //       this.getBankTransactions();
+    //     } else {
+    //       this.hideEledgerWrap();
+    //     }
+    //
+    //     if (acc.parentGroups && acc.parentGroups.length) {
+    //       let findCashOrBankIndx = acc.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
+    //       this.isBankOrCashAccount = findCashOrBankIndx !== -1;
+    //     }
+    //   }
+    // });
 
     this.store.select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
       if (yesOrNo) {

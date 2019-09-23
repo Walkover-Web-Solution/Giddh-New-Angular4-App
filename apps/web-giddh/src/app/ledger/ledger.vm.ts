@@ -19,6 +19,7 @@ export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
   public transactionData$: Observable<TransactionsResponse>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public companyProfile$: Observable<any>;
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
