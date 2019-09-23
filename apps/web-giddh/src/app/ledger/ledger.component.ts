@@ -174,6 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+  public isLedgerAccountAllowsMultiCurrency: boolean = true;
   public accCurrency: string;
   public accCurrencyDetails: ICurrencyResponse;
   public companyCurrencyDetails: ICurrencyResponse;
@@ -228,11 +229,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   condition2: boolean = false;
 
   toggleShow() {
-    this.condition= this.condition ?false:true;
-    this.condition2= this.condition ?false:true;
+    this.condition = this.condition ? false : true;
+    this.condition2 = this.condition ? false : true;
 
-    this.Shown = this.Shown ?false:true;
-    this.isHide = this.isHide ?false:true;
+    this.Shown = this.Shown ? false : true;
+    this.isHide = this.isHide ? false : true;
   }
 
 
@@ -313,7 +314,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
               stockUnitCode: fa.additional.stock.stockUnit.name,
               code: fa.additional.stock.stockUnit.code,
               rate: 0,
-              name:fa.additional.stock.stockUnit.name
+              name: fa.additional.stock.stockUnit.name
             };
             if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
               let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
@@ -468,7 +469,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-        this.isCompanyCreated$.subscribe(s => {
+        this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
           if (!s) {
             this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             if (this.trxRequest && this.trxRequest.q) {
@@ -650,17 +651,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
     });
-
-    // search
-    // Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
-    //   .debounceTime(700)
-    //   .distinctUntilChanged()
-    //   .map((e: any) => e.target.value)
-    //   .subscribe(term => {
-    //     this.trxRequest.q = term;
-    //     this.trxRequest.page = 0;
-    //     this.getTransactionData();
-    //   });
 
     this.searchTermStream.pipe(
       debounceTime(700),

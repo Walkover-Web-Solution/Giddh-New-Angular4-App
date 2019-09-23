@@ -22,7 +22,7 @@
       <!--</div>-->
 
       <!-- region currency toggler -->
-      <div class="col-sm-4 col-xs-6">
+      <div class="col-sm-4 col-xs-6" *ngIf="isLedgerAccountAllowsMultiCurrency">
         <span class="mr-1 d-inilne-block font-14">USD</span>
         <div class="toggle d-inline-block" data-key="disabled">
           <input type="checkbox" class="toggle-checkbox" id="disabled">
