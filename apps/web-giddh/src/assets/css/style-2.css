@@ -7505,6 +7505,10 @@ span.red-text {
     word-break: break-word;
 }
 
+.unvisible {
+    visibility: hidden !important;
+}
+
 
 /* responsive */
 
