@@ -70,7 +70,7 @@
 }
 
 /* class name same as what we are getting data */
- 
+
 .Inward.Note {
   color: #229e2b;
 }
@@ -79,7 +79,7 @@
 }
 .Transfer.Note {
   color: #666666;
-} 
+}
 
 
 
@@ -99,6 +99,14 @@
   }
   .pull-right {
     margin-top: 5px;
+  }
+}
+.btn-group-voucher-type {
+  button {
+    i.fa.fa-ellipsis-v {
+      position: absolute;
+      right: 0;
+    }
   }
 }
 .voucher-type {
