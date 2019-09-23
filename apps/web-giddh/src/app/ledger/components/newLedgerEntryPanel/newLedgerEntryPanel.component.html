@@ -52,7 +52,8 @@
             <label>Price</label>
             <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
-            <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 3259.56</p>
+            <p class="mb-0 amnt-total pr-1 pl-1">
+              {{ accCurrencyDetails?.symbol }} 3259.56</p>
           </td>
 
           <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
@@ -65,7 +66,8 @@
             <input type="text" name="" class="form-control text-right" prefix="$" [mask]="inputMaskFormat"
                    [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
-            <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> 3259.56</p>
+            <p class="mb-0 amnt-total pr-1 pl-1">
+              {{ accCurrencyDetails?.symbol }} 3259.56</p>
           </td>
 
           <td class="text-center table-minus" *ngIf="(discountAccountsList$ | async)?.length">
@@ -79,8 +81,8 @@
                              [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
                              (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
             </ledger-discount>
-            <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i
-              class="icon-rupees font-10"></i> {{ currentTxn.convertedDiscount }}</p>
+            <p class="mb-0 amnt-total pr-1 pl-1">
+              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedDiscount }}</p>
           </td>
 
           <td class="text-center equal-2"
@@ -102,8 +104,8 @@
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
-            <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i
-              class="icon-rupees font-10"></i> {{ currentTxn.convertedTax }}</p>
+            <p  class="mb-0 amnt-total pr-1 pl-1">
+              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedTax }}</p>
           </td>
 
           <td class="text-center equal-2">
@@ -115,7 +117,8 @@
             <label class="primary_clr">Total</label>
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
-            <p *ngIf="totalPrice" class="mb-0 amnt-total pr-1 pl-1"><i class="icon-rupees font-10"></i> {{ currentTxn.convertedTotal }}</p>
+            <p class="mb-0 amnt-total pr-1 pl-1">
+              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedTotal }}</p>
           </td>
 
         </tr>
@@ -318,13 +321,13 @@
 
     <div class="row">
 
-      <div class="col-xs-12 pdT1 form-inline text-right"
-           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">
-        <input type="text" class="form-control max100 text-right" name="multicurrency"
-               [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>
-        <label>
-          ({{currentTxn.selectedAccount?.currency}})</label>
-      </div>
+<!--      <div class="col-xs-12 pdT1 form-inline text-right"-->
+<!--           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">-->
+<!--        <input type="text" class="form-control max100 text-right" name="multicurrency"-->
+<!--               [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>-->
+<!--        <label>-->
+<!--          ({{currentTxn.selectedAccount?.currency}})</label>-->
+<!--      </div>-->
 
       <div class="col-xs-12 clearfix mrT1">
         <div class="mrR1 form-group pull-left cp">
@@ -343,19 +346,20 @@
           </div>
 
           <div class="clearfix">
-            <p class="primary_clr" *ngIf="totalPrice">Total in INR: <i class="icon-rupees font-12"></i> 32564.97</p>
+            <p class="primary_clr">Total in {{ accCurrencyDetails?.code }}:
+              {{ accCurrencyDetails?.symbol }} 32564.97</p>
           </div>
         </div>
       </div>
 
       <div class="clearfix">
-        <div class="pull-left pl-15" *ngIf="totalPrice">
+        <div class="pull-left pl-15">
           <ul class="list-inline font-14">
-            <li>1 USD</li>
+            <li>1 {{ accCurrencyDetails?.code }}</li>
             <li>
               <a class="text-light" href="javascript:void(0)"><i class="icon-switch-icon font-16"></i></a>
             </li>
-            <li><input class="price-input" value="71.9034" type="text"> INR</li>
+            <li><input class="price-input" value="71.9034" type="text"> {{ companyCurrencyDetails?.code }}</li>
           </ul>
         </div>
 

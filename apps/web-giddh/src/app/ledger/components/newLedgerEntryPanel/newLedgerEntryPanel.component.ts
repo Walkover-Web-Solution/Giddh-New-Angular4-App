@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { CompanyActions } from '../../../actions/company.actions';
-import { TaxResponse } from '../../../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
@@ -64,6 +64,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public trxRequest: AdvanceSearchRequest;
   @Input() public invoiceList: any[];
   @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  @Input() public accCurrencyDetails: ICurrencyResponse;
+  @Input() public companyCurrencyDetails: ICurrencyResponse;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -80,8 +82,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
-
-  totalPrice: boolean = true;
 
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
@@ -117,11 +117,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public companyTaxesList: TaxResponse[] = [];
   public totalTdElementWidth: number = 0;
   public inputMaskFormat: string = '';
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  private currentBaseCurrency: string;
-  private currencyRateResponse: any;
+
   private fetchedBaseCurrency: string = null;
   private fetchedConvertToCurrency: string = null;
   private fetchedConvertedRate: number = null;
@@ -185,20 +185,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
           this.currentAccountApplicableTaxes = appTaxes;
         }
-        if (acc.currency) {
-          this.accountBaseCurrency = acc.currency;
-        }
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-          if (!_.isEmpty(o)) {
-            let companyProfile = _.cloneDeep(o);
-            if (companyProfile.isMultipleCurrency && !acc.currency) {
-              this.accountBaseCurrency = companyProfile.baseCurrency || 'INR';
-            }
-            this.companyCurrency = companyProfile.baseCurrency || 'INR';
-          } else {
-            this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
-          }
-        });
       }
     });
 

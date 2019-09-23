@@ -509,8 +509,11 @@
         <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
                (clickOutside)="hideNewLedgerEntryPopup($event)">
           <tbody>
+
           <tr *ngFor="let txn of lc.blankLedger.transactions;">
+
             <td class="width100" *ngIf="txn.type === 'DEBIT'">
+
               <table class="width100">
                 <tbody class="ledger-main">
                 <tr class="ledger-row" container="body">
@@ -585,12 +588,14 @@
 
                 </tbody>
               </table>
+
               <!--new ledge popup-->
               <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
                    *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
-                                        [tcsOrTds]="tcsOrTds"
+                                        [tcsOrTds]="tcsOrTds" [accCurrencyDetails]="accCurrencyDetails"
+                                        [companyCurrencyDetails]="companyCurrencyDetails"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
@@ -747,8 +752,11 @@
         <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
                (click)="$event.stopPropagation()">
           <tbody>
+
           <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="$event.stopPropagation()">
+
             <td class="width100" *ngIf="txn.type === 'CREDIT'">
+
               <table class="width100 h-table">
                 <tbody class="ledger-main">
                 <tr class="ledger-row" container="body" (keydown)="$event.stopPropagation()">
@@ -831,7 +839,8 @@
                    *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
-                                        [tcsOrTds]="tcsOrTds"
+                                        [tcsOrTds]="tcsOrTds" [accCurrencyDetails]="accCurrencyDetails"
+                                        [companyCurrencyDetails]="companyCurrencyDetails"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
