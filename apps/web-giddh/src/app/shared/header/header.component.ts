@@ -358,7 +358,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (this.selectedPlanStatus === 'expired') {// active expired
       this.openExpiredPlanModel(this.expiredPlanModel);
     }
-    if (true) { // this.isSubscribedPlanHaveAdditnlChrgs
+    if (this.isSubscribedPlanHaveAdditnlChrgs) {
       this.openCrossedTxLimitModel(this.crossedTxLimitModel);
     }
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
