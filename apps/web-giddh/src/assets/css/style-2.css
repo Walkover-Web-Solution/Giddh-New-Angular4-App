@@ -1602,7 +1602,7 @@ p.table-email {
 .basic>thead>tr>th {
     font-weight: 400;
     padding: 8px 8px;
-    text-transform: capitalize;
+    text-transform: none;
 }
 
 
@@ -7543,6 +7543,12 @@ color: #484848;
 .total-salesTabs .nav-tabs>li>a{
   border:none;
 }
+
+.unvisible {
+    visibility: hidden !important;
+}
+
+
 /* responsive */
 
 @media (max-width: 1440px) {
