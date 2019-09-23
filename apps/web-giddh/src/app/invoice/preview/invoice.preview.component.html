@@ -197,8 +197,8 @@
         </div>
     </div>
 
-    <perfect-scrollbar [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
-        <table class="table basic table-bordered mrT2 invoice-table desktopTable">
+<!--    <perfect-scrollbar [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">-->
+        <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
 
             <!--sales-->
             <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales'">
@@ -526,7 +526,7 @@
 
         </table>
 
-    </perfect-scrollbar>
+<!--    </perfect-scrollbar>-->
 
 
     <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
