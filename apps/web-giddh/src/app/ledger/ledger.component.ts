@@ -636,6 +636,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.searchTermStream.pipe(
+      debounceTime(700),
+      distinctUntilChanged())
+      .subscribe(term => {
+        this.trxRequest.q = term;
+        this.trxRequest.page = 0;
+        this.needToShowLoader = false;
+        this.getTransactionData();
+      });
+
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
         // need to clear selected entries when account changes
@@ -651,16 +661,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // this.store.dispatch(this._ledgerActions.GetUnpaidInvoiceListAction({accountUniqueName: acc.uniqueName, status: 'unpaid'}));
       }
     });
-
-    this.searchTermStream.pipe(
-      debounceTime(700),
-      distinctUntilChanged())
-      .subscribe(term => {
-        this.trxRequest.q = term;
-        this.trxRequest.page = 0;
-        this.needToShowLoader = false;
-        this.getTransactionData();
-      });
 
     // get A/c details
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
