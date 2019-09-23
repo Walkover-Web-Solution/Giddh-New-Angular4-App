@@ -541,7 +541,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (txnBalance) {
         this.lc.calculateReckonging(txnBalance);
         this._cdRf.detectChanges();
-
       }
     });
 
