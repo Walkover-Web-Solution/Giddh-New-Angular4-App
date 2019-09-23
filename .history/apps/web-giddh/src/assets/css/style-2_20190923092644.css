@@ -1109,22 +1109,7 @@ modal-container.modal.fade.show {
 .btn-filter .icon-options {
   vertical-align: initial;
 }
-.dot-icon {
-  display: inline-block;
-  width: 11px;
-  height: 11px;
-  border-radius: 90px;
-  margin-right: 5px;
-}
-.dot-warning {
-  background: #FED46A;
-}
-.dot-primary {
-  background: #4693F1;
-}
-.dot-success {
-  background: #2DAA4A;
-}
+
 
 /* my css end */
 

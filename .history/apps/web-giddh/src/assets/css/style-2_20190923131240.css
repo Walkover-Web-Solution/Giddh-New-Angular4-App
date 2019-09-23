@@ -1114,16 +1114,15 @@ modal-container.modal.fade.show {
   width: 11px;
   height: 11px;
   border-radius: 90px;
-  margin-right: 5px;
 }
 .dot-warning {
   background: #FED46A;
 }
 .dot-primary {
-  background: #4693F1;
+  background: #FED46A;
 }
 .dot-success {
-  background: #2DAA4A;
+  background: #FED46A;
 }
 
 /* my css end */

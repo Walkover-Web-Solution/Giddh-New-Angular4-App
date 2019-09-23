@@ -90,12 +90,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     });
 
 
-    this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
+    // this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
     // this.breakpointObserver.observe([
     //   '(max-width: 1023px)'
     // ]).subscribe(result => {
     //   this.changeOnMobileView(result.matches);
-    // });
+    });
 
   }
 
