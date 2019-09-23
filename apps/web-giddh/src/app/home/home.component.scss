@@ -62,10 +62,10 @@ span.icon-info-icon {
     margin-right: 10px;
 }
 .dropdown-menu{
-      border: 1px solid #5B64C9;
+      border: 1px solid #D9D9D9;
 }
 a.dropdown-item{
-  color:#1A237E;
+  color:#484848;
 }
 
 a.dropdown-item:hover {
@@ -74,4 +74,10 @@ a.dropdown-item:hover {
 }
 .dashboard-notification {
     margin-bottom: 20px;
+}
+.panel-heading {
+    padding: 15px 15px;
+}
+.basic>tbody>tr:hover td {
+    background: transparent;
 }

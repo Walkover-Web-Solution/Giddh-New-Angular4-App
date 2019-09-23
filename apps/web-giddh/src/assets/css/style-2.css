@@ -7503,8 +7503,46 @@ span.red-text {
     white-space: pre-line;
     word-break: break-word;
 }
-
-
+.total-salesTabs .nav.nav-tabs{
+  position: absolute;
+  top:0;
+  right: 12px;
+}
+.total-salesTabs .nav-tabs {
+    border-bottom: none;
+}
+.total-salesTabs .nav-tabs li a {
+color: #484848;
+    font-size: 16px;
+    padding: 0 5px;
+    position: relative;
+}
+.total-salesTabs .nav-tabs li a:after{
+  position: absolute;
+  content: '';
+    height: 15px;
+    width: 1px;
+    background-color: #484848;
+    right: 0;
+    top: 5px;
+}
+.total-salesTabs .nav-tabs li:last-child a:after{
+  display: none;
+}
+.total-salesTabs .nav-tabs>li.active a {
+    font-family: 'LatoWebBold';
+}
+.total-salesTabs .nav-tabs>li.active>a, .total-salesTabs .nav-tabs>li.active>a:focus, .total-salesTabs .nav-tabs>li.active>a:hover{
+  border:none;
+}
+.total-salesTabs  .nav>li>a:focus, .total-salesTabs  .nav>li>a:hover {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+}
+.total-salesTabs .nav-tabs>li>a{
+  border:none;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

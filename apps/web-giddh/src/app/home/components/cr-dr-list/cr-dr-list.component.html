@@ -1,5 +1,3 @@
-works
-
 <div id="live">
   <div class="panel panel-default">
 
@@ -9,22 +7,59 @@ works
           <span class=""> <strong>Top 5</strong> </span> <span class="icon-arrow-down mrL1"></span>
         </span>
         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-          <li role="menuitem"><a class="dropdown-item" href="#">Sales</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Income </a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Expenses</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="#">Top 5</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="#">Top 10 </a></li>
 
-          <li role="menuitem"><a class="dropdown-item" href="#">Recipt</a>
-          </li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Payment</a>
-          </li>
         </ul>
       </div>
-
+      <span class="thisWeek pull-right">September 2019 <span class="icon-collapse-icon mrL1"></span> </span>
 
     </div>
 
-    <div class="panel-body pos-rel">
+    <div class="cr-dr-body pos-rel">
+      <div class="top-five-cr-dr-table">
+        <div class="table-responsive debtorsTable">
+          <table class="table basic ">
+            <thead>
+              <th>Debtors (Customers)</th>
+              <th>Invoiced on</th>
+              <th class="text-right">Bill Amount</th>
+              <th class="text-right">Due as on 31 Sep19</th>
 
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let addTableData of addTableData">
+                <td> {{ addTableData.Debetors }} </td>
+                <td> {{ addTableData.InvoicedOn }} </td>
+                <td class="text-right"> {{ addTableData.BillAmount }} </td>
+                <td class="text-right"> {{ addTableData.DueAs }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive credtorsTable">
+          <table class="table basic ">
+            <thead>
+              <th>Creditors (Vendors)</th>
+              <th>Invoiced on</th>
+              <th class="text-right">Bill Amount</th>
+              <th class="text-right">Due as on 31 Sep19</th>
+
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let addTableData of addTableData">
+                <td> {{ addTableData.Debetors }} </td>
+                <td> {{ addTableData.InvoicedOn }} </td>
+                <td class="text-right"> {{ addTableData.BillAmount }} </td>
+                <td class="text-right"> {{ addTableData.DueAs }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
 
 

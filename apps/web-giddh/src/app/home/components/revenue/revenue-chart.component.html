@@ -23,7 +23,8 @@
 
             <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
 
-            <span class="thisWeek pull-right">This Week <span class="icon-collapse-icon"></span> </span>
+            <span class="thisWeek pull-right">This Week <span class="icon-collapse-icon mrL1"
+                [routerLink]="['total-sales']"></span> </span>
             <ul class="dashboard-option pull-right">
               <li class="secondryDarkbg"> <span></span> Last Week
                 <!-- <h3>{{ activeYearTotal | number:'1.2-2' }}</h3> -->
