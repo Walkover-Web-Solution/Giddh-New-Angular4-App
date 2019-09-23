@@ -1603,7 +1603,7 @@ p.table-email {
 .basic>thead>tr>th {
     font-weight: 400;
     padding: 8px 8px;
-    text-transform: capitalize;
+    text-transform: none;
 }
 
 
