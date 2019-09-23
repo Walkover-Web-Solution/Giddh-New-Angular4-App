@@ -562,7 +562,7 @@ Create Company
 <ng-template #expiredPlanModel>
     <div class="modal-header">
         <h3 class="modal-title pull-left">Ready to upgrade subscription</h3>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modelRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modelRefExpirePlan.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
@@ -580,7 +580,7 @@ Create Company
                 <li>
                     <button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button>
                 </li>
-                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRef.hide();"> Contact
+                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRefExpirePlan.hide();"> Contact
             Us</a></li>
             </ul>
         </div>
@@ -590,7 +590,7 @@ Create Company
 <ng-template #crossedTxLimitModel>
     <div class="modal-header">
         <h3 class="modal-title pull-left">Ready to upgrade subscription</h3>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modelRef.hide()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modelRefCrossLimit.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
@@ -605,7 +605,7 @@ Create Company
                 <li>
                     <button class="btn btn-blue" (click)="goToSelectPlan();">Buy Plan</button>
                 </li>
-                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRef.hide();"> Contact
+                <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer" (click)="openScheduleModal();modelRefCrossLimit.hide();"> Contact
             Us</a></li>
             </ul>
         </div>
