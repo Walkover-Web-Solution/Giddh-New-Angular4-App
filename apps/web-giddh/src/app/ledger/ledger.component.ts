@@ -175,8 +175,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
   public isLedgerAccountAllowsMultiCurrency: boolean = true;
-  public accCurrencyDetails: ICurrencyResponse;
-  public companyCurrencyDetails: ICurrencyResponse;
+  public baseCurrencyDetails: ICurrencyResponse;
+  public foreignCurrencyDetails: ICurrencyResponse;
+  public currencyTogglerModel: boolean = false;
+  public selectedCurrency: 0 | 1 = 0;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -221,8 +223,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.ledgerTxnBalance$ = this.store.select(p => p.ledger.ledgerTransactionsBalance).pipe(takeUntil(this.destroyed$));
   }
 
-  totalPrice: boolean = true;
-
   Shown: boolean = true;
   isHide: boolean = false;
   condition: boolean = true;
@@ -235,7 +235,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.Shown = this.Shown ? false : true;
     this.isHide = this.isHide ? false : true;
   }
-
 
   public selectCompoundEntry(txn: ITransactionItem) {
     this.lc.currentBlankTxn = null;
@@ -596,12 +595,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
 
-        this.companyCurrencyDetails = {code: profile.baseCurrency, symbol: profile.baseCurrencySymbol};
+        this.foreignCurrencyDetails = {code: profile.baseCurrency, symbol: profile.baseCurrencySymbol};
         if (this.isLedgerAccountAllowsMultiCurrency) {
-          this.accCurrencyDetails = {code: accountDetails.currency, symbol: accountDetails.currencySymbol};
+          this.baseCurrencyDetails = {code: accountDetails.currency, symbol: accountDetails.currencySymbol};
         } else {
-          this.accCurrencyDetails = this.companyCurrencyDetails;
+          this.baseCurrencyDetails = this.foreignCurrencyDetails;
         }
+        this.selectedCurrency = 0;
 
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
@@ -673,31 +673,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.needToShowLoader = false;
         this.getTransactionData();
       });
-
-    // this.lc.activeAccount$.subscribe(acc => {
-    //   if (acc) {
-    //     // need to clear selected entries when account changes
-    //     this.entryUniqueNamesForBulkAction = [];
-    //     this.needToShowLoader = true;
-    //     this.lc.getUnderstandingText(acc.accountType, acc.name);
-    //     this.accountUniquename = acc.uniqueName;
-    //
-    //     if (this.advanceSearchComp) {
-    //       this.advanceSearchComp.resetAdvanceSearchModal();
-    //     }
-    //
-    //     if (acc.yodleeAdded) {
-    //       this.getBankTransactions();
-    //     } else {
-    //       this.hideEledgerWrap();
-    //     }
-    //
-    //     if (acc.parentGroups && acc.parentGroups.length) {
-    //       let findCashOrBankIndx = acc.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
-    //       this.isBankOrCashAccount = findCashOrBankIndx !== -1;
-    //     }
-    //   }
-    // });
 
     this.store.select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
       if (yesOrNo) {
@@ -954,7 +929,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           if (!cls) {
             return;
           }
-          return cls.contains('chkclrbsdp');
+          return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
         });
 
         if (notClose) {
@@ -1470,6 +1445,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   // endregion
+
+  public toggleCurrency(res) {
+    if (res instanceof Object) {
+      this.selectedCurrency = res.target.checked ? 1 : 0;
+    } else {
+      this.selectedCurrency = res;
+    }
+    this.currencyTogglerModel = this.selectedCurrency === 1;
+  }
 
   public getAdvanceSearchTxn() {
     this.isAdvanceSearchImplemented = true;

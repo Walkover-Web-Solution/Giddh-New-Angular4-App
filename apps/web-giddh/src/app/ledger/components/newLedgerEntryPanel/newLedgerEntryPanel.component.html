@@ -53,7 +53,9 @@
             <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="4"
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
-              {{ accCurrencyDetails?.symbol }} 3259.56</p>
+              <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+              3259.56
+            </p>
           </td>
 
           <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
@@ -67,7 +69,9 @@
                    [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
-              {{ accCurrencyDetails?.symbol }} 3259.56</p>
+              <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+              3259.56
+            </p>
           </td>
 
           <td class="text-center table-minus" *ngIf="(discountAccountsList$ | async)?.length">
@@ -82,7 +86,8 @@
                              (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
             </ledger-discount>
             <p class="mb-0 amnt-total pr-1 pl-1">
-              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedDiscount }}</p>
+              <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+              {{ currentTxn.convertedDiscount }}</p>
           </td>
 
           <td class="text-center equal-2"
@@ -104,8 +109,9 @@
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
-            <p  class="mb-0 amnt-total pr-1 pl-1">
-              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedTax }}</p>
+            <p class="mb-0 amnt-total pr-1 pl-1">
+              <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+              {{ currentTxn.convertedTax }}</p>
           </td>
 
           <td class="text-center equal-2">
@@ -118,7 +124,8 @@
             <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
-              {{ accCurrencyDetails?.symbol }} {{ currentTxn.convertedTotal }}</p>
+              <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+              {{ currentTxn.convertedTotal }}</p>
           </td>
 
         </tr>
@@ -173,7 +180,11 @@
         </td>
         <td class="text-right">
           <span
-            class="primary_clr"><!-- Compound Total: --> Total in USD: {{ blankLedger.compoundTotal | giddhCurrency }}</span>
+            class="primary_clr">
+            Total in {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
+            <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+            {{ blankLedger.compoundTotal | giddhCurrency }}
+          </span>
         </td>
       </tr>
 
@@ -321,13 +332,13 @@
 
     <div class="row">
 
-<!--      <div class="col-xs-12 pdT1 form-inline text-right"-->
-<!--           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">-->
-<!--        <input type="text" class="form-control max100 text-right" name="multicurrency"-->
-<!--               [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>-->
-<!--        <label>-->
-<!--          ({{currentTxn.selectedAccount?.currency}})</label>-->
-<!--      </div>-->
+      <!--      <div class="col-xs-12 pdT1 form-inline text-right"-->
+      <!--           *ngIf="companyIsMultiCurrency && currentTxn.selectedAccount && currentTxn.selectedAccount?.currency !== this.accountBaseCurrency">-->
+      <!--        <input type="text" class="form-control max100 text-right" name="multicurrency"-->
+      <!--               [(ngModel)]="currentTxn.convertedAmount" [placeholder]="''" decimalDigitsDirective [DecimalPlaces]="2"/>-->
+      <!--        <label>-->
+      <!--          ({{currentTxn.selectedAccount?.currency}})</label>-->
+      <!--      </div>-->
 
       <div class="col-xs-12 clearfix mrT1">
         <div class="mrR1 form-group pull-left cp">
@@ -346,20 +357,34 @@
           </div>
 
           <div class="clearfix">
-            <p class="primary_clr">Total in {{ accCurrencyDetails?.code }}:
-              {{ accCurrencyDetails?.symbol }} 32564.97</p>
+            <p class="primary_clr">Total
+              in {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}:
+              {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
+              32564.97
+            </p>
           </div>
+
         </div>
       </div>
 
       <div class="clearfix">
+
         <div class="pull-left pl-15">
+
           <ul class="list-inline font-14">
-            <li>1 {{ accCurrencyDetails?.code }}</li>
+            <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+
             <li>
-              <a class="text-light" href="javascript:void(0)"><i class="icon-switch-icon font-16"></i></a>
+              <a class="text-light" href="javascript:void(0)"
+                 (click)="currencyChangeEvent.emit(selectedCurrency === 0 ? 1 : 0)">
+                <i class="icon-switch-icon font-16"></i>
+              </a>
             </li>
-            <li><input class="price-input" value="71.9034" type="text"> {{ companyCurrencyDetails?.code }}</li>
+
+            <li><input class="price-input" value="71.9034"
+                       type="text"> {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+            </li>
+
           </ul>
         </div>
 
@@ -432,3 +457,11 @@
                                   (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);">
 </app-aside-menu-sales-other-taxes>
 <!--</ng-template>-->
+
+<ng-template #totalWithCurrencySymbol>
+
+  <span>
+    {{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}
+  </span>
+
+</ng-template>

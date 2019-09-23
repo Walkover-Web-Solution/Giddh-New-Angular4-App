@@ -64,8 +64,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public trxRequest: AdvanceSearchRequest;
   @Input() public invoiceList: any[];
   @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-  @Input() public accCurrencyDetails: ICurrencyResponse;
-  @Input() public companyCurrencyDetails: ICurrencyResponse;
+  @Input() public baseCurrencyDetails: ICurrencyResponse;
+  @Input() public foreignCurrencyDetails: ICurrencyResponse;
+  @Input() public selectedCurrency: 0 | 1;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -75,6 +76,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
+  @Output() public currencyChangeEvent: EventEmitter<0 | 1> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -120,7 +122,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
 
   private fetchedBaseCurrency: string = null;
   private fetchedConvertToCurrency: string = null;
@@ -656,7 +657,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!cls) {
           return;
         }
-        return cls.contains('chkclrbsdp');
+        return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
       });
 
       if (notClose) {

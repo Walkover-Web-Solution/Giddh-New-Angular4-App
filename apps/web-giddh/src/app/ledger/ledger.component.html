@@ -21,17 +21,23 @@
       <!--</div>-->
       <!--</div>-->
 
-      <!-- region currency toggler -->
+      <!-- region currency toggle -->
       <div class="col-sm-4 col-xs-6" *ngIf="isLedgerAccountAllowsMultiCurrency">
-        <span class="mr-1 d-inilne-block font-14">{{ accCurrencyDetails?.code }}</span>
-        <div class="toggle d-inline-block" data-key="disabled">
-          <input type="checkbox" class="toggle-checkbox" id="disabled">
+
+        <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+
+        <div class="toggle d-inline-block currencyToggler" data-key="disabled">
+
+          <input type="checkbox" class="toggle-checkbox" id="disabled" [(ngModel)]="currencyTogglerModel" (change)="toggleCurrency($event)">
+
           <label class="toggle-label" for="disabled">
             <span class="toggle-inner"></span>
             <span class="toggle-switch"></span>
           </label>
+
         </div>
-        <span class="ml-1 d-inline-block font-14">{{ companyCurrencyDetails?.code }}</span>
+
+        <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
 
       </div>
       <!-- endregion -->
@@ -594,14 +600,16 @@
                    *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
-                                        [tcsOrTds]="tcsOrTds" [accCurrencyDetails]="accCurrencyDetails"
-                                        [companyCurrencyDetails]="companyCurrencyDetails"
+                                        [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        [selectedCurrency]="selectedCurrency"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (currencyChangeEvent)="toggleCurrency($event)"
                                         [invoiceList]="invoiceList">
                 </new-ledger-entry-panel>
               </div>
@@ -839,14 +847,16 @@
                    *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
-                                        [tcsOrTds]="tcsOrTds" [accCurrencyDetails]="accCurrencyDetails"
-                                        [companyCurrencyDetails]="companyCurrencyDetails"
+                                        [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        [selectedCurrency]="selectedCurrency"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (currencyChangeEvent)="toggleCurrency($event)"
                                         [invoiceList]="invoiceList">
                 </new-ledger-entry-panel>
               </div>
