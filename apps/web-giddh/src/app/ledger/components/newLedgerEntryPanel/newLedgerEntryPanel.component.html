@@ -55,7 +55,7 @@
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-              3259.56
+              {{ currentTxn.convertedRate }}
             </p>
           </td>
 
@@ -72,7 +72,7 @@
                    (keyup)="amountChanged();calculateTotal()"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-              3259.56
+              {{ currentTxn.convertedAmount }}
             </p>
           </td>
 

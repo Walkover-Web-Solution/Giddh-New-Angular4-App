@@ -201,14 +201,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       }
     })).pipe(takeUntil(this.destroyed$));
 
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
-      if (s) {
-        this.companyIsMultiCurrency = s.isMultipleCurrency;
-      } else {
-        this.companyIsMultiCurrency = false;
-      }
-    });
-
     // for tcs and tds identification
     if (this.tcsOrTds === 'tcs') {
       this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
@@ -303,11 +295,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     // this.cdRef.markForCheck();
   }
 
-  /**
-   *
-   * @param {string} type
-   * @param {Event} e
-   */
   public addToDrOrCr(type: string, e: Event) {
     this.changeTransactionType.emit(type);
     e.stopPropagation();
@@ -319,6 +306,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
     this.currentTxn.tax = ((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100);
+    this.currentTxn.convertedTax = this.currentTxn.tax * this.blankLedger.exchangeRate;
     this.calculateTotal();
   }
 
@@ -334,6 +322,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
       this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), 2);
+      this.currentTxn.convertedTotal = this.currentTxn.total * this.blankLedger.exchangeRate;
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     this.calculateCompoundTotal();
@@ -347,6 +336,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
           this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+          this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
         }
       }
     }
@@ -361,8 +351,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changePrice(val: string) {
     this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
+    this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
+
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    // this.amountChanged();
+    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
@@ -370,6 +363,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
+    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
     // this.amountChanged();
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -422,6 +416,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
       (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), 2);
+    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
 
     if (this.discountControl) {
       this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -436,6 +431,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
         this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+        this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
       }
     }
     this.calculateCompoundTotal();
@@ -459,7 +455,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), 2);
     }
     if (this.currentTxn && this.currentTxn.selectedAccount) {
-      this.calculateConversionRate();
+      // this.calculateConversionRate();
     }
   }
 
@@ -467,9 +463,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.saveBlankLedger.emit(true);
   }
 
-  /**
-   * reset panel form
-   */
   public resetPanel() {
     this.resetBlankLedger.emit(true);
     this.currentTxn = null;
@@ -697,32 +690,26 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  /**
-   * calculateConversionRate
-   */
   public calculateConversionRate(): void {
     this.currentTxn.convertedAmount = giddhRoundOff((this.currentTxn.total * this.currentTxn.selectedAccount.conversionRate), 2);
   }
 
-  /**
-   * checkForCurrency
-   */
-  public checkForCurrency(currency) {
-    if (!currency && this.companyCurrency) {
-      return this.companyCurrency;
-    } else {
-      return currency;
-    }
-  }
+  // public checkForCurrency(currency) {
+  //   if (!currency && this.companyCurrency) {
+  //     return this.companyCurrency;
+  //   } else {
+  //     return currency;
+  //   }
+  // }
 
-  public checkForMulitCurrency() {
-    this.currentTxn.selectedAccount.currency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
-    if ((this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
-      this.assignConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
-    } else {
-      this.currentTxn.convertedAmount = 0;
-    }
-  }
+  // public checkForMulitCurrency() {
+  //   this.currentTxn.selectedAccount.currency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
+  //   if ((this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+  //     this.assignConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
+  //   } else {
+  //     this.currentTxn.convertedAmount = 0;
+  //   }
+  // }
 
   public selectInvoice(invoiceNo, ev) {
     invoiceNo.isSelected = ev.target.checked;

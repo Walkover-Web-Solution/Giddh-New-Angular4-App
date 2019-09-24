@@ -357,7 +357,7 @@ export class TransactionVM {
   public inventory?: IInventory | any;
   public convertedRate?: number = 0;
   public currency?: string;
-  public convertedAmount?: number;
+  public convertedAmount?: number = 0;
   public isChecked: boolean = false;
   public showTaxationDiscountBox: boolean = false;
 }
