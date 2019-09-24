@@ -99,6 +99,7 @@ export const ROUTES: Routes = [
       {path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization]},
       {path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization]},
       {path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization]},
+      {path: 'expenses', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization]},
 
       {path: '**', redirectTo: 'home', pathMatch: 'full'}
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},

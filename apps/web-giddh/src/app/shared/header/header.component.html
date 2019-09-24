@@ -1,4 +1,5 @@
-<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen}" (clickOutside)="closeSidebarMobile($event)">
+<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
+  (clickOutside)="closeSidebarMobile($event)">
 
   <div class="menu_wrapper">
     <ul class="main-company-name">
@@ -350,10 +351,6 @@ Create Company
 
         </div>
       </li>
-
-
-
-
 
     </ul>
 
