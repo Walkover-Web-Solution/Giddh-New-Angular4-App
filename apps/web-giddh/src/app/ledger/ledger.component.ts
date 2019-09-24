@@ -810,13 +810,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public getCurrencyRate() {
     let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
     let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
-    this._ledgerService.GetCurrencyRate(from, to).subscribe(res => {
+    let date = moment().format('DD-MM-YYYY');
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(res => {
       let rate = res.body;
       if (rate) {
-        this.lc.blankLedger.exchangeRate = rate;
+        this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate};
       }
     }, (error => {
-      this.lc.blankLedger.exchangeRate = 0;
+      this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 0};
     }));
   }
 

@@ -325,10 +325,16 @@ export class LedgerService {
 
   public GetCurrencyRateNewApi(fromCurrency: string, toCurrency: string, date: string) {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
-      let data: any = res;
-      return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    return this._http.get(this.config.apiUrl + LEDGER_API.GET_CURRENCY_RATE
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':from', encodeURIComponent(fromCurrency))
+      .replace(':to', encodeURIComponent(toCurrency))
+      .replace(':date', encodeURIComponent(date))
+    )
+      .pipe(map((res) => {
+        let data: any = res;
+        return data;
+      }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
   /*
