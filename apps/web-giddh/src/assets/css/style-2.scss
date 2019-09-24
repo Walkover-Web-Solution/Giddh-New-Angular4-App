@@ -7663,6 +7663,19 @@ span.red-text {
     word-break: normal;
 }
 
+.form-control{
+  height: 32px;
+}
+.nav.nav-tabs > li > a {
+  color:$dark-blue00 !important;
+  border-bottom: 4px solid transparent !important;
+}
+
+.nav-tabs > li.active > a , .invoce-controll .nav-tabs > li.active > a{
+      border-bottom: 4px solid $yellow !important;
+          padding-bottom: 7px !important;
+          font-family: 'LatoWebBold';
+}
 /* responsive */
 
 @media (max-width: 1440px) {
