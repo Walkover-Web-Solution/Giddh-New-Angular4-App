@@ -7508,7 +7508,10 @@ span.red-text {
 .unvisible {
     visibility: hidden !important;
 }
-
+.main-company-name .input-group .tooltip-inner {
+    white-space: inherit;
+    word-break: normal;
+}
 
 /* responsive */
 
