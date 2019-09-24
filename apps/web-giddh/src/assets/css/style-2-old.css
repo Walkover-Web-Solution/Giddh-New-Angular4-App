@@ -1715,7 +1715,7 @@ p.table-email {
 .basic>thead>tr>th {
     font-weight: 400;
     padding: 8px 8px;
-    text-transform: capitalize;
+    text-transform: none;
 }
 
 
@@ -7617,6 +7617,13 @@ span.red-text {
     word-break: break-word;
 }
 
+.unvisible {
+    visibility: hidden !important;
+}
+.main-company-name .input-group .tooltip-inner {
+    white-space: inherit;
+    word-break: normal;
+}
 
 /* responsive */
 
