@@ -86,7 +86,7 @@ Create Company
 </li>
 -->
 
-              <div class="input-group">
+              <div class="input-group" container="body">
 
                 <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp"
                   #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)"
@@ -341,7 +341,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="javascript:void(0)"><strong>Others</strong></a></li>
+            <li><a href="#"><strong>Others</strong></a></li>
             <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
             <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
             <li><a (click)="analyzeOtherMenus('gstfiling')">GSTR</a></li>
@@ -350,6 +350,10 @@ Create Company
 
         </div>
       </li>
+
+
+
+
 
     </ul>
 
@@ -362,7 +366,7 @@ Create Company
 
 </div>
 
-<header class="clearfix header-container desktopHeader">
+<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 }">
   <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="container-fluid mrT1">
       <div class="navbar_header">
@@ -445,8 +449,7 @@ Create Company
                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
               </li>
               <li class="row text-center">
-                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button>
-                |
+                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
                 <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                     class="btn btn-link tdUndr">FAQs</a></span>
               </li>
@@ -497,8 +500,7 @@ Create Company
                   <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                 </li>
                 <li class="row text-center">
-                  <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button>
-                  |
+                  <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
                   <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                       class="btn btn-link tdUndr">FAQs</a></span>
                 </li>
@@ -633,7 +635,7 @@ Create Company
 <ng-template #expiredPlanModel>
   <div class="modal-header">
     <h3 class="modal-title pull-left">Ready to upgrade subscription</h3>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modelRef.hide()">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modelRefExpirePlan.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -654,7 +656,7 @@ Create Company
           <button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button>
         </li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
-            (click)="openScheduleModal();modelRef.hide();"> Contact
+            (click)="openScheduleModal();modelRefExpirePlan.hide();"> Contact
             Us</a></li>
       </ul>
     </div>
@@ -664,7 +666,7 @@ Create Company
 <ng-template #crossedTxLimitModel>
   <div class="modal-header">
     <h3 class="modal-title pull-left">Ready to upgrade subscription</h3>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modelRef.hide()">
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modelRefCrossLimit.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -681,7 +683,7 @@ Create Company
           <button class="btn btn-blue" (click)="goToSelectPlan();">Buy Plan</button>
         </li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
-            (click)="openScheduleModal();modelRef.hide();"> Contact
+            (click)="openScheduleModal();modelRefCrossLimit.hide();"> Contact
             Us</a></li>
       </ul>
     </div>
