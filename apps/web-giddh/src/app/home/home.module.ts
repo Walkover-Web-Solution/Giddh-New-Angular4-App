@@ -11,6 +11,7 @@ import { HistoryChartComponent } from './components/history/history-chart.compon
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartModule } from 'angular2-highcharts';
+import { TooltipModule } from 'ngx-bootstrap';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -79,7 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PerfectScrollbarModule,
     BsDropdownModule,
     TabsModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    TooltipModule.forRoot(),
   ],
 })
 export class HomeModule {

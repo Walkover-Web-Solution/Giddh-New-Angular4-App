@@ -34,7 +34,6 @@ VERSION:  1
 
 
 
-
 /* Webfont: Lato-Medium */
 
 @font-face {
@@ -81,6 +80,18 @@ VERSION:  1
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
+/* @font-face{
+  font-family: 'opensans-regular';
+  src:url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot');
+    src: url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg') format('woff2'),
+    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff') format('woff'),
+    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+} */
+
 
 html,
 body {

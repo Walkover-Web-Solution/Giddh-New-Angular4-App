@@ -81,3 +81,9 @@ a.dropdown-item:hover {
 .basic>tbody>tr:hover td {
     background: transparent;
 }
+.form-control:focus {
+    border-color: #5B64C9 !important;
+  }
+  .form-control{
+        height: 32px;
+  }

@@ -1,7 +1,7 @@
 <div class="dashboard-container">
   <div class="totalSalesHeader">
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div class="row">
 
           <div class="col-sm-6">
@@ -28,15 +28,15 @@
 
 
       </div>
-      <div class="col-sm-4">
+
+      <div class="col-sm-6">
         <div class="page-title">
+          <div class="collapse-close" [routerLink]="['/home']">
+            <span class="icon-collapse-icon" tooltip="Collapse"></span>
+          </div>
           <h1>Total Sales</h1>
         </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="collapse-close" [routerLink]="['/home']">
-          <span class="icon-collapse-icon"></span>
-        </div>
+
       </div>
     </div>
   </div>
@@ -67,8 +67,13 @@
 
 
           </tab>
-          <tab heading="Weekly">Basic content 1</tab>
-          <tab heading="Monthly">Basic content 2</tab>
+          <tab heading="Weekly">
+            <chart [options]="options"></chart>
+
+          </tab>
+          <tab heading="Monthly">
+            <chart [options]="options"></chart>
+          </tab>
         </tabset>
       </div>
 
@@ -79,26 +84,26 @@
 
     <div class="total-sale-data">
       <div class="row">
-        <div class="col-sm-2 single-sale-data">
+        <div class="col-sm-3 single-sale-data">
           <div class="">
             <p>Total Sales (Sep 19)</p>
             <h3>10,10,900.00</h3>
           </div>
         </div>
-        <div class="col-sm-2 single-sale-data">
+        <div class="col-sm-3 single-sale-data">
           <div class="">
             <p>Total Sales (Aug 19)</p>
             <h3>10,10,900.00</h3>
           </div>
         </div>
-        <div class="col-sm-2 single-sale-data">
+        <div class="col-sm-3 single-sale-data">
           <div class="">
             <p>Highest Sales</p>
             <h3>10,10,900.00</h3>
             <span class="dateWiseSale">(12 Sep 19)</span>
           </div>
         </div>
-        <div class="col-sm-2 single-sale-data">
+        <div class="col-sm-3 single-sale-data">
           <div class="">
             <p>Lowest Sales</p>
             <h3>10,10,900.00</h3>

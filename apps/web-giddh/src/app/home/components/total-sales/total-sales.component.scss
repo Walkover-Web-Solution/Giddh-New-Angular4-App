@@ -45,7 +45,7 @@ a.connectBnk {
 .dateRangeInput span.icon-calender {
     position: absolute;
     width: 32px;
-    height: 33px;
+    height: 32px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -62,6 +62,8 @@ color: #262626;
     text-align: center;
     font-weight: 600;
     line-height: 2.3;
+        display: inline-flex;
+    float: right;
 }
 .collapse-close {
     text-align: right;
@@ -71,6 +73,8 @@ color: #262626;
     float: right;
     height: 65px;
     width: 65px;
+    box-shadow: none;
+    outline: none;
 }
 .collapse-close span.icon-collapse-icon {
     transform: rotate(180deg);
