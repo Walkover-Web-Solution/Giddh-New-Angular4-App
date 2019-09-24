@@ -1,6 +1,6 @@
 <section class="container">
 
-  <!--ledger table-->
+  <!-- region ledger table-->
   <div class="ledgHead transactions-page mrT3 pos-rel">
 
     <!-- region ledger header -->
@@ -603,6 +603,9 @@
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [selectedCurrency]="selectedCurrency"
+                                        [selectedCurrencyRate]="selectedCurrencyRate"
+                                        [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                        [selectedSuffixForCurrency]="selectedSuffixForCurrency"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
@@ -850,6 +853,9 @@
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [selectedCurrency]="selectedCurrency"
+                                        [selectedCurrencyRate]="selectedCurrencyRate"
+                                        [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                        [selectedSuffixForCurrency]="selectedSuffixForCurrency"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
@@ -933,7 +939,7 @@
     </div>
     <!--endregion-->
   </div>
-  <!-- ledger table end -->
+  <!-- endregion -->
 
 </section>
 

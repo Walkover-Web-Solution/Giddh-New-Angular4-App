@@ -67,6 +67,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public baseCurrencyDetails: ICurrencyResponse;
   @Input() public foreignCurrencyDetails: ICurrencyResponse;
   @Input() public selectedCurrency: 0 | 1;
+  @Input() public selectedCurrencyRate: number;
+  @Input() public selectedPrefixForCurrency: string;
+  @Input() public selectedSuffixForCurrency: string;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;

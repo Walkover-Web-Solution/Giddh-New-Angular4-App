@@ -179,6 +179,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public foreignCurrencyDetails: ICurrencyResponse;
   public currencyTogglerModel: boolean = false;
   public selectedCurrency: 0 | 1 = 0;
+  public selectedCurrencyRate: number = 0;
+  public isPrefixAppliedForCurrency: boolean = true;
+  public selectedPrefixForCurrency: string;
+  public selectedSuffixForCurrency: string;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -568,6 +572,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
       if (data[0] && data[1] && data[2]) {
         let profile = cloneDeep(data[2]);
+        this.profileObj = profile;
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
 
@@ -602,6 +607,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.baseCurrencyDetails = this.foreignCurrencyDetails;
         }
         this.selectedCurrency = 0;
+        this.assignPrefixAndSuffixForCurrency();
 
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
@@ -696,13 +702,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
-      this.profileObj = s;
-    });
-
     this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
       this.companyTaxesList = res || [];
     });
+  }
+
+  private assignPrefixAndSuffixForCurrency() {
+    this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
+    this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.baseCurrencyDetails.symbol : '';
+    this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.baseCurrencyDetails.symbol;
   }
 
   public initTrxRequest(accountUnq: string) {
@@ -1453,6 +1461,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.selectedCurrency = res;
     }
     this.currencyTogglerModel = this.selectedCurrency === 1;
+    this.assignPrefixAndSuffixForCurrency();
   }
 
   public getAdvanceSearchTxn() {

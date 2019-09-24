@@ -65,7 +65,8 @@
 
           <td class="pItem text-right amount">
             <label class="primary_clr">Amount</label>
-            <input type="text" name="" class="form-control text-right" prefix="$" [mask]="inputMaskFormat"
+            <input type="text" name="" class="form-control text-right" [prefix]="selectedPrefixForCurrency"
+                   [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                    [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
             <p class="mb-0 amnt-total pr-1 pl-1">
@@ -381,8 +382,9 @@
               </a>
             </li>
 
-            <li><input class="price-input" value="71.9034"
-                       type="text"> {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+            <li>
+              <input class="price-input" [(ngModel)]="selectedCurrencyRate" type="text">
+              {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
             </li>
 
           </ul>
