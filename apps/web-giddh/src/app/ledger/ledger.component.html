@@ -537,6 +537,7 @@
 
                     </div>
                   </td>
+
                   <td data-title="Particular" class="col-xs-6 select2-parent select2-ledger" (click)="bs.hide();"
                       (mousedown)="showNewLedgerEntryPopup(txn);">
 
@@ -585,7 +586,8 @@
                   </td>
 
                   <td data-title="Amount" class="col-xs-4 pos-rel">
-                    <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2"
+                    <input class="form-control alR" type="text" [prefix]="selectedPrefixForCurrency"
+                           [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                            [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                            (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                   </td>
@@ -603,9 +605,9 @@
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [selectedCurrency]="selectedCurrency"
-                                        [selectedCurrencyRate]="selectedCurrencyRate"
                                         [selectedPrefixForCurrency]="selectedPrefixForCurrency"
                                         [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                        [inputMaskFormat]="inputMaskFormat"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"
@@ -837,7 +839,8 @@
                   </td>
 
                   <td class="col-xs-3 pos-rel" data-title="Amount">
-                    <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2"
+                    <input class="form-control alR" type="text" [prefix]="selectedPrefixForCurrency"
+                           [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                            [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                            (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                   </td>
@@ -853,9 +856,9 @@
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [selectedCurrency]="selectedCurrency"
-                                        [selectedCurrencyRate]="selectedCurrencyRate"
                                         [selectedPrefixForCurrency]="selectedPrefixForCurrency"
                                         [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                        [inputMaskFormat]="inputMaskFormat"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                         (resetBlankLedger)="resetBlankTransaction()"

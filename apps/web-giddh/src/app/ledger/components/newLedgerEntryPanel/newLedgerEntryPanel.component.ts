@@ -67,9 +67,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public baseCurrencyDetails: ICurrencyResponse;
   @Input() public foreignCurrencyDetails: ICurrencyResponse;
   @Input() public selectedCurrency: 0 | 1;
-  @Input() public selectedCurrencyRate: number;
   @Input() public selectedPrefixForCurrency: string;
   @Input() public selectedSuffixForCurrency: string;
+  @Input() public inputMaskFormat: string = '';
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -121,7 +121,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public companyTaxesList: TaxResponse[] = [];
   public totalTdElementWidth: number = 0;
-  public inputMaskFormat: string = '';
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -205,7 +204,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
       if (s) {
         this.companyIsMultiCurrency = s.isMultipleCurrency;
-        this.inputMaskFormat = s.balanceDisplayFormat ? s.balanceDisplayFormat.toLowerCase() : '';
       } else {
         this.companyIsMultiCurrency = false;
       }

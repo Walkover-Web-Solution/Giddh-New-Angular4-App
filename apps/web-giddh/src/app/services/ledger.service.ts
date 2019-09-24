@@ -323,6 +323,14 @@ export class LedgerService {
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
 
+  public GetCurrencyRateNewApi(fromCurrency: string, toCurrency: string, date: string) {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + LEDGER_API.CURRENCY_CONVERTER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromCurrency', encodeURIComponent(fromCurrency)).replace(':toCurrency', encodeURIComponent(toCurrency))).pipe(map((res) => {
+      let data: any = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
+
   /*
   * delete bank transaction
   */
@@ -336,12 +344,14 @@ export class LedgerService {
     }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, transactionId)));
   }
 
-  public GetLedgerBalance(model: any): Observable<BaseResponse<any, any>> {
+  public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
-      .replace(':from', model.from).replace(':to', model.to)).pipe(
+      .replace(':from', model.from).replace(':to', model.to)
+      .replace(':accountCurrency', model.accountCurrency.toString())
+    ).pipe(
       map((res) => {
         let data: BaseResponse<any, any> = res;
         data.request = model;

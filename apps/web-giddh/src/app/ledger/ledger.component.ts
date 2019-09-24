@@ -179,10 +179,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public foreignCurrencyDetails: ICurrencyResponse;
   public currencyTogglerModel: boolean = false;
   public selectedCurrency: 0 | 1 = 0;
-  public selectedCurrencyRate: number = 0;
   public isPrefixAppliedForCurrency: boolean = true;
   public selectedPrefixForCurrency: string;
   public selectedSuffixForCurrency: string;
+  public inputMaskFormat: string;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -575,6 +575,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.profileObj = profile;
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
+        this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
         let stockListFormFlattenAccount: IFlattenAccountsResultItem;
         if (data[1]) {
@@ -603,6 +604,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.foreignCurrencyDetails = {code: profile.baseCurrency, symbol: profile.baseCurrencySymbol};
         if (this.isLedgerAccountAllowsMultiCurrency) {
           this.baseCurrencyDetails = {code: accountDetails.currency, symbol: accountDetails.currencySymbol};
+          this.getCurrencyRate();
         } else {
           this.baseCurrencyDetails = this.foreignCurrencyDetails;
         }
@@ -803,7 +805,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
+  }
 
+  public getCurrencyRate() {
+    let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
+    let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+    this._ledgerService.GetCurrencyRate(from, to).subscribe(res => {
+      let rate = res.body;
+      if (rate) {
+        this.lc.blankLedger.exchangeRate = rate;
+      }
+    }, (error => {
+      this.lc.blankLedger.exchangeRate = 0;
+    }));
   }
 
   public toggleTransactionType(event: string) {
@@ -882,7 +896,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxModal: new SalesOtherTaxesModal(),
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
-      otherTaxType: 'tcs'
+      otherTaxType: 'tcs',
+      exchangeRate: 0
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1462,6 +1477,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     this.currencyTogglerModel = this.selectedCurrency === 1;
     this.assignPrefixAndSuffixForCurrency();
+    this.trxRequest.accountCurrency = this.selectedCurrency !== 1;
+    this.getTransactionData();
+    this.getCurrencyRate();
   }
 
   public getAdvanceSearchTxn() {

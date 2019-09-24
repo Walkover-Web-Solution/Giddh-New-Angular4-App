@@ -114,7 +114,8 @@ export class LedgerVM {
       otherTaxModal: new SalesOtherTaxesModal(),
       tdsTcsTaxesSum: 0,
       otherTaxesSum: 0,
-      otherTaxType: 'tcs'
+      otherTaxType: 'tcs',
+      exchangeRate: 0
     };
   }
 
@@ -331,6 +332,7 @@ export class BlankLedgerVM {
   public otherTaxesSum: number;
   public tdsTcsTaxesSum: number;
   public otherTaxType: 'tcs' | 'tds';
+  public exchangeRate: number = 0;
 }
 
 export class TransactionVM {

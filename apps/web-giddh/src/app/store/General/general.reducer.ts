@@ -457,13 +457,15 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
       let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-      grp.accounts[index].uniqueName = aData.uniqueName;
-      grp.accounts[index].name = aData.name;
-      grp.accounts[index].isActive = true;
-      grp.accounts[index].stocks = aData.stocks;
-      grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-      result = true;
-      return result;
+      if (index > -1) {
+        grp.accounts[index].uniqueName = aData.uniqueName;
+        grp.accounts[index].name = aData.name;
+        grp.accounts[index].isActive = true;
+        grp.accounts[index].stocks = aData.stocks;
+        grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+        result = true;
+        return result;
+      }
     }
     if (grp.groups) {
       result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);

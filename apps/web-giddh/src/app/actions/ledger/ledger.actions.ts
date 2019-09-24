@@ -748,7 +748,7 @@ export class LedgerActions {
   public GetLedgerBalance(request: any): CustomActions {
     return {
       type: LEDGER.GET_LEDGER_BALANCE,
-      payload: {from: request.from, to: request.to, accountUniqueName: request.accountUniqueName}
+      payload: {from: request.from, to: request.to, accountUniqueName: request.accountUniqueName, accountCurrency: request.accountCurrency}
     };
   }
 
