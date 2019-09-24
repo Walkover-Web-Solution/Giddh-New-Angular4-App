@@ -330,9 +330,13 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.financialYears = null;
+        newState.refreshCompany = true;
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR: {
+      return Object.assign({}, state, {refreshCompany: false});
     }
     case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
       let response: BaseResponse<any, string> = action.payload;
