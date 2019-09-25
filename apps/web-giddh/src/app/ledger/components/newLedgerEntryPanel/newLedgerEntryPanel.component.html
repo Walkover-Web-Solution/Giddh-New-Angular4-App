@@ -200,7 +200,7 @@
           <span
             class="primary_clr">
             Total in {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
-            <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+            <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
             {{ blankLedger.compoundTotal | giddhCurrency }}
           </span>
 
