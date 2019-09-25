@@ -376,6 +376,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // } else {
           //   this.showMultiCurrency = false;
           // }
+          if (fa.additional.currency && fa.additional.currency !== this.baseCurrencyDetails.code) {
+            let currencies: ICurrencyResponse[] = [];
+            this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res || []);
+            this.baseCurrencyDetails = cloneDeep(currencies.find(f => f.code === fa.additional.currency));
+          }
           return;
         }
       });
