@@ -15,12 +15,12 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
 };
 
 export class TaxControlData {
-  public name: string;
+  public name?: string;
   public uniqueName: string;
-  public amount: number;
-  public isChecked: boolean;
-  public isDisabled: boolean;
-  public type: string;
+  public amount?: number;
+  public isChecked?: boolean;
+  public isDisabled?: boolean;
+  public type?: string;
 }
 
 @Component({

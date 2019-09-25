@@ -6,7 +6,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
-import { SALES_API_V2 } from './apiurls/sales.api';
+import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -49,11 +49,11 @@ export class SalesService {
    * @param updateAccount: boolean flag to update A/c
    * {{url}}/company/{{companyUniqueName}}/accounts/{{accountUniqueName}}/vouchers/generate
    */
-  public generateGenericItem(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
-    let accountUniqueName = model.voucher.accountDetails.uniqueName;
+  public generateGenericItem(model: any): Observable<BaseResponse<any, any>> {
+    let accountUniqueName = model.account.uniqueName;
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS
+    return this._http.post(this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS
       .replace(':companyUniqueName', this.companyUniqueName)
       .replace(':accountUniqueName', accountUniqueName)
       , model)
