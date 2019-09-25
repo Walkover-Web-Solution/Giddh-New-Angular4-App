@@ -169,7 +169,7 @@
 
           <input class="text-right form-control mrL1" disabled="disabled" [(ngModel)]="blankLedger.otherTaxesSum"
                  name="entry.otherTaxesSum" [prefix]="selectedPrefixForCurrency"
-                 [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                 [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"/>
         </span>
 
       </div>
@@ -403,7 +403,7 @@
             </li>
 
             <li>
-              <input class="price-input" [(ngModel)]="blankLedger.exchangeRate" type="text">
+              <input class="price-input" [(ngModel)]="blankLedger.exchangeRate" type="text" decimalDigitsDirective>
               {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
             </li>
 
