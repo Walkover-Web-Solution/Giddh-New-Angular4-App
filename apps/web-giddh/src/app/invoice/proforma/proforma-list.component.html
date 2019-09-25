@@ -14,7 +14,7 @@
               (applyDaterangepicker)="dateRangeChanged($event)" />
           </div>
 
-          <div class="advance-icon" style="align-items: center">
+          <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
 
 
 
@@ -31,6 +31,13 @@
 
       </div>
     </form>
+
+    <!-- need to add functionality -->
+    <div class="clear-filter">
+      <button class="btn btn-filter">
+        <span class="icon-cross"></span> Clear Filter
+      </button>
+    </div>
 
     <div class="d-flex">
 
@@ -394,18 +401,16 @@
   <!-- region sort icon template -->
   <ng-template #sortTemplate let-column="column">
 
-    <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy !== column"
-      (click)="sortButtonClicked('asc', column)"
+    <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy !== column" (click)="sortButtonClicked('asc', column)"
       [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
     </div>
 
-    <div class="fa fa-long-arrow-up" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
+    <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
       (click)="sortButtonClicked('desc', column)"
       [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
     </div>
 
-    <div class="fa fa-long-arrow-down"
-      *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
+    <div class="icon-sort-dsc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
       (click)="sortButtonClicked('asc', column)"
       [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">
     </div>

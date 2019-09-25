@@ -25,10 +25,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-export:before {
-  content: "\e948";
- 
-}
 .icon-advance-serch:before {
   content: "\e900";
  
