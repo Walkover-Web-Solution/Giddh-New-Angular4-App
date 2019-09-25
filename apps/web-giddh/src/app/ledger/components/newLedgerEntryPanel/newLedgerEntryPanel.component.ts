@@ -737,6 +737,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
+  public exchangeRateChanged() {
+    this.calculateAmount();
+  }
+
   @HostListener('window:scroll')
   public onScrollEvent() {
     if (this.datepickers) {
