@@ -3,7 +3,8 @@
 
   <a id="discount">
     <div class="multi-select adjust">
-      <input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"
+      <input type="text" [prefix]="prefix"
+             [suffix]="suffix" [mask]="mask" name="" class="form-control cursor-pointer"
              (focus)="discountMenu = true;hideOtherPopups.emit(true)"
              [(ngModel)]="discountTotal" readonly/>
       <span class="caret"></span>
@@ -25,7 +26,7 @@
                  decimalDigitsDirective [DecimalPlaces]="2"
                  [(ngModel)]="discountPercentageModal"
                  (input)="discountFromInput('PERCENTAGE', $event.target.value)"
-                 style="width: 100px;padding-right: 20px !important;" >
+                 style="width: 100px;padding-right: 20px !important;">
           <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
         </div>
 

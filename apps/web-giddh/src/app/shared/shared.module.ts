@@ -49,6 +49,7 @@ import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/key
 
 import { CKEditorModule } from 'ng2-ckeditor';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
+import { NgxMaskModule } from './helpers/directives/ngx-mask';
 
 const getGoogleCredentials = (baseHref: string) => {
   if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -118,7 +119,8 @@ export function provideConfig() {
     TextCaseChangeModule,
     HighlightModule,
     TabsModule,
-    CKEditorModule
+    CKEditorModule,
+    NgxMaskModule,
 
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
