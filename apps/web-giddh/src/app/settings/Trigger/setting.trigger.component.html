@@ -25,6 +25,7 @@
           <label>Scope</label><br>
           <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope"
             name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
+            <option>selected</option>
           </sh-select>
         </div>
       </div>
