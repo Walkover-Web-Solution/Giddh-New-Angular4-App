@@ -17,7 +17,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -302,7 +302,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public calculateDiscount(total: number) {
     this.currentTxn.discount = total;
-    this.currentTxn.convertedDiscount = this.currentTxn.discount * this.blankLedger.exchangeRate;
+    this.currentTxn.convertedDiscount = giddhRoundOff(this.currentTxn.discount * this.blankLedger.exchangeRate, 2);
     this.calculateTax();
   }
 
@@ -311,24 +311,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
-    this.currentTxn.tax = ((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100);
-    this.currentTxn.convertedTax = this.currentTxn.tax * this.blankLedger.exchangeRate;
+    this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), 2);
+    this.currentTxn.convertedTax = giddhRoundOff(this.currentTxn.tax * this.blankLedger.exchangeRate, 2);
     this.calculateTotal();
   }
 
   public calculateTotal() {
-    if (this.currentTxn && this.currentTxn.selectedAccount) {
-      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-        if (this.currentTxn.inventory.unit.rate) {
-          // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
-        }
-      }
-    }
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
       this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), 2);
-      this.currentTxn.convertedTotal = this.currentTxn.total * this.blankLedger.exchangeRate;
+      this.currentTxn.convertedTotal = giddhRoundOff(this.currentTxn.total * this.blankLedger.exchangeRate, 2);
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     this.calculateCompoundTotal();
@@ -339,7 +332,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
           this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
-          this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
+          this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
         }
       }
 
@@ -350,8 +343,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (this.taxControll) {
         this.taxControll.change();
       }
-      debugger
-      this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
+      this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
     }
 
     if (this.isAmountFirst || this.isTotalFirts) {
@@ -363,12 +355,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public changePrice(val: string) {
-    this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
-    this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
+    this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), 2);
+    this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
 
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    debugger
-    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
 
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -377,8 +368,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    debugger
-    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
     // this.amountChanged();
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -431,8 +421,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
       (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), 2);
-    debugger
-    this.currentTxn.convertedAmount = this.currentTxn.amount * this.blankLedger.exchangeRate;
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
 
     if (this.discountControl) {
       this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -447,7 +436,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
         this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
-        this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate;
+        this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
       }
     }
     this.calculateCompoundTotal();
@@ -645,7 +634,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public detactChanges() {
-    this.cdRef.detectChanges();
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
   public saveCtrlEnter(event) {
