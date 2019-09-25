@@ -716,8 +716,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   private assignPrefixAndSuffixForCurrency() {
     this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
-    this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.baseCurrencyDetails.symbol : '';
-    this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.baseCurrencyDetails.symbol;
+    this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
+    this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
   }
 
   public initTrxRequest(accountUnq: string) {

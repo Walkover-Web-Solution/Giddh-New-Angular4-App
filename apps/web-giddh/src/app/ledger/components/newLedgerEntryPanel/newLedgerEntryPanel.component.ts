@@ -268,12 +268,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.isOtherTaxesApplicable = true;
       }
     }
-    // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
-    //   // this.amountChanged();
-    //   if (moment(changes['blankLedger'].currentValue.entryDate, 'DD-MM-yyyy').isValid()) {
-    //     this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
-    //   }
-    // }
   }
 
   public ngAfterViewInit(): void {
@@ -459,6 +453,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), 2);
     }
+    this.blankLedger.convertedCompoundTotal = giddhRoundOff(this.blankLedger.compoundTotal * this.blankLedger.exchangeRate, 2);
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       // this.calculateConversionRate();
     }

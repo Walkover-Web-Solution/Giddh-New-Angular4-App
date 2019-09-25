@@ -379,7 +379,7 @@
             <p class="primary_clr">Total
               in {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}:
               {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
-              32564.97
+              {{ blankLedger.convertedCompoundTotal | giddhCurrency }}
             </p>
 
           </div>

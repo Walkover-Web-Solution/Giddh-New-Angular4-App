@@ -92,6 +92,7 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
+      convertedCompoundTotal: 0,
       invoicesToBePaid: [],
       otherTaxModal: new SalesOtherTaxesModal(),
       tdsTcsTaxesSum: 0,
@@ -292,6 +293,7 @@ export class BlankLedgerVM {
   public chequeNumber: string;
   public chequeClearanceDate: string;
   public compoundTotal: number;
+  public convertedCompoundTotal: number = 0;
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
