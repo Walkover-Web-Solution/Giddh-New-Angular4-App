@@ -458,7 +458,8 @@
       <table class="balance">
         <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
           <th>
-            {{fieldsAndVisibility.footer.taxableAmount?.label}}
+            <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
+            Taxable Amount
           </th>
           <td>
             <span [innerHTML]="rupeeSymbol"></span> 7200.00
@@ -490,7 +491,8 @@
         </tr>
         <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
           <th>
-            {{fieldsAndVisibility.footer.totalInWords?.label}}
+<!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+            Total (In words)
           </th>
           <td >  
             Ten Thousand One Hundred Sixty Six Only
@@ -507,7 +509,8 @@
         </tr>
         <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
           <th>
-            {{fieldsAndVisibility.footer.totalInWords?.label}}
+<!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
+            Total (In words)
           </th>
           <td>
             One hundred fourty-eight dollars & twenty cents
