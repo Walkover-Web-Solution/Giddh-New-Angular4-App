@@ -168,7 +168,8 @@
           </span>
 
           <input class="text-right form-control mrL1" disabled="disabled" [(ngModel)]="blankLedger.otherTaxesSum"
-                 name="entry.otherTaxesSum"/>
+                 name="entry.otherTaxesSum" [prefix]="selectedPrefixForCurrency"
+                 [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
         </span>
 
       </div>
