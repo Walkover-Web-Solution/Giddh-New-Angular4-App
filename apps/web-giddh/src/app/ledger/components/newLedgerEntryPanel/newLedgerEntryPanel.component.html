@@ -85,7 +85,7 @@
           <td class="pItem text-right price" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                              [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
-                             (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
+                             (discountTotalUpdated)="calculateDiscount($event);">
             </ledger-discount>
             <p class="mb-0 amnt-total pr-1 pl-1">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
@@ -477,7 +477,7 @@
 <ng-template #totalWithCurrencySymbol>
 
   <span>
-    {{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}
+    {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
   </span>
 
 </ng-template>

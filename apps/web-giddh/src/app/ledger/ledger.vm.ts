@@ -63,40 +63,22 @@ export class LedgerVM {
     this.blankLedger = {
       transactions: [
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'DEBIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         },
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'CREDIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         }],
       voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -193,23 +175,13 @@ export class LedgerVM {
    */
   public addNewTransaction(type: string = 'DEBIT'): TransactionVM {
     return {
+      ...new TransactionVM(),
       id: uuid.v4(),
-      amount: 0,
-      tax: 0,
-      total: 0,
-      particular: '',
       type,
-      taxes: [],
-      taxesVm: [],
-      discount: 0,
-      discounts: [
-        this.staticDefaultDiscount()
-      ],
+      discounts: [this.staticDefaultDiscount()],
       selectedAccount: null,
       applyApplicableTaxes: true,
-      isInclusiveTax: true,
-      isChecked: false,
-      showTaxationDiscountBox: false
+      isInclusiveTax: true
     };
   }
 
@@ -337,19 +309,19 @@ export class BlankLedgerVM {
 
 export class TransactionVM {
   public id?: string;
-  public amount: number;
-  public particular: string;
+  public amount: number = 0;
+  public particular: string = '';
   public applyApplicableTaxes: boolean;
   public isInclusiveTax: boolean;
   public type: string;
-  public taxes: string[];
-  public taxesVm?: TaxControlData[];
-  public tax?: number;
+  public taxes: string[] = [];
+  public taxesVm?: TaxControlData[] = [];
+  public tax?: number = 0;
   public convertedTax?: number = 0;
-  public total: number;
+  public total: number = 0;
   public convertedTotal?: number = 0;
   public discounts: LedgerDiscountClass[];
-  public discount?: number;
+  public discount?: number = 0;
   public convertedDiscount?: number = 0;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
