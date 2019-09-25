@@ -18,7 +18,7 @@ import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import { ContactAdvanceSearchCommonModal, ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
+import { ContactAdvanceSearchCommonModal, ContactAdvanceSearchModal, CustomerVendorFiledFilter, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import * as moment from 'moment/moment';
@@ -91,6 +91,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
+  public localStorageKeysForFilters = {customer: 'customerFilterStorage', vendor: 'vendorFilterStorage'};
   public isMobileScreen: boolean = false;
   public modalConfig: ModalOptions = {
     animated: true,
@@ -109,18 +110,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public key: string = 'name'; // set default
   public order: string = 'asc';
 
-  public showFieldFilter = {
-    parentGroup: false,
-    email: false,
-    mobile: false,
-    state: false,
-    gstin: false,
-    comment: false,
-    openingBalance: false,
-    // debitTotal: false,
-    // creditTotal: false,
-    closingBalance: false
-  };
+  public showFieldFilter: CustomerVendorFiledFilter = new CustomerVendorFiledFilter();
   public updateCommentIdx: number = null;
   public searchStr$ = new Subject<string>();
   public searchStr: string = '';
@@ -275,7 +265,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     // localStorage supported
     if (window.localStorage) {
-      let showColumnObj = JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN));
+      let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
       if (showColumnObj) {
         this.showFieldFilter = showColumnObj;
         this.setTableColspan();
@@ -488,6 +478,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.searchStr = '';
     if (tabName === 'vendor') {
       this.getAccounts(this.fromDate, this.toDate, type, null, null, 'true', 20, '');
+    }
+    this.showFieldFilter = new CustomerVendorFiledFilter();
+    let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
+    if (showColumnObj) {
+      this.showFieldFilter = showColumnObj;
+      this.setTableColspan();
     }
 
     // if (this.activeTab !== 'aging-report') {
@@ -1076,7 +1072,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.setTableColspan();
 
     if (window.localStorage) {
-      localStorage.setItem(this.LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN, JSON.stringify(this.showFieldFilter));
+      localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
     }
     // }
   }
