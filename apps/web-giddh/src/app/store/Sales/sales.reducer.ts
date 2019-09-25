@@ -76,7 +76,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
           createdAccountDetails: res.body,
         });
       }
-      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null};
+      return {...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null, createAccountInProcess: false};
     }
 
     case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS : {
