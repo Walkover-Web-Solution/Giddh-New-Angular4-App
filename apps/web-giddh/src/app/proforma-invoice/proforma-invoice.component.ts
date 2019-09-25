@@ -588,7 +588,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // if last invoice is copied then create new Voucher and copy only needed things not all things
             obj = this.invFormData;
           } else {
-            if (this.invoiceType === VoucherTypeEnum.sales) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
               obj = cloneDeep(results[1]) as VoucherClass;
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -601,12 +601,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.isLastInvoiceCopied) {
 
               // assign account details uniqueName because we are using accounts uniqueName not name
-              let isBankInvoice = bankaccounts.some(s => s.value === this.accountUniqueName);
-              if (obj.accountDetails.uniqueName !== 'cash' && !isBankInvoice) {
+              if (!obj.voucherDetails.cashInvoice) {
                 obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
               } else {
                 this.isCashInvoice = true;
                 this.isSalesInvoice = false;
+                this.invoiceType = VoucherTypeEnum.cash;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
                 this.depositAccountUniqueName = obj.accountDetails.uniqueName;
               }

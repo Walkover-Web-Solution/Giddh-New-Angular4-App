@@ -400,6 +400,7 @@ class VoucherDetailsClass {
   public cessTotal?: number;
   public taxesTotal?: [];
   public totalDepositAmount?: number;
+  public cashInvoice?: string;
 
   constructor() {
     this.customerName = null;
