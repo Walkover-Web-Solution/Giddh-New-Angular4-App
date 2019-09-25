@@ -79,7 +79,7 @@
     </div> -->
         <div class="btn-group customeMnthSelect" dropdown>
             <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle" aria-controls="dropdown-custom-html">
-       {{selectedMonth}} <span class="caret"></span>
+        {{selectedMonth}} <span class="caret"></span>
       </button>
             <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-custom-html">
                 <ng-container *ngFor="let item of monthYear; let i=index;">
@@ -182,7 +182,7 @@
 
                         </th> -->
 
-                        <th *ngIf="showFieldFilter.voucherNo" class="td_in_searchBox nowrap" #searchInvoiceContainer (clickOutside)="clickedOutsideEvent();">
+                        <th *ngIf="showFieldFilter.voucherNo" class="td_in_searchBox nowrap" style="width: 210px;" #searchInvoiceContainer (clickOutside)="clickedOutsideEvent();">
 
                             <div [hidden]="showSearchInvoiceNo">
                                 <span>Voucher No</span>
@@ -216,7 +216,7 @@
                                 </ng-container>
                             </div>
                         </th>
-                        <th *ngIf="expand && showFieldFilter.qtyRate ">
+                        <th *ngIf=" showFieldFilter.qtyRate ">
                             <div class="d-flex ">
                                 <div class="flex-fill text-right pr-1 ">
                                     Qty/Unit
@@ -224,7 +224,7 @@
 
                             </div>
                         </th>
-                        <th *ngIf="expand && showFieldFilter.qtyRate ">
+                        <th *ngIf="showFieldFilter.qtyRate ">
                             <div class="d-flex ">
                                 <div class="flex-fill text-right pr-1 ">
                                     Rate
@@ -279,8 +279,8 @@
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td *ngIf="showFieldFilter.voucherType">{{item.voucherType}}</td>
-                        <td *ngIf="showFieldFilter.voucherNo "><a href="javascript:void(0) ">{{item.voucherNumber}}</a></td>
+                        <td *ngIf="showFieldFilter.voucherType" class="vertcleAlignTop">{{item.voucherType}}</td>
+                        <td *ngIf="showFieldFilter.voucherNo " class="vertcleAlignTop"><a href="javascript:void(0) ">{{item.voucherNumber}}</a></td>
                         <td class="text-right ">{{item.creditTotal | giddhCurrency}}
                             <ng-container *ngIf="expand ">
                                 <ng-container *ngFor="let stock of item.stocks ">
@@ -289,14 +289,14 @@
                             </ng-container>
                         </td>
                         <td class="text-right ">{{item.debitTotal | giddhCurrency}}</td>
-                        <td class="text-right " *ngIf="expand && showFieldFilter.qtyRate ">-
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate ">-
                             <ng-container *ngIf="expand ">
                                 <ng-container *ngFor="let stock of item.stocks ">
                                     <p>{{stock.quantity | giddhCurrency}} {{stock.unit.code}}</p>
                                 </ng-container>
                             </ng-container>
                         </td>
-                        <td class="text-right " *ngIf="expand && showFieldFilter.qtyRate">-
+                        <td class="text-right " *ngIf="showFieldFilter.qtyRate">-
                             <ng-container *ngIf="expand ">
                                 <ng-container *ngFor="let stock of item.stocks ">
                                     <p>{{stock.rate | giddhCurrency}}</p>
@@ -327,24 +327,24 @@
     <div class="clearfix sales-ragister ">
         <div class="col-xs-3 ">
             <p>Transaction count</p>
-            <p class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).totalItems | giddhCurrency}}</p>
+            <p class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).totalItems }}</p>
         </div>
         <div class="col-xs-9 ">
             <div *ngIf="SalesRegisteDetailedItems " class="clearfix main-sale-register-box ">
 
-                <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
                     <p>Sales</p>
                     <h4>{{(SalesRegisteDetailedResponse$ | async).creditTotal | giddhCurrency}}</h4>
                 </div>
-                <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
                     <p>Return</p>
                     <h4>{{(SalesRegisteDetailedResponse$ | async).debitTotal | giddhCurrency}}</h4>
                 </div>
-                <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
                     <p>Discount</p>
                     <h4>{{(SalesRegisteDetailedResponse$ | async).discountTotal | giddhCurrency}}</h4>
                 </div>
-                <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
                     <p>Total Tax</p>
                     <h4>{{(SalesRegisteDetailedResponse$ | async).taxTotal | giddhCurrency}}</h4>
                 </div>
@@ -352,7 +352,7 @@
                     <p>Freight</p>
                     <h4>Freight</h4>
                 </div> -->
-                <div class="sale-register-box ">
+                <div class="sale-register-box text-right">
                     <p>Net Sales</p>
                     <h4 class="text-orange ">{{(SalesRegisteDetailedResponse$ | async).netTotal.amount | giddhCurrency}}</h4>
                 </div>

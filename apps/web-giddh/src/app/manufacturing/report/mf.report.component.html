@@ -99,11 +99,13 @@
                         </tr>
                     </tbody>
                 </table>
+                    <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">
+                        <div class="alC">
+                          <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5" class="pagination-sm"
+                            [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                        </div>
+                      </div>
             </div>
-        </div>
-        <div class="alC">
-            <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
-            </pagination>
-        </div>
+        </div>     
     </section>
 </section>

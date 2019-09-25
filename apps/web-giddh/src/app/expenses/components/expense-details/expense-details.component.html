@@ -1,0 +1,110 @@
+<div class="clearfix p-15">
+  <div class="row">
+    <div class="col-sm-6">
+      <p class="bold mb-05">03 Oct 2019 | Others</p>
+    </div>
+    <div class="col-sm-6 text-right xs-left">
+      <button type="button" class="mb-05 btn btn-success">Approve</button>
+      <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
+    </div>
+  </div>
+
+  <div class="upload-fil">
+    <ul>
+      <li>
+        <div class="upload-img">
+          <img src="assets/images/upload-img.png" alt="">
+        </div>
+      </li>
+      <li>
+        <div class="upload-img">
+          <img src="assets/images/upload-img.png" alt="">
+        </div>
+      </li>
+      <li>
+        <div class="upload-img">
+          <img src="assets/images/upload-img.png" alt="">
+        </div>
+      </li>
+      <li>
+        <div class="upload-img add-img">
+          <a href="javasctipt:void(0)">
+            <i class="icon-plus"></i>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- img zoom pls uncomment this code -->
+  <!-- <div class="clearfix img-zoom">
+    <img src="assets/images/upload-img.png" alt="">
+    <a href="#" class="img-close">
+      <i class="icon-cross"></i>
+    </a>
+  </div> -->
+
+</div>
+
+<div class="bg-white p-15">
+  <div class="form-group mb-2">
+    <label>Comment</label>
+    <textarea name="" class="textarea form-control" placeholder="Add Comment"></textarea>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="mb-2 d-inline-block mr-2">
+        <label>Payment Mode
+          <span class="text-danger">*</span>
+        </label>
+        <div class="select-style">
+          <select name="">
+            <option value="">Standard Chartered Bank Indore A/c</option>
+            <option value="">Option 2</option>
+            <option value="">Option 3</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-inline-block">
+        <span class="mr-1 d-inilne-block font-14">USD</span>
+        <div class="toggle d-inline-block" data-key="disabled">
+          <input type="checkbox" class="toggle-checkbox" id="disabled">
+          <label class="toggle-label" for="disabled">
+            <span class="toggle-inner"></span>
+            <span class="toggle-switch"></span>
+          </label>
+        </div>
+        <span class="ml-1 d-inline-block font-14">INR</span>
+      </div>
+
+    </div>
+    <div class="col-sm-4 text-right xs-left">
+      <a href="javascript:void(0)" class="d-inline-block pt-3">Entry against Deptor</a>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <ledger></ledger>
+  </div>
+
+</div>
+
+
+
+<!-- modal start -->
+<ng-template #RejectionReason>
+  <div class="modal-header">
+    <h3 class="modal-title pull-left">Rejection Reason</h3>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <app-rejection-reason></app-rejection-reason>
+    <input type="submit" class="btn btn-success" (click)="confirm()">
+  </div>
+</ng-template>
+<!-- modal end -->
