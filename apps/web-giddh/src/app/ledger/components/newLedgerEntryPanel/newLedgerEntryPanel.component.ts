@@ -275,7 +275,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (a) {
         this.amountChanged();
         this.calculateTotal();
-        this.calculateCompoundTotal();
       }
     });
     this.cdRef.markForCheck();
@@ -738,7 +737,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public exchangeRateChanged() {
-    this.calculateAmount();
+    this.amountChanged();
+    this.calculateTotal();
   }
 
   @HostListener('window:scroll')
