@@ -345,7 +345,7 @@ header img {
 
 #default .subfooter hr {
   width: 100%;
-  border-bottom: 1px solid #595959;
+  border-bottom: 1px solid #ccc;
   margin: 3px 0;
 }
 
@@ -472,3 +472,11 @@ strong {
   text-align: center;
   font-size: 12px;
 }
+
+.inner {
+  width: 60%;
+  height: 1px;
+  margin: 0px auto;
+  border-bottom: 1px solid #ccc;
+}
+

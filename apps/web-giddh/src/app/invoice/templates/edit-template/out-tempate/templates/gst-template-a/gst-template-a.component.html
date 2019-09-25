@@ -492,9 +492,10 @@
           <th>
             {{fieldsAndVisibility.footer.totalInWords?.label}}
           </th>
-          <td>
+          <td >  
             Ten Thousand One Hundred Sixty Six Only
-          </td>
+            <div class="inner" style=" margin-right: 0px;">&nbsp;</div>
+            </td>
         </tr>
         <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
           <th class="strong">
@@ -510,6 +511,7 @@
           </th>
           <td>
             One hundred fourty-eight dollars & twenty cents
+            <div class="inner" style=" margin-right: 0px;">&nbsp;</div>
           </td>
         </tr>
       </table>
@@ -545,7 +547,6 @@
               *ngIf="!showImageSignature">
             <hr *ngIf="fieldsAndVisibility.footer.slogan?.label">
             <ng-container *ngIf="fieldsAndVisibility.footer.slogan?.display">
-
               <strong class="slogan-pre-line">
                 <small
                   *ngIf="fieldsAndVisibility.footer.slogan?.label || fieldsAndVisibility.footer.slogan?.label===''">
