@@ -258,6 +258,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
+  //Multicurrency changes
+  public exchangeRate = 71.9034;
+  public originalExchangeRate = 71.9034;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1141,7 +1144,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entries: [],
       date: '25-09-2019',
       type: this.invoiceType,
-      exchangeRate: 71.0934,
+      exchangeRate: this.originalExchangeRate,
       dueDate:''
     };
 
@@ -1170,9 +1173,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // reset form and other
           this.resetInvoiceForm(f);
 
-          this.voucherNumber = response.body.voucherDetails.voucherNumber;
+          this.voucherNumber = response.body.entries[0].voucherNumber;
           this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.accountDetails.uniqueName;
+          this.accountUniqueName = response.body.entries[0].uniqueName;
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
