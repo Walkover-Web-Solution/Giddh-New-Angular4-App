@@ -13,6 +13,7 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { take } from 'rxjs/operators';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -98,7 +99,8 @@ export class LedgerVM {
       tdsTcsTaxesSum: 0,
       otherTaxesSum: 0,
       otherTaxType: 'tcs',
-      exchangeRate: 0
+      exchangeRate: 0,
+      valuesInAccountCurrency: true
     };
   }
 
@@ -307,6 +309,7 @@ export class BlankLedgerVM {
   public tdsTcsTaxesSum: number;
   public otherTaxType: 'tcs' | 'tds';
   public exchangeRate: number = 0;
+  public valuesInAccountCurrency: boolean = true;
 }
 
 export class TransactionVM {

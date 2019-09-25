@@ -376,11 +376,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // } else {
           //   this.showMultiCurrency = false;
           // }
-          if (fa.additional.currency && fa.additional.currency !== this.baseCurrencyDetails.code) {
-            let currencies: ICurrencyResponse[] = [];
-            this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res || []);
-            this.baseCurrencyDetails = cloneDeep(currencies.find(f => f.code === fa.additional.currency));
-          }
+
+
+          // if (fa.additional.currency && fa.additional.currency !== this.baseCurrencyDetails.code) {
+          //   let currencies: ICurrencyResponse[] = [];
+          //   this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res || []);
+          //   this.baseCurrencyDetails = cloneDeep(currencies.find(f => f.code === fa.additional.currency));
+          // }
           return;
         }
       });
@@ -559,6 +561,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
         // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
+        this.getCurrencyRate();
         this.resetBlankTransaction();
 
         // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -904,7 +907,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
       otherTaxType: 'tcs',
-      exchangeRate: 0
+      exchangeRate: 0,
+      valuesInAccountCurrency: false
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -1048,6 +1052,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
+    blankTransactionObj.valuesInAccountCurrency = this.selectedCurrency === 0;
+
     if (blankTransactionObj.transactions.length > 0) {
 
       let isThereAnyTaxEntry = blankTransactionObj.transactions.some(s => s.taxes.length > 0);
