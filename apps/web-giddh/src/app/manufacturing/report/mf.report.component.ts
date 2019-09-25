@@ -107,7 +107,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
     this.mfStockSearchRequest.page = 1;
-    this.mfStockSearchRequest.count = 10;
+    this.mfStockSearchRequest.count = 20;
   }
 
   public goToCreateNewPage() {
