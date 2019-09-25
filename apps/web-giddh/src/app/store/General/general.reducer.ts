@@ -202,7 +202,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
         UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
         let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-        flattenAccountsArray[index] = updatedAccount.body;
+        let accResp = cloneDeep(updatedAccount.body);
+        accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
+        flattenAccountsArray[index] = accResp;
         return {
           ...state,
           groupswithaccounts: groupArray,
@@ -455,13 +457,15 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
       let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-      grp.accounts[index].uniqueName = aData.uniqueName;
-      grp.accounts[index].name = aData.name;
-      grp.accounts[index].isActive = true;
-      grp.accounts[index].stocks = aData.stocks;
-      grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-      result = true;
-      return result;
+      if (index > -1) {
+        grp.accounts[index].uniqueName = aData.uniqueName;
+        grp.accounts[index].name = aData.name;
+        grp.accounts[index].isActive = true;
+        grp.accounts[index].stocks = aData.stocks;
+        grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+        result = true;
+        return result;
+      }
     }
     if (grp.groups) {
       result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);

@@ -5,9 +5,15 @@
 
     <div class="multi-select adjust" id="tax-control-multi-select">
 
-      <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput"
+      <input type="text" readonly name="sum" *ngIf="!mask" class="form-control cursor-pointer text-right taxInput"
              [(ngModel)]="taxTotalAmount"
              (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:20px !important;"/>
+
+
+      <input type="text" readonly name="sum" *ngIf="mask" class="form-control cursor-pointer text-right taxInput"
+             [(ngModel)]="taxTotalAmount" [mask]="mask" [prefix]="prefix" [suffix]="suffix"
+             (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:20px !important;"/>
+
       <span class="caret cp no-select" (click)="showTaxPopup = !showTaxPopup"></span>
 
     </div>
