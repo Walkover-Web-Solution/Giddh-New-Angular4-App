@@ -480,12 +480,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
+        let bankaccounts: IOption[] = [];
 
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
           // assign flatten A/c's
-          let bankaccounts: IOption[] = [];
           this.sundryDebtorsAcList = [];
           this.sundryCreditorsAcList = [];
           this.prdSerAcListForDeb = [];
@@ -592,7 +592,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // if last invoice is copied then create new Voucher and copy only needed things not all things
             obj = this.invFormData;
           } else {
-            if (this.invoiceType === VoucherTypeEnum.sales) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
               obj = cloneDeep(results[1]) as VoucherClass;
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -605,10 +605,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.isLastInvoiceCopied) {
 
               // assign account details uniqueName because we are using accounts uniqueName not name
-              if (obj.accountDetails.uniqueName !== 'cash') {
+              if (!obj.voucherDetails.cashInvoice) {
                 obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
               } else {
+                this.isCashInvoice = true;
+                this.isSalesInvoice = false;
+                this.invoiceType = VoucherTypeEnum.cash;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
+                this.depositAccountUniqueName = obj.accountDetails.uniqueName;
               }
             }
 
@@ -1136,7 +1140,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       obj.depositAccountUniqueName = '';
     }
-
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
@@ -1764,8 +1767,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name = event.label;
-      this.invFormData.accountDetails.uniqueName = event.value;
+      if (this.isCashInvoice) {
+        this.invFormData.accountDetails.name = event.label;
+        this.invFormData.accountDetails.uniqueName = event.value;
+      }
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
