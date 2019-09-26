@@ -15,7 +15,23 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
+import {
+  AccountDetailsClass,
+  ActionTypeAfterVoucherGenerateOrUpdate,
+  GenericRequestForGenerateSCD,
+  IForceClear,
+  IStockUnit,
+  SalesAddBulkStockItems,
+  SalesEntryClass,
+  SalesOtherTaxesCalculationMethodEnum,
+  SalesOtherTaxesModal,
+  SalesTransactionItemClass,
+  VOUCHER_TYPE_LIST,
+  VoucherClass,
+  VoucherTypeEnum,
+  SalesEntryClassMulticurrency,
+  TransactionClassMulticurrency
+} from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -31,7 +47,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import { cloneDeep, isEqual } from '../lodash-optimized';
+import {cloneDeep, forEach, isEqual} from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -242,6 +258,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
+  //Multicurrency changes
+  public exchangeRate = 71.9034;
+  public originalExchangeRate = 71.9034;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -480,12 +499,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
-        let bankaccounts: IOption[] = [];
 
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
           // assign flatten A/c's
+          let bankaccounts: IOption[] = [];
           this.sundryDebtorsAcList = [];
           this.sundryCreditorsAcList = [];
           this.prdSerAcListForDeb = [];
@@ -592,7 +611,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // if last invoice is copied then create new Voucher and copy only needed things not all things
             obj = this.invFormData;
           } else {
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
+            if (this.invoiceType === VoucherTypeEnum.sales) {
               obj = cloneDeep(results[1]) as VoucherClass;
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -605,14 +624,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!this.isLastInvoiceCopied) {
 
               // assign account details uniqueName because we are using accounts uniqueName not name
-              if (!obj.voucherDetails.cashInvoice) {
+              if (obj.accountDetails.uniqueName !== 'cash') {
                 obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
               } else {
-                this.isCashInvoice = true;
-                this.isSalesInvoice = false;
-                this.invoiceType = VoucherTypeEnum.cash;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
-                this.depositAccountUniqueName = obj.accountDetails.uniqueName;
               }
             }
 
@@ -1123,37 +1138,44 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     let obj: GenericRequestForGenerateSCD = {
-      voucher: data,
-      updateAccountDetails: this.updateAccount
+      account: data.accountDetails,
+      updateAccountDetails: this.updateAccount,
+      voucher:data,
+      entries: [],
+      date: data.voucherDetails.voucherDate,
+      type: this.invoiceType,
+      exchangeRate: this.originalExchangeRate,
+      dueDate:data.voucherDetails.dueDate
     };
 
-    if (this.depositAmount && this.depositAmount > 0) {
-      obj.paymentAction = {
-        action: 'paid',
-        amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
-      };
-      if (this.isCustomerSelected) {
-        obj.depositAccountUniqueName = this.depositAccountUniqueName;
-      } else {
-        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
-      }
-    } else {
-      obj.depositAccountUniqueName = '';
-    }
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
     if (this.isProformaInvoice || this.isEstimateInvoice) {
+
+      if (this.depositAmount && this.depositAmount > 0) {
+        obj.paymentAction = {
+          action: 'paid',
+          amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
+        };
+        if (this.isCustomerSelected) {
+          obj.depositAccountUniqueName = this.depositAccountUniqueName;
+        } else {
+          obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+        }
+      } else {
+        obj.depositAccountUniqueName = '';
+      }
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
-      this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+      this.salesService.generateGenericItem(this.updateData(obj, data)).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
 
-          this.voucherNumber = response.body.voucherDetails.voucherNumber;
+          this.voucherNumber = response.body.number;
           this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.accountDetails.uniqueName;
+          this.accountUniqueName = response.body.uniqueName;
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
@@ -1767,10 +1789,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      if (this.isCashInvoice) {
-        this.invFormData.accountDetails.name = event.label;
-        this.invFormData.accountDetails.uniqueName = event.value;
-      }
+      this.invFormData.accountDetails.name = event.label;
+      this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
     } else {
       this.depositAccountUniqueName = '';
@@ -2461,5 +2481,39 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass){
+    delete obj.voucher;
+    delete obj.updateAccountDetails;
+    delete obj.depositAccountUniqueName;
+
+    let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
+    let entries = data.entries;
+
+    entries.forEach(e => {
+      let salesEntryClass = new SalesEntryClassMulticurrency();
+      salesEntryClass.voucherType = e.voucherType;
+      salesEntryClass.uniqueName = e.uniqueName;
+      salesEntryClass.description = e.description;
+      salesEntryClass.date = e.entryDate;
+      e.taxList.forEach(t=>{
+        salesEntryClass.taxes.push({uniqueName:t});
+      })
+      e.transactions.forEach(tr =>{
+        let transactionClassMul = new TransactionClassMulticurrency();
+        transactionClassMul.account.uniqueName = tr.accountUniqueName;
+        transactionClassMul.account.name = tr.accountName;
+        transactionClassMul.amount.amountForAccount = tr.amount.toString();
+        salesEntryClass.hsnNumber = tr.hsnNumber;
+        salesEntryClass.sacNumber = tr.sacNumber;
+        salesEntryClass.transactions.push(transactionClassMul);
+      })
+      salesEntryClassArray.push(salesEntryClass);
+    });
+
+    obj.entries = salesEntryClassArray;
+
+    return obj;
   }
 }

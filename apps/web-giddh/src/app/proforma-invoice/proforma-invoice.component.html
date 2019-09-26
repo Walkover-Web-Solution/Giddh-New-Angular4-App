@@ -276,7 +276,7 @@
                   <strong>${{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong></span>
                 <!-- added multicurrency feature make it functional to change into appropriate currency -->
                 <span class="sp-rupees"><span
-                    class="icon-rupees"></span>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                    class="icon-rupees"></span>{{invFormData.voucherDetails.balanceDue*exchangeRate | number:'1.2-2'}}</span>
               </p>
             </div>
 
@@ -420,15 +420,14 @@
           <span class="left-currency">1 USD</span>
           <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon">
           <span class="right-currency">
-            <span class="currency-digits" *ngIf="!showCurrencyValue">71.9034</span>
-            <input type="text" *ngIf="editCurrencyInputField" class="form-control edit-currency"> INR
-
+            <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate}}</span>
+            <input type="number" name = "exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue" class="form-control edit-currency"> INR
           </span>
 
           <span class="edit-icon cp">
             <img src="assets/images/edit-pencilicon.svg" class="edit-pencil"
-              (click)="showCurrencyValue = !showCurrencyValue &&  editCurrencyInputField = !editCurrencyInputField && autoSaveIcon = !autoSaveIcon">
-            <img src=" assets/images/autosave.svg" class="edit-pencil" *ngIf="autoSaveIcon">
+              (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
+            <img src=" assets/images/autosave.svg" class="edit-pencil" (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue" *ngIf="autoSaveIcon">
           </span>
 
 
