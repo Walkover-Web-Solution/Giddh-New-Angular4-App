@@ -458,8 +458,10 @@
                 <span
                   [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
               </div>
-              <div *ngIf="hoveredItemForAction === item.uniqueName || clickedHoveredItemForAction === item.uniqueName">
+
+              <div>
                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
+                  *ngIf="hoveredItemForAction === item.uniqueName || clickedHoveredItemForAction === item.uniqueName"
                   class="icon-ellipse selectAction">
                   <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
                     aria-controls="dropdown-basic">

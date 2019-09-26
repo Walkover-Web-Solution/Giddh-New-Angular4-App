@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .menu {
   margin: 0;
   padding: 0;
@@ -6,44 +8,43 @@
   width: 100%;
   overflow: auto;
   box-sizing: border-box;
-  z-index: 999;
+  z-index: 100;
   box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15);
   border-bottom: 1px solid rgba(34, 36, 38, .15);
   border-left: 1px solid rgba(34, 36, 38, .15);
   border-right: 1px solid rgba(34, 36, 38, .15);
+  border-top: 1px solid rgba(34, 36, 38, .15);
   border-radius: 0 0 2px 2px;
   min-width: max-content;
   margin-top: 1px;
-  min-height: 100%;
 }
 
 .item {
   /* padding: 4px; */
   cursor: pointer;
-  white-space: normal;
-  word-break: normal;
+  white-space: inherit;
   display: table;
   width: 100%;
-  text-transform: capitalize;
+  word-break: break-word;
 }
 
 .item:hover {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+        color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 
 .item.selected {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+      color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 
 .item.hilighted {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+      color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 
 .item > a {
-  padding: 6px 10px;
+  padding: 6px;
 }
 
 .no-result-link > a {
@@ -54,6 +55,19 @@
   background: transparent;
 }
 
-:host ::ng-deep .total-padding {
-  height: calc(100vh - 52px) !important;
+.no-result-link {
+  top: 0;
+  z-index: 99;
+  background: #fff;
+  width: calc(100% - 15px);
+}
+.no-result-link{
+  width: 100%;
+}
+.no-result-link a.btn-link{
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
 }

@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .flex-container {
   display: flex;
   flex-direction: row;
@@ -102,14 +104,9 @@ tfoot {
 
 .pending-tabel .nested_table > tbody tr td {
   border: 0 !important;
-  padding: 5px !important;
+  padding: 0px !important;
 }
 
-.pending-tabel tr td {
-
-  padding: 0px 14px !important;
-
-}
 
 
 .pending-textaerea {
@@ -139,14 +136,29 @@ tfoot {
   margin-bottom: 0;
 }
 
-.paginationWrapper {
-  background-color: #fff;
-  text-align: center;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 60px;
-  padding: 20px 0;
+
+.invoice-genrate-container{
+  padding: 0 15px;
+}
+.input-group {
+    position: relative;
+}
+.input-group input.form-control {
+    padding-left: 35px !important;
+    border-color:$border-blue;
+}
+.input-group input.form-control:focus{
+    border-color:$border-blue;
+}
+.icon-calender{
+   position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $border-blue;
 }
 @media(max-width:768px){
   .basic.onMobileView {

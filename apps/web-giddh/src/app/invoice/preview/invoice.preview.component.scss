@@ -306,8 +306,8 @@ ul.selectActionDropdown {
   display: block;
 }
 .selectActionDropdown a:hover{
-  background-color: #e5e5e5;
-  color: #ff5f00;
+      color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 .dropdown-toggle{
   color: #333;
@@ -392,6 +392,9 @@ button.btn.btn-filter {
 }
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
+}
+.invoice-table th .d-flex {
+    align-items: center;
 }
 /* responsive */
 @media (max-width: 768px) {

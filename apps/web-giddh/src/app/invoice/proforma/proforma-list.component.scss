@@ -241,6 +241,9 @@ button.btn.btn-filter span.icon-cross {
 .icon-ellipse.selectAction a {
     color: #333;
 }
+.invoice-table th .d-flex {
+    align-items: center;
+}
 // responsive
 @media(max-width:768px){
   .mobileSearch{
