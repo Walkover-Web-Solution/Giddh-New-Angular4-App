@@ -53,6 +53,7 @@ export class ContactAdvanceSearchCommonModal {
   amountType: string;
   amount: number;
 }
+
 export class ContactAdvanceSearchModal {
   openingBalance: number;
   openingBalanceType: string;
@@ -61,7 +62,7 @@ export class ContactAdvanceSearchModal {
   openingBalanceEqual: boolean;
   closingBalance: number;
   closingBalanceType: string;
-  closingBalanceGreaterThan :boolean;
+  closingBalanceGreaterThan: boolean;
   closingBalanceLessThan: boolean;
   closingBalanceEqual: boolean;
   creditTotal: number;
@@ -96,7 +97,7 @@ export class CustomerAdvanceSearchModal {
   openingBalanceEqual: boolean;
   closingBalance: number;
   closingBalanceType: string = "debit";
-  closingBalanceGreaterThan :boolean;
+  closingBalanceGreaterThan: boolean;
   closingBalanceLessThan: boolean;
   closingBalanceEqual: boolean;
   creditTotal: number;
@@ -111,4 +112,15 @@ export class CustomerAdvanceSearchModal {
   closingBalanceNotEqual: boolean;
   creditTotalNotEqual: boolean;
   debitTotalNotEqual: boolean;
+}
+
+export class CustomerVendorFiledFilter {
+  public parentGroup: boolean = false;
+  public email: boolean = false;
+  public mobile: boolean = false;
+  public state: boolean = false;
+  public gstin: boolean = false;
+  public comment: boolean = false;
+  public openingBalance: boolean = false;
+  public closingBalance: boolean = false;
 }
