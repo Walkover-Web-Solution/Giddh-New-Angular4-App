@@ -118,9 +118,9 @@ class CurrencyClass {
   public code: string;
   constructor(attrs?: any) {
     if (attrs) {
-      return Object.assign({}, this, attrs);
+      this.code = attrs.country.countryCode;
     }else{
-      this.code = "USD";
+      this.code = "IN";
     }
   }
 }
@@ -142,7 +142,7 @@ export class AccountDetailsClass {
 
   constructor(attrs?: any) {
     //this.country = new CountryClass();
-    this.currency = new CurrencyClass();
+    this.currency = new CurrencyClass(attrs);
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
     if (attrs) {
@@ -512,14 +512,14 @@ export class SalesEntryClassMulticurrency {
   public voucherType: string;
   constructor() {
     this.transactions = [];
-    this.date = '25-09-2019';
+    this.date = '';
     this.taxes = [];
     this.hsnNumber = '';
     this.sacNumber = '';
     this.description = '';
     this.uniqueName = '';
     this.voucherNumber = '';
-    this.voucherType = 'sales';
+    this.voucherType = '';
   }
 }
 

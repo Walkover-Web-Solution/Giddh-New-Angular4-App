@@ -276,7 +276,7 @@
                   <strong>${{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong></span>
                 <!-- added multicurrency feature make it functional to change into appropriate currency -->
                 <span class="sp-rupees"><span
-                    class="icon-rupees"></span>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                    class="icon-rupees"></span>{{invFormData.voucherDetails.balanceDue*exchangeRate | number:'1.2-2'}}</span>
               </p>
             </div>
 

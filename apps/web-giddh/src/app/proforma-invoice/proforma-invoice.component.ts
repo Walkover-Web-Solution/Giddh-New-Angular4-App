@@ -1142,10 +1142,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       updateAccountDetails: this.updateAccount,
       voucher:data,
       entries: [],
-      date: '25-09-2019',
+      date: data.voucherDetails.voucherDate,
       type: this.invoiceType,
       exchangeRate: this.originalExchangeRate,
-      dueDate:''
+      dueDate:data.voucherDetails.dueDate
     };
 
     // set voucher type
@@ -1173,9 +1173,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // reset form and other
           this.resetInvoiceForm(f);
 
-          this.voucherNumber = response.body.entries[0].voucherNumber;
+          this.voucherNumber = response.body.number;
           this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.entries[0].uniqueName;
+          this.accountUniqueName = response.body.uniqueName;
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
@@ -2493,7 +2493,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     entries.forEach(e => {
       let salesEntryClass = new SalesEntryClassMulticurrency();
-      salesEntryClass.uniqueName = e.voucherType;
+      salesEntryClass.voucherType = e.voucherType;
+      salesEntryClass.uniqueName = e.uniqueName;
+      salesEntryClass.description = e.description;
+      salesEntryClass.date = e.entryDate;
       e.taxList.forEach(t=>{
         salesEntryClass.taxes.push({uniqueName:t});
       })
@@ -2502,6 +2505,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         transactionClassMul.account.uniqueName = tr.accountUniqueName;
         transactionClassMul.account.name = tr.accountName;
         transactionClassMul.amount.amountForAccount = tr.amount.toString();
+        salesEntryClass.hsnNumber = tr.hsnNumber;
+        salesEntryClass.sacNumber = tr.sacNumber;
         salesEntryClass.transactions.push(transactionClassMul);
       })
       salesEntryClassArray.push(salesEntryClass);
