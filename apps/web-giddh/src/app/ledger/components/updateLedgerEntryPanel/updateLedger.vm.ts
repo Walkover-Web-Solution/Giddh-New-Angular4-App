@@ -20,7 +20,6 @@ export class UpdateLedgerVm {
   public flatternAccountList4BaseAccount: IOption[] = [];
   public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedLedger: LedgerResponse;
-  public selectedLedgerBackup: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public grandTotal: number = 0;
   public totalAmount: number = 0;
@@ -586,7 +585,6 @@ export class UpdateLedgerVm {
 
   public resetVM() {
     this.selectedLedger = null;
-    this.selectedLedgerBackup = null;
     this.taxRenderData = [];
     this.selectedTaxes = [];
     this.discountArray = [];

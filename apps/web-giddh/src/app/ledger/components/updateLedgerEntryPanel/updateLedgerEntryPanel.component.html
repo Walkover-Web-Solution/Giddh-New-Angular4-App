@@ -209,7 +209,7 @@
 
             <tbody class="ledger-main">
 
-              <tr *ngFor="let txn of vm.selectedLedger.transactions">
+              <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
 
                 <ng-container *ngIf="txn.type == 'CREDIT'">
 

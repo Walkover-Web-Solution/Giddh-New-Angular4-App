@@ -33,7 +33,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { ResizedEvent } from 'angular-resize-event';
-import { TaxResponse } from '../../../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -79,11 +79,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isTxnUpdateSuccess$: Observable<boolean>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedLedgerStream$: Observable<LedgerResponse>;
+  public companyProfile$: Observable<any>;
   public activeAccount$: Observable<AccountResponse>;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
+  public baseCurrencyDetails: ICurrencyResponse;
+  public foreignCurrencyDetails: ICurrencyResponse;
   public baseCurrency: string = null;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
@@ -111,6 +114,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).pipe(takeUntil(this.destroyed$));
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).pipe(takeUntil(this.destroyed$));
+    this.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     this.vm.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -152,7 +156,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
     })), takeUntil(this.destroyed$));
 
-    // get enetry name and ledger account uniquename
+    // get entry name and ledger account uniquename
     observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
       if (resp[0] && resp[1]) {
         this.entryUniqueName = resp[0];
@@ -294,7 +298,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
-          this.vm.selectedLedgerBackup = resp[1];
 
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
@@ -390,6 +393,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
       });
 
+
     // check if delete entry is success
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
       if (del) {
@@ -406,10 +410,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.baseAccountChanged = false;
         // this.closeUpdateLedgerModal.emit(true);
       }
-    });
-
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
-      this.profileObj = s;
     });
   }
 

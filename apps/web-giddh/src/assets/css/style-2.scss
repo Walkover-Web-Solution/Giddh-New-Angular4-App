@@ -5664,6 +5664,7 @@ typeahead-container .dropdown-menu li.active>a>a {
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
+    position: relative;
 }
 
 .ledgHead.entry-popup table td.pdR25imp {
@@ -7623,6 +7624,12 @@ span.red-text {
 .main-company-name .input-group .tooltip-inner {
     white-space: inherit;
     word-break: normal;
+}
+
+.debit-blank-row td .form-control, .credit-blank-row td .form-control{
+  border: 0;
+  position: relative;
+  top: 1px;
 }
 
 /* responsive */
