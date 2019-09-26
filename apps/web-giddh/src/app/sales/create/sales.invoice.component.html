@@ -144,7 +144,7 @@
                                   class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling
                                   [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                   name="billingDetails.stateCode"
-                                  [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
+                                  [(ngModel)]="invFormData.accountDetails.billingDetails.state.code"></sales-sh-select>
                                 <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
 [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                               </div>
@@ -190,7 +190,7 @@
                                   <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
                                     class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true"
                                     [options]="statesSource$ | async" name="shippingDetails.stateCode"
-                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode">
+                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
                                   </sales-sh-select>
                                 </div>
                                 <div class="col-sm-12 pd">
@@ -266,7 +266,7 @@
             <div class="col-sm-5">
               <div class="form-group">
                 <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
-                  class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+                  class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.contactNumber" />
               </div>
             </div>
 
@@ -1253,7 +1253,7 @@
                                 class="select-bdr-bottom" (selected)="autoFillShippingDetails()" #statesBilling
                                 [showBottomBorderOnly]="true" [options]="statesSource$ | async"
                                 name="billingDetails.stateCode"
-                                [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></sales-sh-select>
+                                [(ngModel)]="invFormData.accountDetails.billingDetails.state.code"></sales-sh-select>
                               <!-- <ng-select (selected)="autoFillShippingDetails()" #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async"
 [(ngModel)]="invFormData.accountDetails.billingDetails.stateCode"></ng-select> -->
                             </div>
@@ -1299,7 +1299,7 @@
                                 <sales-sh-select [disabled]="isUpdateMode" [placeholder]="'State'"
                                   class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true"
                                   [options]="statesSource$ | async" name="shippingDetails.stateCode"
-                                  [(ngModel)]="invFormData.accountDetails.shippingDetails.stateCode"></sales-sh-select>
+                                  [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code"></sales-sh-select>
                               </div>
                               <div class="col-sm-12 pd">
                                 <!-- <label>GSTIN</label> -->
@@ -1365,7 +1365,7 @@
           <td>
             <div class="col-xs-6 pl-0">
               <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber"
-                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
+                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.contactNumber" />
             </div>
 
           </td>
