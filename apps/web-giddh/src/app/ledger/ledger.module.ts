@@ -43,6 +43,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 import { SalesModule } from '../sales/sales.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
     SelectModule.forRoot(),
     SalesModule,
     AngularResizedEventModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    NgbTooltipModule
   ],
 })
 export class LedgerModule {

@@ -1,20 +1,26 @@
 <div id="entryModal">
   <div class="modal-header">
-    <span aria-hidden="true" class="close hover-orange" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">×</span>
+    <span aria-hidden="true" class="close hover-orange" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
+          aria-label="Close">×</span>
 
-    <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
-    <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group" filterPlaceholder="Type to filter.."
-      name="accountUniqueName" [(ngModel)]="baseAccountName$" [useInBuiltFilterForFlattenAc]="true" [showClear]="false" [options]="vm.flatternAccountList4BaseAccount"
-      style="width:30%">
+    <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()"
+        class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
+    <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
+               filterPlaceholder="Type to filter.."
+               name="accountUniqueName" [(ngModel)]="baseAccountName$" [useInBuiltFilterForFlattenAc]="true"
+               [showClear]="false" [options]="vm.flatternAccountList4BaseAccount"
+               style="width:30%">
       <ng-template #optionTemplate let-option="option">
         <ng-container *ngIf="!option.additional?.stock">
-          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
+          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+             style="border-bottom: 1px solid #ccc;">
             <div class="item">{{option?.label}}</div>
             <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
           </a>
         </ng-container>
         <ng-container *ngIf="option.additional?.stock">
-          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
+          <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+             style="border-bottom: 1px solid #ccc;">
             <div class="item">{{option?.label}}</div>
             <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
             <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
@@ -40,10 +46,10 @@
     <div class="ledgHead entry-popup">
       <table class="col-xs-12 ledger-head mrT1 hidden-xs">
         <thead>
-          <tr>
-            <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.dr}}</th>
-            <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}</th>
-          </tr>
+        <tr>
+          <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.dr}}</th>
+          <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}</th>
+        </tr>
         </thead>
       </table>
 
@@ -64,92 +70,97 @@
 
           <table class="width100 card-table">
             <thead class="hidden-xs">
-              <tr class="t-h-bg1">
-                <th class="col-xs-2" style="border-top:none">
+            <tr class="t-h-bg1">
+              <th class="col-xs-2" style="border-top:none">
                   <span class="cursor-pointer">
                     Date
                   </span>
-                </th>
-                <th class="col-xs-6" style="border-top:none">Paticular</th>
-                <th class="col-xs-2" style="border-top:none">
-                  Amount
-                  <span *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span>
-                </th>
-                <th class="col-xs-2 text-right" style="border-top:none" *ngIf="isMultiCurrencyAvailable">
-                  Amount
-                </th>
-              </tr>
+              </th>
+              <th class="col-xs-6" style="border-top:none">Paticular</th>
+
+              <th class="col-xs-2" style="border-top:none">
+                Amount
+              </th>
+
+            </tr>
             </thead>
 
             <tbody class="ledger-main">
-              <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
-                <ng-container *ngIf="txn.type === 'DEBIT'">
-                  <td class="col-xs-2" data-title="Date">
-                    <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker' [(ngModel)]="vm.selectedLedger.entryDate" class="form-control"
-                      bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" (click)="addBlankTrx('DEBIT', txn, $event)"
-                      placeholder="date">
-                  </td>
+            <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
+              <ng-container *ngIf="txn.type === 'DEBIT'">
+                <td class="col-xs-2" data-title="Date">
+                  <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
+                         [(ngModel)]="vm.selectedLedger.entryDate" class="form-control"
+                         bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                         (click)="addBlankTrx('DEBIT', txn, $event)"
+                         placeholder="date">
+                </td>
 
-                  <td data-title="Paticular" id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
+                <td data-title="Paticular" id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
 
-                    <ng-template [ngIf]="!txn.isDiscount">
-                      <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" (keydown)="keydownPressed($event)"
-                        [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
-                        (selected)="selectAccount($event,txn, dbtSelect)" [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
-                        [ItemHeight]="67" (onShow)="dbs.hide()" [useInBuiltFilterForFlattenAc]="true">
-                        <ng-template #optionTemplate let-option="option">
-                          <ng-container *ngIf="!option.additional?.stock">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                              <div class="item">{{ option.label }}</div>
-                              <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            </a>
-                          </ng-container>
-                          <ng-container *ngIf="option.additional?.stock">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                              <div class="item">{{ option.label }}</div>
-                              <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                              <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                            </a>
-                          </ng-container>
-                        </ng-template>
-                        <ng-template #notFoundLinkTemplate>
-
-                          <a id="createNewId" [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
-                            <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                            <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                  <ng-template [ngIf]="!txn.isDiscount">
+                    <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                               (keydown)="keydownPressed($event)"
+                               [options]="vm.flatternAccountList4Select | async" #dbtSelect
+                               (click)="addBlankTrx('DEBIT', txn, $event)"
+                               (selected)="selectAccount($event,txn, dbtSelect)" [showClear]="false"
+                               [(ngModel)]="txn.particular.uniqueName"
+                               [ItemHeight]="67" (onShow)="dbs.hide()" [useInBuiltFilterForFlattenAc]="true">
+                      <ng-template #optionTemplate let-option="option">
+                        <ng-container *ngIf="!option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                           </a>
-                        </ng-template>
-                      </sh-select>
-                    </ng-template>
+                        </ng-container>
+                        <ng-container *ngIf="option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                          </a>
+                        </ng-container>
+                      </ng-template>
+                      <ng-template #notFoundLinkTemplate>
 
-                    <ng-template [ngIf]="txn.isDiscount">
-                      <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
-                    </ng-template>
+                        <a id="createNewId" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                           [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
+                          <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                          <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                        </a>
+                      </ng-template>
+                    </sh-select>
+                  </ng-template>
 
-                  </td>
+                  <ng-template [ngIf]="txn.isDiscount">
+                    <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
+                  </ng-template>
 
-                  <td class="col-xs-2" data-title="Amount">
-                    <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
-                      (ngModelChange)="onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0"
-                      (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'" [containerClass]="'col-xs-3'"
-                      tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
+                </td>
+
+                <td class="col-xs-2" data-title="Amount">
+                  <input type="text" [(ngModel)]="txn.amount" class="form-control" decimalDigitsDirective
+                         [DecimalPlaces]="2" (click)="addBlankTrx('DEBIT', txn, $event)"
+                         (ngModelChange)="onTxnAmountChange(txn)">
+                  <span class="download-invoice-ledger"
+                        *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0"
+                        (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'"
+                        [containerClass]="'col-xs-3'"
+                        tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0"
-                      [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
-                      (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
+                  <span class="download-invoice-ledger "
+                        *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length> 0"
+                        [placement]="'left'" [containerClass]="'col-xs-3'"
+                        tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                        (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
-                  </td>
-                  <td data-title="Amount" class="col-xs-2 pos-rel text-right" *ngIf="isMultiCurrencyAvailable">
-                    <input type="text" [(ngModel)]="txn.convertedAmount" class="form-control multicurrency_input" decimalDigitsDirective [DecimalPlaces]="2"
-                      (click)="addBlankTrx('DEBIT', txn, $event)" (change)="onTxnAmountChange(txn)">
-                    <span class="currency_type" *ngIf="isMultiCurrencyAvailable && txn.convertedAmount">({{txn.convertedAmountCurrency}})</span>
-                  </td>
-                </ng-container>
-              </tr>
+                  <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">$454</p>
+                </td>
+
+              </ng-container>
+            </tr>
             </tbody>
           </table>
 
@@ -157,27 +168,28 @@
           <table class="ledger-footer-1">
 
             <tbody>
-              <tr class="total_col">
-                <td colspan="12" class="col-xs-12 text-right h32">
-                  <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2" [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
-                    [placement]="'top'">
+            <tr class="total_col">
+              <td colspan="12" class="col-xs-12 text-right h32">
+                  <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
+                        [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
+                        [placement]="'top'">
                     C/F: CR {{vm.compoundTotal | giddhCurrency}}</span>
-                  <!-- <ng-template #understandingTextCr>
-  {{ vm.ledgerUnderStandingObj.balanceText.cr }}
-  </ng-template> -->
-                </td>
-              </tr>
+                <!-- <ng-template #understandingTextCr>
+{{ vm.ledgerUnderStandingObj.balanceText.cr }}
+</ng-template> -->
+              </td>
+            </tr>
 
-              <tr class="total_col">
-                <!-- reckoning -->
-                <td colspan="12" class="col-xs-12 text-right h32">
+            <tr class="total_col">
+              <!-- reckoning -->
+              <td colspan="12" class="col-xs-12 text-right h32">
                   <span class="bdrT pr-1 pl-1 width-200">
                     {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
                     <!--{{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | giddhCurrency }}-->
                   </span>
-                  <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">$454</p>
-                </td>
-              </tr>
+                <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">$454</p>
+              </td>
+            </tr>
 
             </tbody>
 
@@ -193,100 +205,99 @@
 
           <table class="width100 card-table">
             <thead class="xs-hidden">
-              <tr class="t-h-bg1">
-                <th class="col-xs-2" style="border-top:none">
+            <tr class="t-h-bg1">
+              <th class="col-xs-2" style="border-top:none">
                   <span class="cursor-pointer">
                     Date
                   </span>
-                </th>
-                <th class="col-xs-6" style="border-top:none">Paticular</th>
-                <th class="col-xs-2" style="border-top:none">Amount
-                  <span *ngIf="isMultiCurrencyAvailable">{{ baseCurrency }}</span>
-                </th>
-                <th class="col-xs-2 text-right" style="border-top:none" *ngIf="isMultiCurrencyAvailable">Amount</th>
-              </tr>
+              </th>
+              <th class="col-xs-6" style="border-top:none">Paticular</th>
+              <th class="col-xs-2" style="border-top:none">Amount</th>
+            </tr>
             </thead>
 
             <tbody class="ledger-main">
 
-              <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
+            <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
 
-                <ng-container *ngIf="txn.type == 'CREDIT'">
+              <ng-container *ngIf="txn.type == 'CREDIT'">
 
-                  <td data-title="Date" class="col-xs-2">
-                    <input class="form-control" autocomplete="off" name="datepic" type="text" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
-                      #cbs='bsDatepicker' bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-                  </td>
+                <td data-title="Date" class="col-xs-2">
+                  <input class="form-control" autocomplete="off" name="datepic" type="text"
+                         [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
+                         #cbs='bsDatepicker' bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                </td>
 
-                  <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
+                <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
 
-                    <ng-template [ngIf]="!txn.isDiscount">
+                  <ng-template [ngIf]="!txn.isDiscount">
 
-                      <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" (keydown)="keydownPressed($event)"
-                        [options]="vm.flatternAccountList4Select | async" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
-                        (selected)="selectAccount($event,txn, crdSelect)" (onShow)="cbs.hide()" [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
-                        [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-                        <ng-template #optionTemplate let-option="option">
-                          <ng-container *ngIf="!option.additional?.stock">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                              <div class="item">{{ option.label }}</div>
-                              <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            </a>
-                          </ng-container>
-                          <ng-container *ngIf="option.additional?.stock">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                              <div class="item">{{ option.label }}</div>
-                              <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                              <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                            </a>
-                          </ng-container>
-                        </ng-template>
-                        <ng-template #notFoundLinkTemplate>
-
-                          <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
-                            <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                            <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                    <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                               (keydown)="keydownPressed($event)"
+                               [options]="vm.flatternAccountList4Select | async" #crdSelect
+                               (click)="addBlankTrx('CREDIT', txn, $event)"
+                               (selected)="selectAccount($event,txn, crdSelect)" (onShow)="cbs.hide()"
+                               [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
+                               [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                      <ng-template #optionTemplate let-option="option">
+                        <ng-container *ngIf="!option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                           </a>
-                        </ng-template>
-                      </sh-select>
+                        </ng-container>
+                        <ng-container *ngIf="option.additional?.stock">
+                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
+                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
+                          </a>
+                        </ng-container>
+                      </ng-template>
+                      <ng-template #notFoundLinkTemplate>
 
-                    </ng-template>
+                        <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                           [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
+                          <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                          <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                        </a>
+                      </ng-template>
+                    </sh-select>
 
-                    <ng-template [ngIf]="txn.isDiscount">
-                      <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
-                    </ng-template>
+                  </ng-template>
 
-                  </td>
+                  <ng-template [ngIf]="txn.isDiscount">
+                    <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
+                  </ng-template>
 
-                  <td data-title="Amount" class="col-xs-2">
+                </td>
 
-                    <input class="form-control" type="text" [(ngModel)]="txn.amount" [disabled]="txn.isDiscount" (click)="addBlankTrx('CREDIT', txn, $event)"
-                      decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" [placement]="'left'" [containerClass]="'col-xs-3'"
-                      tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
+                <td data-title="Amount" class="col-xs-2">
+
+                  <input class="form-control" type="text" [(ngModel)]="txn.amount" [disabled]="txn.isDiscount"
+                         (click)="addBlankTrx('CREDIT', txn, $event)"
+                         decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
+                  <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
+                        [placement]="'left'" [containerClass]="'col-xs-3'"
+                        tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
+                        (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
 
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
-                      [placement]="'left'" [containerClass]="'col-xs-3'" tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
-                      (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
+                  <span class="download-invoice-ledger"
+                        *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
+                        [placement]="'left'" [containerClass]="'col-xs-3'"
+                        tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                        (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
 
-                    <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
+                  <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">$454</p>
 
-                  </td>
+                </td>
 
-                  <td data-title="Amount" class="col-xs-2 pos-rel text-right" *ngIf="isMultiCurrencyAvailable">
-
-                    <input class="form-control " type="text" [(ngModel)]="txn.convertedAmount" [disabled]="txn.isDiscount" (click)="addBlankTrx('CREDIT', txn, $event)"
-                      decimalDigitsDirective [DecimalPlaces]="2" (change)="onTxnAmountChange(txn)">
-
-                    <span class="currency_type" *ngIf="isMultiCurrencyAvailable && txn.convertedAmount">({{txn.convertedAmountCurrency}})</span>
-                  </td>
-
-                </ng-container>
-              </tr>
+              </ng-container>
+            </tr>
             </tbody>
           </table>
 
@@ -299,28 +310,26 @@
 
             <tbody>
 
-              <tr class="total_col">
-                <td colspan="12" class="col-xs-12  text-right h32">
+            <tr class="total_col">
+              <td colspan="12" class="col-xs-12  text-right h32">
                   <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
-                    <span class="primary_clr pd2" [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
+                    <span class="primary_clr pd2" [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
+                          [placement]="'top'">
                       {{vm.compoundTotal | giddhCurrency}}</span>
-                    <!--                                <ng-template #understandingTextDr>-->
-                    <!--                                    {{ vm.ledgerUnderStandingObj.balanceText.dr }}-->
-                    <!--                                </ng-template>-->
                   </span>
-                </td>
-              </tr>
+              </td>
+            </tr>
 
-              <tr class="total_col">
+            <tr class="total_col">
 
-                <!-- reckoning -->
-                <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
+              <!-- reckoning -->
+              <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                   <span class="bdrT">
                     {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | giddhCurrency }}
                   </span>
-                  <p class="mb-0 amnt-total" *ngIf="totalPrice">$454</p>
-                </td>
-              </tr>
+                <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">$454</p>
+              </td>
+            </tr>
 
             </tbody>
 
@@ -347,111 +356,137 @@
                 <table class="width100 total-detail-table">
                   <tbody>
 
-                    <tr>
-                      <td *ngIf="vm.stockTrxEntry" class="qty-unit">
+                  <tr>
+                    <td *ngIf="vm.stockTrxEntry" class="qty-unit">
 
-                        <table>
+                      <table>
 
-                          <tbody>
+                        <tbody>
 
-                            <tr>
-                              <ng-template [ngIf]="vm.stockTrxEntry">
-                                <td [ngClass]="{width40: vm.stockTrxEntry}" class="text-right">
-                                  <label>Quantity</label>
-                                  <input type="number" name="" class="form-control text-right" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
-                                    [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)" (change)="vm.inventoryQuantityChanged($event.target.value)"
-                                  />
-                                </td>
-                                <td class="text-right pItem" style="width: 115px;">
-                                  <label>Unit</label>
-                                  <select class="form-control text-right no-padding" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code" (change)="vm.unitChanged($event.target.value)">
-                                    <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
-                                      {{item.stockUnitCode}}
-                                    </option>
-                                  </select>
-                                </td>
-                              </ng-template>
-                            </tr>
+                        <tr>
+                          <ng-template [ngIf]="vm.stockTrxEntry">
+                            <td [ngClass]="{width40: vm.stockTrxEntry}" class="text-right">
+                              <label>Quantity</label>
+                              <input type="number" name="" class="form-control text-right"
+                                     [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
+                                     [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
+                                     (change)="vm.inventoryQuantityChanged($event.target.value)"
+                              />
+                            </td>
+                            <td class="text-right pItem" style="width: 115px;">
+                              <label>Unit</label>
+                              <select class="form-control text-right no-padding"
+                                      [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                                      (change)="vm.unitChanged($event.target.value)">
+                                <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
+                                  {{item.stockUnitCode}}
+                                </option>
+                              </select>
+                            </td>
+                          </ng-template>
+                        </tr>
 
-                          </tbody>
-                        </table>
+                        </tbody>
+                      </table>
 
+                    </td>
+
+                    <td class="table-plus" *ngIf="vm.stockTrxEntry">
+                      <label class="d-block">&nbsp;</label>
+                      <label class="fs20">x</label>
+                    </td>
+
+                    <ng-template [ngIf]="vm.stockTrxEntry">
+                      <td class="text-right price pItem">
+                        <label>Price</label>
+                        <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)"
+                               (change)="vm.inventoryPriceChanged($event.target.value)"
+                               decimalDigitsDirective [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate"
+                               class="form-control text-right"
+                        />
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                          <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+                          3259.56
+                        </p>
                       </td>
+                    </ng-template>
 
-                      <td class="table-plus" *ngIf="vm.stockTrxEntry">
-                        <label class="d-block">&nbsp;</label>
-                        <label class="fs20">x</label>
-                      </td>
+                    <td class="equal-2" *ngIf="vm.stockTrxEntry">
+                      <label class="d-block">&nbsp;</label>
+                      <label class="fs20">=</label>
+                    </td>
 
-                      <ng-template [ngIf]="vm.stockTrxEntry">
-                        <td class="text-right price pItem">
-                          <label>Price</label>
-                          <input type="text" name="" (paste)="vm.inventoryPriceChanged($event)" (change)="vm.inventoryPriceChanged($event.target.value)"
-                            decimalDigitsDirective [DecimalPlaces]="4" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right"
-                          />
-                          <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">
-                            <i class="icon-rupees font-10"></i> 3259.56</p>
-                        </td>
-                      </ng-template>
+                    <td class="text-right pItem amount">
+                      <label class="primary_clr">Amount</label>
+                      <input type="text" name="" class="form-control text-right" decimalDigitsDirective
+                             [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
+                             (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()"
+                             [(ngModel)]="vm.totalAmount"/>
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                        <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+                        3259.56
+                      </p>
+                    </td>
 
-                      <td class="equal-2" *ngIf="vm.stockTrxEntry">
-                        <label class="d-block">&nbsp;</label>
-                        <label class="fs20">=</label>
-                      </td>
+                    <td class="table-minus">
+                      <label class="d-block">&nbsp;</label>
+                      <label class="fs20">-</label>
+                    </td>
 
-                      <td class="text-right pItem amount">
-                        <label class="primary_clr">Amount</label>
-                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" (paste)="vm.inventoryAmountChanged($event)"
-                          (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount" />
-                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">
-                          <i class="icon-rupees font-10"></i> 3259.56</p>
-                      </td>
-
-                      <td class="table-minus">
-                        <label class="d-block">&nbsp;</label>
-                        <label class="fs20">-</label>
-                      </td>
-
-                      <td class="text-right pItem price">
+                    <td class="text-right pItem price">
                         <span auto-close="outsideClick">
-                          <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray" [ledgerAmount]="vm.selectedLedger.actualAmount"
-                            (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
-                            (hideOtherPopups)="hideTax()">
+                          <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
+                                                  [ledgerAmount]="vm.selectedLedger.actualAmount"
+                                                  (discountTotalUpdated)="vm.discountTrxTotal = $event;vm.handleDiscountEntry(); vm.generateGrandTotal();"
+                                                  (hideOtherPopups)="hideTax()">
                           </update-ledger-discount>
                         </span>
-                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">
-                          <i class="icon-rupees font-10"></i> 3259.56</p>
-                      </td>
 
-                      <td class="text-center equal-2" *ngIf="(vm.companyTaxesList$ | async)?.length">
-                        <label class="d-block">&nbsp;</label>
-                        <label class="fs20">+</label>
-                      </td>
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                        <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+                        3259.56
+                      </p>
+                    </td>
 
-                      <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                    <td class="text-center equal-2" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                      <label class="d-block">&nbsp;</label>
+                      <label class="fs20">+</label>
+                    </td>
+
+                    <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
                         <span auto-close="outsideClick">
-                          <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
-                            [totalForTax]="vm.totalForTax" [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
-                            (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
+                          <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
+                                                     [date]="vm.selectedLedger.entryDate"
+                                                     [taxRenderData]="vm.taxRenderData"
+                                                     [totalForTax]="vm.totalForTax"
+                                                     [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
+                                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
+                                                     (hideOtherPopups)="hideDiscount()"
+                                                     (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>
-                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">
-                          <i class="icon-rupees font-10"></i> 3259.56</p>
-                      </td>
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                        <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+                        3259.56
+                      </p>
+                    </td>
 
-                      <td class="text-center equal-2">
-                        <label class="d-block">&nbsp;</label>
-                        <label class="fs20">=</label>
-                      </td>
+                    <td class="text-center equal-2">
+                      <label class="d-block">&nbsp;</label>
+                      <label class="fs20">=</label>
+                    </td>
 
-                      <td class="text-right pItem total-amn" style="min-width: 85px;" (resized)="onResized($event)">
-                        <label class="primary_clr">Total</label>
-                        <input type="text" name="" class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="vm.grandTotal"
-                          (paste)="vm.inventoryTotalChanged($event)" (blur)="vm.inventoryTotalChanged($event)" />
-                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="totalPrice">
-                          <i class="icon-rupees font-10"></i> 3259.56</p>
-                      </td>
+                    <td class="text-right pItem total-amn" style="min-width: 85px;" (resized)="onResized($event)">
+                      <label class="primary_clr">Total</label>
+                      <input type="text" name="" class="form-control text-right" decimalDigitsDirective
+                             [DecimalPlaces]="2" [(ngModel)]="vm.grandTotal"
+                             (paste)="vm.inventoryTotalChanged($event)" (blur)="vm.inventoryTotalChanged($event)"/>
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                        <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
+                        3259.56
+                      </p>
+                    </td>
 
-                    </tr>
+                  </tr>
 
                   </tbody>
 
@@ -459,19 +494,22 @@
 
 
                 <div class="text-right mrB1" style="display: flex;justify-content: flex-end;">
-                  <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable" *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
-                    (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)" />
+                  <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                         *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
+                         (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)"/>
                   <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
                   <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="mrT1">
                     <label>Other Tax</label>
-                    <span style="display: flex;align-items: center;margin-right: 6px" [ngStyle]="{'width': totalTdElementWidth + 'px'}">
+                    <span style="display: flex;align-items: center;margin-right: 6px"
+                          [ngStyle]="{'width': totalTdElementWidth + 'px'}">
                       <span>
                         <a href="javascript: void 0" (click)="toggleOtherTaxesAsideMenu.emit(vm)">
                           <img src="assets/images/edit-pencilicon.svg">
                         </a>
                       </span>
-                      <input class="text-right form-control mrL1" disabled="disabled" [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"
+                      <input class="text-right form-control mrL1" disabled="disabled"
+                             [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"
                       />
                     </span>
                   </div>
@@ -487,7 +525,8 @@
 
             <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
               <div class="row">
-                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description"></textarea>
+                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                          placeholder="Description"></textarea>
               </div>
             </div>
 
@@ -500,15 +539,21 @@
           <table class="width100">
             <tbody>
 
-              <tr>
-                <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
-                  <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-                  <button class="no-btn pdL0">&nbsp; More Details</button>
-                </td>
-                <td class="text-right">
-                  <span class="primary_clr" *ngIf="totalPrice">Total in INR: {{vm.compoundTotal | giddhCurrency}}</span>
-                </td>
-              </tr>
+            <tr>
+
+              <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
+                <button class="no-btn pdL0">&nbsp; More Details</button>
+              </td>
+
+              <td class="text-right">
+                <span class="primary_clr" *ngIf="isMultiCurrencyAvailable">
+                  Total in {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
+            <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span> {{vm.compoundTotal | giddhCurrency}}
+                </span>
+              </td>
+
+            </tr>
 
             </tbody>
           </table>
@@ -521,14 +566,18 @@
                 <td class="select2-parent pdR1">
                   <div class="form-group">
                     <label class="default_clr">Voucher Type</label>
-                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true" [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
-                      (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
+                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                               [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
+                               (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'"
+                               [width]="'161px'"></sh-select>
                   </div>
                 </td>
-                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
+                <td class="pdR1"
+                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
                   <div class="form-group">
                     <label class="default_clr">Invoice No.</label>
-                    <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
+                    <input type="text" placeholder="Invoice no." class="form-control"
+                           [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher"
                     />
                   </div>
                 </td>
@@ -546,7 +595,8 @@
                         <li *ngIf="invoiceList.length==0">No results found</li>
                         <li *ngFor="let invoice of invoiceList">
 
-                          <input type="checkbox" [checked]="invoice.isSelected" (click)="selectInvoice (invoice, $event)" /> {{invoice.label}}
+                          <input type="checkbox" [checked]="invoice.isSelected"
+                                 (click)="selectInvoice (invoice, $event)"/> {{invoice.label}}
                         </li>
                       </ul>
                     </div>
@@ -555,8 +605,9 @@
                 <td class="">
                   <div class="form-group">
                     <label class="default_clr">Voucher No.</label>
-                    <input type="text" placeholder="Voucher no." class="form-control" [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
-                      [style.width.px]="80" />
+                    <input type="text" placeholder="Voucher no." class="form-control"
+                           [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
+                           [style.width.px]="80"/>
                   </div>
                 </td>
               </tr>
@@ -566,17 +617,19 @@
             <table class="mrT1 xs-table-block">
 
               <tbody>
-                <tr>
-                  <td class="pdR1">
-                    <label class="default_clr">Cheque Number</label>
-                    <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="vm.selectedLedger.chequeNumber" />
-                  </td>
-                  <td>
-                    <label class="default_clr">Cheque Clearance Date</label>
-                    <input type="text" autocomplete="off" class="form-control" [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker
-                      #chbs='bsDatepicker' [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                  </td>
-                </tr>
+              <tr>
+                <td class="pdR1">
+                  <label class="default_clr">Cheque Number</label>
+                  <input type="text" placeholder="XXXX2619" class="form-control"
+                         [(ngModel)]="vm.selectedLedger.chequeNumber"/>
+                </td>
+                <td>
+                  <label class="default_clr">Cheque Clearance Date</label>
+                  <input type="text" autocomplete="off" class="form-control"
+                         [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker
+                         #chbs='bsDatepicker' [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
+                </td>
+              </tr>
 
               </tbody>
 
@@ -585,13 +638,14 @@
             <table class="mrT1">
 
               <tbody>
-                <tr>
-                  <td class="pdR1">
-                    <label class="default_clr">Assign Tag</label>
-                    <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'" [showClear]="false" [multiple]="true"
-                      name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
-                  </td>
-                </tr>
+              <tr>
+                <td class="pdR1">
+                  <label class="default_clr">Assign Tag</label>
+                  <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'"
+                             [showClear]="false" [multiple]="true"
+                             name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames" [ItemHeight]="'auto'"></sh-select>
+                </td>
+              </tr>
               </tbody>
 
             </table>
@@ -602,7 +656,9 @@
             <div class="col-xs-12 clearfix mrT1">
               <div class="mrR1 form-group pull-left cp">
                 <label class="pull-left cp fs16">
-                  <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice" [disabled]="vm.isInvoiceGeneratedAlready"> Generate Invoice
+                  <input class="pull-left" type="checkbox" name="generateInvoice"
+                         [(ngModel)]="vm.selectedLedger.generateInvoice" [disabled]="vm.isInvoiceGeneratedAlready">
+                  Generate Invoice
                 </label>
               </div>
               <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
@@ -611,28 +667,50 @@
                   <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
                 </div>
               </div>
+
               <div class="pull-right">
-                <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
-                <span *ngIf="totalPrice">Total in USD: $454</span>
+
+                <span class="primary_clr" *ngIf="!isMultiCurrencyAvailable">
+                  Compound Total: {{vm.compoundTotal | giddhCurrency}}
+                </span>
+
+                <span *ngIf="isMultiCurrencyAvailable" class="primary_clr">
+                  Total in {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}:
+                  {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}:
+                  {{ vm.convertedCompoundTotal | giddhCurrency }}
+                </span>
+
               </div>
+
             </div>
 
             <div class="clearfix mb-2">
-              <div class="pull-left pl-15" *ngIf="totalPrice">
-                <ul class="list-inline font-14" *ngIf="totalPrice">
-                  <li>1 USD</li>
+
+              <div class="pull-left pl-15" *ngIf="isMultiCurrencyAvailable">
+
+                <ul class="list-inline font-14">
+
+                  <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+
                   <li>
                     <a href="javascript:void(0)" class="text-light">
                       <i class="icon-switch-icon"></i>
                     </a>
                   </li>
+
                   <li>
-                    <input type="text" class="price-input" placeholder="71.9034"> INR</li>
+                    <input type="text" decimalDigitsDirective class="price-input"
+                           [(ngModel)]="vm.selectedLedger.exchangeRate">
+                    {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+                  </li>
+
                 </ul>
               </div>
+
               <div class="pull-right pr-15">
                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                  <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
+                  <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
+                         (uploadOutput)="onUploadOutputUpdate($event)">
                   <label for="invoiceFile" class="cp fs16">
                     <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                 </label>
@@ -642,12 +720,12 @@
             <div class="col-xs-12 pdT1">
               <div class="pull-right">
                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()">Update
+                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
+                        (click)="saveLedgerTransaction()">Update
                 </button>
               </div>
             </div>
           </div>
-
 
         </div>
       </div>
@@ -660,8 +738,9 @@
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'" (cancelCallBack)="hideDeleteAttachedFileModal()"
-        (successCallBack)="deleteAttachedFile()">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
+                     (cancelCallBack)="hideDeleteAttachedFileModal()"
+                     (successCallBack)="deleteAttachedFile()">
       </confirm-modal>
     </div>
   </div>
@@ -671,8 +750,9 @@
 <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'" (cancelCallBack)="hideDeleteEntryModal()"
-        (successCallBack)="deleteTrxEntry()">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
+                     (cancelCallBack)="hideDeleteEntryModal()"
+                     (successCallBack)="deleteTrxEntry()">
       </confirm-modal>
     </div>
   </div>
@@ -683,8 +763,18 @@
 <div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName" (closeBaseAccountModal)="hideBaseAccountModal()"
-        [flattenAccountList]="vm.flatternAccountList4Select | async" (updateBaseAccount)="changeBaseAccount($event)"></base-account>
+      <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName"
+                    (closeBaseAccountModal)="hideBaseAccountModal()"
+                    [flattenAccountList]="vm.flatternAccountList4Select | async"
+                    (updateBaseAccount)="changeBaseAccount($event)"></base-account>
     </div>
   </div>
 </div>
+
+<ng-template #totalWithCurrencySymbol>
+
+  <span>
+    {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
+  </span>
+
+</ng-template>

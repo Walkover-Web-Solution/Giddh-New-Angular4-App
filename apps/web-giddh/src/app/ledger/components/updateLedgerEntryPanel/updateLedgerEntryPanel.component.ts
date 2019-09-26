@@ -12,7 +12,7 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { filter, last, orderBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
@@ -84,9 +84,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
+
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrencyDetails: ICurrencyResponse;
   public foreignCurrencyDetails: ICurrencyResponse;
+  public selectedCurrency: 0 | 1 = 0;
+  public isPrefixAppliedForCurrency: boolean = true;
+  public selectedPrefixForCurrency: string;
+  public selectedSuffixForCurrency: string;
+  public inputMaskFormat: string;
+
   public baseCurrency: string = null;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
@@ -104,6 +111,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public keydownClassAdded: boolean = false;
   public tcsOrTds: 'tcs' | 'tds' = 'tcs';
   public totalTdElementWidth: number = 0;
+  public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
@@ -172,26 +180,46 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName))
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
       .subscribe((resp: any[]) => {
-        if (resp[0] && resp[1] && resp[2].status === 'success') {
+        if (resp[0] && resp[1] && resp[2].status === 'success' && resp[3]) {
 
           //#region flattern group list assign process
+
+          this.vm.flatternAccountList = resp[0];
+          this.activeAccount$ = observableOf(resp[2].body);
+          this.profileObj = resp[3];
+
+          // set account details for multi currency account
+          this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
+          this.isMultiCurrencyAvailable = !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency);
+
+          this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+
+          if (this.isMultiCurrencyAvailable) {
+            let currencies: ICurrencyResponse[] = [];
+            let multiCurrencyAccCurrency: ICurrencyResponse;
+
+            this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res);
+            multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
+            this.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+          } else {
+            this.baseCurrencyDetails = this.foreignCurrencyDetails;
+          }
+          this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 1 : 0;
+          this.assignPrefixAndSuffixForCurrency();
+          // end multi currency assign
 
           let stockListFormFlattenAccount: IFlattenAccountsResultItem;
           if (resp[0]) {
             stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === resp[2].body.uniqueName);
           }
 
-          this.vm.flatternAccountList = resp[0];
-          this.activeAccount$ = observableOf(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
 
-          this.activeAccount$.subscribe((acc) => {
-            if (acc && acc.currency && this.isMultiCurrencyAvailable) {
-              this.baseCurrency = acc.currency;
-            }
-          });
+          if (accountDetails && accountDetails.currency && this.isMultiCurrencyAvailable) {
+            this.baseCurrency = accountDetails.currency;
+          }
 
           // check if current account category is type 'income' or 'expenses'
           let parentAcc = accountDetails.parentGroups[0].uniqueName;
@@ -298,7 +326,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
-
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
           this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
@@ -339,9 +366,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               }
             }
 
-            if (!this.isMultiCurrencyAvailable) {
-              this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
-            }
+            // if (!this.isMultiCurrencyAvailable) {
+            //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
+            // }
+
             if (t.inventory) {
               let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
               if (findStocks) {
@@ -890,5 +918,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @HostListener('window:scroll')
   public onScrollEvent() {
     this.datepickers.hide();
+  }
+
+  private assignPrefixAndSuffixForCurrency() {
+    this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
+    this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
+    this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
   }
 }

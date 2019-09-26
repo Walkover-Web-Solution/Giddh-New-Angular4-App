@@ -25,6 +25,7 @@ export class UpdateLedgerVm {
   public totalAmount: number = 0;
   public totalForTax: number = 0;
   public compoundTotal: number = 0;
+  public convertedCompoundTotal: number = 0;
   public voucherTypeList: IOption[];
   public discountArray: LedgerDiscountClass[] = [];
   public discountTrxTotal: number = 0;
