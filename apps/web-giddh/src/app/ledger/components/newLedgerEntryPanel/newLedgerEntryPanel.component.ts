@@ -64,6 +64,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public trxRequest: AdvanceSearchRequest;
   @Input() public invoiceList: any[];
   @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  @Input() public isLedgerAccountAllowsMultiCurrency: boolean;
   @Input() public baseCurrencyDetails: ICurrencyResponse;
   @Input() public foreignCurrencyDetails: ICurrencyResponse;
   @Input() public selectedCurrency: 0 | 1;
