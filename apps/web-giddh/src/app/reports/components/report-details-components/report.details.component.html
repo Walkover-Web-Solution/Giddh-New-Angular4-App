@@ -21,13 +21,13 @@
           </button>
                     <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu " role="menu" aria-labelledby="button-nested">
                         <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle (click)="populateRecords('monthly')" class="dropdown-item dropdown-toggle">Monthly</a>
+                            <a dropdownToggle (click)="populateRecords('monthly')" class="dropdown-item dropdown-toggle cursor-pointer">Monthly</a>
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle (click)="populateRecords('quarterly')" class="dropdown-item dropdown-toggle">Quarterly</a>
+                            <a dropdownToggle (click)="populateRecords('quarterly')" class="dropdown-item dropdown-toggle cursor-pointer">Quarterly</a>
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle class="dropdown-item dropdown-toggle" (click)="false">Weekly <span
+                            <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly <span
                   style="margin-left: 80px" class="caret"></span></a>
                             <ul class="dropdown-menu reportDropdown" style=" top: 0px !important;" role="menu">
                                 <li role="menuitem" *ngFor="let month of monthNames"><a (click)="populateRecords('weekly', month)" class="dropdown-item">{{month | slice:0:3}}</a></li>
