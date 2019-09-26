@@ -39,11 +39,11 @@ import { GeneralService } from '../../services/general.service';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 const COMPARISON_FILTER = [
-  { label: 'Greater Than', value: 'greaterThan' },
-  { label: 'Less Than', value: 'lessThan' },
-  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-  { label: 'Equals', value: 'equals' }
+  {label: 'Greater Than', value: 'greaterThan'},
+  {label: 'Less Than', value: 'lessThan'},
+  {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+  {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+  {label: 'Equals', value: 'equals'}
 ];
 
 @Component({
@@ -53,7 +53,7 @@ const COMPARISON_FILTER = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
-  public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
+  public validateInvoiceobj: ValidateInvoice = {invoiceNumber: null};
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
@@ -64,7 +64,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
   @ViewChild('eWayBill') public eWayBill: ModalDirective;
   @ViewChild('searchBox') public searchBox: ElementRef;
-  @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+  @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
@@ -178,7 +178,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public isFabclicked: boolean = false;
   public exportInvoiceType: string = '';
 
-  public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
+  public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
   public showInvoiceGenerateModal: boolean = false;
   public appSideMenubarIsOpen: boolean;
 
@@ -257,7 +257,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       let accounts: IOption[] = [];
       _.forEach(data, (item) => {
         if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
         }
       });
       this.accounts$ = observableOf(orderBy(accounts, 'label'));
@@ -560,7 +560,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = objItem;
         this.performActionOnInvoiceModel.show();
       } else {
-        this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, { action: actionToPerform }));
+        this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
       }
     }
   }
@@ -660,7 +660,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   /**
@@ -677,7 +677,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         voucherType: this.selectedVoucher
       }));
     } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {numbers: userResponse.numbers}, this.selectedInvoice.voucherNumber));
     }
   }
 
@@ -753,7 +753,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     model.count = o.count;
     model.page = o.page;
     if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
-      model = advanceSearch;
+      //model = advanceSearch;
       if (!model.invoiceDate && !model.dueDate) {
         model.from = this.invoiceSearchRequest.from;
         model.to = this.invoiceSearchRequest.to;
@@ -961,7 +961,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
 
-    this.sortRequestForUi = { sortBy: '', sort: 'asc' };
+    this.sortRequestForUi = {sortBy: '', sort: 'asc'};
     this.invoiceSearchRequest.sort = 'asc';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
@@ -1008,7 +1008,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   public exportCsvDownload() {
     this.exportcsvRequest.from = this.invoiceSearchRequest.from;
     this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-    let dataTosend = { accountUniqueName: '' };
+    let dataTosend = {accountUniqueName: ''};
     if (this.selectedInvoicesList.length > 0) {
 
       dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account.uniqueName;
@@ -1036,7 +1036,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.voucherNumber = invoice.voucherNumber;
     obj.uniqueName = invoice.uniqueName;
     obj.grandTotal = invoice.grandTotal;
-    obj.voucherType = this.selectedVoucher;
+    obj.voucherType = this.selectedVoucher === VoucherTypeEnum.sales ? (invoice.cashInvoice ? VoucherTypeEnum.cash : VoucherTypeEnum.sales) : this.selectedVoucher;
     obj.account = invoice.account;
     obj.voucherStatus = invoice.balanceStatus;
     return obj;

@@ -77,6 +77,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public allowedSelection: number = 0;
   @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
+  @Input() public mask: string;
+  @Input() public prefix: string;
+  @Input() public suffix: string;
 
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();

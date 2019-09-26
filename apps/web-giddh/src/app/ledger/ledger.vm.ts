@@ -13,12 +13,14 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { take } from 'rxjs/operators';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
   public transactionData$: Observable<TransactionsResponse>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public companyProfile$: Observable<any>;
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
@@ -62,40 +64,22 @@ export class LedgerVM {
     this.blankLedger = {
       transactions: [
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'DEBIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         },
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'CREDIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         }],
       voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -109,11 +93,14 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
+      convertedCompoundTotal: 0,
       invoicesToBePaid: [],
       otherTaxModal: new SalesOtherTaxesModal(),
       tdsTcsTaxesSum: 0,
       otherTaxesSum: 0,
-      otherTaxType: 'tcs'
+      otherTaxType: 'tcs',
+      exchangeRate: 0,
+      valuesInAccountCurrency: true
     };
   }
 
@@ -191,23 +178,13 @@ export class LedgerVM {
    */
   public addNewTransaction(type: string = 'DEBIT'): TransactionVM {
     return {
+      ...new TransactionVM(),
       id: uuid.v4(),
-      amount: 0,
-      tax: 0,
-      total: 0,
-      particular: '',
       type,
-      taxes: [],
-      taxesVm: [],
-      discount: 0,
-      discounts: [
-        this.staticDefaultDiscount()
-      ],
+      discounts: [this.staticDefaultDiscount()],
       selectedAccount: null,
       applyApplicableTaxes: true,
-      isInclusiveTax: true,
-      isChecked: false,
-      showTaxationDiscountBox: false
+      isInclusiveTax: true
     };
   }
 
@@ -318,6 +295,7 @@ export class BlankLedgerVM {
   public chequeNumber: string;
   public chequeClearanceDate: string;
   public compoundTotal: number;
+  public convertedCompoundTotal: number = 0;
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
@@ -330,23 +308,25 @@ export class BlankLedgerVM {
   public otherTaxesSum: number;
   public tdsTcsTaxesSum: number;
   public otherTaxType: 'tcs' | 'tds';
+  public exchangeRate: number = 0;
+  public valuesInAccountCurrency: boolean = true;
 }
 
 export class TransactionVM {
   public id?: string;
-  public amount: number;
-  public particular: string;
+  public amount: number = 0;
+  public particular: string = '';
   public applyApplicableTaxes: boolean;
   public isInclusiveTax: boolean;
   public type: string;
-  public taxes: string[];
-  public taxesVm?: TaxControlData[];
-  public tax?: number;
+  public taxes: string[] = [];
+  public taxesVm?: TaxControlData[] = [];
+  public tax?: number = 0;
   public convertedTax?: number = 0;
-  public total: number;
+  public total: number = 0;
   public convertedTotal?: number = 0;
   public discounts: LedgerDiscountClass[];
-  public discount?: number;
+  public discount?: number = 0;
   public convertedDiscount?: number = 0;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
@@ -354,7 +334,7 @@ export class TransactionVM {
   public inventory?: IInventory | any;
   public convertedRate?: number = 0;
   public currency?: string;
-  public convertedAmount?: number;
+  public convertedAmount?: number = 0;
   public isChecked: boolean = false;
   public showTaxationDiscountBox: boolean = false;
 }

@@ -53,6 +53,7 @@ export class CompanyActions {
   public static GET_REGISTRATION_ACCOUNT = 'GET_REGISTRATION_ACCOUNT';
   public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
   public static GET_OTP = 'GET_OTP';
+  public static TOTAL_COMPANIES = 'TOTAL_COMPANIES';
 
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
@@ -219,17 +220,25 @@ export class CompanyActions {
         // check if user have companies
         if (response.body.length) {
           let activeCompanyName = null;
+          let totalCompany = 0;
           this.store.select(s => s.session.companyUniqueName).pipe(take(1)).subscribe(a => activeCompanyName = a);
+          this.store.select(s => s.session.totalNumberOfcompanies).pipe(take(1)).subscribe(res => totalCompany = res);
 
           if (activeCompanyName) {
             let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
             if (companyIndex > -1) {
               // if active company find no action needed
-              return {
-                type: 'CHANGE_COMPANY',
-                payload: response.body[companyIndex].uniqueName
-              };
-              //  return { type: 'EmptyAction' };
+              if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                return { type: 'EmptyAction' };
+
+              } else {
+                return {
+                  type: 'CHANGE_COMPANY',
+                  payload: response.body[companyIndex].uniqueName
+                };
+              }
+
+              // return { type: 'EmptyAction' };
             } else {
               // if no active company active next company from companies list
               return {
@@ -412,6 +421,12 @@ export class CompanyActions {
   public setCurrentCompanySubscriptionPlan(value: CreateCompanyUsersPlan): CustomActions {
     return {
       type: CompanyActions.CURRENT_COMPANY_SUBSCRIPTIONS_PLANS,
+      payload: value
+    };
+  }
+  public setTotalNumberofCompanies(value: number): CustomActions {
+    return {
+      type: CompanyActions.TOTAL_COMPANIES,
       payload: value
     };
   }

@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { CompanyActions } from '../../../actions/company.actions';
-import { TaxResponse } from '../../../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
@@ -17,7 +17,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -64,6 +64,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public trxRequest: AdvanceSearchRequest;
   @Input() public invoiceList: any[];
   @Input() public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  @Input() public baseCurrencyDetails: ICurrencyResponse;
+  @Input() public foreignCurrencyDetails: ICurrencyResponse;
+  @Input() public selectedCurrency: 0 | 1;
+  @Input() public selectedPrefixForCurrency: string;
+  @Input() public selectedSuffixForCurrency: string;
+  @Input() public inputMaskFormat: string = '';
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -73,6 +79,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
+  @Output() public currencyChangeEvent: EventEmitter<0 | 1> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -80,8 +87,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
-
-  totalPrice: boolean = true;
 
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
@@ -116,12 +121,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public companyTaxesList: TaxResponse[] = [];
   public totalTdElementWidth: number = 0;
-  public inputMaskFormat: string = '';
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  private currentBaseCurrency: string;
-  private currencyRateResponse: any;
   private fetchedBaseCurrency: string = null;
   private fetchedConvertToCurrency: string = null;
   private fetchedConvertedRate: number = null;
@@ -185,20 +188,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
           this.currentAccountApplicableTaxes = appTaxes;
         }
-        if (acc.currency) {
-          this.accountBaseCurrency = acc.currency;
-        }
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-          if (!_.isEmpty(o)) {
-            let companyProfile = _.cloneDeep(o);
-            if (companyProfile.isMultipleCurrency && !acc.currency) {
-              this.accountBaseCurrency = companyProfile.baseCurrency || 'INR';
-            }
-            this.companyCurrency = companyProfile.baseCurrency || 'INR';
-          } else {
-            this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
-          }
-        });
       }
     });
 
@@ -211,15 +200,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return _.orderBy(tags, 'name');
       }
     })).pipe(takeUntil(this.destroyed$));
-
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(s => {
-      if (s) {
-        this.companyIsMultiCurrency = s.isMultipleCurrency;
-        this.inputMaskFormat = s.balanceDisplayFormat ? s.balanceDisplayFormat.toLowerCase() : '';
-      } else {
-        this.companyIsMultiCurrency = false;
-      }
-    });
 
     // for tcs and tds identification
     if (this.tcsOrTds === 'tcs') {
@@ -288,12 +268,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.isOtherTaxesApplicable = true;
       }
     }
-    // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
-    //   // this.amountChanged();
-    //   if (moment(changes['blankLedger'].currentValue.entryDate, 'DD-MM-yyyy').isValid()) {
-    //     this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
-    //   }
-    // }
   }
 
   public ngAfterViewInit(): void {
@@ -301,7 +275,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (a) {
         this.amountChanged();
         this.calculateTotal();
-        this.calculateCompoundTotal();
       }
     });
     this.cdRef.markForCheck();
@@ -315,14 +288,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     // this.cdRef.markForCheck();
   }
 
-  /**
-   *
-   * @param {string} type
-   * @param {Event} e
-   */
   public addToDrOrCr(type: string, e: Event) {
     this.changeTransactionType.emit(type);
     e.stopPropagation();
+  }
+
+  public calculateDiscount(total: number) {
+    this.currentTxn.discount = total;
+    this.currentTxn.convertedDiscount = giddhRoundOff(this.currentTxn.discount * this.blankLedger.exchangeRate, 2);
+    this.calculateTax();
   }
 
   public calculateTax() {
@@ -330,37 +304,39 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
-    this.currentTxn.tax = ((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100);
+    this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), 2);
+    this.currentTxn.convertedTax = giddhRoundOff(this.currentTxn.tax * this.blankLedger.exchangeRate, 2);
     this.calculateTotal();
   }
 
   public calculateTotal() {
-    if (this.currentTxn && this.currentTxn.selectedAccount) {
-      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-        if (this.currentTxn.inventory.unit.rate) {
-          // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
-        }
-      }
-    }
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
       this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), 2);
+      this.currentTxn.convertedTotal = giddhRoundOff(this.currentTxn.total * this.blankLedger.exchangeRate, 2);
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     this.calculateCompoundTotal();
   }
 
   public amountChanged() {
-    if (this.discountControl) {
-      this.discountControl.change();
-    }
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
           this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+          this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
         }
       }
+
+      if (this.discountControl) {
+        this.discountControl.change();
+      }
+
+      if (this.taxControll) {
+        this.taxControll.change();
+      }
+      this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
     }
 
     if (this.isAmountFirst || this.isTotalFirts) {
@@ -372,9 +348,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public changePrice(val: string) {
-    this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
+    this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), 2);
+    this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
+
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    // this.amountChanged();
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
@@ -382,6 +361,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
     // this.amountChanged();
     this.calculateTotal();
     this.calculateCompoundTotal();
@@ -434,6 +414,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
       (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), 2);
+    this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
 
     if (this.discountControl) {
       this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -448,6 +429,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
         this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+        this.currentTxn.convertedRate = giddhRoundOff(this.currentTxn.inventory.unit.rate * this.blankLedger.exchangeRate, 2);
       }
     }
     this.calculateCompoundTotal();
@@ -470,8 +452,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     } else {
       this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), 2);
     }
+    this.blankLedger.convertedCompoundTotal = giddhRoundOff(this.blankLedger.compoundTotal * this.blankLedger.exchangeRate, 2);
     if (this.currentTxn && this.currentTxn.selectedAccount) {
-      this.calculateConversionRate();
+      // this.calculateConversionRate();
     }
   }
 
@@ -479,9 +462,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.saveBlankLedger.emit(true);
   }
 
-  /**
-   * reset panel form
-   */
   public resetPanel() {
     this.resetBlankLedger.emit(true);
     this.currentTxn = null;
@@ -648,7 +628,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public detactChanges() {
-    this.cdRef.detectChanges();
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
   public saveCtrlEnter(event) {
@@ -670,7 +652,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!cls) {
           return;
         }
-        return cls.contains('chkclrbsdp');
+        return cls.contains('chkclrbsdp') || cls.contains('currencyToggler');
       });
 
       if (notClose) {
@@ -709,32 +691,26 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  /**
-   * calculateConversionRate
-   */
   public calculateConversionRate(): void {
     this.currentTxn.convertedAmount = giddhRoundOff((this.currentTxn.total * this.currentTxn.selectedAccount.conversionRate), 2);
   }
 
-  /**
-   * checkForCurrency
-   */
-  public checkForCurrency(currency) {
-    if (!currency && this.companyCurrency) {
-      return this.companyCurrency;
-    } else {
-      return currency;
-    }
-  }
+  // public checkForCurrency(currency) {
+  //   if (!currency && this.companyCurrency) {
+  //     return this.companyCurrency;
+  //   } else {
+  //     return currency;
+  //   }
+  // }
 
-  public checkForMulitCurrency() {
-    this.currentTxn.selectedAccount.currency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
-    if ((this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
-      this.assignConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
-    } else {
-      this.currentTxn.convertedAmount = 0;
-    }
-  }
+  // public checkForMulitCurrency() {
+  //   this.currentTxn.selectedAccount.currency = this.checkForCurrency(this.currentTxn.selectedAccount.currency);
+  //   if ((this.accountBaseCurrency !== this.currentTxn.selectedAccount.currency)) {
+  //     this.assignConversionRate(this.accountBaseCurrency, this.currentTxn.selectedAccount.currency, this.currentTxn.total);
+  //   } else {
+  //     this.currentTxn.convertedAmount = 0;
+  //   }
+  // }
 
   public selectInvoice(invoiceNo, ev) {
     invoiceNo.isSelected = ev.target.checked;
@@ -758,6 +734,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.blankLedger.voucherType === 'rcpt') {
       this.clickUnpaidInvoiceList.emit(true);
     }
+  }
+
+  public exchangeRateChanged() {
+    this.amountChanged();
+    this.calculateTotal();
   }
 
   @HostListener('window:scroll')
