@@ -653,15 +653,17 @@
                   Invoice
                 </label>
               </div>
-              <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
-                <div class="">
-                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
-                  <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
-                </div>
-              </div>
+              
               <div class="pull-right">
                 <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
                 <span *ngIf="totalPrice">Total in USD: $454</span>
+              </div>
+             
+                <div class="col-xs-12 clearfix ">
+                <div class="file_attached pull-right mr-15" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
+                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
+                  <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
+                </div>
               </div>
             </div>
 
