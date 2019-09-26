@@ -34,7 +34,6 @@ export class UpdateLedgerVm {
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
   public taxRenderData: TaxControlData[] = [];
-  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
   public ledgerUnderStandingObj = {
     accountType: '',

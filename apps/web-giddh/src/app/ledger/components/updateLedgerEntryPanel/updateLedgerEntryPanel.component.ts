@@ -85,7 +85,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public currentAccountApplicableTaxes: string[] = [];
   public isMultiCurrencyAvailable: boolean = false;
   public baseCurrency: string = null;
-  public changedAccountDetails: any;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
   public existingTaxTxn: any[] = [];
@@ -131,12 +130,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   condition2: boolean = false;
 
   toggleShow() {
-    this.condition= this.condition ?false:true;
-    this.condition2= this.condition ?false:true;
-    this.Shown = this.Shown ?false:true;
-    this.isHide = this.isHide ?false:true;
+    this.condition = this.condition ? false : true;
+    this.condition2 = this.condition ? false : true;
+    this.Shown = this.Shown ? false : true;
+    this.isHide = this.isHide ? false : true;
   }
-
 
   public ngOnInit() {
 

@@ -825,7 +825,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate};
       }
     }, (error => {
-      this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 0};
+      this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 1};
     }));
   }
 
@@ -907,7 +907,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       otherTaxesSum: 0,
       tdsTcsTaxesSum: 0,
       otherTaxType: 'tcs',
-      exchangeRate: 0,
+      exchangeRate: 1,
       valuesInAccountCurrency: false
     };
     this.hideNewLedgerEntryPopup();
