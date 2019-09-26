@@ -384,6 +384,10 @@
     <div class="ledger_book" [navigationWalker]="{horizontal:'hr-item',vertical:'vr-item', ignore: 'no-tree'}"
       #navigator="navigationWalker" #root (onReset)="initNavigator(navigator,root.children[0])"
       (onLeft)="onLeftArrow(navigator,$event)" (onRight)="onRightArrow(navigator,$event)">
+
+      <div class="ledger-section">
+
+
       <!--debit transaction-->
       <div [ngClass]="Shown ? 'active' : ''" hr-item
         (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();" class="left-col-new bdrR"
@@ -830,6 +834,7 @@
 
       </div>
       <!--credit transaction-->
+    </div>
 
       <!--footer-->
       <div style="width: 100%">

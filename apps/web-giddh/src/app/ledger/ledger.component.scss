@@ -220,7 +220,16 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-
+.left-col-new, .right-col-new {
+  height: initial;
+  width: 100%;
+}
+.ledger-section {
+  display: flex;
+}
+.ledger-section {
+  display: flex;
+}
 
 
 @media (min-width: 1200px) {
