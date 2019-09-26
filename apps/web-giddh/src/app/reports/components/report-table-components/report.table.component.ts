@@ -115,6 +115,7 @@ export class ReportsTableComponent implements OnInit {
   public GotoDetailedSales(item: ReportsModel) {
     let from = item.from;
     let to = item.to;
+    let aa = this.activeFinacialYr;
     this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to } });
   }
 }
