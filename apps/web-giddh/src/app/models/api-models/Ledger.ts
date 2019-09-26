@@ -80,6 +80,7 @@ export class LedgerResponse {
   public tag?: string;
   public taxes: string[];
   public total: IClosingBalance;
+  public convertedTotal: IClosingBalance;
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry: boolean;
   public uniqueName: string;
@@ -92,6 +93,7 @@ export class LedgerResponse {
   public voucherName?: string;
   public voucherGeneratedType?: string;
   public particular?: INameUniqueName;
+  public particularType?: string;
   public actualAmount?: number;
   public invoicesToBePaid?: string[];
   public linkedInvoices?: string[];
@@ -108,6 +110,8 @@ export class LedgerResponse {
   public tcsTaxes?: string[];
   public tdsTaxes?: string[];
   public otherTaxType?: 'tcs' | 'tds';
+  public exchangeRate?: number = 1;
+  public discountResources?: any[];
 }
 
 /*
