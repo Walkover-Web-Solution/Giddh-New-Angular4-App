@@ -7624,7 +7624,13 @@ span.red-text {
     white-space: inherit;
     word-break: normal;
 }
-
+.table-custom-invoice ul.dropdown-menu{
+      min-width: auto !important;
+    height: auto !important;
+}
+ul.dropdown-menu  p.lead.pd {
+    font-size: 14px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

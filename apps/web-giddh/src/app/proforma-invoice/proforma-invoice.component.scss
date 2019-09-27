@@ -1429,8 +1429,9 @@ table.table.table-custom-invoice.basic {
 }
 
 .amountField, .balanceDueText {
-  max-width: 129px !important;
+  min-width: 129px !important;
   margin-left: 20px;
+
 }
 
 #deposit-dropdown p {
@@ -1473,6 +1474,19 @@ input.form-control.edit-currency {
     display: inline-block;
     width: 80px;
     height: 26px !important;
+}
+.icon-dollar:before{
+  content:'$';
+  height: 20px;
+  width: 20px;
+      font-weight: 600;
+}
+
+.wrap-td-data{
+  padding-bottom: 30px;
+}
+.biggerDollar .icon-dollar:before {
+    font-size: 17px;
 }
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
