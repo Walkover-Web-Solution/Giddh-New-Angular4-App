@@ -300,7 +300,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   }
 
   public testPagesLoaded(count: number) {
-    console.log("testPagesLoaded() successfully called. Total pages # : " + count);
     this.pagecount = count;
   }
 

@@ -2257,12 +2257,17 @@ input[type="checkbox"]:after {
 }
 
 .fixed-ng2pdfview-2 iframe {
-    height: 2915px;
+    height: 2915px !important;
+    overflow: hidden;
+}
+
+.fixed-ng2pdfview-3 iframe {
+    height: 4353px !important;
     overflow: hidden;
 }
 
 .fixed-ng2pdfview iframe {
-    height: 1530px;
+    height: 1530px !important;
     overflow: hidden;
 }
 
