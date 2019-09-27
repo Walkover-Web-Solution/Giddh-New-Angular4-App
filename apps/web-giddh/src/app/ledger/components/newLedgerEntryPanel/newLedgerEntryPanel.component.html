@@ -50,9 +50,10 @@
 
           <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
-            <input type="text" [value]="currentTxn?.inventory?.unit?.rate" [prefix]="selectedPrefixForCurrency"
+            <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
+                   [prefix]="selectedPrefixForCurrency"
                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                   (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
+                   (ngModelChange)="changePrice($event)" name="" class="form-control text-right"/>
             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedRate }}
