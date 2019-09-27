@@ -174,7 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public asideMenuStateForOtherTaxes: string = 'out';
   public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-  public isLedgerAccountAllowsMultiCurrency: boolean = true;
+  public isLedgerAccountAllowsMultiCurrency: boolean = false;
   public baseCurrencyDetails: ICurrencyResponse;
   public foreignCurrencyDetails: ICurrencyResponse;
   public currencyTogglerModel: boolean = false;

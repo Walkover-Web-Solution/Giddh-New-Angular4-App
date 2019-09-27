@@ -53,7 +53,7 @@
             <input type="text" [value]="currentTxn?.inventory?.unit?.rate" [prefix]="selectedPrefixForCurrency"
                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                    (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
-            <p class="mb-0 amnt-total pr-1 pl-1">
+            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedRate }}
             </p>
@@ -70,7 +70,7 @@
                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                    [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                    (keyup)="amountChanged();calculateTotal()"/>
-            <p class="mb-0 amnt-total pr-1 pl-1">
+            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedAmount }}
             </p>
@@ -90,7 +90,7 @@
                              [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
                              (discountTotalUpdated)="calculateDiscount($event);">
             </ledger-discount>
-            <p class="mb-0 amnt-total pr-1 pl-1">
+            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedDiscount }}</p>
           </td>
@@ -116,7 +116,7 @@
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
-            <p class="mb-0 amnt-total pr-1 pl-1">
+            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedTax }}</p>
           </td>
@@ -132,7 +132,7 @@
                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                    name="" class="form-control text-right"
                    [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"/>
-            <p class="mb-0 amnt-total pr-1 pl-1">
+            <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedTotal }}</p>
           </td>
@@ -377,7 +377,7 @@
 
           <div class="clearfix">
 
-            <p class="primary_clr">Total
+            <p class="primary_clr" *ngIf="isLedgerAccountAllowsMultiCurrency">Total
               in {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}:
               {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
               {{ blankLedger.convertedCompoundTotal | giddhCurrency }}
@@ -392,7 +392,7 @@
 
         <div class="pull-left pl-15">
 
-          <ul class="list-inline font-14">
+          <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
             <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
 
             <li>
