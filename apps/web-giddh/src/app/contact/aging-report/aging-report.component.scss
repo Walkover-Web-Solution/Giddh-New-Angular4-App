@@ -1,10 +1,4 @@
-$dark-blue:#000857;
-$dark-blue01:#313a96;
-$light-blue:#5b63b9;
-$light-blue01:#868ee0;
-$light-blue02:#bdc3ff;
-$light-gray:#e6e7e8;
-
+ @import '../../../assets/css/color.scss';
 .dropdown-menu > li > a {
   padding: 2px 10px;
 }
@@ -20,7 +14,7 @@ $light-gray:#e6e7e8;
 .icon-pointer {
   position: absolute;
   right: 10px;
-  top: 31%;
+  top: 37%;
 }
 
 .icon-pointer .glyphicon:hover {
@@ -28,7 +22,7 @@ $light-gray:#e6e7e8;
 }
 
 .icon-pointer .activeTextColor {
-  color: #fff !important;
+  color:$yellow !important;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -38,6 +32,7 @@ $light-gray:#e6e7e8;
 
 .icon-pointer .font-xxs {
   font-size: 12px;
+  color: #757BB9;
 }
 .aging-table {
   max-width: 1170px;
@@ -53,9 +48,41 @@ $light-gray:#e6e7e8;
 .wrapsearchingAging a {
   color:$dark-blue01;
 }
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid #5B64C9;
+    border-radius: 2px;
+    color: #1A237E;
+    background: #fff;
+}
 
-
-
+.searchField{
+  position: relative;
+}
+.searchField input{
+  width: 235px;
+  background-color: #E6E7E8 !important;
+  border-color: #E6E7E8 !important;
+}
+.searchField input:focus{
+  background-color: #fff !important;
+  border-color: $dark-blue00 !important;
+}
+span.inputAddon {
+    position: absolute;
+    right: 0px;
+    padding: 2px 9px;
+    background-color:$border-blue;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 2px;
+}
 // responsive
 @media(min-width:769px){
   .onMobileView > .top-aging-table-top {

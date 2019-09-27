@@ -535,7 +535,7 @@ ul.sub-list {
 
 .customer-footer-box .numbertotal {
     font-size: 26px;
-    color: var(--dark-blue01);
+    color: $border-blue;
 }
 
 .customer-footer-box h5 {
@@ -573,7 +573,7 @@ ul.sub-list {
     font-size: 14px;
     color: #2D3B4B;
     position: relative;
-    padding-bottom: 5px;
+    padding-bottom: 7px;
 }
 
 .custom-tabs .nav.nav-tabs>li.active a {
@@ -597,6 +597,11 @@ ul.sub-list {
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 2px solid #e0e0e0;
+    padding: 0px 0px 0 15px !important;
+    background-color: #fff;
+    z-index: 9;
+    position: relative;
+    top: -4px;
 }
 .btn-blue{
   background: $BtnpinkColor;
@@ -645,11 +650,11 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top {
-    background:var(--light-blue);
-    border: 1px solid var(--light-blue) !important;
+    background:rgba(49,58,151,0.15);
+    border: 1px solid rgba(49,58,151,0.15) !important;
 }
 .aging-table-top .top-aging-table-top strong, .aging-table-top .top-aging-table-top span .date-range-picker{
-  color: #fff;
+  color: #333;
 }
 .aging-table-top td {
     border: 0px solid !important;
@@ -1750,7 +1755,7 @@ p.table-email {
 .basic>tbody>tr>td,
 .basic>thead>tr>th {
     font-weight: 400;
-    padding: 14px 10px !important;
+    padding: 14px 10px;
     text-transform: capitalize;
 }
 
@@ -7734,6 +7739,9 @@ span.red-text {
 }
 #invoice-setting .nav>li>a.active span{
   color: #F85C88;
+}
+.aging-table th .table-checkbox {
+    top: 12px;
 }
 /* responsive */
 
