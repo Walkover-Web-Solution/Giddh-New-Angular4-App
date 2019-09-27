@@ -149,22 +149,6 @@
                     <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
                   </ng-template>
 
-                </td>
-
-                <td class="col-xs-2 text-right" data-title="Amount">
-
-                  <input type="text" *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
-                         [(ngModel)]="txn.amount" class="form-control text-right"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                         (ngModelChange)="onTxnAmountChange(txn)">
-
-                  <input type="text" *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
-                         [(ngModel)]="txn.convertedAmount" class="form-control text-right"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                         (ngModelChange)="onTxnAmountChange(txn)">
-
                   <span class="download-invoice-ledger"
                         *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0"
                         (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'"
@@ -180,6 +164,22 @@
                         (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
                         <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                   </span>
+
+                </td>
+
+                <td class="col-xs-2 text-right" data-title="Amount">
+
+                  <input type="text" *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
+                         [(ngModel)]="txn.amount" class="form-control text-right"
+                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                         (click)="addBlankTrx('DEBIT', txn, $event)"
+                         (ngModelChange)="onTxnAmountChange(txn)">
+
+                  <input type="text" *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
+                         [(ngModel)]="txn.convertedAmount" class="form-control text-right"
+                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                         (click)="addBlankTrx('DEBIT', txn, $event)"
+                         (ngModelChange)="onTxnAmountChange(txn)">
 
                   <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
                     <ng-container
@@ -319,6 +319,21 @@
                     <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
                   </ng-template>
 
+                  <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
+                        [placement]="'left'" [containerClass]="'col-xs-3'"
+                        tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
+                        (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
+                      <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    </span>
+
+                  <span class="download-invoice-ledger"
+                        *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
+                        [placement]="'left'" [containerClass]="'col-xs-3'"
+                        tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
+                        (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
+                      <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                    </span>
+
                 </td>
 
                 <td data-title="Amount" class="col-xs-2 text-right">
@@ -336,21 +351,6 @@
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
-
-                  <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
-                        [placement]="'left'" [containerClass]="'col-xs-3'"
-                        tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
-                        (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
-                      <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
-                    </span>
-
-                  <span class="download-invoice-ledger"
-                        *ngIf="vm.selectedLedger.voucherNumber && vm.selectedLedger.voucherNumber.length > 0"
-                        [placement]="'left'" [containerClass]="'col-xs-3'"
-                        tooltip="Download Invoice : {{vm.selectedLedger.voucherNumber}}"
-                        (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                      <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
-                    </span>
 
                   <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
                     <ng-container
