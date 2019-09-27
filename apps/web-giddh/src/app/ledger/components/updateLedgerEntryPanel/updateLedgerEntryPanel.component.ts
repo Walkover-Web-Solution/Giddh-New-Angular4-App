@@ -134,8 +134,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
-  totalPrice: boolean = true;
-
   Shown: boolean = true;
   isHide: boolean = false;
   condition: boolean = true;
@@ -189,6 +187,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
           this.profileObj = resp[3];
+          this.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
           // set account details for multi currency account
           this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));

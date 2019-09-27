@@ -8,7 +8,7 @@ import { IInventoryUnit } from '../../ledger/ledger.vm';
  */
 export interface ILedgerTransactionItem {
   amount: number;
-  amountSymbol? :string;
+  amountSymbol?: string;
   amountCurrency?: string;
   amountForCompany?: any;
   date?: string;

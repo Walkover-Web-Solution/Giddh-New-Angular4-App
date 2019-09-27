@@ -21,14 +21,19 @@ export class UpdateLedgerVm {
   public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedLedger: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
+  public convertedEntryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public grandTotal: number = 0;
+  public convertedGrandTotal: number = 0;
   public totalAmount: number = 0;
+  public convertedTotalAmount: number = 0;
   public totalForTax: number = 0;
   public compoundTotal: number = 0;
   public convertedCompoundTotal: number = 0;
+  public convertedRate?: number = 0;
   public voucherTypeList: IOption[];
   public discountArray: LedgerDiscountClass[] = [];
   public discountTrxTotal: number = 0;
+  public convertedDiscountTrxTotal: number = 0;
   public taxTrxTotal: number = 0;
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
@@ -90,7 +95,8 @@ export class UpdateLedgerVm {
     } as ILedgerTransactionItem;
   }
 
-  public handleDiscountEntry() {
+  public handleDiscountEntry(amount: number) {
+    this.discountTrxTotal = amount;
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
       let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
