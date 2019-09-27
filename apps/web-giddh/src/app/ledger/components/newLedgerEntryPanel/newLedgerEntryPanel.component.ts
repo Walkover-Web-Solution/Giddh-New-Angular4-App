@@ -108,6 +108,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public selectedItemToMap: ReconcileResponse;
   public tags$: Observable<TagRequest[]>;
   public activeAccount$: Observable<AccountResponse>;
+  public activeAccount: AccountResponse;
   public currentAccountApplicableTaxes: string[] = [];
   //variable added for storing the selected taxes after the tax component is destroyed for resolution of G0-295 by shehbaz
   public currentAccountSavedApplicableTaxes: string[] = [];
@@ -179,6 +180,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.activeAccount$.subscribe(acc => {
       //   console.log('activeAccount...');
       if (acc) {
+        this.activeAccount = acc;
         let parentAcc = acc.parentGroups[0].uniqueName;
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
@@ -234,16 +236,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
           let appTaxes = [];
-          this.activeAccount$.pipe(take(1)).subscribe(acc => {
-            if (acc && acc.applicableTaxes) {
-              acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-              this.taxListForStock = appTaxes;
-            }
-          });
+
+          if (this.activeAccount && this.activeAccount.applicableTaxes) {
+            this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            this.taxListForStock = appTaxes;
+          }
+
         }
       } else {
         this.taxListForStock = [];
       }
+
       let companyTaxes: TaxResponse[] = [];
       this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
       let appliedTaxes: any[] = [];

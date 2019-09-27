@@ -14,10 +14,13 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { take } from 'rxjs/operators';
+import { ICurrencyResponse } from '../models/api-models/Company';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
+  public activeAccount: AccountResponse;
+  public currencies: ICurrencyResponse[] = [];
   public transactionData$: Observable<TransactionsResponse>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public companyProfile$: Observable<any>;

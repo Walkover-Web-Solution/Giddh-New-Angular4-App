@@ -365,24 +365,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.amount = rate;
           }
           //#endregion
-          // reset taxes and discount on selected account change
-          // txn.tax = 0;
-          // txn.taxes = [];
-          // txn.discount = 0;
-          // txn.discounts = [];
-          // txn.currency = e.additional.currency;
-          // if (e.additional.currency && (this.accountBaseCurrency !== e.additional.currency)) {
-          //   this.showMultiCurrency = true;
-          // } else {
-          //   this.showMultiCurrency = false;
-          // }
 
+          // region check multi currency allowed for selected account
+          if (fa.additional.currency) {
+            if (!this.isLedgerAccountAllowsMultiCurrency) {
+              // means ledger account and company currencies are same
+              // now check if the selected account currency is different than company currency
+              if (this.lc.activeAccount.currency !== fa.additional.currency) {
+                this.isLedgerAccountAllowsMultiCurrency = true;
 
-          // if (fa.additional.currency && fa.additional.currency !== this.baseCurrencyDetails.code) {
-          //   let currencies: ICurrencyResponse[] = [];
-          //   this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res || []);
-          //   this.baseCurrencyDetails = cloneDeep(currencies.find(f => f.code === fa.additional.currency));
-          // }
+                this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+                let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
+                this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
+                this.getCurrencyRate();
+
+                this.selectedCurrency = 0;
+                this.assignPrefixAndSuffixForCurrency();
+              }
+            }
+          }
+          // endregion
           return;
         }
       });
@@ -506,6 +508,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       // }
     });
 
+    this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.lc.currencies = res;
+      }
+    });
+
     this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
         if (lt.closingBalanceForBank) {
@@ -580,6 +588,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
       if (data[0] && data[1] && data[2]) {
         let profile = cloneDeep(data[2]);
+        this.lc.activeAccount = data[0];
         this.profileObj = profile;
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
