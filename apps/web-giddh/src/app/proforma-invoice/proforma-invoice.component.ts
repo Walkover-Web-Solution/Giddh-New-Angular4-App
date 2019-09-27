@@ -261,6 +261,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   //Multicurrency changes
   public exchangeRate = 71.9034;
   public originalExchangeRate = 71.9034;
+  public isMulticurrencyAccount = false;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1550,7 +1551,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
-
+      this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
         this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
           .pipe(
@@ -2484,6 +2485,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass){
+    
     delete obj.voucher;
     delete obj.updateAccountDetails;
     delete obj.depositAccountUniqueName;

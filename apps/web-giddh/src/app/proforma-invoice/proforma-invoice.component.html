@@ -272,7 +272,7 @@
               <p class="fs20 b pbR1">
                 <span
                   class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
-                <span class="sp-rupees">
+                <span class="sp-rupees" *ngIf="isMulticurrencyAccount">
                   <strong>${{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong></span>
                 <!-- added multicurrency feature make it functional to change into appropriate currency -->
                 <span class="sp-rupees"><span
@@ -416,7 +416,7 @@
         *ngIf="!isMobileView">
 
         <!-- switch currency on click, remaining functional work , UI is completed -->
-        <div class="switch-currency">
+        <div class="switch-currency" *ngIf="isMulticurrencyAccount">
           <span class="left-currency">1 USD</span>
           <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon">
           <span class="right-currency">
@@ -510,24 +510,24 @@
                 <td class="text-right">
                   {{transaction.rate | number:'1.2-2'}}
 
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.rate*exchangeRate | number:'1.2-2'}}
+                  <div *ngIf="isMulticurrencyAccount" class="differ-currency"><span class="icon-rupees"></span>{{transaction.rate*exchangeRate | number:'1.2-2'}}
                   </div>
                 </td>
                 <td class="text-right">
                   {{transaction.amount | number:'1.2-2'}}
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.amount*exchangeRate | number:'1.2-2'}}
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{transaction.amount*exchangeRate | number:'1.2-2'}}
                   </div>
                 </td>
                 <td>
                   <div class=" text-right">
                     {{ entry.discountSum | number:'1.2-2'}}
-                    <div class="differ-currency"><span
+                    <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                         class="icon-rupees"></span>{{ entry.discountSum*exchangeRate | number:'1.2-2'}}</div>
                   </div>
 
                 </td>
                 <td class="text-right">{{(entry.taxSum + entry.cessSum) | number:'1.2-2'}}
-                  <div class="differ-currency"><span
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                       class="icon-rupees"></span>{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}</div>
                 </td>
                 <td class="text-right">
@@ -536,9 +536,9 @@
                     <span *ngIf="entry.isOtherTaxApplicable">
                       {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
                     </span>
-                    <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.total*exchangeRate | number:'1.2-2'}}
+                    <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{transaction.total*exchangeRate | number:'1.2-2'}}
                     </div>
-                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable">
+                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                       <span class="icon-rupees"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                       {{ entry.otherTaxSum*exchangeRate }}</div>
                   </div>
@@ -687,7 +687,7 @@
                     placeholder="Rate" decimalDigitsDirective name="transaction.rate_{{entryIdx}}"
                     class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate" />
                   <!-- please add condition for show and hide -->
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.rate*exchangeRate | number:'1.2-2'}}
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{transaction.rate*exchangeRate | number:'1.2-2'}}
                   </div>
                 </td>
 
@@ -697,7 +697,7 @@
                     name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                     [(ngModel)]="transaction.amount" decimalDigitsDirective />
 
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.amount*exchangeRate | number:'1.2-2'}}
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{transaction.amount*exchangeRate | number:'1.2-2'}}
                   </div>
                 </td>
 
@@ -711,7 +711,7 @@
                     </discount-control-component>
 
                   </div>
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{ entry.discountSum*exchangeRate | number:'1.2-2'}}
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{ entry.discountSum*exchangeRate | number:'1.2-2'}}
                   </div>
 
                 </td>
@@ -726,7 +726,7 @@
                     (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                     (hideOtherPopups)="closeDiscountPopup()"></tax-control>
 
-                  <div class="differ-currency"><span
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                       class="icon-rupees"></span>{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}</div>
                 </td>
                 <td class="text-right">
@@ -763,9 +763,9 @@
 
                   </div>
 
-                  <div class="differ-currency"><span class="icon-rupees"></span>{{transaction.total*exchangeRate | number:'1.2-2'}}
+                  <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span class="icon-rupees"></span>{{transaction.total*exchangeRate | number:'1.2-2'}}
                   </div>
-                  <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable">
+                  <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                     <span class="icon-rupees"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                     {{ entry.otherTaxSum*exchangeRate }}</div>
 
@@ -951,7 +951,7 @@
                   <div class="tableRow">
 
                     <div class="tableCell">
-                      <strong>Total $</strong>
+                      <strong>Total <span *ngIf="isMulticurrencyAccount">$</span></strong>
                     </div>
 
                     <div class="tableCell figureCell">
@@ -960,14 +960,13 @@
 
                   </div>
                   <!-- multicurrency feature (editable grand total make it functional) -->
-                  <div class="tableRow">
+                  <div class="tableRow" *ngIf="isMulticurrencyAccount">
                     <div class="tableCell">
                       <strong>Total <span class="icon-rupees"></span> </strong>
                     </div>
 
                     <div class="tableCell figureCell">
-                      <input type="text" class="form-control" [value]="invFormData.voucherDetails.grandTotal">
-
+                      <input type="text" class="form-control" [value]="invFormData.voucherDetails.grandTotal*exchangeRate">
                     </div>
                   </div>
 
@@ -1572,7 +1571,7 @@
                 <strong>Total<span class="icon-rupees"></span> </strong>
               </div>
 
-              <div class="tableCell figureCell">
+              <div class="tableCell figureCell" *ngIf="isMulticurrencyAccount">
                 <input type="text" class="form-control" [value]="invFormData.voucherDetails.grandTotal">
 
               </div>
