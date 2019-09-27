@@ -14,9 +14,13 @@
 .aging-table > tbody > tr input[type="checkbox"] {
   position: absolute !important;
   opacity: 0;
-  top: 8px;
+  top: 5px;
 }
-
+.aging-table > tbody > tr td.vendorCustomerName input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0;
+  top: 0;
+}
 .aging-table > tbody > tr:hover input[type="checkbox"] {
   position: relative !important;
   opacity: 1;
@@ -180,8 +184,8 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
 
 
 td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
-  height: 50px;
-  line-height: 2.4;
+  height: 42px;
+  line-height: 1.0;
   border-right: none;
 }
 
@@ -192,9 +196,11 @@ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.
 .customerName .icon-ellipse {
   position: absolute;
   right: 10px;
-  top: 14px;
+  top: 10px;
 }
-
+.customerName.vendorCustomerName .icon-ellipse {
+    top: 5px;
+}
 .pos-rel.WordWrap {
   .icon-dots-three-vertical {
     transform: rotate(90deg);
@@ -297,6 +303,7 @@ span.inputAddon {
     font-size: 20px;
     border-radius: 2px;
 }
+
 // responsive
 
 @media(max-width:768px){
