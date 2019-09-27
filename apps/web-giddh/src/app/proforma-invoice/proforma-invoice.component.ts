@@ -47,7 +47,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import {cloneDeep, forEach, isEqual} from '../lodash-optimized';
+import { cloneDeep, forEach, isEqual } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -1141,12 +1141,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let obj: GenericRequestForGenerateSCD = {
       account: data.accountDetails,
       updateAccountDetails: this.updateAccount,
-      voucher:data,
+      voucher: data,
       entries: [],
       date: data.voucherDetails.voucherDate,
       type: this.invoiceType,
       exchangeRate: this.originalExchangeRate,
-      dueDate:data.voucherDetails.dueDate
+      dueDate: data.voucherDetails.dueDate
     };
 
     // set voucher type
@@ -2484,8 +2484,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.destroyed$.complete();
   }
 
-  public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass){
-    
+  public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
+
     delete obj.voucher;
     delete obj.updateAccountDetails;
     delete obj.depositAccountUniqueName;
@@ -2499,10 +2499,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.uniqueName = e.uniqueName;
       salesEntryClass.description = e.description;
       salesEntryClass.date = e.entryDate;
-      e.taxList.forEach(t=>{
-        salesEntryClass.taxes.push({uniqueName:t});
+      e.taxList.forEach(t => {
+        salesEntryClass.taxes.push({ uniqueName: t });
       })
-      e.transactions.forEach(tr =>{
+      e.transactions.forEach(tr => {
         let transactionClassMul = new TransactionClassMulticurrency();
         transactionClassMul.account.uniqueName = tr.accountUniqueName;
         transactionClassMul.account.name = tr.accountName;
