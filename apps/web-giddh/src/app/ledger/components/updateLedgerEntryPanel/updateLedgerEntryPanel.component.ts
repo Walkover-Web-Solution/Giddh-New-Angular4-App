@@ -20,7 +20,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
-import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
+import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
@@ -182,7 +182,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success' && resp[3]) {
 
-          //#region flattern group list assign process
+          //#region flatten group list assign process
 
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
@@ -455,9 +455,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
       });
     }
-    if (Number(txn.amount) === 0) {
-      txn.amount = undefined;
-    }
+
+    // if (Number(txn.amount) === 0) {
+    //   txn.amount = undefined;
+    // }
+
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       let blankTrxnRow = this.vm.blankTransactionItem(type);
@@ -632,7 +634,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public onTxnAmountChange(txn) {
+  public onTxnAmountChange(txn: ILedgerTransactionItem) {
     if (!txn.selectedAccount) {
       this.vm.flatternAccountList4Select.pipe(take(1)).subscribe((accounts) => {
         if (accounts && accounts.length) {
@@ -644,6 +646,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       });
     }
 
+    txn.convertedAmount = giddhRoundOff(txn.amount * this.vm.selectedLedger.exchangeRate, 2);
     txn.isUpdated = true;
     this.vm.onTxnAmountChange(txn);
   }
@@ -918,6 +921,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.selectedCurrency = res;
     this.assignPrefixAndSuffixForCurrency();
     this.getCurrencyRate();
+    this.vm.inventoryAmountChanged();
+  }
+
+  public exchangeRateChanged() {
+    this.vm.inventoryAmountChanged();
   }
 
   private getCurrencyRate() {

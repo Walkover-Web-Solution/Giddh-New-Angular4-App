@@ -89,6 +89,7 @@ export class UpdateLedgerVm {
   public blankTransactionItem(type: string = 'DEBIT'): ILedgerTransactionItem {
     return {
       amount: 0,
+      convertedAmount: 0,
       type,
       particular: {
         name: '',
@@ -99,6 +100,8 @@ export class UpdateLedgerVm {
 
   public handleDiscountEntry(amount: number) {
     this.discountTrxTotal = amount;
+    this.convertedDiscountTrxTotal = giddhRoundOff(amount * this.selectedLedger.exchangeRate, 2);
+
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
       let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
@@ -116,21 +119,14 @@ export class UpdateLedgerVm {
 
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
         let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
-        if (dx.discountUniqueName) {
-          trx.particular.uniqueName = dx.discountUniqueName;
-          trx.particular.name = dx.name;
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
-          trx.isStock = false;
-          trx.isTax = false;
-          trx.isDiscount = true;
-        } else {
-          trx.particular.uniqueName = 'discount';
-          trx.particular.name = 'discount';
-          trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
-          trx.isStock = false;
-          trx.isTax = false;
-          trx.isDiscount = true;
-        }
+
+        trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
+        trx.particular.name = dx.name;
+        trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
+        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
+        trx.isStock = false;
+        trx.isTax = false;
+        trx.isDiscount = true;
 
         this.selectedLedger.transactions.splice(index, 0, trx);
       });
@@ -236,6 +232,11 @@ export class UpdateLedgerVm {
       }
       return 0;
     }), 2);
+
+    this.convertedEntryTotal = {
+      drTotal: giddhRoundOff(this.entryTotal.drTotal * this.selectedLedger.exchangeRate, 2),
+      crTotal: giddhRoundOff(this.entryTotal.crTotal * this.selectedLedger.exchangeRate, 2),
+    };
   }
 
   public onTxnAmountChange(txn: ILedgerTransactionItem) {
@@ -270,6 +271,7 @@ export class UpdateLedgerVm {
         });
         this.totalAmount = trx ? Number(trx.amount) : 0;
       }
+      this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
     }
   }
 
@@ -314,8 +316,12 @@ export class UpdateLedgerVm {
     let total = this.totalAmount - this.discountTrxTotal;
     this.appliedTaxPerTotal = taxTotal;
     this.totalForTax = total;
+
     this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), 2);
+    this.convertedTaxTrxTotal = giddhRoundOff(this.taxTrxTotal * this.selectedLedger.exchangeRate, 2);
+
     this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), 2);
+    this.convertedGrandTotal = giddhRoundOff((this.grandTotal), 2);
 
     this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
   }
@@ -326,6 +332,7 @@ export class UpdateLedgerVm {
     } else {
       this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), 2);
     }
+    this.convertedCompoundTotal = giddhRoundOff(this.compoundTotal * this.selectedLedger.exchangeRate, 2);
   }
 
   public getUniqueName(txn: ILedgerTransactionItem) {
@@ -362,20 +369,24 @@ export class UpdateLedgerVm {
 
   public inventoryPriceChanged(val: any) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (typeof val !== 'string') {
-      let tempVal = val.clipboardData.getData('text/plain');
-      if (Number.isNaN(Number(tempVal))) {
-        val.stopImmediatePropagation();
-        val.preventDefault();
-        return;
-      }
-      val = tempVal;
-    }
+    // if (typeof val !== 'string') {
+    //   let tempVal = val.clipboardData.getData('text/plain');
+    //   if (Number.isNaN(Number(tempVal))) {
+    //     val.stopImmediatePropagation();
+    //     val.preventDefault();
+    //     return;
+    //   }
+    //   val = tempVal;
+    // }
 
     if (Number(val * this.stockTrxEntry.inventory.quantity) !== this.stockTrxEntry.amount) {
       this.stockTrxEntry.isUpdated = true;
     }
-    this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
+
+    this.convertedRate = giddhRoundOff(val * this.selectedLedger.exchangeRate, 2);
+    this.stockTrxEntry.amount = giddhRoundOff(val * this.stockTrxEntry.inventory.quantity, 2);
+    this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+
     this.getEntryTotal();
     this.generatePanelAmount();
     this.generateGrandTotal();
@@ -384,22 +395,28 @@ export class UpdateLedgerVm {
 
   public inventoryAmountChanged(event = null) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (event) {
-      let tempVal = event.clipboardData.getData('text/plain');
-      if (Number.isNaN(Number(tempVal))) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        return;
-      }
-      this.totalAmount = Number(tempVal);
-    }
+    // if (event) {
+    //   let tempVal = event.clipboardData.getData('text/plain');
+    //   if (Number.isNaN(Number(tempVal))) {
+    //     event.stopImmediatePropagation();
+    //     event.preventDefault();
+    //     return;
+    //   }
+    //   this.totalAmount = Number(tempVal);
+    // }
+
+    this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
 
     if (this.stockTrxEntry) {
       if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), 2)) {
         this.stockTrxEntry.isUpdated = true;
       }
       this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), 2);
+      this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+
       this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
+      this.convertedRate = giddhRoundOff(this.stockTrxEntry.inventory.rate * this.selectedLedger.exchangeRate, 2);
+
     } else {
       // find account that's from category income || expenses || fixedassets
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
@@ -409,10 +426,8 @@ export class UpdateLedgerVm {
 
       if (trx) {
         trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
-        // trx.isUpdated = true;
-        // if (trx.amount !== Number(Number(this.totalAmount).toFixed(2))) {
+        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
         trx.isUpdated = true;
-        // }
       }
     }
 
@@ -430,22 +445,22 @@ export class UpdateLedgerVm {
 
   public inventoryTotalChanged(event) {
     // if val is typeof string change event should be fired and if not then paste event should be fired
-    if (event instanceof ClipboardEvent) {
-      let tempVal = event.clipboardData.getData('text/plain');
-      if (Number.isNaN(Number(tempVal))) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        return;
-      }
-      this.grandTotal = Number(tempVal);
-    } else {
-      // key press event
-      let e = event as any;
-
-      if (!(typeof this.grandTotal === 'string')) {
-        return;
-      }
-    }
+    // if (event instanceof ClipboardEvent) {
+    //   let tempVal = event.clipboardData.getData('text/plain');
+    //   if (Number.isNaN(Number(tempVal))) {
+    //     event.stopImmediatePropagation();
+    //     event.preventDefault();
+    //     return;
+    //   }
+    //   this.grandTotal = Number(tempVal);
+    // } else {
+    //   // key press event
+    //   let e = event as any;
+    //
+    //   if (!(typeof this.grandTotal === 'string')) {
+    //     return;
+    //   }
+    // }
 
     let fixDiscount = 0;
     let percentageDiscount = 0;
@@ -468,10 +483,15 @@ export class UpdateLedgerVm {
     this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
       (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), 2);
 
+    this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
+
     if (this.stockTrxEntry) {
       this.stockTrxEntry.amount = this.totalAmount;
+      this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+
       const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), 2);
       this.stockTrxEntry.inventory.rate = rate;
+      this.convertedRate = giddhRoundOff(this.stockTrxEntry.inventory.rate * this.selectedLedger.exchangeRate, 2);
       this.stockTrxEntry.isUpdated = true;
 
       if (this.discountComponent) {
@@ -486,6 +506,7 @@ export class UpdateLedgerVm {
       });
       if (trx) {
         trx.amount = this.totalAmount;
+        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
         trx.isUpdated = true;
       }
 
