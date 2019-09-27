@@ -3,8 +3,8 @@
 
   <a id="discount">
     <div class="multi-select adjust">
-      <input type="text" [prefix]="prefix"
-             [suffix]="suffix" [mask]="mask" name="" class="form-control cursor-pointer"
+      <input type="text" [prefix]="prefixInput"
+             [suffix]="suffixInput" [mask]="maskInput" name="" class="form-control cursor-pointer"
              (focus)="discountMenu = true;hideOtherPopups.emit(true)"
              [(ngModel)]="discountTotal" readonly/>
       <span class="caret"></span>

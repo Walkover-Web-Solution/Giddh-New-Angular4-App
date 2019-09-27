@@ -85,9 +85,9 @@
           <!--discount-->
           <td class="pItem text-right price" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
-                             [mask]="inputMaskFormat"
-                             [prefix]="selectedPrefixForCurrency"
-                             [suffix]="selectedSuffixForCurrency"
+                             [maskInput]="inputMaskFormat"
+                             [prefixInput]="selectedPrefixForCurrency"
+                             [suffixInput]="selectedSuffixForCurrency"
                              [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
                              (discountTotalUpdated)="calculateDiscount($event);">
             </ledger-discount>
@@ -111,8 +111,8 @@
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                         [mask]="inputMaskFormat"
-                         [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                         [maskInput]="inputMaskFormat"
+                         [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
