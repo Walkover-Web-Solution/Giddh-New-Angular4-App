@@ -151,16 +151,16 @@
 
                 </td>
 
-                <td class="col-xs-2" data-title="Amount">
+                <td class="col-xs-2 text-right" data-title="Amount">
 
                   <input type="text" *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
-                         [(ngModel)]="txn.amount" class="form-control"
+                         [(ngModel)]="txn.amount" class="form-control text-right"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
 
                   <input type="text" *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
-                         [(ngModel)]="txn.convertedAmount" class="form-control"
+                         [(ngModel)]="txn.convertedAmount" class="form-control text-right"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
@@ -321,16 +321,16 @@
 
                 </td>
 
-                <td data-title="Amount" class="col-xs-2">
+                <td data-title="Amount" class="col-xs-2 text-right">
 
-                  <input class="form-control" type="text"
+                  <input class="form-control text-right" type="text"
                          *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
                          [(ngModel)]="txn.amount"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
 
-                  <input class="form-control" type="text"
+                  <input class="form-control text-right" type="text"
                          *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
                          [(ngModel)]="txn.amount"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -548,7 +548,7 @@
 
                       <p class="mb-0 amnt-total pr-1 pl-1 text-right" *ngIf="isMultiCurrencyAvailable">
                         <ng-container
-                          *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.totalForTax }"></ng-container>
+                          *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTaxTrxTotal }"></ng-container>
                       </p>
                     </td>
 
@@ -800,7 +800,7 @@
                   <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
 
                   <li>
-                    <a href="javascript:void(0)" class="text-light">
+                    <a href="javascript:void(0)" class="text-light" (click)="toggleCurrency(selectedCurrency === 0 ? 1 : 0)">
                       <i class="icon-switch-icon"></i>
                     </a>
                   </li>

@@ -205,7 +205,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           } else {
             this.baseCurrencyDetails = this.foreignCurrencyDetails;
           }
-          this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 1 : 0;
+          this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
           this.assignPrefixAndSuffixForCurrency();
           // end multi currency assign
 
@@ -912,6 +912,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.taxControll.change();
       this.taxControll.showTaxPopup = false;
     }
+  }
+
+  public toggleCurrency(res) {
+    this.selectedCurrency = res;
+    this.assignPrefixAndSuffixForCurrency();
+    this.getCurrencyRate();
+  }
+
+  private getCurrencyRate() {
+    let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
+    let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+    let date = moment().format('DD-MM-YYYY');
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(res => {
+      let rate = res.body;
+      if (rate) {
+        this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate};
+      }
+    }, (error => {
+      this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: 1};
+    }));
   }
 
   @HostListener('window:scroll')

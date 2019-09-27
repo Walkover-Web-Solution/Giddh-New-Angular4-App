@@ -35,6 +35,8 @@ export class UpdateLedgerVm {
   public discountTrxTotal: number = 0;
   public convertedDiscountTrxTotal: number = 0;
   public taxTrxTotal: number = 0;
+  public convertedTaxTrxTotal: number = 0;
+  public appliedTaxPerTotal: number = 0;
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
@@ -285,7 +287,7 @@ export class UpdateLedgerVm {
         taxableValue = Number(this.totalAmount) - this.discountTrxTotal;
       } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
         let rawAmount = Number(this.totalAmount) - this.discountTrxTotal;
-        taxableValue = (rawAmount + ((rawAmount * this.taxTrxTotal) / 100));
+        taxableValue = (rawAmount + ((rawAmount * this.appliedTaxPerTotal) / 100));
       }
 
       let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
@@ -310,9 +312,10 @@ export class UpdateLedgerVm {
   public generateGrandTotal() {
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     let total = this.totalAmount - this.discountTrxTotal;
-    this.taxTrxTotal = taxTotal;
+    this.appliedTaxPerTotal = taxTotal;
     this.totalForTax = total;
-    this.grandTotal = giddhRoundOff((total + ((total * taxTotal) / 100)), 2);
+    this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), 2);
+    this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), 2);
 
     this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
   }
