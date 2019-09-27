@@ -67,11 +67,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public invoiceDetailViewHeight: number;
   public invoiceImageSectionViewHeight: number;
   public isMobileView = false;
+  public pagecount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions, private _breakPointObservar: BreakpointObserver,
-              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+    private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions, private _breakPointObservar: BreakpointObserver,
+    private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     this._breakPointObservar.observe([
       '(max-width: 1023px)'
     ]).subscribe(result => {
@@ -296,6 +297,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     this.performActionAfterClose();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public testPagesLoaded(count: number) {
+    this.pagecount = count;
   }
 
   private performActionAfterClose() {
