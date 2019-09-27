@@ -128,45 +128,6 @@ var pdfjsWebApp, pdfjsWebAppOptions;
   __webpack_require__(41);
 }
 
-window.getUrlParameterByName = function(name, url) { //c1s
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-window.applyParameterOverride = function(config) {
-  console.log("########################################################################################" + window.getUrlParameterByName('print'));
-  console.log(window.getUrlParameterByName('print') === "false");
-  
-  if (window.getUrlParameterByName('openFile') === "false") {
-    config.toolbar.openFile.setAttribute('hidden', 'true');
-    config.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
-  }
-  if (window.getUrlParameterByName('download') === "false") {
-    config.toolbar.download.setAttribute('hidden', 'true');
-    config.secondaryToolbar.downloadButton.setAttribute('hidden', 'true');
-  }
-  if (window.getUrlParameterByName('viewBookmark') === "false") {
-    config.toolbar.viewBookmark.setAttribute('hidden', 'true');
-    config.secondaryToolbar.viewBookmarkButton.setAttribute('hidden', 'true');
-  }
-  if (window.getUrlParameterByName('print') === "false") {
-    config.toolbar.print.classList.add('hidden');
-    config.secondaryToolbar.printButton.classList.add('hidden');
-  }
-  if (window.getUrlParameterByName('fullScreen') === "false") {
-    config.toolbar.presentationModeButton.classList.add('hidden');
-    config.secondaryToolbar.presentationModeButton.classList.add('hidden');
-  }
-  if (window.getUrlParameterByName('find') === "false") {
-    config.toolbar.viewFind.classList.add('hidden');
-  }
-}//c1e
-
 function getViewerConfiguration() {
   return {
     appContainer: document.body,
@@ -1049,7 +1010,6 @@ var PDFViewerApplication = {
                 }
               }
 
-              console.log("parameeeeeeeeeeters ##############################:" + JSON.stringify(parameters));
               loadingTask = (0, _pdfjsLib.getDocument)(parameters);
               this.pdfLoadingTask = loadingTask;
 
@@ -1087,10 +1047,11 @@ var PDFViewerApplication = {
                   loadingErrorMessage = _this2.l10n.get('loading_error', null, 'An error occurred while loading the PDF.');
                 }
 
+                let moreInfo = {}; //c1s
+                moreInfo.message = message;
+                window.setCustomError(moreInfo); //c1e
                 return loadingErrorMessage.then(function (msg) {
-                  _this2.error(msg, {
-                    message: message
-                  });
+                  _this2.error(msg, moreInfo);
 
                   throw new Error(msg);
                 });
@@ -1168,6 +1129,21 @@ var PDFViewerApplication = {
       }
     }
 
+    //c1s
+    if (moreInfo.errorMessage) {
+      if (moreInfo.errorOverride) {
+        moreInfoText.length = 0;
+        moreInfoText.push(moreInfo.errorMessage);
+      }
+      else if (moreInfo.errorAppend) {
+        moreInfoText.push(moreInfo.errorMessage);
+      }
+      else {
+        moreInfoText.push(moreInfo.errorMessage);
+      }
+    }
+    //c1e
+
     var errorWrapperConfig = this.appConfig.errorWrapper;
     var errorWrapper = errorWrapperConfig.container;
     errorWrapper.removeAttribute('hidden');
@@ -1234,7 +1210,6 @@ var PDFViewerApplication = {
     }
   },
   load: function load(pdfDocument) {
-    console.log("load()");
     var _this5 = this;
 
     this.pdfDocument = pdfDocument;
@@ -1597,6 +1572,14 @@ var PDFViewerApplication = {
   beforePrint: function beforePrint() {
     var _this7 = this;
 
+    let viewerId = window.getUrlParameterByName('viewerId'); //c1s
+    if (viewerId) {
+      let trigger = window.getUrlParameterByName('beforePrint');
+      if (trigger == "true") {
+        window.parent.postMessage({viewerId: viewerId, event: "beforePrint"}, "*");
+      }
+    }//c1e
+
     if (this.printService) {
       return;
     }
@@ -1623,6 +1606,14 @@ var PDFViewerApplication = {
     printService.layout();
   },
   afterPrint: function pdfViewSetupAfterPrint() {
+    var viewerId = window.getUrlParameterByName('viewerId'); //c1s
+    if (viewerId) {
+      var trigger = window.getUrlParameterByName('afterPrint');
+      if (trigger == "true") {
+        window.parent.postMessage({viewerId: viewerId, event: "afterPrint"}, "*");
+      }
+    }//c1e
+
     if (this.printService) {
       this.printService.destroy();
       this.printService = null;
@@ -1818,6 +1809,11 @@ var validateFileURL;
     } catch (ex) {
       var message = ex && ex.message;
       PDFViewerApplication.l10n.get('loading_error', null, 'An error occurred while loading the PDF.').then(function (loadingErrorMessage) {
+        
+        let moreInfo = {}; //c1s
+        moreInfo.message = message;
+        window.setCustomError(moreInfo); //c1e
+
         PDFViewerApplication.error(loadingErrorMessage, {
           message: message
         });
@@ -1926,6 +1922,7 @@ function webViewerInitialized() {
     webViewerOpenFileViaURL(file);
   } catch (reason) {
     PDFViewerApplication.l10n.get('loading_error', null, 'An error occurred while loading the PDF.').then(function (msg) {
+      window.setCustomError(reason); //c1
       PDFViewerApplication.error(msg, reason);
     });
   }
@@ -2229,7 +2226,6 @@ function webViewerRotateCcw() {
 }
 
 function webViewerSwitchScrollMode(evt) {
-  console.log("sadf ;sadflh kaslf lkhasdfl;kh las;kdflkhasdflkhas dflasldkf lasfdl;khasdf " + evt.mode);
   PDFViewerApplication.pdfViewer.scrollMode = evt.mode;
 }
 
@@ -2316,6 +2312,14 @@ function webViewerPageChanging(evt) {
       Stats.add(page, pageView.stats);
     }
   }
+
+  let viewerId = window.getUrlParameterByName('viewerId'); //c1s
+  if (viewerId) {
+    let trigger = window.getUrlParameterByName('pageChange');
+    if (trigger == "true") {
+      window.parent.postMessage({viewerId: viewerId, event: "pageChange", param: page}, "*");
+    }
+  }//c1e
 }
 
 function webViewerVisibilityChange(evt) {
@@ -4511,6 +4515,73 @@ function () {
   return AppOptions;
 }();
 
+
+window.getUrlParameterByName = function(name, url) { //c1s
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+window.setCustomError = function(moreInfo) {
+  let errorMessage = window.getUrlParameterByName('errorMessage');
+  if(errorMessage) {
+    let errorOverride = window.getUrlParameterByName('errorOverride');
+    if (errorOverride) {
+      moreInfo.errorOverride = true;
+      moreInfo.errorMessage = errorMessage;
+    }
+
+    let errorAppend = window.getUrlParameterByName('errorAppend');
+    if (errorAppend) {
+      moreInfo.errorAppend = true;
+      moreInfo.errorMessage = errorMessage;
+    }
+  }
+}
+
+window.applyUserDefaults = function (appOptions) {
+  let locale = window.getUrlParameterByName('locale');
+  if (locale) {
+    appOptions.set('locale', locale);    
+  }
+
+  let useOnlyCssZoom = window.getUrlParameterByName('useOnlyCssZoom');
+  if (useOnlyCssZoom) {
+      appOptions.set('useOnlyCssZoom', true);
+  }
+}
+
+window.applyParameterOverride = function(config) {
+  if (window.getUrlParameterByName('openFile') === "false") {
+    config.toolbar.openFile.setAttribute('hidden', 'true');
+    config.secondaryToolbar.openFileButton.setAttribute('hidden', 'true');
+  }
+  if (window.getUrlParameterByName('download') === "false") {
+    config.toolbar.download.setAttribute('hidden', 'true');
+    config.secondaryToolbar.downloadButton.setAttribute('hidden', 'true');
+  }
+  if (window.getUrlParameterByName('viewBookmark') === "false") {
+    config.toolbar.viewBookmark.setAttribute('hidden', 'true');
+    config.secondaryToolbar.viewBookmarkButton.setAttribute('hidden', 'true');
+  }
+  if (window.getUrlParameterByName('print') === "false") {
+    config.toolbar.print.classList.add('hidden');
+    config.secondaryToolbar.printButton.classList.add('hidden');
+  }
+  if (window.getUrlParameterByName('fullScreen') === "false") {
+    config.toolbar.presentationModeButton.classList.add('hidden');
+    config.secondaryToolbar.presentationModeButton.classList.add('hidden');
+  }
+  if (window.getUrlParameterByName('find') === "false") {
+    config.toolbar.viewFind.classList.add('hidden');
+  }
+}//c1e
+
+window.applyUserDefaults(AppOptions); //c1
 exports.AppOptions = AppOptions;
 
 /***/ }),
@@ -7623,7 +7694,6 @@ function () {
         ZOOM: 2
       };
       let cursor = window.getUrlParameterByName('cursor');
-      console.log("cursor# " + cursor)
       if (cursor) {
         cursor = cursor.toUpperCase();
         switch(cursor) {
@@ -7652,7 +7722,6 @@ function () {
         WRAPPED: 2
       };
       let scroll = window.getUrlParameterByName('scroll');
-      console.log("scroll# " + scroll)
       if (scroll) {
         scroll = scroll.toUpperCase();
         switch(scroll) {
@@ -7681,7 +7750,6 @@ function () {
         EVEN: 2
       };
       let spread = window.getUrlParameterByName('spread');
-      console.log("spread# " + spread)
       if (spread) {
         spread = spread.toUpperCase();
         switch(spread) {
@@ -7705,35 +7773,30 @@ function () {
       }
 
       let startDownload = window.getUrlParameterByName('startDownload');
-      console.log("startDownload# " + startDownload)
       if (startDownload) {
         _this.eventBus.dispatch('download', {
             source: _this
           });
       }
       let startPrint = window.getUrlParameterByName('startPrint');
-      console.log("startPrint# " + startPrint)
       if (startPrint) {
         _this.eventBus.dispatch('print', {
             source: _this
           });
       }
       let lastpage = window.getUrlParameterByName('lastpage');
-      console.log("lastpage# " + lastpage)
       if (lastpage) {
         _this.eventBus.dispatch('lastpage', {
             source: _this
           });
       }
       let rotatecw = window.getUrlParameterByName('rotatecw');
-      console.log("rotatecw# " + rotatecw)
       if (rotatecw) {
         _this.eventBus.dispatch('rotatecw', {
             source: _this
           });
       }
       let rotateccw = window.getUrlParameterByName('rotateccw');
-      console.log("rotateccw# " + rotateccw)
       if (rotateccw) {
         _this.eventBus.dispatch('rotateccw', {
             source: _this
@@ -7744,6 +7807,14 @@ function () {
     this.eventBus.on('pagesloaded', function (evt) {
       _this.applyActionsOverride(_this);//c1
       _this._isPagesLoaded = !!evt.pagesCount;
+
+      let viewerId = window.getUrlParameterByName('viewerId'); //c1s
+      if (viewerId) {
+        let trigger = window.getUrlParameterByName('pagesLoaded');
+        if (trigger == "true") {
+          window.parent.postMessage({viewerId: viewerId, event: "pagesLoaded", param: evt.pagesCount}, "*");
+        }
+      }//c1e
     });
   }
 
