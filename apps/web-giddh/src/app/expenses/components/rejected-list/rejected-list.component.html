@@ -1,36 +1,36 @@
 <div class="container-fluid">
-  <div class="table-responsive">
-    <table class="table basic table-bordered mt-2 onMobileView">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Date
-            <a class="search-icon" href="javascript:void(0)">
-              <i class="icon-search"></i>
-            </a>
-          </th>
-          <th>Submitted By
-            <a class="search-icon" href="javascript:void(0)">
-              <i class="icon-search"></i>
-            </a>
-          </th>
-          <th>Account
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th class="text-right pr-2">Amount
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th>Payment/Receipt
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th>File</th>
-          <th>Reason of Rejection</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let expenses of RejectedItem let i =index">
-          <td data-title="#">{{i + 1}}</td>
+    <div class="table-responsive">
+        <table class="table basic table-bordered mt-2 onMobileView">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date
+                        <a class="search-icon" href="javascript:void(0)">
+                            <i class="icon-search"></i>
+                        </a>
+                    </th>
+                    <th>Submitted By
+                        <a class="search-icon" href="javascript:void(0)">
+                            <i class="icon-search"></i>
+                        </a>
+                    </th>
+                    <th>Account
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th class="text-right pr-2">Amount
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th>Payment/Receipt
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th>File</th>
+                    <th>Reason of Rejection</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let expenses of RejectedItem let i =index">
+                    <!-- <td data-title="#">{{i + 1}}</td>
           <td data-title="Date">{{expenses.date}}</td>
           <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
           <td data-title="Account">
@@ -61,9 +61,32 @@
             <a href="javascript:void(0)" class="btn-icon">
               <i class="icon-trash"></i>
             </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          </td> -->
+                    <td data-title="#">{{i + 1}}</td>
+                    <td data-title="Date">{{expenses.entryDate}}</td>
+                    <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+                    <td data-title="Account">
+                        <i class="dot-icon dot-warning"></i> {{expenses.baseAccount.name}}
+                    </td>
+                    <td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                    <td data-title="Payment/Receipt">
+                        <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
+                    </td>
+                    <td data-title="File">
+                        <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">
+                            <i class="icon-file-path middle"></i> {{expenses.fileNames}}</a>
+                    </td>
+                    <td data-title="Reason of Rejection">{{expenses.description}}</td>
+                    <td data-title="Action">
+                        <a (click)="revertActionClicked(expenses)" class="btn-icon">
+                            <i class="icon-Revert"></i>
+                        </a>
+                        <a (click)="deleteActionClicked(expenses)" class="btn-icon">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

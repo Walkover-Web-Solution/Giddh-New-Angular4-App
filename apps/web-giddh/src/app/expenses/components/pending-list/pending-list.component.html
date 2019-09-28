@@ -1,64 +1,103 @@
 <div class="container-fluid">
     <div class="table-responsive">
-    <table class="table basic table-bordered mt-2 onMobileView">
-      <thead>
-        <tr>
-          <th data-title="#">#</th>
-          <th>Date
-            <a class="search-icon" href="javascript:void(0)">
-              <i class="icon-search"></i>
-            </a>
-          </th>
-          <th>Submitted By
-            <a class="search-icon" href="javascript:void(0)">
-              <i class="icon-search"></i>
-            </a>
-          </th>
-          <th>Account
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th class="text-right pr-2">Amount
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th>Payment/Receipt
-            <i class="icon-arrow-down-2 arrow-filter"></i>
-          </th>
-          <th>File</th>
-          <th>Description</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let expenses of expensesItem let i = index">
-          <td data-title="#">{{i + 1}}</td>
-          <td data-title="Date">{{expenses.date}}</td>
-          <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
-          <td data-title="Account">
-            <i class="dot-icon {{expenses.dotWarning}}" *ngIf="expenses.dotWarning"></i>
-            <i class="dot-icon {{expenses.dotPrimary}}" *ngIf="expenses.dotPrimary"></i>
-            <i class="dot-icon {{expenses.dotSuccess}}" *ngIf="expenses.dotSuccess"></i>
-            {{expenses.account}}
-          </td>
-          <td data-title="Amount" class="text-right pr-2">{{expenses.amount | currency}}</td>
-          <td data-title="Payment/Receipt">
-            <span *ngIf="expenses.card" class="font-12 text-gray {{expenses.card}}"></span>
-            <span *ngIf="expenses.cash" class="font-12 text-gray {{expenses.cash}}"></span>
-            {{expenses.payment}}
-          </td>
-          <td data-title="File">
-            <a href="javascript:void(0)" *ngIf="expenses.FileIcon" class="font-12">
-              <i class="{{expenses.FileIcon}} middle"></i> {{expenses.File}}</a>
-            <span *ngIf="expenses.ImgeIcon" class="font-12 text-gray middle">
+        <table class="table basic table-bordered mt-2 onMobileView">
+            <thead>
+                <tr>
+                    <th data-title="#">#</th>
+                    <th>Date
+                        <a class="search-icon" href="javascript:void(0)">
+                            <i class="icon-search"></i>
+                        </a>
+                    </th>
+                    <th>Submitted By
+                        <a class="search-icon" href="javascript:void(0)">
+                            <i class="icon-search"></i>
+                        </a>
+                    </th>
+                    <th>Account
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th class="text-right pr-2">Amount
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th>Payment/Receipt
+                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    </th>
+                    <th>File</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="(this.getPettycashReportSuccess$ | async)">
+
+
+                <tr *ngFor="let expenses of expensesItem let i = index">
+                    <!-- <td data-title="#">{{i + 1}}</td>
+                    <td data-title="Date">{{expenses.date}}</td>
+                    <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
+                    <td data-title="Account">
+                        <i class="dot-icon {{expenses.dotWarning}}" *ngIf="expenses.dotWarning"></i>
+                        <i class="dot-icon {{expenses.dotPrimary}}" *ngIf="expenses.dotPrimary"></i>
+                        <i class="dot-icon {{expenses.dotSuccess}}" *ngIf="expenses.dotSuccess"></i> {{expenses.account}}
+                    </td>
+                    <td data-title="Amount" class="text-right pr-2">{{expenses.amount | currency}}</td>
+                    <td data-title="Payment/Receipt">
+                        <span *ngIf="expenses.card" class="font-12 text-gray {{expenses.card}}"></span>
+                        <span *ngIf="expenses.cash" class="font-12 text-gray {{expenses.cash}}"></span> {{expenses.payment}}
+                    </td>
+                    <td data-title="File">
+                        <a href="javascript:void(0)" *ngIf="expenses.FileIcon" class="font-12">
+                            <i class="{{expenses.FileIcon}} middle"></i> {{expenses.File}}</a>
+                        <span *ngIf="expenses.ImgeIcon" class="font-12 text-gray middle">
               <i class="{{expenses.ImgeIcon}} middle"></i> {{expenses.ImgePath}}</span>
-            <span *ngIf="expenses.multiple" class="font-12 text-gray middle">
+                        <span *ngIf="expenses.multiple" class="font-12 text-gray middle">
               <i class="{{expenses.multipleIcon}} middle"></i> {{expenses.multiple}}</span>
-          </td>
-          <td data-title="Description">{{expenses.description}}</td>
-          <td data-title="Action">
-            <button type="button" class="btn btn-success">Approve</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                    </td>
+                    <td data-title="Description">{{expenses.description}}</td>
+                    <td data-title="Action">
+                        <button type="button" (click)="approvedActionClicked(expenses);" class="btn btn-success">Approve</button>
+                    </td> -->
+
+
+
+                    <td data-title="#">{{i + 1}}</td>
+                    <td data-title="Date">{{expenses.entryDate}}</td>
+                    <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+                    <td data-title="Account">
+
+                        <i class="dot-icon dot-primary"></i> {{expenses.baseAccount.name}}
+                    </td>
+                    <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                    <td data-title="Payment/Receipt">
+
+                        <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
+                    </td>
+                    <td data-title="File">
+                        <a href="javascript:void(0)" *ngIf="!expenses.fileNames" class="font-12">
+                            <i class="icon-file-path middle"></i>attach file</a>
+                    </td>
+                    <td data-title="Description">{{expenses.description}}</td>
+                    <td data-title="Action">
+                        <button type="button" (click)="approvedActionClicked(expenses);" class="btn btn-success">Approve</button>
+                    </td>
+                </tr>
+
+            </tbody>
+            <tbody *ngIf="(getPettycashReportInprocess$ | async)">
+                <tr>
+                    <td colspan="9">
+                        <!--loading-->
+                        <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+                            <div class="giddh-spinner vertical-center-spinner"></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- <div class="no-data" *ngIf="(getPettycashReportInprocess$ | async)">
+            <h1>No entries found within given criteria.</h1>
+            <h1>Do search with some other dates</h1>
+        </div> -->
+    </div>
 </div>
