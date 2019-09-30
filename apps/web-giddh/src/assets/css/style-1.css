@@ -5343,7 +5343,9 @@ form#groupDetailForm {
   white-space: initial;
 }
 
-
+ .left-col-new, .right-col-new {
+    width: 50% !important;
+  }
 /* responsive */
 
 @media (min-width: 768px) {
@@ -5374,7 +5376,7 @@ form#groupDetailForm {
     display: block;
   }
   .left-col-new, .right-col-new {
-    width: 100%;
+    width: 100% !important;
     float: none;
     display: none;
     height: initial;

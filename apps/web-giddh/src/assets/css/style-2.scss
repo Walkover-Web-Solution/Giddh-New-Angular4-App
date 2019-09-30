@@ -1385,6 +1385,7 @@ header .navbar {
 #actionPane .btn-default {
     background: #E6E6E6;
     color: #333;
+    border-color: #E6E6E6;
 }
 
 
@@ -1733,9 +1734,17 @@ header .navbar {
     color: $border-blue;
 
 }
+#companyList li.selected-company a:focus{
+      background-color: $border-blue;
+}
 #companyList li.selected-company a:hover span {
     color: $border-blue !important;
 }
+
+#companyList li.selected-company a:focus span {
+    color: #fff !important;
+}
+
 .company-name .icon-dots-three-vertical {
     font-size: 18px;
     position: absolute;
@@ -1888,7 +1897,7 @@ input[type=checkbox]:checked:after {
     border:1px solid #0CB1AF;
 }
 
-.btn-success:hover {
+.btn-success:hover,  .btn-success:active:focus, .btn-success:active:hover ,  .btn-success:focus {
     background: #087E7D;
     color: #fff;
      border:1px solid #087E7D;
@@ -1919,7 +1928,7 @@ input[type=checkbox]:checked:after {
    box-shadow: none;
 }
 
-.btn-danger:disabled , .btn-danger:disabled:hover {
+.btn-danger:disabled , .btn-danger:disabled:hover , .btn-danger:active:focus, .btn-danger:active:hover ,  .btn-danger:focus  {
   background: #E4E4E4;
     color: #666666;
     border-color: #e4e4e4;

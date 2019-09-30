@@ -32,8 +32,8 @@
 }
 
 .ledgHead table td[class*=col-], .ledgHead table td .select2-container {
-  min-height: 54px;
-  height: 54px;
+  min-height: 45px;
+  height: 45px;
   max-height: initial;
 }
 
@@ -194,7 +194,7 @@
     display: none;
 }
 .h-table tr {
-    height: 49px;
+    height: 45px;
 }
 .dateStep {
     padding: 0 !important;
@@ -243,8 +243,8 @@ sh-select:focus {
 }
 .ledgHead .icomoon_ico{
   color: $dark-blue00;
-      width: 28px;
-    height: 28px;
+      width: 30px;
+    height: 30px;
     border:1px solid $border-blue;
         padding: 3px;
     display: flex;
