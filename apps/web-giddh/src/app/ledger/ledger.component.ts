@@ -367,23 +367,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
           //#endregion
 
           // region check multi currency allowed for selected account
-          if (fa.additional.currency) {
-            if (!this.isLedgerAccountAllowsMultiCurrency) {
-              // means ledger account and company currencies are same
-              // now check if the selected account currency is different than company currency
-              if (this.lc.activeAccount.currency !== fa.additional.currency) {
-                this.isLedgerAccountAllowsMultiCurrency = true;
-
-                this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-                let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
-                this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
-                this.getCurrencyRate();
-
-                this.selectedCurrency = 0;
-                this.assignPrefixAndSuffixForCurrency();
-              }
-            }
-          }
+          // if (fa.additional.currency) {
+          //   if (!this.isLedgerAccountAllowsMultiCurrency) {
+          //     // means ledger account and company currencies are same
+          //     // now check if the selected account currency is different than company currency
+          //     if (this.lc.activeAccount.currency !== fa.additional.currency) {
+          //       this.isLedgerAccountAllowsMultiCurrency = true;
+          //
+          //       this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+          //       let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
+          //       this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
+          //       this.getCurrencyRate();
+          //
+          //       this.selectedCurrency = 0;
+          //       this.assignPrefixAndSuffixForCurrency();
+          //     }
+          //   }
+          // }
           // endregion
           return;
         }
@@ -742,6 +742,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // this.advanceSearchRequest.to = this.advanceSearchRequest.to || moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
     // this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
     this.trxRequest.accountUniqueName = accountUnq;
+    // always send accountCurrency true when requesting for first time
+    this.trxRequest.accountCurrency = true;
     this.getTransactionData();
   }
 
@@ -824,9 +826,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
   }
 
-  public getCurrencyRate() {
-    let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
-    let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+  public getCurrencyRate(res: any = null) {
+    let from: string;
+    let to: string;
+    if (res) {
+      from = (res === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code);
+      to = (res === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code);
+    } else {
+      from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
+      to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+    }
     let date = moment().format('DD-MM-YYYY');
     this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(res => {
       let rate = res.body;
@@ -1492,16 +1501,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // endregion
 
   public toggleCurrency(res) {
-    if (res instanceof Object) {
-      this.selectedCurrency = res.target.checked ? 1 : 0;
-    } else {
-      this.selectedCurrency = res;
-    }
+    this.selectedCurrency = res.target.checked ? 1 : 0;
     this.currencyTogglerModel = this.selectedCurrency === 1;
     this.assignPrefixAndSuffixForCurrency();
     this.trxRequest.accountCurrency = this.selectedCurrency !== 1;
     this.getTransactionData();
     this.getCurrencyRate();
+  }
+
+  public toggleCurrencyForDisplayInNewLedger(res: 0 | 1) {
+    this.getCurrencyRate(res);
   }
 
   public getAdvanceSearchTxn() {

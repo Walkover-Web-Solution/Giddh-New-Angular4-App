@@ -17,7 +17,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { forEach, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -71,6 +71,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public selectedPrefixForCurrency: string;
   @Input() public selectedSuffixForCurrency: string;
   @Input() public inputMaskFormat: string = '';
+  public baseCurrencyToDisplay: ICurrencyResponse;
+  public foreignCurrencyToDisplay: ICurrencyResponse;
+  public selectedCurrencyToDisplay: 0 | 1 = 0;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -214,6 +217,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
       this.companyTaxesList = res || [];
     });
+
+    this.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+    this.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
   }
 
   @HostListener('click', ['$event'])
@@ -814,5 +820,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.blankLedger.otherTaxModal = modal;
     this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
     this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
+  }
+
+  public currencyChange() {
+    this.selectedCurrencyToDisplay = this.selectedCurrencyToDisplay === 0 ? 1 : 0;
+    this.currencyChangeEvent.emit(this.selectedCurrencyToDisplay);
+    this.detactChanges();
   }
 }

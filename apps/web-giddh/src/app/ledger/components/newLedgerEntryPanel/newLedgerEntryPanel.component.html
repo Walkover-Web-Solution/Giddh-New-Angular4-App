@@ -394,11 +394,11 @@
         <div class="pull-left pl-15">
 
           <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
-            <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+            <li>
+              1 {{ selectedCurrencyToDisplay === 0 ? baseCurrencyToDisplay?.code : foreignCurrencyToDisplay?.code }}</li>
 
             <li>
-              <a class="text-light" href="javascript:void(0)"
-                 (click)="currencyChangeEvent.emit(selectedCurrency === 0 ? 1 : 0)">
+              <a class="text-light" href="javascript:void(0)" (click)="currencyChange()">
                 <i class="icon-switch-icon font-16"></i>
               </a>
             </li>
@@ -406,7 +406,7 @@
             <li>
               <input class="price-input" [(ngModel)]="blankLedger.exchangeRate" type="text"
                      decimalDigitsDirective (blur)="exchangeRateChanged()">
-              {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+              {{ selectedCurrencyToDisplay === 0 ? foreignCurrencyToDisplay?.code : baseCurrencyToDisplay?.code }}
             </li>
 
           </ul>
