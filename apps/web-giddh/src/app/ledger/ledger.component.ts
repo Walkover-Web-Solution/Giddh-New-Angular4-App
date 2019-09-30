@@ -569,7 +569,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
         // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
         this.initTrxRequest(this.lc.accountUnq);
-        this.getCurrencyRate();
+        // this.getCurrencyRate();
         this.resetBlankTransaction();
 
         // Después del éxito de la entrada. llamar para transacciones bancarias
@@ -593,6 +593,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        this.currencyTogglerModel = false;
 
         let stockListFormFlattenAccount: IFlattenAccountsResultItem;
         if (data[1]) {
@@ -627,6 +628,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.selectedCurrency = 0;
         this.assignPrefixAndSuffixForCurrency();
+
+        // assign multi currency details to new ledger component
+        this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+        this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+        this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
 
         // tcs tds identification
         if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
@@ -826,19 +832,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.GetTransactions(this.trxRequest));
   }
 
-  public getCurrencyRate(res: any = null) {
+  public getCurrencyRate(mode: string = null) {
     let from: string;
     let to: string;
-    if (res) {
-      from = (res === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code);
-      to = (res === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code);
+    if (mode === 'blankLedger') {
+      from = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.baseCurrencyToDisplay.code : this.lc.blankLedger.foreignCurrencyToDisplay.code);
+      to = (this.lc.blankLedger.selectedCurrencyToDisplay === 0 ? this.lc.blankLedger.foreignCurrencyToDisplay.code : this.lc.blankLedger.baseCurrencyToDisplay.code);
     } else {
       from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
       to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
     }
     let date = moment().format('DD-MM-YYYY');
-    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(res => {
-      let rate = res.body;
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+      let rate = response.body;
       if (rate) {
         this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate};
       }
@@ -926,8 +932,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
       tdsTcsTaxesSum: 0,
       otherTaxType: 'tcs',
       exchangeRate: 1,
-      valuesInAccountCurrency: false
+      valuesInAccountCurrency: false,
+      selectedCurrencyToDisplay: this.selectedCurrency,
+      baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
+      foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
     };
+    if (this.isLedgerAccountAllowsMultiCurrency) {
+      this.getCurrencyRate('blankLedger');
+    }
     this.hideNewLedgerEntryPopup();
   }
 
@@ -1511,11 +1523,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.currencyTogglerModel = this.selectedCurrency === 1;
     this.assignPrefixAndSuffixForCurrency();
     this.trxRequest.accountCurrency = this.selectedCurrency !== 1;
-    this.getTransactionData();
     this.getCurrencyRate();
+
+    // assign multi currency details to new ledger component
+    this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+    this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+    this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+
+    this.getTransactionData();
   }
 
-  public toggleCurrencyForDisplayInNewLedger(res: 0 | 1) {
+  public toggleCurrencyForDisplayInNewLedger(res: string) {
     this.getCurrencyRate(res);
   }
 

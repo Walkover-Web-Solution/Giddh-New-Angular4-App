@@ -30,7 +30,7 @@ import {
   VoucherClass,
   VoucherTypeEnum,
   SalesEntryClassMulticurrency,
-  TransactionClassMulticurrency
+  TransactionClassMulticurrency, DiscountMulticurrency
 } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -2503,7 +2503,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.date = e.entryDate;
       e.taxList.forEach(t => {
         salesEntryClass.taxes.push({ uniqueName: t });
-      })
+      });
       e.transactions.forEach(tr => {
         let transactionClassMul = new TransactionClassMulticurrency();
         transactionClassMul.account.uniqueName = tr.accountUniqueName;
@@ -2512,7 +2512,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         salesEntryClass.transactions.push(transactionClassMul);
-      })
+      });
+      e.discounts.forEach(ds=>{
+        salesEntryClass.discounts.push(new DiscountMulticurrency(ds));
+      });
+
       salesEntryClassArray.push(salesEntryClass);
     });
 

@@ -313,6 +313,9 @@ export class BlankLedgerVM {
   public otherTaxType: 'tcs' | 'tds';
   public exchangeRate: number = 1;
   public valuesInAccountCurrency: boolean = true;
+  public baseCurrencyToDisplay?: ICurrencyResponse;
+  public foreignCurrencyToDisplay?: ICurrencyResponse;
+  public selectedCurrencyToDisplay?: 0 | 1 = 0;
 }
 
 export class TransactionVM {
