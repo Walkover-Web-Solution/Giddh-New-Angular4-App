@@ -19,66 +19,66 @@ VERSION:  1
 
 /* Webfont: Lato-Bold */
 
-@font-face {
-    font-family: 'LatoWebBold';
+/* @font-face {
+    font-family: 'opensans-bold';
     src: url('../fonts/lato/Lato-Bold.eot');
-    /* IE9 Compat Modes */
-    src: url('../fonts/lato/Lato-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../fonts/lato/Lato-Bold.woff2') format('woff2'), /* Modern Browsers */
-    url('../fonts/lato/Lato-Bold.woff') format('woff'), /* Modern Browsers */
+
+    src: url('../fonts/lato/Lato-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/lato/Lato-Bold.woff2') format('woff2'),
+    url('../fonts/lato/Lato-Bold.woff') format('woff'),
     url('../fonts/lato/Lato-Bold.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
-}
+} */
 
 
 /* Webfont: Lato-Medium */
 
-@font-face {
-    font-family: 'LatoWebMedium';
+/* @font-face {
+    font-family: 'opensans-semibold';
     src: url('../fonts/lato/Lato-Medium.eot');
-    /* IE9 Compat Modes */
-    src: url('../fonts/lato/Lato-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../fonts/lato/Lato-Medium.woff2') format('woff2'), /* Modern Browsers */
-    url('../fonts/lato/Lato-Medium.woff') format('woff'), /* Modern Browsers */
+
+    src: url('../fonts/lato/Lato-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/lato/Lato-Medium.woff2') format('woff2'),
+    url('../fonts/lato/Lato-Medium.woff') format('woff'),
     url('../fonts/lato/Lato-Medium.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
-}
+} */
 
 
 /* Webfont: Lato-Regular */
 
-@font-face {
-    font-family: 'LatoWeb';
+/* @font-face {
+    font-family: 'opensans-regular';
     src: url('../fonts/lato/Lato-Regular.eot');
-    /* IE9 Compat Modes */
-    src: url('../fonts/lato/Lato-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../fonts/lato/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
-    url('../fonts/lato/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+
+    src: url('../fonts/lato/Lato-Regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/lato/Lato-Regular.woff2') format('woff2'),
+    url('../fonts/lato/Lato-Regular.woff') format('woff'),
     url('../fonts/lato/Lato-Regular.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
-}
+} */
 
 
 /* Webfont: Lato-Semibold */
-
+/*
 @font-face {
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     src: url('../fonts/lato/Lato-Semibold.eot');
-    /* IE9 Compat Modes */
-    src: url('../fonts/lato/Lato-Semibold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('../fonts/lato/Lato-Semibold.woff2') format('woff2'), /* Modern Browsers */
-    url('../fonts/lato/Lato-Semibold.woff') format('woff'), /* Modern Browsers */
+
+    src: url('../fonts/lato/Lato-Semibold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/lato/Lato-Semibold.woff2') format('woff2'),
+    url('../fonts/lato/Lato-Semibold.woff') format('woff'),
     url('../fonts/lato/Lato-Semibold.ttf') format('truetype');
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
-}
+} */
 
 @font-face{
   font-family: 'opensans-regular';
@@ -116,7 +116,7 @@ VERSION:  1
     text-rendering: optimizeLegibility;
 }
 @font-face{
-  font-family: 'opensans-bold';
+  font-family: 'opensans-extra-bold';
   src:url('../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot');
   src: url('../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix') format('embedded-opentype'),
     url('../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg') format('woff2'),
@@ -131,7 +131,7 @@ html,
 body {
   height: 100%;
   background: #F7F8FA;
-  font-family: 'LatoWebMedium';
+  font-family: 'opensans-regular';
 
   color: #333333;
   -webkit-font-smoothing: antialiased;
@@ -3393,7 +3393,7 @@ ul.pills li:hover {
   -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
   -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
   box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
-  font-family: 'LatoWeb';
+  font-family: 'opensans-regular';
   font-size: 90%;
   /* margin: 3px 6px 6px 6px; */
   border: 1px solid #ccc;
@@ -5165,7 +5165,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 strong {
-    font-family: 'LatoWebBold';
+    font-family: 'opensans-bold';
     color: rgba(0, 0, 0, 0.8);
 }
 
@@ -5190,7 +5190,7 @@ strong {
 
 b,
 strong {
-  font-family: 'LatoWebBold';
+  font-family: 'opensans-bold';
 }
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
@@ -5358,7 +5358,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
   background: #e5e5e5;
   color: #262626;
   border: 0;
-  font-family: 'LatoWebbold';
+  font-family: 'opensans-bold';
   text-transform: capitalize;
 }
 

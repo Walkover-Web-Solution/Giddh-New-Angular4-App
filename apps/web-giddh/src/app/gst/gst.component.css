@@ -1,4 +1,4 @@
-@import url('../../assets/css/color.scss');
+@import '../../assets/css/color.scss';
 .return-body .main-wrapper {
     background-color: #f5f5f5;
     padding: 0;
@@ -34,9 +34,10 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: #fff;
-    background-color: #ea795b;
-    border-color: #ea795b;
+    border-color: #5B64C9;
+    background: #e5e5e5;
+    color: #5B64C9;
+
 }
 
 .btn,
@@ -162,7 +163,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: #eb6100;
+    color: $border-blue;
 }
 
 svg.icon.icon-xxlg-md {

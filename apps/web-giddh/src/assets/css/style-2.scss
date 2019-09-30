@@ -409,7 +409,7 @@ input {
 
 .hover-orange:hover {
     color: #bdc3ff !important;
-    /* font-family: 'LatoWebBold'; */
+    /* font-family: 'opensans-bold'; */
 }
 
 .company-list button.btn-link {
@@ -472,7 +472,7 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
 }
 
 .modal-open {
@@ -497,7 +497,7 @@ ul.sub-list {
 
 .top-heading>h4 {
     font-size: 18px;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -692,7 +692,7 @@ ul.sub-list {
     background: #e5e5e5;
     color: #262626;
     border: 0;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
     text-transform: capitalize;
     border-right: 1px solid #cac8c6;
     border-top: 1px solid #cac8c6;
@@ -1032,7 +1032,7 @@ modal-container.modal.fade.show {
 }
 
 .table-modal thead tr th {
-    font-family: 'LatoWebMedium' !important;
+    font-family: 'opensans-semibold' !important;
     /* background: red; */
     font-family: cursive;
     border-right: 1px solid #C6C6C6;
@@ -1393,6 +1393,7 @@ header .navbar {
 
 .ledger-main .form-control {
     background: #fff !important;
+    height: 45px;
 }
 
 .ledger-header thead th {
@@ -2179,7 +2180,7 @@ opacity: 0.5;
 
 .subscription-title {
     font-size: 20px;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
 }
 
 .box2 {
@@ -2190,7 +2191,7 @@ opacity: 0.5;
     background: #e5e5e5;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
     border: 1px solid #ddd;
 }
 
@@ -2240,7 +2241,7 @@ opacity: 0.5;
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
 }
 
 .modal-list ul>li {
@@ -2493,7 +2494,7 @@ opacity: 0.5;
 }
 
 .daterangepicker td.in-range {
-    background-color: #eae7da !important;
+    background-color: $light-purple !important;
     border-color: transparent;
     color: #000;
     border-radius: 0;
@@ -2536,8 +2537,8 @@ opacity: 0.5;
 
 .ranges li.active,
 .ranges li:hover {
-    background: var(--light-blue01) !important;
-    border: 1px solid var(--light-blue01) !important;
+    background: $border-blue !important;
+    border: 1px solid $border-blue !important;
     color: #fff !important;
 }
 
@@ -2658,7 +2659,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: #ff5e01 !important;
+    background: $border-blue !important;
     color: #fff;
     border-radius: 2px;
 }
@@ -5088,7 +5089,7 @@ input[type='checkbox'][disabled] {
     background: $dark-blue01 !important ;
     color: #fff;
     border: 0;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
     text-transform: capitalize;
 }
 
@@ -5109,7 +5110,7 @@ input[type='checkbox'][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: 'LatoWebbold';
+    font-family: 'opensans-bold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5136,6 +5137,7 @@ input[type='checkbox'][disabled] {
 .input-group-btn .btn-default {
     background: #eeeeee;
     border: 1px solid #d6d6d6;
+    color: #484848;
 }
 
 .input-group-btn .btn-default:hover {
@@ -5306,13 +5308,13 @@ input[type='checkbox'][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     color: #535353;
 }
 
@@ -5440,10 +5442,10 @@ ng-select>div>div.single>div.clear:hover {
     border-left: 0px;
 }
 
-.input-group .input-group-btn .btn:hover {
-    color: #28ab00 !important;
-    background: #fff;
-}
+// .input-group .input-group-btn .btn:hover {
+//     color: #28ab00 !important;
+//     background: #fff;
+// }
 
 ng-select .select_drop {
     position: initial;
@@ -5546,7 +5548,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 
 .welcome_header h1 {
     font-size: 40px;
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     color: #535353;
 }
 
@@ -5613,7 +5615,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     color: #535353;
     position: relative;
 }
@@ -5830,7 +5832,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: 'LatoWebBold';
+    font-family: 'opensans-bold';
     text-transform: capitalize;
 }
 
@@ -6053,7 +6055,7 @@ table td[class*=col-]:last-child {
 
 .app_list>ul h6 {
     margin-bottom: 10px;
-    font-family: LatoWebBold;
+    font-family: opensans-bold;
     font-size: 13px;
 }
 
@@ -7467,7 +7469,7 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 
 .noBrdRdsModal {
-    font-family: 'LatoWebMedium';
+    font-family: 'opensans-semibold';
 }
 
 .noBrdRdsModal small.mrT.mrB.grey {
@@ -7765,7 +7767,7 @@ ul.dropdown-menu  p.lead.pd {
 .nav-tabs > li.active > a , .invoce-controll .nav-tabs > li.active > a{
       border-bottom: 4px solid $yellow !important;
           padding-bottom: 7px !important;
-          font-family: 'LatoWebBold';
+          font-family: 'opensans-bold';
 }
 
 .dropdown-menu > li > a:hover {
@@ -7788,7 +7790,7 @@ ul.dropdown-menu  p.lead.pd {
 }
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26,35,126, 0.4)!important;
-    font-family: 'LatoWeb';
+    font-family: 'opensans-regular';
     color: #484848 !important;
     margin-right: 0 !important;
 }
