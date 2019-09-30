@@ -74,15 +74,17 @@
 }
 
 .btn-lg {
-  min-width: 140px;
-  background: #fff3ec;
-  color: #ff5f00;
-  border-radius: 0px;
-  box-shadow: none;
+    min-width: 155px;
+    background: #e5e5e5;
+    color: #5B64C9;
+    border-radius: 0px;
+    box-shadow: none;
 }
+
 .btn-lg:hover {
-  background: #ff5f00;
-  color: #ffffff;
-  box-shadow: 0px 4px 4px -3px #afabab;
-  border-radius: 0px;
+    background: #5B64C9;
+    color: #ffffff;
+    box-shadow: 0px 4px 4px -3px #afabab;
+    border-radius: 0px;
+    border-color: #5B64C9;
 }
