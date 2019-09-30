@@ -1,6 +1,6 @@
 
 
-export interface PettyCashReportResponse {
+export class PettyCashReportResponse {
   page: number;
   count: number;
   totalPages: number;
@@ -15,12 +15,12 @@ export interface PettyCashReportResponse {
   creditTotal: number;
 }
 
-export interface OpeningBalance {
+export class OpeningBalance {
   amount: number;
   type: string;
 }
 
-export interface ExpenseResults {
+export class ExpenseResults {
   entryDate: string;
   uniqueName: string;
   createdBy: CreatedBy;
@@ -34,11 +34,36 @@ export interface ExpenseResults {
   statusMessage?: any;
 }
 
-export interface CreatedBy {
+export class CreatedBy {
   name: string;
   uniqueName: string;
 }
-export interface ActionPettycashRequest {
+export class ActionPettycashRequest {
   actionType: string;
   uniqueName: string;
+}
+
+export class ExpenseActionRequest {
+  ledgerRequest?: LedgerRequest;
+  message?: string;
+}
+
+export class LedgerRequest {
+  transactions: Transaction[];
+  entryDate: string;
+  attachedFile: string;
+  attachedFileName: string;
+  description: string;
+  generateInvoice: boolean;
+  chequeNumber: string;
+}
+
+export class Transaction {
+  amount: number;
+  particular: string;
+  type: string;
+  taxes: any[];
+  applyApplicableTaxes: boolean;
+  isInclusiveTax: boolean;
+  convertedAmount?: any;
 }

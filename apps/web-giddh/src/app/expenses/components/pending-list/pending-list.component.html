@@ -28,9 +28,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody *ngIf="(this.getPettycashReportSuccess$ | async)">
-
-
+            <tbody>
                 <tr *ngFor="let expenses of expensesItem let i = index">
                     <!-- <td data-title="#">{{i + 1}}</td>
                     <td data-title="Date">{{expenses.date}}</td>
@@ -59,24 +57,25 @@
                     </td> -->
 
 
+                    <ng-container id="rowcomys" (click)="rowClicked(expenses);">
+                        <td data-title="#">{{i + 1}}</td>
+                        <td data-title="Date">{{expenses.entryDate}}</td>
+                        <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+                        <td data-title="Account">
 
-                    <td data-title="#">{{i + 1}}</td>
-                    <td data-title="Date">{{expenses.entryDate}}</td>
-                    <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
-                    <td data-title="Account">
+                            <i class="dot-icon dot-primary"></i> {{expenses.baseAccount.name}}
+                        </td>
+                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                        <td data-title="Payment/Receipt">
 
-                        <i class="dot-icon dot-primary"></i> {{expenses.baseAccount.name}}
-                    </td>
-                    <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
-                    <td data-title="Payment/Receipt">
-
-                        <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
-                    </td>
-                    <td data-title="File">
-                        <a href="javascript:void(0)" *ngIf="!expenses.fileNames" class="font-12">
-                            <i class="icon-file-path middle"></i>attach file</a>
-                    </td>
-                    <td data-title="Description">{{expenses.description}}</td>
+                            <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
+                        </td>
+                        <td data-title="File">
+                            <a href="javascript:void(0)" *ngIf="!expenses.fileNames" class="font-12">
+                                <i class="icon-file-path middle"></i>attach file</a>
+                        </td>
+                        <td data-title="Description">{{expenses.description}}</td>
+                    </ng-container>
                     <td data-title="Action">
                         <button type="button" (click)="approvedActionClicked(expenses);" class="btn btn-success">Approve</button>
                     </td>

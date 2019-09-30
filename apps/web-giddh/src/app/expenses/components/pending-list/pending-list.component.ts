@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -6,7 +6,8 @@ import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
-import { ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
+import { ExpenseResults, PettyCashReportResponse, ActionPettycashRequest, ExpenseActionRequest } from '../../../models/api-models/Expences';
+import { ExpenseService } from '../../../services/expences.service';
 
 @Component({
   selector: 'app-pending-list',
@@ -22,9 +23,12 @@ export class PendingListComponent implements OnInit {
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
   public getPettycashReportSuccess$: Observable<boolean>;
+  @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
+  @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
+  public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
 
 
-  expensesItem = [
+  public expensesItem = [
     // {
     //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Stationery A/c', dotWarning: 'dot-warning', dotPrimary: '', dotSuccess: '', amount: 1400, payment: 'ICICI A/c',
     //   card: '', cash: 'icon-cash', File: 'attach file', FileIcon: 'icon-file-path', ImgeIcon: '', ImgePath: '', multipleIcon: '', multiple: '', description: 'Dummy text sample test', Action: '', status: "pending"
@@ -115,14 +119,11 @@ export class PendingListComponent implements OnInit {
       status: "pending",
       statusMessage: null
     }
-  ]
-
-  // for (let i = 1; i <= 31; i++) {
-
-  // }
+  ];
 
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
+    private expenseService: ExpenseService,
     private _route: Router,
     private _toasty: ToasterService,
     private _cdRf: ChangeDetectorRef) {
@@ -134,13 +135,30 @@ export class PendingListComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-      if (res) {
-        this.expensesItems = res.results;
-      }
-    });
+    // this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+    //   if (res) {
+    //     this.expensesItems = res.results;
+    //   }
+    // });
   }
-  public approvedActionClicked(item: ExpenseResults) {
+  // public approvedActionClicked(item: ExpenseResults) {
+  //   let actionType: ActionPettycashRequest = {
+  //     actionType: 'approve',
+  //     uniqueName: item.uniqueName
+  //   };
+  //   this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+  //     if (res.status === 'success') {
+  //       this._toasty.successToast('reverted successfully');
+  //     } else {
+  //       this._toasty.successToast(res.message);
+  //     }
+  //   });
+  // }
+  public rowClicked(item: ExpenseResults) {
+    this.selectedRowInput.emit(item);
+    this.selectedRowToggle.emit(true);
+
 
   }
+
 }

@@ -32,7 +32,7 @@ export class ExpenseService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<PettyCashReportResponse, any>(e)));
   }
-  public actionPettycashReports(requestObj: ActionPettycashRequest, model: any): Observable<BaseResponse<PettyCashReportResponse, any>> {
+  public actionPettycashReports(requestObj: ActionPettycashRequest, model?: any): Observable<BaseResponse<PettyCashReportResponse, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + EXPENSE_API.ACTION.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', requestObj.uniqueName).replace(':actionType', requestObj.actionType), model).pipe(
       map((res) => {

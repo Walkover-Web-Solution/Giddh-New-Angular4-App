@@ -1,15 +1,16 @@
-import { Component, OnInit, ChangeDetectorRef, } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { Store, select } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, of as observableOf, combineLatest as observableCombineLatest } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { createSelector } from 'reselect';
+import { ExpenseResults } from '../models/api-models/Expences';
 
 
 @Component({
@@ -21,33 +22,57 @@ import { createSelector } from 'reselect';
 export class ExpensesComponent implements OnInit {
   public universalDate: Date[];
   public universalDate$: Observable<any>;
+  public todaySelected: boolean = false;
+  public todaySelected$: Observable<boolean> = observableOf(false);
+  public from: string;
+  public to: string;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
 
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
     private _route: Router,
     private _toasty: ToasterService,
+    private route: ActivatedRoute,
     private _cdRf: ChangeDetectorRef) {
-    this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
 
-    // this.pettycashRequest.from = '';
-    // this.pettycashRequest.to = '';
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
+
 
 
   }
 
   public ngOnInit() {
-    this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-      let ss = a;
-      this.pettycashRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-      this.pettycashRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+    observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+      if (!Array.isArray(resp[0])) {
+        return;
+      }
+      let dateObj = resp[0];
+      let params = resp[1];
+      this.todaySelected = resp[2];
+      if (dateObj && !this.todaySelected) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        if (this.from && this.to) {
+          this.pettycashRequest.from = this.from;
+          this.pettycashRequest.to = this.to;
+          this.getPettyCashReports(this.pettycashRequest);
+        }
+      }
     });
+  }
+  public selectedRowToggle(e) {
+    console.log('eeee', e);
+  }
+  public selectedRowInput(item: ExpenseResults) {
+    console.log('eeeitemm  ', item);
 
-    this.getPettyCashReports(this.pettycashRequest);
   }
 
-  public getPettyCashReports(SalesDetailedfilter) {
+  public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
     this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
   }
 }
