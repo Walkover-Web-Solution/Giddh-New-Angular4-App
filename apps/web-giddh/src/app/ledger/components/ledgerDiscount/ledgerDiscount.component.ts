@@ -31,9 +31,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('disInptEle') public disInptEle: ElementRef;
 
   @Input() public discountMenu: boolean;
-  @Input() public mask: string;
-  @Input() public prefix: string;
-  @Input() public suffix: string;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
   // @HostBinding('attr.tabindex') public tabindex = '0';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
