@@ -12,10 +12,13 @@
           </ng-template>
           <span class="icon-dots-three-vertical"></span>
           <div class="cText" [tooltip]="CompanyBranchnamealias" placement="bottom">
-            <span class="cName ellp pdR1">{{ (selectedCompany | async)?.name }}<span
-                *ngIf="(selectedCompany | async)?.nameAlias"
-                style="color: #ff5e01;font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
-                )</span></span>
+            <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name ) | slice: 0 : 1}}
+              <!-- <span *ngIf="(selectedCompany | async)?.nameAlias"
+                style="font-size: 12px;">({{ (selectedCompany | async)?.nameAlias }}
+                )
+              </span> -->
+
+            </span>
             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
           </div>
         </a>
@@ -26,7 +29,7 @@
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
               <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
                   *ngIf="(selectedCompany | async)?.nameAlias"
-                  style="color: #ff5e01;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
+                  style="color: #4B5196;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
               <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
             </a>
             <!-- commented due to not required now
@@ -237,7 +240,7 @@ Create Company
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
           <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
-              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+              container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
             <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
@@ -256,7 +259,8 @@ Create Company
 
         <!-- Main menu -->
         <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">MENU</h6>
+          <h6 class="mrB1">MENU <i *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"
+              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i> </h6>
           <li *ngFor="let menu of menuItemsFromIndexDB">
             <a routerLink="{{menu.uniqueName}}"
               [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
@@ -267,8 +271,9 @@ Create Company
           </li>
           <li id="other" *ngIf="!isMobileSite" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
             (mouseleave)="showOtherMenu = false">
-            <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i
-                class="fa fa-angle-right pull-right"></i></a>
+            <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i *ngIf="!isMobileSite"
+                tooltip="All Modules" placement="bottom" container="body" class="fa fa-plus cp"
+                (click)="showManageGroupsModal()"></i></a>
           </li>
 
         </ul>
@@ -284,7 +289,7 @@ Create Company
       <li>
         <div class="clearfix">
           <ul>
-            <li><a href="#"><strong>General</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>General</strong></a></li>
             <li><a (click)="analyzeOtherMenus('contact/customer', {tab: 'customer', tabIndex: 0})">Customer</a></li>
             <li><a (click)="analyzeOtherMenus('contact/vendor', {tab: 'vendor', tabIndex: 0})">Vendor</a>
             </li>
@@ -299,7 +304,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Invoice</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Invoice</strong></a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/sales')">Sales</a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/purchase')">Purchase</a></li>
             <li><a (click)="analyzeOtherMenus('proforma-invoice/invoice/cash')">Cash</a></li>
@@ -312,7 +317,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Inventory</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
             <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
             <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
             <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li>
@@ -323,7 +328,7 @@ Create Company
           </ul>
 
           <ul>
-            <li><a href="#"><strong>Settings</strong></a></li>
+            <li><a href="javascript:void(0)"><strong>Settings</strong></a></li>
             <li><a (click)="analyzeOtherMenus('permissions')">Permission</a></li>
             <li><a (click)="analyzeOtherMenus('import/select')">Import Data</a></li>
             <li>
@@ -395,28 +400,39 @@ Create Company
 
           </li>
         </ul>
+
+        <div class="giddh_logo">
+          <img src="../../../assets/images/giddh_logo.svg" alt="">
+        </div>
+
         <div class="pull-right">
           <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
             <li [hidden]="isTodaysDateSelected">
               <button class="btn btn-link" (click)="jumpToToday();">Go back to Today</button>
             </li>
-            <li [hidden]="isTodaysDateSelected">
+            <li [hidden]="isTodaysDateSelected" class="notToday">
+              <span class="icon-calender calender-addone"></span>
               <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
                 [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
                 class="form-control date-range-picker" />
             </li>
             <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
               <label class="btn btn-link">Today</label>
-              <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
+              <span class="icon-calender calender-addone"></span>
+              <label class="header-date">
+                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
             </li>
           </ul>
 
 
           <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm"
-            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c
+            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
+              class="icon-edit-ico"></span>Accounts
           </button>
           <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
-            <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
+            <span class="icon-support dropdown-toggle" dropdownToggle></span>
+
+            <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
               aria-labelledby="button-basic" [style.min-width.px]="230">
               <li>
@@ -448,7 +464,7 @@ Create Company
 
 <header class="clearfix header-container mobileHeader">
   <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
-    <div class="container-fluid pdT1 mrB1">
+    <div class="container-fluid  mrB1">
       <div class="upperLayerHeader">
         <ul class="nav navbar-nav">
           <!-- (isOpenChange)="sideBarStateChange($event)" -->
@@ -466,8 +482,8 @@ Create Company
 
           </li>
           <li class="pull-right">
-            <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
-              <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" />
+            <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="isMobileSite">
+              <span class="icon-support dropdown-toggle" dropdownToggle></span>
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
                 aria-labelledby="button-basic" [style.min-width.px]="230">
                 <li>
@@ -501,17 +517,20 @@ Create Company
             <button class="btn btn-link" (click)="jumpToToday();">Go Today</button>
           </li>
           <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
+            <span class="icon-calender calender-addone pos-abs"></span>
             <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
               [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
               class="form-control date-range-picker" />
           </li>
           <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
             <label class="btn btn-link">Today</label>
+            <span class="icon-calender calender-addone "></span>
             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
           </li>
         </ul>
-        <button id="AddManage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
-          [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Groups & A/c
+        <button id="AddManage" *ngIf="isMobileSite" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+          [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span class="icon-edit-ico"></span>
+          Accounts
         </button>
       </div>
     </div>

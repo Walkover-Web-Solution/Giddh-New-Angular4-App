@@ -1,5 +1,5 @@
 /*td-in-searchbox_style*/
-
+@import '../../../assets/css/color.scss';
 .td_in_searchBox div {
   display: flex;
 }
@@ -11,7 +11,7 @@
 
 .td_in_searchBox div i {
   margin-top: 3px;
-  color: #8080808c;
+  color: $iconColorTh;
   padding-right: 8px;
   cursor: pointer;
 }
@@ -44,7 +44,7 @@
 }
 
 .activeTextColor{
-  color: #ff5f00 !important;
+  color:$yellow !important;
 }
 .btn-orange:hover {
   background: #ff5f00 !important;
@@ -71,7 +71,7 @@
 }
 
 .td_in_searchBox div i:hover {
-  color: #ff5f00;
+  color: $yellow;
 }
 
 .mh18_img img {
@@ -81,6 +81,16 @@
 .onMobileView{
   margin-bottom: 0;
 }
+.recurring-container{
+  padding: 0 15px;
+}
+.icon-sort-asc , .icon-sort-dsc{
+   color: $iconColorTh;
+}
+.table-bordered .d-flex {
+    align-items: center;
+}
+// responsive
 @media(max-width:768px){
   .justify-content-sm{
     justify-content: left !important;

@@ -1,3 +1,4 @@
+ @import '../../assets/css/color.scss';
 .dropdown-menu > li > a {
   padding: 2px 10px;
 }
@@ -13,8 +14,13 @@
 .aging-table > tbody > tr input[type="checkbox"] {
   position: absolute !important;
   opacity: 0;
+  top: 5px;
 }
-
+.aging-table > tbody > tr td.vendorCustomerName input[type="checkbox"] {
+  position: absolute !important;
+  opacity: 0;
+  top: 0;
+}
 .aging-table > tbody > tr:hover input[type="checkbox"] {
   position: relative !important;
   opacity: 1;
@@ -28,7 +34,7 @@
 .icon-pointer {
   position: absolute;
   right: 10px;
-  top: 31%;
+  top: 36%;
 }
 .icon-pointer.iconSearch{
   top: 30%;
@@ -36,11 +42,13 @@
 }
 
 .icon-pointer .glyphicon:hover {
-  color: #FF5F00 !important;
+  color: #fff !important;
 }
-
+.icon-pointer{
+  color: red;
+}
 .icon-pointer .activeTextColor {
-  color: #FF5F00 !important;
+  color: $yellow !important;
   opacity: 1!important;
 }
 
@@ -80,7 +88,7 @@
   border-right: 0;
   padding: 11px 10px 10px 10px;
   width: 100%;
-  background: #ffece094;
+background: #efefef;
 }
 
 .account-detail-custom-title {
@@ -144,14 +152,16 @@ ul.list-unstyled li a {
   }
 
   a:hover {
-    color: #ff4700 !important;
+    color: $dark-blue01 !important;
   }
 }
 
 .transinherit {
   transform: inherit !important;
 }
-
+td.commentField {
+    white-space: normal;
+}
 //  my css
 tr:first-child td.pos-rel.WordWrap.customerName.cursor-pointer {
   border-top: none;
@@ -174,8 +184,8 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
 
 
 td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
-  height: 50px;
-  line-height: 2.4;
+  height: 42px;
+  line-height: 1.0;
   border-right: none;
 }
 
@@ -188,7 +198,9 @@ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.
   right: 10px;
   top: 10px;
 }
-
+.customerName.vendorCustomerName .icon-ellipse {
+    top: 5px;
+}
 .pos-rel.WordWrap {
   .icon-dots-three-vertical {
     transform: rotate(90deg);
@@ -243,8 +255,8 @@ tr.aging-table-top td {
 }
 
 .moreBtn li:hover {
-  background-color: #E5E5E5;
-  color: #ff5f00;
+  background-color: #EEEFF9;
+  color:$dark-blue01;
 }
 
 .btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary {
@@ -257,6 +269,42 @@ tr.aging-table-top td {
   float: right; width: auto;
 }
 
+i.icon-options {
+    width: 32px;
+    height: 32px;
+    border: 1px solid $dark-blue00;
+    background-color: #fff;
+    color:$dark-blue00;
+    font-size: 17px;
+    position: relative;
+    top: -1px;
+}
+i.icon-options:hover{
+  background-color:#EAEAEA ;
+}
+.searchField{
+  position: relative;
+}
+.searchField input{
+  width: 235px;
+  background-color: #E6E7E8 !important;
+  border-color: #E6E7E8 !important;
+}
+.searchField input:focus{
+  background-color: #fff !important;
+  border-color: $dark-blue00 !important;
+}
+span.inputAddon {
+    position: absolute;
+    right: 0px;
+    padding: 2px 9px;
+    background-color:$border-blue;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 2px;
+}
+
+// responsive
 
 @media(max-width:768px){
   .custumerRightWrap h4.mb-1.pdR2 {

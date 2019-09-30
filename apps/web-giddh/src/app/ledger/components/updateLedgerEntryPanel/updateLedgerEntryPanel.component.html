@@ -3,7 +3,7 @@
   <!-- region header -->
   <div class="modal-header">
     <span aria-hidden="true" class="close hover-orange" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
-          aria-label="Close">×</span>
+      aria-label="Close">×</span>
 
     <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()"
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>

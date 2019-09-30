@@ -50,9 +50,10 @@
 
           <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
-            <input type="text" [value]="currentTxn?.inventory?.unit?.rate" [prefix]="selectedPrefixForCurrency"
+            <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
+                   [prefix]="selectedPrefixForCurrency"
                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                   (keyup)="changePrice($event.target.value)" name="" class="form-control text-right"/>
+                   (ngModelChange)="changePrice($event)" name="" class="form-control text-right"/>
             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
               {{ currentTxn.convertedRate }}
@@ -84,9 +85,9 @@
           <!--discount-->
           <td class="pItem text-right price" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
-                             [mask]="inputMaskFormat"
-                             [prefix]="selectedPrefixForCurrency"
-                             [suffix]="selectedSuffixForCurrency"
+                             [maskInput]="inputMaskFormat"
+                             [prefixInput]="selectedPrefixForCurrency"
+                             [suffixInput]="selectedSuffixForCurrency"
                              [ledgerAmount]="currentTxn.amount" (hideOtherPopups)="hideTax()"
                              (discountTotalUpdated)="calculateDiscount($event);">
             </ledger-discount>
@@ -110,8 +111,8 @@
             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                          [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
                          [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
-                         [mask]="inputMaskFormat"
-                         [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                         [maskInput]="inputMaskFormat"
+                         [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                          [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
                          (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                          (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
@@ -393,11 +394,11 @@
         <div class="pull-left pl-15">
 
           <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
-            <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+            <li>
+              1 {{ selectedCurrencyToDisplay === 0 ? baseCurrencyToDisplay?.code : foreignCurrencyToDisplay?.code }}</li>
 
             <li>
-              <a class="text-light" href="javascript:void(0)"
-                 (click)="currencyChangeEvent.emit(selectedCurrency === 0 ? 1 : 0)">
+              <a class="text-light" href="javascript:void(0)" (click)="currencyChange()">
                 <i class="icon-switch-icon font-16"></i>
               </a>
             </li>
@@ -405,7 +406,7 @@
             <li>
               <input class="price-input" [(ngModel)]="blankLedger.exchangeRate" type="text"
                      decimalDigitsDirective (blur)="exchangeRateChanged()">
-              {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+              {{ selectedCurrencyToDisplay === 0 ? foreignCurrencyToDisplay?.code : baseCurrencyToDisplay?.code }}
             </li>
 
           </ul>

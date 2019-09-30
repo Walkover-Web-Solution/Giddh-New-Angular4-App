@@ -7,6 +7,10 @@
     margin-top: 1px;
 }
 
+.mr-15{
+    margin-right: -15px;
+}
+
 table.width100 {
     position: relative
 }

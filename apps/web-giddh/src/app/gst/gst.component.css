@@ -1,3 +1,4 @@
+@import url('../../assets/css/color.scss');
 .return-body .main-wrapper {
     background-color: #f5f5f5;
     padding: 0;
@@ -129,16 +130,14 @@ svg.icon.gstr-icon {
 }
 
 .return-content .count a {
-    color: #0f6bde;
+    color: var(--dark-blue01);
 }
 
 .font-xxxlarge {
     font-size: 24px;
 }
 
-.return-content .count a {
-    color: #0f6bde;
-}
+
 
 .bottom-action,
 .tax-engine a,
