@@ -511,6 +511,7 @@ export class SalesEntryClassMulticurrency {
   public uniqueName: string;
   public voucherNumber: string;
   public voucherType: string;
+  public discounts: DiscountMulticurrency[];
   constructor() {
     this.transactions = [];
     this.date = '';
@@ -521,6 +522,7 @@ export class SalesEntryClassMulticurrency {
     this.uniqueName = '';
     this.voucherNumber = '';
     this.voucherType = '';
+    this.discounts = [];
   }
 }
 
@@ -549,3 +551,18 @@ export class AmountClassMulticurrency{
   }
 }
 
+export class DiscountMulticurrency{
+  public calculationMethod: string;
+  public uniqueName: string;
+  public amount: AmountClassMulticurrency;
+  public discountPercent: number;
+
+
+  constructor(ledgerDiscountClass:LedgerDiscountClass){
+    this.calculationMethod = ledgerDiscountClass.discountType;
+    this.uniqueName = ledgerDiscountClass.discountUniqueName;
+    this.amount = new AmountClassMulticurrency();
+    this.amount.amountForAccount = ledgerDiscountClass.amount +"";
+    this.discountPercent = ledgerDiscountClass.discountValue;
+  }
+}

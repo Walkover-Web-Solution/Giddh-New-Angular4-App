@@ -17,7 +17,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -71,9 +71,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public selectedPrefixForCurrency: string;
   @Input() public selectedSuffixForCurrency: string;
   @Input() public inputMaskFormat: string = '';
-  public baseCurrencyToDisplay: ICurrencyResponse;
-  public foreignCurrencyToDisplay: ICurrencyResponse;
-  public selectedCurrencyToDisplay: 0 | 1 = 0;
+  // public baseCurrencyToDisplay: ICurrencyResponse;
+  // public foreignCurrencyToDisplay: ICurrencyResponse;
+  // public selectedCurrencyToDisplay: 0 | 1 = 0;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -83,7 +83,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
-  @Output() public currencyChangeEvent: EventEmitter<0 | 1> = new EventEmitter();
+  @Output() public currencyChangeEvent: EventEmitter<string> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('sh') public sh: ShSelectComponent;
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -218,8 +218,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.companyTaxesList = res || [];
     });
 
-    this.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
-    this.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+    // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
+    // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
   }
 
   @HostListener('click', ['$event'])
@@ -277,6 +277,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
         this.blankLedger.isOtherTaxesApplicable = true;
       }
+    }
+
+    if ('selectedCurrency' in changes) {
+      // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
+      // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
     }
   }
 
@@ -823,8 +828,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public currencyChange() {
-    this.selectedCurrencyToDisplay = this.selectedCurrencyToDisplay === 0 ? 1 : 0;
-    this.currencyChangeEvent.emit(this.selectedCurrencyToDisplay);
+    this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
+    this.currencyChangeEvent.emit('blankLedger');
     this.detactChanges();
   }
 }
