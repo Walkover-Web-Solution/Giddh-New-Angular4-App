@@ -3,7 +3,7 @@
   <!-- region header -->
   <div class="modal-header">
     <span aria-hidden="true" class="close hover-orange" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()"
-      aria-label="Close">×</span>
+          aria-label="Close">×</span>
 
     <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()"
         class="d-inline-block mr-1">{{(baseAccount$ | async)?.name}} A/c</h3>
@@ -522,6 +522,9 @@
                         <span auto-close="outsideClick">
                           <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
                                                   [ledgerAmount]="vm.selectedLedger.actualAmount"
+                                                  [prefixInput]="selectedPrefixForCurrency"
+                                                  [maskInput]="inputMaskFormat"
+                                                  [suffixInput]="selectedSuffixForCurrency"
                                                   (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal();"
                                                   (hideOtherPopups)="hideTax()">
                           </update-ledger-discount>
@@ -545,6 +548,9 @@
                                                      [date]="vm.selectedLedger.entryDate"
                                                      [taxRenderData]="vm.taxRenderData"
                                                      [totalForTax]="vm.totalForTax"
+                                                     [prefixInput]="selectedPrefixForCurrency"
+                                                     [maskInput]="inputMaskFormat"
+                                                     [suffixInput]="selectedSuffixForCurrency"
                                                      [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                                                      [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                                      (hideOtherPopups)="hideDiscount()"

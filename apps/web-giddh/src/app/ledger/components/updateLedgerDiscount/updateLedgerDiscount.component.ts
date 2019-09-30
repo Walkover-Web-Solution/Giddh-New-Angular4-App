@@ -24,6 +24,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() public discountMenu: boolean;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
 
   public discountTotal: number;
   public discountAccountsList$: Observable<IDiscountList[]>;
