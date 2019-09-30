@@ -380,12 +380,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     }
     case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
-      if (response.status === 'success') {
-        newState.tags = response.body;
-        return Object.assign({}, state, newState);
-      } else {
-        newState.tags = null;
-        return Object.assign({}, state, newState);
+      return {
+        ...state,
+        tags: response.status === 'success' ? response.body : null
       }
     }
     case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {

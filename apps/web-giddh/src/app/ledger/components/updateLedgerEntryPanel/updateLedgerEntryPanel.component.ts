@@ -325,6 +325,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
+          this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 2);
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
           this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
