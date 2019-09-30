@@ -917,10 +917,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public toggleCurrency(res) {
+  public async toggleCurrency(res) {
     this.selectedCurrency = res;
     this.assignPrefixAndSuffixForCurrency();
-    this.getCurrencyRate();
+    let rate = await this.getCurrencyRate();
+    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
     this.vm.inventoryAmountChanged();
   }
 
@@ -932,14 +933,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
     let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
     let date = moment().format('DD-MM-YYYY');
-    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(res => {
-      let rate = res.body;
-      if (rate) {
-        this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate};
-      }
-    }, (error => {
-      this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: 1};
-    }));
+    return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
 
   @HostListener('window:scroll')

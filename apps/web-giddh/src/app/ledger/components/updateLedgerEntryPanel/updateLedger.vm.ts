@@ -121,7 +121,7 @@ export class UpdateLedgerVm {
         let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
         trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
-        trx.particular.name = dx.name;
+        trx.particular.name = dx.name ? dx.name : 'discount';
         trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
         trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
         trx.isStock = false;
@@ -321,7 +321,7 @@ export class UpdateLedgerVm {
     this.convertedTaxTrxTotal = giddhRoundOff(this.taxTrxTotal * this.selectedLedger.exchangeRate, 2);
 
     this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), 2);
-    this.convertedGrandTotal = giddhRoundOff((this.grandTotal), 2);
+    this.convertedGrandTotal = giddhRoundOff((this.grandTotal * this.selectedLedger.exchangeRate), 2);
 
     this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
   }
