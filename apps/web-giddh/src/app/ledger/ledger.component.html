@@ -14,7 +14,7 @@
         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
           <input type="checkbox" class="toggle-checkbox" id="disabled" [(ngModel)]="currencyTogglerModel"
-            (change)="toggleCurrency($event)">
+                 (click)="toggleCurrency($event)">
 
           <label class="toggle-label" for="disabled">
             <span class="toggle-inner"></span>
@@ -595,23 +595,28 @@
                   </tbody>
                 </table>
 
-                <!--new ledge popup-->
-                <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
-                  *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                  <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
-                    [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
-                    [baseCurrencyDetails]="baseCurrencyDetails" [foreignCurrencyDetails]="foreignCurrencyDetails"
-                    [selectedCurrency]="selectedCurrency" [selectedPrefixForCurrency]="selectedPrefixForCurrency"
-                    [selectedSuffixForCurrency]="selectedSuffixForCurrency"
-                    [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
-                    [inputMaskFormat]="inputMaskFormat" (changeTransactionType)="toggleTransactionType($event)"
-                    [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()"
-                    (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
-                    (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                    (currencyChangeEvent)="toggleCurrency($event)" [invoiceList]="invoiceList">
-                  </new-ledger-entry-panel>
-                </div>
+              <!--new ledge popup-->
+              <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
+                   *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                        [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                                        [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        [selectedCurrency]="selectedCurrency"
+                                        [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                        [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                        [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
+                                        [inputMaskFormat]="inputMaskFormat"
+                                        (changeTransactionType)="toggleTransactionType($event)"
+                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                        (resetBlankLedger)="resetBlankTransaction()"
+                                        (saveBlankLedger)="saveBlankTransaction()"
+                                        (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                        (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (currencyChangeEvent)="toggleCurrencyForDisplayInNewLedger($event)"
+                                        [invoiceList]="invoiceList">
+                </new-ledger-entry-panel>
+              </div>
 
               </td>
             </tr>
@@ -839,23 +844,28 @@
                   </tbody>
                 </table>
 
-                <!--new ledge popup-->
-                <div class="pos-abs entry-modal" (click)="shCredit?.hide()" (keydown)="$event.stopPropagation()"
-                  *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                  <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
-                    [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" [tcsOrTds]="tcsOrTds"
-                    [baseCurrencyDetails]="baseCurrencyDetails" [foreignCurrencyDetails]="foreignCurrencyDetails"
-                    [selectedCurrency]="selectedCurrency" [selectedPrefixForCurrency]="selectedPrefixForCurrency"
-                    [selectedSuffixForCurrency]="selectedSuffixForCurrency" [inputMaskFormat]="inputMaskFormat"
-                    [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
-                    (changeTransactionType)="toggleTransactionType($event)"
-                    [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()"
-                    (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
-                    (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                    (currencyChangeEvent)="toggleCurrency($event)" [invoiceList]="invoiceList">
-                  </new-ledger-entry-panel>
-                </div>
+              <!--new ledge popup-->
+              <div class="pos-abs entry-modal" (click)="shCredit?.hide()" (keydown)="$event.stopPropagation()"
+                   *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                        [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                                        [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        [selectedCurrency]="selectedCurrency"
+                                        [selectedPrefixForCurrency]="selectedPrefixForCurrency"
+                                        [selectedSuffixForCurrency]="selectedSuffixForCurrency"
+                                        [inputMaskFormat]="inputMaskFormat"
+                                        [isLedgerAccountAllowsMultiCurrency]="isLedgerAccountAllowsMultiCurrency"
+                                        (changeTransactionType)="toggleTransactionType($event)"
+                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                        (resetBlankLedger)="resetBlankTransaction()"
+                                        (saveBlankLedger)="saveBlankTransaction()"
+                                        (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                        (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (currencyChangeEvent)="toggleCurrencyForDisplayInNewLedger($event)"
+                                        [invoiceList]="invoiceList">
+                </new-ledger-entry-panel>
+              </div>
 
               </td>
             </tr>
