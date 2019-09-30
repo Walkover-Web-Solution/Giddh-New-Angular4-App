@@ -1,4 +1,4 @@
-<span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false" (click)="$event.stopPropagation()">
+<span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false" (click)="$event.stopPropagation()" style="position: relative">
   <label *ngIf="showHeading">Tax</label>
 
   <a id="tax" class="clearfix">
@@ -8,7 +8,7 @@
       <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput"
              [(ngModel)]="taxTotalAmount"
              (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:20px !important;"/>
-      <span class="caret cp no-select" (click)="showTaxPopup = !showTaxPopup"></span>
+      <span class="caret cp no-select" (click)="showTaxPopup = true;hideOtherPopups.emit(true)"></span>
 
     </div>
   </a>
