@@ -6,7 +6,7 @@ import { VirtualScrollComponent } from '../../theme/ng-virtual-select/virtual-sc
   selector: 'virtual-list-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './virtual-list-menu.component.html',
-  styleUrls: ['./virtual-list-menu.component.css']
+  styleUrls: ['./virtual-list-menu.component.scss']
 })
 export class AVAccountListComponent implements OnChanges {
   @Input() public selectedValues: any[];

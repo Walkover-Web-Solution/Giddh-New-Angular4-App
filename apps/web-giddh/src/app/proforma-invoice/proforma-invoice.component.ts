@@ -651,7 +651,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
-            this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount || 0;
+            this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
             this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
             // if (obj.depositEntry || obj.depositEntryToBeUpdated) {

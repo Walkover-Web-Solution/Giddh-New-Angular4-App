@@ -85,6 +85,7 @@ body {
   height: 100%;
   background: #F7F8FA;
   font-family: 'LatoWebMedium';
+
   color: #333333;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -309,9 +310,9 @@ aside-menu-account .container-fluid {
   margin: 15px 0;
 }
 
-.cText span {
+/* .cText span {
   display: block;
-}
+} */
 
 
 /* .cName {
@@ -3316,9 +3317,8 @@ ul.pills li:hover {
   height: 32px;
 }
 
-.compoundEntry td,
-.compoundEntry td input {
-  background: #FFF6F1 !important;
+.compoundEntry td, .compoundEntry td input , .compoundEntry td:hover, .compoundEntry td input:hover{
+  background:rgba(254, 205, 81, 0.1) !important;
 }
 
 .uncEntry td,
@@ -5343,7 +5343,9 @@ form#groupDetailForm {
   white-space: initial;
 }
 
-
+ .left-col-new, .right-col-new {
+    width: 50% !important;
+  }
 /* responsive */
 
 @media (min-width: 768px) {
@@ -5374,7 +5376,7 @@ form#groupDetailForm {
     display: block;
   }
   .left-col-new, .right-col-new {
-    width: 100%;
+    width: 100% !important;
     float: none;
     display: none;
     height: initial;
@@ -5400,8 +5402,8 @@ form#groupDetailForm {
       top: 10px;
       font-weight: bold;
   }
-  
-  
+
+
   .transactions-page .left-col-new, .transactions-page .right-col-new {
       padding-bottom: 20px;
   }

@@ -36,7 +36,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public userIsSuperUser: boolean = true; // Protect permission module
@@ -1085,10 +1085,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.modelRefCrossLimit = this.modalService.show(template);
   }
 
-  public goToSelectPlan() {
+  public goToSelectPlan(template: TemplateRef<any>) {
     this.modalService.hide(1);
     // this.router.navigate(['billing-detail']);
     this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
+    this.modelRefExpirePlan = this.modalService.show(template);
   }
 
   public onRight(nodes) {
