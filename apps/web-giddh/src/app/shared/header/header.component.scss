@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .ddMaxHeight {
     max-height: 500px;
 }
@@ -7,7 +9,7 @@
     top: 0;
     bottom: 0;
     min-height: 100vh;
-    background: #303E4E;
+    background:$dark-blue;
     width: 215px;
     /* padding-bottom: 120px; */
     left: -215px;
@@ -15,28 +17,31 @@
 }
 
 .account-search .input-group-addon {
-    background: none;
-    border-color: #5F6E7E;
+
+    border-color:$light-blue02;
     border-radius: 2px 0 0 2px;
-    color: #B7B7B7;
+    color: #fff;
     /* height: 29px; */
     /* line-height: 14px; */
     font-size: 12px;
-    padding-right: 5px;
+    padding-right: 0px;
+    background-color:transparent;
+
 }
 
 .account-search .input-group-addon i.icon-search {
     position: relative;
     top: 2px;
+    left: -3px;
 }
 
 .account-search .form-control {
     background: none !important;
-    border-color: #5F6E7E;
+    border-color:$light-blue02;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 30px;
-    padding-left: 0px !important;
+    padding-left: 3px !important;
 }
 
 .account-search .form-control:focus {
@@ -45,12 +50,12 @@
 }
 
 .account-search {
-    margin: 20px 20px 20px;
+    margin:20px 20px 20px 10px;
     position: relative;
 }
 
 .account-search:hover:after {
-    color: #FF5F00;
+    color:$light-blue01;
     cursor: pointer;
 }
 
@@ -69,7 +74,7 @@ a[vr-item]:focus {
     right: 4px;
     font-size: 10px;
     line-height: 30px;
-    color: #5F6E7E;
+    color: #5F6581;
 }
 
 .account-search .form-control:after {
@@ -82,28 +87,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: #B7B7B7;
+    color: #fff;
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -113,7 +118,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: #b7b7b7 !important;
+    color: #fff !important;
 }
 /* .left_fixed_header.open,
 .left_fixed_header:hover {
@@ -125,7 +130,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name>li>a {
-    padding: 12px 20px !important;
+    padding: 12px 10px !important;
 }
 
 .main-company-name>li>a:hover {
@@ -154,23 +159,39 @@ a[vr-item]:focus {
 
 .left_fixed_header>li>a {
     display: block;
-    padding: 8px 20px;
+    padding: 8px 10px;
     color: #EBECEE;
+    position: relative;
     /* width: 32px; */
 }
-
-.left_fixed_header>li>a:hover {
-    background: #40505F;
+.left_fixed_header>li>a:before{
+  position: absolute;
+  content:'';
+  width: 4px;
+  height: 100%;
+  left: 0;
+  background-color: transparent;
+  top: 0;
 }
-
-.left_fixed_header>li a.active {
+.left_fixed_header>li>a:hover {
     background: transparent;
+    color:$yellow;
+}
+.left_fixed_header>li>a.active:before{
+    background: $yellow;
+}
+.left_fixed_header>li>a:hover .label>span, .left_fixed_header>li>a:hover .label{
+  color:$yellow;
+}
+.left_fixed_header>li a.active {
+    background: $darkGray;
 }
 
 .left_fixed_header>li>a.active .label,
 .left_fixed_header>li>a.active .label>span {
-    color: #FF5F00;
-    font-family: 'LatoWebBold';
+    color: $yellow;
+    font-family: 'LatoWebMedium';
+
 }
 
 .left_fixed_header>li>a .label {
@@ -273,31 +294,47 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header h6 {
-    color: #5F6E7E;
-    font-size: 14px;
-    padding-left: 20px;
+    color:$light-blue02;
+    font-size: 16px;
+    padding-left: 10px;
     padding-right: 20px;
     /* font-family: 'LatoWebBold'; */
 }
 
 .left_fixed_header>h6>i {
-    float: right;
-    font-size: 8px;
-    background: #B7B7B7;
+    float: left;
+    font-size: 10px;
+    background: #868EE0;
     display: inline-block;
-    width: 12px;
-    height: 12px;
+    width: 15px;
+    height: 15px;
     text-align: center;
-    line-height: 12px;
+    line-height: 15.9px;
     border-radius: 2px;
-    color: #303E4E;
-    margin-top: 2px;
-    /*transition: .1s all ease;*/
+    color: #00074D;
+    margin-top: 1px;
+    margin-right: 10px;
+
+}
+
+#other i{
+  float: left;
+    font-size: 10px;
+    background: #868EE0;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 15.9px;
+    border-radius: 2px;
+    color: #00074D;
+    margin-top: 1px;
+    margin-right: 10px;
 }
 
 .left_fixed_header>h6>i:hover {
     color: #fff;
-    background: #FF5F00;
+    background: #6B73C8;
 }
 
 .nav-tabs {
@@ -318,7 +355,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul>li>a:hover {
-    color: #FF5F00;
+    color: $dark-blue01;
 }
 
 .left-sub-menu ul {
@@ -388,7 +425,7 @@ a[vr-item]:focus {
 
 .nav_wrapper {
     position: relative;
-    background: #303E4E;
+    background:$dark-blue;
     height: calc(100vh - 145px);
 }
 
@@ -427,24 +464,109 @@ a[vr-item]:focus {
 
 .universal_date li {
     display: inline-block;
+    position: relative;
 }
 
 .universal_date li input {
-    background: #d6d6d6!important;
+    background:$dark-blue00 !important;
+    padding-left: 28px !important;
+    color: #fff;
+    padding-right: 5px !important;
+    border:1px solid $border-blueDark;
 }
-
+.universal_date li input:focus{
+  border:1px solid $border-blueDark !important;
+}
 .header-date {
-    background: #d6d6d6 !important;
-    padding: 2px 9px;
+    background:$dark-blue00 !important;
+    padding: 5px 9px;
+    border-radius: 0px 2px 2px 0px;
+    color: #fff;
+    padding-left: 0;
 }
 .mobile_menu_icon {
     display: none;
+}
+#cmpWrp{
+  background-color:$dark-blue;
+}
+.calender-addone{
+background-color:$dark-blue00;
+    color: #fff;
+    padding:9.5px 8px;
+    vertical-align: bottom;
+    font-size: 14px;
+    border-radius: 2px 0 0 2px;
+    display: inline-flex;
+
+    }
+    .notToday .calender-addone{
+      position: absolute;
+      border:1px solid $dark-blue00;
+          padding: 8px 8px;
+    }
+    #AddManage.btn-gray {
+    background: $dark-blue00;
+    color: #fff;
+    position: relative;
+    padding-left: 28px;
+       padding-top: 4px;
+    padding-bottom: 5px;
+    border: 1px solid $dark-blue00;
+}
+ #AddManage .icon-edit-ico{
+
+position: absolute;
+    left: 0px;
+    background-color: $dark-blue00;
+    padding: 8px 6px;
+    top: 0px;
+
+    text-align: center;
+    display: inline-flex;
+    color: #fff;
+
+ }
+ span.icon-support.dropdown-toggle {
+    background-color:$border-blue;
+    color: #fff;
+    padding:6px 7px;
+    font-size: 17px;
+    border:1px solid $border-blue;
+    border-radius: 1px;
+    position: relative;
+    top: 1px;
+
+}
+.notToday .date-range-picker{
+  height: 32px;
+}
+
+#other a{
+  color: $light-blue02;
+  text-transform: uppercase;
 }
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
         width: 100% !important;
     }
+}
+
+@media(max-width:768px){
+  .mobileHeader .btn-xs {
+    padding: 3px 8px 8px 28px !important;
+}
+span.icon-support.dropdown-toggle{
+  top: 7px;
+}
+.lowerLayerHeader {
+    padding-top: 14px;
+}
+.hamburger_menu button{
+  padding-top: 4px;
+  padding-bottom: 0;
+}
 }
 @media(max-width:767px){
   .mobile_menu_icon {
@@ -469,14 +591,28 @@ a[vr-item]:focus {
 }
 
 @media(max-width:375px){
-  .universal_date li.dateRangPicker, .universal_date .header-date {
+  .universal_date li.dateRangPicker {
     display: block ;
 }
-
+.universal_date .header-date {
+    display: inline-block ;
+}
 
 button#AddManage {
   position: absolute;
-  right: 15px;
-  bottom: 10px;
+  right: 0;
+  bottom: -23px;
+}
+.universal_date li {
+    display: block;
+    position: relative;
+}
+.universal_date .btn-link{
+      border-bottom: none;
+          display: block;
+    text-align: left;
+}
+.lowerLayerHeader {
+    padding-top:5px;
 }
 }

@@ -1488,6 +1488,9 @@ input.form-control.edit-currency {
 .biggerDollar .icon-dollar:before {
     font-size: 17px;
 }
+label.salesCountryLabel {
+    padding-bottom: 0;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;

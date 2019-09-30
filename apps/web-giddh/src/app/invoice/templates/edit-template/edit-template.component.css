@@ -1,9 +1,9 @@
 .template-grid {
-  background: #fafafa;
+  background: #fff;
   max-width: 255px;
   width: 100%;
   padding: 20px;
-  min-height: 243px;
+  min-height: 250px;
   border: 1px solid #d9d9d9;
   float: left;
   border-radius: 4px;
@@ -34,23 +34,44 @@
 }
 
 .spcl_dropdown {
-  border: 1px solid rgb(214, 214, 214) !important;
+  border: 1px solid #d9d9d9 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  font-size: 18px;
+  font-size: 14px;
   padding: 5px 10px;
   background: rgb(255, 255, 255) !important;
-  width: 175px;
+  width: 160px;
   text-align: left;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: center;color: #484848;
 }
 
 .dropdown-menu > li > a:hover {
   color: #ff5e01;
   background: #f4f5f8;
+}
+.badge{
+    background: #EAEAEA;
+    color: #484848;
+    font-family: LatoWeb;
+    border:none;
+    font-weight: 400;
+    padding: 10px;
+   border-radius: 50px;
+}
+.badge.btn-success:hover{
+background: #ddd;
+    color: #484848;
+}
+.badge.btn-blue, .badge.btn-blue:hover{
+  background:#313A97 !important;
+    border:none !important;
+    color: #fff !important;
+}
+.templteGrid-container{
+  padding: 0 15px;
 }
 @media(max-width:414px){
   .template-grid {

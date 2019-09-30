@@ -651,7 +651,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
-            this.depositAmountAfterUpdate = obj.voucherDetails.totalDepositAmount || 0;
+            this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
             this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
             // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
             // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
@@ -922,6 +922,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
+    this.customerCountryName = data.country.countryName;
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
@@ -1553,6 +1554,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+
         this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
           .pipe(
             catchError(err => {
