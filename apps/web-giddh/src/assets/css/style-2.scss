@@ -985,7 +985,7 @@ ul.sub-list {
 }
 
 .text-orange {
-    color: #FF5F00;
+    color: #5B64C9;
 }
 
 .text-light {
@@ -1345,13 +1345,13 @@ header .navbar {
 
 .btn-primary {
     background: #e5e5e5;
-    color: #ff5f00;
+    color: $border-blue;
 }
 
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:disabled {
-    background: #ff5f00;
+    background: $border-blue;
     color: #fff;
 }
 
@@ -1375,8 +1375,8 @@ header .navbar {
     color: $dark-blue00;
 }
 
-.btn-default:hover,
-.btn-default:disabled , .btn-default[disabled]:hover{
+.btn-default:hover, .btn-default:focus, .btn-default.active.focus
+.btn-default:disabled , .btn-default[disabled]:hover, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover{
     background: #EAEAEA;
     color: $dark-blue00;
     border-color:$border-blue;
@@ -5288,7 +5288,7 @@ input[type='checkbox'][disabled]:after {
 }
 
 .toggle-btn label {
-    color: #ff5f00;
+    color: $border-blue;
     font-size: 16px;
 }
 
@@ -7786,6 +7786,21 @@ span.red-text {
 }
 .aging-table th .table-checkbox {
     top: 10px;
+}
+.btn-lg.btn-primary {
+    min-width: 155px;
+    background: #e5e5e5;
+    color: #5B64C9;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.btn-lg.btn-primary:hover {
+    background: #5B64C9;
+    color: #ffffff;
+    box-shadow: 0px 4px 4px -3px #afabab;
+    border-radius: 0px;
+    border-color: #5B64C9;
 }
 /* responsive */
 

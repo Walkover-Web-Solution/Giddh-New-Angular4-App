@@ -1,5 +1,6 @@
+@import '../../../../assets/css/color.scss';
 .active {
-  color: #d35f29 !important;
+  color: $dark-blue01 !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -19,12 +20,12 @@
 }
 
 .stock-grp-list .active a,
-s.tock-grp-list .active i {
-  color: #ff5f00 !important;
+s.tock-grp-list .active i , .stock-grp-list .active  .btn-link i{
+  color: $dark-blue01 !important;
 }
 
 .stock-grp-list .active {
-  background-color: #fff3ec;
+  background-color: #EEEFF9;
 }
 
 .item-group {
