@@ -1491,6 +1491,19 @@ input.form-control.edit-currency {
 label.salesCountryLabel {
     padding-bottom: 0;
 }
+.biggerDollar .icon-rupees {
+    font-size: 12px;
+}
+.tableCell.figureCell span.icon-rupees {
+    font-size: 11px;
+    margin-right: 2px;
+
+}
+.tableCell.figureCell span.icon-dollar {
+
+    margin-right: 2px;
+
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;
