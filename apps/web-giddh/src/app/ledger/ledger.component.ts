@@ -1500,8 +1500,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   // endregion
 
-  public toggleCurrency(res) {
-    this.selectedCurrency = res.target.checked ? 1 : 0;
+  public toggleCurrency(event) {
+    let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
+    if (isThereBlankEntry) {
+      this._toaster.errorToast('please save unfinished entry first...');
+      event.preventDefault();
+      return false;
+    }
+    this.selectedCurrency = event.target.checked ? 1 : 0;
     this.currencyTogglerModel = this.selectedCurrency === 1;
     this.assignPrefixAndSuffixForCurrency();
     this.trxRequest.accountCurrency = this.selectedCurrency !== 1;
