@@ -1019,8 +1019,8 @@
                     </div>
 
                     <div class="tableCell figureCell">
-                      <span
-                        [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
+                      <span *ngIf="isMulticurrencyAccount"
+                        [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>
                       {{calculatedRoundOff | number:'1.2-2'}}
                     </div>
 
