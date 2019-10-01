@@ -412,6 +412,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
 
+          if (this.vm.stockTrxEntry) {
+            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+          }
+
           this.vm.getEntryTotal();
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
