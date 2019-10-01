@@ -645,7 +645,8 @@ ul.sub-list {
 .aging-table.basic>thead>tr>th {
     border: 1px solid $dark-blue01 !important;
     position: relative;
-        border-right-color: #ddd !important;
+    border-right-color: #ddd !important;
+    padding-right: 30px;
 }
 
 .sorting-box {
@@ -7466,7 +7467,7 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 
 .aging-table tr:hover .vendorCustomerName .table-checkbox {
-    top: 8px;
+    top: 13px;
 }
 
 .noBrdRdsModal {

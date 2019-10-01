@@ -567,8 +567,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.lc.showNewLedgerPanel = false;
-        // this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
-        this.initTrxRequest(this.lc.accountUnq);
+
+        this.getTransactionData();
         // this.getCurrencyRate();
         this.resetBlankTransaction();
 

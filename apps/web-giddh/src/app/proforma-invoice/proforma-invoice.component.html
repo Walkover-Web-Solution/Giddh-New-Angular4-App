@@ -172,13 +172,13 @@
                                 aria-autocomplete="none"></textarea>
 
                               <div class="">
-                                <div class="col-sm-3 pd mrB1">
+                                <div class="col-sm-6 pd ">
                                   <label class="salesCountryLabel">
                                     {{ customerCountryName }}
                                   </label>
                                 </div>
 
-                                <div class="col-sm-5 pd mrB1">
+                                <div class="col-sm-6 pd ">
                                   <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom"
                                     (selected)="autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true"
                                     [options]="statesSource" name="billingDetails.stateCode"
@@ -186,7 +186,7 @@
                                   </sales-sh-select>
                                 </div>
 
-                                <div class="col-sm-4 pd mrB1">
+                                <div class="col-sm-12 pd ">
                                   <!-- <label>GSTIN</label> -->
                                   <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber"
                                     class="form-control input-custom"
@@ -222,7 +222,7 @@
 
                                 <div class="form-group">
 
-                                  <div class="col-sm-3 pd mrB1">
+                                  <div class="col-sm-6 pd ">
                                     <div class="form-group">
 
                                       <label class="salesCountryLabel">
@@ -231,7 +231,7 @@
                                     </div>
                                   </div>
 
-                                  <div class="col-sm-5 pd mrB1">
+                                  <div class="col-sm-6 pd ">
 
                                     <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'"
                                       class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true"
@@ -240,7 +240,7 @@
                                     </sales-sh-select>
                                   </div>
 
-                                  <div class="col-sm-4 pd mrB1">
+                                  <div class="col-sm-12 pd ">
 
                                     <input [readonly]="autoFillShipping" autocomplete="None" maxLength="15" type="text"
                                       name="shippingDetails.gstNumber" class="form-control input-custom"
@@ -488,7 +488,7 @@
 
                     <div class="row">
 
-                      <div class="col-xs-6" *ngIf="entry.entryDate">
+                      <div class="col-xs-6 pdR0" *ngIf="entry.entryDate">
                         <div class="entryDate">
                           <label>Entry Date: </label> {{entry.entryDate | date: 'dd-MM-yyyy'}}
                           <span class="edit-icon cp" *ngIf="!isUpdateMode">
@@ -565,6 +565,7 @@
 
                     <div class="wrap-td-data">
                       <span>{{transaction.total | number:'1.2-2'}}</span>
+                      <br>
                       <span *ngIf="entry.isOtherTaxApplicable">
                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
                       </span>
@@ -574,13 +575,16 @@
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       <span *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
                       <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
+
                     </div>
-                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
+                    <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
+                      {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                       <span
-                        [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                        [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       :
                       <span *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum*exchangeRate | number:'1.2-2'}}</span>
                       <span *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum/exchangeRate | number:'1.2-2'}}</span>
+
                     </div>
                   </div>
                 </td>
@@ -646,7 +650,7 @@
                     <div class="dateHsnCode">
 
                       <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 pdR0">
                           <div class="entryDate">
                             <label>Entry Date: </label>
 
@@ -809,7 +813,7 @@
                           name="entry.otherTaxesSum" />
                       </div>
 
-                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
                         {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                     </span>
 
@@ -820,12 +824,16 @@
                     <span *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
                     <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
                   </div>
-                  <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
-                    <span
-                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                  <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount" class="texIncurrency"
+                    style="color:#999;">
+                    {{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                    <span class=""
+                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
+
                     :
-                    <span *ngIf="companyCurrency === 'INR'">{{ entry.otherTaxSum*exchangeRate }}</span>
-                    <span *ngIf="companyCurrency === 'USD'">{{ entry.otherTaxSum/exchangeRate }}</span></div>
+
+                    <span>{{ entry.otherTaxSum }}</span>
+                  </div>
 
                   <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }"></ng-container>
                 </td>
@@ -1101,9 +1109,10 @@
                               <label class="pull-right">Amount</label>
                             </li>
 
-                            <li class="clearfix mrT1" *ngIf="isSalesInvoice">
-                              <strong
-                                class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                            <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
+                              <strong class="pull-right balanceDueText"> <span *ngIf="isMulticurrencyAccount"
+                                  [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>
+                                {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                               <strong class="pull-right">Balance Due</strong>
                             </li>
 
@@ -1174,7 +1183,7 @@
                     <p class="small text-muted sku_and_customfields" *ngIf="transaction.sku_and_customfields">
                       {{transaction.sku_and_customfields}}</p>
 
-                    <div class="dateHsnCode">
+                    <div class="dateHsnCode pdR0">
                       <div class="row">
 
                         <div class="col-xs-6" *ngIf="entry.entryDate">
@@ -1333,7 +1342,7 @@
                         <!-- region entry date/ hsncode -->
                         <div class="dateHsnCode">
                           <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-6 pdR0">
                               <div class="entryDate">
                                 <label>Entry Date: </label>
                                 <span>

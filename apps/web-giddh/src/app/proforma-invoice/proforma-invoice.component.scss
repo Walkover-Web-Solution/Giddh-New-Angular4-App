@@ -790,10 +790,11 @@ a.copyInvoice img {
 .entryDate input {
   border: none;
   display: inline-block;
-  width: 80px;
+  width: 73px;
   background: transparent !important;
   height: 25px !important;
   font-size: 12px;
+  padding-right: 0 !important;
 }
 
 .entryDate input:focus {
@@ -960,9 +961,6 @@ span.edit-icon {
   height: 15px !important;
 }
 
-.wrap-billing-address label {
-  margin-bottom: 5px;
-}
 
 .customerInvoiceTable tr,
 .customerInvoiceTable td,
@@ -1071,6 +1069,12 @@ section.newtable {
 
 .cashinvoice_tipImg.tip_img {
   max-width: 215px;
+}
+.texIncurrency {
+    margin-bottom: 8px;
+}
+.pd {
+    padding: 3px 5px;
 }
 
 @media (min-width: 768px) {
@@ -1503,6 +1507,9 @@ label.salesCountryLabel {
 
     margin-right: 2px;
 
+}
+.texIncurrency span.icon-rupees {
+    font-size: 11px;
 }
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
