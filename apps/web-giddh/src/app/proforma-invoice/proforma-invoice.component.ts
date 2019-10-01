@@ -1636,6 +1636,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.activeIndx = null;
       }
       this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
+      this.calculateAffectedThingsFromOtherTaxChanges();
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
