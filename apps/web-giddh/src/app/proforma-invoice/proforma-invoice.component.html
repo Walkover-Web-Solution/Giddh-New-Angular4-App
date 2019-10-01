@@ -831,8 +831,8 @@
                       [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
 
                     :
-
-                    <span>{{ entry.otherTaxSum }}</span>
+                    <span *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum *exchangeRate | number:'1.2-2'}}</span>
+                    <span *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum /exchangeRate | number:'1.2-2'}}</span>
                   </div>
 
                   <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }"></ng-container>
