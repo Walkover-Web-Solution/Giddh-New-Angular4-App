@@ -170,19 +170,18 @@
                 <td class="col-xs-2 text-right" data-title="Amount">
 
                   <input type="text"
-                         *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
                          [(ngModel)]="txn.amount" class="form-control text-right"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
                          [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
 
-                  <input type="text" *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
-                         [(ngModel)]="txn.convertedAmount" class="form-control text-right"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                         [suffix]="selectedSuffixForCurrency"
-                         (click)="addBlankTrx('DEBIT', txn, $event)"
-                         (ngModelChange)="onTxnAmountChange(txn)">
+<!--                  <input type="text" *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"-->
+<!--                         [(ngModel)]="txn.convertedAmount" class="form-control text-right"-->
+<!--                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"-->
+<!--                         [suffix]="selectedSuffixForCurrency"-->
+<!--                         (click)="addBlankTrx('DEBIT', txn, $event)"-->
+<!--                         (ngModelChange)="onTxnAmountChange(txn)">-->
 
                   <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
                     <ng-container
@@ -342,20 +341,19 @@
                 <td data-title="Amount" class="col-xs-2 text-right">
 
                   <input class="form-control text-right" type="text"
-                         *ngIf="!isMultiCurrencyAvailable || (isMultiCurrencyAvailable && selectedCurrency === 0)"
                          [(ngModel)]="txn.amount"
                          [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
                          [suffix]="selectedSuffixForCurrency"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
 
-                  <input class="form-control text-right" type="text"
-                         *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"
-                         [(ngModel)]="txn.amount"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                         [suffix]="selectedSuffixForCurrency"
-                         (click)="addBlankTrx('CREDIT', txn, $event)"
-                         (change)="onTxnAmountChange(txn)">
+<!--                  <input class="form-control text-right" type="text"-->
+<!--                         *ngIf="(isMultiCurrencyAvailable && selectedCurrency === 1)"-->
+<!--                         [(ngModel)]="txn.amount"-->
+<!--                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"-->
+<!--                         [suffix]="selectedSuffixForCurrency"-->
+<!--                         (click)="addBlankTrx('CREDIT', txn, $event)"-->
+<!--                         (change)="onTxnAmountChange(txn)">-->
 
                   <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
                     <ng-container
@@ -808,11 +806,11 @@
 
                 <ul class="list-inline font-14">
 
-                  <li>1 {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+                  <li>1 {{ selectedCurrencyForDisplay === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
 
                   <li>
                     <a href="javascript:void(0)" class="text-light"
-                       (click)="toggleCurrency(selectedCurrency === 0 ? 1 : 0)">
+                       (click)="toggleCurrency()">
                       <i class="icon-switch-icon"></i>
                     </a>
                   </li>
@@ -820,7 +818,7 @@
                   <li>
                     <input type="text" decimalDigitsDirective class="price-input"
                            [(ngModel)]="vm.selectedLedger.exchangeRate" (blur)="exchangeRateChanged()">
-                    {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+                    {{ selectedCurrencyForDisplay === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
                   </li>
 
                 </ul>

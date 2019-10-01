@@ -89,6 +89,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseCurrencyDetails: ICurrencyResponse;
   public foreignCurrencyDetails: ICurrencyResponse;
   public selectedCurrency: 0 | 1 = 0;
+  public selectedCurrencyForDisplay: 0 | 1 = 0;
   public isPrefixAppliedForCurrency: boolean = true;
   public selectedPrefixForCurrency: string;
   public selectedSuffixForCurrency: string;
@@ -206,6 +207,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.baseCurrencyDetails = this.foreignCurrencyDetails;
           }
           this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
+          this.selectedCurrencyForDisplay = this.selectedCurrency;
           this.assignPrefixAndSuffixForCurrency();
           // end multi currency assign
 
@@ -922,9 +924,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public async toggleCurrency(res) {
-    this.selectedCurrency = res;
-    this.assignPrefixAndSuffixForCurrency();
+  public async toggleCurrency() {
+    this.selectedCurrencyForDisplay = this.selectedCurrencyForDisplay === 1 ? 0 : 1;
     let rate = await this.getCurrencyRate();
     this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
     this.vm.inventoryAmountChanged();
@@ -935,8 +936,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   private getCurrencyRate() {
-    let from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
-    let to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
+    let from = this.selectedCurrencyForDisplay === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
+    let to = this.selectedCurrencyForDisplay === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
     let date = moment().format('DD-MM-YYYY');
     return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
