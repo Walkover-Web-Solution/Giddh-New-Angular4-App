@@ -1,4 +1,4 @@
-<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
+<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': (companies$ |async).length===0 }"
   (clickOutside)="closeSidebarMobile($event)">
 
   <div class="menu_wrapper">
@@ -358,14 +358,13 @@ Create Company
 
 </div>
 
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 }">
+<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': (companies$ |async).length===0 }">
   <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="container-fluid mrT1">
       <div class="navbar_header">
         <ul class="nav navbar-nav">
           <!-- (isOpenChange)="sideBarStateChange($event)" -->
           <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-
             <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
               <i class="icon-bar"></i>
             </button>
