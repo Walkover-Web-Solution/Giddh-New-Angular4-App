@@ -23,6 +23,8 @@ export class ExpensesComponent implements OnInit {
   public universalDate: Date[];
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
+  public isSelectedRow: boolean = false;
+  public selectedRowItem: ExpenseResults = new ExpenseResults();
   public todaySelected$: Observable<boolean> = observableOf(false);
   public from: string;
   public to: string;
@@ -65,11 +67,13 @@ export class ExpensesComponent implements OnInit {
     });
   }
   public selectedRowToggle(e) {
-    console.log('eeee', e);
+    this.isSelectedRow = e;
   }
   public selectedRowInput(item: ExpenseResults) {
-    console.log('eeeitemm  ', item);
-
+    this.selectedRowItem = item;
+  }
+  public closeDetailedMode(e) {
+    this.isSelectedRow = !e;
   }
 
   public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {

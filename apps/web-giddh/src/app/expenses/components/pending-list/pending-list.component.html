@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!isRowExpand">
     <div class="table-responsive">
         <table class="table basic table-bordered mt-2 onMobileView">
             <thead>
@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let expenses of expensesItem let i = index">
+                <tr (click)="rowClicked(expenses);" *ngFor="let expenses of expensesItem let i = index">
                     <!-- <td data-title="#">{{i + 1}}</td>
                     <td data-title="Date">{{expenses.date}}</td>
                     <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
@@ -65,13 +65,13 @@
 
                             <i class="dot-icon dot-primary"></i> {{expenses.baseAccount.name}}
                         </td>
-                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount}}</td>
                         <td data-title="Payment/Receipt">
 
                             <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
                         </td>
                         <td data-title="File">
-                            <a href="javascript:void(0)" *ngIf="!expenses.fileNames" class="font-12">
+                            <a *ngIf="!expenses.fileNames" class="font-12">
                                 <i class="icon-file-path middle"></i>attach file</a>
                         </td>
                         <td data-title="Description">{{expenses.description}}</td>

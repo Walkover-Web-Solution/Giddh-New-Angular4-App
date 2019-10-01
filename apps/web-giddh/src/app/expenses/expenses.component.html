@@ -1,16 +1,16 @@
 <div class="clearfix">
     <tabset class="custom-tabs">
         <tab heading="Pending" id="tab1">
-            <app-pending-list (selectedRowToggle)="selectedRowToggle($event);" (selectedRowInput)=selectedRowInput($event);></app-pending-list>
+            <app-pending-list *ngIf="!isSelectedRow" (selectedRowToggle)="selectedRowToggle($event);" (selectedRowInput)=selectedRowInput($event);></app-pending-list>
 
-            <!-- <div class="main-edit-expense">
-        <div class="left-expense">
-          <app-filter-list></app-filter-list>
-        </div>
-        <div class="main-expense-details">
-          <app-expense-details></app-expense-details>
-        </div>
-      </div> -->
+            <div class="main-edit-expense" *ngIf="isSelectedRow">
+                <div class="left-expense">
+                    <app-filter-list></app-filter-list>
+                </div>
+                <div class="main-expense-details">
+                    <app-expense-details (toggleDetailsMode)="closeDetailedMode($event);"></app-expense-details>
+                </div>
+            </div>
 
         </tab>
         <tab heading="Rejected">

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
@@ -12,11 +12,13 @@ export class ExpenseDetailsComponent implements OnInit {
 
   modalRef: BsModalRef;
   message: string;
+  @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private modalService: BsModalService) {}
+
+  constructor(private modalService: BsModalService) { }
 
   openModal(RejectionReason: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(RejectionReason, {class: 'modal-md'});
+    this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
   }
 
   confirm(): void {
@@ -31,4 +33,8 @@ export class ExpenseDetailsComponent implements OnInit {
 
   public ngOnInit() {
   }
+  public closeDetailsMode() {
+    this.toggleDetailsMode.emit(true);
+  }
+
 }

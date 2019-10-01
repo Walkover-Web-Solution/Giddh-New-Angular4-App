@@ -23,6 +23,7 @@ export class PendingListComponent implements OnInit {
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
   public getPettycashReportSuccess$: Observable<boolean>;
+  public isRowExpand: boolean = false;
   @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
   public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
@@ -155,6 +156,7 @@ export class PendingListComponent implements OnInit {
   //   });
   // }
   public rowClicked(item: ExpenseResults) {
+    this.isRowExpand = true;
     this.selectedRowInput.emit(item);
     this.selectedRowToggle.emit(true);
 
