@@ -143,7 +143,7 @@
     clear: both;
     position: relative;
     float: left;
-    width: 100%;    
+    width: 100%;
     margin-bottom: 30px;
     background: #fff;
 
@@ -220,7 +220,16 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-
+.left-col-new, .right-col-new {
+  height: initial;
+  width: 100%;
+}
+.ledger-section {
+  display: flex;
+}
+.ledger-section {
+  display: flex;
+}
 
 
 @media (min-width: 1200px) {

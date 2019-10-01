@@ -21,6 +21,7 @@ import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/recei
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+
 @Component({
   selector: 'invoice-preview-details-component',
   templateUrl: './invoice-preview-details.component.html',
@@ -66,6 +67,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public invoiceDetailViewHeight: number;
   public invoiceImageSectionViewHeight: number;
   public isMobileView = false;
+  public pagecount: number = 0;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
@@ -140,7 +142,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.detectChanges();
       }))
 
-    this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight
+    this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
     this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
     this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
   }
@@ -199,9 +201,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     this.isVoucherDownloading = true;
     this.isVoucherDownloadError = false;
 
-    if (this.voucherType === 'sales') {
+    if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.voucherType)) {
       let model: DownloadVoucherRequest = {
-        voucherType: this.selectedItem.voucherType,
+        voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
         voucherNumber: [this.selectedItem.voucherNumber]
       };
       let accountUniqueName: string = this.selectedItem.account.uniqueName;
@@ -295,6 +297,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     this.performActionAfterClose();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public testPagesLoaded(count: number) {
+    this.pagecount = count;
   }
 
   private performActionAfterClose() {

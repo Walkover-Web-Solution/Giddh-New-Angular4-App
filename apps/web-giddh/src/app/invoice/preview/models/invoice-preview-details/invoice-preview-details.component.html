@@ -238,8 +238,8 @@
               </span>
                         </div>
 
-                        <div class="fixed-ng2pdfview">
-                            <ng2-pdfjs-viewer [hidden]="isVoucherDownloading || isVoucherDownloadError" [downloadFileName]="'invoice.pdf'" [openFile]="false" [viewBookmark]="false" [download]="false">
+                        <div class="fixed-ng2pdfview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                            <ng2-pdfjs-viewer viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError" [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
                             </ng2-pdfjs-viewer>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
             <div class="invoice-editHeader">
 
                 <span>
-          <p>Edit {{ voucherType | voucherTypeToNamePipe | titlecase }}</p>
+          <p>Edit {{ selectedItem.voucherType | voucherTypeToNamePipe | titlecase }}</p>
         </span>
 
                 <span class="close-modal cp" (click)="toggleEditMode()">

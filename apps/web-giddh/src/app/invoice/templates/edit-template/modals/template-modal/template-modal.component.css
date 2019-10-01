@@ -38,3 +38,9 @@
 #email-body {
   min-height: 400px;
 }
+
+@media(max-width:1266px){
+  .invoice-preview{
+        width: 7in;
+  }
+}
