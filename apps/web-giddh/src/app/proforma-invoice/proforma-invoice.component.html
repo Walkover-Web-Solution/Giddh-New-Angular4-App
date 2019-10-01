@@ -565,6 +565,7 @@
 
                     <div class="wrap-td-data">
                       <span>{{transaction.total | number:'1.2-2'}}</span>
+                      <br>
                       <span *ngIf="entry.isOtherTaxApplicable">
                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
                       </span>
@@ -574,13 +575,16 @@
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       <span *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
                       <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
+
                     </div>
-                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
+                    <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
+                      {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                       <span
-                        [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                        [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       :
                       <span *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum*exchangeRate | number:'1.2-2'}}</span>
                       <span *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum/exchangeRate | number:'1.2-2'}}</span>
+
                     </div>
                   </div>
                 </td>
@@ -809,7 +813,7 @@
                           name="entry.otherTaxesSum" />
                       </div>
 
-                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize;">
+                      <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
                         {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                     </span>
 
@@ -820,12 +824,16 @@
                     <span *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
                     <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
                   </div>
-                  <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
-                    <span
-                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>{{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                  <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount" class="texIncurrency"
+                    style="color:#999;">
+                    {{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                    <span class=""
+                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
+
                     :
-                    <span *ngIf="companyCurrency === 'INR'">{{ entry.otherTaxSum*exchangeRate }}</span>
-                    <span *ngIf="companyCurrency === 'USD'">{{ entry.otherTaxSum/exchangeRate }}</span></div>
+
+                    <span>{{ entry.otherTaxSum }}</span>
+                  </div>
 
                   <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }"></ng-container>
                 </td>
