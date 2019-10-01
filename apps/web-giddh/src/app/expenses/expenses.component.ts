@@ -61,7 +61,7 @@ export class ExpensesComponent implements OnInit {
         if (this.from && this.to) {
           this.pettycashRequest.from = this.from;
           this.pettycashRequest.to = this.to;
-          this.getPettyCashReports(this.pettycashRequest);
+          // this.getPettyCashReports(this.pettycashRequest);
         }
       }
     });

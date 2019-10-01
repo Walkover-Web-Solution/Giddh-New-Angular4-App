@@ -1,6 +1,12 @@
-import { Component, OnInit, TemplateRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, TemplateRef, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ExpenseResults, ActionPettycashRequest, ExpenseActionRequest } from '../../../models/api-models/Expences';
+import { ToasterService } from '../../../services/toaster.service';
+import { ExpenseService } from '../../../services/expences.service';
+import { ExpencesAction } from '../../../actions/expences/expence.action';
+import { AppState } from '../../../store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-expense-details',
@@ -10,12 +16,19 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 export class ExpenseDetailsComponent implements OnInit {
 
-  modalRef: BsModalRef;
-  message: string;
+  public modalRef: BsModalRef;
+  public message: string;
+  public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
   @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
 
 
-  constructor(private modalService: BsModalService) { }
+  constructor(private modalService: BsModalService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _expenceActions: ExpencesAction,
+    private expenseService: ExpenseService,
+    private _cdRf: ChangeDetectorRef
+  ) { }
 
   openModal(RejectionReason: TemplateRef<any>) {
     this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
@@ -35,6 +48,19 @@ export class ExpenseDetailsComponent implements OnInit {
   }
   public closeDetailsMode() {
     this.toggleDetailsMode.emit(true);
+  }
+  public approvedActionClicked(item: ExpenseResults) {
+    let actionType: ActionPettycashRequest = {
+      actionType: 'approve',
+      uniqueName: item.uniqueName
+    };
+    this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+      if (res.status === 'success') {
+        this._toasty.successToast('reverted successfully');
+      } else {
+        this._toasty.successToast(res.message);
+      }
+    });
   }
 
 }

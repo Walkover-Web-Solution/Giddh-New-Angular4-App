@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr (click)="rowClicked(expenses);" *ngFor="let expenses of expensesItem let i = index">
+                <tr (click)="rowClicked(expenses);" *ngFor="let expenses of expensesItems let i = index">
                     <!-- <td data-title="#">{{i + 1}}</td>
                     <td data-title="Date">{{expenses.date}}</td>
                     <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
@@ -65,7 +65,7 @@
 
                             <i class="dot-icon dot-primary"></i> {{expenses.baseAccount.name}}
                         </td>
-                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount}}</td>
+                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
                         <td data-title="Payment/Receipt">
 
                             <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}

@@ -1,13 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, combineLatest as observableCombineLatest, of as observableOf } from 'rxjs';
 import { ExpenseResults, PettyCashReportResponse, ActionPettycashRequest, ExpenseActionRequest } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
+import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
+import * as moment from 'moment/moment';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+
 
 @Component({
   selector: 'app-pending-list',
@@ -23,7 +27,14 @@ export class PendingListComponent implements OnInit {
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
   public getPettycashReportSuccess$: Observable<boolean>;
+  public universalDate$: Observable<any>;
+  public todaySelected: boolean = false;
+  public todaySelected$: Observable<boolean> = observableOf(false);
+  public from: string;
+  public to: string;
+
   public isRowExpand: boolean = false;
+  public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
   public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
@@ -126,35 +137,59 @@ export class PendingListComponent implements OnInit {
     private _expenceActions: ExpencesAction,
     private expenseService: ExpenseService,
     private _route: Router,
+    private route: ActivatedRoute,
     private _toasty: ToasterService,
     private _cdRf: ChangeDetectorRef) {
-
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
     this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
     this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
     this.getPettycashReportSuccess$ = this.store.select(p => p.expense.getPettycashReportSuccess).pipe(takeUntil(this.destroyed$));
-
+    observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+      if (!Array.isArray(resp[0])) {
+        return;
+      }
+      let dateObj = resp[0];
+      let params = resp[1];
+      this.todaySelected = resp[2];
+      if (dateObj && !this.todaySelected) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        if (this.from && this.to) {
+          this.pettycashRequest.from = this.from;
+          this.pettycashRequest.to = this.to;
+          this.pettycashRequest.status = 'pending';
+          this.getPettyCashPendingReports(this.pettycashRequest);
+        }
+      }
+    });
   }
 
   public ngOnInit() {
-    // this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-    //   if (res) {
-    //     this.expensesItems = res.results;
-    //   }
-    // });
+
+    this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.expensesItems = res.results;
+      }
+    });
   }
-  // public approvedActionClicked(item: ExpenseResults) {
-  //   let actionType: ActionPettycashRequest = {
-  //     actionType: 'approve',
-  //     uniqueName: item.uniqueName
-  //   };
-  //   this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
-  //     if (res.status === 'success') {
-  //       this._toasty.successToast('reverted successfully');
-  //     } else {
-  //       this._toasty.successToast(res.message);
-  //     }
-  //   });
-  // }
+  public approvedActionClicked(item: ExpenseResults) {
+    let actionType: ActionPettycashRequest = {
+      actionType: 'approve',
+      uniqueName: item.uniqueName
+    };
+    this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+      if (res.status === 'success') {
+        this._toasty.successToast('reverted successfully');
+      } else {
+        this._toasty.successToast(res.message);
+      }
+    });
+  }
+  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  }
   public rowClicked(item: ExpenseResults) {
     this.isRowExpand = true;
     this.selectedRowInput.emit(item);

@@ -14,6 +14,7 @@ import { ExpenseDetailsComponent } from './components/expense-details/expense-de
 import { RejectionReason } from './components/rejection-reason/rejection-reason.component';
 import { LedgerModule } from '../ledger/ledger.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { NgxUploaderModule } from 'ngx-uploader';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
     ExpensesRoutingModule,
     TabsModule.forRoot(),
     LedgerModule,
-    CurrencyModule
+    CurrencyModule,
+    NgxUploaderModule
   ],
   exports: [
     ExpensesComponent,

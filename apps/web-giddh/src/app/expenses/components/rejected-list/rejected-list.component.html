@@ -68,7 +68,7 @@
                     <td data-title="Account">
                         <i class="dot-icon dot-warning"></i> {{expenses.baseAccount.name}}
                     </td>
-                    <td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount}}</td>
+                    <td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
                     <td data-title="Payment/Receipt">
                         <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
                     </td>
