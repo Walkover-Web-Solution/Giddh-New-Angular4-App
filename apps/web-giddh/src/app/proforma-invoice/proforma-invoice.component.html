@@ -577,13 +577,14 @@
                       <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
 
                     </div>
-                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && !isMulticurrencyAccount">
+                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                       {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                       <span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       :
+                      <span *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum*exchangeRate | number:'1.2-2'}}</span>
+                      <span *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum/exchangeRate | number:'1.2-2'}}</span>
 
-                      <span>{{entry.otherTaxSum/exchangeRate | number:'1.2-2'}}</span>
                     </div>
                   </div>
                 </td>
@@ -823,9 +824,10 @@
                     <span *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
                     <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
                   </div>
-                  <div *ngIf="entry.isOtherTaxApplicable && !isMulticurrencyAccount">
+                  <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount" class="texIncurrency"
+                    style="color:#999;">
                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                    <span class="differ-currency"
+                    <span class=""
                       [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
 
                     :
