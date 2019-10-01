@@ -5,7 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
-import { EmailKeyClass, IntegrationPage, IntegrationPageClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
+import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PaymentClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
@@ -77,31 +77,31 @@ export interface SettingsState {
   amazonState: AmazonState;
   isGmailIntegrated: boolean;
   profileRequest: boolean;
-  isPaymentAdditionSuccess:  boolean;
+  isPaymentAdditionSuccess: boolean;
   isPaymentUpdationSuccess: boolean;
 }
 
 export const initialState: SettingsState = {
-integration: new IntegrationPageClass(),
-    profile: {},
-    inventory: {},
-    profileRequest: false,
-    updateProfileSuccess: false,
-    updateProfileInProgress: false,
-    linkedAccounts: {},
-    financialYears: null,
-    usersWithCompanyPermissions: null,
-    branches: null,
-    tags: null,
-    parentCompany: null,
-    triggers: null,
-    discount: discountInitialState,
-    refreshCompany: false,
-    amazonState: AmazonInititalState,
-    isGmailIntegrated: false,
-    isPaymentAdditionSuccess :false,
-    isPaymentUpdationSuccess: false
-  };
+  integration: new IntegrationPageClass(),
+  profile: {},
+  inventory: {},
+  profileRequest: false,
+  updateProfileSuccess: false,
+  updateProfileInProgress: false,
+  linkedAccounts: {},
+  financialYears: null,
+  usersWithCompanyPermissions: null,
+  branches: null,
+  tags: null,
+  parentCompany: null,
+  triggers: null,
+  discount: discountInitialState,
+  refreshCompany: false,
+  amazonState: AmazonInititalState,
+  isGmailIntegrated: false,
+  isPaymentAdditionSuccess: false,
+  isPaymentUpdationSuccess: false
+};
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
   let newState = _.cloneDeep(state);
@@ -383,7 +383,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return {
         ...state,
         tags: response.status === 'success' ? response.body : null
-      }
+      };
     }
     case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;

@@ -292,7 +292,7 @@ export class MaskService extends MaskApplierService {
     }
     if (this.isNumberValue) {
       if (this.maskExpression === Separators.IND_COMMA_SEPARATED || this.maskExpression === Separators.INT_APOSTROPHE_SEPARATED ||
-        this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_SPACE_SEPARATED) {
+        this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
         return result === ''
           ? result
           : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters.filter(f => f !== '.')));

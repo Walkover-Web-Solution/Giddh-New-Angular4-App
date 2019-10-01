@@ -190,7 +190,7 @@ a[vr-item]:focus {
 .left_fixed_header>li>a.active .label,
 .left_fixed_header>li>a.active .label>span {
     color: $yellow;
-    font-family: 'LatoWebMedium';
+    font-family: 'opensans-semibold';
 
 }
 
@@ -204,13 +204,13 @@ a[vr-item]:focus {
     color: #EBECEE;
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-semibold';
     padding: 0;
 }
 
 .left_fixed_header.open li a .label {
     opacity: 1;
-    overflow: hidden;
+    // overflow: hidden;
     text-overflow: ellipsis;
     max-width: 170px;
 }
@@ -298,7 +298,7 @@ a[vr-item]:focus {
     font-size: 16px;
     padding-left: 10px;
     padding-right: 20px;
-    /* font-family: 'LatoWebBold'; */
+    /* font-family: 'opensans-bold'; */
 }
 
 .left_fixed_header>h6>i {

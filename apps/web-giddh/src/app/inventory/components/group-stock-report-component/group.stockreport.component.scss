@@ -125,13 +125,14 @@ tfoot {
 }
 .stock-input {
   background-color: transparent !important;
-  border-bottom: 1px dotted black !important;
+  border-bottom: 1px dotted #fff !important;
   border: none;
   width: auto;
   padding: 0 !important;
   height: auto;
   text-align: center;
   min-width: 155px;
+  color: #fff;
 }
 .footer-tr td {
   background-color: #e5e5e5;
