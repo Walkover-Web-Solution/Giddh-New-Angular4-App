@@ -577,7 +577,7 @@
                       <span *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
 
                     </div>
-                    <div class="differ-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
+                    <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                       {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                       <span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
