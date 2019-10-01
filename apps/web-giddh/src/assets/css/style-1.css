@@ -36,7 +36,7 @@ VERSION:  1
 /* Webfont: Lato-Medium */
 
 /* @font-face {
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     src: url('../fonts/lato/Lato-Medium.eot');
 
     src: url('../fonts/lato/Lato-Medium.eot?#iefix') format('embedded-opentype'),
@@ -68,7 +68,7 @@ VERSION:  1
 /* Webfont: Lato-Semibold */
 /*
 @font-face {
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     src: url('../fonts/lato/Lato-Semibold.eot');
 
     src: url('../fonts/lato/Lato-Semibold.eot?#iefix') format('embedded-opentype'),
@@ -5190,7 +5190,8 @@ strong {
 
 b,
 strong {
-  font-family: 'opensans-bold';
+  font-family: 'opensans-regular';
+  font-weight: 500;
 }
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
