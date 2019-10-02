@@ -1033,7 +1033,7 @@ modal-container.modal.fade.show {
 }
 
 .table-modal thead tr th {
-    font-family: 'opensans-semibold' !important;
+    font-family: 'opensans-regular' !important;
     /* background: red; */
     font-family: cursive;
     border-right: 1px solid #C6C6C6;
@@ -5090,8 +5090,9 @@ input[type='checkbox'][disabled] {
     background: $dark-blue01 !important ;
     color: #fff;
     border: 0;
-    font-family: 'opensans-bold';
+    font-family: 'opensans-regular';
     text-transform: capitalize;
+    font-size: 14px !important;
 }
 
 .basic>tbody>tr:hover td {
@@ -5309,13 +5310,13 @@ input[type='checkbox'][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     color: #535353;
 }
 
@@ -5549,7 +5550,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 
 .welcome_header h1 {
     font-size: 40px;
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     color: #535353;
 }
 
@@ -5616,7 +5617,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
     color: #535353;
     position: relative;
 }
@@ -7471,7 +7472,7 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
 }
 
 .noBrdRdsModal {
-    font-family: 'opensans-semibold';
+    font-family: 'opensans-regular';
 }
 
 .noBrdRdsModal small.mrT.mrB.grey {

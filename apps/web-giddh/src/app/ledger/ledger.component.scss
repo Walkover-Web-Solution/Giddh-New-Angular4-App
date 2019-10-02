@@ -71,6 +71,21 @@
 }
 .ledgHead input[type=search] {
     min-width: auto;
+        background: #E6E7E8 !important;
+    border-color: #E6E7E8 !important
+}
+.ledger-head-top i.icon-search.pos-abs {
+    background-color: #5B64C9;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    top: 0px !important;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0 !important;
+    border-radius: 2px;
 }
 .ledger-stat {
      padding: 10px 15px 0;

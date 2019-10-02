@@ -408,7 +408,7 @@ Create Company
         <div class="pull-right">
           <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
             <li [hidden]="isTodaysDateSelected">
-              <button class="btn btn-link" (click)="jumpToToday();">Go back to Today</button>
+              <button class="btn btn-link" (click)="jumpToToday();">Today</button>
             </li>
             <li [hidden]="isTodaysDateSelected" class="notToday">
               <span class="icon-calender calender-addone"></span>
@@ -417,7 +417,7 @@ Create Company
                 class="form-control date-range-picker" />
             </li>
             <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-              <label class="btn btn-link">Today</label>
+              <!-- <label class="btn btn-link"></label> -->
               <span class="icon-calender calender-addone"></span>
               <label class="header-date">
                 {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
@@ -442,7 +442,7 @@ Create Company
                 </button>
               </li>
               <li class="mrT2 text-center mrB2">
-                <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>
+                <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span> -->
                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
               </li>
               <li class="row text-center">
@@ -493,7 +493,7 @@ Create Company
                   </button>
                 </li>
                 <li class="mrT2 text-center mrB2">
-                  <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span>
+                  <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span> -->
                   <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                 </li>
                 <li class="row text-center">
@@ -514,7 +514,7 @@ Create Company
       <div class="lowerLayerHeader clearfix">
         <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
           <li [hidden]="isTodaysDateSelected">
-            <button class="btn btn-link" (click)="jumpToToday();">Go Today</button>
+            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
           </li>
           <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
             <span class="icon-calender calender-addone pos-abs"></span>
@@ -523,7 +523,7 @@ Create Company
               class="form-control date-range-picker" />
           </li>
           <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-            <label class="btn btn-link">Today</label>
+            <label class="btn btn-link">&nbsp;</label>
             <span class="icon-calender calender-addone "></span>
             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
           </li>
