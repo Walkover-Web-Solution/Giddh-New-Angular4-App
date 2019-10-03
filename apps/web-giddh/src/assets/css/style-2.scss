@@ -409,7 +409,7 @@ input {
 
 .hover-orange:hover {
     color: #bdc3ff !important;
-    /* font-family: 'opensans-bold'; */
+    /* font-family: ''opensans-semibold''; */
 }
 
 .company-list button.btn-link {
@@ -472,7 +472,7 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
 }
 
 .modal-open {
@@ -497,7 +497,7 @@ ul.sub-list {
 
 .top-heading>h4 {
     font-size: 18px;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -583,18 +583,24 @@ ul.sub-list {
     font-size: 14px;
     margin-bottom: 7px;
 }
-
+.custom-tabs .nav.nav-tabs>li {
+  padding-right:35px;
+}
 .custom-tabs .nav.nav-tabs>li a {
     background: none;
     border: 0;
     font-size: 14px;
-    color: #2D3B4B;
+    color: #333 !important;
     position: relative;
     padding-bottom: 7px;
+        padding-left: 0;
+    padding-right: 0;
 }
-
+.custom-tabs .nav.nav-tabs>li a:hover{
+  color: $dark-blue00 !important;
+}
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: var(--dark-blue01);
+    color: $dark-blue00 !important;
 }
 
 .custom-tabs .nav.nav-tabs>li.active a:after {
@@ -620,14 +626,14 @@ ul.sub-list {
     position: relative;
     top: -4px;
 }
-.btn-blue{
+.btn-pink{
   background: $BtnpinkColor;
   border:1px solid $BtnpinkColor;
   color:#fff;
 }
 
-.btn-blue:hover,
-.btn-blue:focus {
+.btn-pink:hover,
+.btn-pink:focus {
     background: $BtnHoverpinkColor !important;
     border-color:$BtnHoverpinkColor;
     color: #fff;
@@ -693,7 +699,7 @@ ul.sub-list {
     background: #e5e5e5;
     color: #262626;
     border: 0;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     text-transform: capitalize;
     border-right: 1px solid #cac8c6;
     border-top: 1px solid #cac8c6;
@@ -1345,15 +1351,17 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-    background: #e5e5e5;
+    background: #fff;
     color: $border-blue;
+    border-color:$border-blue;
 }
 
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:disabled {
-    background: $border-blue;
-    color: #fff;
+    background: #eee;
+    color: $border-blue;
+    border-color:$border-blue;
 }
 
 .btn {
@@ -1576,7 +1584,7 @@ header .navbar {
 .header-date {
     /* background: #E7E7E8 !important; */
     font-size: 12px;
-    height: 33px;
+    height: 32px;
     line-height: 23px;
     padding: 2px 0px;
     border-radius: 2px;
@@ -1810,7 +1818,7 @@ p.table-email {
 
 input[type="checkbox"] {
     position: relative;
-    top: 2px;
+    top: 1px;
     text-align: center;
     margin: 0 8px 0 0;
     cursor: pointer;
@@ -1860,8 +1868,8 @@ input[type="checkbox"]:after {
     border-radius: 2px;
 }
 input[type=checkbox]:checked:after {
-    background-color: $light-blue02;
-    border-color: $light-blue02;
+    background-color: $border-blue;
+    border-color: $border-blue;
 }
 .tab-pane .list-inline>li {
     padding-left: 0;
@@ -1918,13 +1926,13 @@ input[type=checkbox]:checked:after {
 
 .btn-danger {
     background: #E4E4E4;
-    color: #666666;
+    color: #E51F0C;
     border-color: #e4e4e4;
 }
 
 .btn-danger:hover , .btn-danger:active ,  .btn-danger:focus , .btn-danger:active:focus {
     background: #D3D3D3;
-    color: #666666;
+    color: #E51F0C;
    border-color: #D3D3D3;
    outline:none;
    box-shadow: none;
@@ -1932,7 +1940,27 @@ input[type=checkbox]:checked:after {
 
 .btn-danger:disabled , .btn-danger:disabled:hover , .btn-danger:active:focus, .btn-danger:active:hover ,  .btn-danger:focus  {
   background: #E4E4E4;
+    color: #E51F0C;
+    border-color: #e4e4e4;
+opacity: 0.5;
+}
+
+.btn-cancel{
+  background: #E4E4E4;
     color: #666666;
+    border-color: #e4e4e4;
+}
+.btn-cancel:hover , .btn-cancel:active ,  .btn-cancel:focus , .btn-cancel:active:focus {
+    background: #D3D3D3;
+    color: #666;
+   border-color: #D3D3D3;
+   outline:none;
+   box-shadow: none;
+}
+
+.btn-cancel:disabled , .btn-cancel:disabled:hover , .btn-cancel:active:focus, .btn-cancel:active:hover ,  .btn-cancel:focus  {
+  background: #E4E4E4;
+    color: #666;
     border-color: #e4e4e4;
 opacity: 0.5;
 }
@@ -2181,7 +2209,7 @@ opacity: 0.5;
 
 .subscription-title {
     font-size: 20px;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
 }
 
 .box2 {
@@ -2192,7 +2220,7 @@ opacity: 0.5;
     background: #e5e5e5;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     border: 1px solid #ddd;
 }
 
@@ -2242,7 +2270,7 @@ opacity: 0.5;
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
 }
 
 .modal-list ul>li {
@@ -4733,7 +4761,7 @@ label {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $light-blue02;
+    background: $border-blue;
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -4741,7 +4769,7 @@ label {
     text-align: center;
 }
 .radio_theme:checked:before{
-  border: 1px solid $light-blue02;
+  border: 1px solid $border-blue;
 }
 .dropdown-container .dropdown-menu {
     display: block;
@@ -5112,7 +5140,7 @@ input[type='checkbox'][disabled] {
 
 .section_head {
     padding-bottom: 10px;
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5834,7 +5862,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     text-transform: capitalize;
 }
 
@@ -6057,7 +6085,7 @@ table td[class*=col-]:last-child {
 
 .app_list>ul h6 {
     margin-bottom: 10px;
-    font-family: opensans-bold;
+    font-family: 'opensans-semibold';
     font-size: 13px;
 }
 
@@ -6540,6 +6568,7 @@ perfect-scrollbar>.ps>.ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $dark-blue00;
+   font-family: 'opensans-semibold';
 }
 
 .tax-engine .icon {
@@ -7769,7 +7798,7 @@ ul.dropdown-menu  p.lead.pd {
 .nav-tabs > li.active > a , .invoce-controll .nav-tabs > li.active > a{
       border-bottom: 4px solid $yellow !important;
           padding-bottom: 7px !important;
-          font-family: 'opensans-bold';
+          font-family: 'opensans-semibold';
 }
 
 .dropdown-menu > li > a:hover {
@@ -7786,7 +7815,7 @@ ul.dropdown-menu  p.lead.pd {
     border-bottom-right-radius: 2px;
 }
 #invoice-setting ul.nav.nav-tabs {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     background: transparent;
     position: inherit;
 }
@@ -7822,6 +7851,60 @@ ul.dropdown-menu  p.lead.pd {
     border-radius: 0px;
     border-color: #5B64C9;
 }
+.settingPage ul.nav.nav-tabs {
+    margin-bottom: 15px;
+    padding: 14px 0px 0 15px !important;
+    background-color: #fff;
+    z-index: 9;
+    position: relative;
+    top: -4px;
+}
+.settingPage .nav > li > a{
+      padding: 2px 0px ;
+    margin-right: 35px ;
+    padding-bottom: 7px ;
+    font-size: 14px;
+    color: #333 !important;
+}
+.settingPage .nav > li > a:hover{
+   color:$dark-blue00 !important;
+}
+#tab-integration .nav-tabs {
+    padding: 40px;
+    border-bottom: 0px;
+    padding-left: 0 !important;
+    background-color: transparent;
+    position: static;
+   padding-top: 0 !important;
+}
+.settingPage .nav > li > a.active{
+    color:$dark-blue00 !important;
+}
+
+
+#tab-integration .nav-tabs > li{
+  margin-right: 0;
+}
+#tab-integration .nav-tabs > li a{
+    border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
+}
+#tab-integration .nav-tabs > li a.active{
+   border-bottom: 1px solid $BtnpinkColor !important;
+       font-family: 'opensans-regular';
+    color: $BtnpinkColor !important;
+    border-color : $BtnpinkColor !important;
+
+}
+#tab-integration .nav-tabs > li a.active span{
+   color: $BtnpinkColor;
+}
+.input-group-addon {
+    padding: 5px 12px;
+}
+.mrTop {
+    margin-top: 24px;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8039,6 +8122,9 @@ ul.dropdown-menu  p.lead.pd {
     .onMobileView tbody td::first-letter {
         text-transform: uppercase;
     }
+    .universal_date label.btn.btn-link {
+    display: none;
+}
 }
 
 @media (max-width: 1280px) {

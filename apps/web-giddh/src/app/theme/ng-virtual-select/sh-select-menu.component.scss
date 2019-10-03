@@ -25,10 +25,10 @@
   word-break: break-word;
 }
 
-.item:hover {
-      color: $border-blue !important;
-    background: #EEEFF9 !important;
-}
+// .item:hover {
+//       color: $border-blue !important;
+//     background: #e3e4ed !important;
+// }
 
 .item.selected {
       color: $border-blue !important;
@@ -37,7 +37,7 @@
 
 .item.hilighted {
       color: $border-blue !important;
-    background: #EEEFF9 !important;
+    background: #e3e4ed !important;
 }
 
 .item > a {

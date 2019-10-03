@@ -29,20 +29,16 @@
   text-transform: capitalize;
 }
 
-.item:hover {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
-}
-
 .item.selected {
       color: $border-blue !important;
     background: #EEEFF9 !important;
 }
 
 .item.hilighted {
-       color: $border-blue !important;
-    background: #EEEFF9 !important;
+      color: $border-blue !important;
+    background: #e3e4ed !important;
 }
+
 
 .item > a {
   padding: 6px 10px;
