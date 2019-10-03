@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -11,6 +11,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { createSelector } from 'reselect';
 import { ExpenseResults } from '../models/api-models/Expences';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class ExpensesComponent implements OnInit {
   public todaySelected$: Observable<boolean> = observableOf(false);
   public from: string;
   public to: string;
+  public modalRef: BsModalRef;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -37,6 +39,7 @@ export class ExpensesComponent implements OnInit {
     private _route: Router,
     private _toasty: ToasterService,
     private route: ActivatedRoute,
+    private modalService: BsModalService,
     private _cdRf: ChangeDetectorRef) {
 
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -78,5 +81,8 @@ export class ExpensesComponent implements OnInit {
 
   public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
     this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  }
+  public openModal(filterModal: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
   }
 }

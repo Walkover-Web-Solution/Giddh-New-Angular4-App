@@ -42,7 +42,7 @@ export class FilterListComponent implements OnInit {
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private modalService: BsModalService,
+    // private modalService: BsModalService,
     private _expenceActions: ExpencesAction,
     private expenseService: ExpenseService,
     private _route: Router,
@@ -53,9 +53,9 @@ export class FilterListComponent implements OnInit {
     this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
   }
 
-  openModal(filterModal: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
-  }
+  // openModal(filterModal: TemplateRef<any>) {
+  //   this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+  // }
 
   confirm(): void {
     this.message = 'Confirmed!';

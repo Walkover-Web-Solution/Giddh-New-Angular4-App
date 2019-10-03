@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, TemplateRef, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -11,6 +11,7 @@ import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 @Component({
@@ -32,6 +33,8 @@ export class PendingListComponent implements OnInit {
   public todaySelected$: Observable<boolean> = observableOf(false);
   public from: string;
   public to: string;
+
+
 
   public isRowExpand: boolean = false;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
