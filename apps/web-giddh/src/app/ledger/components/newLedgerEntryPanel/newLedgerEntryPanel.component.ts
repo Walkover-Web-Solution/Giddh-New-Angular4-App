@@ -82,7 +82,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('tax') public taxControll: TaxControlComponent;
 
   totalPrice: boolean = false;
-  
+
   public uploadInput: EventEmitter<UploadInput>;
   public fileUploadOptions: UploaderOptions;
   public discountAccountsList$: Observable<IDiscountList[]>;
@@ -373,7 +373,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public changePrice(val: string) {
     this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    // this.amountChanged();
+
+    // calculate discount
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
@@ -381,7 +387,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
-    // this.amountChanged();
+
+    // calculate discount
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
