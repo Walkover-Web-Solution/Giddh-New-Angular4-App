@@ -81,6 +81,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public selectedLedgerStream$: Observable<LedgerResponse>;
   public companyProfile$: Observable<any>;
   public activeAccount$: Observable<AccountResponse>;
+  public activeAccount: AccountResponse;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
@@ -89,7 +90,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public baseCurrencyDetails: ICurrencyResponse;
   public foreignCurrencyDetails: ICurrencyResponse;
   public selectedCurrency: 0 | 1 = 0;
-  public selectedCurrencyForDisplay: 0 | 1 = 0;
   public isPrefixAppliedForCurrency: boolean = true;
   public selectedPrefixForCurrency: string;
   public selectedSuffixForCurrency: string;
@@ -132,6 +132,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).pipe(takeUntil(this.destroyed$));
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).pipe(takeUntil(this.destroyed$));
     this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
+    this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
   }
 
@@ -141,10 +142,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   condition2: boolean = false;
 
   toggleShow() {
-    this.condition = this.condition ? false : true;
-    this.condition2 = this.condition ? false : true;
-    this.Shown = this.Shown ? false : true;
-    this.isHide = this.isHide ? false : true;
+    this.condition = !this.condition;
+    this.condition2 = !this.condition;
+    this.Shown = !this.Shown;
+    this.isHide = !this.isHide;
   }
 
   public ngOnInit() {
@@ -187,6 +188,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = observableOf(resp[2].body);
+          this.activeAccount = cloneDeep(resp[2].body);
           this.profileObj = resp[3];
           this.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
@@ -200,14 +202,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             let currencies: ICurrencyResponse[] = [];
             let multiCurrencyAccCurrency: ICurrencyResponse;
 
-            this.store.pipe(select(s => s.session.currencies), take(1)).subscribe(res => currencies = res);
+            this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
             multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
             this.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
           } else {
             this.baseCurrencyDetails = this.foreignCurrencyDetails;
           }
           this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
-          this.selectedCurrencyForDisplay = this.selectedCurrency;
+          this.vm.selectedCurrencyForDisplay = this.selectedCurrency;
           this.assignPrefixAndSuffixForCurrency();
           // end multi currency assign
 
@@ -327,7 +329,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
-          this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 2);
+          // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
           this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
@@ -453,16 +455,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let isMultiCurrencyAvailable: boolean = false;
-    if (txn.selectedAccount && txn.selectedAccount.currency) {
-      this.activeAccount$.pipe(take(1)).subscribe((acc) => {
-        if (acc.currency !== txn.selectedAccount.currency) {
-          this.isMultiCurrencyAvailable = true;
-          isMultiCurrencyAvailable = true;
-          this.baseCurrency = acc.currency;
-        }
-      });
-    }
-
     // if (Number(txn.amount) === 0) {
     //   txn.amount = undefined;
     // }
@@ -470,10 +462,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       let blankTrxnRow = this.vm.blankTransactionItem(type);
-      if (isMultiCurrencyAvailable) {
-        blankTrxnRow.convertedAmount = null;
-        blankTrxnRow.convertedAmountCurrency = null;
-      }
       this.vm.selectedLedger.transactions.push(blankTrxnRow);
     }
   }
@@ -525,9 +513,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
       // check if need to showEntryPanel
       // first check with opened lager
-      let activeAccount: AccountResponse = null;
-      this.activeAccount$.pipe(take(1)).subscribe(s => activeAccount = s);
-      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(activeAccount)) {
+      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
         this.vm.showNewEntryPanel = true;
       } else {
         // now check if we transactions array have any income/expense/fixed assets entry
@@ -627,14 +613,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
       // check if need to showEntryPanel
       // first check with opened lager
-      let activeAccount: AccountResponse = null;
-      this.activeAccount$.pipe(take(1)).subscribe(s => activeAccount = s);
-      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(activeAccount)) {
+      if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
         this.vm.showNewEntryPanel = true;
       } else {
         // now check if we transactions array have any income/expense/fixed assets entry
         let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+      }
+
+      if (!this.isMultiCurrencyAvailable) {
+        this.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.activeAccount.currency;
+
+        this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+
+        if (this.isMultiCurrencyAvailable) {
+          let currencies: ICurrencyResponse[] = [];
+          let multiCurrencyAccCurrency: ICurrencyResponse;
+
+          this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
+          multiCurrencyAccCurrency = currencies.find(f => f.code === e.additional.currency);
+          this.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+        } else {
+          this.baseCurrencyDetails = this.foreignCurrencyDetails;
+        }
+        this.selectedCurrency = 0;
+        this.vm.selectedCurrencyForDisplay = this.selectedCurrency;
+        this.assignPrefixAndSuffixForCurrency();
       }
 
       this.vm.onTxnAmountChange(txn);
@@ -653,25 +657,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       });
     }
 
-    txn.convertedAmount = giddhRoundOff(txn.amount * this.vm.selectedLedger.exchangeRate, 2);
+    txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
     txn.isUpdated = true;
     this.vm.onTxnAmountChange(txn);
-  }
-
-  /**
-   * calculateConversionRate
-   */
-  public calculateConversionRate(baseCurr, convertTo, amount, obj): any {
-    if (baseCurr && convertTo) {
-      this._ledgerService.GetCurrencyRate(baseCurr, convertTo).subscribe((res: any) => {
-        let rate = res.body;
-        if (rate) {
-          obj.convertedAmount = amount * rate;
-          obj.convertedAmountCurrency = convertTo;
-          return obj;
-        }
-      });
-    }
   }
 
   public showDeleteAttachedFileModal() {
@@ -780,16 +768,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
     e.stopPropagation();
-    let activeAccount = null;
-    this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
     let downloadRequest = new DownloadLedgerRequest();
     downloadRequest.invoiceNumber = [invoiceName];
     downloadRequest.voucherType = voucherType;
 
-    this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
+    this._ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
       if (d.status === 'success') {
         let blob = base64ToBlob(d.body, 'application/pdf', 512);
-        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+        return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
       } else {
         this._toasty.errorToast(d.message);
       }
@@ -925,21 +911,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public async toggleCurrency() {
-    this.selectedCurrencyForDisplay = this.selectedCurrencyForDisplay === 1 ? 0 : 1;
-    let rate = await this.getCurrencyRate();
-    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
-    this.vm.inventoryAmountChanged();
+    this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
+    let rate = giddhRoundOff(1 / this.vm.selectedLedger.exchangeRate, 4);
+    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate};
   }
 
   public exchangeRateChanged() {
     this.vm.inventoryAmountChanged();
-  }
-
-  private getCurrencyRate() {
-    let from = this.selectedCurrencyForDisplay === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
-    let to = this.selectedCurrencyForDisplay === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
-    let date = moment().format('DD-MM-YYYY');
-    return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
 
   @HostListener('window:scroll')

@@ -10,7 +10,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
-import { TaxResponse } from '../../../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
@@ -19,6 +19,7 @@ export class UpdateLedgerVm {
   public flatternAccountList4Select: Observable<IOption[]>;
   public flatternAccountList4BaseAccount: IOption[] = [];
   public companyTaxesList$: Observable<TaxResponse[]>;
+  public currencyList$: Observable<ICurrencyResponse[]>;
   public selectedLedger: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public convertedEntryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
@@ -53,6 +54,7 @@ export class UpdateLedgerVm {
       dr: ''
     }
   };
+  public selectedCurrencyForDisplay: 0 | 1 = 0;
 
   constructor() {
     this.voucherTypeList = [{
@@ -100,7 +102,7 @@ export class UpdateLedgerVm {
 
   public handleDiscountEntry(amount: number) {
     this.discountTrxTotal = amount;
-    this.convertedDiscountTrxTotal = giddhRoundOff(amount * this.selectedLedger.exchangeRate, 2);
+    this.convertedDiscountTrxTotal = this.calculateConversionRate(amount);
 
     if (this.selectedLedger.transactions) {
       this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
@@ -123,7 +125,7 @@ export class UpdateLedgerVm {
         trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
         trx.particular.name = dx.name ? dx.name : 'discount';
         trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
-        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
+        trx.convertedAmount = this.calculateConversionRate(trx.amount);
         trx.isStock = false;
         trx.isTax = false;
         trx.isDiscount = true;
@@ -234,8 +236,8 @@ export class UpdateLedgerVm {
     }), 2);
 
     this.convertedEntryTotal = {
-      drTotal: giddhRoundOff(this.entryTotal.drTotal * this.selectedLedger.exchangeRate, 2),
-      crTotal: giddhRoundOff(this.entryTotal.crTotal * this.selectedLedger.exchangeRate, 2),
+      drTotal: this.calculateConversionRate(this.entryTotal.drTotal),
+      crTotal: this.calculateConversionRate(this.entryTotal.crTotal),
     };
   }
 
@@ -271,7 +273,7 @@ export class UpdateLedgerVm {
         });
         this.totalAmount = trx ? Number(trx.amount) : 0;
       }
-      this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
+      this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
     }
   }
 
@@ -318,10 +320,10 @@ export class UpdateLedgerVm {
     this.totalForTax = total;
 
     this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), 2);
-    this.convertedTaxTrxTotal = giddhRoundOff(this.taxTrxTotal * this.selectedLedger.exchangeRate, 2);
+    this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
 
     this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), 2);
-    this.convertedGrandTotal = giddhRoundOff((this.grandTotal * this.selectedLedger.exchangeRate), 2);
+    this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
 
     this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
   }
@@ -332,7 +334,7 @@ export class UpdateLedgerVm {
     } else {
       this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), 2);
     }
-    this.convertedCompoundTotal = giddhRoundOff(this.compoundTotal * this.selectedLedger.exchangeRate, 2);
+    this.convertedCompoundTotal = this.calculateConversionRate(this.compoundTotal);
   }
 
   public getUniqueName(txn: ILedgerTransactionItem) {
@@ -383,9 +385,9 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.isUpdated = true;
     }
 
-    this.convertedRate = giddhRoundOff(val * this.selectedLedger.exchangeRate, 2);
+    this.convertedRate = this.calculateConversionRate(val);
     this.stockTrxEntry.amount = giddhRoundOff(val * this.stockTrxEntry.inventory.quantity, 2);
-    this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+    this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
     this.getEntryTotal();
     this.generatePanelAmount();
@@ -399,23 +401,22 @@ export class UpdateLedgerVm {
     //   let tempVal = event.clipboardData.getData('text/plain');
     //   if (Number.isNaN(Number(tempVal))) {
     //     event.stopImmediatePropagation();
-    //     event.preventDefault();
     //     return;
     //   }
     //   this.totalAmount = Number(tempVal);
     // }
 
-    this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
+    this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
 
     if (this.stockTrxEntry) {
       if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), 2)) {
         this.stockTrxEntry.isUpdated = true;
       }
       this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), 2);
-      this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+      this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
       this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
-      this.convertedRate = giddhRoundOff(this.stockTrxEntry.inventory.rate * this.selectedLedger.exchangeRate, 2);
+      this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
 
     } else {
       // find account that's from category income || expenses || fixedassets
@@ -426,7 +427,7 @@ export class UpdateLedgerVm {
 
       if (trx) {
         trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
-        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
+        trx.convertedAmount = this.calculateConversionRate(trx.amount);
         trx.isUpdated = true;
       }
     }
@@ -483,15 +484,15 @@ export class UpdateLedgerVm {
     this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
       (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), 2);
 
-    this.convertedTotalAmount = giddhRoundOff(this.totalAmount * this.selectedLedger.exchangeRate, 2);
+    this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
 
     if (this.stockTrxEntry) {
       this.stockTrxEntry.amount = this.totalAmount;
-      this.stockTrxEntry.convertedAmount = giddhRoundOff(this.stockTrxEntry.amount * this.selectedLedger.exchangeRate, 2);
+      this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
       const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), 2);
       this.stockTrxEntry.inventory.rate = rate;
-      this.convertedRate = giddhRoundOff(this.stockTrxEntry.inventory.rate * this.selectedLedger.exchangeRate, 2);
+      this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
       this.stockTrxEntry.isUpdated = true;
 
       if (this.discountComponent) {
@@ -506,7 +507,7 @@ export class UpdateLedgerVm {
       });
       if (trx) {
         trx.amount = this.totalAmount;
-        trx.convertedAmount = giddhRoundOff(trx.amount * this.selectedLedger.exchangeRate, 2);
+        trx.convertedAmount = this.calculateConversionRate(trx.amount);
         trx.isUpdated = true;
       }
 
@@ -619,5 +620,13 @@ export class UpdateLedgerVm {
     this.taxRenderData = [];
     this.selectedTaxes = [];
     this.discountArray = [];
+  }
+
+  public calculateConversionRate(baseModel) {
+    if (this.selectedCurrencyForDisplay === 0) {
+      return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, 2);
+    } else {
+      return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, 2);
+    }
   }
 }
