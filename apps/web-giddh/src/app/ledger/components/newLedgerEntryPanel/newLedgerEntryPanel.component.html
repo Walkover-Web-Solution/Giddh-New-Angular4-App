@@ -83,7 +83,7 @@
           </td>
 
           <!--discount-->
-          <td class="pItem text-right price" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
+          <td class="pItem text-right price" (click)="$event.stopPropagation()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                              [maskInput]="inputMaskFormat"
                              [prefixInput]="selectedPrefixForCurrency"
@@ -104,7 +104,7 @@
 
           <td *ngIf="(companyTaxesList$ | async)?.length"
               class="pItem amount pos-rel dropdown-container text-right dropdown-width" (clickOutside)="hideTax()"
-              (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
+              (click)="$event.stopPropagation()">
             <!--tax control component-->
             <!-- Login Changes by Sagar  -->
             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->

@@ -369,6 +369,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
     this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
 
+    // calculate discount on change of price
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
@@ -377,7 +383,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.currentTxn.inventory.quantity = Number(val);
     this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
     this.currentTxn.convertedAmount = giddhRoundOff(this.currentTxn.amount * this.blankLedger.exchangeRate, 2);
-    // this.amountChanged();
+
+    // calculate discount on change of price
+    if (this.discountControl) {
+      this.discountControl.ledgerAmount = this.currentTxn.amount;
+      this.discountControl.change();
+    }
+
     this.calculateTotal();
     this.calculateCompoundTotal();
   }
