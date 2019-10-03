@@ -114,7 +114,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     }
 
     case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
-      let vouchers = { ...state.vouchers };
+      let vouchers = {...state.vouchers};
       let result = action.payload as BaseResponse<VoucherClass, GenericRequestForGenerateSCD>;
       return {
         ...state,
@@ -123,6 +123,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
           items: vouchers.items.map(m => {
             if (m.voucherNumber === result.body.voucherDetails.voucherNumber) {
               m.grandTotal = result.body.voucherDetails.grandTotal;
+              m.balanceDue = result.body.voucherDetails.balance;
             }
             return m;
           })
@@ -205,7 +206,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return { ...state, ...newState };
+      return {...state, ...newState};
     }
 
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
@@ -216,7 +217,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return { ...state, ...newState };
+      return {...state, ...newState};
     }
     case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
       return Object.assign({}, state, {

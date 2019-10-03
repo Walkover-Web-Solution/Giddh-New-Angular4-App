@@ -270,7 +270,7 @@ export class SettingTriggerComponent implements OnInit {
   public onSelectScope(event) {
     if (event.value === 'closing balance') {
       this.onSelectClosingBalance();
-      if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountLessThan')) {
+      if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountSmallerThan')) {
         return;
       } else {
         this.forceClearFilterList$ = observableOf({status: true});
@@ -283,7 +283,7 @@ export class SettingTriggerComponent implements OnInit {
   public onSelectClosingBalance() {
     this.filterList = [
       {label: 'Amount Greater Than', value: 'amountGreaterThan'},
-      {label: 'Amount Less Than', value: 'amountLessThan'},
+      {label: 'Amount Less Than', value: 'amountSmallerThan'},
     ];
   }
 
