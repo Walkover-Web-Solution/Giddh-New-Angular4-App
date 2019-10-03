@@ -92,7 +92,7 @@
                                         <!-- region for proforma and estimates -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="only4ProformaEstimates">
 
-                                            <label *ngIf="selectedItem.voucherStatus === 'invoiced'" class="labeled">
+                                            <label *ngIf="selectedItem.voucherStatus === 'invoiced'" class="labeled text-capitalize">
                                               {{ selectedItem.voucherStatus }}</label>
 
                                             <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle" aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus !== 'invoiced'">Change Status
