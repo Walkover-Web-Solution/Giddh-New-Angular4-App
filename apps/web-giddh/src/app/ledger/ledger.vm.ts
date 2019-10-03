@@ -13,7 +13,6 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
-import { take } from 'rxjs/operators';
 import { ICurrencyResponse } from '../models/api-models/Company';
 
 export class LedgerVM {
@@ -60,7 +59,9 @@ export class LedgerVM {
   public showBankLedgerPanel: boolean = false;
   public currentBankEntry: BlankLedgerVM;
   public reckoningDebitTotal: number = 0;
+  public convertedReckoningDebitTotal: number = 0;
   public reckoningCreditTotal: number = 0;
+  public convertedReckoningCreditTotal: number = 0;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -107,32 +108,53 @@ export class LedgerVM {
     };
   }
 
-  public calculateReckonging(transactions: TransactionsResponse) {
+  public calculateReckonging(transactions: any) {
     if (transactions.forwardedBalance.amount === 0) {
       let recTotal = 0;
+      let convertedTotal = 0;
       if (transactions.creditTotal > transactions.debitTotal) {
         recTotal = transactions.creditTotal;
+        convertedTotal = transactions.convertedCreditTotal;
       } else {
         recTotal = transactions.debitTotal;
+        convertedTotal = transactions.convertedDebitTotal;
       }
       this.reckoningCreditTotal = recTotal;
-      return this.reckoningDebitTotal = recTotal;
+      this.convertedReckoningCreditTotal = convertedTotal;
+
+      this.reckoningDebitTotal = recTotal;
+      this.convertedReckoningDebitTotal = convertedTotal;
     } else {
       if (transactions.forwardedBalance.type === 'DEBIT') {
         if ((transactions.forwardedBalance.amount + transactions.debitTotal) <= transactions.creditTotal) {
           this.reckoningCreditTotal = transactions.creditTotal;
-          return this.reckoningDebitTotal = transactions.creditTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedCreditTotal;
+
+          this.reckoningDebitTotal = transactions.creditTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedCreditTotal;
+          return;
         } else {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
-          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+
+          this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+          return;
         }
       } else {
         if ((transactions.forwardedBalance.amount + transactions.creditTotal) <= transactions.debitTotal) {
           this.reckoningCreditTotal = transactions.debitTotal;
-          return this.reckoningDebitTotal = transactions.debitTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedDebitTotal;
+
+          this.reckoningDebitTotal = transactions.debitTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedDebitTotal;
+          return;
         } else {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
-          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+
+          this.reckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
         }
       }
     }

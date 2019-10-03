@@ -160,7 +160,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public todaySelected$: Observable<boolean> = observableOf(false);
   public selectedTrxWhileHovering: string;
   public checkedTrxWhileHovering: string[] = [];
-  public ledgerTxnBalance$: Observable<any> = observableOf({});
+  public ledgerTxnBalance: any = {};
   public isAdvanceSearchImplemented: boolean = false;
   public invoiceList: any[] = [];
   public keydownClassAdded: boolean = false;
@@ -224,7 +224,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
-    this.ledgerTxnBalance$ = this.store.select(p => p.ledger.ledgerTransactionsBalance).pipe(takeUntil(this.destroyed$));
   }
 
   Shown: boolean = true;
@@ -556,8 +555,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.ledgerTxnBalance$.subscribe((txnBalance: any) => {
+    this.store.pipe(
+      select(p => p.ledger.ledgerTransactionsBalance),
+      takeUntil(this.destroyed$)
+    ).subscribe((txnBalance: any) => {
       if (txnBalance) {
+        this.ledgerTxnBalance = txnBalance;
         this.lc.calculateReckonging(txnBalance);
         this._cdRf.detectChanges();
       }
