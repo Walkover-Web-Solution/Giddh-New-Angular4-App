@@ -21,7 +21,7 @@
 }
 .inventory-controll ::ng-deep.nav-tabs>::ng-deep li.active> a, .nav-tabs>::ng-deep li.active> a:focus, ::ng-deep.nav-tabs> li.active>a:hover {
   color:$dark-blue00 !important;
-  border-bottom: 2px solid $yellow !important;
+  border-bottom: 4px solid $yellow !important;
   cursor: pointer !important;
   background-color: unset !important;
   border-top: transparent !important;
@@ -30,7 +30,7 @@
 }
 .inventory-controll .nav-tabs > li > a:hover {
   color: $dark-blue00 !important;
-  border-bottom: 2px solid $yellow !important;
+  border-bottom: 4px solid $yellow !important;
 }
 
 //.inventory-controll .invoice-nav.navbar-nav > li > a.active {

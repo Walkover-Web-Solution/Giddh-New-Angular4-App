@@ -13,7 +13,7 @@
                         <input type="text" placeholder="search" #searchElement>
 
                         <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView" [autoClose]="true">
-                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
+                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
                 + New Invoice <span class="caret"></span>
               </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu" aria-labelledby="button-basic2">
@@ -26,7 +26,7 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-blue" *ngIf="voucherType !== 'sales' && !isMobileView" (click)="goToInvoice()">+ New
+                        <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView" (click)="goToInvoice()">+ New
               {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
 
@@ -96,7 +96,7 @@
                         {{ selectedItem.voucherStatus }}
                       </label>
 
-                                            <button id="button-basic" dropdownToggle type="button" class="btn btn-blue dropdown-toggle" aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
+                                            <button id="button-basic" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic" *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
                         <span class="caret"></span>
                       </button>
 
@@ -126,7 +126,7 @@
                         {{ selectedItem.voucherStatus }}
                       </label>
 
-                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-blue dropdown-toggle" aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
+                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
                         Status <span class="caret"></span>
                       </button>
 
