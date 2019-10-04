@@ -401,7 +401,8 @@ export interface GenericRequestForGenerateSCD {
   exchangeRate?: number,
   type?: string,
   number?:string,
-  uniqueName?:string
+  uniqueName?:string,
+  templateDetails?: TemplateDetailsClass
 }
 
 export class VoucherDetailsClass {
