@@ -1,4 +1,5 @@
 let COMMON_URL = 'company/:companyUniqueName/';
+let COMMON_URL_V4 = 'v4/company/:companyUniqueName/';
 let EWAYBILL_COMMON_URL = 'company/:companyUniqueName/ewb';
 let PART_A = 'v2/company/:companyUniqueName/';
 let PART_B = 'accounts/:accountUniqueName/invoices/';
@@ -9,7 +10,7 @@ export const INVOICE_API = {
   GET_ALL_INVOICES: COMMON_URL + 'invoices?',
   GET_ALL_LEDGERS_FOR_INVOICE: COMMON_URL + 'ledgers?',
   // GENERATE_BULK_INVOICE: COMMON_URL + 'invoices/bulk-generate?combined', // By Nidhi
-  GENERATE_BULK_INVOICE: COMMON_URL + 'vouchers/bulk-generate?combined',
+  GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'accounts/:accountuniquename/vouchers/bulk-generate?combined',
   GET_INVOICE_TEMPLATES: COMMON_URL + 'templates/all',
   GET_INVOICE_TEMPLATE: COMMON_URL + 'templates-v2/templateUniqueName', // get call for single
   ACTION_ON_INVOICE: COMMON_URL + 'invoices/:invoiceUniqueName/action',
