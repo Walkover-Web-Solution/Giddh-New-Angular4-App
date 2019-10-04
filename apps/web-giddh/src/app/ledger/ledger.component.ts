@@ -34,7 +34,7 @@ import { createSelector } from 'reselect';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
-import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
+import {AdvanceSearchModel, AdvanceSearchRequest} from '../models/interfaces/AdvanceSearchRequest';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
@@ -387,10 +387,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(event: any): void {
-    // this.advanceSearchRequest.page = event.page;
+    this.advanceSearchRequest.page = event.page;
     this.trxRequest.page = event.page;
     // this.lc.currentPage = event.page;
-    this.getTransactionData();
+    this.getAdvanceSearchTxn(true);
+
   }
 
   public ngOnInit() {
@@ -1465,9 +1466,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   // endregion
 
-  public getAdvanceSearchTxn() {
-    this.isAdvanceSearchImplemented = true;
-    if (!this.todaySelected) {
+  public getAdvanceSearchTxn(fromPageChange?:boolean) {
+    this.advanceSearchRequest.count=15; // because getTransactionData have 15 count
+    if(!fromPageChange){
+      this.isAdvanceSearchImplemented = true;
+    }
+    if (this.advanceSearchRequest.dataToSend.bsRangeValue && !this.todaySelected) {
+      this.advanceSearchRequest.dataToSend = this.advanceSearchRequest.dataToSend || new AdvanceSearchModel();
       this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
         moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format('DD-MM-YYYY'), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format('DD-MM-YYYY'),
         this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
