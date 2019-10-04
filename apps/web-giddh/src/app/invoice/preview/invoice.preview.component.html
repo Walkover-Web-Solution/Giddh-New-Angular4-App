@@ -87,7 +87,7 @@
         </div>
 
         <!-- <div class="pull-right">
-                <button class="btn btn-blue">+ New Invoice</button>
+                <button class="btn btn-pink">+ New Invoice</button>
               </div> -->
 
         <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
@@ -97,7 +97,7 @@
         </button>
         <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
           <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView"
-            class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
+            class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
             + New Invoice <span class="caret"></span>
           </button>
           <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="ddl-newinv">
@@ -113,17 +113,17 @@
         <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
         <!--        &lt;!&ndash; *ngIf="showExportButton" (this is removed from export btn for showing this button) &ndash;&gt;-->
         <!--        -->
-        <!--        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>-->
+        <!--        <button class="btn btn-pink" style="margin: 0 !important;">+ New Invoice</button>-->
         <!--      </div>-->
 
 
         <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr. Note
+          <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr. Note
           </button>
         </div>
 
         <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-          <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr. Note
+          <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr. Note
           </button>
         </div>
 
@@ -188,7 +188,7 @@
 
             <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales' && !isMobileView" [autoClose]="true">
               <button id="ddl-newinv" dropdownToggle type="button"
-                class="btn btn-blue dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
+                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
                 + New Invoice <span class="caret"></span>
               </button>
               <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="ddl-newinv">
@@ -204,18 +204,18 @@
             <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
             <!--        &lt;!&ndash; *ngIf="showExportButton" (this is removed from export btn for showing this button) &ndash;&gt;-->
             <!--        -->
-            <!--        <button class="btn btn-blue" style="margin: 0 !important;">+ New Invoice</button>-->
+            <!--        <button class="btn btn-pink" style="margin: 0 !important;">+ New Invoice</button>-->
             <!--      </div>-->
 
 
             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-              <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr.
+              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr.
                 Note
               </button>
             </div>
 
             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-              <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr.
+              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr.
                 Note
               </button>
             </div>
