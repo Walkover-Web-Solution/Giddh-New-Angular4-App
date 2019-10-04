@@ -86,15 +86,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public showAdvanced: boolean;
   public currentAccountApplicableTaxes: string[] = [];
 
-  public isMultiCurrencyAvailable: boolean = false;
-  public baseCurrencyDetails: ICurrencyResponse;
-  public foreignCurrencyDetails: ICurrencyResponse;
-  public selectedCurrency: 0 | 1 = 0;
-  public isPrefixAppliedForCurrency: boolean = true;
-  public selectedPrefixForCurrency: string;
-  public selectedSuffixForCurrency: string;
-  public inputMaskFormat: string;
-
   public baseCurrency: string = null;
   public isChangeAcc: boolean = false;
   public firstBaseAccountSelected: string;
@@ -190,26 +181,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.activeAccount$ = observableOf(resp[2].body);
           this.activeAccount = cloneDeep(resp[2].body);
           this.profileObj = resp[3];
-          this.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
+          this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
           // set account details for multi currency account
           this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
-          this.isMultiCurrencyAvailable = !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency);
+          this.vm.isMultiCurrencyAvailable = !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency);
 
-          this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+          this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
 
-          if (this.isMultiCurrencyAvailable) {
+          if (this.vm.isMultiCurrencyAvailable) {
             let currencies: ICurrencyResponse[] = [];
             let multiCurrencyAccCurrency: ICurrencyResponse;
 
             this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
             multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
-            this.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+            this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
           } else {
-            this.baseCurrencyDetails = this.foreignCurrencyDetails;
+            this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
           }
-          this.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
-          this.vm.selectedCurrencyForDisplay = this.selectedCurrency;
+          this.vm.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
+          this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
           this.assignPrefixAndSuffixForCurrency();
           // end multi currency assign
 
@@ -220,7 +211,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           let accountDetails: AccountResponse = resp[2].body;
 
-          if (accountDetails && accountDetails.currency && this.isMultiCurrencyAvailable) {
+          if (accountDetails && accountDetails.currency && this.vm.isMultiCurrencyAvailable) {
             this.baseCurrency = accountDetails.currency;
           }
 
@@ -504,7 +495,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.totalTdElementWidth = event.newWidth + 10;
   }
 
-  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
+  public async selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
@@ -621,27 +612,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       }
 
-      if (!this.isMultiCurrencyAvailable) {
-        this.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.activeAccount.currency;
+      // if multi-currency is not available then check if selected account allows multi-currency
+      if (!this.vm.isMultiCurrencyAvailable) {
+        this.vm.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.profileObj.baseCurrency;
 
-        this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+        this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
 
-        if (this.isMultiCurrencyAvailable) {
+        if (this.vm.isMultiCurrencyAvailable) {
           let currencies: ICurrencyResponse[] = [];
           let multiCurrencyAccCurrency: ICurrencyResponse;
 
           this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
           multiCurrencyAccCurrency = currencies.find(f => f.code === e.additional.currency);
-          this.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+          this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+
+          let rate = await this.getCurrencyRate();
+          this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
+
         } else {
-          this.baseCurrencyDetails = this.foreignCurrencyDetails;
+          this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
         }
-        this.selectedCurrency = 0;
-        this.vm.selectedCurrencyForDisplay = this.selectedCurrency;
+        this.vm.selectedCurrency = 0;
+        this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
         this.assignPrefixAndSuffixForCurrency();
       }
 
-      this.vm.onTxnAmountChange(txn);
+      this.vm.inventoryAmountChanged(txn);
     }
   }
 
@@ -926,8 +922,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   private assignPrefixAndSuffixForCurrency() {
-    this.isPrefixAppliedForCurrency = this.isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
-    this.selectedPrefixForCurrency = this.isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
-    this.selectedSuffixForCurrency = this.isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+    this.vm.isPrefixAppliedForCurrency = this.vm.isPrefixAppliedForCurrency = !(['AED'].includes(this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code));
+    this.vm.selectedPrefixForCurrency = this.vm.isPrefixAppliedForCurrency ? this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.symbol : this.vm.foreignCurrencyDetails.symbol : '';
+    this.vm.selectedSuffixForCurrency = this.vm.isPrefixAppliedForCurrency ? '' : this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.symbol : this.vm.foreignCurrencyDetails.symbol;
+  }
+
+  private getCurrencyRate() {
+    let from = this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code;
+    let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
+    let date = moment().format('DD-MM-YYYY');
+    return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
 }

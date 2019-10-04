@@ -13,6 +13,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import * as moment from 'moment';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -54,6 +55,16 @@ export class UpdateLedgerVm {
       dr: ''
     }
   };
+
+  // multi-currency variables
+  public isMultiCurrencyAvailable: boolean = false;
+  public baseCurrencyDetails: ICurrencyResponse;
+  public foreignCurrencyDetails: ICurrencyResponse;
+  public selectedCurrency: 0 | 1 = 0;
+  public isPrefixAppliedForCurrency: boolean = true;
+  public selectedPrefixForCurrency: string;
+  public selectedSuffixForCurrency: string;
+  public inputMaskFormat: string;
   public selectedCurrencyForDisplay: 0 | 1 = 0;
 
   constructor() {
@@ -407,7 +418,6 @@ export class UpdateLedgerVm {
     // }
 
     this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
-
     if (this.stockTrxEntry) {
       if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), 2)) {
         this.stockTrxEntry.isUpdated = true;
@@ -418,18 +428,37 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
       this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
 
+      // update every transaction conversion rates for multi-currency
+      this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
+        trx.convertedAmount = this.calculateConversionRate(trx.amount);
+        return trx;
+      });
     } else {
-      // find account that's from category income || expenses || fixedassets
-      let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
+
+      // update every transaction conversion rates for multi-currency
+      this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
-        return this.isValidCategory(category);
+
+        // find account that's from category income || expenses || fixed assets and update it's amount too
+        if (this.isValidCategory(category)) {
+          t.amount = giddhRoundOff(Number(this.totalAmount), 2);
+          t.isUpdated = true;
+        }
+        t.convertedAmount = this.calculateConversionRate(t.amount);
+        return t;
       });
 
-      if (trx) {
-        trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
-        trx.convertedAmount = this.calculateConversionRate(trx.amount);
-        trx.isUpdated = true;
-      }
+      // find account that's from category income || expenses || fixed assets
+      // let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
+      //   let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
+      //   return this.isValidCategory(category);
+      // });
+      //
+      // if (trx) {
+      //   trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
+      //   trx.convertedAmount = this.calculateConversionRate(trx.amount);
+      //   trx.isUpdated = true;
+      // }
     }
 
     this.getEntryTotal();
@@ -500,7 +529,7 @@ export class UpdateLedgerVm {
         this.discountComponent.change();
       }
     } else {
-      // find account that's from category income || expenses || fixedassets
+      // find account that's from category income || expenses || fixed assets
       let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return this.isValidCategory(category);

@@ -171,12 +171,12 @@
 
                   <input type="text"
                          [(ngModel)]="txn.amount" class="form-control text-right"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                         [suffix]="selectedSuffixForCurrency"
+                         [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                         [suffix]="vm.selectedSuffixForCurrency"
                          (click)="addBlankTrx('DEBIT', txn, $event)"
                          (ngModelChange)="onTxnAmountChange(txn)">
 
-                  <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
+                  <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                     <ng-container
                       *ngTemplateOutlet="totalWithCurrencySymbol;context:{ $implicit: txn.convertedAmount }"
                     ></ng-container>
@@ -202,7 +202,7 @@
                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr"
                         [placement]="'top'">
                     C/F: CR
-                    {{ baseCurrencyDetails.symbol}}
+                    {{ vm.baseCurrencyDetails.symbol}}
                     {{  vm.compoundTotal | giddhCurrency}}
                   </span>
               </td>
@@ -214,11 +214,11 @@
               <td colspan="12" class="col-xs-12 text-right h32">
 
                   <span class="bdrT pr-1 pl-1 width-200">
-                    {{ baseCurrencyDetails?.symbol}}
+                    {{ vm.baseCurrencyDetails?.symbol}}
                     {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal) | giddhCurrency}}
                   </span>
 
-                <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="vm.isMultiCurrencyAvailable">
                   <ng-container
                     *ngTemplateOutlet="totalWithCurrencySymbol;context: {
                       $implicit: (vm.convertedEntryTotal.drTotal > vm.convertedEntryTotal.crTotal ? vm.convertedEntryTotal.drTotal : vm.convertedEntryTotal.crTotal)
@@ -335,13 +335,13 @@
 
                   <input class="form-control text-right" type="text"
                          [(ngModel)]="txn.amount"
-                         [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                         [suffix]="selectedSuffixForCurrency"
+                         [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                         [suffix]="vm.selectedSuffixForCurrency"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
                          (change)="onTxnAmountChange(txn)">
 
 
-                  <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
+                  <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                     <ng-container
                       *ngTemplateOutlet="totalWithCurrencySymbol;context:{ $implicit: txn.convertedAmount}"
                     ></ng-container>
@@ -365,7 +365,7 @@
                   <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                     <span class="primary_clr pd2" [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr"
                           [placement]="'top'">
-                      {{ baseCurrencyDetails.symbol }}
+                      {{ vm.baseCurrencyDetails.symbol }}
                       {{ vm.compoundTotal | giddhCurrency}}</span>
                   </span>
               </td>
@@ -377,11 +377,11 @@
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
 
                   <span class="bdrT">
-                    {{ baseCurrencyDetails?.symbol }}
+                    {{ vm.baseCurrencyDetails?.symbol }}
                     {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal) | giddhCurrency }}
                   </span>
 
-                <p class="mb-0 amnt-total" *ngIf="isMultiCurrencyAvailable">
+                <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                   <ng-container
                     *ngTemplateOutlet="totalWithCurrencySymbol;context: {
                       $implicit: (vm.convertedEntryTotal.crTotal > vm.convertedEntryTotal.drTotal ? vm.convertedEntryTotal.crTotal : vm.convertedEntryTotal.drTotal)
@@ -464,12 +464,12 @@
                         <label>Price</label>
                         <input type="text" name=""
                                (change)="vm.inventoryPriceChanged($event.target.value)"
-                               [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                               [suffix]="selectedSuffixForCurrency"
+                               [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                               [suffix]="vm.selectedSuffixForCurrency"
                                [(ngModel)]="vm.stockTrxEntry.inventory.rate"
                                class="form-control text-right"
                         />
-                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                        <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="vm.isMultiCurrencyAvailable">
                           <ng-container
                             *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedRate }"></ng-container>
                         </p>
@@ -485,13 +485,12 @@
                       <label class="primary_clr">Amount</label>
 
                       <input type="text" name="" class="form-control text-right"
-                             [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                             [suffix]="selectedSuffixForCurrency"
-                             (paste)="vm.inventoryAmountChanged($event)"
+                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                             [suffix]="vm.selectedSuffixForCurrency"
                              (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()"
                              [(ngModel)]="vm.totalAmount"/>
 
-                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="vm.isMultiCurrencyAvailable">
                         <ng-container
                           *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTotalAmount }"></ng-container>
                       </p>
@@ -506,15 +505,15 @@
                         <span auto-close="outsideClick">
                           <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
                                                   [ledgerAmount]="vm.selectedLedger.actualAmount"
-                                                  [prefixInput]="selectedPrefixForCurrency"
-                                                  [maskInput]="inputMaskFormat"
-                                                  [suffixInput]="selectedSuffixForCurrency"
+                                                  [prefixInput]="vm.selectedPrefixForCurrency"
+                                                  [maskInput]="vm.inputMaskFormat"
+                                                  [suffixInput]="vm.selectedSuffixForCurrency"
                                                   (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal();"
                                                   (hideOtherPopups)="hideTax()">
                           </update-ledger-discount>
                         </span>
 
-                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="vm.isMultiCurrencyAvailable">
                         <ng-container
                           *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedDiscountTrxTotal }"></ng-container>
                       </p>
@@ -532,16 +531,16 @@
                                                      [date]="vm.selectedLedger.entryDate"
                                                      [taxRenderData]="vm.taxRenderData"
                                                      [totalForTax]="vm.totalForTax"
-                                                     [prefixInput]="selectedPrefixForCurrency"
-                                                     [maskInput]="inputMaskFormat"
-                                                     [suffixInput]="selectedSuffixForCurrency"
+                                                     [prefixInput]="vm.selectedPrefixForCurrency"
+                                                     [maskInput]="vm.inputMaskFormat"
+                                                     [suffixInput]="vm.selectedSuffixForCurrency"
                                                      [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                                                      [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                                      (hideOtherPopups)="hideDiscount()"
                                                      (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         </span>
 
-                      <p class="mb-0 amnt-total pr-1 pl-1 text-right" *ngIf="isMultiCurrencyAvailable">
+                      <p class="mb-0 amnt-total pr-1 pl-1 text-right" *ngIf="vm.isMultiCurrencyAvailable">
                         <ng-container
                           *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTaxTrxTotal }"></ng-container>
                       </p>
@@ -556,11 +555,11 @@
                       <label class="primary_clr">Total</label>
 
                       <input type="text" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
-                             [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                             [suffix]="selectedSuffixForCurrency"
+                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                             [suffix]="vm.selectedSuffixForCurrency"
                              (paste)="vm.inventoryTotalChanged($event)" (blur)="vm.inventoryTotalChanged($event)"/>
 
-                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isMultiCurrencyAvailable">
+                      <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="vm.isMultiCurrencyAvailable">
                         <ng-container
                           *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedGrandTotal }"></ng-container>
                       </p>
@@ -592,8 +591,8 @@
                       </span>
 
                       <input class="text-right form-control mrL1" disabled="disabled"
-                             [mask]="inputMaskFormat" [prefix]="selectedPrefixForCurrency"
-                             [suffix]="selectedSuffixForCurrency"
+                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                             [suffix]="vm.selectedSuffixForCurrency"
                              [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum"
                       />
                     </span>
@@ -634,9 +633,9 @@
 
 
               <td class="text-right">
-                <span class="primary_clr" *ngIf="isMultiCurrencyAvailable">
-                  Total in {{ baseCurrencyDetails?.code  }}:
-            <span>{{ baseCurrencyDetails?.symbol }}</span> {{vm.compoundTotal | giddhCurrency}}
+                <span class="primary_clr" *ngIf="vm.isMultiCurrencyAvailable">
+                  Total in {{ vm.baseCurrencyDetails?.code  }}:
+            <span>{{ vm.baseCurrencyDetails?.symbol }}</span> {{vm.compoundTotal | giddhCurrency}}
                 </span>
               </td>
 
@@ -772,13 +771,13 @@
 
               <div class="pull-right">
 
-                <span class="primary_clr" *ngIf="!isMultiCurrencyAvailable">
+                <span class="primary_clr" *ngIf="!vm.isMultiCurrencyAvailable">
                   Compound Total: {{vm.compoundTotal | giddhCurrency}}
                 </span>
 
-                <span *ngIf="isMultiCurrencyAvailable" class="primary_clr">
-                  Total in {{  foreignCurrencyDetails?.code }}:
-                  {{ foreignCurrencyDetails?.symbol }}
+                <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
+                  Total in {{  vm.foreignCurrencyDetails?.code }}:
+                  {{ vm.foreignCurrencyDetails?.symbol }}
                   {{ vm.convertedCompoundTotal | giddhCurrency }}
                 </span>
 
@@ -788,12 +787,12 @@
 
             <div class="clearfix mb-2">
 
-              <div class="pull-left pl-15" *ngIf="isMultiCurrencyAvailable">
+              <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
 
                 <ul class="list-inline font-14">
 
                   <li>
-                    1 {{ vm.selectedCurrencyForDisplay === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}</li>
+                    1 {{ vm.selectedCurrencyForDisplay === 0 ? vm.baseCurrencyDetails?.code : vm.foreignCurrencyDetails?.code }}</li>
 
                   <li>
                     <a href="javascript:void(0)" class="text-light"
@@ -805,7 +804,7 @@
                   <li>
                     <input type="text" class="price-input"
                            [(ngModel)]="vm.selectedLedger.exchangeRate" (blur)="exchangeRateChanged()">
-                    {{ vm.selectedCurrencyForDisplay === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}
+                    {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code }}
                   </li>
 
                 </ul>
@@ -890,7 +889,7 @@
 <ng-template #totalWithCurrencySymbol let-amountToDispaly>
 
   <span>
-    {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
+    {{ vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol }}
     {{ amountToDispaly | giddhCurrency }}
   </span>
 
