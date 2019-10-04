@@ -110,7 +110,7 @@ export class InvoiceService {
     this.companyUniqueName = this._generalService.companyUniqueName;
     // create url
     let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
-    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model).pipe(
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':accountuniquename', model[0].accountUniqueName), model).pipe(
       map((res) => {
         let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
         data.request = model;
