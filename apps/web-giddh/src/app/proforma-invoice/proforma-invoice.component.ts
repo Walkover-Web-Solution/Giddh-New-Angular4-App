@@ -2542,7 +2542,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       salesEntryClassArray.push(salesEntryClass);
     });
-
+    obj.templateDetails = data.templateDetails;
     obj.entries = salesEntryClassArray;
     obj.account.mobileNumber = obj.account.contactNumber;
     return obj;
@@ -2609,7 +2609,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherDetails.voucherDate = result.date;
     voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
     //need to check usage
-    voucherDetails.dueDate = result.date;
+    voucherDetails.dueDate = result.dueDate;
     voucherDetails.balanceStatus = result.balanceStatus;
     voucherDetails.customerName = result.account.name;
     voucherDetails.customerUniquename = result.account.uniqueName;
@@ -2620,6 +2620,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherDetails.totalAsWords = result.totalAsWords.amountForAccount;
 
     voucherClassConversion.voucherDetails = voucherDetails;
+    voucherClassConversion.templateDetails = result.templateDetails;
 
     this.isMulticurrencyAccount = voucherClassConversion.accountDetails.currency.code !== this.companyCurrency;
     this.customerCountryName = voucherClassConversion.accountDetails.currency.code;
