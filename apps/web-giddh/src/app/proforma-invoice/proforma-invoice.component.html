@@ -62,7 +62,6 @@
 
                   <div class="clearfix d-flex" style="flex-direction: column">
                     <div class="d-flex">
-
                       <!-- region if not cashinvoice show customer dropdown -->
                       <ng-container *ngIf="!isCashInvoice">
                         <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
@@ -165,7 +164,6 @@
                             <label>Billing Address</label>
 
                             <div class="billing-address clearfix">
-
                               <textarea name="billingDetails.address" class="form-control"
                                 (keyup)="autoFillShippingDetails()" rows="3" autocomplete="off"
                                 [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" autofocus="off"
@@ -442,7 +440,6 @@
 
 
         </div>
-
         <table class="table table-custom-invoice  basic">
           <thead>
 
@@ -454,7 +451,6 @@
 
             </tr>
           </thead>
-
           <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last"
             (clickOutside)="activeIndx = null" [exclude]="'.entriesTr'">
 
@@ -782,7 +778,11 @@
                     (hideOtherPopups)="closeDiscountPopup()"></tax-control>
 
                   <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
-                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}
+                      [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
+                    <span
+                      *ngIf="companyCurrency === 'INR'">{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}</span>
+                    <span
+                      *ngIf="companyCurrency === 'USD'">{{(entry.taxSum + entry.cessSum)/exchangeRate | number:'1.2-2'}}</span>
                   </div>
                 </td>
                 <td class="text-right">
@@ -1156,7 +1156,6 @@
 
       <!-- region mobile view  -->
       <div class="showInMobile" *ngIf="isMobileView">
-
         <div class="card-invoiceTable-wrapper"
           *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
 
