@@ -9,7 +9,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { FilterListComponent } from './components/filter-list/filter-list.component';
-import { FilterDataComponent } from './components/filter-data/filter-data.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
 import { RejectionReason } from './components/rejection-reason/rejection-reason.component';
 import { LedgerModule } from '../ledger/ledger.module';
@@ -18,7 +17,7 @@ import { NgxUploaderModule } from 'ngx-uploader';
 
 
 @NgModule({
-  declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, FilterDataComponent, RejectionReason],
+  declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, RejectionReason],
   providers: [],
   imports: [CommonModule,
     ReactiveFormsModule,

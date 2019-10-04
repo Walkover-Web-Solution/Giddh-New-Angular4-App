@@ -27,11 +27,64 @@ export class ExpensesComponent implements OnInit {
   public isSelectedRow: boolean = false;
   public selectedRowItem: ExpenseResults = new ExpenseResults();
   public todaySelected$: Observable<boolean> = observableOf(false);
-  public from: string;
-  public to: string;
+  public unaiversalFrom: string;
+  public unaiversalTo: string;
   public modalRef: BsModalRef;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public datePickerOptions: any = {
+    hideOnEsc: true,
+    // parentEl: '#dateRangePickerParent',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'This Month to Date': [
+        moment().startOf('month'),
+        moment()
+      ],
+      'This Quarter to Date': [
+        moment().quarter(moment().quarter()).startOf('quarter'),
+        moment()
+      ],
+      'This Financial Year to Date': [
+        moment().startOf('year').subtract(9, 'year'),
+        moment()
+      ],
+      'This Year to Date': [
+        moment().startOf('year'),
+        moment()
+      ],
+      'Last Month': [
+        moment().subtract(1, 'month').startOf('month'),
+        moment().subtract(1, 'month').endOf('month')
+      ],
+      'Last Quater': [
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+        moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+      ],
+      'Last Financial Year': [
+        moment().startOf('year').subtract(10, 'year'),
+        moment().endOf('year').subtract(10, 'year')
+      ],
+      'Last Year': [
+        moment().startOf('year').subtract(1, 'year'),
+        moment().endOf('year').subtract(1, 'year')
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
+  public selectedDate = {
+    dateFrom: '',
+    dateTo: ''
+  }
 
 
   constructor(private store: Store<AppState>,
@@ -45,8 +98,6 @@ export class ExpensesComponent implements OnInit {
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
 
-
-
   }
 
   public ngOnInit() {
@@ -59,12 +110,19 @@ export class ExpensesComponent implements OnInit {
       this.todaySelected = resp[2];
       if (dateObj && !this.todaySelected) {
         let universalDate = _.cloneDeep(dateObj);
-        this.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-        if (this.from && this.to) {
-          this.pettycashRequest.from = this.from;
-          this.pettycashRequest.to = this.to;
-          // this.getPettyCashReports(this.pettycashRequest);
+        this.unaiversalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.unaiversalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+        this.datePickerOptions = {
+          ...this.datePickerOptions,
+          startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        if (this.unaiversalFrom && this.unaiversalTo) {
+          this.pettycashRequest.from = this.unaiversalFrom;
+          this.pettycashRequest.to = this.unaiversalTo;
+          this.selectedDate.dateFrom = this.pettycashRequest.from;
+          this.selectedDate.dateTo = this.pettycashRequest.to;
         }
       }
     });
@@ -75,14 +133,35 @@ export class ExpensesComponent implements OnInit {
   public selectedRowInput(item: ExpenseResults) {
     this.selectedRowItem = item;
   }
+  public selectedDetailedRowInput(item: ExpenseResults) {
+    this.selectedRowItem = item;
+  }
   public closeDetailedMode(e) {
     this.isSelectedRow = !e;
   }
 
-  public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
-    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
-  }
+  // public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
+  //   this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  // }
   public openModal(filterModal: TemplateRef<any>) {
     this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+  }
+  public bsValueChange(event: any) {
+    if (event) {
+      this.pettycashRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
+      this.pettycashRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+      this.selectedDate.dateFrom = this.pettycashRequest.from;
+      this.selectedDate.dateTo = this.pettycashRequest.to;
+    }
+  }
+  public clearFilter() {
+    this.selectedDate.dateFrom = this.unaiversalFrom;
+    this.selectedDate.dateTo = this.unaiversalTo;
+
+    this.datePickerOptions = {
+      ...this.datePickerOptions, startDate: this.unaiversalFrom,
+      endDate: this.unaiversalTo
+    };
+
   }
 }

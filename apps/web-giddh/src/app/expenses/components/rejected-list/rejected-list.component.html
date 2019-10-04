@@ -5,23 +5,19 @@
                 <tr>
                     <th>#</th>
                     <th>Date
-                        <a class="search-icon" href="javascript:void(0)">
-                            <i class="icon-search"></i>
-                        </a>
+                        <ng-container class="d-inline-block" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                     </th>
                     <th>Submitted By
-                        <a class="search-icon" href="javascript:void(0)">
+                        <!-- <a class="search-icon" href="javascript:void(0)">
                             <i class="icon-search"></i>
-                        </a>
+                        </a> -->
                     </th>
                     <th>Account
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
                     </th>
-                    <th class="text-right pr-2">Amount
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                    <th class="text-right">Amount
+                        <ng-container class="d-inline-block ml-1" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                     </th>
                     <th>Payment/Receipt
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
                     </th>
                     <th>File</th>
                     <th>Reason of Rejection</th>
@@ -29,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let expenses of RejectedItem let i =index">
+                <tr *ngFor="let expenses of RejectedItems let i =index">
                     <!-- <td data-title="#">{{i + 1}}</td>
           <td data-title="Date">{{expenses.date}}</td>
           <td data-title="Submitted By">{{expenses.SubmittedBy}} </td>
@@ -66,11 +62,14 @@
                     <td data-title="Date">{{expenses.entryDate}}</td>
                     <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
                     <td data-title="Account">
-                        <i class="dot-icon dot-warning"></i> {{expenses.baseAccount.name}}
+                        <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                        <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
                     </td>
                     <td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
                     <td data-title="Payment/Receipt">
-                        <span class="font-12 text-gray icon-cash"></span> {{expenses.particularAccount.name}}
+                        <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
+                        <span *ngIf="expenses.baseAccountCategory==='BANK'" class="font-12 text-gray icon-atm-card"></span>
+                        <span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span> {{expenses.baseAccount.name}}
                     </td>
                     <td data-title="File">
                         <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">
@@ -86,7 +85,36 @@
                         </a>
                     </td>
                 </tr>
+                <ng-container *ngIf="!(RejectedItems.length) && (getPettycashReportSuccess$ | async)">
+                    <tr>
+                        <td colspan="9 " class="text-center empty_table ">
+                            <h1>No Record Found !!</h1>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+            <tbody *ngIf="(getPettycashReportInprocess$ | async) ">
+                <tr>
+                    <td colspan="9 ">
+                        <!--loading-->
+                        <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+                            <div class="giddh-spinner vertical-center-spinner "></div>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- region sorting template -->
+<ng-template #sortingTemplate let-col>
+    <div class="icon-pointer d-inline-block pull-right ml-1 ">
+        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
+
+        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
+
+        <div class="fa fa-long-arrow-down text-light-2 font-xxs " *ngIf="key===col && order==='desc' " (click)="sort(col, 'asc') " [ngClass]="{ 'activeTextColor': key===col && order==='desc' } "></div>
+    </div>
+</ng-template>
+<!-- endregion -->

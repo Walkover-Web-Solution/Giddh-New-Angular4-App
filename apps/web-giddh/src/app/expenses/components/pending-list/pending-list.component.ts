@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, TemplateRef, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, TemplateRef, Input, SimpleChange, SimpleChanges, OnChanges, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -20,10 +20,10 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
   styleUrls: ['./pending-list.component.scss'],
 })
 
-export class PendingListComponent implements OnInit {
+export class PendingListComponent implements OnInit, OnChanges {
 
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public expensesItems: ExpenseResults[];
+  public expensesItems: ExpenseResults[] = [];
   public expensesItems$: Observable<ExpenseResults[]>;
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
@@ -33,13 +33,16 @@ export class PendingListComponent implements OnInit {
   public todaySelected$: Observable<boolean> = observableOf(false);
   public from: string;
   public to: string;
-
-
+  public key: string = 'name';
+  public order: string = 'asc';
 
   public isRowExpand: boolean = false;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
+  @Input() public dateFrom: string;
+  @Input() public dateTo: string;
+
   public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
 
 
@@ -184,7 +187,7 @@ export class PendingListComponent implements OnInit {
     };
     this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
       if (res.status === 'success') {
-        this._toasty.successToast('reverted successfully');
+        this._toasty.successToast(res.body);
       } else {
         this._toasty.successToast(res.message);
       }
@@ -197,8 +200,21 @@ export class PendingListComponent implements OnInit {
     this.isRowExpand = true;
     this.selectedRowInput.emit(item);
     this.selectedRowToggle.emit(true);
-
-
   }
-
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dateFrom']) {
+      this.pettycashRequest.from = changes['dateFrom'].currentValue;
+    } else if (changes['dateTo']) {
+      this.pettycashRequest.to = changes['dateTo'].currentValue;
+    }
+    if (this.pettycashRequest.from && this.pettycashRequest.to) {
+      this.getPettyCashPendingReports(this.pettycashRequest);
+    }
+  }
+  public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
+    this.pettycashRequest.sortBy = key;
+    this.pettycashRequest.sort = ord;
+    this.key = key;
+    this.order = ord;
+  }
 }

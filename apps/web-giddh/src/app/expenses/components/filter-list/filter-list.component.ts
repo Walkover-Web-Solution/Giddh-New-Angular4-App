@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ChangeDetectorRef, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./filter-list.component.scss'],
 })
 
-export class FilterListComponent implements OnInit {
+export class FilterListComponent implements OnInit, OnChanges {
 
   filterItems = [
     { filterDate: '03 Oct 2018', clientName: 'Pratik Piplode', ACType: 'Stationery A/c', amount: 15200.00, cash: 'icon-cash', card: 'icon-atm-card', imgIcon: '', multiple: '' },
@@ -33,16 +33,18 @@ export class FilterListComponent implements OnInit {
     "July", "August", "September", "October", "November", "December"
   ];
 
-  public modalRef: BsModalRef;
-  public message: string;
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
   public expensesDetailedItems: ExpenseResults[];
   public expensesDetailedItems$: Observable<ExpenseResults[]>;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  @Input() public selectedRowItem: string;
+  @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
+
+  public selectedItem: ExpenseResults;
+
 
   constructor(private store: Store<AppState>,
-    // private modalService: BsModalService,
     private _expenceActions: ExpencesAction,
     private expenseService: ExpenseService,
     private _route: Router,
@@ -53,19 +55,6 @@ export class FilterListComponent implements OnInit {
     this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
   }
 
-  // openModal(filterModal: TemplateRef<any>) {
-  //   this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
-  // }
-
-  confirm(): void {
-    this.message = 'Confirmed!';
-    this.modalRef.hide();
-  }
-
-  decline(): void {
-    this.message = 'Declined!';
-    this.modalRef.hide();
-  }
 
   public ngOnInit() {
     this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -77,7 +66,6 @@ export class FilterListComponent implements OnInit {
           resp.entryDate = this.getDateToDMY(resp.entryDate);
         })
       }
-      console.log('this.expensesDetailedItems', this.expensesDetailedItems);
     });
   }
   public getDateToDMY(selecteddate) {
@@ -89,6 +77,15 @@ export class FilterListComponent implements OnInit {
     } else {
       return selecteddate;
     }
+  }
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedRowItem']) {
+      this.selectedItem = changes['selectedRowItem'].currentValue;
+    }
 
+  }
+  public rowClicked(item: ExpenseResults) {
+    this.selectedItem = item;
+    this.selectedDetailedRowInput.emit(item);
   }
 }

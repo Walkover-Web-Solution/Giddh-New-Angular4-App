@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, EventEmitter, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ExpenseResults, ActionPettycashRequest, ExpenseActionRequest } from '../../../models/api-models/Expences';
@@ -7,6 +7,7 @@ import { ExpenseService } from '../../../services/expences.service';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-expense-details',
@@ -14,13 +15,17 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./expense-details.component.scss'],
 })
 
-export class ExpenseDetailsComponent implements OnInit {
+export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
   public modalRef: BsModalRef;
   public message: string;
   public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
   @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
-
+  @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
+  @Input() public selectedRowItem: string;
+  public selectedItem: ExpenseResults;
+  public rejectReason = new FormControl();
+  public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
 
   constructor(private modalService: BsModalService,
     private _toasty: ToasterService,
@@ -34,9 +39,11 @@ export class ExpenseDetailsComponent implements OnInit {
     this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
   }
 
-  confirm(): void {
-    this.message = 'Confirmed!';
-    this.modalRef.hide();
+  public submitReject(): void {
+    this.actionPettyCashRequestBody.message = this.rejectReason.value;
+    this.actionPettycashRequest.actionType = 'reject';
+    this.actionPettycashRequest.uniqueName = this.selectedItem.uniqueName;
+    this.pettyCashAction(this.actionPettycashRequest);
   }
 
   decline(): void {
@@ -54,13 +61,33 @@ export class ExpenseDetailsComponent implements OnInit {
       actionType: 'approve',
       uniqueName: item.uniqueName
     };
+    this.pettyCashAction(actionType);
+    // this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+    //   if (res.status === 'success') {
+    //     this.modalService.hide(0);
+    //     this._toasty.successToast('reverted successfully');
+    //   } else {
+    //     this._toasty.successToast(res.message);
+    //   }
+    // });
+  }
+  public pettyCashAction(actionType: ActionPettycashRequest) {
     this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
       if (res.status === 'success') {
-        this._toasty.successToast('reverted successfully');
+        this._toasty.successToast(res.body);
+        this.closeDetailsMode();
       } else {
-        this._toasty.successToast(res.message);
+        this._toasty.errorToast(res.body);
       }
+      this.modalRef.hide();
     });
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedRowItem']) {
+      this.selectedItem = changes['selectedRowItem'].currentValue;
+    }
+
   }
 
 }

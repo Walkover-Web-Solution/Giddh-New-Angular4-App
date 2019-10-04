@@ -4,24 +4,22 @@
             <thead>
                 <tr>
                     <th data-title="#">#</th>
-                    <th>Date
-                        <a class="search-icon" href="javascript:void(0)">
-                            <i class="icon-search"></i>
-                        </a>
+                    <th>Date{{pettycashRequestChange}}
+                        <ng-container class="d-inline-block" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
                     </th>
                     <th>Submitted By
-                        <a class="search-icon" href="javascript:void(0)">
+                        <!-- <a class="search-icon" href="javascript:void(0)">
                             <i class="icon-search"></i>
-                        </a>
+                        </a> -->
                     </th>
                     <th>Account
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                        <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
                     </th>
                     <th class="text-right pr-2">Amount
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                        <ng-container class="d-inline-block" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                     </th>
                     <th>Payment/Receipt
-                        <i class="icon-arrow-down-2 arrow-filter"></i>
+                        <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
                     </th>
                     <th>File</th>
                     <th>Description</th>
@@ -29,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr (click)="rowClicked(expenses);" *ngFor="let expenses of expensesItems let i = index">
+                <tr (click)="rowClicked(expenses);" class="cursor-pointer" *ngFor="let expenses of expensesItems let i = index">
 
                     <ng-container id="rowcomys" (click)="rowClicked(expenses);">
                         <td data-title="#">{{i + 1}}</td>
@@ -50,28 +48,43 @@
                                 <i class="icon-file-path middle"></i>attach file</a>
                         </td>
                         <td data-title="Description">{{expenses.description}}</td>
+                        <td data-title="Action">
+                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success">Approve</button>
+                        </td>
                     </ng-container>
-                    <td data-title="Action">
-                        <button type="button" (click)="approvedActionClicked(expenses);" class="btn btn-success">Approve</button>
-                    </td>
                 </tr>
+                <ng-container *ngIf="!(expensesItems.length) && (getPettycashReportSuccess$ | async)">
+                    <tr>
+                        <td colspan=" 9 " class="text-center empty_table ">
+                            <h1>No Record Found !!</h1>
+                        </td>
+                    </tr>
+                </ng-container>
 
             </tbody>
-            <tbody *ngIf="(getPettycashReportInprocess$ | async)">
+            <tbody *ngIf="(getPettycashReportInprocess$ | async) ">
                 <tr>
-                    <td colspan="9">
+                    <td colspan="9 ">
                         <!--loading-->
-                        <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-                            <div class="giddh-spinner vertical-center-spinner"></div>
+                        <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+                            <div class="giddh-spinner vertical-center-spinner "></div>
                         </div>
                     </td>
                 </tr>
             </tbody>
-        </table>
 
-        <!-- <div class="no-data" *ngIf="(getPettycashReportInprocess$ | async)">
-            <h1>No entries found within given criteria.</h1>
-            <h1>Do search with some other dates</h1>
-        </div> -->
+        </table>
     </div>
 </div>
+
+<!-- region sorting template -->
+<ng-template #sortingTemplate let-col>
+    <div class="icon-pointer d-inline-block pull-right">
+        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col" [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
+
+        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
+
+        <div class="fa fa-long-arrow-down text-light-2 font-xxs " *ngIf="key===col && order==='desc' " (click)="sort(col, 'asc') " [ngClass]="{ 'activeTextColor': key===col && order==='desc' } "></div>
+    </div>
+</ng-template>
+<!-- endregion -->

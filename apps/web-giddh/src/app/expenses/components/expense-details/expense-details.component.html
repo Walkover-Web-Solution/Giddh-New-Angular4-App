@@ -1,10 +1,10 @@
 <div class="clearfix p-15">
     <div class="row">
         <div class="col-sm-6">
-            <p class="bold mb-05">03 Oct 2019 | Others</p>
+            <p class="bold mb-05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
         </div>
         <div class="col-sm-6 text-right xs-left">
-            <button type="button" class="mb-05 btn btn-success">Approve</button>
+            <button type="button" class="mb-05 btn btn-success" disabled>Approve</button>
             <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
             <span class="close-modal cp" (click)="closeDetailsMode()">
           <img src="assets/images/multiply.svg">
@@ -14,7 +14,7 @@
 
     <div class="upload-fil">
         <ul>
-            <li>
+            <!-- <li>
                 <div class="upload-img">
                     <img src="assets/images/upload-img.png" alt="">
                 </div>
@@ -28,7 +28,7 @@
                 <div class="upload-img">
                     <img src="assets/images/upload-img.png" alt="">
                 </div>
-            </li>
+            </li> -->
             <li>
                 <div class="upload-img add-img">
                     <a href="javasctipt:void(0)">
@@ -106,8 +106,44 @@
     </div>
 
     <div class="modal-body">
-        <app-rejection-reason></app-rejection-reason>
-        <input type="submit" class="btn btn-success" (click)="confirm()">
+        <!-- <app-rejection-reason></app-rejection-reason> -->
+        <div class="clearfix modal-top">
+            <p class="font-12 text-gray mb-1">
+                <span>{{selectedItem?.entryDate}} </span> |
+                <span>by {{selectedItem?.createdBy?.name}}</span>
+            </p>
+            <div class="row mb-1">
+                <div class="col-xs-4">
+                    <p class="font-14">Expenses:</p>
+                </div>
+                <div class="col-xs-8">
+                    <p class="font-14">{{selectedItem?.particularAccount?.name}}</p>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-xs-4">
+                    <p class="font-14">Payment Mode:</p>
+                </div>
+                <div class="col-xs-8">
+                    <p class="font-14">{{selectedItem?.baseAccount?.name}}</p>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-xs-4">
+                    <p class="font-14">Amount:</p>
+                </div>
+                <div class="col-xs-8">
+                    <p class="font-14">
+                        <i>{{selectedItem?.currencySymbol}} {{ selectedItem?.amount}}</i></p>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="rejectReason">Reason</label>
+            <textarea name="rejectReason" id="rejectReason" [formControl]="rejectReason" class="textarea form-control" placeholder="Add Reason"></textarea>
+        </div>
+
+        <input type="submit" class="btn btn-success" (click)="submitReject()">
     </div>
 </ng-template>
 <!-- modal end -->

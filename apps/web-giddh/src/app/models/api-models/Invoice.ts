@@ -49,6 +49,9 @@ export class CommonPaginatedRequest {
   public totalItems?: number;
   public totalPages?: number;
   public status?: string;
+  public sort?: string;
+  public sortBy?: string;
+
 }
 
 export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {
