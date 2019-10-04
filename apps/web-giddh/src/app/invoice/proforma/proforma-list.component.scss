@@ -233,7 +233,7 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 10px;
+    padding: 4px 10px;
 }
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
@@ -253,11 +253,11 @@ button.btn.btn-filter span.icon-cross {
   .mobileSearch .input-container input{
     font-size: 13px;
   }
-  .mobileSearch button.btn.btn-blue {
+  .mobileSearch button.btn.btn-pink {
     width: 100%;
     margin-top: 10px !important;
 }
-.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-blue{
+.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-pink{
 display: none;
 }
 .input-grp-dateRangePicker .form-group {

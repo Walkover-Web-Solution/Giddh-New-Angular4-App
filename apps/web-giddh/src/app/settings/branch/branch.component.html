@@ -1,5 +1,5 @@
 <div class="" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
-  <h3 class="section_head mrT2 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
+  <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
         *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
     <button class="btn btn-default mrL1" (click)="openAddBranchModal()">Add Branch</button>
   </h3>
@@ -44,8 +44,8 @@
   </div>
 </div>
 
-<div class="container" *ngIf="(branches$ | async)?.length < 1">
-  <div class="col-xs-6 col-xs-offset-3  text-center">
+<div class="" *ngIf="(branches$ | async)?.length < 1">
+  <div class="col-xs-12  text-center">
     <div class="illustration_box">
       <img src="assets/images/new/branch-Illus.png" />
       <div class="" *ngIf="!parentCompanyName">

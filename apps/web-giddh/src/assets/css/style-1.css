@@ -20,7 +20,7 @@ VERSION:  1
 /* Webfont: Lato-Bold */
 
 /* @font-face {
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     src: url('../fonts/lato/Lato-Bold.eot');
 
     src: url('../fonts/lato/Lato-Bold.eot?#iefix') format('embedded-opentype'),
@@ -5165,7 +5165,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 strong {
-    font-family: 'opensans-bold';
+    font-family: ''opensans-semibold'';
     color: rgba(0, 0, 0, 0.8);
 }
 
@@ -5359,7 +5359,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
   background: #e5e5e5;
   color: #262626;
   border: 0;
-  font-family: 'opensans-bold';
+  font-family: ''opensans-semibold'';
   text-transform: capitalize;
 }
 

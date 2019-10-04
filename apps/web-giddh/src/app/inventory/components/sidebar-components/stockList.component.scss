@@ -1,8 +1,10 @@
+@import '../../../../assets/css/color.scss';
+
 .stock-items .active {
-  background-color: #fff3ec;
+  background-color: #EEEFF9;
 }
 .stock-items .active a .span {
-  color: #d35f29 !important;
+  color: $dark-blue01 !important;
 }
 .span {
   color: black;
@@ -14,4 +16,7 @@
 }
 .in-list .btn{
   line-height: 14px!important;
+}
+.stock-items .active  .btn-link .fa{
+  color: $dark-blue01;
 }

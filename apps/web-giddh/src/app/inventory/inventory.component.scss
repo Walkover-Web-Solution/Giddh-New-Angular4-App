@@ -2,7 +2,7 @@
 
 .inventory-controll ::ng-deep.nav > li > a {
   padding: 2px 0px !important;
-  margin-right: 25px !important;
+  margin-right: 35px !important;
 }
 
 .inventory-controll ::ng-deep.nav>li>a {
@@ -11,17 +11,23 @@
   border-top: transparent !important;
   border-right: transparent !important;
   border-left: transparent !important;
+  font-size: 14px;
 }
 
 .inventory-controll ::ng-deep.nav.nav-tabs {
-  padding: 10px 0px 0 15px !important;
+    margin-bottom: 0;
+    padding: 12px 0px 0 15px !important;
+    background-color: #fff;
+    z-index: 9;
+    position: relative;
+    top: -4px;
 }
 .inventory-controll ::ng-deep.nav-tabs>li>a:hover {
   border-color: transparent !important;
 }
 .inventory-controll ::ng-deep.nav-tabs>::ng-deep li.active> a, .nav-tabs>::ng-deep li.active> a:focus, ::ng-deep.nav-tabs> li.active>a:hover {
   color:$dark-blue00 !important;
-  border-bottom: 2px solid $yellow !important;
+  border-bottom: 4px solid $yellow !important;
   cursor: pointer !important;
   background-color: unset !important;
   border-top: transparent !important;
@@ -30,7 +36,7 @@
 }
 .inventory-controll .nav-tabs > li > a:hover {
   color: $dark-blue00 !important;
-  border-bottom: 2px solid $yellow !important;
+  border-bottom: 4px solid $yellow !important;
 }
 
 //.inventory-controll .invoice-nav.navbar-nav > li > a.active {

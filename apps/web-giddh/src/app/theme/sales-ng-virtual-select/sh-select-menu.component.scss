@@ -27,12 +27,6 @@
   width: 100%;
   word-break: break-word;
 }
-
-.item:hover {
-        color: $border-blue !important;
-    background: #EEEFF9 !important;
-}
-
 .item.selected {
       color: $border-blue !important;
     background: #EEEFF9 !important;
@@ -40,8 +34,9 @@
 
 .item.hilighted {
       color: $border-blue !important;
-    background: #EEEFF9 !important;
+    background: #e3e4ed !important;
 }
+
 
 .item > a {
   padding: 6px;

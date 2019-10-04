@@ -482,7 +482,7 @@ Create Company
 
           </li>
           <li class="pull-right">
-            <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="isMobileSite">
+            <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
               <span class="icon-support dropdown-toggle" dropdownToggle></span>
               <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
                 aria-labelledby="button-basic" [style.min-width.px]="230">
@@ -528,7 +528,7 @@ Create Company
             <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
           </li>
         </ul>
-        <button id="AddManage" *ngIf="isMobileSite" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+        <button id="AddManage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
           [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span class="icon-edit-ico"></span>
           Accounts
         </button>
@@ -677,7 +677,7 @@ Create Company
     <div class="clearfix">
       <ul class="list-inline">
         <li>
-          <button class="btn btn-blue" (click)="goToSelectPlan();">Buy Plan</button>
+          <button class="btn btn-pink" (click)="goToSelectPlan();">Buy Plan</button>
         </li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
             (click)="openScheduleModal();modelRefCrossLimit.hide();"> Contact

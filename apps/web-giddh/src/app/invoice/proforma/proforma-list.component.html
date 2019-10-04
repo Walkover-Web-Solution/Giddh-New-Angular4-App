@@ -20,12 +20,12 @@
 
             <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup()"></span>
             <!-- -->
-            <a class="cp smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
-              (click)="resetAdvanceSearch()">
-              <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-                tooltip="Reset Filter"></i>
-            </a>
+
           </div>
+          <!-- <a class="cp pd smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
+            (click)="resetAdvanceSearch()">
+            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
+          </a> -->
         </div>
 
 
@@ -33,7 +33,7 @@
     </form>
 
     <!-- need to add functionality -->
-    <div class="clear-filter">
+    <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
       <button class="btn btn-filter">
         <span class="icon-cross"></span> Clear Filter
       </button>
@@ -65,12 +65,12 @@
       <!-- endregion -->
 
       <div *ngIf="voucherType === 'proformas' && !isMobileView" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New Proforma
+        <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New Proforma
         </button>
       </div>
 
       <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
-        <button class="btn btn-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New Estimates
+        <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New Estimates
         </button>
       </div>
 
@@ -98,12 +98,12 @@
     <div class="row">
       <div class="col-xs-12" *ngIf="!isMobileView">
         <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-          <button class="btn btn-blue" (click)="goToInvoice('proformas')">+ New Proforma
+          <button class="btn btn-pink" (click)="goToInvoice('proformas')">+ New Proforma
           </button>
         </div>
 
         <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
-          <button class="btn btn-blue" (click)="goToInvoice('estimates')">+ New Estimates
+          <button class="btn btn-pink" (click)="goToInvoice('estimates')">+ New Estimates
           </button>
         </div>
       </div>
@@ -258,7 +258,7 @@
           <!--for not cancelled status-->
 
           <td data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
-            *ngIf="item.action === 'submitted' || item.action === 'accepted'">
+            *ngIf="item.action !== 'invoiced'">
             <div class="d-flex" style="align-items: center">
               <div class="flex-fill">
                 <span
@@ -341,7 +341,7 @@
           </td>
 
           <!--for cancelled/ declined status-->
-          <td *ngIf="item.action !== 'submitted' && item.action !== 'accepted'" data-title="Action">
+          <td *ngIf="item.action === 'invoiced'" data-title="Action">
             <span>{{ item.action}}</span>
           </td>
 

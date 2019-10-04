@@ -18,12 +18,15 @@ import { GeneralService } from '../services/general.service';
 
       .invoce-controll ::ng-deep.nav > li > a {
           padding: 2px 0px !important;
-          margin-right: 25px !important;
+          margin-right: 35px !important;
            padding-bottom: 7px !important;
+           font-size:14px;
+               color: #333 !important;
       }
 
       .invoce-controll ::ng-deep.nav-tabs > li.active > a {
           border-bottom: 4px solid #FECD51 !important;
+          color:#1A237E !important;
       }
 
       /
@@ -35,7 +38,7 @@ import { GeneralService } from '../services/general.service';
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 20px;
-          padding: 8px 0px 0 15px !important;
+          padding: 12px 0px 0 15px !important;
          background-color: #fff;
     z-index: 9;
     position: relative;
