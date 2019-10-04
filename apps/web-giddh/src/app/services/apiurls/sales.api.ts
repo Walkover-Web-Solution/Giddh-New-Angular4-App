@@ -7,5 +7,5 @@ export const SALES_API_V2 = {
 export const SALES_API_V4 = {
   GENERATE_SALES: `v4/${URL}invoices/generate-sales`,
   GENERATE_GENERIC_ITEMS: `v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate`,
-  UPDATE_VOUCHER: URL + 'vouchers'
+  UPDATE_VOUCHER: `v4/${URL}vouchers`
 };

@@ -139,7 +139,7 @@ export class AccountDetailsClass {
   public country?: CountryClass;
   public currency?: CurrencyClass;
   public customerName: string;
-
+  public mobileNumber?: string;
   constructor(attrs?: any) {
     //this.country = new CountryClass();
     this.currency = new CurrencyClass(attrs);
@@ -148,6 +148,7 @@ export class AccountDetailsClass {
     if (attrs) {
       Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email']));
       this.contactNumber = attrs.mobileNo || '';
+      //this.mobileNo = attrs.mobileNo || '';
       this.email = attrs.updatedBy.email || '';
       this.customerName = attrs.updatedBy.name || '';
       if (attrs.addresses.length > 0) {
@@ -398,10 +399,12 @@ export interface GenericRequestForGenerateSCD {
   entries?: SalesEntryClassMulticurrency[],
   date?: string,
   exchangeRate?: number,
-  type?: string
+  type?: string,
+  number?:string,
+  uniqueName?:string
 }
 
-class VoucherDetailsClass {
+export class VoucherDetailsClass {
   public voucherNumber?: string;
   public proformaNumber?: string;
   public estimateNumber?: string;
