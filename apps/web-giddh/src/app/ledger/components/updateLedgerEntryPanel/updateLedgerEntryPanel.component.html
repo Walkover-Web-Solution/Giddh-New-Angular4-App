@@ -91,7 +91,7 @@
             </thead>
 
             <tbody class="ledger-main">
-            <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
+            <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions; let i = index">
               <ng-container *ngIf="txn.type === 'DEBIT'">
 
                 <td class="col-xs-2" data-title="Date">
@@ -170,7 +170,7 @@
                 <td class="col-xs-2 text-right" data-title="Amount">
 
                   <input type="text"
-                         [(ngModel)]="txn.amount" class="form-control text-right"
+                         [(ngModel)]="txn.amount" class="form-control text-right" name="{{txn[i]}}.amount"
                          [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                          [suffix]="vm.selectedSuffixForCurrency"
                          (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -428,7 +428,7 @@
 
                             <td [ngClass]="{width40: vm.stockTrxEntry}" class="text-right">
                               <label>Quantity</label>
-                              <input type="number" name="" class="form-control text-right"
+                              <input type="text" name="" class="form-control text-right"
                                      [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
                                      [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
                                      (change)="vm.inventoryQuantityChanged($event.target.value)"

@@ -445,11 +445,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
-    let isMultiCurrencyAvailable: boolean = false;
-    // if (Number(txn.amount) === 0) {
-    //   txn.amount = undefined;
+    // let isMultiCurrencyAvailable: boolean = false;
+    // if (txn.selectedAccount && txn.selectedAccount.currency) {
+    //   this.activeAccount$.pipe(take(1)).subscribe((acc) => {
+    //     if (acc.currency !== txn.selectedAccount.currency) {
+    //       // this.isMultiCurrencyAvailable = true;
+    //       isMultiCurrencyAvailable = true;
+    //       this.baseCurrency = acc.currency;
+    //     }
+    //   });
     // }
-
+    if (Number(txn.amount) === 0) {
+      txn.amount = undefined;
+    }
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       let blankTrxnRow = this.vm.blankTransactionItem(type);
@@ -495,7 +503,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.totalTdElementWidth = event.newWidth + 10;
   }
 
-  public async selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
+  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
@@ -612,32 +620,34 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
       }
 
+      // commented for now after discussion with @shubhendra and @aditya soni
+
       // if multi-currency is not available then check if selected account allows multi-currency
-      if (!this.vm.isMultiCurrencyAvailable) {
-        this.vm.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.profileObj.baseCurrency;
+      // if (!this.vm.isMultiCurrencyAvailable) {
+      //   this.vm.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.profileObj.baseCurrency;
+      //
+      //   this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+      //
+      //   if (this.vm.isMultiCurrencyAvailable) {
+      //     let currencies: ICurrencyResponse[] = [];
+      //     let multiCurrencyAccCurrency: ICurrencyResponse;
+      //
+      //     this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
+      //     multiCurrencyAccCurrency = currencies.find(f => f.code === e.additional.currency);
+      //     this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+      //
+      //     let rate = await this.getCurrencyRate();
+      //     this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
+      //
+      //   } else {
+      //     this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
+      //   }
+      //   this.vm.selectedCurrency = 0;
+      //   this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
+      //   this.assignPrefixAndSuffixForCurrency();
+      // }
 
-        this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-
-        if (this.vm.isMultiCurrencyAvailable) {
-          let currencies: ICurrencyResponse[] = [];
-          let multiCurrencyAccCurrency: ICurrencyResponse;
-
-          this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
-          multiCurrencyAccCurrency = currencies.find(f => f.code === e.additional.currency);
-          this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
-
-          let rate = await this.getCurrencyRate();
-          this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
-
-        } else {
-          this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
-        }
-        this.vm.selectedCurrency = 0;
-        this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
-        this.assignPrefixAndSuffixForCurrency();
-      }
-
-      this.vm.inventoryAmountChanged(txn);
+      this.vm.onTxnAmountChange(txn);
     }
   }
 

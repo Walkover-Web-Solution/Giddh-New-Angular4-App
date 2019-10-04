@@ -429,7 +429,7 @@ export class UpdateLedgerVm {
       this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
 
       // update every transaction conversion rates for multi-currency
-      this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
+      this.selectedLedger.transactions.filter(f => f.particular.uniqueName !== this.stockTrxEntry.particular.uniqueName).map(trx => {
         trx.convertedAmount = this.calculateConversionRate(trx.amount);
         return trx;
       });
