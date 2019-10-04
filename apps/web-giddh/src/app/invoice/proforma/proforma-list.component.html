@@ -20,12 +20,12 @@
 
             <span class="icon-advance-serch" (click)="toggleAdvanceSearchPopup()"></span>
             <!-- -->
-            <a class="cp smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
-              (click)="resetAdvanceSearch()">
-              <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-                tooltip="Reset Filter"></i>
-            </a>
+
           </div>
+          <!-- <a class="cp pd smallLoading" *ngIf="showResetAdvanceSearchIcon" href="javascript: void 0"
+            (click)="resetAdvanceSearch()">
+            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"></i>
+          </a> -->
         </div>
 
 
@@ -33,7 +33,7 @@
     </form>
 
     <!-- need to add functionality -->
-    <div class="clear-filter">
+    <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
       <button class="btn btn-filter">
         <span class="icon-cross"></span> Clear Filter
       </button>

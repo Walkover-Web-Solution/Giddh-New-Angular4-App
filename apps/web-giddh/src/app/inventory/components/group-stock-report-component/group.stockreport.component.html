@@ -32,9 +32,18 @@
       <div class="d-flex" style="align-items: center">
         <h2 class="mr-2" style="font-size: 20px;font-weight: bold; text-transform:capitalize;" *ngIf="groupStockReport">
           <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
-        <button class="btn btn-link btn-link-2" (click)="onOpenAdvanceSearch()" style="padding-left:0px;">Advance
-          Search</button>
-        <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i>
+
+
+        <div class="advance-icon" tooltip="Advance Search">
+          <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
+        </div>
+
+        <!-- <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i> -->
+      </div>
+      <div class="clear-filter" *ngIf="isFilterCorrect">
+        <button class="btn btn-filter" (click)="resetFilter()">
+          <span class="icon-cross"></span> Clear Filter
+        </button>
       </div>
       <div class="clearfix">
 
@@ -112,18 +121,17 @@
             <div class="d-flex">
               <div class="flex-fill">Qty</div>
               <div class="icon-pointer">
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
 
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
@@ -137,18 +145,17 @@
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
@@ -161,18 +168,17 @@
               <div class="flex-fill">Qty</div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_QTY'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'INWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
@@ -186,18 +192,17 @@
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_VALUE'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'INWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
@@ -210,18 +215,17 @@
               <div class="flex-fill ">Qty </div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_QTY'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
@@ -235,18 +239,17 @@
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_VALUE'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
@@ -259,18 +262,17 @@
               <div class="flex-fill">Qty </div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_QTY'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_QTY'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'CLOSING_STOCK_QTY')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' && GroupStockReportRequest.sort === 'asc'}">
@@ -284,18 +286,17 @@
               <div class="flex-fill">Value</div>
               <div class="icon-pointer">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right "
-                  *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_VALUE'"
+                <div class="icon-sort-asc text-right " *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_VALUE'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right "
+                <div class="icon-sort-dsc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'CLOSING_STOCK_VALUE')"
                   [ngClass]="{'activeTextColor': GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' && GroupStockReportRequest.sort === 'asc'}">
