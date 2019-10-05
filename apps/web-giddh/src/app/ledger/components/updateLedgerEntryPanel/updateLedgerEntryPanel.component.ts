@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -108,7 +108,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
-              private _settingsTagActions: SettingsTagActions) {
+              private _settingsTagActions: SettingsTagActions, private _cdr: ChangeDetectorRef) {
     this.vm = new UpdateLedgerVm();
 
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
@@ -321,6 +321,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
           // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
+
+          // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
+          this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, 4);
+
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
           this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
@@ -410,14 +414,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           if (this.vm.stockTrxEntry) {
             this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
           }
+          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
+          //#endregion
+        }
 
+        setTimeout(() => {
           this.vm.getEntryTotal();
           this.vm.generatePanelAmount();
           this.vm.generateGrandTotal();
           this.vm.generateCompoundTotal();
-          this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
-          //#endregion
-        }
+        }, 500);
       });
 
 
@@ -720,6 +726,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 

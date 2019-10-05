@@ -13,7 +13,6 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import * as moment from 'moment';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -262,6 +261,11 @@ export class UpdateLedgerVm {
 
     this.generatePanelAmount();
 
+    if (this.stockTrxEntry) {
+      this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
+      this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
+    }
+
     if (this.discountComponent) {
       this.discountComponent.ledgerAmount = this.totalAmount;
       this.discountComponent.change();
@@ -373,15 +377,20 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.isUpdated = true;
     }
     this.stockTrxEntry.amount = Number(this.stockTrxEntry.inventory.rate * val);
-    this.stockTrxEntry.inventory.unit.rate = this.stockTrxEntry.amount;
+
     this.getEntryTotal();
     this.generatePanelAmount();
+
+    if (this.discountComponent) {
+      this.discountComponent.ledgerAmount = this.totalAmount;
+      this.discountComponent.change();
+    }
+
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
 
   public inventoryPriceChanged(val: any) {
-    val = Number(val);
     if (Number(val * this.stockTrxEntry.inventory.quantity) !== this.stockTrxEntry.amount) {
       this.stockTrxEntry.isUpdated = true;
     }
@@ -392,6 +401,12 @@ export class UpdateLedgerVm {
 
     this.getEntryTotal();
     this.generatePanelAmount();
+
+    if (this.discountComponent) {
+      this.discountComponent.ledgerAmount = this.totalAmount;
+      this.discountComponent.change();
+    }
+
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
@@ -453,24 +468,7 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
-  public inventoryTotalChanged(event) {
-    // if val is typeof string change event should be fired and if not then paste event should be fired
-    // if (event instanceof ClipboardEvent) {
-    //   let tempVal = event.clipboardData.getData('text/plain');
-    //   if (Number.isNaN(Number(tempVal))) {
-    //     event.stopImmediatePropagation();
-    //     event.preventDefault();
-    //     return;
-    //   }
-    //   this.grandTotal = Number(tempVal);
-    // } else {
-    //   // key press event
-    //   let e = event as any;
-    //
-    //   if (!(typeof this.grandTotal === 'string')) {
-    //     return;
-    //   }
-    // }
+  public inventoryTotalChanged() {
 
     let fixDiscount = 0;
     let percentageDiscount = 0;
@@ -588,6 +586,7 @@ export class UpdateLedgerVm {
     let requestObj: any = cloneDeep(this.selectedLedger);
     let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
+
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
     requestObj.generateInvoice = this.selectedLedger.generateInvoice;
