@@ -43,6 +43,9 @@ export class PendingListComponent implements OnInit, OnChanges {
   @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
   @Input() public dateFrom: string;
   @Input() public dateTo: string;
+  @Input() public isClearFilter: boolean = false;
+  public isClearFiltered: boolean = false;
+
 
   public actionPettyCashRequestBody: ExpenseActionRequest = new ExpenseActionRequest();
 
@@ -211,6 +214,10 @@ export class PendingListComponent implements OnInit, OnChanges {
       this.pettycashRequest.from = changes['dateFrom'].currentValue;
     } else if (changes['dateTo']) {
       this.pettycashRequest.to = changes['dateTo'].currentValue;
+    } else if (changes['isClearFilter']) {
+      if (changes['isClearFilter'].currentValue) {
+        this.clearFilter();
+      }
     }
     if (this.pettycashRequest.from && this.pettycashRequest.to) {
       this.getPettyCashPendingReports(this.pettycashRequest);
@@ -222,6 +229,12 @@ export class PendingListComponent implements OnInit, OnChanges {
     this.key = key;
     this.order = ord;
     this.getPettyCashPendingReports(this.pettycashRequest);
+  }
+  public clearFilter() {
+    this.pettycashRequest.sort = '';
+    this.pettycashRequest.sortBy = '';
+    this.pettycashRequest.page = 1;
+
   }
 
   public pageChanged(ev: any): void {

@@ -60,7 +60,8 @@
     </div>
 </div>
 <!-- <div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems>1" class="paginationWrapper">
-    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" [(ngModel)]="(pettyCashReportsResponse$ | async)?.page" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+        (pageChanged)="pageChanged($event)"></pagination>
 </div> -->
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">

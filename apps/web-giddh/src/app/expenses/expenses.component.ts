@@ -30,6 +30,7 @@ export class ExpensesComponent implements OnInit {
   public unaiversalFrom: string;
   public unaiversalTo: string;
   public modalRef: BsModalRef;
+  public isClearFilter: boolean = false;
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public datePickerOptions: any = {
@@ -158,6 +159,7 @@ export class ExpensesComponent implements OnInit {
   public clearFilter() {
     this.selectedDate.dateFrom = this.unaiversalFrom;
     this.selectedDate.dateTo = this.unaiversalTo;
+    this.isClearFilter = true;
 
     this.datePickerOptions = {
       ...this.datePickerOptions, startDate: this.unaiversalFrom,

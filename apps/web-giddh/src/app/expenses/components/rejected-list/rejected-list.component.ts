@@ -37,98 +37,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
   @Input() public dateFrom: string;
   @Input() public dateTo: string;
-  RejectedItem = [
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Stationery A/c', dotWarning: 'dot-warning', dotPrimary: '', dotSuccess: '', amount: 1400, payment: 'ICICI A/c',
-    //   card: '', cash: 'icon-cash', File: 'attach file', FileIcon: 'icon-file-path', ImgeIcon: '', ImgePath: '', multipleIcon: '', multiple: '', description: 'Dummy text sample test', Action: ''
-    // },
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Fuel A/c', dotWarning: '', dotPrimary: 'dot-primary', dotSuccess: '', amount: 1400, payment: 'Cash A/c',
-    //   card: '', cash: 'icon-cash', File: '', FileIcon: '', ImgeIcon: 'icon-image', ImgePath: 'sampleimage.jpg', multipleIcon: '', multiple: '', description: 'Dummy text sample test', Action: ''
-    // },
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Stationery A/c', dotWarning: 'dot-warning', dotPrimary: '', dotSuccess: '', amount: 1400, payment: 'SBI A/c',
-    //   card: 'icon-atm-card', cash: '', File: '', FileIcon: '', ImgeIcon: '', ImgePath: '', multipleIcon: 'icon-folder-group', multiple: 'Multiple', description: 'Dummy text sample test', Action: ''
-    // },
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Fuel A/c', dotWarning: '', dotPrimary: 'dot-primary', dotSuccess: '', amount: 1400, payment: 'Cash A/c',
-    //   card: '', cash: 'icon-cash', File: 'attach file', FileIcon: 'icon-file-path', ImgeIcon: '', ImgePath: '', multipleIcon: '', multiple: '', description: 'Dummy text sample test', Action: ''
-    // },
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Others', dotWarning: '', dotPrimary: 'dot-primary', dotSuccess: '', amount: 1400, payment: 'ICICI A/c',
-    //   card: 'icon-atm-card', cash: '', File: '', FileIcon: '', ImgeIcon: 'icon-image', ImgePath: 'sampleimage.jpg', multipleIcon: '', multiple: '', description: 'Dummy text sample test', Action: ''
-    // },
-    // {
-    //   date: '29-07-2019', SubmittedBy: 'Pratik Piplode', account: 'Money Request', dotWarning: '', dotPrimary: '', dotSuccess: 'dot-success', amount: 1400, payment: 'Cash A/c',
-    //   card: '', cash: 'icon-cash', File: '', FileIcon: '', ImgeIcon: '', ImgePath: '', multipleIcon: 'icon-folder-group', multiple: 'Multiple', description: 'Dummy text sample test', Action: ''
-    // },
-    {
-      entryDate: "02-09-2019",
-      uniqueName: "zkn1569595169090",
-      createdBy: {
-        name: "Arpit Ajmera",
-        uniqueName: "arpit@walkover.in"
-      },
-      currencySymbol: "₹",
-      amount: 200,
-      baseAccount: {
-        name: "Cash",
-        uniqueName: "cash"
-      },
-      particularAccount: {
-        name: "Purchases",
-        uniqueName: "purchases"
-      },
-      fileNames: null,
-      description: "Newi idfdf sdsd",
-      status: "pending",
-      statusMessage: null
-    },
-    {
-      entryDate: "02-09-2019",
-      uniqueName: "zkn1569595169090",
-      createdBy: {
-        name: "Arpit Ajmera",
-        uniqueName: "arpit@walkover.in"
-      },
-      currencySymbol: "₹",
-      amount: 200,
-      baseAccount: {
-        name: "Cash",
-        uniqueName: "cash"
-      },
-      particularAccount: {
-        name: "Purchases",
-        uniqueName: "purchases"
-      },
-      fileNames: null,
-      description: "Newi idfdf sdsd",
-      status: "pending",
-      statusMessage: null
-    },
-    {
-      entryDate: "02-09-2019",
-      uniqueName: "zkn1569595169090",
-      createdBy: {
-        name: "Arpit Ajmera",
-        uniqueName: "arpit@walkover.in"
-      },
-      currencySymbol: "₹",
-      amount: 200,
-      baseAccount: {
-        name: "Cash",
-        uniqueName: "cash"
-      },
-      particularAccount: {
-        name: "Purchases",
-        uniqueName: "purchases"
-      },
-      fileNames: null,
-      description: "Newi idfdf sdsd",
-      status: "pending",
-      statusMessage: null
-    }
-  ]
+  @Input() public isClearFilter: boolean = false;
 
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
@@ -185,6 +94,12 @@ export class RejectedListComponent implements OnInit, OnChanges {
       this.pettycashRequest.from = changes['dateFrom'].currentValue;
     } else if (changes['dateTo']) {
       this.pettycashRequest.to = changes['dateTo'].currentValue;
+    } else if (changes['isClearFilter']) {
+      if (changes['isClearFilter'].currentValue) {
+        this.pettycashRequest.sort = '';
+        this.pettycashRequest.sortBy = '';
+        this.pettycashRequest.page = 1;
+      }
     }
     if (this.pettycashRequest.from && this.pettycashRequest.to) {
       this.getPettyCashRejectedReports(this.pettycashRequest);
