@@ -221,7 +221,8 @@ export class MaskService extends MaskApplierService {
         this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
       );
     } else if (this.dropSpecialCharacters) {
-      this.onChange(this._checkSymbols(inputValue));
+      let result = this._checkSymbols(inputValue);
+      this.onChange(result);
     } else {
       this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
     }

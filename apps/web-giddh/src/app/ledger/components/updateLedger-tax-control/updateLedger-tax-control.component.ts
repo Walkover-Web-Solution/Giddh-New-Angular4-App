@@ -40,6 +40,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
   @Input() public allowedSelection: number = 0;
   @Input() public allowedSelectionOfAType: { type: string, count: number };
 
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
+
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
