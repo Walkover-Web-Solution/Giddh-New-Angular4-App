@@ -134,6 +134,23 @@ export class ReceiptService implements OnInit {
       catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
   }
 
+  public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
+    console.log('voucher details');
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+      model
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
+        data.queryString = accountUniqueName;
+        data.request = model;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
+  }
+
   /*
 * get detailed registered sales
 * */

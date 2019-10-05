@@ -55,7 +55,19 @@ export class InvoiceReceiptActions {
         }
         return this.GetVoucherDetailsResponse(response);
       }));
-
+  @Effect()
+  private GET_VOUCHER_DETAILSV4$: Observable<Action> = this.action$
+    .ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4).pipe(
+      switchMap((action: CustomActions) => this._receiptService.GetVoucherDetailsV4(action.payload.accountUniqueName,
+        action.payload.model)),
+      map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
+        if (response.status === 'success') {
+          // this.showToaster('');
+        } else {
+          this.showToaster(response.message, 'error');
+        }
+        return this.GetVoucherDetailsResponseV4(response);
+      }));
   @Effect()
   private DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
     .ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT).pipe(
@@ -156,7 +168,19 @@ export class InvoiceReceiptActions {
       payload: response
     };
   }
+  public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4,
+      payload: { accountUniqueName, model }
+    };
+  }
 
+  public GetVoucherDetailsResponseV4(response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>): CustomActions {
+    return {
+      type: INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSEV4,
+      payload: response
+    };
+  }
   public ResetVoucherDetails(): CustomActions {
     return {
       type: INVOICE_RECEIPT_ACTIONS.RESET_VOUCHER_DETAILS
