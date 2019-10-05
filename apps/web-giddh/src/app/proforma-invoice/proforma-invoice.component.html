@@ -1,3 +1,9 @@
+<div *ngIf="showLoader">
+  <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+    <div class="giddh-spinner vertical-center-spinner"></div>
+  </div>
+</div>
+<div *ngIf="!showLoader">
 <!-- region page change menu -->
 <div class="form-group mrB mrT2 clearfix">
 
@@ -1875,7 +1881,8 @@
 
   </form>
 </div>
-<!-- endregion-->
+<!-- endregion -->
+</div>
 
 <!-- region models section -->
 <!-- open account aside -->
@@ -1883,28 +1890,44 @@
      asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-  (closeAsideEvent)="toggleAccountAsidePane($event)"
-  [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
-  [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
-  [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()"
-  (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
+                            (closeAsideEvent)="toggleAccountAsidePane($event)"
+                            [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
+                            [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
+                            [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()"
+                            (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
 <aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
-  (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+                            (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 <app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"
-  [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
-  (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+                           [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
+                           (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+<!-- region send email popup -->
+<div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;"
+     [config]="modalConfig">
 
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+
+      <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
+        <app-send-email-invoice-component [voucherType]="invoiceType" (successEvent)="sendEmail($event)"
+                                          (cancelEvent)="cancelEmailModal()"></app-send-email-invoice-component>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>
+<!-- endregion -->
 
 <!-- region bulk items -->
 <div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 2000;"
-  [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
+     [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
   <ng-container *ngIf="showBulkItemModal">
     <proforma-add-bulk-items-component [data]="salesAccounts$ | async" (saveItemsEvent)="addBulkStockItems($event)"
-      (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
+                                       (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
   </ng-container>
 
 </div>
@@ -1929,16 +1952,16 @@
 
 <ng-template let-entry #otherTaxesModal>
   <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes"
-    (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges()">
+                              [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes"
+                              (closeModal)="toggleOtherTaxesAsidePane(true, null)"
+                              (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges()">
   </app-aside-menu-other-taxes>
 </ng-template>
 
 <!-- create Group modal -->
 <section *ngIf="showCreateGroupModal">
   <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [keyboardShortcut]="'esc'"
-    (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">
+       (onShortcutPress)="closeCreateGroupModal()" [config]="modalConfig">
     <div class="modal-dialog modal-md">
       <div class="modal-content">
         <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
@@ -1957,41 +1980,20 @@
     </div>
   </div>
 </section>
-<!-- endregion -->
-
-<!-- region send email popup -->
-<div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;"
-  [config]="modalConfig">
-
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-
-      <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
-        <app-send-email-invoice-component [voucherType]="invoiceType" (successEvent)="sendEmail($event)"
-          (cancelEvent)="cancelEmailModal()"></app-send-email-invoice-component>
-      </ng-container>
-
-    </div>
-  </div>
-
-</div>
-<!-- endregion -->
-
 <!-- region print voucher popup -->
 <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;"
-  [config]="modalConfig">
+     [config]="modalConfig">
 
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && (invoiceNo && accountUniqueName)">
         <proforma-print-in-place-component [voucherType]="invoiceType"
-          [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
-          (cancelEvent)="cancelPrintModal()"></proforma-print-in-place-component>
+                                           [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
+                                           (cancelEvent)="cancelPrintModal()"></proforma-print-in-place-component>
       </ng-container>
 
     </div>
   </div>
 
 </div>
-<!-- endregion -->

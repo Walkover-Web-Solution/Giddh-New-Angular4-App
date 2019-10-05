@@ -5810,6 +5810,7 @@ typeahead-container .dropdown-menu li.active>a>a {
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
+    position: relative;
 }
 
 .ledgHead.entry-popup table td.pdR25imp {
@@ -7804,6 +7805,12 @@ ul.dropdown-menu  p.lead.pd {
 .dropdown-menu > li > a:hover {
     color: $border-blue !important;
     background: #EEEFF9 !important;
+}
+
+.debit-blank-row td .form-control, .credit-blank-row td .form-control{
+  border: 0;
+  position: relative;
+  top: 1px;
 }
 
 .pagination-sm>li:first-child>a, .pagination-sm>li:first-child>span {

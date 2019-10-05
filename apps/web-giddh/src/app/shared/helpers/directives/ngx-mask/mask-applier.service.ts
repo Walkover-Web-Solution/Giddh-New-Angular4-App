@@ -170,7 +170,7 @@ export class MaskApplierService {
       }
 
       const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
-      const shiftStep: number = result.length - inputValue.length;
+      let shiftStep: number = result.length - inputValue.length;
 
       // position shifting issue fixed for custom separators
       if (!(maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
@@ -196,6 +196,22 @@ export class MaskApplierService {
         } else {
           this._shift.clear();
         }
+      } else {
+        let shiftCustomOperator: string;
+        switch (maskExpression) {
+          case Separators.IND_COMMA_SEPARATED:
+          case Separators.INT_COMMA_SEPARATED:
+            shiftCustomOperator = ',';
+            break;
+          case Separators.INT_APOSTROPHE_SEPARATED:
+            shiftCustomOperator = '\'';
+            break;
+          case Separators.INT_SPACE_SEPARATED:
+            shiftCustomOperator = ' ';
+            break;
+        }
+        let shiftCustomOperatorCalculation = result.indexOf(shiftCustomOperator) - inputValue.indexOf(shiftCustomOperator);
+        this._shift.add(position + shiftCustomOperatorCalculation);
       }
 
     } else {

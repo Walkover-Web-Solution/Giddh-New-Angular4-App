@@ -115,13 +115,15 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
 
     case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
       let vouchers = { ...state.vouchers };
-      let result = action.payload as BaseResponse<VoucherClass, GenericRequestForGenerateSCD>;
+      let result = action.payload;
       return {
         ...state,
         vouchers: {
           ...vouchers,
           items: vouchers.items.map(m => {
-            if (m.voucherNumber === result.body.voucherDetails.voucherNumber) {
+            if(m.voucherNumber === result.body.number){
+              m.grandTotal = result.body.grandTotal.amountForAccount;
+            }else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
               m.grandTotal = result.body.voucherDetails.grandTotal;
             }
             return m;

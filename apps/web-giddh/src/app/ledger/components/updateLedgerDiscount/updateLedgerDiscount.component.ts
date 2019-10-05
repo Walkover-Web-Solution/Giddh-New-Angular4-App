@@ -24,6 +24,9 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input() public discountMenu: boolean;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
 
   public discountTotal: number;
   public discountAccountsList$: Observable<IDiscountList[]>;
@@ -119,7 +122,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = Number(this.generateTotal());
+    this.discountTotal = Number(this.generateTotal() || 0);
     this.discountTotalUpdated.emit(this.discountTotal);
     // this.appliedDiscount = this.generateAppliedDiscounts();
     // this.appliedDiscountEvent.emit(this.appliedDiscount);
@@ -142,7 +145,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
         return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
       }, 0) || 0;
 
-    let perFromAmount = Math.round(((percentageListTotal * this.ledgerAmount) / 100) * 100) / 100;
+    let perFromAmount = Math.round(((percentageListTotal * (this.ledgerAmount || 0)) / 100) * 100) / 100;
     return perFromAmount + Math.round(fixedListTotal * 100) / 100;
 
     // return this.discountAccountsDetails.map(ds => {
