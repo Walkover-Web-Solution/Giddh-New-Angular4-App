@@ -471,6 +471,7 @@ export class VoucherClass {
   public depositEntryToBeUpdated?: SalesEntryClass;
   public depositAccountUniqueName: string;
   public templateUniqueName?: string;
+  public number?: string;
 
   constructor() {
     this.accountDetails = new AccountDetailsClass();
