@@ -432,7 +432,7 @@
                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                   {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                 </span><br>
-                <span  *ngIf="isLedgerAccountAllowsMultiCurrency">
+                <span class="amnt-total"  *ngIf="isLedgerAccountAllowsMultiCurrency">
                   {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                 </span>
               <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
@@ -686,7 +686,7 @@
                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                   {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{ ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                 </span><br>
-                <span  *ngIf="isLedgerAccountAllowsMultiCurrency">
+                <span class="amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                   {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
                 </span>
               <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
