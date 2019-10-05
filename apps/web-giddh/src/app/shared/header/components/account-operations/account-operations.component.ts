@@ -850,7 +850,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
       if (res) {
-        this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
+        this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
       }
     }, (err: any) => {
       console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
