@@ -381,17 +381,7 @@ export class UpdateLedgerVm {
   }
 
   public inventoryPriceChanged(val: any) {
-    // if val is typeof string change event should be fired and if not then paste event should be fired
-    // if (typeof val !== 'string') {
-    //   let tempVal = val.clipboardData.getData('text/plain');
-    //   if (Number.isNaN(Number(tempVal))) {
-    //     val.stopImmediatePropagation();
-    //     val.preventDefault();
-    //     return;
-    //   }
-    //   val = tempVal;
-    // }
-
+    val = Number(val);
     if (Number(val * this.stockTrxEntry.inventory.quantity) !== this.stockTrxEntry.amount) {
       this.stockTrxEntry.isUpdated = true;
     }
@@ -407,16 +397,6 @@ export class UpdateLedgerVm {
   }
 
   public inventoryAmountChanged(event = null) {
-    // if val is typeof string change event should be fired and if not then paste event should be fired
-    // if (event) {
-    //   let tempVal = event.clipboardData.getData('text/plain');
-    //   if (Number.isNaN(Number(tempVal))) {
-    //     event.stopImmediatePropagation();
-    //     return;
-    //   }
-    //   this.totalAmount = Number(tempVal);
-    // }
-
     this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
     if (this.stockTrxEntry) {
       if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), 2)) {

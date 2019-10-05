@@ -338,7 +338,7 @@
                          [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                          [suffix]="vm.selectedSuffixForCurrency"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
-                         (change)="onTxnAmountChange(txn)">
+                         (ngModelChange)="onTxnAmountChange(txn)">
 
 
                   <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
@@ -439,7 +439,7 @@
                               <label>Unit</label>
                               <select class="form-control text-right no-padding"
                                       [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                      (change)="vm.unitChanged($event.target.value)">
+                                      (ngModelChange)="vm.unitChanged($event)">
                                 <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
                                   {{item.stockUnitCode}}
                                 </option>
@@ -463,7 +463,7 @@
 
                         <label>Price</label>
                         <input type="text" name=""
-                               (change)="vm.inventoryPriceChanged($event.target.value)"
+                               (ngModelChange)="vm.inventoryPriceChanged($event)"
                                [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                [suffix]="vm.selectedSuffixForCurrency"
                                [(ngModel)]="vm.stockTrxEntry.inventory.rate"
