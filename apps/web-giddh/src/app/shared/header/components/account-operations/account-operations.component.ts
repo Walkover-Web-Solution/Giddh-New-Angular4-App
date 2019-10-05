@@ -7,7 +7,7 @@ import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permis
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import { TaxResponse } from '../../../../models/api-models/Company';
+import {CompanyResponse, TaxResponse} from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -34,6 +34,8 @@ import { ApplyDiscountRequest } from '../../../../models/api-models/ApplyDiscoun
 import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {DbService} from "../../../../services/db.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'account-operations',
@@ -142,6 +144,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isDebtorCreditor: boolean = false;
   public accountDetails: any = '';
   @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
+  public selectedCompany: Observable<CompanyResponse>;
+  public activeCompany:any;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -154,7 +158,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
               private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
-              private _settingsDiscountAction: SettingsDiscountActions) {
+              private _settingsDiscountAction: SettingsDiscountActions,
+              private _dbService: DbService, private router: Router) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).pipe(takeUntil(this.destroyed$));
@@ -236,6 +241,32 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+    this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+      if (!selectedCmp) {
+        return;
+      }
+
+      if (selectedCmp) {
+        this.activeCompany = selectedCmp.uniqueName;
+      }
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$));
+    this.selectedCompany.subscribe((res: any) => {
+      if (res) {
+        this.activeCompany = res;
+      }
+    });
   }
 
   public ngOnInit() {
@@ -812,7 +843,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
 
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+    this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
+      if (res) {
+        this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
+      }
+    }, (err: any) => {
+      console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+    });
     this.hideDeleteAccountModal();
+    this.router.navigateByUrl('home');
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
