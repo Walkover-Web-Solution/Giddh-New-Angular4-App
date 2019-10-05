@@ -762,24 +762,22 @@
                 </label>
               </div>
 
-              <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
-                <div class="">
-                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
-                  <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
-                </div>
-              </div>
+
 
               <div class="pull-right">
 
-                <span class="primary_clr" *ngIf="!vm.isMultiCurrencyAvailable">
-                  Compound Total: {{vm.compoundTotal | giddhCurrency}}
-                </span>
 
-                <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
-                  Total in {{  vm.foreignCurrencyDetails?.code }}:
-                  {{ vm.foreignCurrencyDetails?.symbol }}
-                  {{ vm.convertedCompoundTotal | giddhCurrency }}
-                </span>
+                <div class="clearfix">
+                    <span class="primary_clr" *ngIf="!vm.isMultiCurrencyAvailable">
+                        Compound Total: {{vm.compoundTotal | giddhCurrency}}
+                      </span>
+
+                      <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
+                        Total in {{  vm.foreignCurrencyDetails?.code }}:
+                        {{ vm.foreignCurrencyDetails?.symbol }}
+                        {{ vm.convertedCompoundTotal | giddhCurrency }}
+                      </span>
+                </div>
 
               </div>
 
@@ -811,6 +809,14 @@
               </div>
 
               <div class="pull-right pr-15">
+
+
+              <div class="file_attached text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
+                <div class="">
+                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
+                  <label class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">(remove)</label>
+                </div>
+              </div>
 
                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                   <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
