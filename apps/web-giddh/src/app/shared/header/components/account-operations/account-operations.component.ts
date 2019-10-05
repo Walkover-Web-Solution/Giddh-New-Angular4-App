@@ -849,7 +849,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
     this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
-      if (res) {}
+      if (res) {
+        this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
+      }
     }, (err: any) => {
       console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
     });
