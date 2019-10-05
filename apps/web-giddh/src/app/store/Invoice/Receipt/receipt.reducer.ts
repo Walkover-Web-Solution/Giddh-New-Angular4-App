@@ -144,7 +144,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         voucher: action.payload.body ? action.payload.body : null
       };
     }
-
+    case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSEV4: {
+      return {
+        ...state,
+        voucherDetailsInProcess: false,
+        voucher: action.payload.body ? action.payload.body : null
+      };
+    }
     case INVOICE_RECEIPT_ACTIONS.RESET_VOUCHER_DETAILS: {
       return {
         ...state,
