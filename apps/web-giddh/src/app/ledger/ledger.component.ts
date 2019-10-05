@@ -21,7 +21,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
-import { base64ToBlob } from '../shared/helpers/helperFunctions';
+import { base64ToBlob, giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -549,8 +549,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         setTimeout(() => {
           this.loadPaginationComponent(lt);
-          this._cdRf.detectChanges();
-
+          if (!this._cdRf['destroyed']) {
+            this._cdRf.detectChanges();
+          }
         }, 400);
       }
     });
@@ -849,10 +850,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
       let rate = response.body;
       if (rate) {
-        this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate};
+        this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, 4)};
       }
     }, (error => {
-      this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 1};
+      this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1};
     }));
   }
 
@@ -935,6 +936,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       tdsTcsTaxesSum: 0,
       otherTaxType: 'tcs',
       exchangeRate: 1,
+      exchangeRateForDisplay: 1,
       valuesInAccountCurrency: false,
       selectedCurrencyToDisplay: this.selectedCurrency,
       baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
