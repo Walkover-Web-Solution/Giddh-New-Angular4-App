@@ -66,6 +66,8 @@ import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recip
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
 import { GeneralService } from '../services/general.service';
+import {LoaderState} from "../loader/loader";
+import {LoaderService} from "../loader/loader.service";
 
 const THEAD_ARR_READONLY = [
   {
@@ -265,6 +267,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public originalExchangeRate = 71.9034;
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
+  public showLoader: boolean = false;
+
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -287,7 +291,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _cdr: ChangeDetectorRef,
     private proformaActions: ProformaActions,
     private _ledgerService: LedgerService,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private loaderService: LoaderService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -327,6 +332,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     );
 
     this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+    this.loaderService.loaderState.pipe(takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+      if (stateLoader.show) {
+        this.showLoader = true;
+      } else {
+        this.showLoader = false;
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -1183,7 +1196,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
           this.voucherNumber = response.body.number;
           this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.uniqueName;
+          this.accountUniqueName = response.body.account.uniqueName;
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
