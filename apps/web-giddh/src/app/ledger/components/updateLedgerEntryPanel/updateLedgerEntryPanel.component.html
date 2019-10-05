@@ -803,7 +803,7 @@
 
                   <li>
                     <input type="text" class="price-input"
-                           [(ngModel)]="vm.selectedLedger.exchangeRate" (blur)="exchangeRateChanged()">
+                           [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay" (blur)="exchangeRateChanged()">
                     {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code }}
                   </li>
 

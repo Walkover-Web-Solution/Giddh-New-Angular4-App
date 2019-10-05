@@ -320,6 +320,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
+          this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
           // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
 
           // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
@@ -925,11 +926,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public async toggleCurrency() {
     this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
-    let rate = giddhRoundOff(1 / this.vm.selectedLedger.exchangeRate, 4);
-    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate};
+    let rate = 1 / this.vm.selectedLedger.exchangeRate;
+    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(1 / this.vm.selectedLedger.exchangeRateForDisplay, 4)};
   }
 
   public exchangeRateChanged() {
+    this.vm.selectedLedger.exchangeRate = this.vm.selectedLedger.exchangeRateForDisplay;
     this.vm.inventoryAmountChanged();
   }
 

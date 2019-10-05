@@ -1088,6 +1088,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     blankTransactionObj.valuesInAccountCurrency = this.selectedCurrency === 0;
+    blankTransactionObj.exchangeRate = (this.lc.blankLedger.selectedCurrencyToDisplay !== this.selectedCurrency) ? 1 / blankTransactionObj.exchangeRate : blankTransactionObj.exchangeRate;
 
     if (blankTransactionObj.transactions.length > 0) {
 

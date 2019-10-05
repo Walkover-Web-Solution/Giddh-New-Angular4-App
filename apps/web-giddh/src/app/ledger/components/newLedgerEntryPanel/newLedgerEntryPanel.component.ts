@@ -718,11 +718,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  public exchangeRateChanged() {
-    this.amountChanged();
-    this.calculateTotal();
-  }
-
   @HostListener('window:scroll')
   public onScrollEvent() {
     if (this.datepickers) {
@@ -794,8 +789,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public currencyChange() {
     this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
     this.blankLedger.exchangeRate = 1 / this.blankLedger.exchangeRate;
-    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(1 / this.blankLedger.exchangeRate, 4);
+    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(1 / this.blankLedger.exchangeRateForDisplay, 4);
     this.detactChanges();
+  }
+
+  public exchangeRateChanged() {
+    this.blankLedger.exchangeRate = this.blankLedger.exchangeRateForDisplay;
+    this.amountChanged();
+    this.calculateTotal();
   }
 
   public calculateConversionRate(baseModel) {
