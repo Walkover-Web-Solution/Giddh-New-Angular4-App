@@ -1,3 +1,9 @@
+<div *ngIf="showLoader">
+  <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+    <div class="giddh-spinner vertical-center-spinner"></div>
+  </div>
+</div>
+<div *ngIf="!showLoader">
 <!-- region page change menu -->
 <div class="form-group mrB mrT2 clearfix">
 
@@ -1958,17 +1964,17 @@
   </div>
 </section>
 <!-- endregion -->
-
+</div>
 <!-- region send email popup -->
 <div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;"
-  [config]="modalConfig">
+     [config]="modalConfig">
 
   <div class="modal-dialog modal-md">
     <div class="modal-content">
 
       <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
         <app-send-email-invoice-component [voucherType]="invoiceType" (successEvent)="sendEmail($event)"
-          (cancelEvent)="cancelEmailModal()"></app-send-email-invoice-component>
+                                          (cancelEvent)="cancelEmailModal()"></app-send-email-invoice-component>
       </ng-container>
 
     </div>
@@ -1979,19 +1985,18 @@
 
 <!-- region print voucher popup -->
 <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;"
-  [config]="modalConfig">
+     [config]="modalConfig">
 
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && (invoiceNo && accountUniqueName)">
         <proforma-print-in-place-component [voucherType]="invoiceType"
-          [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
-          (cancelEvent)="cancelPrintModal()"></proforma-print-in-place-component>
+                                           [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
+                                           (cancelEvent)="cancelPrintModal()"></proforma-print-in-place-component>
       </ng-container>
 
     </div>
   </div>
 
 </div>
-<!-- endregion -->
