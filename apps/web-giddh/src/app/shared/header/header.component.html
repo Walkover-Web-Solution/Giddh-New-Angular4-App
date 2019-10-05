@@ -243,7 +243,7 @@ Create Company
               container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
-            <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
+            <a *ngIf="acc && acc.uniqueName" [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
               (click)="analyzeAccounts($event, acc)"
               [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName">
               <span class="icon-dashboard"></span>
