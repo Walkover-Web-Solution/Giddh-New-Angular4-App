@@ -779,11 +779,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalTaxes += tax.taxDetail[0].taxValue;
       }
       this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      this.blankLedger.otherTaxModal = modal;
+      this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
+      this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
+    } else {
+      this.blankLedger.otherTaxesSum = 0;
+      this.blankLedger.isOtherTaxesApplicable = false;
+      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
-
-    this.blankLedger.otherTaxModal = modal;
-    this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-    this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
   }
 
   public currencyChange() {
