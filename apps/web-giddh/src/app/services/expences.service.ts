@@ -22,12 +22,15 @@ export class ExpenseService {
     private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
-  public getPettycashReports(model: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
+  public getPettycashReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + EXPENSE_API.GET.replace(':companyUniqueName', this.companyUniqueName), model).pipe(
+    let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
+      page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
+    });
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
       map((res) => {
         let data: BaseResponse<PettyCashReportResponse, any> = res;
-        data.request = model;
+        data.request = request;
         return data;
       }),
       catchError((e) => this.errorHandler.HandleCatch<PettyCashReportResponse, any>(e)));
@@ -41,6 +44,30 @@ export class ExpenseService {
         return data;
       }),
       catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
+
+  private createQueryString(str, model) {
+    let url = str + '?';
+    if ((model.page)) {
+      url = url + 'page=' + model.page + '&';
+    }
+    if ((model.count)) {
+      url = url + 'count=' + model.count;
+    }
+
+    if ((model.type)) {
+      url = url + '&type=' + model.type;
+    }
+    if ((model.sort)) {
+      url = url + '&sort=' + model.sort;
+    }
+    if ((model.sortBy)) {
+      url = url + '&sortBy=' + model.sortBy;
+    }
+    // if ((model.q)) {
+    //   url = url + '&q=' + model.q;
+    // }
+    return url;
   }
 
 

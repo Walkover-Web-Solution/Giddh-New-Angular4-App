@@ -7,10 +7,10 @@ import { ExpensesComponent } from './expenses.component';
   imports: [
     RouterModule.forChild([
       {
-        path: 'expenses-manager', component: ExpensesComponent
+        path: '', redirectTo: 'expenses-manager'
       },
       {
-        path: '', component: ExpensesComponent
+        path: 'expenses-manager', component: ExpensesComponent
       }
     ])
   ],

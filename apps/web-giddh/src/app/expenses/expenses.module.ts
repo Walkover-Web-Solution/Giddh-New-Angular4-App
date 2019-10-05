@@ -10,14 +10,14 @@ import { PendingListComponent } from './components/pending-list/pending-list.com
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
 import { FilterListComponent } from './components/filter-list/filter-list.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
-import { RejectionReason } from './components/rejection-reason/rejection-reason.component';
 import { LedgerModule } from '../ledger/ledger.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { PaginationModule } from 'ngx-bootstrap';
 
 
 @NgModule({
-  declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, RejectionReason],
+  declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent],
   providers: [],
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -29,7 +29,8 @@ import { NgxUploaderModule } from 'ngx-uploader';
     TabsModule.forRoot(),
     LedgerModule,
     CurrencyModule,
-    NgxUploaderModule
+    NgxUploaderModule,
+    PaginationModule
   ],
   exports: [
     ExpensesComponent,

@@ -26,6 +26,7 @@ export class PendingListComponent implements OnInit, OnChanges {
   public expensesItems: ExpenseResults[] = [];
   public expensesItems$: Observable<ExpenseResults[]>;
   public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
+  public pettyCashPendingReportResponse: PettyCashReportResponse = null;
   public getPettycashReportInprocess$: Observable<boolean>;
   public getPettycashReportSuccess$: Observable<boolean>;
   public universalDate$: Observable<any>;
@@ -33,7 +34,7 @@ export class PendingListComponent implements OnInit, OnChanges {
   public todaySelected$: Observable<boolean> = observableOf(false);
   public from: string;
   public to: string;
-  public key: string = 'name';
+  public key: string = 'entry_date';
   public order: string = 'asc';
 
   public isRowExpand: boolean = false;
@@ -165,6 +166,9 @@ export class PendingListComponent implements OnInit, OnChanges {
         if (this.from && this.to) {
           this.pettycashRequest.from = this.from;
           this.pettycashRequest.to = this.to;
+          this.pettycashRequest.sort = '';
+          this.pettycashRequest.sortBy = '';
+
           this.pettycashRequest.status = 'pending';
           this.getPettyCashPendingReports(this.pettycashRequest);
         }
@@ -176,6 +180,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
+        this.pettyCashPendingReportResponse = res;
         this.expensesItems = res.results;
       }
     });
@@ -216,5 +221,14 @@ export class PendingListComponent implements OnInit, OnChanges {
     this.pettycashRequest.sort = ord;
     this.key = key;
     this.order = ord;
+    this.getPettyCashPendingReports(this.pettycashRequest);
+  }
+
+  public pageChanged(ev: any): void {
+    if (ev.page === this.pettycashRequest.page) {
+      return;
+    }
+    this.pettycashRequest.page = ev.page;
+    this.getPettyCashPendingReports(this.pettycashRequest);
   }
 }

@@ -24,6 +24,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
 
   public RejectedItems: ExpenseResults[] = [];
+  public totalRejectedResponse: PettyCashReportResponse;
   public expensesItems$: Observable<ExpenseResults[]>;
   public pettycashRejectedReportResponse$: Observable<PettyCashReportResponse>;
   public getPettycashReportInprocess$: Observable<boolean>;
@@ -31,6 +32,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
   public todaySelected$: Observable<boolean> = observableOf(false);
+  public key: string = 'entry_date';
+  public order: string = 'asc';
   public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
   @Input() public dateFrom: string;
   @Input() public dateTo: string;
@@ -152,6 +155,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
         if (from && to) {
           this.pettycashRequest.from = from;
           this.pettycashRequest.to = to;
+          this.pettycashRequest.page = 1;
           this.pettycashRequest.status = 'rejected';
           if (from && to) {
             this.getPettyCashRejectedReports(this.pettycashRequest);
@@ -171,18 +175,19 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
     this.expenseService.getPettycashReports(SalesDetailedfilter).subscribe(res => {
       if (res.status === 'success') {
+        this.totalRejectedResponse = res.body;
         this.RejectedItems = res.body.results;
       }
     });
   }
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dateFrom'] && changes['dateTo']) {
+    if (changes['dateFrom']) {
       this.pettycashRequest.from = changes['dateFrom'].currentValue;
+    } else if (changes['dateTo']) {
       this.pettycashRequest.to = changes['dateTo'].currentValue;
-      if (this.pettycashRequest.from && this.pettycashRequest.to) {
-        this.pettycashRequest.status = 'rejected';
-        this.getPettyCashRejectedReports(this.pettycashRequest);
-      }
+    }
+    if (this.pettycashRequest.from && this.pettycashRequest.to) {
+      this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
   public revertActionClicked(item: ExpenseResults) {
@@ -192,10 +197,15 @@ export class RejectedListComponent implements OnInit, OnChanges {
       if (res.status === 'success') {
         this._toasty.successToast(res.body);
         this.getPettyCashRejectedReports(this.pettycashRequest);
+        this.getPettyCashPendingReports(this.pettycashRequest);
       } else {
         this._toasty.successToast(res.message);
       }
     });
+  }
+  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'pending';
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
   }
   public deleteActionClicked(item: ExpenseResults) {
     this.actionPettycashRequest.actionType = 'delete';
@@ -208,5 +218,12 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this._toasty.successToast(res.message);
       }
     });
+  }
+  public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
+    this.pettycashRequest.sortBy = key;
+    this.pettycashRequest.sort = ord;
+    this.key = key;
+    this.order = ord;
+    this.getPettyCashRejectedReports(this.pettycashRequest);
   }
 }

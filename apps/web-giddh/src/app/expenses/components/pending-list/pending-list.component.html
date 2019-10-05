@@ -1,4 +1,4 @@
-<div class="container-fluid" *ngIf="!isRowExpand">
+<div class="container-fluid" *ngIf="!(getPettycashReportInprocess$ | async) && !isRowExpand ">
     <div class="table-responsive">
         <table class="table basic table-bordered mt-2 onMobileView">
             <thead>
@@ -16,7 +16,7 @@
                         <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
                     </th>
                     <th class="text-right pr-2">Amount
-                        <ng-container class="d-inline-block" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                        <ng-container class="d-inline-block " *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                     </th>
                     <th>Payment/Receipt
                         <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
@@ -53,33 +53,34 @@
                         </td>
                     </ng-container>
                 </tr>
-                <ng-container *ngIf="!(expensesItems.length) && (getPettycashReportSuccess$ | async)">
-                    <tr>
-                        <td colspan=" 9 " class="text-center empty_table ">
-                            <h1>No Record Found !!</h1>
-                        </td>
-                    </tr>
-                </ng-container>
 
-            </tbody>
-            <tbody *ngIf="(getPettycashReportInprocess$ | async) ">
-                <tr>
-                    <td colspan="9 ">
-                        <!--loading-->
-                        <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
-                            <div class="giddh-spinner vertical-center-spinner "></div>
-                        </div>
-                    </td>
-                </tr>
             </tbody>
 
         </table>
     </div>
 </div>
+<!-- <div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems>1" class="paginationWrapper">
+    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+</div> -->
+
+<div *ngIf="(getPettycashReportInprocess$ | async) ">
+
+
+    <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+        <div class="giddh-spinner vertical-center-spinner "></div>
+    </div>
+
+</div>
+<div class="no-data" *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
+    <h1>No entries found within given criteria.</h1>
+    <h1>Do search with some other dates</h1>
+</div>
+
+<!--loading-->
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block pull-right">
+    <div class="icon-pointer d-inline-block pull-right ml-1">
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col" [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
 
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>

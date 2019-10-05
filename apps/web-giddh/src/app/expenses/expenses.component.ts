@@ -121,6 +121,7 @@ export class ExpensesComponent implements OnInit {
         if (this.unaiversalFrom && this.unaiversalTo) {
           this.pettycashRequest.from = this.unaiversalFrom;
           this.pettycashRequest.to = this.unaiversalTo;
+          this.pettycashRequest.page = 1;
           this.selectedDate.dateFrom = this.pettycashRequest.from;
           this.selectedDate.dateTo = this.pettycashRequest.to;
         }
