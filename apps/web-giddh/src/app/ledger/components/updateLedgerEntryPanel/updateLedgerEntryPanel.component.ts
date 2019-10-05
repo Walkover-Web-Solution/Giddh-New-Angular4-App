@@ -728,6 +728,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     let requestObj: LedgerResponse = this.vm.prepare4Submit();
     requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
+    requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
 
     let isThereAnyTaxEntry = requestObj.taxes.length > 0;
 
