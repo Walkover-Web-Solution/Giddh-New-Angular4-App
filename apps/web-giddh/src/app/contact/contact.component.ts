@@ -1,38 +1,52 @@
-import { CompanyService } from '../services/companyService.service';
-import { BulkEmailRequest } from '../models/api-models/Search';
-import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import {CompanyService} from '../services/companyService.service';
+import {BulkEmailRequest} from '../models/api-models/Search';
+import {Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { DashboardService } from '../services/dashboard.service';
-import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent } from 'ngx-bootstrap';
-import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store';
+import {ToasterService} from '../services/toaster.service';
+import {StateDetailsRequest} from '../models/api-models/Company';
+import {CompanyActions} from '../actions/company.actions';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IOption} from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import {DashboardService} from '../services/dashboard.service';
+import {ContactService} from '../services/contact.service';
+import {BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent} from 'ngx-bootstrap';
+import {CashfreeClass} from '../models/api-models/SettingsIntegraion';
+import {IFlattenAccountsResultItem} from '../models/interfaces/flattenAccountsResultItem.interface';
+import {SettingsIntegrationActions} from '../actions/settings/settings.integration.action';
 import * as _ from 'lodash';
-import { ContactAdvanceSearchCommonModal, ContactAdvanceSearchModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../models/api-models/Contact';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  ContactAdvanceSearchCommonModal,
+  ContactAdvanceSearchModal,
+  DueAmountReportQueryRequest,
+  DueAmountReportResponse
+} from '../models/api-models/Contact';
+import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import * as moment from 'moment/moment';
-import { saveAs } from 'file-saver';
-import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
-import { createSelector } from 'reselect';
+import {saveAs} from 'file-saver';
+import {GroupWithAccountsAction} from '../actions/groupwithaccounts.actions';
+import {createSelector} from 'reselect';
 
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
+import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 
 
 const CustomerType = [
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  {label: 'Customer', value: 'customer'},
+  {label: 'Vendor', value: 'vendor'}
 ];
 
 export interface PayNowRequest {
@@ -221,8 +235,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     private _companyActions: CompanyActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private _groupWithAccountsAction: GroupWithAccountsAction,
-    private _cdRef: ChangeDetectorRef,private _breakpointObserver: BreakpointObserver,
-    private _route: ActivatedRoute, private _router : Router) {
+    private _cdRef: ChangeDetectorRef, private _breakpointObserver: BreakpointObserver,
+    private _route: ActivatedRoute, private _router: Router) {
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.dueAmountReportRequest = new DueAmountReportQueryRequest();
     this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -306,10 +320,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         let accounts: IOption[] = [];
         let bankAccounts: IOption[] = [];
         _.forEach(data, (item) => {
-          accounts.push({ label: item.name, value: item.uniqueName });
+          accounts.push({label: item.name, value: item.uniqueName});
           let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
           if (findBankIndx !== -1) {
-            bankAccounts.push({ label: item.name, value: item.uniqueName });
+            bankAccounts.push({label: item.name, value: item.uniqueName});
           }
         });
         this.bankAccounts$ = observableOf(accounts);
@@ -448,7 +462,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   // public closeModel(account: any) {
   //     this.modalUniqueName = '';
   // }
-  public tabSelected(tabName: 'customer' | 'aging' | 'vendor') {
+  public tabSelected(tabName: 'customer' | 'aging' | 'vendor' | 'aging-report') {
     this.searchStr = '';
     this.selectedCheckedContacts = [];
     this.activeTab = tabName;
@@ -502,7 +516,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     this.toggleBodyClass();
   }
 
-  public togglePaymentPane(event?){
+  public togglePaymentPane(event?) {
     if (event) {
       event.preventDefault();
     }
@@ -985,11 +999,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays, {type: contentType});
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string,
-    sortBy: string = '', order: string = 'asc') {
+                      sortBy: string = '', order: string = 'asc') {
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
@@ -1063,8 +1077,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
   //Redirect to add payment module
-  private redirectAddPayment(account: any){
+  private redirectAddPayment(account: any) {
     this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
     this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
   }
