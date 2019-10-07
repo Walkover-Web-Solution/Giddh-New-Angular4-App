@@ -1,10 +1,14 @@
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { config, IConfig, withoutValidation } from './config';
 import { MaskService } from './mask.service';
 import { Separators } from './mask-applier.service';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../../store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Directive({
   selector: '[mask]',
@@ -22,7 +26,7 @@ import { Separators } from './mask-applier.service';
     MaskService,
   ],
 })
-export class MaskDirective implements ControlValueAccessor, OnChanges {
+export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
   @Input('mask') public maskExpression: string = '';
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
   @Input() public patterns: IConfig['patterns'] = {};
@@ -35,13 +39,18 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   @Input() public showTemplate: IConfig['showTemplate'] | null = null;
   @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
   @Input() public validation: IConfig['validation'] | null = null;
+
   private _maskValue!: string;
   private _inputValue!: string;
   private _position: number | null = null;
+
   // tslint:disable-next-line
   private _start!: number;
   private _end!: number;
   private _code!: string;
+  private giddhDecimalPlaces: number = 2;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   // tslint:disable-next-line
   public onChange = (_: any) => {
   };
@@ -53,7 +62,19 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
     @Inject(config) protected _config: IConfig,
+    private store: Store<AppState>
   ) {
+  }
+
+  public ngOnInit(): void {
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res && res.balanceDecimalPlaces) {
+        this.giddhDecimalPlaces = res.balanceDecimalPlaces;
+      } else {
+        this.giddhDecimalPlaces = 2;
+      }
+      this._maskService.giddhDecimalPlaces = this.giddhDecimalPlaces;
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -119,12 +140,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   }
 
   // tslint:disable-next-line: cyclomatic-complexity
-  public validate({ value }: FormControl): ValidationErrors | null {
+  public validate({value}: FormControl): ValidationErrors | null {
     if (!this._maskService.validation) {
       return null;
     }
     if (this._maskService.ipError) {
-      return { 'Mask error': true };
+      return {'Mask error': true};
     }
     if (
       this._maskValue.startsWith('dot_separator') ||
@@ -176,14 +197,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) ||
         (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?'))
       ) {
-        return { 'Mask error': true };
+        return {'Mask error': true};
       }
       if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
         const length: number = this._maskService.dropSpecialCharacters
           ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
           : this._maskValue.length - counterOfOpt;
         if (value.toString().length < length) {
-          return { 'Mask error': true };
+          return {'Mask error': true};
         }
       }
     }
@@ -393,5 +414,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       'value',
       this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
     ];
+  }
+
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

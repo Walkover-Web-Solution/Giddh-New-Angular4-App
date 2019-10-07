@@ -59,7 +59,9 @@ export class MaskService extends MaskApplierService {
             ? actualResult.length - inputValue.length === 1
               ? actualResult.splice(this.selStart - 1, 1)
               : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+            // tslint:disable-next-line:no-unused-expression
             : null
+        // tslint:disable-next-line:no-unused-expression
         : null
         : (actualResult = []);
       newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;

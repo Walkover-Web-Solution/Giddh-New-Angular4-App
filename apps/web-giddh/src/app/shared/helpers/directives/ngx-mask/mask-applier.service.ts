@@ -28,6 +28,7 @@ export class MaskApplierService {
   public ipError?: boolean;
   public showMaskTyped!: IConfig['showMaskTyped'];
   public validation: IConfig['validation'];
+  public giddhDecimalPlaces!: number;
 
   private _shift!: Set<number>;
 
@@ -107,7 +108,7 @@ export class MaskApplierService {
       ) {
         inputValue = this._checkInput(inputValue);
       }
-      const precision: number = this.getPrecision(maskExpression);
+      let precision: number = this.getPrecision(maskExpression);
       let strForSep: string;
       if (maskExpression.startsWith(Separators.SEPARATOR)) {
         if (
@@ -165,6 +166,7 @@ export class MaskApplierService {
         strForSep = inputValue.replace(/,/g, '');
         result = this.currencySeparator(strForSep, ',', '.', precision);
       } else if (maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/[ ,']/g, '');
         result = this.currencySeparator(strForSep, '\'', '.', precision);
       }
@@ -464,7 +466,7 @@ export class MaskApplierService {
 
       if (decimalMarker === '.') {
         precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
-      } else {
+      } else if (decimalMarker === ',') {
         precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
       }
 
@@ -473,6 +475,19 @@ export class MaskApplierService {
         inputValue = inputValue.substring(0, inputValue.length - 1);
       } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
         inputValue = inputValue.substring(0, inputValue.length - 1);
+      }
+    }
+    return inputValue;
+  };
+
+  private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
+    if (precision < Infinity) {
+      let precisionRegEx: RegExp;
+
+      const splitter = inputValue.split(decimalMarker);
+      if (splitter[1] && splitter[1].length > precision) {
+        splitter[1] = splitter[1].substr(0, precision);
+        inputValue = splitter.join('.');
       }
     }
     return inputValue;
