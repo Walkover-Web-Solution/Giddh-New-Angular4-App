@@ -718,11 +718,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  public exchangeRateChanged() {
-    this.amountChanged();
-    this.calculateTotal();
-  }
-
   @HostListener('window:scroll')
   public onScrollEvent() {
     if (this.datepickers) {
@@ -784,18 +779,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalTaxes += tax.taxDetail[0].taxValue;
       }
       this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      this.blankLedger.otherTaxModal = modal;
+      this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
+      this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
+    } else {
+      this.blankLedger.otherTaxesSum = 0;
+      this.blankLedger.isOtherTaxesApplicable = false;
+      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
-
-    this.blankLedger.otherTaxModal = modal;
-    this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-    this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
   }
 
   public currencyChange() {
     this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
     this.blankLedger.exchangeRate = 1 / this.blankLedger.exchangeRate;
-    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(1 / this.blankLedger.exchangeRate, 4);
+    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(1 / this.blankLedger.exchangeRateForDisplay, 4);
     this.detactChanges();
+  }
+
+  public exchangeRateChanged() {
+    this.blankLedger.exchangeRate = this.blankLedger.exchangeRateForDisplay;
+    this.amountChanged();
+    this.calculateTotal();
   }
 
   public calculateConversionRate(baseModel) {

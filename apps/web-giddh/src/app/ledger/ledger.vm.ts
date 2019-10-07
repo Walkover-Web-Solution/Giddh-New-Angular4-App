@@ -185,7 +185,7 @@ export class LedgerVM {
       // delete local id
       delete bl['id'];
 
-      if (requestObj.isOtherTaxesApplicable) {
+      if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
         bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
       }
     });
