@@ -789,7 +789,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public currencyChange() {
     this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
-    let rate = 1 / this.blankLedger.exchangeRate;
+    let rate = 0;
+    if (!this.blankLedger.exchangeRateForDisplay) {
+      rate = 0;
+    } else {
+      rate = 1 / this.blankLedger.exchangeRate;
+    }
     this.blankLedger.exchangeRate = rate;
     this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, this.giddhBalanceDecimalPlaces);
     this.detactChanges();
