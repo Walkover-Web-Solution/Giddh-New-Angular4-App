@@ -6373,8 +6373,9 @@ panel.sFthanks.fieldset {
 .auto_save {
     float: right;
     position: absolute;
-    top: 15px;
-    right: 20px;
+    top: 64px;
+    right: 15px;
+    z-index: 9;
 }
 
 .auto_save i {
@@ -7922,7 +7923,7 @@ ul.dropdown-menu  p.lead.pd {
 
 @media(max-width:1024px) {
     .auto_save {
-        top: 51px;
+        top: 96px;
     }
     #settingTab .tab-container .nav.nav-tabs {
         margin: 0;
@@ -7966,7 +7967,7 @@ ul.dropdown-menu  p.lead.pd {
 
 @media (max-width: 768px) {
     .auto_save {
-        top: 55px;
+        top: 124px;
     }
     .justify-content-sm-start {
         justify-content: left !important;

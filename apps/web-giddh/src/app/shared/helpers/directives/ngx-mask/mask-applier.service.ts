@@ -157,12 +157,15 @@ export class MaskApplierService {
         strForSep = inputValue.replace(/,/g, '');
         result = this.separator(strForSep, ',', '.', precision);
       } else if (maskExpression.startsWith(Separators.IND_COMMA_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/,/g, '');
         result = this.currencySeparator(strForSep, ',', '.', precision, true);
       } else if (maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/[ ,']/g, '');
         result = this.currencySeparator(strForSep, ' ', '.', precision);
       } else if (maskExpression.startsWith(Separators.INT_COMMA_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/,/g, '');
         result = this.currencySeparator(strForSep, ',', '.', precision);
       } else if (maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED)) {
