@@ -271,7 +271,7 @@
         </div>
 
         <!-- Bank Account -->
-        <div *ngIf="showBankDetail">
+        <div>
           <div formArrayName="accountBankDetails">
             <div class=""
               *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last"
