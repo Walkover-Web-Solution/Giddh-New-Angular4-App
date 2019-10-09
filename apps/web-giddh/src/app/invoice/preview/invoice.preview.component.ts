@@ -974,13 +974,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.getVoucher(this.isUniversalDateApplicable);
   }
 
-  public sendEmail(obj: { email: string, invoiceType: string[] }) {
-    this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
-      emailId: obj.email.split(','),
-      voucherNumber: [this.selectedInvoice.voucherNumber],
-      voucherType: this.selectedVoucher,
-      typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
-    }));
+  public sendEmail(obj: any) {
+    if (obj.email) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+        emailId: obj.email.split(','),
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        voucherType: this.selectedVoucher,
+        typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
+      }));
+    } else {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {
+        numbers: obj.numbers.split(',')
+      }, this.selectedVoucher))
+    }
   }
 
   public ngOnDestroy() {
