@@ -928,7 +928,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public async toggleCurrency() {
     this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
-    let rate = 1 / this.vm.selectedLedger.exchangeRate;
+    let rate = 0;
+    if (this.vm.selectedLedger.exchangeRateForDisplay) {
+      rate = 1 / this.vm.selectedLedger.exchangeRate;
+    }
     this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.vm.giddhBalanceDecimalPlaces)};
   }
 
