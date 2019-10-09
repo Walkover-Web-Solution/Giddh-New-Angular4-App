@@ -36,6 +36,7 @@ import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import {DbService} from "../../../../services/db.service";
 import {Router} from "@angular/router";
+import {forEach} from "../../../../lodash-optimized";
 
 @Component({
   selector: 'account-operations',
@@ -440,6 +441,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.accountsAction.RemoveAccountDiscountResponse$.subscribe(res => {
       this.discountShSelect.clear();
     });
+    this.accountsAction.mergeAccountResponse$.subscribe(res => {
+      if(this.selectedaccountForMerge.length>0) {
+        this.selectedaccountForMerge.forEach((element) => {
+          this.deleteFromLocalDB(element);
+        })
+      }
+      this.selectedaccountForMerge = '';
+    });
   }
 
   public ngAfterViewInit() {
@@ -790,7 +799,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         finalData.push(obj);
       });
       this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
-      this.selectedaccountForMerge = '';
       this.showDeleteMove = false;
     } else {
       this._toaster.errorToast('Please Select at least one account');
@@ -836,13 +844,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.deleteAccountModal.hide();
   }
 
-  public deleteAccount() {
-    let activeAccUniqueName = null;
-    this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-
-    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
-
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+  public deleteFromLocalDB(activeAccUniqueName?:string){
     this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
       if (res) {
         this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
@@ -850,6 +852,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }, (err: any) => {
       console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
     });
+  }
+  public deleteAccount() {
+    let activeAccUniqueName = null;
+    this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
+
+    let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
+    this.deleteFromLocalDB(activeAccUniqueName);
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
+
     this.hideDeleteAccountModal();
     this.router.navigateByUrl('home');
   }
