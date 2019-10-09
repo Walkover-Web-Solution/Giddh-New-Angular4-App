@@ -185,6 +185,30 @@ class AppDatabase extends Dexie {
     });
   }
 
+  public removeItem(key: any, entity: string, uniqueName:string): Promise<any> {
+    return this.companies.get(key).then((res: CompAidataModel) => {
+      if (!res) {
+        return;
+      }
+      let arr: IUlist[] = res.aidata[entity];
+      // for accounts and groups
+      arr = arr.filter((item: IUlist) => {
+        if (item.uniqueName !== uniqueName) {
+          return item;
+        }
+      });
+      // order by name
+      arr = orderBy(arr, ['time'], ['desc']);
+      res.aidata[entity] = this.getSlicedResult(entity, arr);
+      // do entry in db and return all data
+      return this.companies.put(res).then(() => {
+        return this.companies.get(key);
+      }).catch((err) => (err));
+    }).catch((err) => {
+      console.log('error while deleting item', err);
+    });
+  }
+
   private getSlicedResult(entity: string, arr: IUlist[]): any[] {
     let endCount: number = 0;
     if (entity === 'menus') {

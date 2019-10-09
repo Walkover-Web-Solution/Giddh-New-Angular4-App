@@ -344,6 +344,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.saveStateDetails();
           this.resetInvoiceForm(this.invoiceForm);
           this.makeCustomerList();
+          this.getAllLastInvoices();
         }
         this.invoiceType = parmas['invoiceType'];
         this.prepareInvoiceTypeFlags();
@@ -835,15 +836,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public pageChanged(val: string, label: string) {
-    this.invoiceType = val as VoucherTypeEnum;
-    this.prepareInvoiceTypeFlags();
-    this.makeCustomerList();
-    this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
-
-    this.getAllLastInvoices();
-    this.resetInvoiceForm(this.invoiceForm);
-
-    this.saveStateDetails();
+    this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
+    // this.invoiceType = val as VoucherTypeEnum;
+    // this.prepareInvoiceTypeFlags();
+    // this.makeCustomerList();
+    // this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
+    //
+    // this.getAllLastInvoices();
+    // this.resetInvoiceForm(this.invoiceForm);
+    //
+    // this.saveStateDetails();
   }
 
   public prepareInvoiceTypeFlags() {
