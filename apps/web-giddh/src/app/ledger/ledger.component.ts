@@ -183,6 +183,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public selectedPrefixForCurrency: string;
   public selectedSuffixForCurrency: string;
   public inputMaskFormat: string;
+  public giddhBalanceDecimalPlaces: number = 2;
 
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
@@ -594,6 +595,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let profile = cloneDeep(data[2]);
         this.lc.activeAccount = data[0];
         this.profileObj = profile;
+        this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
         this.entryUniqueNamesForBulkAction = [];
         this.needToShowLoader = true;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
@@ -850,7 +852,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
       let rate = response.body;
       if (rate) {
-        this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, 4)};
+        this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces)};
       }
     }, (error => {
       this.lc.blankLedger = {...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1};
