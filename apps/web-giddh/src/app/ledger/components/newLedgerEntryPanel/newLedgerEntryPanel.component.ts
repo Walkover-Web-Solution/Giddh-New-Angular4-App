@@ -71,9 +71,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public selectedPrefixForCurrency: string;
   @Input() public selectedSuffixForCurrency: string;
   @Input() public inputMaskFormat: string = '';
-  // public baseCurrencyToDisplay: ICurrencyResponse;
-  // public foreignCurrencyToDisplay: ICurrencyResponse;
-  // public selectedCurrencyToDisplay: 0 | 1 = 0;
+  @Input() public giddhBalanceDecimalPlaces: number = 2;
 
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -319,7 +317,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
       return cv.isChecked ? pv + cv.amount : pv;
     }, 0);
-    this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), 2);
+    this.currentTxn.tax = giddhRoundOff(((totalPercentage * (Number(this.currentTxn.amount) - this.currentTxn.discount)) / 100), this.giddhBalanceDecimalPlaces);
     this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
     this.calculateTotal();
   }
@@ -328,7 +326,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.amount) {
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.totalForTax = total;
-      this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), 2);
+      this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
       this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
     }
     this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
@@ -339,7 +337,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.quantity) {
-          this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+          this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
           this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
         }
       }
@@ -363,10 +361,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public changePrice(val: string) {
-    this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), 2);
+    this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
     this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
 
-    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
+    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
     this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
     // calculate discount on change of price
@@ -381,7 +379,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
-    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), 2);
+    this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
     this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
     // calculate discount on change of price
@@ -440,7 +438,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     // this.currentTxn.amount = giddhRoundOff((Number(this.currentTxn.total)+ fixDiscount - Number(this.currentTxn.tax)) * 100 / (100 - percentageDiscount),2)
 
     this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), 2);
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
     this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
     if (this.discountControl) {
@@ -455,7 +453,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
-        this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), 2);
+        this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
         this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
       }
     }
@@ -475,9 +473,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), (trxn) => Number(trxn.total))) || 0;
 
     if (debitTotal > creditTotal) {
-      this.blankLedger.compoundTotal = giddhRoundOff((debitTotal - creditTotal), 2);
+      this.blankLedger.compoundTotal = giddhRoundOff((debitTotal - creditTotal), this.giddhBalanceDecimalPlaces);
     } else {
-      this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), 2);
+      this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
     }
     this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
     if (this.currentTxn && this.currentTxn.selectedAccount) {
@@ -778,10 +776,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (tax) {
         totalTaxes += tax.taxDetail[0].taxValue;
       }
-      this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
       this.blankLedger.otherTaxModal = modal;
       this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-      this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
+      this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
     } else {
       this.blankLedger.otherTaxesSum = 0;
       this.blankLedger.isOtherTaxesApplicable = false;
@@ -793,7 +791,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
     let rate = 1 / this.blankLedger.exchangeRate;
     this.blankLedger.exchangeRate = rate;
-    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, 4);
+    this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, this.giddhBalanceDecimalPlaces);
     this.detactChanges();
   }
 
@@ -805,9 +803,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public calculateConversionRate(baseModel) {
     if (this.blankLedger.selectedCurrencyToDisplay === 0) {
-      return giddhRoundOff(baseModel * this.blankLedger.exchangeRate, 2);
+      return giddhRoundOff(baseModel * this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
     } else {
-      return giddhRoundOff(baseModel / this.blankLedger.exchangeRate, 2);
+      return giddhRoundOff(baseModel / this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
     }
   }
 }

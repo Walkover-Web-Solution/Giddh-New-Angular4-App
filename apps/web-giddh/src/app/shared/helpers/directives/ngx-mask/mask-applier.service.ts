@@ -485,9 +485,13 @@ export class MaskApplierService {
       let precisionRegEx: RegExp;
 
       const splitter = inputValue.split(decimalMarker);
-      if (splitter[1] && splitter[1].length > precision) {
-        splitter[1] = splitter[1].substr(0, precision);
-        inputValue = splitter.join('.');
+      if (precision === 0) {
+        inputValue = splitter[0];
+      } else {
+        if (splitter[1] && splitter[1].length > precision) {
+          splitter[1] = splitter[1].substr(0, precision);
+          inputValue = splitter.join('.');
+        }
       }
     }
     return inputValue;
