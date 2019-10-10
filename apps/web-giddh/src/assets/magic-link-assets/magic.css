@@ -415,6 +415,7 @@ h4 {
         margin: 0 auto;
         left: 0px;
         right: 0;
+        display: none;
     }
 }
 
