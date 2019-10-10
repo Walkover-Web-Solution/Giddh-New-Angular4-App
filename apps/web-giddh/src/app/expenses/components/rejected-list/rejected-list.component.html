@@ -31,6 +31,7 @@
                     <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
                     <td data-title="Account">
                         <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                        <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
                         <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i>{{expenses.particularAccount.name}}
                     </td>
                     <td data-title="Amount" class="text-right pr-2">{{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
@@ -41,9 +42,10 @@
                     </td>
                     <td data-title="File">
                         <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">
-                            <i class="icon-file-path middle"></i> {{expenses.fileNames}}</a>
+                            <i class="icon-file-path middle"></i> attach file</a>
+                        <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                     </td>
-                    <td data-title="Reason of Rejection">{{expenses.description}}</td>
+                    <td data-title="Reason of Rejection">{{expenses.statusMessage}}</td>
                     <td data-title="Action">
                         <a (click)="revertActionClicked(expenses)" class="btn-icon">
                             <i class="icon-Revert"></i>
