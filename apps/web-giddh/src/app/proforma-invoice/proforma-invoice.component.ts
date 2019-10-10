@@ -2210,7 +2210,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
       let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-
+      if(!modal.appliedOtherTax.name){
+        entry.otherTaxModal.appliedOtherTax.name = tax.name;
+      }
       if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
 
         if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
@@ -2548,12 +2550,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         if(tr.isStockTxn){
-          transactionClassMul.stock.name = tr.stockDetails.name;
-          transactionClassMul.stock.uniqueName = tr.stockDetails.uniqueName;
-          transactionClassMul.stock.quantity = tr.quantity;
-          transactionClassMul.stock.rate = tr.rate;
-          transactionClassMul.stock.stockUnitCode = tr.stockDetails.skuCode;
-          transactionClassMul.stock.sku = tr.stockDetails.skuCodeHeading;
+         let saalesAddBulkStockItems = new SalesAddBulkStockItems();
+          saalesAddBulkStockItems.name = tr.stockDetails.name;
+          saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
+          saalesAddBulkStockItems.quantity = tr.quantity;
+          saalesAddBulkStockItems.rate = tr.rate;
+          saalesAddBulkStockItems.stockUnitCode = tr.stockDetails.skuCode;
+          saalesAddBulkStockItems.sku = tr.stockDetails.skuCodeHeading;
+          transactionClassMul.stock = saalesAddBulkStockItems;
         }
         salesEntryClass.transactions.push(transactionClassMul);
       });
@@ -2587,7 +2591,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.sacNumber = entry.sacNumber;
         salesEntryClass.transactions.push(salesTransactionItemClass);
         entry.taxes.forEach(ta=>{
-          salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
+          if(ta.taxType==='tdspay'){
+           salesEntryClass.isOtherTaxApplicable = true;
+           let otherTaxModal = new SalesOtherTaxesModal();
+           otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
+           otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
+           salesEntryClass.otherTaxModal = otherTaxModal;
+          }else{
+           salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
+          }
         });
       });
 
@@ -2630,7 +2642,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherDetails.voucherDate = result.date;
     voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
     //need to check usage
-    voucherDetails.dueDate = result.dueDate;
+    voucherDetails.dueDate = moment(result.dueDate, 'DD-MM-YYYY').toDate();
     voucherDetails.balanceStatus = result.balanceStatus;
     voucherDetails.customerName = result.account.name;
     voucherDetails.customerUniquename = result.account.uniqueName;
