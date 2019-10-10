@@ -524,7 +524,7 @@
                       <label class="fs20">+</label>
                     </td>
 
-                    <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                    <td class="pos-rel dropdown-container pItem amount text-right" *ngIf="(vm.companyTaxesList$ | async)?.length">
 
                         <span auto-close="outsideClick">
                           <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
@@ -762,12 +762,7 @@
                 </label>
               </div>
 
-              <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
-                <div class="">
-                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
-                  <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
-                </div>
-              </div>
+
 
               <div class="pull-right">
 
@@ -811,6 +806,13 @@
               </div>
 
               <div class="pull-right pr-15">
+
+                  <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
+
+                      <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
+                      <label class="remove cp pl-1 text-danger" (click)="showDeleteAttachedFileModal()">(remove)</label>
+
+                  </div>
 
                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                   <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
