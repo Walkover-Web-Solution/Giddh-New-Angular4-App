@@ -137,7 +137,6 @@ export class PendingListComponent implements OnInit, OnChanges {
     this.pettycashRequest.sort = '';
     this.pettycashRequest.sortBy = '';
     this.pettycashRequest.page = 1;
-
   }
 
   public pageChanged(ev: any): void {
