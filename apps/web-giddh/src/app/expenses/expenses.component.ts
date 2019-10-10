@@ -94,8 +94,6 @@ export class ExpensesComponent implements OnInit, OnChanges {
 
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
-    private _route: Router,
-    private _toasty: ToasterService,
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private _cdRf: ChangeDetectorRef) {
@@ -154,6 +152,9 @@ export class ExpensesComponent implements OnInit, OnChanges {
     if (e) {
       this.getPettyCashPendingReports(this.pettycashRequest);
       this.getPettyCashRejectedReports(this.pettycashRequest);
+      setTimeout(() => {
+        this.detectChanges();
+      }, 600)
     }
   }
 
@@ -192,10 +193,11 @@ export class ExpensesComponent implements OnInit, OnChanges {
         this.unaiversalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
       }
     })
-    // this.selectedDate.dateFrom = this.unaiversalFrom;
-    // this.selectedDate.dateTo = this.unaiversalTo;
     this.pettycashRequest.from = this.unaiversalFrom;
     this.pettycashRequest.to = this.unaiversalTo;
+    this.pettycashRequest.sortBy = '';
+    this.pettycashRequest.sort = '';
+    this.pettycashRequest.page = 1;
     this.isClearFilter = true;
     this.isFilterSelected = false;
 
@@ -205,5 +207,10 @@ export class ExpensesComponent implements OnInit, OnChanges {
     };
     this.getPettyCashPendingReports(this.pettycashRequest);
     this.getPettyCashRejectedReports(this.pettycashRequest);
+  }
+  detectChanges() {
+    if (!this._cdRf['destroyed']) {
+      this._cdRf.detectChanges();
+    }
   }
 }

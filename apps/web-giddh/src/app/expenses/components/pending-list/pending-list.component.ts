@@ -9,9 +9,6 @@ import { ReplaySubject, Observable, combineLatest as observableCombineLatest, of
 import { ExpenseResults, PettyCashReportResponse, ActionPettycashRequest, ExpenseActionRequest } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
-import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 
 @Component({
@@ -42,9 +39,6 @@ export class PendingListComponent implements OnInit, OnChanges {
   @Output() public selectedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Output() public selectedRowToggle: EventEmitter<boolean> = new EventEmitter();
   @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
-
-  // @Input() public dateFrom: string;
-  // @Input() public dateTo: string;
   @Input() public isClearFilter: boolean = false;
   public isClearFiltered: boolean = false;
 
@@ -55,8 +49,6 @@ export class PendingListComponent implements OnInit, OnChanges {
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
     private expenseService: ExpenseService,
-    private _route: Router,
-    private route: ActivatedRoute,
     private _toasty: ToasterService,
     private _cdRf: ChangeDetectorRef) {
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -94,7 +86,9 @@ export class PendingListComponent implements OnInit, OnChanges {
       if (res) {
         this.pettyCashPendingReportResponse = res;
         this.expensesItems = res.results;
-        this.detectChanges();
+        setTimeout(() => {
+          this.detectChanges();
+        }, 500);
       }
     });
   }
@@ -121,11 +115,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     this.selectedRowToggle.emit(true);
   }
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dateFrom']) {
-      this.pettycashRequest.from = changes['dateFrom'].currentValue;
-    } else if (changes['dateTo']) {
-      this.pettycashRequest.to = changes['dateTo'].currentValue;
-    } else if (changes['isClearFilter']) {
+
+    if (changes['isClearFilter']) {
       if (changes['isClearFilter'].currentValue) {
         this.clearFilter();
       }

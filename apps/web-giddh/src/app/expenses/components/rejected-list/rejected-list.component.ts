@@ -79,10 +79,11 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public ngOnInit() {
     this.pettycashRejectedReportResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-        // this.pettyCashPendingReportResponse = res;
-        // this.expensesItems = res.results;
         this.totalRejectedResponse = res;
         this.RejectedItems = res.results;
+        setTimeout(() => {
+          this.detectChanges();
+        }, 400)
       }
     });
 
@@ -93,11 +94,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 
   }
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dateFrom']) {
-      this.pettycashRequest.from = changes['dateFrom'].currentValue;
-    } else if (changes['dateTo']) {
-      this.pettycashRequest.to = changes['dateTo'].currentValue;
-    } else if (changes['isClearFilter']) {
+    if (changes['isClearFilter']) {
       if (changes['isClearFilter'].currentValue) {
         this.pettycashRequest.sort = '';
         this.pettycashRequest.sortBy = '';
@@ -141,5 +138,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
     this.order = ord;
     this.getPettyCashRejectedReports(this.pettycashRequest);
     this.isFilteredSelected.emit(true);
+  }
+  detectChanges() {
+    if (!this._cdRf['destroyed']) {
+      this._cdRf.detectChanges();
+    }
   }
 }

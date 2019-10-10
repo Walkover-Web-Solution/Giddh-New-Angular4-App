@@ -87,8 +87,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this._toasty.successToast(res.body);
         this.closeDetailsMode();
         this.refreshPendingItem.emit(true);
-        // this.getPettyCashPendingReports();
-        // this.getPettyCashRejectedReports();
       } else {
         this._toasty.errorToast(res.body);
       }
