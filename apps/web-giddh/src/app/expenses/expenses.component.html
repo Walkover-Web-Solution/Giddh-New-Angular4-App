@@ -16,7 +16,7 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" *ngIf="isFilterSelected">
                     <div class="d-inline-block">
                         <a href="javascript:void(0)" (click)="clearFilter()" class="btn btn-default d-flex align-items-center ml-1"><i class=" icon-cross mr-1"></i> Clear Filter</a>
                     </div>
@@ -27,7 +27,7 @@
 
 
         <tab heading="Pending" id="tab1">
-            <app-pending-list *ngIf="!isSelectedRow" [dateFrom]="selectedDate.dateFrom" [isClearFilter]='isClearFilter' [dateTo]="selectedDate.dateTo" (selectedRowToggle)="selectedRowToggle($event);" (selectedRowInput)=selectedRowInput($event);></app-pending-list>
+            <app-pending-list *ngIf="!isSelectedRow" [isClearFilter]='isClearFilter' (isFilteredSelected)=isFilteredSelected($event); (selectedRowToggle)="selectedRowToggle($event);" (selectedRowInput)=selectedRowInput($event);></app-pending-list>
             <div class="main-edit-expense" *ngIf="isSelectedRow">
                 <div class="left-expense">
                     <app-filter-list [selectedRowItem]='selectedRowItem' (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
@@ -38,7 +38,7 @@
             </div>
         </tab>
         <tab heading="Rejected">
-            <app-rejected-list [dateFrom]="selectedDate.dateFrom" [isClearFilter]='isClearFilter' [dateTo]="selectedDate.dateTo"></app-rejected-list>
+            <app-rejected-list (isFilteredSelected)=isFilteredSelected($event); [isClearFilter]='isClearFilter'></app-rejected-list>
         </tab>
     </tabset>
 </div>

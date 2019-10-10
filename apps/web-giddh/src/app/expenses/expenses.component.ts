@@ -31,6 +31,9 @@ export class ExpensesComponent implements OnInit {
   public unaiversalTo: string;
   public modalRef: BsModalRef;
   public isClearFilter: boolean = false;
+  public isFilterSelected: boolean = false;
+
+
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public datePickerOptions: any = {
@@ -88,6 +91,7 @@ export class ExpensesComponent implements OnInit {
   }
 
 
+
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
     private _route: Router,
@@ -125,6 +129,8 @@ export class ExpensesComponent implements OnInit {
           this.pettycashRequest.page = 1;
           this.selectedDate.dateFrom = this.pettycashRequest.from;
           this.selectedDate.dateTo = this.pettycashRequest.to;
+          this.getPettyCashPendingReports(this.pettycashRequest);
+          this.getPettyCashRejectedReports(this.pettycashRequest);
         }
       }
     });
@@ -138,13 +144,21 @@ export class ExpensesComponent implements OnInit {
   public selectedDetailedRowInput(item: ExpenseResults) {
     this.selectedRowItem = item;
   }
+  public isFilteredSelected(isSelect: boolean) {
+    this.isFilterSelected = isSelect;
+  }
   public closeDetailedMode(e) {
     this.isSelectedRow = !e;
   }
 
-  // public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
-  //   this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
-  // }
+  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'pending';
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  }
+  public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'rejected';
+    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
+  }
   public openModal(filterModal: TemplateRef<any>) {
     this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
   }
@@ -154,17 +168,30 @@ export class ExpensesComponent implements OnInit {
       this.pettycashRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
       this.selectedDate.dateFrom = this.pettycashRequest.from;
       this.selectedDate.dateTo = this.pettycashRequest.to;
+      this.isFilterSelected = true;
+      this.getPettyCashPendingReports(this.pettycashRequest);
+      this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
   public clearFilter() {
-    this.selectedDate.dateFrom = this.unaiversalFrom;
-    this.selectedDate.dateTo = this.unaiversalTo;
+    this.universalDate$.subscribe(res => {
+      if (res) {
+        this.unaiversalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
+        this.unaiversalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
+      }
+    })
+    // this.selectedDate.dateFrom = this.unaiversalFrom;
+    // this.selectedDate.dateTo = this.unaiversalTo;
+    this.pettycashRequest.from = this.unaiversalFrom;
+    this.pettycashRequest.to = this.unaiversalTo;
     this.isClearFilter = true;
+    this.isFilterSelected = false;
 
     this.datePickerOptions = {
       ...this.datePickerOptions, startDate: this.unaiversalFrom,
       endDate: this.unaiversalTo
     };
-
+    this.getPettyCashPendingReports(this.pettycashRequest);
+    this.getPettyCashRejectedReports(this.pettycashRequest);
   }
 }

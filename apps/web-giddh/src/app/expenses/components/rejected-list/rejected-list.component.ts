@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnChanges, Input, SimpleChanges, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnChanges, Input, SimpleChanges, EventEmitter, Output, } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -27,17 +27,19 @@ export class RejectedListComponent implements OnInit, OnChanges {
   public totalRejectedResponse: PettyCashReportResponse;
   public expensesItems$: Observable<ExpenseResults[]>;
   public pettycashRejectedReportResponse$: Observable<PettyCashReportResponse>;
-  public getPettycashReportInprocess$: Observable<boolean>;
-  public getPettycashReportSuccess$: Observable<boolean>;
+  public getPettycashRejectedReportInprocess$: Observable<boolean>;
+  public getPettycashRejectedReportSuccess$: Observable<boolean>;
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
   public todaySelected$: Observable<boolean> = observableOf(false);
   public key: string = 'entry_date';
   public order: string = 'asc';
   public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
-  @Input() public dateFrom: string;
-  @Input() public dateTo: string;
+  // @Input() public dateFrom: string;
+  // @Input() public dateTo: string;
   @Input() public isClearFilter: boolean = false;
+  @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+
 
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
@@ -48,8 +50,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
     this.pettycashRejectedReportResponse$ = this.store.select(p => p.expense.pettycashRejectedReport).pipe(takeUntil(this.destroyed$));
-    this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
-    this.getPettycashReportSuccess$ = this.store.select(p => p.expense.getPettycashReportSuccess).pipe(takeUntil(this.destroyed$));
+    this.getPettycashRejectedReportInprocess$ = this.store.select(p => p.expense.getPettycashRejectedReportInprocess).pipe(takeUntil(this.destroyed$));
+    this.getPettycashRejectedReportSuccess$ = this.store.select(p => p.expense.getPettycashRejectedReportSuccess).pipe(takeUntil(this.destroyed$));
 
     observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
       if (!Array.isArray(resp[0])) {
@@ -66,28 +68,29 @@ export class RejectedListComponent implements OnInit, OnChanges {
           this.pettycashRequest.to = to;
           this.pettycashRequest.page = 1;
           this.pettycashRequest.status = 'rejected';
-          if (from && to) {
-            this.getPettyCashRejectedReports(this.pettycashRequest);
-          }
+          // if (from && to) {
+          //   this.getPettyCashRejectedReports(this.pettycashRequest);
+          // }
         }
       }
     });
   }
 
   public ngOnInit() {
-    // console.log('rejected Dtaes', this.dateFrom, this.dateTo);
-    // this.expenseService.getPettycashReports(this.pettycashRequest).subscribe(res => {
-    //   console.log('rejected item', res);
-    // });
+    this.pettycashRejectedReportResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        // this.pettyCashPendingReportResponse = res;
+        // this.expensesItems = res.results;
+        this.totalRejectedResponse = res;
+        this.RejectedItems = res.results;
+      }
+    });
 
   }
   public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
-    this.expenseService.getPettycashReports(SalesDetailedfilter).subscribe(res => {
-      if (res.status === 'success') {
-        this.totalRejectedResponse = res.body;
-        this.RejectedItems = res.body.results;
-      }
-    });
+    SalesDetailedfilter.status = 'rejected';
+    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
+
   }
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['dateFrom']) {
@@ -100,9 +103,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.pettycashRequest.sortBy = '';
         this.pettycashRequest.page = 1;
       }
-    }
-    if (this.pettycashRequest.from && this.pettycashRequest.to) {
-      this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
   public revertActionClicked(item: ExpenseResults) {
@@ -140,5 +140,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
     this.key = key;
     this.order = ord;
     this.getPettyCashRejectedReports(this.pettycashRequest);
+    this.isFilteredSelected.emit(true);
   }
 }
