@@ -8,6 +8,7 @@ import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { FormControl } from '@angular/forms';
+import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 
 @Component({
   selector: 'app-expense-details',
@@ -23,6 +24,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
   @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Input() public selectedRowItem: string;
+  @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
   public selectedItem: ExpenseResults;
   public rejectReason = new FormControl();
   public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
@@ -71,11 +73,22 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     //   }
     // });
   }
+  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'pending';
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  }
+  public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'rejected';
+    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
+  }
   public pettyCashAction(actionType: ActionPettycashRequest) {
     this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
       if (res.status === 'success') {
         this._toasty.successToast(res.body);
         this.closeDetailsMode();
+        this.refreshPendingItem.emit(true);
+        // this.getPettyCashPendingReports();
+        // this.getPettyCashRejectedReports();
       } else {
         this._toasty.errorToast(res.body);
       }

@@ -35,6 +35,7 @@
                         <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
                         <td data-title="Account">
                             <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                            <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
                             <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i> {{expenses.particularAccount.name}}
                         </td>
                         <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>

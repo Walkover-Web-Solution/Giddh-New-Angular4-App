@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, OnChanges, SimpleChanges, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -20,7 +20,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
   styleUrls: ['./expenses.component.scss'],
 })
 
-export class ExpensesComponent implements OnInit {
+export class ExpensesComponent implements OnInit, OnChanges {
   public universalDate: Date[];
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
@@ -150,6 +150,12 @@ export class ExpensesComponent implements OnInit {
   public closeDetailedMode(e) {
     this.isSelectedRow = !e;
   }
+  public refreshPendingItem(e) {
+    if (e) {
+      this.getPettyCashPendingReports(this.pettycashRequest);
+      this.getPettyCashRejectedReports(this.pettycashRequest);
+    }
+  }
 
   public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
     SalesDetailedfilter.status = 'pending';
@@ -173,6 +179,12 @@ export class ExpensesComponent implements OnInit {
       this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
+  public ngOnChanges(changes: SimpleChanges): void {
+    // if (changes['dateFrom']) {
+    //   this.pettycashRequest.from = changes['dateFrom'].currentValue;
+    // }
+  }
+
   public clearFilter() {
     this.universalDate$.subscribe(res => {
       if (res) {

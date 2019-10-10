@@ -139,11 +139,11 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="rejectReason">Reason</label>
-            <textarea name="rejectReason" id="rejectReason" [formControl]="rejectReason" class="textarea form-control" placeholder="Add Reason"></textarea>
+            <label for="rejectReason">Reason</label> <sup>*</sup>
+            <textarea name="rejectReason" required id="rejectReason" [formControl]="rejectReason" class="textarea form-control" placeholder="Add Reason"></textarea>
         </div>
 
-        <input type="submit" class="btn btn-success" (click)="submitReject()">
+        <input type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
     </div>
 </ng-template>
 <!-- modal end -->
