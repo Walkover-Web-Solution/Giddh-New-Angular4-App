@@ -67,9 +67,9 @@ export class ExportLedgerComponent implements OnInit {
     exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
     exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
 
-    delete body.dataToSend;
+    //delete body.dataToSend;
 
-    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body, exportByInvoiceNumber).subscribe(a => {
+    this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body.dataToSend, exportByInvoiceNumber).subscribe(a => {
       if (a.status === 'success') {
         if (a.queryString.fileType === 'xlsx') {
           let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
