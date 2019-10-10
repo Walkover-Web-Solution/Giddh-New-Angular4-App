@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, OnChanges, SimpleChanges, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
@@ -20,7 +20,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
   styleUrls: ['./expenses.component.scss'],
 })
 
-export class ExpensesComponent implements OnInit {
+export class ExpensesComponent implements OnInit, OnChanges {
   public universalDate: Date[];
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
@@ -31,6 +31,9 @@ export class ExpensesComponent implements OnInit {
   public unaiversalTo: string;
   public modalRef: BsModalRef;
   public isClearFilter: boolean = false;
+  public isFilterSelected: boolean = false;
+
+
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public datePickerOptions: any = {
@@ -88,10 +91,9 @@ export class ExpensesComponent implements OnInit {
   }
 
 
+
   constructor(private store: Store<AppState>,
     private _expenceActions: ExpencesAction,
-    private _route: Router,
-    private _toasty: ToasterService,
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private _cdRf: ChangeDetectorRef) {
@@ -125,6 +127,8 @@ export class ExpensesComponent implements OnInit {
           this.pettycashRequest.page = 1;
           this.selectedDate.dateFrom = this.pettycashRequest.from;
           this.selectedDate.dateTo = this.pettycashRequest.to;
+          this.getPettyCashPendingReports(this.pettycashRequest);
+          this.getPettyCashRejectedReports(this.pettycashRequest);
         }
       }
     });
@@ -138,13 +142,30 @@ export class ExpensesComponent implements OnInit {
   public selectedDetailedRowInput(item: ExpenseResults) {
     this.selectedRowItem = item;
   }
+  public isFilteredSelected(isSelect: boolean) {
+    this.isFilterSelected = isSelect;
+  }
   public closeDetailedMode(e) {
     this.isSelectedRow = !e;
   }
+  public refreshPendingItem(e) {
+    if (e) {
+      this.getPettyCashPendingReports(this.pettycashRequest);
+      this.getPettyCashRejectedReports(this.pettycashRequest);
+      setTimeout(() => {
+        this.detectChanges();
+      }, 600)
+    }
+  }
 
-  // public getPettyCashReports(SalesDetailedfilter: CommonPaginatedRequest) {
-  //   this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
-  // }
+  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'pending';
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  }
+  public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
+    SalesDetailedfilter.status = 'rejected';
+    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
+  }
   public openModal(filterModal: TemplateRef<any>) {
     this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
   }
@@ -154,17 +175,42 @@ export class ExpensesComponent implements OnInit {
       this.pettycashRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
       this.selectedDate.dateFrom = this.pettycashRequest.from;
       this.selectedDate.dateTo = this.pettycashRequest.to;
+      this.isFilterSelected = true;
+      this.getPettyCashPendingReports(this.pettycashRequest);
+      this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
+  public ngOnChanges(changes: SimpleChanges): void {
+    // if (changes['dateFrom']) {
+    //   this.pettycashRequest.from = changes['dateFrom'].currentValue;
+    // }
+  }
+
   public clearFilter() {
-    this.selectedDate.dateFrom = this.unaiversalFrom;
-    this.selectedDate.dateTo = this.unaiversalTo;
+    this.universalDate$.subscribe(res => {
+      if (res) {
+        this.unaiversalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
+        this.unaiversalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
+      }
+    })
+    this.pettycashRequest.from = this.unaiversalFrom;
+    this.pettycashRequest.to = this.unaiversalTo;
+    this.pettycashRequest.sortBy = '';
+    this.pettycashRequest.sort = '';
+    this.pettycashRequest.page = 1;
     this.isClearFilter = true;
+    this.isFilterSelected = false;
 
     this.datePickerOptions = {
       ...this.datePickerOptions, startDate: this.unaiversalFrom,
       endDate: this.unaiversalTo
     };
-
+    this.getPettyCashPendingReports(this.pettycashRequest);
+    this.getPettyCashRejectedReports(this.pettycashRequest);
+  }
+  detectChanges() {
+    if (!this._cdRf['destroyed']) {
+      this._cdRf.detectChanges();
+    }
   }
 }
