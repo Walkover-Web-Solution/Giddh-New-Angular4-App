@@ -624,6 +624,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, {isGmailIntegrated: false});
       }
     }
+
+    case SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE: {
+      let response: BaseResponse<any, any> = action.payload;
+      if (response.status === 'success') {
+        return Object.assign({}, state, {isGmailIntegrated: false});
+      } else {
+        return Object.assign({}, state, {isGmailIntegrated: true});
+      }
+    }
     //  endregion discount reducer
     default: {
       return state;
