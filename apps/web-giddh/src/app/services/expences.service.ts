@@ -23,6 +23,21 @@ export class ExpenseService {
   }
 
   public getPettycashReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
+    request.status = 'pending';
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
+      page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
+    });
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
+      map((res) => {
+        let data: BaseResponse<PettyCashReportResponse, any> = res;
+        data.request = request;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<PettyCashReportResponse, any>(e)));
+  }
+  public getPettycashRejectedReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
+    request.status = 'rejected';
     this.companyUniqueName = this._generalService.companyUniqueName;
     let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
       page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
