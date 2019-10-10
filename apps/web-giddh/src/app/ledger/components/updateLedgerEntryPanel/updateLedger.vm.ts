@@ -65,6 +65,7 @@ export class UpdateLedgerVm {
   public selectedSuffixForCurrency: string;
   public inputMaskFormat: string;
   public selectedCurrencyForDisplay: 0 | 1 = 0;
+  public giddhBalanceDecimalPlaces: number = 2;
 
   constructor() {
     this.voucherTypeList = [{
@@ -134,7 +135,7 @@ export class UpdateLedgerVm {
 
         trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
         trx.particular.name = dx.name ? dx.name : 'discount';
-        trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), 2);
+        trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), this.giddhBalanceDecimalPlaces);
         trx.convertedAmount = this.calculateConversionRate(trx.amount);
         trx.isStock = false;
         trx.isTax = false;
@@ -237,13 +238,13 @@ export class UpdateLedgerVm {
         return Number(tr.amount) || 0;
       }
       return 0;
-    }), 2);
+    }), this.giddhBalanceDecimalPlaces);
     this.entryTotal.crTotal = giddhRoundOff(sumBy(this.selectedLedger.transactions, (tr) => {
       if (tr.type === 'CREDIT') {
         return Number(tr.amount) || 0;
       }
       return 0;
-    }), 2);
+    }), this.giddhBalanceDecimalPlaces);
 
     this.convertedEntryTotal = {
       drTotal: this.calculateConversionRate(this.entryTotal.drTotal),
@@ -262,7 +263,7 @@ export class UpdateLedgerVm {
     this.generatePanelAmount();
 
     if (this.stockTrxEntry) {
-      this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
+      this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
       this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
     }
 
@@ -315,7 +316,7 @@ export class UpdateLedgerVm {
         totalTaxes += tax.taxDetail[0].taxValue;
       }
 
-      this.selectedLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      this.selectedLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
     } else {
       this.selectedLedger.tdsTcsTaxesSum = 0;
       this.selectedLedger.isOtherTaxesApplicable = false;
@@ -324,7 +325,7 @@ export class UpdateLedgerVm {
 
     this.selectedLedger.otherTaxModal = modal;
     this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-    this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), 2);
+    this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
   }
 
   // FIXME: fix total calculation
@@ -334,10 +335,10 @@ export class UpdateLedgerVm {
     this.appliedTaxPerTotal = taxTotal;
     this.totalForTax = total;
 
-    this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), 2);
+    this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
     this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
 
-    this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), 2);
+    this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
     this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
 
     this.calculateOtherTaxes(this.selectedLedger.otherTaxModal);
@@ -345,9 +346,9 @@ export class UpdateLedgerVm {
 
   public generateCompoundTotal() {
     if (this.entryTotal.crTotal > this.entryTotal.drTotal) {
-      this.compoundTotal = giddhRoundOff((this.entryTotal.crTotal - this.entryTotal.drTotal), 2);
+      this.compoundTotal = giddhRoundOff((this.entryTotal.crTotal - this.entryTotal.drTotal), this.giddhBalanceDecimalPlaces);
     } else {
-      this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), 2);
+      this.compoundTotal = giddhRoundOff((this.entryTotal.drTotal - this.entryTotal.crTotal), this.giddhBalanceDecimalPlaces);
     }
     this.convertedCompoundTotal = this.calculateConversionRate(this.compoundTotal);
   }
@@ -396,7 +397,7 @@ export class UpdateLedgerVm {
     }
 
     this.convertedRate = this.calculateConversionRate(val);
-    this.stockTrxEntry.amount = giddhRoundOff(val * this.stockTrxEntry.inventory.quantity, 2);
+    this.stockTrxEntry.amount = giddhRoundOff(val * this.stockTrxEntry.inventory.quantity, this.giddhBalanceDecimalPlaces);
     this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
     this.getEntryTotal();
@@ -414,13 +415,13 @@ export class UpdateLedgerVm {
   public inventoryAmountChanged(event = null) {
     this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
     if (this.stockTrxEntry) {
-      if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), 2)) {
+      if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces)) {
         this.stockTrxEntry.isUpdated = true;
       }
-      this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), 2);
+      this.stockTrxEntry.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
       this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-      this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), 2);
+      this.stockTrxEntry.inventory.rate = giddhRoundOff((Number(this.totalAmount) / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
       this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
 
       // update every transaction conversion rates for multi-currency
@@ -436,7 +437,7 @@ export class UpdateLedgerVm {
 
         // find account that's from category income || expenses || fixed assets and update it's amount too
         if (this.isValidCategory(category)) {
-          t.amount = giddhRoundOff(Number(this.totalAmount), 2);
+          t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
           t.isUpdated = true;
         }
         t.convertedAmount = this.calculateConversionRate(t.amount);
@@ -489,7 +490,7 @@ export class UpdateLedgerVm {
 
     let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
     this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), 2);
+      (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
 
     this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
 
@@ -497,7 +498,7 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.amount = this.totalAmount;
       this.stockTrxEntry.convertedAmount = this.calculateConversionRate(this.stockTrxEntry.amount);
 
-      const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), 2);
+      const rate = giddhRoundOff(Number(this.stockTrxEntry.amount / this.stockTrxEntry.inventory.quantity), this.giddhBalanceDecimalPlaces);
       this.stockTrxEntry.inventory.rate = rate;
       this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate);
       this.stockTrxEntry.isUpdated = true;
@@ -632,9 +633,9 @@ export class UpdateLedgerVm {
 
   public calculateConversionRate(baseModel) {
     if (this.selectedCurrencyForDisplay === 0) {
-      return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, 2);
+      return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
     } else {
-      return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, 2);
+      return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
     }
   }
 }

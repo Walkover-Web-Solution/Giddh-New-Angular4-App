@@ -68,7 +68,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
 
   public ngOnInit(): void {
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(res => {
-      if (res && res.balanceDecimalPlaces) {
+      if (res) {
         this.giddhDecimalPlaces = res.balanceDecimalPlaces;
       } else {
         this.giddhDecimalPlaces = 2;

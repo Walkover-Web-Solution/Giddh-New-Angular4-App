@@ -2547,6 +2547,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         transactionClassMul.amount.amountForAccount = tr.amount.toString();
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
+        if(tr.isStockTxn){
+          transactionClassMul.stock.name = tr.stockDetails.name;
+          transactionClassMul.stock.uniqueName = tr.stockDetails.uniqueName;
+          transactionClassMul.stock.quantity = tr.quantity;
+          transactionClassMul.stock.rate = tr.rate;
+          transactionClassMul.stock.stockUnitCode = tr.stockDetails.skuCode;
+          transactionClassMul.stock.sku = tr.stockDetails.skuCodeHeading;
+        }
         salesEntryClass.transactions.push(transactionClassMul);
       });
       e.discounts.forEach(ds=>{

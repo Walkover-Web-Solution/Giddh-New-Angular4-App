@@ -181,6 +181,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.activeAccount$ = observableOf(resp[2].body);
           this.activeAccount = cloneDeep(resp[2].body);
           this.profileObj = resp[3];
+          this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
           this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
           // set account details for multi currency account
@@ -320,11 +321,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           //#endregion
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
-          this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
+          this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
           // this.vm.selectedLedger.exchangeRate = giddhRoundOff(this.vm.selectedLedger.exchangeRate, 4);
 
           // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
-          this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, 4);
+          this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
 
           // other taxes assigning process
           let companyTaxes: TaxResponse[] = [];
@@ -927,8 +928,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public async toggleCurrency() {
     this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
-    let rate = 1 / this.vm.selectedLedger.exchangeRate;
-    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, 4)};
+    let rate = 0;
+    if (this.vm.selectedLedger.exchangeRateForDisplay) {
+      rate = 1 / this.vm.selectedLedger.exchangeRate;
+    }
+    this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.vm.giddhBalanceDecimalPlaces)};
   }
 
   public exchangeRateChanged() {

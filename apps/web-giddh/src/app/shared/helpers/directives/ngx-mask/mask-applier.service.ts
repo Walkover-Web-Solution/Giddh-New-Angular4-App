@@ -157,12 +157,15 @@ export class MaskApplierService {
         strForSep = inputValue.replace(/,/g, '');
         result = this.separator(strForSep, ',', '.', precision);
       } else if (maskExpression.startsWith(Separators.IND_COMMA_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/,/g, '');
         result = this.currencySeparator(strForSep, ',', '.', precision, true);
       } else if (maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/[ ,']/g, '');
         result = this.currencySeparator(strForSep, ' ', '.', precision);
       } else if (maskExpression.startsWith(Separators.INT_COMMA_SEPARATED)) {
+        inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
         strForSep = inputValue.replace(/,/g, '');
         result = this.currencySeparator(strForSep, ',', '.', precision);
       } else if (maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED)) {
@@ -485,9 +488,13 @@ export class MaskApplierService {
       let precisionRegEx: RegExp;
 
       const splitter = inputValue.split(decimalMarker);
-      if (splitter[1] && splitter[1].length > precision) {
-        splitter[1] = splitter[1].substr(0, precision);
-        inputValue = splitter.join('.');
+      if (precision === 0) {
+        inputValue = splitter[0];
+      } else {
+        if (splitter[1] && splitter[1].length > precision) {
+          splitter[1] = splitter[1].substr(0, precision);
+          inputValue = splitter.join('.');
+        }
       }
     }
     return inputValue;
