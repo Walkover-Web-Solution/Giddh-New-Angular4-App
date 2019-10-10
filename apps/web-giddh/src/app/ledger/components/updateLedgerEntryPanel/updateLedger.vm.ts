@@ -632,6 +632,9 @@ export class UpdateLedgerVm {
   }
 
   public calculateConversionRate(baseModel) {
+    if (!baseModel || !this.selectedLedger.exchangeRate) {
+      return 0;
+    }
     if (this.selectedCurrencyForDisplay === 0) {
       return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
     } else {

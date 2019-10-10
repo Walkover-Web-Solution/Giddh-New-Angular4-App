@@ -207,19 +207,32 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       });
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE: {
-      newState.updateProfileSuccess = false;
-      newState.updateProfileInProgress = true;
-      newState.profileRequest = false;
-      return Object.assign({}, state, newState);
+      return {
+        ...state,
+        updateProfileSuccess: false,
+        updateProfileInProgress: true,
+        profileRequest: false
+      };
+      // newState.updateProfileSuccess = false;
+      // newState.updateProfileInProgress = true;
+      // newState.profileRequest = false;
+      // return Object.assign({}, state, newState);
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
-        newState.profile = _.cloneDeep(response.body);
-        newState.updateProfileSuccess = true;
-        newState.updateProfileInProgress = false;
-        newState.profileRequest = true;
-        return Object.assign({}, state, newState);
+        return {
+          ...state,
+          profile: _.cloneDeep(response.body),
+          updateProfileSuccess: true,
+          updateProfileInProgress: false,
+          profileRequest: true
+        };
+        // newState.profile = _.cloneDeep(response.body);
+        // newState.updateProfileSuccess = true;
+        // newState.updateProfileInProgress = false;
+        // newState.profileRequest = true;
+        // return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
         updateProfileSuccess: false,
