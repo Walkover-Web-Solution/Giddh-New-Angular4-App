@@ -554,7 +554,6 @@ export class TransactionClassMulticurrency{
       uniqueName: 'sales';
     };
     this.amount = new AmountClassMulticurrency();
-    this.stock = new SalesAddBulkStockItems();
   }
 }
 
