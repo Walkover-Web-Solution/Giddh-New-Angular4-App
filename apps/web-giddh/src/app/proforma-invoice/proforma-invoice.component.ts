@@ -971,6 +971,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public resetInvoiceForm(f: NgForm) {
+    if (!f) {
+      return;
+    }
     f.form.reset();
     this.invFormData = new VoucherClass();
     this.depositAccountUniqueName = 'cash';

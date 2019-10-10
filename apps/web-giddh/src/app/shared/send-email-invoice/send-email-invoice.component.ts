@@ -9,12 +9,13 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
   @Input() voucherType: VoucherTypeEnum;
-  @Output() public successEvent: EventEmitter<string | { email: string, invoiceType: string[] }> = new EventEmitter<string | { email: string, invoiceType: string[] }>();
+  @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   public emailAddresses: string = '';
   public invoiceType: string[] = [];
   public isTransport: boolean = false;
   public isCustomer: boolean = false;
+  public activeTab: string = 'email';
 
   constructor() {
   }
