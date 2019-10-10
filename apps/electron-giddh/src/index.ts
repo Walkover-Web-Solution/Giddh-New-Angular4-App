@@ -1,8 +1,13 @@
-import { app, ipcMain } from "electron";
+import {app, ipcMain} from "electron";
 import setMenu from "./AppMenuManager";
-import { log } from "./util";
+import {log} from "./util";
 import WindowManager from "./WindowManager";
-import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from "./main-auth.config";
+import {
+  AdditionalGoogleLoginParams,
+  AdditionalLinkedinLoginParams,
+  GoogleLoginElectronConfig,
+  LinkedinLoginElectronConfig
+} from "./main-auth.config";
 
 let windowManager: WindowManager = null;
 
@@ -20,7 +25,7 @@ ipcMain.on("open-url", (event, arg) => {
 });
 
 
-ipcMain.on("authenticate", async function(event, arg) {
+ipcMain.on("authenticate", async function (event, arg) {
 
   const electronOauth2 = require("electron-oauth");
   let config = {};
@@ -44,16 +49,21 @@ ipcMain.on("authenticate", async function(event, arg) {
         nodeIntegration: false
       }
     });
-    const token = await myApiOauth.getAccessToken(bodyParams);
-    if (arg === "google") {
-      // google
-      event.returnValue = token.access_token;
-      // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-    } else {
-      // linked in
-      event.returnValue = token.access_token;
-      // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-    }
+
+    myApiOauth.getAccessToken(bodyParams, (token) => {
+      if (arg === "google") {
+        // google
+        event.returnValue = token.access_token;
+        // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+      } else {
+        // linked in
+        event.returnValue = token.access_token;
+        // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+      }
+      event.sender.send('authenticate-token',event.returnValue);
+    });
+
+
   } catch (e) {
     //
   }

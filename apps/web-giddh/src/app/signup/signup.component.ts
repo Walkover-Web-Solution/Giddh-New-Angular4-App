@@ -1,20 +1,32 @@
-import { take, takeUntil } from "rxjs/operators";
-import { LoginActions } from "../actions/login.action";
-import { AppState } from "../store";
-import { Router } from "@angular/router";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap";
-import { Configuration } from "../app.constant";
-import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject } from "rxjs";
-import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
-import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
-import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
-import { ToasterService } from "../services/toaster.service";
-import { userLoginStateEnum } from "../models/user-login-state";
+import {take, takeUntil} from "rxjs/operators";
+import {LoginActions} from "../actions/login.action";
+import {AppState} from "../store";
+import {Router} from "@angular/router";
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ModalDirective} from "ngx-bootstrap";
+import {Configuration} from "../app.constant";
+import {Store} from "@ngrx/store";
+import {Observable, ReplaySubject} from "rxjs";
+import {
+  LinkedInRequestModel,
+  SignupwithEmaillModel,
+  SignupWithMobile,
+  VerifyEmailModel,
+  VerifyEmailResponseModel,
+  VerifyMobileModel
+} from "../models/api-models/loginModels";
+import {
+  AuthService,
+  GoogleLoginProvider,
+  LinkedinLoginProvider,
+  SocialUser
+} from "../theme/ng-social-login-module/index";
+import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
+import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
+import {DOCUMENT} from "@angular/platform-browser";
+import {ToasterService} from "../services/toaster.service";
+import {userLoginStateEnum} from "../models/user-login-state";
 
 @Component({
   selector: "signup",
@@ -114,7 +126,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({ value: c.countryName, label: c.value });
+      this.countryCodeList.push({value: c.countryName, label: c.value});
     });
     this.userLoginState$ = this.store.select(p => p.session.userLoginState);
     this.userDetails$ = this.store.select(p => p.session.user);
@@ -147,7 +159,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       email: ["", [Validators.required, Validators.email]],
       verificationCode: ["", Validators.required]
     });
-    this.setCountryCode({ value: "India", label: "India" });
+    this.setCountryCode({value: "India", label: "India"});
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -285,18 +297,26 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem("email");
   }
 
-  public async signInWithProviders(provider: string) {
+  public signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
 
-      const { ipcRenderer } = (window as any).require("electron");
+      const {ipcRenderer} = (window as any).require("electron");
       if (provider === "google") {
         // google
-        const t = ipcRenderer.sendSync("authenticate", provider);
-        this.store.dispatch(this.loginAction.signupWithGoogle(t));
+        ipcRenderer.send("authenticate", provider);
+        ipcRenderer.once("authenticate-token", (event, res) => {
+          debugger;
+          this.store.dispatch(this.loginAction.signupWithGoogle(res));
+        });
+        // this.store.dispatch(this.loginAction.signupWithGoogle(t));
       } else {
         // linked in
-        const t = ipcRenderer.sendSync("authenticate", provider);
-        this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+        ipcRenderer.send("authenticate", provider);
+        ipcRenderer.once("authenticate-token", (event, res) => {
+          debugger;
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+        });
+        // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
       }
 
     } else {

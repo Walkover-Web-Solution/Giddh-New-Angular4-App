@@ -57,38 +57,32 @@ electron_1.ipcMain.on("open-url", function (event, arg) {
 });
 electron_1.ipcMain.on("authenticate", function (event, arg) {
     return __awaiter(this, void 0, void 0, function () {
-        var electronOauth2, config, bodyParams, myApiOauth, token, e_1;
+        var electronOauth2, config, bodyParams, myApiOauth;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    electronOauth2 = require("electron-oauth");
-                    config = {};
-                    bodyParams = {};
-                    if (arg === "google") {
-                        // google
-                        config = main_auth_config_1.GoogleLoginElectronConfig;
-                        bodyParams = main_auth_config_1.AdditionalGoogleLoginParams;
+            electronOauth2 = require("electron-oauth");
+            config = {};
+            bodyParams = {};
+            if (arg === "google") {
+                // google
+                config = main_auth_config_1.GoogleLoginElectronConfig;
+                bodyParams = main_auth_config_1.AdditionalGoogleLoginParams;
+            }
+            else {
+                // linked in
+                config = main_auth_config_1.LinkedinLoginElectronConfig;
+                bodyParams = main_auth_config_1.AdditionalLinkedinLoginParams;
+            }
+            try {
+                myApiOauth = electronOauth2(config, {
+                    alwaysOnTop: true,
+                    autoHideMenuBar: true,
+                    webPreferences: {
+                        devTools: true,
+                        partition: "oauth2",
+                        nodeIntegration: false
                     }
-                    else {
-                        // linked in
-                        config = main_auth_config_1.LinkedinLoginElectronConfig;
-                        bodyParams = main_auth_config_1.AdditionalLinkedinLoginParams;
-                    }
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    myApiOauth = electronOauth2(config, {
-                        alwaysOnTop: true,
-                        autoHideMenuBar: true,
-                        webPreferences: {
-                            devTools: true,
-                            partition: "oauth2",
-                            nodeIntegration: false
-                        }
-                    });
-                    return [4 /*yield*/, myApiOauth.getAccessToken(bodyParams)];
-                case 2:
-                    token = _a.sent();
+                });
+                myApiOauth.getAccessToken(bodyParams, function (token) {
                     if (arg === "google") {
                         // google
                         event.returnValue = token.access_token;
@@ -99,12 +93,13 @@ electron_1.ipcMain.on("authenticate", function (event, arg) {
                         event.returnValue = token.access_token;
                         // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
                     }
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_1 = _a.sent();
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    event.sender.send('authenticate-token', event.returnValue);
+                });
             }
+            catch (e) {
+                //
+            }
+            return [2 /*return*/];
         });
     });
 });
