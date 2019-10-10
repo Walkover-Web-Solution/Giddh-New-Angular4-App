@@ -403,6 +403,7 @@ export interface GenericRequestForGenerateSCD {
   number?:string,
   uniqueName?:string,
   templateDetails?: TemplateDetailsClass
+  deposit?: AmountClassMulticurrency;
 }
 
 export class VoucherDetailsClass {
@@ -529,6 +530,7 @@ export class SalesEntryClassMulticurrency {
   public voucherNumber: string;
   public voucherType: string;
   public discounts: DiscountMulticurrency[];
+
   constructor() {
     this.transactions = [];
     this.date = '';
@@ -561,6 +563,7 @@ export class AmountClassMulticurrency{
   public amountForAccount: string;
   public amountForCompany: string;
   public type: string;
+  public accountUniqueName?:string;
 
   constructor(){
     this.amountForAccount = '400.99';
@@ -584,3 +587,4 @@ export class DiscountMulticurrency{
     this.discountPercent = ledgerDiscountClass.discountValue;
   }
 }
+
