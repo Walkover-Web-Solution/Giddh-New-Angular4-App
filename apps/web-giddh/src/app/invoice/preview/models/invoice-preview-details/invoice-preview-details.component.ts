@@ -20,6 +20,7 @@ import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/recei
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -265,7 +266,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     if (this.isVoucherDownloading || this.isVoucherDownloadError) {
       return;
     }
-    this.downloadVoucherModal.show();
+
+    if (this.only4ProformaEstimates) {
+      if (this.selectedItem && this.selectedItem.blob) {
+        return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
+      } else {
+        return;
+      }
+    } else {
+      this.downloadVoucherModal.show();
+    }
   }
 
   public printVoucher() {

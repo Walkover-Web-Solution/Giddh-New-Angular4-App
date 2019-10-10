@@ -4,8 +4,6 @@ import { InvoiceService } from '../../../../services/invoice.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
-import { ProformaDownloadRequest } from '../../../../models/api-models/proforma';
-import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { ProformaService } from '../../../../services/proforma.service';
 
 @Component({
@@ -39,47 +37,25 @@ export class DownloadVoucherComponent implements OnInit {
   }
 
   public onDownloadInvoiceEvent() {
-    if (this.isProformaEstimatesInvoice) {
-      let request: ProformaDownloadRequest = new ProformaDownloadRequest();
-      request.fileType = 'pdf';
-      request.accountUniqueName = this.selectedItem.account.uniqueName;
-
-      if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
-        request.proformaNumber = this.selectedItem.voucherNumber;
-      } else {
-        request.estimateNumber = this.selectedItem.voucherNumber;
-      }
-
-      this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
-        if (result && result.status === 'success') {
-          let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
-        } else {
-          this._toaster.errorToast(result.message, result.code);
-        }
-      }, (err) => {
-        this._toaster.errorToast(err.message);
-      });
-    } else {
-      let dataToSend = {
-        voucherNumber: [this.selectedItem.voucherNumber],
-        typeOfInvoice: this.invoiceType,
-        voucherType: this.selectedItem.voucherType
-      };
-      this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend)
-        .subscribe(res => {
-          if (res) {
-            if (dataToSend.typeOfInvoice.length > 1) {
-              saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
-            } else {
-              saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
-            }
+    let dataToSend = {
+      voucherNumber: [this.selectedItem.voucherNumber],
+      typeOfInvoice: this.invoiceType,
+      voucherType: this.selectedItem.voucherType
+    };
+    this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend)
+      .subscribe(res => {
+        if (res) {
+          if (dataToSend.typeOfInvoice.length > 1) {
+            saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
           } else {
-            this._toaster.errorToast('Something went wrong Please try again!');
+            saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
           }
-        }, (error => {
+        } else {
           this._toaster.errorToast('Something went wrong Please try again!');
-        }));
-    }
+        }
+      }, (error => {
+        this._toaster.errorToast('Something went wrong Please try again!');
+      }));
   }
 
   resetModal() {

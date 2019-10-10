@@ -5,68 +5,31 @@
 
 <div class="modal-body">
 
-  <tabset>
+  <div class="row mrB1">
+    <div class="col-sm-12">
+      <input type="text" class="form-control" placeholder="Enter email addresses" [(ngModel)]="emailAddresses">
+    </div>
+  </div>
 
-    <tab heading="Send Email" (select)="activeTab = 'email'; tabChanged();">
+  <div class="clearfix"
+       *ngIf="voucherType !== 'proforma' && voucherType !== 'proformas' && voucherType !== 'estimates' && voucherType !== 'estimate'">
+    <h3 class="fs16 mrB">Invoice Copy</h3>
+    <hr>
 
-      <div class="row mrB1">
-        <div class="col-sm-12">
-          <input type="text" class="form-control" placeholder="Enter email addresses" [(ngModel)]="emailAddresses">
-        </div>
-      </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)" [(ngModel)]="isTransport">
+        Transport
+      </label>
+    </div>
 
-      <div class="clearfix"
-           *ngIf="voucherType !== 'proforma' && voucherType !== 'proformas' && voucherType !== 'estimates' && voucherType !== 'estimate'">
-        <h3 class="fs16 mrB">Invoice Copy</h3>
-        <hr>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)" [(ngModel)]="isTransport">
-            Transport
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
-            Customer
-          </label>
-        </div>
-      </div>
-
-    </tab>
-
-    <tab heading="Send Sms" (select)="activeTab = 'sms'; tabChanged();" *ngIf="showSmsTab">
-
-      <div class="row mrB1">
-        <div class="col-sm-12">
-          <input type="text" class="form-control" placeholder="Enter mobile no" [(ngModel)]="mobileNo">
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <h3 class="fs16 mrB">Transport</h3>
-        <hr>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="Transport" (change)="invoiceTypeChanged($event)" [(ngModel)]="isTransport">
-            Customer
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
-            Customer
-          </label>
-        </div>
-      </div>
-
-    </tab>
-
-  </tabset>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="Customer" (change)="invoiceTypeChanged($event)" [(ngModel)]="isCustomer">
+        Customer
+      </label>
+    </div>
+  </div>
 
 
   <!-- region buttons -->
@@ -75,8 +38,8 @@
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <button type="button" class="btn btn-success"
-                (click)="send()"
+        <button type="button" class="btn btn-success" [disabled]="!emailAddresses"
+                (click)="sendEmail()"
         >Send
         </button>
 
