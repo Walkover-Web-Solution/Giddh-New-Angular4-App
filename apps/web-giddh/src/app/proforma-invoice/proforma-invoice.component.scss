@@ -458,6 +458,7 @@ textarea:focus {
         &:last-child {
           //border-right: none !important;
           vertical-align: middle !important;
+          display: none;
         }
       }
     }
@@ -478,6 +479,7 @@ textarea:focus {
         &:last-child {
           // border-right: none !important;
           vertical-align: middle !important;
+
         }
         &:nth-child(2) {
           white-space: normal;
@@ -785,6 +787,7 @@ a.copyInvoice img {
 
 .entryDate label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate input {
@@ -795,6 +798,8 @@ a.copyInvoice img {
   height: 25px !important;
   font-size: 12px;
   padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
 }
 
 .entryDate input:focus {
@@ -808,6 +813,7 @@ a.copyInvoice img {
 
 .hsnCode label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate {
@@ -1071,7 +1077,9 @@ section.newtable {
   max-width: 215px;
 }
 .texIncurrency {
-    margin-bottom: 13px;
+    margin-bottom: 7px;
+    color:#999 !important;
+    white-space: initial;
 }
 .pd {
     padding: 3px 5px;
@@ -1449,11 +1457,13 @@ table.table.table-custom-invoice.basic {
 .differ-currency {
     color: #999999;
     font-size: 14px;
-    position: absolute;
+    text-align: right;
     bottom:3px;
     right: 8px;
-    white-space: normal;
+    white-space: nowrap;
     padding-left: 2px;
+    align-self: flex-end;
+    justify-self: flex-end;
 }
 .differ-currency span.icon-rupees{
 
@@ -1488,6 +1498,7 @@ input.form-control.edit-currency {
 
 .wrap-td-data{
   padding-bottom: 30px;
+  min-height: 50px;
 }
 .biggerDollar .icon-dollar:before {
     font-size: 17px;
@@ -1510,6 +1521,49 @@ label.salesCountryLabel {
 }
 .texIncurrency span.icon-rupees {
     font-size: 11px;
+    color: #999;
+}
+
+
+.theadOfSalesInvoice {
+    max-width: 100%;
+}
+.table-custom-invoice .Rate {
+    width: 8%;
+}
+.table-custom-invoice .Amount {
+    width: 12%;
+}
+.table-custom-invoice .Discount {
+    width: 10%;
+}
+.table-custom-invoice .Tax {
+    width: 10%;
+}
+.table-custom-invoice .Total {
+    width: 12%;
+}
+.td_Wrapper{
+  display: flex; flex-direction: column; height: 100%;
+}
+.setActive .td_Wrapper{
+   height:77%;
+}
+.setActive td:last-child .td_Wrapper {
+    height: 105% !important;
+}
+.dlt-abs {
+    position: relative;
+}
+.trashIconDlt {
+    position: absolute;
+    right: -30px;
+    transform: translateY(-40px);
+    width: 20px;
+    height: 20px;
+    border: 1px solid #999;
+    border-radius: 50%;
+    text-align: center;
 }
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
