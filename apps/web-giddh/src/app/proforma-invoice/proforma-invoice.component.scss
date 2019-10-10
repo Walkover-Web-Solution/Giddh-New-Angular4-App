@@ -787,6 +787,7 @@ a.copyInvoice img {
 
 .entryDate label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate input {
@@ -797,6 +798,8 @@ a.copyInvoice img {
   height: 25px !important;
   font-size: 12px;
   padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
 }
 
 .entryDate input:focus {
@@ -810,6 +813,7 @@ a.copyInvoice img {
 
 .hsnCode label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate {
@@ -1074,6 +1078,8 @@ section.newtable {
 }
 .texIncurrency {
     margin-bottom: 7px;
+    color:#999 !important;
+    white-space: initial;
 }
 .pd {
     padding: 3px 5px;
@@ -1541,7 +1547,10 @@ label.salesCountryLabel {
   display: flex; flex-direction: column; height: 100%;
 }
 .setActive .td_Wrapper{
-   height:70%;
+   height:77%;
+}
+.setActive td:last-child .td_Wrapper {
+    height: 105% !important;
 }
 .dlt-abs {
     position: relative;

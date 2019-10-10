@@ -524,7 +524,7 @@
                     </div>
 
                   </td>
-                  <td class="text-right">
+                  <td class="text-right stockUnit">
                     <div class="wrap-td-data">
                       {{transaction.quantity}} {{transaction.stockUnit}}
                     </div>
@@ -753,7 +753,7 @@
                     </div>
                   </td>
 
-                  <td class="text-right">
+                  <td class="text-right stockUnit">
                     <input type="text" [disabled]="!transaction.isStockTxn"
                       (blur)="calculateStockEntryAmount(transaction); calculateWhenTrxAltered(entry, transaction);"
                       placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
