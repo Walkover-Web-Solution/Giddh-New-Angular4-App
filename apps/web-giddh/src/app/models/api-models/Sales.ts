@@ -498,9 +498,21 @@ export class SalesAddBulkStockItems {
   quantity: number = 1;
   rate: number = 0;
   sku?: string = '';
-  stockUnitCode?: string;
+  stockUnitCode?: CodeStockMulticurrency;
 }
 
+class CodeStockMulticurrency{
+  code:string;
+}
+export class SalesStockItemMulticurrency {
+  name: string;
+  uniqueName: string;
+  quantity: number = 1;
+  rate: number = 0;
+  skuCode:string;
+  skuCodeHeading?:string;
+  stockUnit?: string;
+}
 export class StateCode {
   name: string;
   code: string;
@@ -534,6 +546,7 @@ export class SalesEntryClassMulticurrency {
 export class TransactionClassMulticurrency{
   public account: INameUniqueName;
   public amount: AmountClassMulticurrency;
+  public stock?: SalesAddBulkStockItems;
 
   constructor() {
     this.account = new class implements INameUniqueName {
