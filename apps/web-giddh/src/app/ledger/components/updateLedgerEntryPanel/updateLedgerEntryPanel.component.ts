@@ -936,7 +936,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public exchangeRateChanged() {
-    this.vm.selectedLedger.exchangeRate = this.vm.selectedLedger.exchangeRateForDisplay;
+    this.vm.selectedLedger.exchangeRate = this.vm.selectedLedger.exchangeRateForDisplay || 0;
     this.vm.inventoryAmountChanged();
   }
 
