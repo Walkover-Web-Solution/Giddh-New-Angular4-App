@@ -1134,9 +1134,9 @@
 
                       <div class="tableCell figureCell">
                         <input *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate">
+                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate | number:'1.2-2'">
                         <input *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate">
+                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate | number:'1.2-2'">
                       </div>
                     </div>
 
