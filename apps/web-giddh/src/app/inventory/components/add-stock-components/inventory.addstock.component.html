@@ -141,7 +141,7 @@
                 <div class="row sku-row">
                   <div class="form-group col-xs-4" [hidden]="(isManageInventory$ | async)">
                     <label>SAC Code</label>
-                    <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                    <input type="text" class="form-control" maxlength="10" (keyup)="validateSac($event)"
                       formControlName="sacNumber" />
                   </div>
 
