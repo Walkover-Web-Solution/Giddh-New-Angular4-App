@@ -107,7 +107,12 @@ export class GstDetailsClass {
   public address: string[];
   public state?: StateCode;
   public panNumber?: any;
-
+  public countryName?:string;
+  /*Keeping both as API team is too confused to Map one variable type
+  *thus kept both whichever is needed on run time we can send that in request mapping.
+  * */
+  public stateCode?:string;
+  public stateName?:string;
   constructor() {
     this.address = [];
     this.state = new StateCode();
