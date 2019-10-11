@@ -2579,6 +2579,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     obj.account.mobileNumber = obj.account.contactNumber;
     obj.deposit = deposit;
 
+    obj.account.billingDetails.countryName = this.customerCountryName;
+    obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+    obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+    delete obj.account.billingDetails.state;
+
+    obj.account.shippingDetails.countryName = this.customerCountryName;
+    obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+    obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+    delete obj.account.shippingDetails.state;
+
     return obj;
   }
 
@@ -2677,7 +2687,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.templateDetails = result.templateDetails;
 
     this.isMulticurrencyAccount = voucherClassConversion.accountDetails.currency.code !== this.companyCurrency;
-    this.customerCountryName = voucherClassConversion.accountDetails.currency.code;
+    this.customerCountryName = result.account.billingDetails.countryName;
 
     this.exchangeRate = this.companyCurrency==='USD'? 1/result.exchangeRate:result.exchangeRate;
     this.originalExchangeRate = this.exchangeRate;
