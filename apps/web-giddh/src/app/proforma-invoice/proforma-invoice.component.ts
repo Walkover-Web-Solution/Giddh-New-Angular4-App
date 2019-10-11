@@ -32,7 +32,7 @@ import {
   VoucherTypeEnum,
   SalesEntryClassMulticurrency,
   TransactionClassMulticurrency, DiscountMulticurrency,
-  GstDetailsClass
+  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency
 } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -971,6 +971,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public resetInvoiceForm(f: NgForm) {
+    if (!f) {
+      return;
+    }
     f.form.reset();
     this.invFormData = new VoucherClass();
     this.depositAccountUniqueName = 'cash';
@@ -2524,14 +2527,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
-
-
     delete obj.voucher;
-    delete obj.updateAccountDetails;
     delete obj.depositAccountUniqueName;
 
     let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
     let entries = data.entries;
+    let deposit = new AmountClassMulticurrency();
+
+    deposit.accountUniqueName = this.depositAccountUniqueName;
+    deposit.amountForAccount = this.depositAmount.toString();
 
     entries.forEach(e => {
       let salesEntryClass = new SalesEntryClassMulticurrency();
@@ -2555,8 +2559,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
           saalesAddBulkStockItems.quantity = tr.quantity;
           saalesAddBulkStockItems.rate = tr.rate;
-          saalesAddBulkStockItems.stockUnitCode = tr.stockDetails.skuCode;
-          saalesAddBulkStockItems.sku = tr.stockDetails.skuCodeHeading;
+          saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+          saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+          saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+
           transactionClassMul.stock = saalesAddBulkStockItems;
         }
         salesEntryClass.transactions.push(transactionClassMul);
@@ -2567,9 +2573,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       salesEntryClassArray.push(salesEntryClass);
     });
+
     obj.templateDetails = data.templateDetails;
     obj.entries = salesEntryClassArray;
     obj.account.mobileNumber = obj.account.contactNumber;
+    obj.deposit = deposit;
+
     return obj;
   }
 
@@ -2591,7 +2600,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.sacNumber = entry.sacNumber;
         salesEntryClass.transactions.push(salesTransactionItemClass);
         entry.taxes.forEach(ta=>{
-          if(ta.taxType==='tdspay'){
+          let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+          if(taxTypeArr.indexOf(ta.taxType) > -1 ){
            salesEntryClass.isOtherTaxApplicable = true;
            let otherTaxModal = new SalesOtherTaxesModal();
            otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
@@ -2601,6 +2611,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
           }
         });
+        if(t.stock){
+          salesTransactionItemClass.isStockTxn = true;
+          salesTransactionItemClass.stockDetails = {};
+          salesTransactionItemClass.stockDetails.name = t.stock.name;
+          salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
+          salesTransactionItemClass.quantity = t.stock.quantity;
+          salesTransactionItemClass.rate = t.stock.rate;
+          salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
+          salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName+'#'+t.stock.uniqueName
+        }
       });
 
       salesEntryClass.discounts = [new LedgerDiscountClass()];

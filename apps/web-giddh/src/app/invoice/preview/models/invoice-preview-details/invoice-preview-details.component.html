@@ -302,7 +302,9 @@
 <!-- region send email modal-->
 <div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
   [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+
   <div class="modal-dialog semdMailModal">
+
     <div class="modal-content">
 
       <!--  region new email design -->
@@ -371,6 +373,26 @@
 
     </div>
   </div>
+
+</div>
+<!-- endregion -->
+
+<!-- region download modal-->
+<div bsModal #downloadVoucherModal="bs-modal" class="modal fade" role="dialog"
+     [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+
+  <div class="modal-dialog semdMailModal">
+
+    <div class="modal-content">
+
+      <download-voucher
+        [selectedItem]="selectedItem"
+        (cancelEvent)="downloadVoucherModal.hide()"
+      ></download-voucher>
+
+    </div>
+  </div>
+
 </div>
 <!-- endregion -->
 
