@@ -622,9 +622,9 @@
 
                     </div>
 
-                    <div class="trashIconDlt">
-                      <span class="cp" (click)="removeTransaction(entryIdx)"
-                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
+                    <div class="trashIconDlt" *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
+                      (click)="removeTransaction(entryIdx)">
+                      <span class="cp">
                         <i class="icon-trash" aria-hidden="true"></i>
                       </span>
                     </div>
@@ -914,9 +914,9 @@
 
                     </div>
 
-                    <div class="trashIconDlt">
-                      <span class="cp" (click)="removeTransaction(entryIdx)"
-                        *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
+                    <div class="trashIconDlt" *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
+                      (click)="removeTransaction(entryIdx)">
+                      <span class="cp">
                         <i class="icon-trash" aria-hidden="true"></i>
                       </span>
                     </div>
