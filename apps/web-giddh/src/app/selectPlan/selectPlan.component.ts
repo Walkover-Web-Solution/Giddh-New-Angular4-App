@@ -13,6 +13,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CompanyService } from '../services/companyService.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-select-plan',
@@ -29,6 +30,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     userUniqueName: '',
     licenceKey: ''
   };
+  public licenceKey = new FormControl();
   public SubscriptionPlans: CreateCompanyUsersPlan[] = [];
   public subscriptionPrice: any = '';
   public UserCurrency: string = '';
@@ -148,8 +150,14 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
         this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
       }
-
-
+    }
+  }
+  public createCompanyViaActivationKey() {
+    let activationKey = this.licenceKey.value;
+    if (activationKey) {
+      this.SubscriptionRequestObj.licenceKey = activationKey;
+      this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
+      this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
     }
   }
 }
