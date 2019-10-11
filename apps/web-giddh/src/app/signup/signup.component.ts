@@ -305,7 +305,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         // google
         ipcRenderer.send("authenticate", provider);
         ipcRenderer.once("authenticate-token", (event, res) => {
-          debugger;
+          // debugger;
           this.store.dispatch(this.loginAction.signupWithGoogle(res));
         });
         // this.store.dispatch(this.loginAction.signupWithGoogle(t));
@@ -313,7 +313,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         // linked in
         ipcRenderer.send("authenticate", provider);
         ipcRenderer.once("authenticate-token", (event, res) => {
-          debugger;
+          // debugger;
           this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
         });
         // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
