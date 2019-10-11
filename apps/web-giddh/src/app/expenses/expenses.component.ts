@@ -192,19 +192,20 @@ export class ExpensesComponent implements OnInit, OnChanges {
         this.unaiversalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
         this.unaiversalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
       }
+      this.datePickerOptions = {
+        ...this.datePickerOptions, startDate: res[0],
+        endDate: res[1]
+      };
     })
     this.pettycashRequest.from = this.unaiversalFrom;
     this.pettycashRequest.to = this.unaiversalTo;
     this.pettycashRequest.sortBy = '';
     this.pettycashRequest.sort = '';
     this.pettycashRequest.page = 1;
-    this.isClearFilter = true;
+    // this.isClearFilter = true;
     this.isFilterSelected = false;
 
-    this.datePickerOptions = {
-      ...this.datePickerOptions, startDate: this.unaiversalFrom,
-      endDate: this.unaiversalTo
-    };
+
     this.getPettyCashPendingReports(this.pettycashRequest);
     this.getPettyCashRejectedReports(this.pettycashRequest);
   }
