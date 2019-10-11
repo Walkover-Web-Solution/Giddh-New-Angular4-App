@@ -49,7 +49,7 @@
                                 <i class="icon-file-path middle"></i> attach file</a>
                             <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                         </td>
-                        <td data-title="Description">{{expenses.description}}</td>
+                        <td data-title="Description"><span *ngIf="expenses.description">{{expenses.description}}</span><span *ngIf="!expenses.description">-</span></td>
                         <td data-title="Action">
                             <button type="button" (click)="rowClicked(expenses);" class="btn btn-success-outline">Approve</button>
                         </td>
