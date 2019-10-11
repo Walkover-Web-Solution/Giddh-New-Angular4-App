@@ -63,14 +63,11 @@ export const ROUTES: Routes = [
   { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
   { path: 'select-plan', component: SelectPlanComponent },
   { path: 'billing-detail', component: BillingDetailComponent },
-
-
   { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
-
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthorization] },
       // { path: 'sales', loadChildren: './sales/sales.module#SalesModule', canActivate: [NeedsAuthorization] },
       { path: 'daybook', loadChildren: './daybook/daybook.module#DaybookModule', canActivate: [NeedsAuthorization] },
@@ -104,9 +101,9 @@ export const ROUTES: Routes = [
       { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
       { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
-      //{path: 'expenses', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization]},
+      { path: 'expenses', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
-      {path: '**', redirectTo: 'home', pathMatch: 'full'}
+      { path: '**', redirectTo: 'home', pathMatch: 'full' }
       // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
     ]

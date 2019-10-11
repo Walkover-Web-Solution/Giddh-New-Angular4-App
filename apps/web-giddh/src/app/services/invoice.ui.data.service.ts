@@ -165,7 +165,7 @@ export class InvoiceUiDataService {
         if (this.companyName && mode === 'create') {
           selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
         }
-        if (this.companyAddress && mode === 'create') {
+        if (this.companyAddress ) { // due to this on edit mode company address was not pre-filling
           selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
         }
         selectedTemplate.sections['header'].data['companyName'].label = this.companyName;

@@ -163,6 +163,7 @@ export class FinancialYearComponent implements OnInit {
   public switchFY() {
     if (this.selectedFinancialYearUN) {
       this.store.dispatch(this.settingsFinancialYearActions.SwitchFinancialYear(this.selectedFinancialYearUN));
+      this.store.dispatch(this._companyActions.RefreshCompanies());
     }
   }
 

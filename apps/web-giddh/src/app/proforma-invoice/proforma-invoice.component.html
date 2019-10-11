@@ -108,7 +108,8 @@
                         style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
-                          Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
+                          Copy Previous Invoices
+                          <!-- {{ invoiceType | voucherTypeToNamePipe | titlecase}} -->
                         </a>
 
                         <ng-container *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">

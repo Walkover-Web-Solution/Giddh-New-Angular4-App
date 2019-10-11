@@ -198,7 +198,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       isFsStock: [false],
       parentGroup: [''],
       hsnNumber: [''],
-      sacNumber: [''],
+      sacNumber: ['', Validators.pattern('^$|^[A-Za-z0-9]+')],
       taxes: [[]]
     });
     this.taxTempArray=[];
@@ -412,6 +412,16 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+  public validateSKU(e: any){
+    let pattern = new RegExp("^[a-zA-Z0-9]+$");
+    let isOk = pattern.test(e.key);
+    if(!isOk){
+      let val = this.addStockForm.get('skuCode').value;
+      val=val.substr(0,(val.length -1));
+      this.addStockForm.get('skuCode').patchValue(val);
+      return;
+    }
+  }
   public addCustomField() {
     if(!this.customField1){
       this.customField1=true;
