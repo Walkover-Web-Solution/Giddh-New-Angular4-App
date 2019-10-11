@@ -464,9 +464,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.addBlankRow(null);
     }
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-      if (setting && setting.invoiceSettings) {
-        this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-          moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
+      if (setting && (setting.invoiceSettings || setting.proformaSettings || setting.estimateSettings)) {
+        if(this.isSalesInvoice) {
+          this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
+            moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }else if(this.isProformaInvoice) {
+            this.invFormData.voucherDetails.dueDate = setting.proformaSettings.duePeriod ?
+              moment().add(setting.proformaSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }else{
+          this.invFormData.voucherDetails.dueDate = setting.estimateSettings.duePeriod ?
+            moment().add(setting.estimateSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }
       }
     });
 
@@ -947,12 +955,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.selectedFileName = '';
 
     this.assignDates();
-    let invoiceSettings: InvoiceSetting = null;
-    this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-    if (invoiceSettings && invoiceSettings.invoiceSettings) {
-      this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
-        moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days') : moment().toDate();
-    }
+    this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
+      if (setting && (setting.invoiceSettings || setting.proformaSettings || setting.estimateSettings)) {
+        if(this.isSalesInvoice) {
+          this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
+            moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }else if(this.isProformaInvoice) {
+          this.invFormData.voucherDetails.dueDate = setting.proformaSettings.duePeriod ?
+            moment().add(setting.proformaSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }else{
+          this.invFormData.voucherDetails.dueDate = setting.estimateSettings.duePeriod ?
+            moment().add(setting.estimateSettings.duePeriod, 'days').toDate() : moment().toDate();
+        }
+      }
+    });
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
