@@ -46,12 +46,12 @@
                         </td>
                         <td data-title="File">
                             <a *ngIf="!expenses.fileNames" class="font-12">
-                                <i class="icon-file-path middle"></i>attach file</a>
+                                <i class="icon-file-path middle"></i> attach file</a>
                             <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                         </td>
                         <td data-title="Description">{{expenses.description}}</td>
                         <td data-title="Action">
-                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success">Approve</button>
+                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success-outline">Approve</button>
                         </td>
                     </ng-container>
                 </tr>
@@ -80,7 +80,7 @@
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block pull-right ml-1">
+    <div class="icon-pointer d-inline-block pull-right ml-1 pointer">
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col" [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
 
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
