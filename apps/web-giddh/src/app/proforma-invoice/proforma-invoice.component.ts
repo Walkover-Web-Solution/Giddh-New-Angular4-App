@@ -32,7 +32,7 @@ import {
   VoucherTypeEnum,
   SalesEntryClassMulticurrency,
   TransactionClassMulticurrency, DiscountMulticurrency,
-  GstDetailsClass, AmountClassMulticurrency
+  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency
 } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -2528,7 +2528,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
     delete obj.voucher;
-    delete obj.updateAccountDetails;
     delete obj.depositAccountUniqueName;
 
     let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
@@ -2536,7 +2535,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let deposit = new AmountClassMulticurrency();
 
     deposit.accountUniqueName = this.depositAccountUniqueName;
-    deposit.amountForAccount = this.depositAmount.toString();
+    deposit.amountForAccount = this.depositAmount;
 
     entries.forEach(e => {
       let salesEntryClass = new SalesEntryClassMulticurrency();
@@ -2551,7 +2550,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let transactionClassMul = new TransactionClassMulticurrency();
         transactionClassMul.account.uniqueName = tr.accountUniqueName;
         transactionClassMul.account.name = tr.accountName;
-        transactionClassMul.amount.amountForAccount = tr.amount.toString();
+        transactionClassMul.amount.amountForAccount = tr.amount;
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         if(tr.isStockTxn){
@@ -2560,8 +2559,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
           saalesAddBulkStockItems.quantity = tr.quantity;
           saalesAddBulkStockItems.rate = tr.rate;
-          saalesAddBulkStockItems.stockUnitCode = tr.stockDetails.skuCode;
-          saalesAddBulkStockItems.sku = tr.stockDetails.skuCodeHeading;
+          saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+          saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+          saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+
           transactionClassMul.stock = saalesAddBulkStockItems;
         }
         salesEntryClass.transactions.push(transactionClassMul);
@@ -2577,6 +2578,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     obj.entries = salesEntryClassArray;
     obj.account.mobileNumber = obj.account.contactNumber;
     obj.deposit = deposit;
+
+    obj.account.billingDetails.countryName = this.customerCountryName;
+    obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+    obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+    delete obj.account.billingDetails.state;
+
+    obj.account.shippingDetails.countryName = this.customerCountryName;
+    obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+    obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+    delete obj.account.shippingDetails.state;
 
     return obj;
   }
@@ -2610,6 +2621,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
           }
         });
+        if(t.stock){
+          salesTransactionItemClass.isStockTxn = true;
+          salesTransactionItemClass.stockDetails = {};
+          salesTransactionItemClass.stockDetails.name = t.stock.name;
+          salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
+          salesTransactionItemClass.quantity = t.stock.quantity;
+          salesTransactionItemClass.rate = t.stock.rate;
+          salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
+          salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName+'#'+t.stock.uniqueName
+        }
       });
 
       salesEntryClass.discounts = [new LedgerDiscountClass()];
@@ -2665,7 +2687,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.templateDetails = result.templateDetails;
 
     this.isMulticurrencyAccount = voucherClassConversion.accountDetails.currency.code !== this.companyCurrency;
-    this.customerCountryName = voucherClassConversion.accountDetails.currency.code;
+    this.customerCountryName = result.account.billingDetails.countryName;
 
     this.exchangeRate = this.companyCurrency==='USD'? 1/result.exchangeRate:result.exchangeRate;
     this.originalExchangeRate = this.exchangeRate;

@@ -107,7 +107,12 @@ export class GstDetailsClass {
   public address: string[];
   public state?: StateCode;
   public panNumber?: any;
-
+  public countryName?:string;
+  /*Keeping both as API team is too confused to Map one variable type
+  *thus kept both whichever is needed on run time we can send that in request mapping.
+  * */
+  public stateCode?:string;
+  public stateName?:string;
   constructor() {
     this.address = [];
     this.state = new StateCode();
@@ -500,9 +505,10 @@ export class SalesAddBulkStockItems {
   rate: number = 0;
   sku?: string = '';
   stockUnitCode?: CodeStockMulticurrency;
+  stockUnit?: CodeStockMulticurrency;
 }
 
-class CodeStockMulticurrency{
+export class CodeStockMulticurrency{
   code:string;
 }
 export class SalesStockItemMulticurrency {
@@ -560,14 +566,12 @@ export class TransactionClassMulticurrency{
 }
 
 export class AmountClassMulticurrency{
-  public amountForAccount: string;
+  public amountForAccount: number;
   public amountForCompany: string;
-  public type: string;
+  public type?: string;
   public accountUniqueName?:string;
 
   constructor(){
-    this.amountForAccount = '400.99';
-    this.amountForCompany = '';
     this.type = 'DEBIT';
   }
 }
@@ -583,7 +587,7 @@ export class DiscountMulticurrency{
     this.calculationMethod = ledgerDiscountClass.discountType;
     this.uniqueName = ledgerDiscountClass.discountUniqueName;
     this.amount = new AmountClassMulticurrency();
-    this.amount.amountForAccount = ledgerDiscountClass.amount +"";
+    this.amount.amountForAccount = ledgerDiscountClass.amount;
     this.discountPercent = ledgerDiscountClass.discountValue;
   }
 }
