@@ -500,9 +500,10 @@ export class SalesAddBulkStockItems {
   rate: number = 0;
   sku?: string = '';
   stockUnitCode?: CodeStockMulticurrency;
+  stockUnit?: CodeStockMulticurrency;
 }
 
-class CodeStockMulticurrency{
+export class CodeStockMulticurrency{
   code:string;
 }
 export class SalesStockItemMulticurrency {

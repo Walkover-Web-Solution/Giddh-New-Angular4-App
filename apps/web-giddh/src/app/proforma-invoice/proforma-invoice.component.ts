@@ -32,7 +32,7 @@ import {
   VoucherTypeEnum,
   SalesEntryClassMulticurrency,
   TransactionClassMulticurrency, DiscountMulticurrency,
-  GstDetailsClass, AmountClassMulticurrency
+  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency
 } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -2528,7 +2528,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
     delete obj.voucher;
-    delete obj.updateAccountDetails;
     delete obj.depositAccountUniqueName;
 
     let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
@@ -2560,8 +2559,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
           saalesAddBulkStockItems.quantity = tr.quantity;
           saalesAddBulkStockItems.rate = tr.rate;
-          saalesAddBulkStockItems.stockUnitCode = tr.stockDetails.skuCode;
-          saalesAddBulkStockItems.sku = tr.stockDetails.skuCodeHeading;
+          saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+          saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+          saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+
           transactionClassMul.stock = saalesAddBulkStockItems;
         }
         salesEntryClass.transactions.push(transactionClassMul);
@@ -2610,6 +2611,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
           }
         });
+        if(t.stock){
+          salesTransactionItemClass.isStockTxn = true;
+          salesTransactionItemClass.stockDetails = {};
+          salesTransactionItemClass.stockDetails.name = t.stock.name;
+          salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
+          salesTransactionItemClass.quantity = t.stock.quantity;
+          salesTransactionItemClass.rate = t.stock.rate;
+          salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
+          salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName+'#'+t.stock.uniqueName
+        }
       });
 
       salesEntryClass.discounts = [new LedgerDiscountClass()];
