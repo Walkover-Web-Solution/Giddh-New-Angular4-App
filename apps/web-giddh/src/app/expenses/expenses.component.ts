@@ -1,17 +1,17 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, TemplateRef, OnChanges, SimpleChanges, } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, TemplateRef, OnChanges, SimpleChanges, } from '@angular/core';
 import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
 import { Store, select } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { ReplaySubject, Observable, of as observableOf, combineLatest as observableCombineLatest } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { createSelector } from 'reselect';
 import { ExpenseResults } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { CompanyActions } from '../actions/company.actions';
+import { ActivatedRoute } from '@angular/router';
+import { StateDetailsRequest } from '../models/api-models/Company';
 
 
 @Component({
@@ -96,6 +96,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
     private _expenceActions: ExpencesAction,
     private route: ActivatedRoute,
     private modalService: BsModalService,
+    private companyActions: CompanyActions,
     private _cdRf: ChangeDetectorRef) {
 
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -132,6 +133,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
         }
       }
     });
+    this.saveLastState('');
   }
   public selectedRowToggle(e) {
     this.isSelectedRow = e;
@@ -208,6 +210,18 @@ export class ExpensesComponent implements OnInit, OnChanges {
 
     this.getPettyCashPendingReports(this.pettycashRequest);
     this.getPettyCashRejectedReports(this.pettycashRequest);
+  }
+  public tabChanged(tab: string) {
+    this.saveLastState(tab);
+  }
+  private saveLastState(state: string) {
+    let companyUniqueName = null;
+    this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = `app/pages/expenses${state}`;
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
   detectChanges() {
     if (!this._cdRf['destroyed']) {
