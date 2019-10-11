@@ -412,13 +412,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  public validateSac(e:any){
+  public validateSKU(e: any){
     let pattern = new RegExp("^[a-zA-Z0-9]+$");
     let isOk = pattern.test(e.key);
     if(!isOk){
-      let val = this.addStockForm.get('sacNumber').value;
+      let val = this.addStockForm.get('skuCode').value;
       val=val.substr(0,(val.length -1));
-      this.addStockForm.get('sacNumber').patchValue(val);
+      this.addStockForm.get('skuCode').patchValue(val);
       return;
     }
   }

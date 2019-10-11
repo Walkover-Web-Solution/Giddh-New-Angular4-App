@@ -141,8 +141,8 @@
                 <div class="row sku-row">
                   <div class="form-group col-xs-4" [hidden]="(isManageInventory$ | async)">
                     <label>SAC Code</label>
-                    <input type="text" class="form-control" maxlength="10" (keyup)="validateSac($event)"
-                      formControlName="sacNumber" />
+                    <input type="text" class="form-control" maxlength="10"
+                      formControlName="sacNumber" decimalDigitsDirective/>
                   </div>
 
 
@@ -156,7 +156,7 @@
                       <i *ngIf="!editSKUlabel" class="fa fa-pencil" (click)="editSKUlabel=!editSKUlabel"></i>
                     </label>
                     <input type="text" name="skuCode" class="form-control" maxlength="20" 
-                      formControlName="skuCode">
+                      formControlName="skuCode" (keyup)="validateSKU($event)" >
                   </div>
 
 
