@@ -170,7 +170,14 @@
 
 
 /* end MDB tweaks */
-
+.btn-success-outline {
+  background: #E5E5E5;
+  color: #2DAA4A;
+}
+.btn-success-outline:hover {
+  background: #2DAA4A;
+  color: #fff;
+}
 .bg-none {
     background: none !important;
 }
@@ -178,7 +185,9 @@
 .relative {
     position: relative;
 }
-
+.pointer {
+  cursor: pointer;
+}
 
 /* css end */
 
