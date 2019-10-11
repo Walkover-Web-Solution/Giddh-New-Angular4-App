@@ -491,9 +491,29 @@ export class MaskApplierService {
       if (precision === 0) {
         inputValue = splitter[0];
       } else {
-        if (splitter[1] && splitter[1].length > precision) {
-          splitter[1] = splitter[1].substr(0, precision);
-          inputValue = splitter.join('.');
+        if (splitter[1]) {
+          // decimal points are grater then allowed then replace
+          if (splitter[1].length > precision) {
+            splitter[1] = splitter[1].substr(0, precision);
+            inputValue = splitter.join('.');
+          } else {
+            // add necessary decimal points
+            let missingPoints = precision - splitter[1].length;
+            while (missingPoints) {
+              splitter[1] = splitter[1] + '0';
+              missingPoints--;
+            }
+            inputValue = splitter.join('.');
+          }
+        } else {
+          // if no decimal points then add missing
+          // let missingPoints = precision;
+          // splitter[1] = '';
+          // while (missingPoints) {
+          //   splitter[1] = splitter[1] + '0';
+          //   missingPoints--;
+          // }
+          // inputValue = splitter.join('.');
         }
       }
     }
