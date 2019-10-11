@@ -2535,7 +2535,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let deposit = new AmountClassMulticurrency();
 
     deposit.accountUniqueName = this.depositAccountUniqueName;
-    deposit.amountForAccount = this.depositAmount.toString();
+    deposit.amountForAccount = this.depositAmount;
 
     entries.forEach(e => {
       let salesEntryClass = new SalesEntryClassMulticurrency();
@@ -2550,7 +2550,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let transactionClassMul = new TransactionClassMulticurrency();
         transactionClassMul.account.uniqueName = tr.accountUniqueName;
         transactionClassMul.account.name = tr.accountName;
-        transactionClassMul.amount.amountForAccount = tr.amount.toString();
+        transactionClassMul.amount.amountForAccount = tr.amount;
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         if(tr.isStockTxn){

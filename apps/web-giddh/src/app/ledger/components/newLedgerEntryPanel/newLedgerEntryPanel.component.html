@@ -119,7 +119,7 @@
             </tax-control>
             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
               <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-              {{ currentTxn.convertedTax | giddhCurrency}}</p>
+              {{ currentTxn.convertedTax |giddhCurrency}}</p>
           </td>
 
           <td class="text-center equal-2">

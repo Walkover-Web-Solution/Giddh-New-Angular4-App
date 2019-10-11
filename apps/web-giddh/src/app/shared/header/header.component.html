@@ -260,7 +260,7 @@ Create Company
         <!-- Main menu -->
         <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
           <h6 class="mrB1">MENU <i *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body"
-              class="fa fa-plus cp" (click)="showManageGroupsModal()"></i> </h6>
+              class="fa fa-plus cp"></i> </h6>
           <li *ngFor="let menu of menuItemsFromIndexDB">
             <a routerLink="{{menu.uniqueName}}"
               [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
@@ -272,8 +272,7 @@ Create Company
           <li id="other" *ngIf="!isMobileSite" (click)="toggleAllmoduleMenu()" (mouseenter)="showOtherMenu = true"
             (mouseleave)="showOtherMenu = false">
             <a (mouseenter)="openSubMenu(true)" (mouseleave)="openSubMenu(false)">All Modules <i *ngIf="!isMobileSite"
-                tooltip="All Modules" placement="bottom" container="body" class="fa fa-plus cp"
-                (click)="showManageGroupsModal()"></i></a>
+                tooltip="All Modules" placement="bottom" container="body" class="fa fa-plus cp"></i></a>
           </li>
 
         </ul>
