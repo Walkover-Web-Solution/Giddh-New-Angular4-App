@@ -6,7 +6,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
@@ -22,34 +22,34 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
   selector: 'account-add-new',
   templateUrl: 'account-add-new.component.html',
   styles: [`
-    .hsn-sac {
-      left: 51px;
-      position: relative;
-    }
+      .hsn-sac {
+          left: 51px;
+          position: relative;
+      }
 
-    .hsn-sac-radio {
-      top: 34px;
-      position: relative;
-      left: -10px;
-    }
+      .hsn-sac-radio {
+          top: 34px;
+          position: relative;
+          left: -10px;
+      }
 
-    .hsn-sac-w-m-input {
-      width: 144px;
-      margin-left: 50px;
-    }
+      .hsn-sac-w-m-input {
+          width: 144px;
+          margin-left: 50px;
+      }
 
-    .hsn-sac-group {
-      position: relative;
-      top: -75px;
-      left: 197px;
-    }
+      .hsn-sac-group {
+          position: relative;
+          top: -75px;
+          left: 197px;
+      }
 
-    .save-btn {
-      font-weight: 600;
-      color: #0aa50a;
-      letter-spacing: 1px;
-      background-color: #dcdde4;
-    }
+      .save-btn {
+          font-weight: 600;
+          color: #0aa50a;
+          letter-spacing: 1px;
+          background-color: #dcdde4;
+      }
   `]
 })
 
@@ -65,6 +65,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public showBankDetail: boolean = false;
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = true;
+  @Input() public isDiscountableAccount: boolean = false;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
@@ -88,6 +89,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public isIndia: boolean = false;
   public companyCountry: string = '';
   public isDiscount: boolean = false;
+  public companyDiscountDropDown: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -132,8 +134,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    if(this.activeGroupUniqueName == 'discount')
-    {
+    if (this.activeGroupUniqueName == 'discount') {
       this.isDiscount = true;
     }
     this.initializeNewForm();
@@ -152,6 +153,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         hsn.disable();
       }
     });
+
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
 
@@ -174,6 +176,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
@@ -182,6 +185,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
       }
     });
+
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
       if (a) {
         this.companiesList$.pipe(take(1)).subscribe(companies => {
@@ -231,6 +235,16 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.addAccountForm.patchValue({uniqueName: ''});
       }
     });
+
+    this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.companyDiscountDropDown = res.map(m => {
+          return {label: m.name, value: m.uniqueName};
+        });
+      } else {
+        this.companyDiscountDropDown = [];
+      }
+    })
   }
 
   public setCountryByCompany(company: CompanyResponse) {
@@ -443,8 +457,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
 
-    if(this.activeGroupUniqueName === 'discount')
-    {
+    if (this.activeGroupUniqueName === 'discount') {
       delete accountRequest['addresses'];
     }
     // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {

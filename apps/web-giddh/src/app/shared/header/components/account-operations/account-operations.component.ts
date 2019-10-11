@@ -1,10 +1,10 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
-import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
+import { ShareGroupModalComponent } from '../share-group-modal/share-group-modal.component';
+import { ShareAccountModalComponent } from '../share-account-modal/share-account-modal.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { ShareRequestForm } from './../../../../models/api-models/Permission';
+import { ShareRequestForm } from '../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { TaxResponse } from '../../../../models/api-models/Company';
@@ -39,18 +39,18 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
   selector: 'account-operations',
   templateUrl: './account-operations.component.html',
   styles: [`
-    .mrgeBtn {
-      padding: 8px 16px;
-    }
+      .mrgeBtn {
+          padding: 8px 16px;
+      }
 
-    .form_box .btn {
-      width: 72px;
-    }
+      .form_box .btn {
+          width: 72px;
+      }
 
-    .item_unq ul {
-      padding-left: 30px;
-      list-style: none;
-    }
+      .item_unq ul {
+          padding-left: 30px;
+          list-style: none;
+      }
 
   `],
 })
@@ -64,7 +64,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @Input() public height: number;
   public activeAccount$: Observable<AccountResponseV2>;
   public isTaxableAccount$: Observable<boolean>;
-  public isDiscountableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
@@ -104,10 +103,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public companyTaxes$: Observable<TaxResponse[]>;
   public companyTaxDropDown: Observable<IOption[]>;
   public companyDiscountDropDown: IOption[] = [];
+  public isDiscountableAccount: boolean = false;
   public groupsList: IOption[];
   public accounts$: Observable<IOption[]>;
   public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
-  public showTaxDropDown: boolean = false;
 
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
@@ -119,7 +118,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public discountList$: Observable<IDiscountList[]>;
-  public optionsForDropDown: IOption[] = [{label: 'TDS', value: 'vishal'}, {label: 'tcs', value: 'shalini'}];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -145,11 +143,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = {};
-  itemList = [];
-  settings = {};
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
@@ -240,32 +233,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public ngOnInit() {
 
-
-    this.itemList = [
-      {"id": 1, "itemName": "India", "category": "asia"},
-      {"id": 2, "itemName": "Singapore", "category": "asia pacific"},
-      {"id": 3, "itemName": "Germany", "category": "Europe"},
-      {"id": 4, "itemName": "France", "category": "Europe"},
-      {"id": 5, "itemName": "South Korea", "category": "asia"},
-      {"id": 6, "itemName": "Sweden", "category": "Europe"}
-    ];
-
-    this.selectedItems = [];
-    this.settings = {
-      singleSelection: false,
-      text: "Select Fields",
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      searchPlaceholderText: 'Search Fields',
-      enableSearchFilter: true,
-      badgeShowLimit: 5,
-      groupBy: "category",
-      enableCheckAll: false,
-      showCheckbox: false,
-      enableFilterSelectAll: false
-    };
-
-
     this.activeAccount$.subscribe(a => {
       if (a && a.parentGroups[0].uniqueName) {
         let col = a.parentGroups[0].uniqueName;
@@ -274,7 +241,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
 
       if (a && this.breadcrumbUniquePath[1]) {
-        this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
+        this.isDiscountableAccount = this.breadcrumbUniquePath[1] === 'sundrydebtors';
         this.discountAccountForm.patchValue({discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined});
       }
     });
@@ -433,10 +400,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.pipe(take(1)).subscribe(p => {
       activeAccount = p;
-      if(!this.showBankDetail){
-        if(p.parentGroups){
-          p.parentGroups.forEach(grp=>{
-            this.showBankDetail = grp.uniqueName === "sundrycreditors"? true: false;
+      if (!this.showBankDetail) {
+        if (p.parentGroups) {
+          p.parentGroups.forEach(grp => {
+            this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
             return;
           });
         }

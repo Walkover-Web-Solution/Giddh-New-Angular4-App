@@ -51,6 +51,7 @@
     <!--account add component-->
 
     <account-add-new *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                     [isDiscountableAccount]="isDiscountableAccount"
                      [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                      [isAccountNameAvailable$]="isAccountNameAvailable$"
                      [createAccountInProcess$]="createAccountInProcess$"
@@ -262,32 +263,32 @@
   </div>
 
   <!--select tax group-->
-<!--  <div class="container-fluid" *ngIf="((showEditGroup$ | async) || (showAddNewGroup$ | async) ||-->
-<!--    (showEditAccount$ | async) || (showAddNewAccount$ | async)) && isDebtorCreditor">-->
-<!--    <div class="row">-->
-<!--      <div class="form-group  clearfix  col-xs-12 ">-->
-<!--        <div class=" horizontal-form">-->
+  <!--  <div class="container-fluid" *ngIf="((showEditGroup$ | async) || (showAddNewGroup$ | async) ||-->
+  <!--    (showEditAccount$ | async) || (showAddNewAccount$ | async)) && isDebtorCreditor">-->
+  <!--    <div class="row">-->
+  <!--      <div class="form-group  clearfix  col-xs-12 ">-->
+  <!--        <div class=" horizontal-form">-->
 
-<!--          <form name="selectTaxForm" novalidate>-->
-<!--            <div class="tax-label">-->
-<!--              <label>Select Tax</label>-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--              <div class="input-group">-->
+  <!--          <form name="selectTaxForm" novalidate>-->
+  <!--            <div class="tax-label">-->
+  <!--              <label>Select Tax</label>-->
+  <!--            </div>-->
+  <!--            <div class="form-group">-->
+  <!--              <div class="input-group">-->
 
-<!--&lt;!&ndash;                <angular2-multiselect [(ngModel)]="selectedItems" name="selectedItems"&ndash;&gt;-->
-<!--&lt;!&ndash;                                      [data]="itemList" [settings]="settings">&ndash;&gt;-->
-<!--&lt;!&ndash;                </angular2-multiselect>&ndash;&gt;-->
-<!--                <span class="input-group-btn pdL2"> <button type="submit"-->
-<!--                                                            class="btn btn-success mrgeBtn">Save</button></span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </div>-->
+  <!--&lt;!&ndash;                <angular2-multiselect [(ngModel)]="selectedItems" name="selectedItems"&ndash;&gt;-->
+  <!--&lt;!&ndash;                                      [data]="itemList" [settings]="settings">&ndash;&gt;-->
+  <!--&lt;!&ndash;                </angular2-multiselect>&ndash;&gt;-->
+  <!--                <span class="input-group-btn pdL2"> <button type="submit"-->
+  <!--                                                            class="btn btn-success mrgeBtn">Save</button></span>-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--          </form>-->
+  <!--        </div>-->
 
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <!--select tax group-->
 
