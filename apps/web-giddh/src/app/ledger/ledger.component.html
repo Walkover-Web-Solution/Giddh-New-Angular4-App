@@ -513,7 +513,7 @@
               {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
               <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount }}</p>
+                {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}</p>
             </td>
           </tr>
           <!-- endregion -->
@@ -767,7 +767,7 @@
             <td data-title="Amount" class="col-xs-3 pos-rel text-right">
               {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
               <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount }}
+                {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
               </p>
 
             </td>
