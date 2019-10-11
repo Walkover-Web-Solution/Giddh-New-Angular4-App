@@ -566,14 +566,12 @@ export class TransactionClassMulticurrency{
 }
 
 export class AmountClassMulticurrency{
-  public amountForAccount: string;
+  public amountForAccount: number;
   public amountForCompany: string;
-  public type: string;
+  public type?: string;
   public accountUniqueName?:string;
 
   constructor(){
-    this.amountForAccount = '400.99';
-    this.amountForCompany = '';
     this.type = 'DEBIT';
   }
 }
@@ -589,7 +587,7 @@ export class DiscountMulticurrency{
     this.calculationMethod = ledgerDiscountClass.discountType;
     this.uniqueName = ledgerDiscountClass.discountUniqueName;
     this.amount = new AmountClassMulticurrency();
-    this.amount.amountForAccount = ledgerDiscountClass.amount +"";
+    this.amount.amountForAccount = ledgerDiscountClass.amount;
     this.discountPercent = ledgerDiscountClass.discountValue;
   }
 }

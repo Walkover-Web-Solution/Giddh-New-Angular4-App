@@ -1044,7 +1044,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.voucherDate = invoice.voucherDate;
     obj.voucherNumber = invoice.voucherNumber;
     obj.uniqueName = invoice.uniqueName;
-    obj.grandTotal = invoice.grandTotal;
+    obj.grandTotal = invoice.grandTotal.amountForAccount;
     obj.voucherType = this.selectedVoucher === VoucherTypeEnum.sales ? (invoice.cashInvoice ? VoucherTypeEnum.cash : VoucherTypeEnum.sales) : this.selectedVoucher;
     obj.account = invoice.account;
     obj.voucherStatus = invoice.balanceStatus;
