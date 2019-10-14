@@ -154,7 +154,7 @@ export class AccountDetailsClass {
       Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email']));
       this.contactNumber = attrs.mobileNo || '';
       //this.mobileNo = attrs.mobileNo || '';
-      this.email = attrs.updatedBy.email || '';
+      this.email = attrs.email || '';
       this.customerName = attrs.updatedBy.name || '';
       if (attrs.addresses.length > 0) {
         let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
