@@ -699,6 +699,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               }
             }
 
+            if(!obj.accountDetails.billingDetails.state){
+              obj.accountDetails.billingDetails.state = {};
+              obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
+              obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
+            }
+            if(!obj.accountDetails.shippingDetails.state){
+              obj.accountDetails.shippingDetails.state = {};
+              obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
+              obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
+            }
+
+            if(!obj.voucherDetails.customerUniquename){
+              obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
+            }
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
 
@@ -2211,7 +2225,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     }
 
-    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+    if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
       let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
       if(!modal.appliedOtherTax.name){
         entry.otherTaxModal.appliedOtherTax.name = tax.name;

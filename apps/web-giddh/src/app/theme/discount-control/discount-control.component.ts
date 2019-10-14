@@ -74,7 +74,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     this.prepareDiscountList();
 
-    if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+    if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
       this.discountFixedValueModal = this.defaultDiscount.amount;
     } else {
       this.discountPercentageModal = this.defaultDiscount.amount;
