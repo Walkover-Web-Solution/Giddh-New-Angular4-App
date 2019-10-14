@@ -8,7 +8,7 @@ import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsRespo
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment';
-import { GIDDH_DATE_FORMAT }  from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
 
 /**
@@ -44,8 +44,6 @@ export interface AuthenticationState {
   isForgotPasswordInProcess: boolean;
   isResetPasswordInSuccess: boolean;
 }
-
-
 
 export interface SessionState {
   user?: VerifyEmailResponseModel;
@@ -250,7 +248,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let newState = _.cloneDeep(state);
       let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-      if (GOOGLE_RESPONSE.status === 'success') {
+      if (GOOGLE_RESPONSE && GOOGLE_RESPONSE.status === 'success') {
         newState.isLoggedInWithSocialAccount = true;
       } else {
         newState.isLoggedInWithSocialAccount = false;
@@ -332,19 +330,19 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
       return Object.assign({}, state, {
         isLoginWithPasswordInProcess: true
       });
-      case LoginActions.LoginWithPasswdResponse: {
-        let res: BaseResponse<any, any> = action.payload;
-        if (res.status === 'success') {
-          if (!res.body.user.isVerified) {
-            return Object.assign({}, state, {
-              isLoginWithPasswordInProcess: false,
-              isLoginWithPasswordSuccessNotVerified: true,
-              user: res.body
-            });
-          }
+    case LoginActions.LoginWithPasswdResponse: {
+      let res: BaseResponse<any, any> = action.payload;
+      if (res.status === 'success') {
+        if (!res.body.user.isVerified) {
+          return Object.assign({}, state, {
+            isLoginWithPasswordInProcess: false,
+            isLoginWithPasswordSuccessNotVerified: true,
+            user: res.body
+          });
         }
-        return state;
       }
+      return state;
+    }
     case LoginActions.SignupWithPasswdRequest:
       return Object.assign({}, state, {
         isSignupWithPasswordInProcess: true,
@@ -407,7 +405,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     }
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-      if (data.status === 'success') {
+      if (data && data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
         });
@@ -629,7 +627,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       if (response.status === 'success') {
         let d = _.cloneDeep(state);
         localStorage.setItem('currencyDesimalType', response.body.balanceDecimalPlaces);
-         localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
+        localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
         let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
         if (currentCompanyIndx !== -1) {
           d.companies[currentCompanyIndx].country = response.body.country;
