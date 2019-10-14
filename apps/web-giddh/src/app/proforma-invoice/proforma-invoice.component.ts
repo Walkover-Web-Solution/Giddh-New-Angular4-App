@@ -2558,7 +2558,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           saalesAddBulkStockItems.name = tr.stockDetails.name;
           saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
           saalesAddBulkStockItems.quantity = tr.quantity;
-          saalesAddBulkStockItems.rate = tr.rate;
+          saalesAddBulkStockItems.rate = {};
+          saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
+          //saalesAddBulkStockItems.rate = tr.rate;
           saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
           saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
           saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
@@ -2627,7 +2629,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           salesTransactionItemClass.stockDetails.name = t.stock.name;
           salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
           salesTransactionItemClass.quantity = t.stock.quantity;
-          salesTransactionItemClass.rate = t.stock.rate;
+          salesTransactionItemClass.rate = t.stock.rate.amountForAccount;
           salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
           salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
           salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName+'#'+t.stock.uniqueName
