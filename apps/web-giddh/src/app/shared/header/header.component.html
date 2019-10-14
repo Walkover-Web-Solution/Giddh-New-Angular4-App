@@ -11,11 +11,11 @@
                   *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }} )</span>
               </ng-template>
               <!-- <span class="icon-dots-three-vertical"></span> -->
-              <div class="cText" [tooltip]="CompanyBranchnamealias" placement="bottom">
+              <div class="cText">
                 <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name ) | slice: 0 : 1}}
                 </span>
 
-                <div class="companyName-financeYear">
+                <div class="companyName-financeYear" [tooltip]="CompanyBranchnamealias" placement="right">
                   <span *ngIf="(selectedCompany | async)?.nameAlias"
                     style="">({{ (selectedCompany | async)?.nameAlias }}
                     )
@@ -295,8 +295,8 @@
               </span>
             </a>
           </li>
-          <li *ngIf="!isMobileSite" class="mrT cp hover-orange showMoreOpt" (click)="showNavigationModal()"
-            container="body" tooltip="Search accounts" placement="right">Show more...</li>
+          <li *ngIf="!isMobileSite" class="mrT cp  showMoreOpt" (click)="showNavigationModal()" container="body"
+            tooltip="Search accounts" placement="right">Show more...</li>
         </ul>
 
         <!-- Main menu -->

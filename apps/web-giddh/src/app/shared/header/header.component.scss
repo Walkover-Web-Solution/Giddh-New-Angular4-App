@@ -13,7 +13,7 @@
     width: 215px;
     /* padding-bottom: 120px; */
     left: -215px;
-    z-index: 999;
+    z-index: 990;
     box-shadow: -2px -2px 10px #0000001A inset;
 }
 
@@ -41,7 +41,7 @@
     border-color:$inputBorderColor;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
-    height: 30px;
+    height: 36px;
     padding-left: 3px !important;
 }
 
@@ -53,6 +53,7 @@
 .account-search {
     margin:20px 20px 20px 10px;
     position: relative;
+    height: 36px;
 }
 
 .account-search:hover:after {
@@ -67,14 +68,14 @@ a[vr-item]:focus {
 }
 
 .account-search:after {
-    content: 'Ctrl + k/g ';
+    content: 'Ctrl + g ';
     position: absolute;
     display: block;
     clear: both;
     top: 0;
     right: 4px;
     font-size: 10px;
-    line-height: 30px;
+    line-height: 36px;
     color: #484848;
 }
 
@@ -175,13 +176,13 @@ a[vr-item]:focus {
   top: 0;
 }
 .left_fixed_header>li>a:hover {
-    background:  $menuHoverColor;
+
     color:#262626;
 }
 
 .left_fixed_header>li>a:hover .label>span, .left_fixed_header>li>a:hover .label{
-  color:#262626;
-  font-family: 'opensans-semibold'
+  color:#01A9F4;
+
 }
 .left_fixed_header>li a.active {
     background: $menuHoverColor;
@@ -296,10 +297,10 @@ a[vr-item]:focus {
 
 .left_fixed_header h6 {
     color:$sidebarHeading;
-    font-size: 16px;
+    font-size: 14px;
     padding-left: 15px;
     padding-right: 15px;
-    /* font-family: ''opensans-semibold''; */
+   font-family: 'opensans-semibold';
 }
 
 .left_fixed_header>h6>i {
@@ -314,7 +315,7 @@ a[vr-item]:focus {
     border-radius: 2px;
     color: #fff;
     margin-top: 1px;
-    margin-right: 10px;
+
 
 }
 
@@ -328,9 +329,9 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #D1D1D1;
+    color: #999;
     margin-top: 1px;
-    margin-right: 10px;
+
 }
 
 .left_fixed_header>h6>i:hover {
@@ -577,7 +578,7 @@ padding-right: 15px;
 }
 .primary-header  li.company-name {
     top: 0;
-    width: 215px;
+
 }
 
 .primary-header .companyName-financeYear{
@@ -614,11 +615,22 @@ span.icon-support.dropdown-toggle{
     padding-top: 14px;
 }
 .hamburger_menu button{
-  padding-top: 4px;
+  padding-top: 0;
   padding-bottom: 0;
 }
+
 }
 @media(max-width:767px){
+.upperLayerHeader {
+    padding-top: 5px;
+}
+.paddingTopFixed{
+  display: none;
+}
+
+.nav-left-bar{
+  top: 0;
+}
   .mobile_menu_icon {
     position: absolute;
     top: 14px;
@@ -638,12 +650,7 @@ span.icon-support.dropdown-toggle{
 .nav-left-bar.open  .mobile_menu_icon{
   display: flex;
 }
-.paddingTopFixed{
-  display: none;
-}
-.nav-left-bar{
-  top: 0;
-}
+
 }
 
 @media(max-width:375px){

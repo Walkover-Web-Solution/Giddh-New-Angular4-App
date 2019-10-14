@@ -5409,13 +5409,14 @@ form#groupDetailForm {
     float: none;
   }
   .desktopHeader{
-    display: none;
-  }
-  .mobileHeader{
     display: block;
   }
+
   .mobileHeader  .btn-xs {
     padding: 3px 8px !important;
+}
+.universal_date {
+    margin-right: 0;
 }
 }
 
@@ -5435,6 +5436,12 @@ form#groupDetailForm {
 
 /*  */
 @media only screen and (max-width: 767px) {
+    .mobileHeader{
+    display: block;
+  }
+  .desktopHeader {
+    display: none;
+}
   .ledger_book .h-table tbody .ledger-row td {
       position: relative;
       display: block;

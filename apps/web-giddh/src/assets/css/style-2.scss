@@ -1365,7 +1365,7 @@ header .navbar {
 }
 
 .btn {
-    padding: 5px 16px;
+    padding: 7px 16px;
     border-radius: 2px;
     font-size: 14px;
     margin-right: 8px;
@@ -5108,7 +5108,9 @@ input[type='checkbox'][disabled] {
 .basic {
     background: #fff;
 }
-
+// table.basic{
+//   position: relative;
+// }
 .basic>thead>tr>th {
     background: #fff;
     color: #000000;
@@ -5119,6 +5121,9 @@ input[type='checkbox'][disabled] {
     font-family: opensans-semibold;
     font-size: 14px;
     border-top: 1px solid #D1D1D1;
+    // position: sticky !important;
+    // top: 60px;
+    // z-index: 999;
 }
 
 .basic>tbody>tr:hover td {
@@ -7761,7 +7766,7 @@ span.red-text {
 }
 
 .main-company-name .tooltip-inner {
-    white-space: pre-line;
+    white-space:nowrap;
     word-break: break-word;
 }
 .hamburger_menu i.icon-bar {
@@ -7788,7 +7793,7 @@ ul.dropdown-menu  p.lead.pd {
 }
 
 .form-control{
-  height: 32px;
+  height: 36px;
 }
 .nav.nav-tabs > li > a {
   color:$dark-blue00 !important;
@@ -8146,6 +8151,17 @@ ul.dropdown-menu  p.lead.pd {
 }
 
 @media (max-width: 767px) {
+  header .navbar {
+    background-color:$top_header;
+    border-bottom: 2px solid #e6e7e8;
+}
+ header  .hamburger_menu h4{
+  color:#fff;
+}
+ header  .hamburger_menu i.icon-bar {
+    color: #fff;
+}
+
     .dropdown-width ul.dropdown-menu.pd {
         min-width: 150px!important;
     }
