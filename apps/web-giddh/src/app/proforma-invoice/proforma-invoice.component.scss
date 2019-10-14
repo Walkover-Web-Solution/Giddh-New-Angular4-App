@@ -1069,7 +1069,9 @@ section.newtable {
 .customerInvoiceTable label {
   line-height: 2.3;
 }
-
+.customerInvoiceTable label.salesCountryLabel {
+    min-height: 32px;
+}
 .table-custom-invoice.table > tfoot > tr > td {
   border-top: none;
 }
