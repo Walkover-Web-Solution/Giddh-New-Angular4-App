@@ -49,11 +49,18 @@ export class SalesService {
    * @param updateAccount: boolean flag to update A/c
    * {{url}}/company/{{companyUniqueName}}/accounts/{{accountUniqueName}}/vouchers/generate
    */
-  public generateGenericItem(model: any): Observable<BaseResponse<any, any>> {
+  public generateGenericItem(model: any, isVoucherV4 = false): Observable<BaseResponse<any, any>> {
     let accountUniqueName = model.account.uniqueName;
     this.user = this._generalService.user;
+    let url;
+
+    if(isVoucherV4){
+      url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
+    }else{
+      url = this.config.apiUrl + SALES_API_V2.GENERATE_GENERIC_ITEMS;
+    }
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS
+    return this._http.post(url
       .replace(':companyUniqueName', this.companyUniqueName)
       .replace(':accountUniqueName', accountUniqueName)
       , model)

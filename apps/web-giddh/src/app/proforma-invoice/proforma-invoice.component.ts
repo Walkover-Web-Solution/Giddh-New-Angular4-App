@@ -630,7 +630,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             obj = this.invFormData;
           } else {
             if (this.invoiceType === VoucherTypeEnum.sales) {
-              let convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              let convertedRes1 = results[1];
+              if( this.isSalesInvoice){
+                convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              }
               obj = cloneDeep(convertedRes1) as VoucherClass;
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
@@ -1206,14 +1209,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
-      this.salesService.generateGenericItem(this.updateData(obj, data)).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+      let updatedData = obj;
+      let isVoucherV4 = false;
+      if(this.isSalesInvoice){
+        updatedData = this.updateData(obj, data);
+        isVoucherV4 = true;
+      }
+      this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
 
-          this.voucherNumber = response.body.number;
-          this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.account.uniqueName;
+
+          if(response.body.account){
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
+            this.accountUniqueName = response.body.account.uniqueName;
+          }else{
+            this.voucherNumber = response.body.voucherDetails.voucherNumber;
+            this.invoiceNo = this.voucherNumber;
+            this.accountUniqueName = response.body.accountDetails.uniqueName;
+          }
+
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
@@ -2313,10 +2330,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-      this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
-        invoiceNumber: this.invoiceNo,
-        voucherType: this.parseVoucherType(this.invoiceType)
-      }));
+      if(this.isSalesInvoice){
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
+          invoiceNumber: this.invoiceNo,
+          voucherType: this.parseVoucherType(this.invoiceType)
+        }));
+      }else{
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
+          invoiceNumber: this.invoiceNo,
+          voucherType: this.parseVoucherType(this.invoiceType)
+        }));
+      }
     } else {
       let obj: ProformaGetRequest = new ProformaGetRequest();
       obj.accountUniqueName = this.accountUniqueName;
