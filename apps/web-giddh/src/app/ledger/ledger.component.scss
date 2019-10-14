@@ -169,13 +169,20 @@
     padding-right: 25px !important;
 }
 .t-h-bg1 th {
-    background:$dark-blue01;
-    color: #fff;
-    border-right: 1px solid #c4c6c7;
+      background: #fff;
+    color: #000000;
+    border-right: 1px solid #D1D1D1;
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $dark-blue01;
+    border-bottom: 1px solid #D1D1D1;
+    font-family: opensans-semibold;
+    font-size: 14px;
+    border-top: 1px solid #D1D1D1;
 }
+.ledger-main .form-control, .ledger-main input {
+    color: #1C1C1C;
+}
+
 .ledger_book {
     border: 0px solid #ccc;
     clear: both;

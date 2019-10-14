@@ -20,13 +20,13 @@ import { GeneralService } from '../services/general.service';
           padding: 2px 0px !important;
           margin-right: 35px !important;
            padding-bottom: 7px !important;
-           font-size:14px;
-               color: #333 !important;
+           font-size:16px;
+               color: #262626 !important;
       }
 
       .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-          border-bottom: 4px solid #FECD51 !important;
-          color:#1A237E !important;
+          border-bottom: 4px solid #01A9F4 !important;
+          color:#262626 !important;
       }
 
       /
@@ -39,10 +39,10 @@ import { GeneralService } from '../services/general.service';
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 20px;
           padding: 12px 0px 0 15px !important;
-         background-color: #fff;
-    z-index: 9;
-    position: relative;
-    top: -4px;
+          background-color: #F7F8FD;
+          z-index: 9;
+          position: relative;
+          top: -4px;
       }
 
       /*.invoice-nav.navbar-nav > li > a {*/
