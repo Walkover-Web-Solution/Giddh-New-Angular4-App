@@ -11,23 +11,23 @@ import { GeneralActions } from './actions/general/general.actions';
 @Component({
   selector: 'page',
   template: `
-    <div id="main" [ngClass]="{'menu_open':sideMenu.isopen}">
+    <div id="main">
       <giddh-loader></giddh-loader>
       <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>
-      <layout-main>
-        <router-outlet></router-outlet>
+      <layout-main [sideMenu]="sideMenu">
+        <router-outlet ></router-outlet>
       </layout-main>
-       
+
     </div>`
 })
 export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
-  public sideMenu: { isopen: boolean } = {isopen: true};
+  public sideMenu: { isopen: boolean } = { isopen: true };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private comapnyActions: CompanyActions, private store: Store<AppState>,
-              private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
-              private _generalService: GeneralService, private generalActions: GeneralActions) {
+    private router: Router, private activatedRoute: ActivatedRoute, private location: Location,
+    private _generalService: GeneralService, private generalActions: GeneralActions) {
   }
 
   public ngOnInit() {

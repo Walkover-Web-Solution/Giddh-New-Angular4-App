@@ -6,21 +6,22 @@
 
 .nav-left-bar {
     position: fixed;
-    top: 0;
+    top: 61px;
     bottom: 0;
     min-height: 100vh;
-    background:$dark-blue;
+    background:#fff;
     width: 215px;
     /* padding-bottom: 120px; */
     left: -215px;
     z-index: 999;
+    box-shadow: -2px -2px 10px #0000001A inset;
 }
 
 .account-search .input-group-addon {
 
-    border-color:$light-blue02;
+    border-color:$inputBorderColor;
     border-radius: 2px 0 0 2px;
-    color: #fff;
+    color: #484848;
     /* height: 29px; */
     /* line-height: 14px; */
     font-size: 12px;
@@ -37,7 +38,7 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color:$light-blue02;
+    border-color:$inputBorderColor;
     border-left: 0px;
     border-radius: 0px 2px 2px 0 !important;
     height: 30px;
@@ -45,7 +46,7 @@
 }
 
 .account-search .form-control:focus {
-    border-color: #5F6E7E !important;
+    border-color: $inputBorderColor !important;
     color: #B7B7B7;
 }
 
@@ -74,7 +75,7 @@ a[vr-item]:focus {
     right: 4px;
     font-size: 10px;
     line-height: 30px;
-    color: #5F6581;
+    color: #484848;
 }
 
 .account-search .form-control:after {
@@ -87,28 +88,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: #fff;
+    color:#484848;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: #fff;
+    color:#484848;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: #fff;
+    color:#484848;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: #fff;
+    color: #484848;
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -118,7 +119,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: #fff !important;
+    color:#484848 !important;
 }
 /* .left_fixed_header.open,
 .left_fixed_header:hover {
@@ -133,9 +134,9 @@ a[vr-item]:focus {
     padding: 12px 10px !important;
 }
 
-.main-company-name>li>a:hover {
-    background: #40505F;
-}
+// .main-company-name>li>a:hover {
+//     background: #40505F;
+// }
 
 .main-company-name>li>a:hover .cText .cName,
 .main-company-name>li>a:hover .cText .fyear,
@@ -159,7 +160,7 @@ a[vr-item]:focus {
 
 .left_fixed_header>li>a {
     display: block;
-    padding: 8px 10px;
+    padding:10px 15px;
     color: #EBECEE;
     position: relative;
     /* width: 32px; */
@@ -174,23 +175,23 @@ a[vr-item]:focus {
   top: 0;
 }
 .left_fixed_header>li>a:hover {
-    background: transparent;
-    color:$yellow;
+    background:  $menuHoverColor;
+    color:#262626;
 }
-.left_fixed_header>li>a.active:before{
-    background: $yellow;
-}
+
 .left_fixed_header>li>a:hover .label>span, .left_fixed_header>li>a:hover .label{
-  color:$yellow;
+  color:#262626;
+  font-family: 'opensans-semibold'
 }
 .left_fixed_header>li a.active {
-    background: $darkGray;
+    background: $menuHoverColor;
+
 }
 
 .left_fixed_header>li>a.active .label,
 .left_fixed_header>li>a.active .label>span {
-    color: $yellow;
-    font-family: 'opensans-regular';
+     color:#262626;
+    font-family: 'opensans-semibold';
 
 }
 
@@ -201,7 +202,7 @@ a[vr-item]:focus {
     padding-left: 0px;
     /* opacity: 0; */
     text-align: left;
-    color: #EBECEE;
+    color:#262626;
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: 'opensans-regular';
@@ -294,40 +295,40 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header h6 {
-    color:$light-blue02;
+    color:$sidebarHeading;
     font-size: 16px;
-    padding-left: 10px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     /* font-family: ''opensans-semibold''; */
 }
 
 .left_fixed_header>h6>i {
-    float: left;
+    float: right;
     font-size: 10px;
-    background: #868EE0;
+    background:$sidebarHeading;
     display: inline-block;
     width: 15px;
     height: 15px;
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #00074D;
+    color: #fff;
     margin-top: 1px;
     margin-right: 10px;
 
 }
 
 #other i{
-  float: left;
-    font-size: 10px;
-    background: #868EE0;
+    float: right;
+    font-size: 20px;
+    background: transparent;
     display: inline-block;
     width: 15px;
     height: 15px;
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #00074D;
+    color: #D1D1D1;
     margin-top: 1px;
     margin-right: 10px;
 }
@@ -425,7 +426,7 @@ a[vr-item]:focus {
 
 .nav_wrapper {
     position: relative;
-    background:$dark-blue;
+
     height: calc(100vh - 145px);
 }
 
@@ -468,17 +469,17 @@ a[vr-item]:focus {
 }
 
 .universal_date li input {
-    background:$dark-blue00 !important;
+    background:$headerBtnColor !important;
     padding-left: 28px !important;
     color: #fff;
     padding-right: 5px !important;
-    border:1px solid $border-blueDark;
+    border:1px solid $headerBtnColor;
 }
 .universal_date li input:focus{
-  border:1px solid $border-blueDark !important;
+  border:1px solid $headerBtnColor !important;
 }
 .header-date {
-    background:$dark-blue00 !important;
+    background:$headerBtnColor !important;
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
     color: #fff;
@@ -487,11 +488,11 @@ a[vr-item]:focus {
 .mobile_menu_icon {
     display: none;
 }
-#cmpWrp{
-  background-color:$dark-blue;
-}
+// #cmpWrp{
+//   background-color:$dark-blue;
+// }
 .calender-addone{
-background-color:$dark-blue00;
+background-color:$headerBtnColor;
     color: #fff;
     padding:9px 8px 9px 10px;
     vertical-align: bottom;
@@ -502,27 +503,25 @@ background-color:$dark-blue00;
     }
     .notToday .calender-addone{
       position: absolute;
-      border:1px solid $dark-blue00;
+      border:1px solid $headerBtnColor;
           padding: 8px 8px;
     }
     #AddManage.btn-gray {
-    background: $dark-blue00;
+    background: $headerBtnColor;
     color: #fff;
     position: relative;
     padding-left: 32px;
     padding-top: 4px;
     padding-bottom: 5px;
     padding-right: 12px;
-    border: 1px solid $dark-blue00;
+    border: 1px solid $headerBtnColor;
 }
  #AddManage .icon-edit-ico{
-
-position: absolute;
+    position: absolute;
     left: 0px;
-    background-color: $dark-blue00;
+    background-color: $headerBtnColor;
     padding:8px 6px 8px 10px;
     top: 0px;
-
     text-align: center;
     display: inline-flex;
     color: #fff;
@@ -544,8 +543,58 @@ position: absolute;
 }
 
 #other a{
-  color: $light-blue02;
-  text-transform: uppercase;
+    color: #262626;
+    text-transform: uppercase;
+    font-family: opensans-semibold;
+}
+
+
+.showMoreOpt {
+    font-size: 14px;
+    padding: 0 15px;
+}
+// top header css
+.paddingTopFixed {
+    padding-top: 60px;
+}
+.primary-header{
+  background-color: $top_header;
+  min-height: 60px;
+  position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 999;
+}
+
+.primary-header .giddh-logo {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 3.8;
+}
+.primary-header .rightDetails{
+transform: translateY(14px);
+padding-right: 15px;
+}
+.primary-header  li.company-name {
+    top: 0;
+    width: 215px;
+}
+
+.primary-header .companyName-financeYear{
+      display: inline-block;
+    padding-left: 10px;
+}
+.primary-header  .companyName-financeYear span {
+    display: block;
+    vertical-align: middle;
+}
+.primary-header .cText{
+      display: flex;
+    align-items: center;
+}
+.primary-header  .companyName-financeYear span:first-child {
+    font-family: opensans-semibold;
+    font-size: 14px;
 }
 /* responsive */
 @media(max-width:991px) {
@@ -574,8 +623,8 @@ span.icon-support.dropdown-toggle{
     position: absolute;
     top: 14px;
     color: #fff;
-    right: -34px;
-    background-color: #303e4e;
+    right: -35px;
+    background-color: $top_header;
     width: 35px;
     height: 35px;
     text-align: center;
@@ -588,6 +637,12 @@ span.icon-support.dropdown-toggle{
 }
 .nav-left-bar.open  .mobile_menu_icon{
   display: flex;
+}
+.paddingTopFixed{
+  display: none;
+}
+.nav-left-bar{
+  top: 0;
 }
 }
 

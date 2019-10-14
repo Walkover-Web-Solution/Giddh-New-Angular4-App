@@ -627,8 +627,8 @@ ul.sub-list {
     top: -4px;
 }
 .btn-pink{
-  background: $BtnpinkColor;
-  border:1px solid $BtnpinkColor;
+  background:$primaryBtncolror;
+  border:1px solid $primaryBtncolror;
   color:#fff;
 }
 
@@ -1257,7 +1257,7 @@ modal-container.modal.fade.show {
 
 .company-name .cText .fyear {
       font-size: 12px;
-    margin-left: 5px;
+
 }
 
 .company-name .cText span {
@@ -1269,7 +1269,7 @@ modal-container.modal.fade.show {
 }
 
 header .navbar {
-    background-color: #fff;
+    background-color:#F7F8FA;
     border-bottom: 2px solid #e6e7e8;
 }
 
@@ -5110,12 +5110,15 @@ input[type='checkbox'][disabled] {
 }
 
 .basic>thead>tr>th {
-    background: $dark-blue01 !important ;
-    color: #fff;
-    border: 0;
-    font-family: 'opensans-regular';
-    text-transform: capitalize;
-    font-size: 14px !important;
+    background: #fff;
+    color: #000000;
+    border-right: 1px solid #D1D1D1;
+    padding: 11px !important;
+    font-weight: 400;
+    border-bottom: 1px solid #D1D1D1;
+    font-family: opensans-semibold;
+    font-size: 14px;
+    border-top: 1px solid #D1D1D1;
 }
 
 .basic>tbody>tr:hover td {
@@ -6009,11 +6012,11 @@ table td[class*=col-]:last-child {
 } */
 
 .universal_date .btn-link {
-    color:$dark-blue00 !important;
+    color:#F5F5F5 !important;
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid $dark-blue00;
+    border-bottom: 1px solid #F5F5F5;
     padding-bottom: 0;
     border-radius: 0;
 }
@@ -6564,8 +6567,8 @@ perfect-scrollbar>.ps>.ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $dark-blue00;
-   font-family: 'opensans-semibold';
+    color:$pageTitleColor;
+   font-family: 'opensans-bold';
 }
 
 .tax-engine .icon {
@@ -7762,7 +7765,7 @@ span.red-text {
     word-break: break-word;
 }
 .hamburger_menu i.icon-bar {
-    color:$dark-blue00;
+    color:$pageTitleColor;
 }
 .pageCount span {
     font-size: 14px;
@@ -8208,9 +8211,10 @@ ul.dropdown-menu  p.lead.pd {
         position: absolute;
         content: '';
         background: rgba(0, 0, 0, 0.3);
-        z-index: 2;
+        z-index: 99;
         height: 100%;
         width: 100%;
+            top: 0;
     }
 }
 
