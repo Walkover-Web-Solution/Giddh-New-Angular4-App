@@ -386,6 +386,14 @@ sh-select:focus {
 .subTotal {
   font-size: 14px !important;
 }
+
+.ledgHead .advancSearchBlock {
+    height: 34px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
+
 // reponsive
 
 @media (min-width: 1200px) {
