@@ -100,7 +100,6 @@
                           </sales-sh-select>
                         </ng-container>
                         <!-- endregion -->
-
                         <!-- region if not cashinvoice show customer dropdown -->
                         <ng-container *ngIf="isCashInvoice">
                           <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
@@ -438,7 +437,7 @@
             <span class="left-currency">1 USD</span>
             <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon">
             <span class="right-currency">
-              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate}}</span>
+              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | number:'1.2-2'}}</span>
               <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
                 class="form-control edit-currency"> INR
             </span>
