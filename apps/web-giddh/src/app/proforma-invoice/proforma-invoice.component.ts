@@ -2750,4 +2750,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     return voucherClassConversion;
   }
+
+  public updateExchangeRate(val) {
+    let total = parseFloat(val.replace(/,/g,""));
+    if(this.isMulticurrencyAccount){
+      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
 }

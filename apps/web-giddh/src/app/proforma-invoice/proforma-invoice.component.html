@@ -1132,10 +1132,10 @@
                       </div>
 
                       <div class="tableCell figureCell">
-                        <input *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate | giddhCurrency">
-                        <input *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate | giddhCurrency">
+                        <input #grandTotalInr *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
+                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate | giddhCurrency" (blur)="updateExchangeRate(grandTotalInr.value)">
+                        <input #grandTotalMul *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
+                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate | giddhCurrency" (blur)="updateExchangeRate(grandTotalMul.value)">
                       </div>
                     </div>
 
