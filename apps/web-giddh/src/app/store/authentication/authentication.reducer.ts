@@ -262,7 +262,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let newState = _.cloneDeep(state);
       let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-      if (GOOGLE_RESPONSE.status === 'success') {
+      if (GOOGLE_RESPONSE && GOOGLE_RESPONSE.status === 'success') {
         newState.isLoggedInWithSocialAccount = true;
       } else {
         newState.isLoggedInWithSocialAccount = false;
@@ -419,7 +419,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     }
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
-      if (data.status === 'success') {
+      if (data && data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
         });
