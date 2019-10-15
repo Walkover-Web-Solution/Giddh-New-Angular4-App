@@ -2683,6 +2683,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           let discountLedger = new LedgerDiscountClass();
           discountLedger.discountValue = discount.amount.amountForAccount;
           discountLedger.discountType = discount.calculationMethod;
+          discountLedger.amount = discountLedger.discountValue;
           discountLedger.isActive = true;
           discountArray.push(discountLedger);
         });
