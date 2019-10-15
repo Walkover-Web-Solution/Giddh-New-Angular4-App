@@ -2674,8 +2674,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       });
 
-      salesEntryClass.discounts = [new LedgerDiscountClass()];
 
+      if(entry.discounts){
+        let discountArray = [];
+        entry.discounts.forEach(discount=>{
+          let discountLedger = new LedgerDiscountClass();
+          discountLedger.discountValue = discount.amount.amountForAccount;
+          discountLedger.discountType = discount.calculationMethod;
+          discountLedger.isActive = true;
+          discountArray.push(discountLedger);
+        });
+        salesEntryClass.discounts = discountArray;
+      }else{
+        salesEntryClass.discounts = [new LedgerDiscountClass()];
+      }
       salesEntryClass.voucherType = entry.voucherType;
       salesEntryClass.uniqueName = entry.uniqueName;
       salesEntryClass.description = entry.description;
