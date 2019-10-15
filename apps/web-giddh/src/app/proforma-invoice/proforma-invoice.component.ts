@@ -268,7 +268,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;
-
+  public inputMaskFormat: string;
+  public isPrefixAppliedForCurrency: boolean;
+  public selectedPrefixForCurrency: string;
+  public selectedSuffixForCurrency: string;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -369,6 +372,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+        this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
       } else {
         this.customerCountryName = '';
         this.companyCurrency = 'INR';
@@ -517,7 +521,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
-
+        //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
@@ -1606,6 +1610,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
+      if(this.isMulticurrencyAccount){
+        this.assignPrefixAndSuffixForCurrency();
+      }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
 
         this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
@@ -2753,10 +2760,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateExchangeRate(val) {
+    val = val.replace(this.selectedPrefixForCurrency, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
       this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
       this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+
+  private assignPrefixAndSuffixForCurrency() {
+    if(this.companyCurrency === 'INR'){
+      this.selectedPrefixForCurrency = '$';
+    }else{
+      this.selectedPrefixForCurrency = '₹';
     }
   }
 }

@@ -31,6 +31,7 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.
     SendEmailInvoiceModule,
     VoucherTypeToNamePipeModule,
     PdfJsViewerModule,
-    CurrencyModule
+    CurrencyModule,
+    NgxMaskModule.forRoot()
   ],
   exports: [ProformaInvoiceComponent],
   declarations: [

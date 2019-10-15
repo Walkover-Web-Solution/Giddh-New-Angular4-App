@@ -5,7 +5,7 @@
     <div class="multi-select adjust">
       <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer"
              (focus)="discountMenu = true;hideOtherPopups.emit(true)"
-             [(ngModel)]="discountSum" readonly (blur)="discountInputBlur($event)"
+             [(ngModel)]="discountSum" [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput" readonly (blur)="discountInputBlur($event)"
              style="padding-right:22px !important;"/>
       <span class="caret cp no-select" (click)="discountMenu = true;hideOtherPopups.emit(true)"></span>
     </div>
