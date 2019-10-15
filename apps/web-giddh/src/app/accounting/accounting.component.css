@@ -141,13 +141,13 @@
 .sidebar_list h3 {
   background: #fff;
 }
-
+/*
 .label.isActive {
   font-weight: normal;
   background: #F85C88;
   color: #fff !important;
   cursor: auto;
-}
+} */
 
 input[name="entryDate"] {
   background: transparent !important;

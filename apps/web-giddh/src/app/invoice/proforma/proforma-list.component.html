@@ -197,7 +197,8 @@
       </thead>
 
       <tbody *ngIf="voucherData && voucherData.results.length > 0 && !(isGetAllInProcess$ | async)"
-        (clickOutside)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''">
+        (clickOutside)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
+        (mouseleave)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''">
 
         <tr *ngFor="let item of voucherData.results; let i = index"
           (mouseover)="hoveredItemUniqueName = item.uniqueName">

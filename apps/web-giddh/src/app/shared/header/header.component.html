@@ -196,7 +196,7 @@
       </div>
       <div class="col-sm-4">
         <div class="giddh-logo">
-          <img src="../../../assets/images/giddh-logo.svg">
+          <img src="assets/images/giddh-logo.svg">
         </div>
 
       </div>
@@ -295,8 +295,8 @@
               </span>
             </a>
           </li>
-          <li *ngIf="!isMobileSite" class="mrT cp  showMoreOpt" (click)="showNavigationModal()" container="body"
-            tooltip="Search accounts" placement="right">Show more...</li>
+          <li *ngIf="!isMobileSite" class="mrT cp  showMoreOpt" (click)="showNavigationModal()">
+            <span container="body" tooltip="Search accounts" placement="bottom"> Show more...</span></li>
         </ul>
 
         <!-- Main menu -->

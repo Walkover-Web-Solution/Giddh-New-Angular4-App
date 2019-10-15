@@ -22,7 +22,7 @@
 }
 
 .icon-pointer .activeTextColor {
-  color:$yellow !important;
+  color:$activeIconTh !important;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -77,7 +77,7 @@
 span.inputAddon {
     position: absolute;
     right: 0px;
-    padding: 2px 9px;
+    padding: 4px 9px;
     background-color:$border-blue;
     color: #fff;
     font-size: 20px;
