@@ -79,7 +79,7 @@ export class InvoiceUiDataService {
     template.sections['header'].data['companyName'].label = this.companyName;
     if (template.sections && template.sections.footer.data.companyName) {
       template.sections['footer'].data['companyName'].label = this.companyName;
-      template.sections['footer'].data['companyAddress'].label = this.companyAddress;
+    //  template.sections['footer'].data['companyAddress'].label = this.companyAddress;
     }
 
     this.BRToNewLine(template);
@@ -166,7 +166,7 @@ export class InvoiceUiDataService {
           selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
         }
         if (this.companyAddress ) { // due to this on edit mode company address was not pre-filling
-          selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
+         // selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
         }
         selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
         if (!selectedTemplate.logoUniqueName) {
