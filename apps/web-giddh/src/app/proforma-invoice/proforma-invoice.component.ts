@@ -1619,6 +1619,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let rate = res.body;
             if (rate) {
               this.fetchedConvertedRate = rate;
+              this.exchangeRate = rate;
+              this.originalExchangeRate = rate;
             }
           }, (error1 => {
             this.fetchedConvertedRate = 0;
@@ -2747,5 +2749,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.invoiceUniqueName = result.uniqueName;
 
     return voucherClassConversion;
+  }
+
+  public updateExchangeRate(val) {
+    let total = parseFloat(val.replace(/,/g,""));
+    if(this.isMulticurrencyAccount){
+      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      this.originalExchangeRate = this.exchangeRate;
+    }
   }
 }

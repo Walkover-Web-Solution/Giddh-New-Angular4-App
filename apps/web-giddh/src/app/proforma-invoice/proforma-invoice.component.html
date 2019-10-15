@@ -282,15 +282,15 @@
                     class="balance-due">{{isProformaInvoice || isEstimateInvoice ? 'Total Amount' : 'Balance Due'}}</span>
                   <span class="sp-rupees" *ngIf="isMulticurrencyAccount"
                     [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}">
-                    <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong></span>
+                    <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong></span>
                   <!-- added multicurrency feature make it functional to change into appropriate currency -->
                   <span class="sp-rupees">
                     <span
                       [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                     <span
-                      *ngIf="companyCurrency === 'INR'">{{invFormData.voucherDetails.balanceDue*exchangeRate | number:'1.2-2'}}</span>
+                      *ngIf="companyCurrency === 'INR'">{{invFormData.voucherDetails.balanceDue*exchangeRate | giddhCurrency}}</span>
                     <span
-                      *ngIf="companyCurrency === 'USD'">{{ invFormData.voucherDetails.balanceDue/exchangeRate | number:'1.2-2'}}</span>
+                      *ngIf="companyCurrency === 'USD'">{{ invFormData.voucherDetails.balanceDue/exchangeRate | giddhCurrency}}</span>
                   </span>
                 </p>
               </div>
@@ -437,7 +437,7 @@
             <span class="left-currency">1 USD</span>
             <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon">
             <span class="right-currency">
-              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | number:'1.2-2'}}</span>
+              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
               <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
                 class="form-control edit-currency"> INR
             </span>
@@ -531,7 +531,7 @@
                   <td class="text-right tra-rate item-rate " style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex: 1;">
-                        <div class="wrap-td-data">{{transaction.rate | number:'1.2-2'}}</div>
+                        <div class="wrap-td-data">{{transaction.rate | giddhCurrency}}</div>
                       </div>
                     </div>
 
@@ -539,36 +539,36 @@
                       <span class=""
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}">
                       </span>
-                      <span *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | number:'1.2-2'}}</span>
-                      <span *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | number:'1.2-2'}}</span>
+                      <span *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | giddhCurrency}}</span>
+                      <span *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | giddhCurrency}}</span>
                     </div>
                   </td>
                   <td class="text-right  item-amount" style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex: 1;">
-                        <div class="wrap-td-data">{{transaction.amount | number:'1.2-2'}}</div>
+                        <div class="wrap-td-data">{{transaction.amount | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                       <span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       <span
-                        *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | number:'1.2-2'}}</span>
+                        *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | giddhCurrency}}</span>
                       <span
-                        *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | number:'1.2-2'}}</span>
+                        *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | giddhCurrency}}</span>
                     </div>
                   </td>
                   <td class="item-discount" style="height:1px;">
                     <div class=" text-right td_Wrapper">
 
                       <div style="flex: 1;">
-                        <div class="wrap-td-data"> {{ entry.discountSum | number:'1.2-2'}}</div>
+                        <div class="wrap-td-data"> {{ entry.discountSum | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
-                      <span *ngIf="companyCurrency === 'INR'">{{entry.discountSum*exchangeRate | number:'1.2-2'}}</span>
-                      <span *ngIf="companyCurrency === 'USD'">{{entry.discountSum/exchangeRate | number:'1.2-2'}}</span>
+                      <span *ngIf="companyCurrency === 'INR'">{{entry.discountSum*exchangeRate | giddhCurrency}}</span>
+                      <span *ngIf="companyCurrency === 'USD'">{{entry.discountSum/exchangeRate | giddhCurrency}}</span>
                     </div>
 
 
@@ -576,22 +576,22 @@
                   <td class="text-right item-tax" style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex:1;">
-                        <div class="wrap-td-data">{{(entry.taxSum + entry.cessSum) | number:'1.2-2'}}</div>
+                        <div class="wrap-td-data">{{(entry.taxSum + entry.cessSum) | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                       <span
-                        *ngIf="companyCurrency === 'INR'">{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}</span>
+                        *ngIf="companyCurrency === 'INR'">{{(entry.taxSum + entry.cessSum)*exchangeRate | giddhCurrency}}</span>
                       <span
-                        *ngIf="companyCurrency === 'USD'">{{(entry.taxSum + entry.cessSum)/exchangeRate | number:'1.2-2'}}</span>
+                        *ngIf="companyCurrency === 'USD'">{{(entry.taxSum + entry.cessSum)/exchangeRate | giddhCurrency}}</span>
                     </div>
                   </td>
                   <td class="text-right item-tax dlt-abs" style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex:1;">
                         <div class="wrap-td-data">
-                          <span>{{transaction.total | number:'1.2-2'}}</span>
+                          <span>{{transaction.total | giddhCurrency}}</span>
                           <br>
                           <span *ngIf="entry.isOtherTaxApplicable">
                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
@@ -605,17 +605,17 @@
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         :
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum/exchangeRate | giddhCurrency}}</span>
 
                       </div>
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | giddhCurrency}}</span>
 
                       </div>
 
@@ -781,9 +781,9 @@
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | giddhCurrency}}</span>
                       </div>
                     </div>
 
@@ -801,9 +801,9 @@
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | giddhCurrency}}</span>
                       </div>
 
                     </div>
@@ -823,9 +823,9 @@
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{entry.discountSum*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{entry.discountSum*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{entry.discountSum/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{entry.discountSum/exchangeRate | giddhCurrency}}</span>
                       </div>
                     </div>
                   </td>
@@ -844,9 +844,9 @@
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{(entry.taxSum + entry.cessSum)*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{(entry.taxSum + entry.cessSum)*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{(entry.taxSum + entry.cessSum)/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{(entry.taxSum + entry.cessSum)/exchangeRate | giddhCurrency}}</span>
                       </div>
                     </div>
                   </td>
@@ -896,16 +896,16 @@
 
                         :
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum *exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{entry.otherTaxSum *exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum /exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{entry.otherTaxSum /exchangeRate | giddhCurrency}}</span>
                       </div>
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
                         <span
-                          *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'INR'">{{transaction.total*exchangeRate | giddhCurrency}}</span>
                         <span
-                          *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | number:'1.2-2'}}</span>
+                          *ngIf="companyCurrency === 'USD'">{{transaction.total/exchangeRate | giddhCurrency}}</span>
                       </div>
 
 
@@ -1061,7 +1061,7 @@
                       <div class="tableCell">Total Amount</div>
                       <div class="tableCell figureCell">
                         <span *ngIf="isMulticurrencyAccount"
-                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}
+                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.subTotal | giddhCurrency}}
                       </div>
                     </div>
 
@@ -1069,7 +1069,7 @@
                       <div class="tableCell">Discount</div>
                       <div class="tableCell figureCell">
                         -<span *ngIf="isMulticurrencyAccount"
-                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}
+                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.totalDiscount | giddhCurrency}}
                       </div>
                     </div>
 
@@ -1077,7 +1077,7 @@
                       <div class="tableCell">Taxable Value</div>
                       <div class="tableCell figureCell">
                         <span *ngIf="isMulticurrencyAccount"
-                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.totalTaxableValue | giddhCurrency}}
                       </div>
                     </div>
 
@@ -1085,14 +1085,14 @@
                       <div class="tableCell">Tax</div>
                       <div class="tableCell figureCell">
                         <span *ngIf="isMulticurrencyAccount"
-                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}
+                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}
                       </div>
                     </div>
 
                     <div class="tableRow">
                       <div class="tableCell">CESS</div>
                       <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount"
-                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                          [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                       </div>
                     </div>
                     <div class="tableRow" *ngIf="calculatedRoundOff > 0 || calculatedRoundOff < 0">
@@ -1105,7 +1105,7 @@
                       <div class="tableCell figureCell">
                         <span *ngIf="isMulticurrencyAccount"
                           [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>
-                        {{calculatedRoundOff | number:'1.2-2'}}
+                        {{calculatedRoundOff | giddhCurrency}}
                       </div>
 
                     </div>
@@ -1119,7 +1119,7 @@
 
                       <div class="tableCell figureCell">
                         <strong><span *ngIf="isMulticurrencyAccount"
-                            [ngClass]="{'icon-rupees' : companyCurrency === 'USD' , ' icon-dollar' :  companyCurrency === 'INR'}"></span>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                            [ngClass]="{'icon-rupees' : companyCurrency === 'USD' , ' icon-dollar' :  companyCurrency === 'INR'}"></span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}</strong>
                       </div>
 
                     </div>
@@ -1132,21 +1132,21 @@
                       </div>
 
                       <div class="tableCell figureCell">
-                        <input *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate | number:'1.2-2'">
-                        <input *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
-                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate | number:'1.2-2'">
+                        <input #grandTotalInr *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
+                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate | giddhCurrency" (blur)="updateExchangeRate(grandTotalInr.value)">
+                        <input #grandTotalMul *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
+                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate | giddhCurrency" (blur)="updateExchangeRate(grandTotalMul.value)">
                       </div>
                     </div>
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
                       <div class="tableCell">TCS</div>
-                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | number:'1.2-2'}}</div>
+                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | giddhCurrency}}</div>
                     </div>
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
                       <div class="tableCell">TDS</div>
-                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}</div>
+                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}</div>
                     </div>
 
                     <!--region balance due for non-purchase-->
@@ -1189,14 +1189,14 @@
 
                               <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                 <span class="amountField pull-right max100 amountFiledCash">
-                                  {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                                  {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
                                 <label class="pull-right">Amount</label>
                               </li>
 
                               <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
                                 <strong class="pull-right balanceDueText"> <span *ngIf="isMulticurrencyAccount"
                                     [ngClass]="{'icon-dollar' : companyCurrency === 'INR' , 'icon-rupees' :  companyCurrency === 'USD'}"></span>
-                                  {{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                  {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong>
                                 <strong class="pull-right">Balance Due</strong>
                               </li>
 
@@ -1207,7 +1207,7 @@
                       </div>
 
                       <!--                  <div class="tableCell figureCell">-->
-                      <!--                    {{depositAmount | number:'1.2-2'}}-->
+                      <!--                    {{depositAmount | giddhCurrency}}-->
                       <!--                  </div>-->
                     </div>
                     <!--endregion-->
@@ -1218,7 +1218,7 @@
                         <strong>Balance Due</strong>
                       </div>
                       <div class="tableCell figureCell">
-                        <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                        <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong>
                       </div>
                     </div>
                     <!-- endregion -->
@@ -1325,7 +1325,7 @@
                     <div class="single-card-row">
                       <div class="card-amount">
                         <label class="card-label">Amount</label>
-                        <p> {{transaction.amount | number:'1.2-2'}}</p>
+                        <p> {{transaction.amount | giddhCurrency}}</p>
                       </div>
                     </div>
 
@@ -1359,7 +1359,7 @@
                     <div class="single-card-row">
                       <div class="card-total">
                         <label class="card-label">Total</label>
-                        <p>{{transaction.total | number:'1.2-2'}}</p>
+                        <p>{{transaction.total | giddhCurrency}}</p>
                       </div>
                     </div>
                   </div>
@@ -1706,28 +1706,28 @@
 
               <div class="tableRow">
                 <div class="tableCell">Total Amount</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | number:'1.2-2'}}</div>
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal | giddhCurrency}}</div>
               </div>
 
               <div class="tableRow">
                 <div class="tableCell">Discount</div>
-                <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | number:'1.2-2'}}</div>
+                <div class="tableCell figureCell">-{{invFormData.voucherDetails.totalDiscount | giddhCurrency}}</div>
               </div>
 
               <div class="tableRow">
                 <div class="tableCell">Taxable Value</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | number:'1.2-2'}}
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.totalTaxableValue | giddhCurrency}}
                 </div>
               </div>
 
               <div class="tableRow">
                 <div class="tableCell">Tax</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | number:'1.2-2'}}</div>
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}}</div>
               </div>
 
               <div class="tableRow">
                 <div class="tableCell">CESS</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | number:'1.2-2'}}
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                 </div>
               </div>
 
@@ -1737,7 +1737,7 @@
                 </div>
 
                 <div class="tableCell figureCell">
-                  <strong>{{invFormData.voucherDetails.grandTotal | number:'1.2-2'}}</strong>
+                  <strong>{{invFormData.voucherDetails.grandTotal | giddhCurrency}}</strong>
                 </div>
               </div>
               <div class="tableRow">
@@ -1754,12 +1754,12 @@
 
               <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
                 <div class="tableCell">TCS</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | number:'1.2-2'}}</div>
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | giddhCurrency}}</div>
               </div>
 
               <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
                 <div class="tableCell">TDS</div>
-                <div class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | number:'1.2-2'}}</div>
+                <div class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}</div>
               </div>
 
               <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
@@ -1811,7 +1811,7 @@
                 </div>
 
                 <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                  {{depositAmount | number:'1.2-2'}}
+                  {{depositAmount | giddhCurrency}}
                 </div>
               </div>
 
@@ -1820,7 +1820,7 @@
                   <strong>Balance Due</strong>
                 </div>
                 <div class="tableCell figureCell">
-                  <strong>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                  <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong>
                 </div>
               </div>
 
