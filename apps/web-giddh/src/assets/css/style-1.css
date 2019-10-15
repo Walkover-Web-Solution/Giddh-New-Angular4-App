@@ -1709,7 +1709,7 @@ li:last-child .angular-ui-tree-handle {
 
 .tb-head th:nth-child(3) {
   line-height: 25px;
-  padding: 5px 0px !important;
+  padding: 5px 11px !important;
   padding-bottom: 0px !important;
 }
 
@@ -5153,7 +5153,9 @@ border-bottom: 1px solid #e0e0e0;
 #settingTab .nav > li > a:hover {
   background: transparent;
 }
-
+#settingTab .nav > li > a:hover {
+  color: #01A9F4 !important;
+}
 .navbar-inverse .navbar-nav > .open > a {
   background-color: #292929;
   border-color: transparent;

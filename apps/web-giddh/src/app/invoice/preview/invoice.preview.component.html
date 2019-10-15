@@ -387,6 +387,7 @@
 
       <!--sales-->
       <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+        (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
         *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
 
         <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">

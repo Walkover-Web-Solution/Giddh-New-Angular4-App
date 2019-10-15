@@ -70,7 +70,7 @@ import { GeneralService } from '../services/general.service';
       @media (max-width: 768px) {
           .invoce-controll ::ng-deep.nav.nav-tabs {
               margin-bottom: 28px;
-              padding: 10px 0px 0 0px !important;
+              padding: 10px 0px 0 15px !important;
           }
       }
 
