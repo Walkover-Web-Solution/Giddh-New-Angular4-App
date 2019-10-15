@@ -32,6 +32,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() public discountSum: number;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
   public discountAccountsList$: Observable<IDiscountList[]>;
   public discountFromPer: boolean = true;
   public discountFromVal: boolean = true;
