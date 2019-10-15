@@ -268,10 +268,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;
-  public inputMaskFormat: string;
+  public inputMaskFormat: string ='';
   public isPrefixAppliedForCurrency: boolean;
-  public selectedPrefixForCurrency: string;
-  public selectedSuffixForCurrency: string;
+  public selectedPrefixForCurrency: string ='';
+  public selectedSuffixForCurrency: string ='';
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
