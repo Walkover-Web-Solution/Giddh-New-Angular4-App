@@ -7680,7 +7680,13 @@ span.red-text {
 p.lead.pd {
    font-size: 14px;
 }
-
+.input-group .input-group-btn .btn.btnShare:hover {
+    color: #fff !important;
+    background: #28ab00;
+}
+.sidebarTooltip .tooltip-inner {
+    white-space: initial;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
