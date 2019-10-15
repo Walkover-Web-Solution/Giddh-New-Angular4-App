@@ -14,7 +14,7 @@
     /* padding-bottom: 120px; */
     left: -215px;
     z-index: 990;
-    box-shadow: -2px -2px 10px #0000001A inset;
+    box-shadow:-2px -2px 15px rgba(0,0,0,0.2);
 }
 
 .account-search .input-group-addon {
@@ -162,7 +162,7 @@ a[vr-item]:focus {
 .left_fixed_header>li>a {
     display: block;
     padding:10px 15px;
-    color: #EBECEE;
+    color: #1c1c1c;
     position: relative;
     /* width: 32px; */
 }
@@ -191,7 +191,7 @@ a[vr-item]:focus {
 
 .left_fixed_header>li>a.active .label,
 .left_fixed_header>li>a.active .label>span {
-     color:#262626;
+     color:#1c1c1c;
     font-family: 'opensans-semibold';
 
 }

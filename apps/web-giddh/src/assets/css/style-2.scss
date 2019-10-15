@@ -678,7 +678,10 @@ ul.sub-list {
     border: 1px solid rgba(49,58,151,0.15) !important;
 }
 .aging-table-top .top-aging-table-top strong, .aging-table-top .top-aging-table-top span .date-range-picker{
-  color: #333;
+  color: #1c1c1c;
+}
+.aging-table-top .top-aging-table-top span .date-range-picker {
+    font-family: opensans-semibold;
 }
 .aging-table-top td {
     border: 0px solid !important;
