@@ -44,7 +44,7 @@
 }
 
 .activeTextColor{
-  color:$yellow !important;
+  color:$activeIconTh !important;
 }
 .btn-orange:hover {
   background: #ff5f00 !important;
@@ -71,7 +71,7 @@
 }
 
 .td_in_searchBox div i:hover {
-  color: $yellow;
+  color: $activeIconTh;
 }
 
 .mh18_img img {
@@ -89,6 +89,9 @@
 }
 .table-bordered .d-flex {
     align-items: center;
+}
+.btn-link-2{
+  color: #1c1c1c;
 }
 // responsive
 @media(max-width:768px){

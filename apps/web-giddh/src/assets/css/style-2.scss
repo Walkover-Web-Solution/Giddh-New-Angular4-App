@@ -597,10 +597,10 @@ ul.sub-list {
     padding-right: 0;
 }
 .custom-tabs .nav.nav-tabs>li a:hover{
-  color: $dark-blue00 !important;
+  color: $activeTabBorder !important;
 }
 .custom-tabs .nav.nav-tabs>li.active a {
-    color: $dark-blue00 !important;
+    color: #1c1c1c !important;
 }
 
 .custom-tabs .nav.nav-tabs>li.active a:after {
@@ -619,9 +619,9 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
     padding: 0px 0px 0 15px !important;
-    background-color: #fff;
+    background-color: #F7F8FD;
     z-index: 9;
     position: relative;
     top: -4px;
@@ -634,8 +634,8 @@ ul.sub-list {
 
 .btn-pink:hover,
 .btn-pink:focus {
-    background: $BtnHoverpinkColor !important;
-    border-color:$BtnHoverpinkColor;
+    background: $primaryBtnHovercolror !important;
+    border-color:$primaryBtnHovercolror;
     color: #fff;
 }
 
@@ -649,10 +649,10 @@ ul.sub-list {
 }
 
 .aging-table.basic>thead>tr>th {
-    border: 1px solid $dark-blue01 !important;
+    border: 1px solid $tableBorderColor !important;
     position: relative;
-    border-right-color: #ddd !important;
-    padding-right: 30px;
+    border-right-color: $tableBorderColor !important;
+    padding-right: 30px !important;
 }
 
 .sorting-box {
@@ -808,7 +808,7 @@ ul.sub-list {
 
 .aging-table tr td:first-child,
 .aging-table tr th:first-child {
-    padding-left: 28px;
+    padding-left: 28px !important;
 }
 
 .aging-table.table-aging-report tr td:first-child,
@@ -1145,7 +1145,7 @@ modal-container.modal.fade.show {
     background: #fff;
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: #C6C6C6;
+    border-color: $inputBorderColor;
 }
 
 .btn-filter {
@@ -1190,11 +1190,11 @@ modal-container.modal.fade.show {
 
 .form-control {
     background: #fff !important;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $inputBorderColor;
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-  color:#484848;
+  color:#1c1c1c;
     box-shadow: none;
 }
 
@@ -1358,7 +1358,7 @@ header .navbar {
 
 .btn-primary:hover,
 .btn-primary:focus,
-.btn-primary:disabled {
+.btn-primary:disabled ,.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary , .btn-primary:active:focus{
     background: #eee;
     color: $border-blue;
     border-color:$border-blue;
@@ -1797,7 +1797,7 @@ p.table-email {
 .basic>tbody>tr>td,
 .basic>thead>tr>th {
     font-weight: 400;
-    padding: 10px 10px;
+    padding: 14px 10px;
     text-transform: capitalize;
 }
 
@@ -2145,7 +2145,7 @@ opacity: 0.5;
 /* my css start */
 
 .modal.fade .modal-dialog {
-    transform: translateY(0px) !important;
+    transform: translateY(70px) !important;
     margin: 10px auto;
 }
 
@@ -2673,7 +2673,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid  $yellow !important;
+    border: 1px solid  $activeIconTh !important;
     border-radius: 0 !important;
 }
 
@@ -3162,7 +3162,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .pop-panel .form-control {
     background: #f9f7f2;
-    border-color: #949494;
+    border-color: $inputBorderColor;
 }
 
 .pop-panel label {
@@ -3393,7 +3393,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: #525252;
+    background: $top_header !important;
 }
 
 .close_modal {
@@ -3401,8 +3401,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: #db7f53;
-    color: #db7f53;
+    color: #fff;
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -3832,7 +3831,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid #cccccc;
+    border: 1px solid $inputBorderColor;
 }
 
 .col_wrapper:nth-child(1) {
@@ -3886,14 +3885,14 @@ label {
 
 .isActive {
     color: #fff !important;
-    background: #F85C88;
-    border-color: #F85C88;
+    background: $primaryBtncolror;
+    border-color: $primaryBtncolror;
 }
 
 .isParent.isActive {
     color: #fff !important;
-       background: #F85C88 !important;
-    border-color: #F85C88;
+       background: $primaryBtncolror !important;
+    border-color: $primaryBtncolror;
 }
 
 .primary_clr {
@@ -4022,7 +4021,7 @@ label {
 
 #App_taxes .form-control {
     background: #f4f5f5 !important;
-    border: 1px solid #cccccc;
+    border: 1px solid $inputBorderColor;
 }
 
 .tax-bullet {
@@ -4884,7 +4883,7 @@ label {
 #customInvoice .templateEditor .table>tbody>tr>td .form-control {
     margin: 7px 0;
     background: #fff;
-    border-color: #969696;
+    border-color:$inputBorderColor;
     border-radius: 2px;
 }
 
@@ -5115,7 +5114,7 @@ input[type='checkbox'][disabled] {
     background: #fff;
     color: #000000;
     border-right: 1px solid #D1D1D1;
-    padding: 11px !important;
+    padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid #D1D1D1;
     font-family: opensans-semibold;
@@ -7801,7 +7800,7 @@ ul.dropdown-menu  p.lead.pd {
 }
 
 .nav-tabs > li.active > a , .invoce-controll .nav-tabs > li.active > a{
-      border-bottom: 4px solid $yellow !important;
+      border-bottom: 4px solid $activeIconTh !important;
           padding-bottom: 7px !important;
           font-family: 'opensans-semibold';
 }
@@ -7837,15 +7836,15 @@ ul.dropdown-menu  p.lead.pd {
     margin-right: 0 !important;
 }
 #invoice-setting .nav>li>a.active {
-    border:1px solid #F85C88 !important;
-    border-bottom-color: #F85C88  !important;
-     color: #F85C88 !important;
+    border:1px solid $activeTabBorder !important;
+    border-bottom-color: $activeTabBorder  !important;
+     color: $activeTabBorder !important;
 }
 #invoice-setting .nav>li>a.active span{
-  color: #F85C88;
+  color:$activeTabBorder;
 }
 .aging-table th .table-checkbox {
-    top: 10px;
+    top: 16px;
 }
 .btn-lg.btn-primary {
     min-width: 155px;
@@ -7865,7 +7864,7 @@ ul.dropdown-menu  p.lead.pd {
 .settingPage ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 14px 0px 0 15px !important;
-    background-color: #fff;
+    background-color:#F7F8FA;
     z-index: 9;
     position: relative;
     top: -4px;
@@ -7874,11 +7873,11 @@ ul.dropdown-menu  p.lead.pd {
       padding: 2px 0px ;
     margin-right: 35px ;
     padding-bottom: 7px ;
-    font-size: 14px;
+    font-size: 16px;
     color: #333 !important;
 }
 .settingPage .nav > li > a:hover{
-   color:$dark-blue00 !important;
+   color:$activeTabBorder !important;
 }
 #tab-integration .nav-tabs {
     padding: 40px;
@@ -7889,7 +7888,7 @@ ul.dropdown-menu  p.lead.pd {
    padding-top: 0 !important;
 }
 .settingPage .nav > li > a.active{
-    color:$dark-blue00 !important;
+    color:#1c1c1c !important;
 }
 
 
@@ -7898,16 +7897,17 @@ ul.dropdown-menu  p.lead.pd {
 }
 #tab-integration .nav-tabs > li a{
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
+        font-size: 18px;
 }
 #tab-integration .nav-tabs > li a.active{
-   border-bottom: 1px solid $BtnpinkColor !important;
+   border-bottom: 1px solid $activeTabBorder !important;
        font-family: 'opensans-regular';
-    color: $BtnpinkColor !important;
-    border-color : $BtnpinkColor !important;
+    color: $activeTabBorder !important;
+    border-color : $activeTabBorder !important;
 
 }
 #tab-integration .nav-tabs > li a.active span{
-   color: $BtnpinkColor;
+   color: $activeTabBorder;
 }
 .input-group-addon {
     padding: 5px 12px;
@@ -7916,6 +7916,42 @@ ul.dropdown-menu  p.lead.pd {
     margin-top: 24px;
 }
 
+.date-advanceSearch .icon-calender{
+      height: 36px !important;
+      border-right: 1px solid #D9D9D9 !important;
+      color: #999999 !important;
+}
+.date-advanceSearch   .input-group input.form-control{
+      border-color: $inputBorderColor !important;
+}
+
+.advance-icon{
+  height: 36px  !important;
+  width: 36px  !important;
+  border: 1px solid $inputBorderColor !important;
+}
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+      border: 1px solid $tableBorderColor;
+}
+table.basic td {
+    color: #1c1c1c;
+}
+.aging-table .text-light-2{
+  color: $iconColorTh;
+}
+.aging-table .icon-pointer .activeTextColor {
+    color: #000 !important;
+    opacity: 1 !important;
+}
+.invoice-table td > a {
+    color: #1c1c1c;
+}
+button.btn.btn-filter{
+      padding: 6px 10px !important;
+}
+.setting-container .btn-default.btn-xs {
+    top: -3px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

@@ -48,7 +48,7 @@
   color: red;
 }
 .icon-pointer .activeTextColor {
-  color: $yellow !important;
+  color: $activeIconTh !important;
   opacity: 1!important;
 }
 
@@ -270,14 +270,15 @@ tr.aging-table-top td {
 }
 
 i.icon-options {
-    width: 32px;
-    height: 32px;
-    border: 1px solid $dark-blue00;
+    width: 36px;
+    height: 36px;
+    border: 1px solid $inputBorderColor;
     background-color: #fff;
-    color:$dark-blue00;
-    font-size: 17px;
+    color: #999;
+    font-size: 20px;
     position: relative;
-    top: -1px;
+    top: 2px;
+    padding: 7px 7px;
 }
 i.icon-options:hover{
   background-color:#EAEAEA ;
@@ -297,7 +298,7 @@ i.icon-options:hover{
 span.inputAddon {
     position: absolute;
     right: 0px;
-    padding: 2px 9px;
+    padding: 4px 9px;
     background-color:$border-blue;
     color: #fff;
     font-size: 20px;
