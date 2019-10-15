@@ -14,6 +14,8 @@ import { LedgerModule } from '../ledger/ledger.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { PaginationModule } from 'ngx-bootstrap';
+import { SharedModule } from '../shared/shared.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { PaginationModule } from 'ngx-bootstrap';
     LedgerModule,
     CurrencyModule,
     NgxUploaderModule,
-    PaginationModule
+    PaginationModule,
+    SharedModule,
+    ShSelectModule
   ],
   exports: [
     ExpensesComponent,

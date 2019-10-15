@@ -930,7 +930,7 @@
                               <div class="clearfix paymentMode">
 
                                 <sh-select class="pull-right " name="depositAccountUniqueName"
-                                  [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
+                                  [options]="bankAccounts" [(ngModel)]="depositAccountUniqueName"
                                   (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
                                   [notFoundLink]="false" [forceClearReactive]="forceClear$ | async" [multiple]="false"
                                   [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
