@@ -100,7 +100,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
-  public  activeAccountName: string = '';
+  public activeAccountName: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -477,7 +477,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (this.showBankDetail) {
       if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
         if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-          accountRequest['accountBankDetails'] = [];
+        //  accountRequest['accountBankDetails'] = [];
+        this.accountDetails.accountBankDetails;
         }
       }
     } else {
