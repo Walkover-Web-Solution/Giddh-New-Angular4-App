@@ -268,7 +268,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;
-  public inputMaskFormat: string ='';
+  public inputMaskFormat: string = '';
   public isPrefixAppliedForCurrency: boolean;
   public selectedPrefixForCurrency: string ='';
   public selectedSuffixForCurrency: string ='';
@@ -2774,5 +2774,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }else{
       this.selectedPrefixForCurrency = '₹';
     }
+  }
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.invoiceForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
   }
 }
