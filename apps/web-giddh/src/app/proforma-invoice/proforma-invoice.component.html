@@ -531,7 +531,9 @@
                   <td class="text-right tra-rate item-rate " style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex: 1;">
-                        <div class="wrap-td-data">{{transaction.rate | giddhCurrency}}</div>
+                        <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount"
+                            [ngClass]="{'icon-dollar' : companyCurrency === 'INR'  , 'icon-rupees' :    companyCurrency === 'USD'}">
+                          </span> {{transaction.rate | giddhCurrency}}</div>
                       </div>
                     </div>
 
@@ -546,23 +548,25 @@
                   <td class="text-right  item-amount" style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex: 1;">
-                        <div class="wrap-td-data">{{transaction.amount | giddhCurrency}}</div>
+                        <div class="wrap-td-data"><span *ngIf="isMulticurrencyAccount"
+                            [ngClass]="{'icon-dollar' : companyCurrency === 'INR'  , 'icon-rupees' :    companyCurrency === 'USD'}">
+                          </span>{{transaction.amount | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                       <span
                         [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
-                      <span
-                        *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | giddhCurrency}}</span>
-                      <span
-                        *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | giddhCurrency}}</span>
+                      <span *ngIf="companyCurrency === 'INR'">{{transaction.amount*exchangeRate | giddhCurrency}}</span>
+                      <span *ngIf="companyCurrency === 'USD'">{{transaction.amount/exchangeRate | giddhCurrency}}</span>
                     </div>
                   </td>
                   <td class="item-discount" style="height:1px;">
                     <div class=" text-right td_Wrapper">
 
                       <div style="flex: 1;">
-                        <div class="wrap-td-data"> {{ entry.discountSum | giddhCurrency}}</div>
+                        <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount"
+                            [ngClass]="{'icon-dollar' : companyCurrency === 'INR'  , 'icon-rupees' :    companyCurrency === 'USD'}">
+                          </span>{{ entry.discountSum | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
@@ -576,7 +580,9 @@
                   <td class="text-right item-tax" style="height:1px;">
                     <div class="td_Wrapper">
                       <div style="flex:1;">
-                        <div class="wrap-td-data">{{(entry.taxSum + entry.cessSum) | giddhCurrency}}</div>
+                        <div class="wrap-td-data"><span *ngIf="isMulticurrencyAccount"
+                            [ngClass]="{'icon-dollar' : companyCurrency === 'INR'  , 'icon-rupees' :    companyCurrency === 'USD'}">
+                          </span>{{(entry.taxSum + entry.cessSum) | giddhCurrency}}</div>
                       </div>
                     </div>
                     <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
@@ -591,7 +597,9 @@
                     <div class="td_Wrapper">
                       <div style="flex:1;">
                         <div class="wrap-td-data">
-                          <span>{{transaction.total | giddhCurrency}}</span>
+                          <span><span *ngIf="isMulticurrencyAccount"
+                              [ngClass]="{'icon-dollar' : companyCurrency === 'INR'  , 'icon-rupees' :    companyCurrency === 'USD'}">
+                            </span>{{transaction.total | giddhCurrency}}</span>
                           <br>
                           <span *ngIf="entry.isOtherTaxApplicable">
                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
@@ -776,15 +784,14 @@
                           (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
                           placeholder="Rate" decimalDigitsDirective name="transaction.rate_{{entryIdx}}"
                           class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
-                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"/>
+                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                          [mask]="inputMaskFormat" />
                       </div>
                       <!-- please add condition for show and hide -->
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
-                        <span
-                          *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | giddhCurrency}}</span>
-                        <span
-                          *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | giddhCurrency}}</span>
+                        <span *ngIf="companyCurrency === 'INR'">{{transaction.rate*exchangeRate | giddhCurrency}}</span>
+                        <span *ngIf="companyCurrency === 'USD'">{{transaction.rate/exchangeRate | giddhCurrency}}</span>
                       </div>
                     </div>
 
@@ -797,8 +804,8 @@
                         <input type="text" [disabled]="transaction.isStockTxn"
                           (blur)="calculateWhenTrxAltered(entry, transaction)" placeholder="Amount"
                           name="transaction.amount_{{entryIdx}}" class="form-control text-right"
-                          [(ngModel)]="transaction.amount" decimalDigitsDirective
-                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"/>
+                          [(ngModel)]="transaction.amount" decimalDigitsDirective [prefix]="selectedPrefixForCurrency"
+                          [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                       </div>
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
@@ -819,8 +826,7 @@
                           [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
                           [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
                           (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
-                          [maskInput]="inputMaskFormat"
-                          [prefixInput]="selectedPrefixForCurrency"
+                          [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                           [suffixInput]="selectedSuffixForCurrency">
                         </discount-control-component>
 
@@ -844,10 +850,9 @@
                           [allowedSelectionOfAType]="[{ type: ['GST', 'commongst', 'InputGST'], count:1 }]"
                           [showHeading]="false" [rootClass]="'salseInvoicetable'"
                           (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
-                          (hideOtherPopups)="closeDiscountPopup()"
-                          [maskInput]="inputMaskFormat"
-                          [prefixInput]="selectedPrefixForCurrency"
-                          [suffixInput]="selectedSuffixForCurrency"></tax-control>
+                          (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
+                          [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency">
+                        </tax-control>
                       </div>
                       <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span
                           [ngClass]="{'icon-dollar' : companyCurrency === 'USD' , 'icon-rupees' :  companyCurrency === 'INR'}"></span>
@@ -864,8 +869,9 @@
 
                       <div style="flex:1;">
                         <input type="text" name="transaction.total_{{entryIdx}}" class="form-control text-right"
-                        [(ngModel)]="transaction.total" readonly decimalDigitsDirective
-                        [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
+                          [(ngModel)]="transaction.total" readonly decimalDigitsDirective
+                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                          [mask]="inputMaskFormat" />
 
                         <div class="wrap-otherTax">
                           <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable"
@@ -887,7 +893,9 @@
                               </span>
 
                               <input class="text-right otherTaxsinput" disabled="disabled"
-                                [(ngModel)]="entry.otherTaxSum" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" name="entry.otherTaxesSum" />
+                                [(ngModel)]="entry.otherTaxSum" [prefix]="selectedPrefixForCurrency"
+                                [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                name="entry.otherTaxesSum" />
                             </div>
 
                             <p
@@ -1142,12 +1150,15 @@
 
                       <div class="tableCell figureCell">
                         <input #grandTotalInr *ngIf="companyCurrency === 'INR'" type="text" class="form-control"
-                               [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" name = "grandTotal-INR" [mask]="inputMaskFormat"
-                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate"  (blur)="updateExchangeRate(grandTotalInr.value)">
+                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                          name="grandTotal-INR" [mask]="inputMaskFormat"
+                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate"
+                          (blur)="updateExchangeRate(grandTotalInr.value)">
 
                         <input #grandTotalMul *ngIf="companyCurrency === 'USD'" type="text" class="form-control"
-                               [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                          [value]="invFormData.voucherDetails.grandTotal/exchangeRate"  name = "grandTotal-MUL" (blur)="updateExchangeRate(grandTotalMul.value)">
+                          [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                          [mask]="inputMaskFormat" [value]="invFormData.voucherDetails.grandTotal/exchangeRate"
+                          name="grandTotal-MUL" (blur)="updateExchangeRate(grandTotalMul.value)">
                       </div>
                     </div>
 
