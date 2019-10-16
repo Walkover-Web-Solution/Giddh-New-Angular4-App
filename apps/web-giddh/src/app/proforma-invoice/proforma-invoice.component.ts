@@ -268,10 +268,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;
-  public inputMaskFormat: string = '';
+  public inputMaskFormat: string ='';
   public isPrefixAppliedForCurrency: boolean;
-  public selectedPrefixForCurrency: string ='';
   public selectedSuffixForCurrency: string ='';
+  public companyCurrencyName: string;
+  public baseCurrencySymbol: any;
+
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -371,6 +373,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (profile) {
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        if(profile.baseCurrency !== 'INR'){
+          this.companyCurrencyName = profile.baseCurrency;
+        }
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
       } else {
@@ -635,8 +641,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           } else {
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
-              if( this.isSalesInvoice){
-                convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              if(results[1].account.currency.code !== 'INR'){
+                this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
             } else {
@@ -1215,7 +1222,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       let updatedData = obj;
       let isVoucherV4 = false;
-      if(this.isSalesInvoice){
+      if(this.isSalesInvoice || this.isCashInvoice){
         updatedData = this.updateData(obj, data);
         isVoucherV4 = true;
       }
@@ -1611,7 +1618,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
       if(this.isMulticurrencyAccount){
-        this.assignPrefixAndSuffixForCurrency();
+        if(item.additional.currency !== 'INR'){
+          this.companyCurrencyName = item.additional.currency;
+        }
       }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
 
@@ -1858,6 +1867,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = event.label;
       this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
+      this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      if(event.additional.currency !== 'INR'){
+        this.companyCurrencyName = event.additional.currency;
+      }
     } else {
       this.depositAccountUniqueName = '';
     }
@@ -2760,29 +2773,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateExchangeRate(val) {
-    val = val.replace(this.selectedPrefixForCurrency, '');
+    val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
       this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
       this.originalExchangeRate = this.exchangeRate;
     }
-  }
-
-  private assignPrefixAndSuffixForCurrency() {
-    if(this.companyCurrency === 'INR'){
-      this.selectedPrefixForCurrency = '$';
-    }else{
-      this.selectedPrefixForCurrency = '₹';
-    }
-  }
-  public findInvalidControls() {
-    const invalid = [];
-    const controls = this.invoiceForm.controls;
-    for (const name in controls) {
-      if (controls[name].invalid) {
-        invalid.push(name);
-      }
-    }
-    return invalid;
   }
 }
