@@ -20,7 +20,7 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent } from "ngx-bootstrap";
+import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { IRegistration } from "../../models/interfaces/registration.interface";
 
@@ -93,6 +93,7 @@ export class SettingIntegrationComponent implements OnInit {
   private isSellerUpdate: Observable<boolean> = observableOf(false);
   @Input() private selectedTabParent: number;
   @ViewChild('integrationTab') public integrationTab: TabsetComponent;
+  @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
   //variable holding account Info
   public registeredAccount;
   public openNewRegistration: boolean;
@@ -302,6 +303,11 @@ export class SettingIntegrationComponent implements OnInit {
   public deleteRazorPayDetails() {
     this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
+
+  public removeGmailAccount() {
+    this.store.dispatch(this.settingsIntegrationActions.RemoveGmailIntegration());
+  }
+
 
   public selectCashfreeAccount(event: IOption, objToApnd) {
     let accObj = {

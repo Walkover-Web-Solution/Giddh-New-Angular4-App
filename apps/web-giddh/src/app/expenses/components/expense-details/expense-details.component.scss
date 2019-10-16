@@ -1,57 +1,95 @@
 .upload-fil ul {
-  display: flex;
-  list-style-type: none;
-  text-align: center;
-  align-items: center;
-  overflow-y: auto;
+    display: flex;
+    list-style-type: none;
+    text-align: center;
+    align-items: center;
+    overflow-y: auto;
 }
-.upload-fil ul > li {
-  padding-right: 15px;
+
+.upload-fil ul>li {
+    padding-right: 15px;
 }
+
 .upload-fil ul li .upload-img {
-  width: 120px;
-  height: 120px;
-  background: #CBCBCB;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  justify-content: center;
-  font-size: 32px;
+    width: 120px;
+    height: 120px;
+    background: #CBCBCB;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    justify-content: center;
+    font-size: 32px;
 }
-.upload-fil ul li .upload-img > a {
-  color: #999999;
-  display: block;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  display: flex;
-  justify-content: center;
+
+.upload-fil ul li .upload-img>a {
+    color: #999999;
+    display: block;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
+
 .upload-fil ul li .upload-img img {
-  max-height: 200px;
+    max-height: 200px;
 }
+
 .img-zoom {
-  position: relative;
-  width: 300px;
-  height: 300px;
+    position: relative;
+    width: 300px;
+    height: 300px;
 }
+
 .img-zoom img {
-  max-height: 300px;
-  min-width: 300px;
+    max-height: 300px;
+    min-width: 300px;
 }
+
 .img-zoom .img-close {
-  position: absolute;
-  top: 0;
-  right: -29px;
-  z-index: 99;
-  background: #CBCBCB;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: 30px;
-  color: #666666;
-  border-radius: 3px;
+    position: absolute;
+    top: 0;
+    right: -29px;
+    z-index: 99;
+    background: #CBCBCB;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #666666;
+    border-radius: 3px;
 }
+
 .textarea.form-control {
-  height: 70px;
+    height: 70px;
+}
+
+span.close-modal.cp.pull-right {
+    display: inline-grid;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+}
+
+.close-modal img {
+    width: 16px;
+    opacity: 0.6;
+}
+
+.upload-img.add-img label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+}
+
+.upload-img.add-img input {
+    width: 100%;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
 }

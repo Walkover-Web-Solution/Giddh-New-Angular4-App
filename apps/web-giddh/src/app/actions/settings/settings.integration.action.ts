@@ -480,6 +480,26 @@ public GetSMSKey$: Observable<Action> = this.action$
       }
       return {type: 'EmptyAction'};
     }));
+
+  @Effect()
+  public RemoveGmailIntegration$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION)
+    .pipe(switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveGmailIntegration())
+    , map(response => this.RemoveGmailIntegrationResponse(response)));
+
+    @Effect()
+    public RemoveGmailIntegrationResponse$: Observable<Action> = this.action$
+      .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE)
+      .pipe(map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this.toasty.errorToast(data.message, data.code);
+        } else {
+          this.toasty.successToast(data.body, '');
+        }
+        return {type: 'EmptyAction'};
+      }));  
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -781,6 +801,18 @@ public GetSMSKey$: Observable<Action> = this.action$
     };
   }
 
+  public RemoveGmailIntegration(): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION
+    };
+  }
+
+  public RemoveGmailIntegrationResponse(response): CustomActions {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE,
+      payload:response
+    };
+  }
 
   public RemovePaymentInfo(URN: string) : CustomActions {
     return {

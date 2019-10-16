@@ -1,20 +1,84 @@
 <div class="clearfix">
-  <tabset class="custom-tabs">
-    <tab heading="Pending" id="tab1">
-      <!-- <app-pending-list></app-pending-list> -->
+    <tabset class="custom-tabs">
+        <div class="container-fluid mt-2" *ngIf="!isSelectedRow">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="d-flex">
 
-      <div class="main-edit-expense">
-        <div class="left-expense">
-          <app-filter-list></app-filter-list>
-        </div>
-        <div class="main-expense-details">
-          <app-expense-details></app-expense-details>
-        </div>
-      </div>
+                        <div class="clearfix mr-1">
+                            <div class="input-group input-calender">
+                                <span class="input-group-addon" id="basic-addon1"><i class="icon-calender"></i></span>
+                                <input type="text" class="form-control" placeholder="Daterangepicker" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)">
+                            </div>
+                        </div>
+                        <!-- <div class="btn-group" dropdown="" ng-reflect-placement="right">
+                            <a (click)="openModal(filterModal)"> <i class="icon-options pd cp fs20" dropdowntoggle="" aria-haspopup="true"></i></a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="isFilterSelected">
+                    <div class="d-inline-block">
+                        <a href="javascript:void(0)" (click)="clearFilter()" class="btn btn-default d-flex align-items-center ml-1"><i class=" icon-cross mr-1"></i> Clear Filter</a>
+                    </div>
 
-    </tab>
-    <tab heading="Rejected">
-      <app-rejected-list></app-rejected-list>
-    </tab>
-  </tabset>
+                </div>
+            </div>
+        </div>
+
+
+        <tab heading="Pending" id="tab1" (select)="tabChanged('pending');">
+            <app-pending-list *ngIf=" !isSelectedRow " [isClearFilter]='isClearFilter' (isFilteredSelected)=isFilteredSelected($event); (selectedRowToggle)="selectedRowToggle($event); " (selectedRowInput)=selectedRowInput($event);></app-pending-list>
+            <div class="main-edit-expense " *ngIf="isSelectedRow ">
+                <div class="left-expense ">
+                    <app-filter-list [selectedRowItem]='selectedRowItem' (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
+                </div>
+                <div class="main-expense-details ">
+                    <app-expense-details [selectedRowItem]='selectedRowItem' (toggleDetailsMode)="closeDetailedMode($event); " (refreshPendingItem)="refreshPendingItem($event); "></app-expense-details>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Rejected " (select)="tabChanged('rejected');">
+            <app-rejected-list (isFilteredSelected)=isFilteredSelected($event); [isClearFilter]='isClearFilter'></app-rejected-list>
+        </tab>
+    </tabset>
 </div>
+<ng-template #filterModal>
+    <div class="modal-header ">
+        <h3 class="modal-title pull-left ">Filter Data</h3>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalRef.hide() ">
+      <span aria-hidden="true ">&times;</span>
+    </button>
+    </div>
+
+    <div class="modal-body ">
+        <!-- <app-filter-data></app-filter-data> -->
+        <div class="row ">
+            <div class="col-sm-5 ">
+                <label class="pt-05 ">Total Amount</label>
+            </div>
+            <div class="col-sm-7 d-flex ">
+                <div class="select-style mb-2 ">
+                    <select name=" ">
+          <option value=" " selected disabled>Select Range</option>
+          <option value=" ">Equals </option>
+          <option value=" ">Greater than</option>
+          <option value=" ">Less than</option>
+          <option value=" ">Exclude</option>
+        </select>
+                </div>
+                <div class="form-group ml-1 ">
+                    <input type="text " placeholder="1500 " value="1500 " class="form-control ">
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 ">
+            <div class="col-sm-5 ">
+            </div>
+            <div class="col-sm-7 ">
+                <button type="button " class="btn btn-success " (click)="confirm() ">Add</button>
+                <button type="button " class="btn btn-danger " (click)="decline() ">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</ng-template>

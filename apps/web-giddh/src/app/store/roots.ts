@@ -19,6 +19,7 @@ import * as fromSettings from './Settings/Settings.reducer';
 import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 import * as fromDayBook from './Daybook/daybook.reducer';
+import * as fromExpence from './expense/expence.reducer';
 import * as fromNewVsOldInvoices from './new-vs-old-invoices/new-vs-old-invoices.reducer';
 import * as fromUserSession from './General/session.reducer';
 import * as fromImportExcel from './import-excel/import-excel.reducer';
@@ -57,6 +58,7 @@ export interface AppState {
   manufacturing: fromManufacturing.ManufacturingState;
   invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
   daybook: fromDayBook.Daybook;
+  expense: fromExpence.ExpensePettyCash;
   userLoggedInSessions: fromUserSession.SessionState;
   importExcel: fromImportExcel.ImportExcelState;
   inventoryInOutState: fromInventoryInOut.InventoryInOutState;
@@ -95,6 +97,7 @@ export const reducers: ActionReducerMap<AppState> = {
   ledger: fromLedger.ledgerReducer,
   invoicePurchase: fromInvoicePurchase.InvoicePurchaseReducer,
   daybook: fromDayBook.daybookReducer,
+  expense: fromExpence.expensesReducer,
   userLoggedInSessions: fromUserSession.SessionReducer,
   inventoryInOutState: fromInventoryInOut.InventoryInOutReducer,
   importExcel: fromImportExcel.importExcelReducer,

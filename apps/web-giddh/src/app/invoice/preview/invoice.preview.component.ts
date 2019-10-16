@@ -309,7 +309,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.showExportButton = false;
           }
-          this.selectedInvoicesList = [];
+
+          //this.selectedInvoicesList = []; // Commented Due to clearing after page changed
+          if(this.selectedInvoicesList && this.selectedInvoicesList.length>0){
+            res[0] = this.checkSelectedInvoice(voucherData);
+          }
           this.selectedItems = [];
         }
 
@@ -839,19 +843,38 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public toggleAllItems(type: boolean) {
     this.allItemsSelected = type;
-    this.selectedInvoicesList = [];
     this.selectedItems = [];
     if (this.voucherData && this.voucherData.items && this.voucherData.items.length) {
       this.voucherData.items = _.map(this.voucherData.items, (item: ReceiptItem) => {
         item.isSelected = this.allItemsSelected;
-        this.selectedInvoicesList.push(item);
+        let isAvailable=false;
+        if(this.selectedInvoicesList && this.selectedInvoicesList.length>0){
+          this.selectedInvoicesList.forEach((ele)=>{
+            if(ele.uniqueName===item.uniqueName){
+              isAvailable=true;
+            }
+          });
+        }
+        if(!isAvailable){
+          this.selectedInvoicesList.push(item);
+        }
+
         this.selectedItems.push(item.uniqueName);
         //  this.itemStateChanged(item, true);
         return item;
       });
     }
     if (!this.allItemsSelected) {
-      this.selectedInvoicesList = [];
+      this.selectedInvoicesList = this.selectedInvoicesList.filter((ele)=>{
+        return ele.isSelected;
+      });
+      
+      this.voucherData.items.forEach((ele)=>{
+        this.selectedInvoicesList = this.selectedInvoicesList.filter((s)=>{
+          return ele.uniqueName!==s.uniqueName;
+        })
+      })
+
       this.selectedItems = [];
       this.isExported = false;
     } else {
@@ -924,13 +947,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public itemStateChanged(item: any, allSelected: boolean = false) {
     let index = this.selectedItems.findIndex(f => f === item.uniqueName);
+    let indexInv = this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName);
+
+    if (indexInv > -1 && !allSelected) {
+      this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f.uniqueName !== item.uniqueName);
+    } else {
+      this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
+    }
 
     if (index > -1 && !allSelected) {
       this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
-      this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f !== item);
     } else {
       this.selectedItems.push(item.uniqueName);  // Array of checked seleted Items uniqueName of the list
-      this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
     }
     if (this.selectedInvoicesList.length === 1) {
       this.exportInvoiceType = this.selectedInvoicesList[0].account.uniqueName;
@@ -939,6 +967,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.isExported = this.selectedInvoicesList.every(ele => {
       return ele.account.uniqueName === this.exportInvoiceType;
     })
+    this.selectedInvoicesList = this.selectedInvoicesList.filter(s => s.isSelected);
+    this.voucherData = this.checkSelectedInvoice(this.voucherData);
   }
 
   public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
@@ -1030,6 +1060,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (res) {
         if (res.status === 'success') {
           let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+          this.selectedInvoicesList=[];
           return saveAs(blob, `${dataTosend.accountUniqueName}All-invoices.xls`);
         } else {
           this._toaster.errorToast(res.message);
@@ -1049,5 +1080,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.account = invoice.account;
     obj.voucherStatus = invoice.balanceStatus;
     return obj;
+  }
+  public checkSelectedInvoice(voucherData:ReciptResponse){
+    voucherData.items.forEach((v)=>{
+      this.selectedInvoicesList.forEach((s)=>{
+        if(v.uniqueName===s.uniqueName){
+          v.isSelected=true;
+        }
+      })
+    })
+    return voucherData;
   }
 }
