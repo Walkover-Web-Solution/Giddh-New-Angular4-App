@@ -32,9 +32,7 @@
 }
 
 .icon-pointer {
-  position: absolute;
-  right: 10px;
-  top: 36%;
+     margin-left: 6px;
 }
 .icon-pointer.iconSearch{
   top: 30%;
@@ -227,6 +225,7 @@ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.
 
 tr.aging-table-top td {
   width: 320px;
+  padding:1px 0;
 }
 
 .aging-table {

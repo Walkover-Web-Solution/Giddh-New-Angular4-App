@@ -256,18 +256,6 @@
 
           </th>
 
-          <!-- <th width="11%" class="td_in_searchBox" #searchPerfomaContainer (clickOutside)="clickedOutside($event, searchPerfomaContainer, 'ProformaPurchaseOrder')">
-          <div [hidden]="showProformaSearch">
-              <span> Proforma/<br>Purchase Order #</span>
-              <i class="icon-search" (click)="toggleSearch('ProformaPurchaseOrder');"></i>
-          </div>
-
-          <div class="input-container" [hidden]="!showProformaSearch">
-              <input type="text" placeholder="Search Order" class="w100" #perfomaSearch [formControl]="ProformaPurchaseOrder" />
-          </div>
-
-      </th> -->
-
           <th width="19%" class="td_in_searchBox" #searchCustomerContainer
             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
 
@@ -278,7 +266,7 @@
 
           <th width="10%">
             <div class="d-flex">
-              <div class="flex-fill">Invoice Date</div>
+              <div class="">Invoice Date</div>
 
               <div class="icon-pointer">
 
@@ -290,7 +278,7 @@
           <th width="12%">
 
             <div class="d-flex">
-              <div class="flex-fill text-right pr-1"> Total Amt.</div>
+              <div class=" text-right"> Total Amt.</div>
 
               <div class="icon-pointer">
                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
@@ -300,7 +288,7 @@
 
           <th width="12%">
             <div class="d-flex">
-              <div class="flex-fill text-right pr-1"> Balance Due</div>
+              <div class=" text-right"> Balance Due</div>
 
               <div class="icon-pointer">
                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}"></ng-container>
@@ -311,7 +299,7 @@
           <th width="10%">
             <div class="d-flex">
 
-              <div class="flex-fill">Due Date</div>
+              <div class="">Due Date</div>
               <div class="icon-pointer">
                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}"></ng-container>
               </div>

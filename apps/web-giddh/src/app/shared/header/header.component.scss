@@ -68,12 +68,12 @@ a[vr-item]:focus {
 }
 
 .account-search:after {
-    content: 'Ctrl + g ';
+    content: 'Ctrl + G ';
     position: absolute;
     display: block;
     clear: both;
     top: 0;
-    right: 4px;
+    right: 10px;
     font-size: 10px;
     line-height: 36px;
     color: #484848;
