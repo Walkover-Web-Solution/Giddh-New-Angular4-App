@@ -1885,19 +1885,19 @@
                 *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default"
-                  *ngIf="isCustomerSelected" [disabled]="invoiceForm.invalid">Generate {{invoiceType | titlecase}}
+                  *ngIf="isCustomerSelected">Generate {{invoiceType | titlecase}}
                   &amp; Update A/c
                 </button>
 
                 <div class="btn-group" dropdown [dropup]="true">
 
                   <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                    class="btn btn-default" [disabled]="invoiceForm.invalid">Generate {{invoiceType | titlecase}}
+                    class="btn btn-default">Generate {{invoiceType | titlecase}}
                   </button>
 
                   <button id="button-split" type="button" dropdownToggle
                     class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split"
-                    *ngIf="invoiceType === 'sales'" [disabled]="invoiceForm.invalid">
+                    *ngIf="invoiceType === 'sales'">
                     <span class="caret"></span>
                     <span class="sr-only">Split button!</span>
                   </button>
@@ -1935,12 +1935,11 @@
                 <div class="btn-group" dropdown [dropup]="true">
 
                   <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                    class="btn btn-default" [disabled]="invoiceForm.invalid">Create
+                    class="btn btn-default">Create
                   </button>
 
                   <button id="button-split2" type="button" dropdownToggle
-                    class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split"
-                    [disabled]="invoiceForm.invalid">
+                    class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
                     <span class="caret"></span>
                     <span class="sr-only">Split button!</span>
                   </button>
@@ -1977,8 +1976,7 @@
               <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
               </button>
 
-              <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)"
-                [disabled]="invoiceForm.invalid">
+              <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)">
                 <span>Update {{invoiceType | titlecase}}</span>
               </button>
             </div>
