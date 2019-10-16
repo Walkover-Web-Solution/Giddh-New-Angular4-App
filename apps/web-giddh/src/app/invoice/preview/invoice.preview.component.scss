@@ -51,7 +51,7 @@
 }
 
 .td_in_searchBox div span {
-    flex: 1 1 auto;
+    // flex: 1 1 auto;
     padding: 8px 0 8px 10px;
 }
 
@@ -70,12 +70,13 @@
 /*}*/
 
 .td_in_searchBox div i {
-    margin-top: 3px;
+    margin-top: 1px;
     color:$iconColorTh;;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
+     padding-left: 8px;
 }
 
 .td_in_searchBox div i:hover {
@@ -89,11 +90,12 @@
 
 .td_in_searchBox .input-container input {
     height: 50px;
-    width: 100%;
+    min-width: 100%;
     padding: 11px;
     padding-right: 40px;
     color: #1c1c1c;
     border: none;
+    background-color: #f2f2f2;
 }
 
 .td_in_searchBox .input-container i {
@@ -283,6 +285,7 @@ td.card-header.clearfix {
 .icon-pointer {
   cursor: pointer;
     color:$iconColorTh;
+    margin-left: 6px;
 }
 
 .icon-pointer .activeTextColor {
@@ -401,6 +404,15 @@ button.btn.btn-filter span.icon-cross {
 }
 .btn-link-2{
   color: #1C1C1C;
+}
+
+table{
+  position: relative;
+}
+.basic > thead > tr > th{
+      position: sticky !important;
+    top: 59px;
+    z-index: 999;
 }
 /* responsive */
 @media (max-width: 768px) {
