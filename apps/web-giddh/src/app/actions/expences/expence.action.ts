@@ -11,9 +11,12 @@ import { ExpenseService } from '../../services/expences.service';
 
 @Injectable()
 export class ExpencesAction {
-
+  public static readonly GET_PETTYCASH_ENTRY_REQUEST = 'GET_PETTYCASH_ENTRY_REQUEST';
+  public static readonly GET_PETTYCASH_ENTRY_RESPONSE = 'GET_PETTYCASH_ENTRY_RESPONSE';
   public static readonly GET_PETTYCASH_REPORT_REQUEST = 'GET_PETTYCASH_REPORT_REQUEST';
   public static readonly GET_PETTYCASH_REPORT_RESPONSE = 'GET_PETTYCASH_REPORT_RESPONSE';
+  public static readonly GET_PETTYCASH_REJECTED_REPORT_REQUEST = 'GET_PETTYCASH_REJECTED_REPORT_REQUEST';
+  public static readonly GET_PETTYCASH_REJECTED_REPORT_RESPONSE = 'GET_PETTYCASH_REJECTED_REPORT_RESPONSE';
 
 
   @Effect()
@@ -38,7 +41,50 @@ export class ExpencesAction {
         }
         return { type: 'EmptyAction' };
       }));
+  @Effect()
+  public GetPettycashRejectedReportRequest$: Observable<Action> = this.action$
+    .ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST).pipe(
+      switchMap((action: CustomActions) =>
+        this._expenseService.getPettycashRejectedReports(action.payload)
+      ),
+      map(response => {
+        return this.GetPettycashRejectedReportResponse(response);
+      }));
 
+  @Effect()
+  private GetPettycashRejectedReportRequestResponse$: Observable<Action> = this.action$
+    .ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, CommonPaginatedRequest> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          // this._toasty.successToast(data.body);
+        }
+        return { type: 'EmptyAction' };
+      }));
+  @Effect()
+  public GetPettycashEntryRequest$: Observable<Action> = this.action$
+    .ofType(ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST).pipe(
+      switchMap((action: CustomActions) =>
+        this._expenseService.getPettycashEntry(action.payload)
+      ),
+      map(response => {
+        return this.getPettycashEntryResponse(response);
+      }));
+
+  @Effect()
+  private GetPettycashEntryResponse$: Observable<Action> = this.action$
+    .ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE).pipe(
+      map((response: CustomActions) => {
+        let data: BaseResponse<any, any> = response.payload;
+        if (data.status === 'error') {
+          this._toasty.errorToast(data.message, data.code);
+        } else {
+          // this._toasty.successToast(data.body);
+        }
+        return { type: 'EmptyAction' };
+      }));
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -78,19 +124,30 @@ export class ExpencesAction {
       payload: value
     };
   }
-  // public actionPettycashRequest(request: CommonPaginatedRequest): CustomActions {
-  //   return {
-  //     type: ExpencesAction.GET_PETTYCASH_REPORT_REQUEST,
-  //     payload: request
-  //   };
-  // }
-  // public actionPettycashRequestResponse(value: BaseResponse<any, string>): CustomActions {
-  //   return {
-  //     type: ExpencesAction.GET_PETTYCASH_REPORT_RESPONSE,
-  //     payload: value
-  //   };
-  // }
-
+  public GetPettycashRejectedReportRequest(request: CommonPaginatedRequest): CustomActions {
+    return {
+      type: ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST,
+      payload: request
+    };
+  }
+  public GetPettycashRejectedReportResponse(value: BaseResponse<any, string>): CustomActions {
+    return {
+      type: ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE,
+      payload: value
+    };
+  }
+  public getPettycashEntryRequest(request: string): CustomActions {
+    return {
+      type: ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST,
+      payload: request
+    };
+  }
+  public getPettycashEntryResponse(value: BaseResponse<any, string>): CustomActions {
+    return {
+      type: ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE,
+      payload: value
+    };
+  }
 
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {

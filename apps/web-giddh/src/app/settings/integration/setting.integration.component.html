@@ -45,11 +45,24 @@
 
       <div class="box clearfix mb-2">
         <h3 class="section_head">Gmail Integration</h3>
-
+        <div class="d-flex">
         <a *ngIf="!(isGmailIntegrated$ | async)" class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">Connect with
           Gmail</a>
-        <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
+        <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
+        <button style="margin-left: 20px" *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger" (click)="removegmailintegration.toggle()">Remove Account</button>
       </div>
+      </div>
+
+      <!--remove account integration confirmation modal-->
+      <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <confirm-modal [title]="'Remove Gmail Integration'" [body]="'Are you sure you want to remove gmail account?'"
+              (cancelCallBack)="removegmailintegration.toggle()" (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
+          </div>
+        </div>
+      </div>
+
 
 
       <div class="box clearfix">

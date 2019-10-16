@@ -75,3 +75,21 @@ span.close-modal.cp.pull-right {
     width: 16px;
     opacity: 0.6;
 }
+
+.upload-img.add-img label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100%;
+}
+
+.upload-img.add-img input {
+    width: 100%;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+}

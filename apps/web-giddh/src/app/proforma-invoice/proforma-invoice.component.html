@@ -108,7 +108,8 @@
                         style="align-items: center;margin-left: 2%">
                         <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                           <i class="fa fa-files-o"></i>
-                          Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
+                          Copy Previous Invoices
+                          <!-- {{ invoiceType | voucherTypeToNamePipe | titlecase}} -->
                         </a>
 
                         <ng-container *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
@@ -929,7 +930,7 @@
                               <div class="clearfix paymentMode">
 
                                 <sh-select class="pull-right " name="depositAccountUniqueName"
-                                  [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
+                                  [options]="bankAccounts" [(ngModel)]="depositAccountUniqueName"
                                   (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
                                   [notFoundLink]="false" [forceClearReactive]="forceClear$ | async" [multiple]="false"
                                   [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">

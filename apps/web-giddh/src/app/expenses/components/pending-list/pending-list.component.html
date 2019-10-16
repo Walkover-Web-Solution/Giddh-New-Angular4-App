@@ -35,6 +35,7 @@
                         <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
                         <td data-title="Account">
                             <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                            <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
                             <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i> {{expenses.particularAccount.name}}
                         </td>
                         <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
@@ -45,11 +46,12 @@
                         </td>
                         <td data-title="File">
                             <a *ngIf="!expenses.fileNames" class="font-12">
-                                <i class="icon-file-path middle"></i>attach file</a>
+                                <i class="icon-file-path middle"></i> attach file</a>
+                            <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                         </td>
-                        <td data-title="Description">{{expenses.description}}</td>
+                        <td data-title="Description"><span *ngIf="expenses.description">{{expenses.description}}</span><span *ngIf="!expenses.description">-</span></td>
                         <td data-title="Action">
-                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success">Approve</button>
+                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success-outline">Approve</button>
                         </td>
                     </ng-container>
                 </tr>
@@ -60,13 +62,10 @@
     </div>
 </div>
 <!-- <div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems>1" class="paginationWrapper">
-    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" [(ngModel)]="(pettyCashReportsResponse$ | async)?.page" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
-        (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
 </div> -->
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">
-
-
     <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
         <div class="giddh-spinner vertical-center-spinner "></div>
     </div>
@@ -81,7 +80,7 @@
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block pull-right ml-1">
+    <div class="icon-pointer d-inline-block pull-right ml-1 pointer">
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col" [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
 
         <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
