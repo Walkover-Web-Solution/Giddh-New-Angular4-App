@@ -11,7 +11,7 @@ import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 // import {ViewChild, ElementRef} from '@angular/core';
-import { INVOICE_API }  from 'apps/web-giddh/src/app/services/apiurls/invoice';
+import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
 
 @Component({
   selector: 'content-selector',
@@ -48,7 +48,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
-              private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
+    private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
   ) {
     let companies = null;
     let defaultTemplate = null;
@@ -94,7 +94,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.fieldsAndVisibility = _.cloneDeep(obj);
     });
 
-    this.fileUploadOptions = {concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg']};
+    this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
@@ -213,7 +213,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
       // this.logoAttached = true;
       this.signatureImgAttached = true;
       this.previewFile(output.file);
-      this.startUpload();
 
     } else if (output.type === 'start') {
       this.isSignatureUploadInProgress = true;
@@ -243,7 +242,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
       type: 'uploadAll',
       url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
-      headers: {'Session-Id': sessionId},
+      headers: { 'Session-Id': sessionId },
     };
 
     this.uploadInput.emit(event);
@@ -269,15 +268,15 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public cancelUpload(id: string): void {
-    this.uploadInput.emit({type: 'cancel', id});
+    this.uploadInput.emit({ type: 'cancel', id });
   }
 
   public removeFile(id: string): void {
-    this.uploadInput.emit({type: 'remove', id});
+    this.uploadInput.emit({ type: 'remove', id });
   }
 
   public removeAllFiles(): void {
-    this.uploadInput.emit({type: 'removeAll'});
+    this.uploadInput.emit({ type: 'removeAll' });
   }
 
 
