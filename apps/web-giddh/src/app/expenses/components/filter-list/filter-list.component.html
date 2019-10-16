@@ -16,7 +16,10 @@
                         <span>{{filterItem?.entryDate}}</span> |
                         <span>by {{filterItem?.createdBy?.name}}</span>
                     </p>
-                    <p class="mb-0 font-14">{{filterItem?.baseAccount?.name}}</p>
+                    <i class="dot-icon dot-warning" *ngIf="filterItem.entryType==='sales'"></i>
+                    <i class="dot-icon dot-success" *ngIf="filterItem.entryType==='deposit'"></i>
+                    <i class="dot-icon dot-primary" *ngIf="filterItem.entryType==='expense'"></i>
+                    <p class="mb-0 font-14 d-inline-block">{{filterItem?.baseAccount?.name}}</p>
                 </div>
 
                 <div class="right-item">
