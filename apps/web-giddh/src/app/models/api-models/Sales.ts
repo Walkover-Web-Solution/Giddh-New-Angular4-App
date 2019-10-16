@@ -143,6 +143,7 @@ export class AccountDetailsClass {
   public shippingDetails: GstDetailsClass;
   public country?: CountryClass;
   public currency?: CurrencyClass;
+  public currencySymbol:string = '';
   public customerName: string;
   public mobileNumber?: string;
   constructor(attrs?: any) {
@@ -151,6 +152,9 @@ export class AccountDetailsClass {
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
     if (attrs) {
+      if(attrs.currencySymbol){
+        this.currencySymbol = attrs.currencySymbol;
+      }
       Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email']));
       this.contactNumber = attrs.mobileNo || '';
       //this.mobileNo = attrs.mobileNo || '';

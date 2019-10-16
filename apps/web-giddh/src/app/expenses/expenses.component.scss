@@ -8,7 +8,13 @@
 .main-edit-expense {
   display: flex;
 }
-
+.input-calender {
+  width: 225px;
+}
+.input-calender > span {
+  background: none;
+  border-radius: 0px;
+}
 @media only screen and (max-width: 767px) {
   .left-expense {
     width: 100%;

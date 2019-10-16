@@ -122,6 +122,9 @@ table th[class*=col-] {
 
 .ledger-stat {
     margin-bottom: 0;
+    background-color: #fff;
+    margin-top: 30px;
+    padding: 20px 0;
 }
 
 .homeBtmhalf h3 {
@@ -404,17 +407,18 @@ h4 {
         width: 50%;
     }
     .ledger_book:before {
-        content: ' ';
-        height: 100%;
-        position: absolute;
-        width: 0;
-        border-left: 1px solid #ccc;
-        top: 0;
-        bottom: 0;
-        z-index: 9;
-        margin: 0 auto;
-        left: 0px;
-        right: 0;
+         content: ' ';
+    height:calc(100% - 160px);
+    position: absolute;
+    width: 0;
+    border-left: 1px solid #ccc;
+    top: 37px;
+    bottom: 0;
+    z-index: 9;
+    margin: 0 auto;
+    left: 0px;
+    right: 0;
+
     }
 }
 
@@ -494,4 +498,26 @@ h4 {
 
 .app_download li a:hover {
     box-shadow: 0px 1px 4px #f76845;
+}
+
+tbody td {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+thead tr:first-child th {
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+#credit td {
+    border-left: 0;
+}
+div#transaction_table {
+    background-color: #fff;
+    position: relative;
+}
+.ledger-footer-1.leftfooter .total_col td {
+    border-right: 0;
+}
+#debit td {
+    border-right: 0;
 }
