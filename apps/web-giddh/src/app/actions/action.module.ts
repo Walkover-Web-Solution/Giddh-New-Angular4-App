@@ -49,6 +49,7 @@ import { InvoiceReceiptActions } from './invoice/receipt/receipt.actions';
 import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 import { SubscriptionsActions } from './userSubscriptions/subscriptions.action';
 import { ProformaActions } from './proforma/proforma.actions';
+import { ExpencesAction } from './expences/expence.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -59,6 +60,7 @@ import { ProformaActions } from './proforma/proforma.actions';
     EffectsModule.forRoot([
       HomeActions,
       GeneralActions,
+      ExpencesAction,
       CompanyActions,
       LoginActions,
       GroupWithAccountsAction,

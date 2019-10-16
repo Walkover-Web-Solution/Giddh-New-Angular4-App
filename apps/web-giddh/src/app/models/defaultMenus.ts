@@ -81,7 +81,9 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
   { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details', additional: { tab: 'profile', tabIndex: 1 } },
   { type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: { tab: 'api', tabIndex: 0 } },
   { type: 'MENU', name: 'Reports > Sales Register', uniqueName: '/pages/reports/reports-details' },
-  { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/sales-detailed-expand' }
+  { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/sales-detailed-expand' },
+  { type: 'MENU', name: 'Petty Cash Management', uniqueName: '/pages/expenses' },
+
 
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['accounting-voucher', 'inventory',

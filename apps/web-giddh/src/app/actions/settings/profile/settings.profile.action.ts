@@ -24,9 +24,9 @@ export class SettingsProfileActions {
         type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
         payload: res
       }, true, {
-          type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-          payload: res
-        })));
+        type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+        payload: res
+      })));
 
   @Effect()
   public UpdateProfile$: Observable<Action> = this.action$
@@ -44,9 +44,9 @@ export class SettingsProfileActions {
         type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
         payload: res
       }, true, {
-          type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
-          payload: res
-        })));
+        type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
+        payload: res
+      })));
 
   @Effect()
   public UpdateInventory$: Observable<Action> = this.action$
@@ -87,7 +87,7 @@ export class SettingsProfileActions {
           this.toasty.errorToast(data.message, data.code);
         } else {
           this.store.dispatch(this.companyActions.RefreshCompanies());
-          // this.toasty.successToast('Profile Updated Successfully.');
+          this.toasty.successToast('Profile Updated Successfully.');
         }
         if (data.request.isMultipleCurrency) {
           return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);

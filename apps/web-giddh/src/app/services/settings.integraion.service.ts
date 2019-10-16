@@ -312,6 +312,17 @@ constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperServic
     }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
   }
 
+  /*
+  Remove Gmail Integration
+  */
+  public RemoveGmailIntegration(): Observable<BaseResponse<any, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_GMAIL_INTEGRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
+
   public RemoveICICI(urn) {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
@@ -319,5 +330,5 @@ constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperServic
       let data: BaseResponse<any, any> = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
-  }
+  }  
 }
