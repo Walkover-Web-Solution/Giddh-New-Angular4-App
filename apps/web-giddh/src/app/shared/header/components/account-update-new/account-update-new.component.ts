@@ -100,7 +100,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
-  public  activeAccountName: string = '';
+  public activeAccountName: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -474,15 +474,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
     //   return;
     // }
-    if (this.showBankDetail) {
-      if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
-        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-          accountRequest['accountBankDetails'] = [];
-        }
+    // if (this.showBankDetail) {
+    //   if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
+    //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+    //       accountRequest['accountBankDetails'] = [];
+    //     }
+    //   }
+    // } else {
+    if (!this.showBankDetail) { 
+        delete accountRequest['accountBankDetails'];
       }
-    } else {
-      delete accountRequest['accountBankDetails'];
-    }
 
     this.submitClicked.emit({
       value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName},
