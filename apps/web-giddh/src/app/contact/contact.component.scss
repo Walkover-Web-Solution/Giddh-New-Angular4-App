@@ -14,12 +14,12 @@
 .aging-table > tbody > tr input[type="checkbox"] {
   position: absolute !important;
   opacity: 0;
-  top: 5px;
+  top: 8px;
 }
 .aging-table > tbody > tr td.vendorCustomerName input[type="checkbox"] {
   position: absolute !important;
   opacity: 0;
-  top: 0;
+  top: 2px;
 }
 .aging-table > tbody > tr:hover input[type="checkbox"] {
   position: relative !important;
@@ -196,10 +196,10 @@ tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer, tr:last-child td.
 .customerName .icon-ellipse {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 14px;
 }
 .customerName.vendorCustomerName .icon-ellipse {
-    top: 5px;
+    top: 8px;
 }
 .pos-rel.WordWrap {
   .icon-dots-three-vertical {

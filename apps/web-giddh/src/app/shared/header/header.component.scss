@@ -597,6 +597,11 @@ padding-right: 15px;
     font-family: opensans-semibold;
     font-size: 14px;
 }
+.primary-header ul.main-company-name {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {

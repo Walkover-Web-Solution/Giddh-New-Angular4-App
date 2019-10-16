@@ -816,7 +816,7 @@ ul.sub-list {
 
 .aging-table.table-aging-report tr td:first-child,
 .aging-table.table-aging-report tr th:first-child {
-    padding-left: 15px;
+    padding-left: 15px !important;
 }
 
 .aging-table .table-checkbox {
@@ -2591,8 +2591,8 @@ opacity: 0.5;
 
 a,
 button,
-input {
-    outline: none;
+input , button:focus{
+    outline:none !important;
 }
 
 .Inpt_dwn {
@@ -7955,6 +7955,15 @@ button.btn.btn-filter{
 .setting-container .btn-default.btn-xs {
     top: -3px !important;
 }
+.welcome_outer #content_wrapper {
+    padding-left: 0;
+}
+
+.mangeAccountPopup.fullScreenMy.modal.fade .modal-dialog {
+    transform: translateY(0) !important;
+    margin: 0 auto;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8497,3 +8506,4 @@ button.btn.btn-filter{
         width: 180px !important;
     }
 }
+
