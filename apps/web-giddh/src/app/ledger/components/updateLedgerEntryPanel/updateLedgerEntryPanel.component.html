@@ -433,7 +433,7 @@
                   (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
               </span>
 
-              <p class="pr-1 text-right" *ngIf="vm.isMultiCurrencyAvailable">
+              <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedTaxTrxTotal }"></ng-container>
               </p>
             </div>
@@ -457,7 +457,7 @@
                 <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
                     <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable" *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
                     (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)" />
-                  <p *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other Tax ?</p>
+                  <p class="font-14 nowrap" *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other Tax ?</p>
                 </div>
 
                 <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1">
