@@ -70,6 +70,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
+  public showBankDetail: boolean = false;
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -88,6 +90,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
   public ngOnInit() {
     //
+    this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
   }
 
   public addNewAcSubmit(accRequestObject: AddAccountRequest) {

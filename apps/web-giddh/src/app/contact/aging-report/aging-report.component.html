@@ -156,44 +156,58 @@
 
       <tr>
 
-        <th>Customer Name
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
+        <th>
+          <div class="d-flex align-items-center">Customer Name
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}"></ng-container>
+          </div>
         </th>
 
-        <th>Parent Group
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
+        <th>
+          <div class="d-flex align-items-center">Parent Group
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}"></ng-container>
+          </div>
         </th>
 
-        <th class="text-right pr-3">Upcoming Due
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}">
-          </ng-container>
+        <th class="text-right pr-3">
+          <div class="d-flex align-items-center justify-content-end">Upcoming Due
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}">
+            </ng-container>
+          </div>
         </th>
 
         <th class="italic unbold underline pr-3 text-right">
-          <span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}"></ng-container>
+          <div class="d-flex align-items-center justify-content-end"><span
+              (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}"></ng-container>
+          </div>
         </th>
 
         <th class="italic text-right pr-3 unbold underline">
-          <span (click)="openAgingDropDown()">
-            {{(agingDropDownoptions$| async)?.fourth + 1}}-{{((agingDropDownoptions$| async)?.fifth)}} Days </span>
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range1'}"></ng-container>
+          <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">
+              {{(agingDropDownoptions$| async)?.fourth + 1}}-{{((agingDropDownoptions$| async)?.fifth)}} Days </span>
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range1'}"></ng-container>
+          </div>
         </th>
 
         <th class="italic text-right pr-3 unbold underline">
-          <span (click)="openAgingDropDown()">
-            {{((agingDropDownoptions$| async)?.fifth + 1)}}-{{((agingDropDownoptions$| async)?.sixth)}} Days </span>
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range2'}"></ng-container>
+          <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">
+              {{((agingDropDownoptions$| async)?.fifth + 1)}}-{{((agingDropDownoptions$| async)?.sixth)}} Days </span>
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range2'}"></ng-container>
+          </div>
         </th>
 
         <th class="italic text-right pr-3 unbold underline">
-          <span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}"></ng-container>
+          <div class="d-flex align-items-center justify-content-end"><span
+              (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}"></ng-container>
+          </div>
         </th>
 
-        <th class="text-right pr-3">Total Due
-          <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}">
-          </ng-container>
+        <th class="text-right pr-3">
+          <div class="d-flex align-items-center justify-content-end">Total Due
+            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}">
+            </ng-container>
+          </div>
         </th>
 
       </tr>

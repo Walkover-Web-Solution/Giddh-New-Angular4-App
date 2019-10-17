@@ -5273,6 +5273,10 @@ bs-datepicker-container {
   align-items: center;
   -ms-flex-align: center;
 }
+.justify-content-end {
+   justify-content: flex-end;
+
+}
 
 
 /* cmdk modal styles */

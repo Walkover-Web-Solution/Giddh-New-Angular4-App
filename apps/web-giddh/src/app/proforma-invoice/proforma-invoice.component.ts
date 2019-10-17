@@ -68,6 +68,7 @@ import { TaxControlComponent } from '../theme/tax-control/tax-control.component'
 import { GeneralService } from '../services/general.service';
 import {LoaderState} from "../loader/loader";
 import {LoaderService} from "../loader/loader.service";
+import {LedgerResponseDiscountClass} from "../models/api-models/Ledger";
 
 const THEAD_ARR_READONLY = [
   {
@@ -270,8 +271,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showLoader: boolean = false;
   public inputMaskFormat: string ='';
   public isPrefixAppliedForCurrency: boolean;
-  public selectedPrefixForCurrency: string ='';
   public selectedSuffixForCurrency: string ='';
+  public companyCurrencyName: string;
+  public baseCurrencySymbol: any;
+
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -371,6 +374,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (profile) {
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        if(profile.baseCurrency !== 'INR'){
+          this.companyCurrencyName = profile.baseCurrency;
+        }
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
       } else {
@@ -635,8 +642,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           } else {
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
-              if( this.isSalesInvoice){
-                convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              if(results[1].account.currency && results[1].account.currency.code !== 'INR'){
+                this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
             } else {
@@ -673,7 +681,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (obj.entries.length) {
-              //obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
+              obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
             this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
@@ -1215,7 +1223,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       let updatedData = obj;
       let isVoucherV4 = false;
-      if(this.isSalesInvoice){
+      if(this.isSalesInvoice || this.isCashInvoice){
         updatedData = this.updateData(obj, data);
         isVoucherV4 = true;
       }
@@ -1611,7 +1619,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
       if(this.isMulticurrencyAccount){
-        this.assignPrefixAndSuffixForCurrency();
+        if(item.additional.currency !== 'INR'){
+          this.companyCurrencyName = item.additional.currency;
+        }
       }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
 
@@ -1858,6 +1868,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = event.label;
       this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
+      this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      if(event.additional.currency !== 'INR'){
+        this.companyCurrencyName = event.additional.currency;
+      }
     } else {
       this.depositAccountUniqueName = '';
     }
@@ -2686,15 +2700,42 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       if(entry.discounts && entry.discounts.length){
         let discountArray = [];
+        let tradeDiscountArray=[];
         entry.discounts.forEach(discount=>{
-          let discountLedger = new LedgerDiscountClass();
-          discountLedger.discountValue = discount.amount.amountForAccount;
-          discountLedger.discountType = discount.calculationMethod;
-          discountLedger.amount = discountLedger.discountValue;
-          discountLedger.isActive = true;
-          discountArray.push(discountLedger);
+
+            let discountLedger = new LedgerDiscountClass();
+            discountLedger.discountValue = discount.amount.amountForAccount;
+            discountLedger.discountType = discount.calculationMethod;
+            discountLedger.amount = discountLedger.discountValue;
+            discountLedger.isActive = true;
+            discountLedger.discountUniqueName = discount.uniqueName;
+            discountLedger.name = discount.name;
+            discountLedger.particular = discount.particular;
+            if(discountLedger.discountUniqueName){
+              discountLedger.uniqueName = discountLedger.discountUniqueName;
+              let tradeDiscount = new LedgerResponseDiscountClass();
+              tradeDiscount.discount = {
+                uniqueName: '',
+                name: 'API FIX NEEDED',
+                discountType: "PERCENTAGE",
+                discountValue: 10
+              };
+              tradeDiscount.account = {
+                accountType: '',
+                uniqueName: entry.uniqueName,
+                name: ''
+              };
+              tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+              tradeDiscount.discount.discountValue = discountLedger.discountValue;
+              tradeDiscount.discount.discountType = discountLedger.discountType;
+              tradeDiscount.discount.name = discountLedger.name;
+              tradeDiscountArray.push(tradeDiscount);
+            }else{
+              discountArray.push(discountLedger);
+            }
         });
         salesEntryClass.discounts = discountArray;
+        salesEntryClass.tradeDiscounts = tradeDiscountArray;
       }else{
         salesEntryClass.discounts = [new LedgerDiscountClass()];
       }
@@ -2760,19 +2801,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateExchangeRate(val) {
-    val = val.replace(this.selectedPrefixForCurrency, '');
+    val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
       this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
       this.originalExchangeRate = this.exchangeRate;
-    }
-  }
-
-  private assignPrefixAndSuffixForCurrency() {
-    if(this.companyCurrency === 'INR'){
-      this.selectedPrefixForCurrency = '$';
-    }else{
-      this.selectedPrefixForCurrency = '₹';
     }
   }
 }

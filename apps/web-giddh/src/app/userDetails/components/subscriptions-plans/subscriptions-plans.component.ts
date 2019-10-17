@@ -62,11 +62,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     if (this._generalService.user) {
       this.logedInUser = this._generalService.user;
     }
-    this.isUpdateCompanySuccess$.subscribe(p => {
-      if (p) {
-        this._toast.successToast("Plan changed successfully");
-      }
-    });
+    // this.isUpdateCompanySuccess$.subscribe(p => {
+    //   if (p) {
+    //     this._toast.successToast("Plan changed successfully");
+    //   }
+    // });
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
       this.isSwitchPlanInProcess = inProcess;
     });

@@ -68,12 +68,12 @@ a[vr-item]:focus {
 }
 
 .account-search:after {
-    content: 'Ctrl + g ';
+    content: 'Ctrl + G ';
     position: absolute;
     display: block;
     clear: both;
     top: 0;
-    right: 4px;
+    right: 10px;
     font-size: 10px;
     line-height: 36px;
     color: #484848;
@@ -596,6 +596,11 @@ padding-right: 15px;
 .primary-header  .companyName-financeYear span:first-child {
     font-family: opensans-semibold;
     font-size: 14px;
+}
+.primary-header ul.main-company-name {
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 /* responsive */
 @media(max-width:991px) {

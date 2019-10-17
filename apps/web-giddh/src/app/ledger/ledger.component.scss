@@ -18,7 +18,7 @@
 }
 .ledgHead table td[class*=col-],
 .ledgHead table td .select2-container {
-    padding: 8px !important;
+    padding: 8px 10px !important;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
     font-size: 13px;
@@ -32,8 +32,8 @@
 }
 
 .ledgHead table td[class*=col-], .ledgHead table td .select2-container {
-  min-height: 45px;
-  height: 45px;
+  min-height: 49px;
+  height: 49px;
   max-height: initial;
 }
 
@@ -172,7 +172,7 @@
       background: #fff;
     color: #000000;
     border-right: 1px solid #D1D1D1;
-    padding: 11px !important;
+    padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid #D1D1D1;
     font-family: opensans-semibold;
@@ -200,7 +200,7 @@
 }
 .daterange_picker_ledger {
     border: 0;
-    background: #f7f8fa !important;
+    background: #fff !important;
     text-decoration-line: none;
     text-decoration-style: none;
 }
@@ -344,6 +344,7 @@ sh-select:focus {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
     border-right: 1px solid $border-blue;
 }
 .ledger-head {

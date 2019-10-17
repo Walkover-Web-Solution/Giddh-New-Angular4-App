@@ -1,28 +1,37 @@
-
 .input-search {
-  width: 100%;
+    width: 100%;
 }
+
 .filter-list .inner-filter-list li {
-  border-bottom: 1px solid #ccc;
-  padding: 15px;
-  display: flex;
+    border-bottom: 1px solid #ccc;
+    padding: 15px;
+    display: flex;
 }
+
 .filter-list .inner-filter-list li:hover {
-  background: #F0F0F0;
-  transition: .5s all ease;
+    background: #F0F0F0;
+    transition: .5s all ease;
 }
+
 .filter-list .inner-filter-list li .left-item {
-  width: 100%;
+    width: 100%;
 }
+
 .filter-list .inner-filter-list li .right-item {
-  width: 160px;
-  text-align: right;
+    width: 160px;
+    text-align: right;
 }
+
 .filter-list .inner-filter-list li .right-item i {
-  color: #999999;
-  margin-left: 5px;
+    color: #999999;
+    margin-left: 5px;
 }
+
 .filter-list .inner-filter-list {
-  height: calc(100vh - 200px);
-  overflow-y: auto;
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.filter-list .activeItem {
+    background-color: #F0F0F0;
 }
