@@ -68,6 +68,7 @@ import { TaxControlComponent } from '../theme/tax-control/tax-control.component'
 import { GeneralService } from '../services/general.service';
 import {LoaderState} from "../loader/loader";
 import {LoaderService} from "../loader/loader.service";
+import {LedgerResponseDiscountClass} from "../models/api-models/Ledger";
 
 const THEAD_ARR_READONLY = [
   {
@@ -642,10 +643,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
               convertedRes1 = this.modifyMulticurrencyRes(results[1]);
-              if(results[1].account.currency.code !== 'INR'){
+              if(results[1].account.currency && results[1].account.currency.code !== 'INR'){
                 this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
+              this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
+                obj.accountDetails.currencySymbol = acc.currencySymbol||'';
+              });
+
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
             }
@@ -680,7 +685,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (obj.entries.length) {
-              //obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
+              obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
             this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
@@ -1188,7 +1193,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       return entry;
     });
-    let exRate = this.companyCurrency === 'USD' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+    let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
     let obj: GenericRequestForGenerateSCD = {
       account: data.accountDetails,
       updateAccountDetails: this.updateAccount,
@@ -2024,7 +2029,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
       let data = result.voucher;
-      let exRate = this.companyCurrency === 'USD' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+      let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
       let unqName = this.invoiceUniqueName || this.accountUniqueName;
       result = {
         account: data.accountDetails,
@@ -2699,15 +2704,42 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       if(entry.discounts && entry.discounts.length){
         let discountArray = [];
+        let tradeDiscountArray=[];
         entry.discounts.forEach(discount=>{
-          let discountLedger = new LedgerDiscountClass();
-          discountLedger.discountValue = discount.amount.amountForAccount;
-          discountLedger.discountType = discount.calculationMethod;
-          discountLedger.amount = discountLedger.discountValue;
-          discountLedger.isActive = true;
-          discountArray.push(discountLedger);
+
+            let discountLedger = new LedgerDiscountClass();
+            discountLedger.discountValue = discount.amount.amountForAccount;
+            discountLedger.discountType = discount.calculationMethod;
+            discountLedger.amount = discountLedger.discountValue;
+            discountLedger.isActive = true;
+            discountLedger.discountUniqueName = discount.uniqueName;
+            discountLedger.name = discount.name;
+            discountLedger.particular = discount.particular;
+            if(discountLedger.discountUniqueName){
+              discountLedger.uniqueName = discountLedger.discountUniqueName;
+              let tradeDiscount = new LedgerResponseDiscountClass();
+              tradeDiscount.discount = {
+                uniqueName: '',
+                name: 'API FIX NEEDED',
+                discountType: "PERCENTAGE",
+                discountValue: 10
+              };
+              tradeDiscount.account = {
+                accountType: '',
+                uniqueName: entry.uniqueName,
+                name: ''
+              };
+              tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+              tradeDiscount.discount.discountValue = discountLedger.discountValue;
+              tradeDiscount.discount.discountType = discountLedger.discountType;
+              tradeDiscount.discount.name = discountLedger.name;
+              tradeDiscountArray.push(tradeDiscount);
+            }else{
+              discountArray.push(discountLedger);
+            }
         });
         salesEntryClass.discounts = discountArray;
+        salesEntryClass.tradeDiscounts = tradeDiscountArray;
       }else{
         salesEntryClass.discounts = [new LedgerDiscountClass()];
       }
@@ -2761,10 +2793,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.voucherDetails = voucherDetails;
     voucherClassConversion.templateDetails = result.templateDetails;
 
-    this.isMulticurrencyAccount = voucherClassConversion.accountDetails.currency.code !== this.companyCurrency;
+    this.isMulticurrencyAccount = result.multiCurrency;
     this.customerCountryName = result.account.billingDetails.countryName;
 
-    this.exchangeRate = this.companyCurrency==='USD'? 1/result.exchangeRate:result.exchangeRate;
+    this.exchangeRate = this.companyCurrency !=='INR'? 1/result.exchangeRate:result.exchangeRate;
     this.originalExchangeRate = this.exchangeRate;
 
     this.invoiceUniqueName = result.uniqueName;

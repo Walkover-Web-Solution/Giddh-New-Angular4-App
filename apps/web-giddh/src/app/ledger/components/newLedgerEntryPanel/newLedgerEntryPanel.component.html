@@ -18,9 +18,8 @@
 
               <tr>
 
-                <td class="text-right" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}"
-                    style="width:100% !important;">
-                  <label style=" margin-right: 6px;">Qty</label>
+                <td class="text-right width-70" ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
+                  <label style="margin-right: 6px;">Qty</label>
                   <input type="text" name="" class="form-control text-right"
                          (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity"
                          decimalDigitsDirective [DecimalPlaces]="4"/>
@@ -145,7 +144,7 @@
 
     </div>
 
-    <div class="text-right mrB1" style="display: flex;justify-content: flex-end;"
+    <div class="text-right mrB1"
          *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"

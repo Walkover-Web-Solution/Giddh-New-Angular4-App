@@ -291,7 +291,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
-  public tradeDiscounts?: LedgerResponseDiscountClass[];
+  public tradeDiscounts?: LedgerResponseDiscountClass[];currencySymbol
   public taxes: TaxControlData[];
   public transactions: SalesTransactionItemClass[];
   public description: string;
@@ -585,7 +585,8 @@ export class DiscountMulticurrency{
   public uniqueName: string;
   public amount: AmountClassMulticurrency;
   public discountPercent: number;
-
+  public particular: string;
+  public name: string;
 
   constructor(ledgerDiscountClass:LedgerDiscountClass){
     this.calculationMethod = ledgerDiscountClass.discountType;
@@ -593,6 +594,8 @@ export class DiscountMulticurrency{
     this.amount = new AmountClassMulticurrency();
     this.amount.amountForAccount = ledgerDiscountClass.amount;
     this.discountPercent = ledgerDiscountClass.discountValue;
+    this.name = ledgerDiscountClass.name;
+    this.particular = ledgerDiscountClass.particular;
   }
 }
 

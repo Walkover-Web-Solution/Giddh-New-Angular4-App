@@ -759,7 +759,7 @@
         </table>
 
         <!-- region blank ledger-->
-        <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
+        <table class="width100 bl-1" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
           (click)="$event.stopPropagation()">
           <tbody>
 
@@ -1095,25 +1095,19 @@
 
         <div class="ledger-state-box">
           <h1>Closing Balance</h1>
-
           <div class="d-flex" style="justify-content: space-between;flex-direction: column">
             <h3 class="digitBlue">
               {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
               {{ ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
             </h3>
-
             <h3 class="digitBlue" *ngIf="isLedgerAccountAllowsMultiCurrency">
               {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
               {{ ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
             </h3>
           </div>
-
         </div>
-
       </div>
     </div>
-
-
   </section>
 </div>
 <!-- modal sections -->
@@ -1126,7 +1120,7 @@
 
 <!-- update ladger entry popup -->
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
-  <div class="modal-dialog modal-lg" style="width:90%">
+  <div class="modal-dialog modal-lg modal-ledger">
     <div class="modal-content">
       <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
       </div>

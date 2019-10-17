@@ -22,6 +22,11 @@
 .total-detail-table tbody tr td {
   vertical-align: top;
 }
+.width-70 {
+  width: 70px;
+  min-width: 70px;
+}
+
 
 @media only screen and (max-width: 767px) {
   .ledger-panel .btn {

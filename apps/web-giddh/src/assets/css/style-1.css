@@ -4982,11 +4982,8 @@ border-bottom: 1px solid #e0e0e0;
   padding-bottom: 350px;
 }
 
-#entryModal {
-}
-
 #entryModal .modal-body {
-  padding: 15px 20px 100px;
+  padding: 15px 20px 15px /*100px*/;
   display: flex;
   flex-direction: column;
 }
