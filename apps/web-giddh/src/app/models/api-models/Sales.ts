@@ -584,7 +584,7 @@ export class DiscountMulticurrency{
   public calculationMethod: string;
   public uniqueName: string;
   public amount: AmountClassMulticurrency;
-  public discountPercent: number;
+  public discountValue: number;
   public particular: string;
   public name: string;
 
@@ -593,7 +593,7 @@ export class DiscountMulticurrency{
     this.uniqueName = ledgerDiscountClass.discountUniqueName;
     this.amount = new AmountClassMulticurrency();
     this.amount.amountForAccount = ledgerDiscountClass.amount;
-    this.discountPercent = ledgerDiscountClass.discountValue;
+    this.discountValue = ledgerDiscountClass.discountValue;
     this.name = ledgerDiscountClass.name;
     this.particular = ledgerDiscountClass.particular;
   }
