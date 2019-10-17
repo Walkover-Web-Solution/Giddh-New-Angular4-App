@@ -291,7 +291,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
-  public tradeDiscounts?: LedgerResponseDiscountClass[];
+  public tradeDiscounts?: LedgerResponseDiscountClass[];currencySymbol
   public taxes: TaxControlData[];
   public transactions: SalesTransactionItemClass[];
   public description: string;

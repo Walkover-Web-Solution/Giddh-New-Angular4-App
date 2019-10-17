@@ -559,11 +559,12 @@ background-color:$headerBtnColor;
     padding-top: 60px;
 }
 .primary-header{
-  background-color: $top_header;
-  min-height: 60px;
-  position: fixed;
+    background-color: $top_header;
+    min-height: 60px;
+    position: fixed;
     width: 100%;
     top: 0;
+
     z-index: 999;
 }
 
@@ -601,6 +602,14 @@ padding-right: 15px;
     height: 60px;
     display: flex;
     align-items: center;
+}
+.uniqNmae-finaclYear span {
+    display: inline-block !important;
+}
+.uniqNmae-finaclYear span:nth-child(2) {
+   margin-left: 10px;
+   padding-left: 10px;
+   border-left: 1px solid #fff;
 }
 /* responsive */
 @media(max-width:991px) {
