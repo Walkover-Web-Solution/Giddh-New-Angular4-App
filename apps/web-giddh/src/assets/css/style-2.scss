@@ -176,7 +176,18 @@
 .pl-15 {
     padding-left: 15px;
 }
-
+.bt-1 {
+  border-top: 1px solid #ccc;
+}
+.br-1 {
+  border-right: 1px solid #ccc;
+}
+.bb-1 {
+  border-bottom: 1px solid #ccc;
+}
+.bl-1 {
+  border-left: 1px solid #ccc;
+}
 
 /* end MDB tweaks */
 
@@ -186,6 +197,9 @@
 
 .relative {
     position: relative;
+}
+.d-sm-block {
+  display: block !important;
 }
 
 
@@ -5947,23 +5961,32 @@ table td[class*=col-]:last-child {
     position: absolute;
     width: 600px;
 }
+.table-amount label {
+  font-size: 12px;
+}
+.table-amount .multi-select input.form-control {
+  padding-right: 28px !important;
+}
 
 .entrypanel {
     position: relative;
 }
-
-.entrypanel:before {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 1px;
-    height: 100%;
-    background: #ccc;
-    right: 1px;
-    margin: 0 auto;
+.dropdown-left .dropdown-menu {
+  left: auto !important;
 }
+
+// .entrypanel:before {
+//     content: ' ';
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     bottom: 0;
+//     width: 1px;
+//     height: 100%;
+//     background: #ccc;
+//     right: 1px;
+//     margin: 0 auto;
+// }
 
 
 /* .ledger-main sh-select .header.open>input[type="text"] {
@@ -7393,12 +7416,12 @@ app-header {
 /* my css */
 
 .ledger_book .right-col-new .entry-modal {
-    width: 125%;
-    left: -25%;
+  width: 165%;
+  left: -65%;
 }
 
 .ledger_book .left-col-new .entry-modal {
-    width: 125%;
+    width: 165%;
 }
 
 #middleBody .horizontal-form,

@@ -20,7 +20,8 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
       right: 0;
       bottom: 0;
       width: 480px;
-      z-index: 1045;
+      max-width: 100%;
+      z-index: 9999;
     }
 
     #close {
