@@ -92,6 +92,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
   display: flex;
   padding-top: 25px;
   display: flex;
+  padding-left: 8px;
 }
 .total_col span.bdrT {
     width: 150px;
@@ -125,7 +126,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
   display: flex;
 }
 
-
 .total-detail-table .table-amount {
   width: 100%;
 }
@@ -155,6 +155,15 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     }
     .left-col-new.active, .right-col-new.active {
         display: block !important;
+    }
+    .total-detail-table {
+      flex-wrap: wrap;
+    }
+    .total-detail-table .table-amount {
+      width: 100%;
+      flex: 0 0 30%;
+      max-width: 30%;
+      white-space: initial;
     }
 }
 @media only screen and (max-width: 767px) {

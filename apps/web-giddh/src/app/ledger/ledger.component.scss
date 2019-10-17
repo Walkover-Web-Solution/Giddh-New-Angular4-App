@@ -434,6 +434,7 @@ sh-select:focus {
       max-height: initial;
     }
 
+
 }
 @media only screen and (max-width: 767px) {
     .ledgHead table td[class*=col-],
@@ -502,9 +503,6 @@ sh-select:focus {
     }
     .left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
         border-left: 0px solid #ccc !important;
-    }
-    .modal-ledger {
-      width: 95%;
     }
 }
 
