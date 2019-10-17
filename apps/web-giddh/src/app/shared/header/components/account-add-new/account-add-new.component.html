@@ -207,7 +207,7 @@
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-          <label class="d-block" *ngIf="!isMultipleCurrency">
+          <label class="d-block currencyTooltip" *ngIf="!isMultipleCurrency">
             <i class="fa fa-info-circle" aria-hidden="true"
               tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"></i>
             Currency</label>

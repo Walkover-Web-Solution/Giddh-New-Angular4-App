@@ -7687,6 +7687,15 @@ p.lead.pd {
 .sidebarTooltip .tooltip-inner {
     white-space: initial;
 }
+.mangeAccountPopup .modal-dialog.modal-lg {
+    margin: 0 auto;
+}
+
+.currencyTooltip .tooltip-inner {
+    white-space: initial;
+    word-break: break-all;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
