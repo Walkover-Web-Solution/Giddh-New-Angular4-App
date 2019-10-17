@@ -226,7 +226,7 @@ export class AccountResponseV2 {
   public closingBalanceTriggerAmount: number;
   public closingBalanceTriggerAmountType: string;
   public discounts?: IDiscountList[];
-
+  public currencySymbol?:string;
 }
 
 /*
