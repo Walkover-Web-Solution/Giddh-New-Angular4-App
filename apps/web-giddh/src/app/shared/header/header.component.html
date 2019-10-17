@@ -1,7 +1,7 @@
 <div class="paddingTopFixed">
   <div class="primary-header">
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-5">
         <ul class="main-company-name">
           <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
           <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false"
@@ -15,27 +15,32 @@
                 <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name ) | slice: 0 : 1}}
                 </span>
 
-                <div class="companyName-financeYear" [tooltip]="CompanyBranchnamealias" placement="right">
-                  <span *ngIf="(selectedCompany | async)?.nameAlias"
-                    style="">({{ (selectedCompany | async)?.nameAlias }}
-                    )
+                <div class="companyName-financeYear" placement="bottom">
+                  <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name )}}
                   </span>
-                  <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
+
+                  <div class="uniqNmae-finaclYear"> <span *ngIf="(selectedCompany | async)?.nameAlias"
+                      style="font-size:12px;color:#01A9F4;">
+                      ({{ (selectedCompany | async)?.nameAlias }})
+                    </span>
+                    <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }} </span>
+                  </div>
                 </div>
+
 
               </div>
             </a>
 
             <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
               <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
-              <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
+              <!-- <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
                 <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                   <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
                       *ngIf="(selectedCompany | async)?.nameAlias"
                       style="color: #4B5196;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
                   <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
                 </a>
-              </li>
+              </li> -->
 
               <li>
                 <a href="javascript:void(0)"
@@ -194,13 +199,13 @@
         </ul>
 
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-2">
         <div class="giddh-logo">
           <img src="assets/images/giddh-logo.svg">
         </div>
 
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-5">
         <div class="pull-right rightDetails">
           <ul class="nav universal_date mr-2" *ngIf="(selectedCompany | async)">
             <li [hidden]="isTodaysDateSelected">
