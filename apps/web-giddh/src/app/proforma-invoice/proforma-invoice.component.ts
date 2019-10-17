@@ -68,6 +68,7 @@ import { TaxControlComponent } from '../theme/tax-control/tax-control.component'
 import { GeneralService } from '../services/general.service';
 import {LoaderState} from "../loader/loader";
 import {LoaderService} from "../loader/loader.service";
+import {LedgerResponseDiscountClass} from "../models/api-models/Ledger";
 
 const THEAD_ARR_READONLY = [
   {
@@ -642,7 +643,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
               convertedRes1 = this.modifyMulticurrencyRes(results[1]);
-              if(results[1].account.currency.code !== 'INR'){
+              if(results[1].account.currency && results[1].account.currency.code !== 'INR'){
                 this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -680,7 +681,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (obj.entries.length) {
-              //obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
+              obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
             this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
@@ -2699,15 +2700,42 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
       if(entry.discounts && entry.discounts.length){
         let discountArray = [];
+        let tradeDiscountArray=[];
         entry.discounts.forEach(discount=>{
-          let discountLedger = new LedgerDiscountClass();
-          discountLedger.discountValue = discount.amount.amountForAccount;
-          discountLedger.discountType = discount.calculationMethod;
-          discountLedger.amount = discountLedger.discountValue;
-          discountLedger.isActive = true;
-          discountArray.push(discountLedger);
+
+            let discountLedger = new LedgerDiscountClass();
+            discountLedger.discountValue = discount.amount.amountForAccount;
+            discountLedger.discountType = discount.calculationMethod;
+            discountLedger.amount = discountLedger.discountValue;
+            discountLedger.isActive = true;
+            discountLedger.discountUniqueName = discount.uniqueName;
+            discountLedger.name = discount.name;
+            discountLedger.particular = discount.particular;
+            if(discountLedger.discountUniqueName){
+              discountLedger.uniqueName = discountLedger.discountUniqueName;
+              let tradeDiscount = new LedgerResponseDiscountClass();
+              tradeDiscount.discount = {
+                uniqueName: '',
+                name: 'API FIX NEEDED',
+                discountType: "PERCENTAGE",
+                discountValue: 10
+              };
+              tradeDiscount.account = {
+                accountType: '',
+                uniqueName: entry.uniqueName,
+                name: ''
+              };
+              tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+              tradeDiscount.discount.discountValue = discountLedger.discountValue;
+              tradeDiscount.discount.discountType = discountLedger.discountType;
+              tradeDiscount.discount.name = discountLedger.name;
+              tradeDiscountArray.push(tradeDiscount);
+            }else{
+              discountArray.push(discountLedger);
+            }
         });
         salesEntryClass.discounts = discountArray;
+        salesEntryClass.tradeDiscounts = tradeDiscountArray;
       }else{
         salesEntryClass.discounts = [new LedgerDiscountClass()];
       }
