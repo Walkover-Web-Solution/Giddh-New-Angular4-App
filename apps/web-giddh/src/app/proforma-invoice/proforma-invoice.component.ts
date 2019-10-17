@@ -1401,7 +1401,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       txn.sku_and_customfields = null;
 
       // description with sku and custom fields
-      if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
+     // if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
+       // condition removed as SKU Code need to be displayed in all case.
+      if ((o.stock))  {
         let description = [];
         let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
         if (o.stock.skuCode) {
@@ -2296,7 +2298,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // get account from flatten account
           let selectedAcc = flattenAccounts.find(d => {
             return (d.uniqueName === trx.accountUniqueName);
-          });
+          }); 
 
           if (selectedAcc) {
             // get stock from flatten account
