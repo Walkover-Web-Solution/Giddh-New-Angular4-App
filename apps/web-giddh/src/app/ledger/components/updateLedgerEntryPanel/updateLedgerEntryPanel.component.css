@@ -86,7 +86,12 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .amnt-total {
     font-size: 12px;
     color: #999999;
-    padding-left: 5px;
+}
+.other-tax {
+  justify-content: flex-end;
+  display: flex;
+  padding-top: 25px;
+  display: flex;
 }
 .total_col span.bdrT {
     width: 150px;
@@ -113,8 +118,26 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
-.total-detail-table tbody tr td {
+/* .total-detail-table tbody tr td {
   vertical-align: top;
+} */
+.total-detail-table {
+  display: flex;
+}
+
+
+.total-detail-table .table-amount {
+  width: 100%;
+}
+.icon-box {
+  text-align: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 10px 10px;
+}
+.width-80 {
+  width: 80px !important;
+  min-width: 80px;
 }
 
 @media only screen and (max-width: 1024px) {
@@ -135,6 +158,9 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     }
 }
 @media only screen and (max-width: 767px) {
+  .last-ttable-amount {
+    max-width: 100% !important;
+  }
     .ledger_book .h-table tbody .ledger-row td {
         padding-left: 80px !important;
     }
@@ -145,27 +171,36 @@ ng-select .select_drop i.fa.fa-caret-up::before {
         position: absolute;
         bottom: 0;
     }
-
-
-
+    .total-detail-table {
+      flex-wrap: wrap;
+    }
+    .total-detail-table .table-amount {
+      width: 100%;
+      flex: 0 0 50%;
+      max-width: 39%;
+      white-space: initial;
+    }
+    /* .icon-box {
+      display: flex;
+      align-items: flex-end;
+      padding: 0 10px 10px;
+  } */
+  .other-tax {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-top: 10px;
+  }
     /*  */
-    .total-detail-table tbody tr td {
+    /* .total-detail-table tbody tr td {
         padding: 8px 0;
     }
     .total-detail-table > tbody > tr {
         display: flex;
         flex-wrap: wrap;
-    }
-    .qty-unit {
-        width: 90%;
-    }
-    .qty-unit table {
-        width: 100%;
-    }
-    .qty-unit table td.text-right.width40 {
-        padding-right: 20px !important;
-    }
-    .table-plus {
+    } */
+
+
+    /* .table-plus {
         width: 10%;
         text-align: center;
     }
@@ -178,7 +213,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     }
     .amount {
         width: 40%;
-    }
+    } */
     .entrypanel:before {
         display: none;
     }
@@ -192,8 +227,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     .xs-table-block tbody tr td {
         display: block;
     }
-
-
 }
 
 
