@@ -677,7 +677,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top {
     background:rgba(49,58,151,0.15);
-    border: 1px solid rgba(49,58,151,0.15) !important;
+    // border: 1px solid rgba(49,58,151,0.15) !important;
 }
 .aging-table-top .top-aging-table-top strong, .aging-table-top .top-aging-table-top span .date-range-picker{
   color: #1c1c1c;
@@ -5698,7 +5698,7 @@ typeahead-container .dropdown-menu li.active>a>a {
 .btn-share,
 .btn-share:hover,
 .btn-share:focus {
-    background: #28ab00;
+    background: $primaryBtncolror;
     color: #fff;
 }
 
@@ -7777,8 +7777,8 @@ span.red-text {
 }
 
 .main-company-name .tooltip-inner {
-    white-space:nowrap;
-    word-break: break-word;
+    white-space:normal;
+    word-break:initial;
 }
 .hamburger_menu i.icon-bar {
     color:$pageTitleColor;

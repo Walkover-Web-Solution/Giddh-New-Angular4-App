@@ -50,9 +50,9 @@
 
 
       <div *ngIf="!isMobileScreen">
-        <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true">
-          <ng-container *ngTemplateOutlet='mainTable'></ng-container>
-        </perfect-scrollbar>
+        <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
+        <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+        <!-- </perfect-scrollbar> -->
       </div>
 
       <div *ngIf="isMobileScreen">
@@ -130,7 +130,7 @@
 <!-- endregion -->
 
 <ng-template #mainTable>
-  <table class="table basic table-bordered aging-table table-aging-report">
+  <table class="table basic table-bordered aging-table table-aging-report table-responsive">
     <thead>
       <tr class="aging-table-top">
         <td></td>
