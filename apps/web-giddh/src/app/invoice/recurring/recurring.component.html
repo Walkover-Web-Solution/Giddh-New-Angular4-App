@@ -181,7 +181,7 @@
 
         <th>
           <div class="d-flex">
-            <div class="flex-fill">Interval</div>
+            <div class="">Interval</div>
 
             <div class="icon-pointer">
               <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}"></ng-container>
@@ -191,7 +191,7 @@
         </th>
         <th>
           <div class="d-flex">
-            <div class="flex-fill"> Last Invoice Date</div>
+            <div class=""> Last Invoice Date</div>
             <div class="icon-pointer">
               <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'lastinvoicedate'}"></ng-container>
             </div>
@@ -199,7 +199,7 @@
         </th>
         <th>
           <div class="d-flex">
-            <div class="flex-fill"> Next Invoice Date</div>
+            <div class=""> Next Invoice Date</div>
             <div class="icon-pointer">
               <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'nextcrondate'}"></ng-container>
 
@@ -209,7 +209,7 @@
         </th>
         <th>
           <div class="d-flex">
-            <div class="flex-fill">Status</div>
+            <div class="">Status</div>
             <div class="icon-pointer">
               <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}"></ng-container>
 
@@ -219,7 +219,7 @@
           </div>
         </th>
         <th>
-          <div class="d-flex">
+          <div class="d-flex text-right">
             <div class="flex-fill">Invoice Amt</div>
             <div class="icon-pointer">
               <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'vouchertotal'}"></ng-container>
@@ -262,7 +262,7 @@
         <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
         <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
         <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
-        <td data-title="Invoice Amt">{{ col.voucherTotal | giddhCurrency   }}</td>
+        <td data-title="Invoice Amt" class=" text-right">{{ col.voucherTotal | giddhCurrency   }}</td>
       </tr>
     </tbody>
 

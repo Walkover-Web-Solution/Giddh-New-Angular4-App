@@ -652,7 +652,9 @@ ul.sub-list {
     border: 1px solid $tableBorderColor !important;
     position: relative;
     border-right-color: $tableBorderColor !important;
-    padding-right: 30px !important;
+    padding-right: 10px !important;
+    border-left: none !important;
+    border-right: none !important;
 }
 
 .sorting-box {
@@ -1802,9 +1804,15 @@ p.table-email {
     font-weight: 400;
     padding: 14px 10px;
     text-transform: capitalize;
+    border-right: none !important;
+    border-left: none !important;
 }
-
-
+.basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+    border-right: 1px solid #ddd !important;
+}
+.basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
+    border-left: 1px solid #ddd !important;
+}
 /*
 .basic>tbody>tr>td a {
     color: #ff5e01;
@@ -3317,6 +3325,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #shareModal select {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
+        margin-left: 10px;
 }
 
 #select_view {
@@ -4143,7 +4152,7 @@ label {
 }
 
 .breadcrumb>.active>a {
-    color: #ff5f00;
+    color: $activeTabBorder;
 }
 
 .breadcrumb a {
@@ -7963,7 +7972,9 @@ button.btn.btn-filter{
     transform: translateY(0) !important;
     margin: 0 auto;
 }
-
+.translatY8{
+  transform: translateY(80px);
+}
 /* responsive */
 
 @media (max-width: 1440px) {
