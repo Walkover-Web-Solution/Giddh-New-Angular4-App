@@ -73,7 +73,7 @@
         <table class="table table-bordered basic mrB onMobileView">
           <thead>
             <tr>
-              <th>S. No.</th>
+              <th>#</th>
               <th>Name</th>
               <th>Entity type</th>
               <th>Entity</th>
@@ -88,7 +88,7 @@
           </thead>
           <tbody *ngIf="availableTriggers.length">
             <tr *ngFor="let trigger of availableTriggers; let i = index">
-              <td data-title="S. No.">{{i+1}}</td>
+              <td data-title="#">{{i+1}}</td>
               <td data-title="Name">
                 <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
                 <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
