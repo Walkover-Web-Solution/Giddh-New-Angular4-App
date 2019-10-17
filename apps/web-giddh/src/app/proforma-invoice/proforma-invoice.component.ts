@@ -2357,7 +2357,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-      if(this.isSalesInvoice){
+      if(this.isSalesInvoice || this.isCashInvoice){
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.parseVoucherType(this.invoiceType)
@@ -2800,7 +2800,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.originalExchangeRate = this.exchangeRate;
 
     this.invoiceUniqueName = result.uniqueName;
-
+    this.invoiceType = result.type;
     return voucherClassConversion;
   }
 
