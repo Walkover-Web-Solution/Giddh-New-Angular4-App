@@ -402,11 +402,17 @@ sh-select:focus {
     align-items: center;
 }
 .modal-ledger {
-  width: 60%;
+  width: 70%;
 }
 
 
 // reponsive
+@media only screen and (max-width: 1366px) {
+  .modal-ledger {
+    width: 90%;
+  }
+}
+
 
 @media (min-width: 1200px) {
     .container {
@@ -427,9 +433,7 @@ sh-select:focus {
       height:  initial;
       max-height: initial;
     }
-    .modal-ledger {
-      width: 90%;
-    }
+
 }
 @media only screen and (max-width: 767px) {
     .ledgHead table td[class*=col-],
