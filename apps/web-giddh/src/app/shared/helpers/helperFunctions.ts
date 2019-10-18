@@ -10,8 +10,8 @@ export const uniqueNameInvalidStringReplace = (val: string = ''): string => {
   //  if (val) {
   //   return val.replace(/[\\/(){};:"<>#?%,+-@&$!^*]/g, '').toLowerCase();      //  /[\\/(){};:"<>#?%,+-@&$!^*]/g
   // }
-  if ((/[^1-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
-    return val.replace(/[^1-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
+  if ((/[^0-9A-Za-z~|'_\[\]`]/g).test(val)) { // /[^1-9A-Za-z~|'_]/g
+    return val.replace(/[^0-9A-Za-z~|'_\[\]`]/g, '').toLowerCase();
   }
   return val.toLowerCase();
 };
@@ -40,7 +40,7 @@ export const base64ToBlob = (b64Data, contentType, sliceSize) => {
     byteArrays.push(byteArray);
     offset += sliceSize;
   }
-  return new Blob(byteArrays, {type: contentType});
+  return new Blob(byteArrays, { type: contentType });
 };
 
 /**

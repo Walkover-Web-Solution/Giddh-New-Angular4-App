@@ -1,3 +1,4 @@
+<label for="">Opening Balance</label>
 <div class="container-fluid mrT1">
   <!-- update account form -->
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
@@ -222,7 +223,7 @@
       <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103 -->
       <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
         <div class="form-group col-xs-12 col-sm-6">
-          <label for="">Opening Balance</label>
+          <label for="">Foreign Opening Balance</label>
           <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
             <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance"
               placeholder="00.00">
