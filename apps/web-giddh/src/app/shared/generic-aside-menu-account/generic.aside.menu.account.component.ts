@@ -21,7 +21,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
       bottom: 0;
       width: 480px;
       max-width: 100%;
-      z-index: 9999;
+      z-index: 99999;
     }
 
     #close {

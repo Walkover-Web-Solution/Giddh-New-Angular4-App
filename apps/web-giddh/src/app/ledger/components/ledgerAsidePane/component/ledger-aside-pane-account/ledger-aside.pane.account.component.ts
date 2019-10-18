@@ -23,7 +23,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       bottom: 0;
       width: 100%;
       max-width:580px;
-      z-index: 1045;
+      z-index: 99999;
     }
 
     #close {
