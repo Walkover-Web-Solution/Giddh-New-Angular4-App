@@ -4846,6 +4846,7 @@ label {
     color: #333;
 }
 
+
 .dropdown-container .dropdown-menu {
     border-radius: 0;
     margin: 0;
@@ -8004,6 +8005,9 @@ button.btn.btn-filter{
 }
 .modal-backdrop + .modal.fade .modal-dialog{
   transform: translate(0);
+}
+.dropdown-container .dropdown-menu li label.checkbox.oh.customItem span{
+    max-width: calc(100% - 35px);
 }
 /* responsive */
 
