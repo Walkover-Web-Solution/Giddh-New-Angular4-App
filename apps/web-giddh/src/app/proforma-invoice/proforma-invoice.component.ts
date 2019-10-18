@@ -683,8 +683,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
               obj.templateDetails = result.templateDetails;
             }
-
-            if (obj.entries.length) {
+            //added update mode as causing trouble in multicurrency
+            if (obj.entries.length && !this.isUpdateMode) {
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
@@ -2698,7 +2698,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
            salesEntryClass.otherTaxModal = otherTaxModal;
           }else{
-           salesTransactionItemClass.applicableTaxes.push(ta.uniqueName);
+            salesEntryClass.taxes.push({
+              amount: ta.amount.amountForAccount,
+              uniqueName: ta.uniqueName,
+              isChecked: true,
+              isDisabled:false,
+              type: ta.taxType
+            });
           }
         });
         if(t.stock){
@@ -2756,6 +2762,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }else{
         salesEntryClass.discounts = [new LedgerDiscountClass()];
       }
+      salesEntryClass.discounts = this.parseDiscountFromResponse(salesEntryClass);
       salesEntryClass.voucherType = entry.voucherType;
       salesEntryClass.uniqueName = entry.uniqueName;
       salesEntryClass.description = entry.description;
