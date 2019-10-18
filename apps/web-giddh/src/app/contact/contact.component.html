@@ -164,7 +164,7 @@
       </div>
 
 
-      <div class="text-center top-aging-table-top pd1" *ngIf="isMobileScreen">
+      <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
         <p><strong>Due as on </strong> <span class="italic underline">
             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
               (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
@@ -442,9 +442,8 @@
 
 <ng-template #mainTable>
 
-  <div class="onMobileView mobilecardwrapper vendorPage">
-    <table class="table table-responsive basic table-bordered aging-table marginBottom260"
-      *ngIf="activeTab !== 'aging'">
+  <div class="onMobileView mobilecardwrapper table-responsive vendorPage">
+    <table class="table  basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
       <thead>
         <tr class="aging-table-top">
           <td></td>
@@ -562,7 +561,8 @@
                 <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
                   [(ngModel)]="account.isSelected"
                   [ngClass]="{'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
-              </span> {{account.name}}
+              </span>
+              <span class="accountNameCustomer"> {{account.name}} </span>
               <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                 <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
                   aria-controls="dropdown-basic" (click)="dropdown.show()">
