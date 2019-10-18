@@ -1176,8 +1176,9 @@
 
                               <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                 <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount"
-                                  class="form-control amountField pull-right max100" decimalDigitsDirective
-                                  [(ngModel)]="depositAmount" />
+                                  class="form-control amountField pull-right max100"
+                                  [(ngModel)]="depositAmount"  [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency"
+                                  [mask]="inputMaskFormat"/>
                                 <label class="pull-right">Amount</label>
                               </li>
 
