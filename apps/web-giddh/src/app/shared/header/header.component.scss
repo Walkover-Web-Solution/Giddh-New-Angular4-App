@@ -426,7 +426,8 @@ a[vr-item]:focus {
 }
 
 .nav_wrapper {
-    position: relative;
+
+  position: relative;
 
     height: calc(100vh - 145px);
 }
@@ -521,7 +522,7 @@ background-color:$headerBtnColor;
     position: absolute;
     left: 0px;
     background-color: $headerBtnColor;
-    padding:8px 6px 8px 10px;
+    padding:8px 6px 8px 7px;
     top: 0px;
     text-align: center;
     display: inline-flex;
@@ -594,10 +595,7 @@ padding-right: 15px;
       display: flex;
     align-items: center;
 }
-.primary-header  .companyName-financeYear span:first-child {
-    font-family: opensans-semibold;
-    font-size: 14px;
-}
+
 .primary-header ul.main-company-name {
     height: 60px;
     display: flex;
@@ -685,9 +683,10 @@ button#AddManage {
     position: relative;
 }
 .universal_date .btn-link{
-      border-bottom: none;
-          // display: block;
+     border-bottom: none;
     text-align: left;
+    height: 24px !important;
+    display: block;
 }
 .lowerLayerHeader {
     padding-top:5px;

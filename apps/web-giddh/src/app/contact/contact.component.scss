@@ -303,18 +303,21 @@ span.inputAddon {
     font-size: 20px;
     border-radius: 2px;
 }
-table{
-  position: relative;
-}
-.basic  thead tr:last-child  th{
-    position: sticky !important;
-    top: 59px;
-    z-index: 99;
-    box-shadow: 1px 1px 0 #d9d9d9;
-}
+// table{
+//   position: relative;
+// }
+// .basic  thead tr:last-child  th{
+//     position: sticky !important;
+//     top: 59px;
+//     z-index: 99;
+//     box-shadow: 1px 1px 0 #d9d9d9;
+// }
 // responsive
 
 @media(max-width:768px){
+  .aging-table > tbody > tr input[type="checkbox"] {
+  top: 2px;
+}
   .custumerRightWrap h4.mb-1.pdR2 {
     margin-bottom: 0;
 }
@@ -366,6 +369,9 @@ table{
 
 }
 @media(max-width:767px){
+  span.inputAddon{
+    top: 0;
+  }
   .btn-group.plus-btn {
     float: none;
     width: 100%;
@@ -385,6 +391,12 @@ table{
     padding-top: 0;
   }
 }
+@media(max-width:652px){
+  .customer-footer-box + .btn-group {
+    float: left !important;
+  }
+}
+
 @media(max-width:575px){
   .customer-footer-box {
     padding-bottom: 10px;
@@ -447,10 +459,11 @@ table{
     font-size: 14px;
 }
 }
-@media(max-width:375px){
-
-}
-
+ @media(min-width:769px) and (max-width:1023px){
+   .seprta-top-aging{
+     display:none;
+   }
+ }
 @media(min-width:768px){
   .onMobileView.btn-group{
     display: none;
