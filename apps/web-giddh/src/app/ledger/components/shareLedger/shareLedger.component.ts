@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './shareLedger.component.html',
   styles: [`
     .btn-success:disabled {
-      color: #28ab00 !important;
+      color: #fff !important;
     }
   `]
 })
@@ -34,7 +34,7 @@ export class ShareLedgerComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-              private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+    private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 

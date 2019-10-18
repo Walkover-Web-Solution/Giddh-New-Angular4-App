@@ -943,13 +943,13 @@ ul.sub-list {
 }
 
 .btn-green {
-    background: #28AB00;
+    background: $primaryBtncolror;
     color: #fff;
 }
 
 .btn-green:hover {
     color: #fff;
-    background: #228205;
+    background: $primaryBtnHovercolror;
 }
 
 
@@ -2169,10 +2169,10 @@ opacity: 0.5;
 
 /* my css start */
 
-.modal.fade .modal-dialog {
-    transform: translateY(70px) !important;
-    margin: 10px auto;
-}
+// .modal.fade .modal-dialog {
+//     transform: translateY(70px) !important;
+//     margin: 10px auto;
+// }
 
 .pt-05 {
     padding-top: 5px;
@@ -5587,7 +5587,7 @@ typeahead-container .dropdown-menu li.active>a>a {
     right: 20px;
     top: 4px;
     line-height: 48px;
-    color: #7d7d7d;
+    color: #fff;
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
@@ -7998,6 +7998,13 @@ button.btn.btn-filter{
 .translatY8{
   transform: translateY(80px);
 }
+.modal-backdrop + .modal {
+    margin-top: 70px;
+    z-index: 99999;
+}
+.modal-backdrop + .modal.fade .modal-dialog{
+  transform: translate(0);
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8051,6 +8058,13 @@ button.btn.btn-filter{
 }
 
 @media (max-width: 768px) {
+  .aging-table tr td:first-child, .aging-table tr th:first-child , .aging-table.table-aging-report tr td:first-child, .aging-table.table-aging-report tr th:first-child {
+    padding-left: 50% !important;
+}
+.basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {
+    border-left: none !important;
+}
+
     .auto_save {
         top: 124px;
     }

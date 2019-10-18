@@ -437,6 +437,13 @@ sh-select:focus {
 
 }
 @media only screen and (max-width: 767px) {
+  .daterngoption{
+    margin-bottom: 10px;
+    text-align:left !important;
+  }
+  .advanceSearchByDate:before, .advanceSearchByDate:after{
+    display:none;
+  }
     .ledgHead table td[class*=col-],
     .ledgHead table td .select2-container {
         border-bottom: 0px solid #ccc;

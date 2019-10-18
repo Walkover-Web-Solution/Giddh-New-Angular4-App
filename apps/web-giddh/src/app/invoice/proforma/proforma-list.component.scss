@@ -252,15 +252,15 @@ button.btn.btn-filter span.icon-cross {
 a.btn-link-2 {
     color: #1c1c1c;
 }
-table{
-  position: relative;
-}
-.basic > thead > tr > th{
-    position: sticky !important;
-    top: 59px;
-    z-index: 99;
-    box-shadow: 1px 1px 0 #d9d9d9;
-}
+// table{
+//   position: relative;
+// }
+// .basic > thead > tr > th{
+//     position: sticky !important;
+//     top: 59px;
+//     z-index: 99;
+//     box-shadow: 1px 1px 0 #d9d9d9;
+// }
 // responsive
 @media(max-width:768px){
   .mobileSearch{

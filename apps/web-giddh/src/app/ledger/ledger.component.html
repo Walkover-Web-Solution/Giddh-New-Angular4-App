@@ -6,7 +6,7 @@
     <!-- region ledger header -->
     <div class="clearfix">
       <!-- region currency toggle -->
-      <div class="col-sm-4 advancSearchBlock  xs-pl-0 xs-pr-0" *ngIf="isLedgerAccountAllowsMultiCurrency">
+      <div class="col-sm-4 col-xs-12 advancSearchBlock  xs-pl-0 xs-pr-0" *ngIf="isLedgerAccountAllowsMultiCurrency">
 
         <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
@@ -25,7 +25,8 @@
         <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
 
       </div>
-      <div class="col-sm-4 text-center" [ngClass]="{'col-sm-offset-4' : !isLedgerAccountAllowsMultiCurrency }">
+      <div class="col-sm-4 text-center col-xs-12 daterngoption"
+        [ngClass]="{'col-sm-offset-4' : !isLedgerAccountAllowsMultiCurrency }">
         <div class="row">
 
 
