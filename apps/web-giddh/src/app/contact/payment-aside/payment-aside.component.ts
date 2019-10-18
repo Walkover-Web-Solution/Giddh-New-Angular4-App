@@ -22,7 +22,7 @@ import { ToasterService } from "../../services/toaster.service";
       right: 0;
       bottom: 0;
       width: 480px;
-      z-index: 1045;
+      z-index: 99999;
       }
       :host.in #close {
       display: block;
