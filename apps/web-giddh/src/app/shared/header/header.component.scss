@@ -51,7 +51,7 @@
 }
 
 .account-search {
-    margin:20px 20px 20px 10px;
+    margin:10px 20px 10px 10px;
     position: relative;
     height: 36px;
 }
@@ -630,7 +630,27 @@ span.icon-support.dropdown-toggle{
   padding-top: 0;
   padding-bottom: 0;
 }
-
+.nav-left-bar .company-name .cText span {
+    color: #1c1c1c !important;
+}
+.nav-left-bar  .companyName-financeYear {
+    display: inline;
+    padding-left: 10px;
+}
+.nav-left-bar  .uniqNmae-finaclYear span {
+    display: block !important;
+}
+.nav-left-bar  .uniqNmae-finaclYear span:nth-child(2) {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+}
+.nav-left-bar .uniqNmae-finaclYear{
+   padding-left: 35px;
+}
+.nav-left-bar .company-name .cText span.alice{
+  color: #fff !important;
+}
 }
 @media(max-width:767px){
 .upperLayerHeader {
@@ -690,5 +710,10 @@ button#AddManage {
 }
 .lowerLayerHeader {
     padding-top:5px;
+}
+}
+@media(min-width:768px){
+  .sidebarLishowMob {
+    display: none;
 }
 }
