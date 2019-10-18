@@ -36,7 +36,7 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
       bottom: 0;
       max-width:480px;
       width: 100%;
-      z-index: 1045;
+      z-index: 99999;
     }
 
     #close {

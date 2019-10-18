@@ -274,6 +274,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public selectedSuffixForCurrency: string ='';
   public companyCurrencyName: string;
   public baseCurrencySymbol: any;
+  public depositCurrSymbol: string ='';
 
   constructor(
     private modalService: BsModalService,
@@ -375,6 +376,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        this.depositCurrSymbol = this.baseCurrencySymbol;
         if(profile.baseCurrency !== 'INR'){
           this.companyCurrencyName = profile.baseCurrency;
         }
@@ -1628,24 +1630,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
-
-        this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
-          .pipe(
-            catchError(err => {
-              this.fetchedConvertedRate = 0;
-              return err;
-            })
-          )
-          .subscribe((res: any) => {
-            let rate = res.body;
-            if (rate) {
-              this.fetchedConvertedRate = rate;
-              this.exchangeRate = rate;
-              this.originalExchangeRate = rate;
-            }
-          }, (error1 => {
-            this.fetchedConvertedRate = 0;
-          }));
+        this.getCurrencyRate(this.companyCurrency, item.additional.currency);
       }
     }
   }
@@ -1873,6 +1858,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
       this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      if(this.isMulticurrencyAccount){
+        if(this.isCashInvoice){
+          this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+          this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
+        }
+        if(this.isSalesInvoice){
+          this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+        }
+      }
       if(event.additional.currency !== 'INR'){
         this.companyCurrencyName = event.additional.currency;
       }
@@ -2727,9 +2721,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         entry.discounts.forEach(discount=>{
 
             let discountLedger = new LedgerDiscountClass();
-            discountLedger.discountValue = discount.amount.amountForAccount;
+            discountLedger.amount = discount.discountValue;
             discountLedger.discountType = discount.calculationMethod;
-            discountLedger.amount = discountLedger.discountValue;
+            discountLedger.discountValue = discount.discountValue;
             discountLedger.isActive = true;
             discountLedger.discountUniqueName = discount.uniqueName;
             discountLedger.name = discount.name;
@@ -2739,7 +2733,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               let tradeDiscount = new LedgerResponseDiscountClass();
               tradeDiscount.discount = {
                 uniqueName: '',
-                name: 'API FIX NEEDED',
+                name: '',
                 discountType: "PERCENTAGE",
                 discountValue: 10
               };
@@ -2821,6 +2815,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.invoiceUniqueName = result.uniqueName;
     this.invoiceType = result.type;
+    this.prepareInvoiceTypeFlags();
     return voucherClassConversion;
   }
 
@@ -2828,8 +2823,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
-      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      if(this.companyCurrency !=='INR'){
+        this.exchangeRate = this.invFormData.voucherDetails.grandTotal/total;
+      }else{
+        this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      }
       this.originalExchangeRate = this.exchangeRate;
     }
+  }
+
+  public getCurrencyRate(to, from) {
+    let date = moment().format('DD-MM-YYYY');
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+      let rate = response.body;
+      if (rate) {
+        this.originalExchangeRate = rate;
+        this.exchangeRate = rate;
+      }
+    }, (error => {
+
+    }));
   }
 }

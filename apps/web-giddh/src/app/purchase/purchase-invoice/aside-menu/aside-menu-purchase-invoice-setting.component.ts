@@ -18,7 +18,7 @@ import { takeUntil } from 'rxjs/operators';
       bottom: 0;
       max-width:480px;
       width: 100%;
-      z-index: 9999;
+      z-index: 99999;
     }
 
     #close {

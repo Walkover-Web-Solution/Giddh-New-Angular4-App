@@ -21,7 +21,7 @@ import { ToasterService } from '../../../services/toaster.service';
       bottom: 0;
       max-width:480px;
       width: 100%;
-      z-index: 1045;
+      z-index: 99999;
     }
 
     #close {
