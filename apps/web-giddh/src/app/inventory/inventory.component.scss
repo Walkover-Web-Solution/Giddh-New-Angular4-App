@@ -21,12 +21,14 @@
     z-index: 9;
     position: relative;
     top: -4px;
+    background-color: #f7f8fa;
 }
 .inventory-controll ::ng-deep.nav-tabs>li>a:hover {
   border-color: transparent !important;
+    color: $activeIconTh !important;
 }
 .inventory-controll ::ng-deep.nav-tabs>::ng-deep li.active> a, .nav-tabs>::ng-deep li.active> a:focus, ::ng-deep.nav-tabs> li.active>a:hover {
-  color:$dark-blue00 !important;
+  color:#1c1c1c !important;
   border-bottom: 4px solid $activeIconTh !important;
   cursor: pointer !important;
   background-color: unset !important;
@@ -35,7 +37,7 @@
   border-left: transparent !important;
 }
 .inventory-controll .nav-tabs > li > a:hover {
-  color: $dark-blue00 !important;
+  color: $activeIconTh !important;
   border-bottom: 4px solid $activeIconTh !important;
 }
 

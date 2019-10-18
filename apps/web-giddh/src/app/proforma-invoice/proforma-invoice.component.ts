@@ -647,6 +647,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
+              this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
+                obj.accountDetails.currencySymbol = acc.currencySymbol||'';
+              });
+
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
             }
@@ -1189,7 +1193,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       return entry;
     });
-    let exRate = this.companyCurrency === 'USD' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+    let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
     let obj: GenericRequestForGenerateSCD = {
       account: data.accountDetails,
       updateAccountDetails: this.updateAccount,
@@ -2025,7 +2029,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
       let data = result.voucher;
-      let exRate = this.companyCurrency === 'USD' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+      let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
       let unqName = this.invoiceUniqueName || this.accountUniqueName;
       result = {
         account: data.accountDetails,
@@ -2353,7 +2357,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-      if(this.isSalesInvoice){
+      if(this.isSalesInvoice || this.isCashInvoice){
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.parseVoucherType(this.invoiceType)
@@ -2789,14 +2793,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.voucherDetails = voucherDetails;
     voucherClassConversion.templateDetails = result.templateDetails;
 
-    this.isMulticurrencyAccount = voucherClassConversion.accountDetails.currency.code !== this.companyCurrency;
+    this.isMulticurrencyAccount = result.multiCurrency;
     this.customerCountryName = result.account.billingDetails.countryName;
 
-    this.exchangeRate = this.companyCurrency==='USD'? 1/result.exchangeRate:result.exchangeRate;
+    this.exchangeRate = this.companyCurrency !=='INR'? 1/result.exchangeRate:result.exchangeRate;
     this.originalExchangeRate = this.exchangeRate;
 
     this.invoiceUniqueName = result.uniqueName;
-
+    this.invoiceType = result.type;
     return voucherClassConversion;
   }
 
