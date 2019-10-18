@@ -635,7 +635,7 @@ span.icon-support.dropdown-toggle{
 }
 .nav-left-bar  .companyName-financeYear {
     display: inline;
-    padding-left: 10px;
+    padding-left: 0;
 }
 .nav-left-bar  .uniqNmae-finaclYear span {
     display: block !important;
@@ -646,10 +646,11 @@ span.icon-support.dropdown-toggle{
     border-left: none;
 }
 .nav-left-bar .uniqNmae-finaclYear{
-   padding-left: 35px;
+   padding-left: 0;
 }
 .nav-left-bar .company-name .cText span.alice{
   color: #fff !important;
+  display: none;
 }
 }
 @media(max-width:767px){
