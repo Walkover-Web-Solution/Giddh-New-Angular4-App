@@ -2519,14 +2519,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         isActive: true
       });
     } else {
-      discountArray.push({
-        discountType: 'FIX_AMOUNT',
-        amount: 0,
-        name: '',
-        particular: '',
-        isActive: true,
-        discountValue: 0
-      });
+      if(entry.discounts.length > 0){
+        entry.discounts.forEach(ds=>{
+          discountArray.push({
+            discountType: ds.discountType,
+            amount: ds.amount,
+            name: ds.name,
+            particular: ds.particular,
+            isActive: true,
+            discountValue: ds.discountValue
+          });
+        })
+      }else {
+        discountArray.push({
+          discountType: 'FIX_AMOUNT',
+          amount: 0,
+          name: '',
+          particular: '',
+          isActive: true,
+          discountValue: 0
+        });
+      }
     }
 
     entry.tradeDiscounts.forEach((f, ind) => {
