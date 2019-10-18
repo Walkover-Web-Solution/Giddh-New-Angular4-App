@@ -2821,6 +2821,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.invoiceUniqueName = result.uniqueName;
     this.invoiceType = result.type;
+    this.prepareInvoiceTypeFlags();
     return voucherClassConversion;
   }
 
