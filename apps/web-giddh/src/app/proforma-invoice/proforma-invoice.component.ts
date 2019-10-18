@@ -2727,9 +2727,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         entry.discounts.forEach(discount=>{
 
             let discountLedger = new LedgerDiscountClass();
-            discountLedger.discountValue = discount.amount.amountForAccount;
+            discountLedger.amount = discount.discountValue;
             discountLedger.discountType = discount.calculationMethod;
-            discountLedger.amount = discountLedger.discountValue;
+            discountLedger.discountValue = discount.discountValue;
             discountLedger.isActive = true;
             discountLedger.discountUniqueName = discount.uniqueName;
             discountLedger.name = discount.name;
@@ -2739,7 +2739,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               let tradeDiscount = new LedgerResponseDiscountClass();
               tradeDiscount.discount = {
                 uniqueName: '',
-                name: 'API FIX NEEDED',
+                name: '',
                 discountType: "PERCENTAGE",
                 discountValue: 10
               };
