@@ -2828,7 +2828,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
-      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      if(this.companyCurrency !=='INR'){
+        this.exchangeRate = this.invFormData.voucherDetails.grandTotal/total;
+      }else{
+        this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      }
       this.originalExchangeRate = this.exchangeRate;
     }
   }
