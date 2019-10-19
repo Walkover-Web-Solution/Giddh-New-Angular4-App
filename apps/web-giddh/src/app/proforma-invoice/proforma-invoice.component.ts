@@ -273,9 +273,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isPrefixAppliedForCurrency: boolean;
   public selectedSuffixForCurrency: string ='';
   public companyCurrencyName: string;
-  public baseCurrencySymbol: any;
+  public baseCurrencySymbol: string = '';
   public depositCurrSymbol: string ='';
-
+  public grandTotalMulDum;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1448,7 +1448,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-
+    this.grandTotalMulDum = calculatedGrandTotal*this.exchangeRate;
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -2829,7 +2829,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateExchangeRate(val) {
-    val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
+    val = val.replace(this.baseCurrencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
       this.exchangeRate = total/this.invFormData.voucherDetails.grandTotal;
