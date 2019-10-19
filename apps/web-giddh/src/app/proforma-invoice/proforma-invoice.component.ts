@@ -1858,8 +1858,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      this.invFormData.accountDetails.name = event.label;
-      this.invFormData.accountDetails.uniqueName = event.value;
+      if(this.isCashInvoice){
+        this.invFormData.accountDetails.name = event.label;
+        this.invFormData.accountDetails.uniqueName = event.value;
+      }
       this.depositAccountUniqueName = event.value;
       if(this.isCashInvoice){
         this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
@@ -1870,9 +1872,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
         }
         if(this.isSalesInvoice){
-          if(event.additional.currency && event.additional.currency !== this.companyCurrency){
-            this._toasty.errorToast('please select '+ this.companyCurrency +' currency account');
-          }
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
       }
