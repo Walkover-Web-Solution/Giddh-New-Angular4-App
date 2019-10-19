@@ -1093,10 +1093,9 @@
                       </div>
 
                       <div class="tableCell figureCell">
-                        <input #grandTotalInr type="text" class="form-control"
-                          [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency"
-                          name="grandTotal-INR" [mask]="inputMaskFormat"
-                          [value]="invFormData.voucherDetails.grandTotal*exchangeRate"
+                        <input #grandTotalInr type="text" class="form-control" name="grandTotalMulDum"
+                          [prefix]="baseCurrencySymbol" [suffix]="selectedSuffixForCurrency"
+                          [mask]="inputMaskFormat" [(ngModel)] = "grandTotalMulDum"
                           (blur)="updateExchangeRate(grandTotalInr.value)">
 
                       </div>
