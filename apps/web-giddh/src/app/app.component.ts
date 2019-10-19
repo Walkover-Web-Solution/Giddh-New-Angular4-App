@@ -14,6 +14,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
+declare var device;
 
 /**
  * App Component
@@ -44,6 +45,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   public isElectron: boolean = false;
   public tagManagerUrl: SafeUrl;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
 
   public sidebarStatusChange(event) {
     this.sideMenu.isopen = event;
@@ -125,7 +127,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
           this.newVersionAvailableForWebApp = _.clone(isChanged);
         }
       });
+
+      document.addEventListener("deviceready", function() {
+        alert(device.platform);
+        }, false);
+
+
     }
+
+
+
   }
 
   public ngAfterViewInit() {

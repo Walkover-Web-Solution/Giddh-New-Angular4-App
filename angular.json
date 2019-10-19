@@ -74,7 +74,7 @@
           "builder": "ngx-build-plus:build",
           "options": {
             "baseHref": "http://localapp.giddh.com:3000",
-            "outputPath": "dist/apps/web-giddh",
+            "outputPath": "www",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",
             "polyfills": "apps/web-giddh/src/polyfills.ts",
