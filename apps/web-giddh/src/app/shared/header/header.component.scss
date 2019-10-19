@@ -132,7 +132,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name>li>a {
-    padding: 12px 10px !important;
+    padding: 7px 10px !important;
 }
 
 // .main-company-name>li>a:hover {
@@ -608,6 +608,9 @@ padding-right: 15px;
    margin-left: 10px;
    padding-left: 10px;
    border-left: 1px solid #fff;
+}
+.company-name .dropdown-menu {
+    padding-top: 15px;
 }
 /* responsive */
 @media(max-width:991px) {

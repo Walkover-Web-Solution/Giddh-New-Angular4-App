@@ -123,7 +123,7 @@ class CurrencyClass {
   public code: string;
   constructor(attrs?: any) {
     if (attrs) {
-      this.code = attrs.country.countryCode;
+      this.code = attrs.currency;
     }else{
       this.code = "IN";
     }
@@ -291,7 +291,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
 export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
-  public tradeDiscounts?: LedgerResponseDiscountClass[];currencySymbol
+  public tradeDiscounts?: LedgerResponseDiscountClass[];
   public taxes: TaxControlData[];
   public transactions: SalesTransactionItemClass[];
   public description: string;

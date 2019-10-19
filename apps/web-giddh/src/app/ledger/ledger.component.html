@@ -386,7 +386,7 @@
 
       <!-- region debit transaction-->
       <div [ngClass]="Shown ? 'active' : ''" hr-item
-        (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();" class="left-col-new bdrR"
+        (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();" class="left-col-new"
         [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
         <!-- region debit transaction header-->
@@ -760,7 +760,7 @@
         </table>
 
         <!-- region blank ledger-->
-        <table class="width100 bl-1" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
+        <table class="width100 " no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
           (click)="$event.stopPropagation()">
           <tbody>
 

@@ -26,7 +26,9 @@
   width: 70px;
   min-width: 70px;
 }
-
+.equal-2, .table-minus {
+    line-height: 1.6;
+}
 
 @media only screen and (max-width: 767px) {
   .ledger-panel .btn {
