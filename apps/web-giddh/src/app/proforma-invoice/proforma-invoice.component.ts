@@ -2702,11 +2702,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            salesEntryClass.otherTaxModal = otherTaxModal;
           }else{
             salesEntryClass.taxes.push({
-              amount: ta.amount.amountForAccount,
+              amount: ta.taxPercent,
               uniqueName: ta.uniqueName,
               isChecked: true,
               isDisabled:false,
-              type: ta.taxType
+              type: ta.taxType,
+              name: ta.name||''
             });
           }
         });
