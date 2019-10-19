@@ -272,6 +272,7 @@ sh-select:focus {
     display: flex;
     justify-content: center;
     border-top-width: 1px;
+    background-color: #fff;
 }
  .advancSearchBlock  input{
    background: $lightGray !important;
@@ -513,3 +514,21 @@ sh-select:focus {
     }
 }
 
+@media(min-width:991px){
+  .ledger_book:before{
+        content: ' ';
+    height: calc(100% - 220px);
+    position: absolute;
+    width: 0;
+    border-left: 1px solid #ccc;
+    top: 0px;
+    bottom: 0;
+    z-index: 1;
+    margin: 0 auto;
+    left: 0px;
+    right: 0;
+  }
+  table.ledger-footer-1:first-child {
+    border-right: 1px solid #d1d1d1;
+}
+}
