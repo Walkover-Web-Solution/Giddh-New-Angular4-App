@@ -3914,13 +3914,21 @@ label {
     background: $primaryBtncolror;
     border-color: $primaryBtncolror;
 }
-
+.isActive:hover{
+   color: #fff !important;
+    background: $primaryBtnHovercolror;
+    border-color: $primaryBtnHovercolror;
+}
 .isParent.isActive {
     color: #fff !important;
        background: $primaryBtncolror !important;
     border-color: $primaryBtncolror;
 }
-
+.isParent.isActive:hover {
+    color: #fff !important;
+       background: $primaryBtnHovercolror !important;
+    border-color: $primaryBtnHovercolror;
+}
 .primary_clr {
     color: var(--dark-blue01) !important;
 }
@@ -7820,7 +7828,7 @@ span.red-text {
     word-break: normal;
 }
 .table-custom-invoice ul.dropdown-menu{
-      min-width: auto !important;
+      min-width: 160px !important;
     height: auto !important;
 }
 ul.dropdown-menu  p.lead.pd {
@@ -8009,6 +8017,10 @@ button.btn.btn-filter{
 .dropdown-container .dropdown-menu li label.checkbox.oh.customItem span{
     max-width: calc(100% - 35px);
 }
+.icon-sort-asc:hover, .icon-sort-dsc:hover {
+    color: $activeIconTh;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
