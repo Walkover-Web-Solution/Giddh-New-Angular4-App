@@ -1412,6 +1412,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     let count: number = 0;
     let depositAmount = Number(this.depositAmount);
     if(this.isMulticurrencyAccount){
+      if(this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol){
+        depositAmount = depositAmount*this.exchangeRate;
+      }
       depositAmount = depositAmount/this.exchangeRate;
     }
     this.invFormData.entries.forEach(f => {
@@ -1636,6 +1639,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
         this.getCurrencyRate(this.companyCurrency, item.additional.currency);
       }
+    }
+    if(this.isSalesInvoice){
+      this.bankAccounts$ = observableOf(this.updateBankAccountObject(this.companyCurrencyName));
     }
   }
 
@@ -1881,6 +1887,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       this.depositAccountUniqueName = '';
     }
+    this.calculateBalanceDue();
   }
 
   public clickedInside($event: Event) {
@@ -2848,5 +2855,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }, (error => {
 
     }));
+  }
+
+  public updateBankAccountObject(accCurr){
+    let bankAccounts: IOption[] = [];
+    this.flattenAccountListStream$.pipe(take(1)).subscribe(a =>{
+       a.forEach(acc=> {
+         if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+           if (!acc.currency || acc.currency === accCurr || acc.currency === this.companyCurrency) {
+             bankAccounts.push({ label: acc.name, value: acc.uniqueName, additional: acc });
+           }
+         }
+       });
+    });
+    return _.orderBy(bankAccounts, 'label');
   }
 }
