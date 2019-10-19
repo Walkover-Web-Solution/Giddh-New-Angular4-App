@@ -1857,7 +1857,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = event.label;
       this.invFormData.accountDetails.uniqueName = event.value;
       this.depositAccountUniqueName = event.value;
-      this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      if(this.isCashInvoice){
+        this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      }
       if(this.isMulticurrencyAccount){
         if(this.isCashInvoice){
           this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
@@ -1867,7 +1869,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
       }
-      if(event.additional.currency !== 'INR'){
+      if(event.additional.currency !== 'INR' && this.isCashInvoice){
         this.companyCurrencyName = event.additional.currency;
       }
     } else {
