@@ -1641,7 +1641,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     }
     if(this.isSalesInvoice && this.isMulticurrencyAccount){
-      this.bankAccounts$ = observableOf(this.updateBankAccountObject(this.companyCurrencyName));
+      this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
     }
   }
 
@@ -2678,6 +2678,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
     delete obj.account.shippingDetails.state;
 
+    if(this.isCashInvoice){
+      obj.account.customerName = data.voucherDetails.customerName;
+      obj.account.name = data.voucherDetails.customerName;
+    }
     return obj;
   }
 
