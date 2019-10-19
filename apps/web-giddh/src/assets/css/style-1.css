@@ -5203,7 +5203,7 @@ strong {
 
 bs-daterangepicker-container,
 bs-datepicker-container {
-  z-index: 9999;
+  z-index: 99999;
 
 }
 
