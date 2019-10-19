@@ -1640,7 +1640,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.getCurrencyRate(this.companyCurrency, item.additional.currency);
       }
     }
-    if(this.isSalesInvoice){
+    if(this.isSalesInvoice && this.isMulticurrencyAccount){
       this.bankAccounts$ = observableOf(this.updateBankAccountObject(this.companyCurrencyName));
     }
   }
