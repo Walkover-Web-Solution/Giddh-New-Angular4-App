@@ -273,9 +273,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public isPrefixAppliedForCurrency: boolean;
   public selectedSuffixForCurrency: string ='';
   public companyCurrencyName: string;
-  public baseCurrencySymbol: any;
+  public baseCurrencySymbol: string = '';
   public depositCurrSymbol: string ='';
-
+  public grandTotalMulDum;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1195,7 +1195,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       return entry;
     });
-    let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+    let exRate = this.originalExchangeRate;
     let obj: GenericRequestForGenerateSCD = {
       account: data.accountDetails,
       updateAccountDetails: this.updateAccount,
@@ -1410,13 +1410,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public calculateBalanceDue() {
     let count: number = 0;
+    let depositAmount = Number(this.depositAmount);
+    if(this.isMulticurrencyAccount){
+      depositAmount = depositAmount/this.exchangeRate;
+    }
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
         return pv + cv.total;
       }, 0);
     });
     this.invFormData.voucherDetails.balanceDue =
-      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
     this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
@@ -1444,7 +1448,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-
+    this.grandTotalMulDum = calculatedGrandTotal*this.exchangeRate;
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -1867,7 +1871,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if(this.isSalesInvoice){
           if(event.additional.currency && event.additional.currency !== this.companyCurrency){
-            this._toasty.errorToast('please select '+ this.companyCurrency +'currency account');
+            this._toasty.errorToast('please select '+ this.companyCurrency +' currency account');
           }
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
@@ -2028,7 +2032,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
       let data = result.voucher;
-      let exRate = this.companyCurrency !== 'INR' ? 1/this.originalExchangeRate: this.originalExchangeRate;
+      let exRate = this.originalExchangeRate;
       let unqName = this.invoiceUniqueName || this.accountUniqueName;
       result = {
         account: data.accountDetails,
@@ -2698,11 +2702,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
            salesEntryClass.otherTaxModal = otherTaxModal;
           }else{
             salesEntryClass.taxes.push({
-              amount: ta.amount.amountForAccount,
+              amount: ta.taxPercent,
               uniqueName: ta.uniqueName,
               isChecked: true,
               isDisabled:false,
-              type: ta.taxType
+              type: ta.taxType,
+              name: ta.name||''
             });
           }
         });
@@ -2815,7 +2820,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.isMulticurrencyAccount = result.multiCurrency;
     this.customerCountryName = result.account.billingDetails.countryName;
 
-    this.exchangeRate = this.companyCurrency !=='INR'? 1/result.exchangeRate:result.exchangeRate;
+    this.exchangeRate = result.exchangeRate;
     this.originalExchangeRate = this.exchangeRate;
 
     this.invoiceUniqueName = result.uniqueName;
@@ -2825,14 +2830,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public updateExchangeRate(val) {
-    val = val.replace(this.invFormData.accountDetails.currencySymbol, '');
+    val = val.replace(this.baseCurrencySymbol, '');
     let total = parseFloat(val.replace(/,/g,""));
     if(this.isMulticurrencyAccount){
-      if(this.companyCurrency !=='INR'){
-        this.exchangeRate = this.invFormData.voucherDetails.grandTotal/total;
-      }else{
-        this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
-      }
+      this.exchangeRate = total/this.invFormData.voucherDetails.grandTotal;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
