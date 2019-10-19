@@ -298,6 +298,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public filterData() {
     this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
     this.onPropertyChanged.emit(this.filterForm.value);
+    // this will clear the search and reset it after we click apply --G0-2745   
+    let a = this.search = '';
+    this.seachChange.emit(a);
+       
   }
 
   public refreshData() {
