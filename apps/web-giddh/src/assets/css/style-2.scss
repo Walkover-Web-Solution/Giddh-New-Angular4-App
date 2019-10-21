@@ -8023,6 +8023,9 @@ button.btn.btn-filter{
 .td_in_searchBox div i.icon-search:hover{
   color: $activeIconTh !important;
 }
+.mobileCode .menu {
+    min-width: 100px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
