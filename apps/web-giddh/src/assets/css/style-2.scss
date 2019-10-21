@@ -8018,9 +8018,11 @@ button.btn.btn-filter{
     max-width: calc(100% - 35px);
 }
 .icon-sort-asc:hover, .icon-sort-dsc:hover {
-    color: $activeIconTh;
+    color: $activeIconTh !important;
 }
-
+.td_in_searchBox div i.icon-search:hover{
+  color: $activeIconTh !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
