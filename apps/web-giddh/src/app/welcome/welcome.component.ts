@@ -28,7 +28,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  public BranchField: boolean = false;
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public company: any = {};

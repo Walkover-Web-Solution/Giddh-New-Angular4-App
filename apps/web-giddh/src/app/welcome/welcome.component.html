@@ -14,6 +14,8 @@
         <div class=" clearfix row">
           <div class="col-xs-12 mrB2">
             <label for="name" class="m-t-30">Company Name<sup class="text-danger">*</sup></label>
+            <!-- Need to show when creat branch  -->
+            <label for="name" class="m-t-30" *ngIf="BranchField">Branch Name<sup class="text-danger">*</sup></label>
             <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name"
               placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
           </div>
@@ -52,7 +54,7 @@
           </div>
 
           <div class="col-xs-12 mrB2 selectBox">
-            <div class="">
+            <div class="pos-rel">
               <label for="bussinessType">Select Business Type</label>
               <div class="custom-select select-caret pos-rel">
                 <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType"
@@ -60,10 +62,12 @@
                   [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33">
                 </sh-select>
               </div>
+              <!-- Need to add functionality by developer end -->
+              <span class="clearBTn">Clear</span>
             </div>
           </div>
           <div class="col-xs-12 mrB2 selectBox">
-            <div class="">
+            <div class="pos-rel">
               <label for="bussinessNature">Select Business Nature</label>
               <div class="custom-select select-caret pos-rel">
                 <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false"
@@ -71,6 +75,8 @@
                   [isFilterEnabled]="true" [ItemHeight]="33">
                 </sh-select>
               </div>
+              <!-- Need to add functionality by developer end -->
+              <span class="clearBTn">Clear</span>
             </div>
           </div>
           <ng-container *ngIf="selectedBusinesstype === 'Registered'">
@@ -125,6 +131,8 @@
           <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
             <div class="clearfix ">
               <label for="address " class="d-block ">Company Address</label>
+              <!-- Need to show when creat branch  -->
+              <label for="address " class="d-block " *ngIf="BranchField">Branch Address</label>
               <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address"
                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
             </div>
@@ -138,6 +146,11 @@
             <button type="submit " class="btn btn-pink  " (click)="submit() "
               [disabled]="welcomeForm.invalid || !isGstValid">
               Next
+            </button>
+
+            <button type="submit " class="btn btn-pink  " *ngIf="BranchField" (click)="submit() "
+              [disabled]="welcomeForm.invalid || !isGstValid">
+              Create Branch
             </button>
           </div>
         </div>

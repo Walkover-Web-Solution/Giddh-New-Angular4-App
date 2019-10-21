@@ -1,11 +1,251 @@
-<div class="" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
-  <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
+<div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
+  <!-- <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
         *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
-    <button class="btn btn-default mrL1" (click)="openAddBranchModal()">Add Branch</button>
-  </h3>
+
+  </h3> -->
+  <div class="d-flex date-advanceSearch row">
+    <form class="form-inline input-grp-dateRangePicker pr col-sm-8">
+      <div class=" mrR1 d-flex">
+        <div class="input-group">
+          <div class="form-group">
+            <span class="icon-calender"></span> <input type="text" placeholder="Select Date" class="form-control"
+              bsDaterangepicker>
+          </div>
+        </div>
+        <div class="contentView mrL2">
+          <div class="">
+            <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
+                type="radio" [value]="'Table View'">Table View
+            </span>
+
+            <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
+                type="radio" [value]="'Card View'">Card View </span>
+          </div>
+
+        </div>
+
+      </div>
+    </form>
+    <div class="col-sm-4">
+      <button class="btn btn-pink mrB2 pull-right " (click)="openAddBranchModal()"> +New Branch</button>
+    </div>
+  </div>
 </div>
 
+
+
 <div class="" *ngIf="(branches$ | async)?.length > 0">
+
+  <table class="table basic table-bordered mrT2">
+    <thead>
+      <tr>
+        <th>
+          Branch Name
+        </th>
+        <th>GSTIN</th>
+        <th>Contact No.</th>
+        <th class="text-right">Total Sales</th>
+        <th class="text-right">Total Expenses</th>
+        <th class="text-right">Total taxes</th>
+        <th class="text-right">Total Stock</th>
+      </tr>
+
+    </thead>
+    <tbody>
+      <tr *ngFor="let branchTableData of branchTable">
+        <td>{{branchTableData.BranchName}}</td>
+        <td>{{branchTableData.GSTIN}}</td>
+        <td>{{branchTableData.ContactNumber}}</td>
+        <td class="text-right">{{branchTableData.TotalSales}}</td>
+        <td class="text-right">{{branchTableData.TotalExpenses}}</td>
+        <td class="text-right">{{branchTableData.TotalTaxes}}</td>
+        <td class="text-right">{{branchTableData.TotalStock}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="branchCardView">
+    <div class="row">
+      <div class="col-md-4 pdR1">
+
+        <div class="branchCard">
+          <div class="cardBasicDetails">
+            <h2>Walkover Web Solutions Banglore</h2>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Contact:</span>
+              <span class="pull-left"> +91 9876543210</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">GSTIN:</span>
+              <span class="pull-left"> not
+                available</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Address:</span>
+              <span class="pull-left">
+
+                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
+                Hospital, Indore-452080, MP
+              </span>
+            </div>
+          </div>
+          <div class="branchSalesDetails">
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Sales</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Expenses</label>
+              </span>
+              <span class="pull-right">
+                1,21,900
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Taxes</label>
+              </span>
+              <span class="pull-right">
+                58,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Stock</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 pdL1 pdR1">
+
+        <div class="branchCard">
+          <div class="cardBasicDetails">
+            <h2>Walkover Web Solutions Banglore</h2>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Contact:</span>
+              <span class="pull-left"> +91 9876543210</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">GSTIN:</span>
+              <span class="pull-left"> not
+                available</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Address:</span>
+              <span class="pull-left">
+
+                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
+                Hospital, Indore-452080, MP
+              </span>
+            </div>
+          </div>
+          <div class="branchSalesDetails">
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Sales</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Expenses</label>
+              </span>
+              <span class="pull-right">
+                1,21,900
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Taxes</label>
+              </span>
+              <span class="pull-right">
+                58,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Stock</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 pdL1">
+
+        <div class="branchCard">
+          <div class="cardBasicDetails">
+            <h2>Walkover Web Solutions Banglore</h2>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Contact:</span>
+              <span class="pull-left"> +91 9876543210</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">GSTIN:</span>
+              <span class="pull-left"> not
+                available</span>
+            </div>
+            <div class="clearfix">
+              <span class="mrR1 pull-left">Address:</span>
+              <span class="pull-left">
+
+                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
+                Hospital, Indore-452080, MP
+              </span>
+            </div>
+          </div>
+          <div class="branchSalesDetails">
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Sales</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Expenses</label>
+              </span>
+              <span class="pull-right">
+                1,21,900
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Taxes</label>
+              </span>
+              <span class="pull-right">
+                58,000
+              </span>
+            </div>
+            <div class="clearfix">
+              <span class="pull-left">
+                <label>Total Stock</label>
+              </span>
+              <span class="pull-right">
+                25,00,000
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <div class="row">
     <div class="col-sm-6 col-xs-12 branch" *ngFor="let branch of branches$ | async">
       <div class="box clearfix mrB2">
@@ -69,12 +309,12 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header clearfix">
-        <h3>Add Branch</h3>
+        <h3>Create New Branch</h3>
         <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
       </div>
-      <div style="height: 228px;" class="modal-body">
+      <div class="modal-body">
         <div>
-          <label>Select companies who are your branch</label>
+          <label class="selectCompanies">Select companies who are your branch</label>
           <div class="btn-group btn-block" dropdown>
             <button dropdownToggle (click)="getAllBranches()" type="button"
               class="form-control text-left btn-block dropdown-toggle">
@@ -110,14 +350,19 @@
 
         </div>
         <div>
+          <br>
           <span>Or</span>
-          <button class="btn-link" (click)="openCreateCompanyModal()">Create Branch</button>
+          <button class="btn-link" (click)="openCreateCompanyModal()">Create New Branch</button>
         </div>
+
+
+        <div class="buttonYesCancel">
+          <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
+          <button (click)="createBranches()" class="btn btn-sm btn-success">Yes</button>
+        </div>
+
       </div>
-      <div class="modal-footer clearfix">
-        <button (click)="createBranches()" class="btn btn-sm btn-success">Save</button>
-        <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
-      </div>
+
       <!-- modal footer -->
     </div>
   </div>

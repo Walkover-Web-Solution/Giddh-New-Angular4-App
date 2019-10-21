@@ -5609,15 +5609,16 @@ typeahead-container .dropdown-menu li.active>a>a {
 .welcome_header {
     background: #fff url("../images/Welcome.png") no-repeat center center;
     text-align: center;
-    padding: 20px 0;
+    padding: 0px 0 30px;
     position: relative;
 }
 
 .welcome_header h1 {
     font-size: 40px;
     font-family: 'opensans-regular';
-    color: #535353;
+    color: #1A237E;
 }
+
 
 .welcome_header:after {
     position: absolute !important;
@@ -5631,6 +5632,7 @@ typeahead-container .dropdown-menu li.active>a>a {
     left: 50%;
     content: " ";
     transform: translateX(-50%);
+    display: none;
 }
 
 .dblock {

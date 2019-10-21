@@ -6,16 +6,16 @@
   <div class="modal-body pd0" id="SharePop">
     <div class="welcome_wrapper">
       <div class="giddh_logo_welcome">
-        <img src="../../../../../assets/images/new/giddh-logo.png">
+        <img src="../../../../../assets/images/giddh-logo-big.svg">
       </div>
       <div class="welcome_header">
         <h1>Welcome {{ this.logedInusers.name}},</h1>
       </div>
     </div>
 
-    <div class="form-group clearfix add-companyDetail pdB5">
+    <div class=" clearfix add-companyDetail pdB5">
       <!--<h3 class="pdB1">Share with</h3>-->
-      <div class="add_mailer">
+      <div class="add_mailer clearfix">
         <!--create company from-->
         <form name="form" #createCompanyForm="ngForm" class="clearfix" novalidate="" class="" autocomplete="off">
           <div class="company-form-body">
@@ -51,6 +51,7 @@
                 <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isFilterEnabled]="true"
                   [(ngModel)]="company.baseCurrency"></sh-select>
               </div>
+
             </div>
 
             <div class="col-xs-6 mrB3">
