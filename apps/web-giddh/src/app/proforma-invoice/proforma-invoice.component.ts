@@ -2307,7 +2307,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (stock && newTrxObj) {
               // description with sku and custom fields
               newTrxObj.sku_and_customfields = null;
-              if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
+             // condition removed as SKU Code should be displayed in all case 
+            //  if (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice) {
                 let description = [];
                 let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
                 if (stock.skuCode) {
@@ -2322,7 +2323,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                   description.push(customField2Heading + ':' + stock.customField2Value)
                 }
                 newTrxObj.sku_and_customfields = description.join(', ');
-              }
+           //   }
               //------------------------
 
               let stockUnit: IStockUnit = {
