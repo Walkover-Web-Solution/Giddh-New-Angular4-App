@@ -134,7 +134,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
     });
 
     // Country phone Code
@@ -162,7 +162,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileCode: ['91'],
+      mobileCode: [''],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -503,5 +503,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.resetUpdateAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.addAccountForm.get('mobileCode').patchValue(phoneCode);
+    }
   }
 }
