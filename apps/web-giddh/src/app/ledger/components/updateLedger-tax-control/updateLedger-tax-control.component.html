@@ -11,6 +11,8 @@
     </div>
   </a>
 
+
+  <div class="pr">
   <ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
       (click)="$event.stopPropagation()"
       style="max-height: 102px;min-height: 40px">
@@ -23,5 +25,6 @@
           </label>
       </li>
   </ul>
+  </div>
   <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </span>
