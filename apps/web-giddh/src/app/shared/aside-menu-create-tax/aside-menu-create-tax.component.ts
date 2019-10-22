@@ -10,6 +10,8 @@ import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
+import { group } from '@angular/animations';
+import { GroupsAccountSidebarComponent } from '../header/components';
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -61,12 +63,28 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.store
-      .pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$))
+      .pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$))
       .subscribe(data => {
-        if (data && data.length) {
+        if (data) {
           let arr: IOption[] = [];
           data.forEach(f => {
-            arr.push({label: `${f.name} - (${f.uniqueName})`, value: f.uniqueName});
+            if(f.uniqueName === "currentliabilities")
+            {
+              if(f.groups)
+              {
+               f.groups.forEach(f => { 
+               if(f.uniqueName === "dutiestaxes")
+               {
+                if(f.groups)
+                {
+                  f.groups.forEach(f => { 
+                  arr.push({label: `${f.name} - (${f.uniqueName})`, value: f.uniqueName});
+                  });
+                }
+              }
+              });
+              }
+           }
           });
           this.flattenAccountsOptions = arr;
         }
