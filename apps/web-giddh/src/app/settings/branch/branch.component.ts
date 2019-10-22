@@ -54,7 +54,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   public selectedBranch: string = null;
   public isBranch: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  public branchCardView = false;
+  public branchTableView = true;
+  public hideOldData = false;
   branchTable = [
     {
       BranchName: "{{branch.name}}",

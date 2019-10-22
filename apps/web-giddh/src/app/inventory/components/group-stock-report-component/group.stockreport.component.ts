@@ -1,20 +1,20 @@
-import {ToasterService} from '../../../services/toaster.service';
-import {base64ToBlob} from './../../../shared/helpers/helperFunctions';
-import {InventoryService} from '../../../services/inventory.service';
-import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
+import { ToasterService } from '../../../services/toaster.service';
+import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
+import { InventoryService } from '../../../services/inventory.service';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
-import {take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount} from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
 import {
   GroupStockReportRequest,
   GroupStockReportResponse,
   StockGroupResponse,
   AdvanceFilterOptions, InventoryDownloadRequest
 } from '../../../models/api-models/Inventory';
-import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
-import {AppState} from '../../../store';
-import {saveAs} from 'file-saver';
+import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
+import { AppState } from '../../../store';
+import { saveAs } from 'file-saver';
 
-import {Store} from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
 import {
   AfterViewInit,
@@ -28,21 +28,22 @@ import {
   ViewChildren,
   QueryList, ChangeDetectorRef
 } from '@angular/core';
-import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import {InventoryAction} from '../../../actions/inventory/inventory.actions';
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {createSelector} from 'reselect';
-import {ModalDirective, PaginationComponent} from 'ngx-bootstrap';
-import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
-import {CompanyResponse} from '../../../models/api-models/Company';
-import {InvViewService} from '../../inv.view.service';
-import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
-import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { createSelector } from 'reselect';
+import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import { InvViewService } from '../../inv.view.service';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+
 
 
 @Component({
@@ -113,9 +114,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public pickerSelectedFromDate: string;
   public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
-    {id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales'},
-    {id: 2, uniqueName: 'transfer', name: 'Transfer'},
-    {id: 3, uniqueName: 'all', name: 'All Transactions'},
+    { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
+    { id: 2, uniqueName: 'transfer', name: 'Transfer' },
+    { id: 3, uniqueName: 'all', name: 'All Transactions' },
   ];
   public CategoryOptions: any[] = [
     {
@@ -219,6 +220,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public branchAvailable: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
@@ -245,7 +247,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
         const stockList = [];
         this.activeGroupName = stockGroup.name;
         stockGroup.stocks.forEach((stock) => {
-          stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
+          stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
         });
         this.stockList$ = observableOf(stockList);
         if (this.GroupStockReportRequest && !this.GroupStockReportRequest.stockGroupUniqueName) {
@@ -297,7 +299,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     });
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
         this.getGroupReport(true);
@@ -491,7 +493,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
   }
 
   public pageChanged(event: any): void {
@@ -637,7 +639,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     //Reset Date with universal date
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
       }
@@ -676,8 +678,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
 
   }
 
-  public  clearModal(){
-    if(this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity){
+  public clearModal() {
+    if (this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity) {
       this.shCategory.clear();
       this.shCategoryType.clear();
       this.shValueCondition.clear();
@@ -729,19 +731,19 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.mapAdvFilters();
   }
 
-  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
-    console.log('Called : download',reportType, 'format',reportFormat);
-    let obj= new InventoryDownloadRequest();
-    if(this.GroupStockReportRequest.stockGroupUniqueName){
-      obj.stockGroupUniqueName=this.GroupStockReportRequest.stockGroupUniqueName;
+  public downloadAllInventoryReports(reportType: string, reportFormat: string) {
+    console.log('Called : download', reportType, 'format', reportFormat);
+    let obj = new InventoryDownloadRequest();
+    if (this.GroupStockReportRequest.stockGroupUniqueName) {
+      obj.stockGroupUniqueName = this.GroupStockReportRequest.stockGroupUniqueName;
     }
-    if(this.GroupStockReportRequest.stockUniqueName){
-      obj.stockUniqueName=this.GroupStockReportRequest.stockUniqueName;
+    if (this.GroupStockReportRequest.stockUniqueName) {
+      obj.stockUniqueName = this.GroupStockReportRequest.stockUniqueName;
     }
-    obj.format=reportFormat;
-    obj.reportType=reportType;
-    obj.from=this.fromDate;
-    obj.to=this.toDate;
+    obj.format = reportFormat;
+    obj.reportType = reportType;
+    obj.from = this.fromDate;
+    obj.to = this.toDate;
     this.inventoryService.downloadAllInventoryReports(obj)
       .subscribe(res => {
         if (res.status === 'success') {
@@ -753,13 +755,13 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   }
 
   public mapAdvFilters() {
-    if (this.filterCategory) { // entity = Opening Stock, inwards, outwards, Closing Stock 
+    if (this.filterCategory) { // entity = Opening Stock, inwards, outwards, Closing Stock
       this.GroupStockReportRequest.entity = this.filterCategory;
     }
-    if (this.filterCategoryType) { // value = quantity/value 
+    if (this.filterCategoryType) { // value = quantity/value
       this.GroupStockReportRequest.value = this.filterCategoryType;
     }
-    if (this.filterValueCondition) { // condition = GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS 
+    if (this.filterValueCondition) { // condition = GREATER_THAN,GREATER_THAN_OR_EQUALS,LESS_THAN,LESS_THAN_OR_EQUALS,EQUALS,NOT_EQUALS
       this.GroupStockReportRequest.condition = this.filterValueCondition;
     }
     if (this.advanceSearchForm.controls['filterAmount'].value && !this.advanceSearchForm.controls['filterAmount'].invalid) { // number=1 {any number given by user}

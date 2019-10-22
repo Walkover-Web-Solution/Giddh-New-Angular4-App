@@ -652,7 +652,16 @@ ul.sub-list {
     border-color:$primaryBtnHovercolror;
     color: #fff;
 }
-
+.btn-light-gray{
+  background:$btn-light-gray;
+  border-color:$btn-light-gray;
+  color: #1A237E;
+}
+.btn-light-gray:hover{
+  background:$primaryBtncolror;
+  border-color:$primaryBtncolror;
+  color: #fff;
+}
 .top-aging-table-top {
     background: #E5E5E5;
     position: relative;
@@ -6041,12 +6050,14 @@ table td[class*=col-]:last-child {
 /* ======================================= INVENTORY CSS ===================================== */
 
 .form_header {
-    padding: 12px 15px;
-    background: #f5f5f5;
-    color: #333333;
-    border-bottom: 1px solid #ddd;
+    padding: 20px 15px;
+    background: $top_header;
+    color: #fff;
 }
-
+.form_header h3{
+      font-size: 18px;
+    font-family: 'opensans-bold';
+}
 .form_body {
     background: #fff;
     /* padding: 15px; */
@@ -8027,6 +8038,11 @@ button.btn.btn-filter{
 }
 .mobileCode .menu {
     min-width: 100px !important;
+}
+.form-group sup {
+    font-size: 14px;
+    top: 0;
+    color: red;
 }
 /* responsive */
 

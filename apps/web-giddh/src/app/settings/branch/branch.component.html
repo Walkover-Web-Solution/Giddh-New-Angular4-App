@@ -19,7 +19,7 @@
             </span>
 
             <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                type="radio" [value]="'Card View'">Card View </span>
+                type="radio" [value]="'Card View'" (click)="branchCardView = !branchCardView">Card View </span>
           </div>
 
         </div>
@@ -36,7 +36,7 @@
 
 <div class="" *ngIf="(branches$ | async)?.length > 0">
 
-  <table class="table basic table-bordered mrT2">
+  <table class="table basic table-bordered mrT2" *ngIf="branchTableView">
     <thead>
       <tr>
         <th>
@@ -64,7 +64,7 @@
     </tbody>
   </table>
 
-  <div class="branchCardView">
+  <div class="branchCardView" *ngIf="branchCardView">
     <div class="row">
       <div class="col-md-4 pdR1">
 
@@ -246,7 +246,7 @@
 
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="hideOldData">
     <div class="col-sm-6 col-xs-12 branch" *ngFor="let branch of branches$ | async">
       <div class="box clearfix mrB2">
         <div class="mrB1 pdB bdrB clearfix pos-rel">
