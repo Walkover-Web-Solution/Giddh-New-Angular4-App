@@ -61,12 +61,28 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.store
-      .pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$))
+      .pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$))
       .subscribe(data => {
-        if (data && data.length) {
+        if (data) {
           let arr: IOption[] = [];
-          data.forEach(f => {
-            arr.push({label: `${f.name} - (${f.uniqueName})`, value: f.uniqueName});
+          data.forEach(acc => {
+            if(acc.uniqueName === "currentliabilities")
+            {
+              if(acc.groups)
+              {
+               acc.groups.forEach(grp => { 
+               if(grp.uniqueName === "dutiestaxes")
+               {
+                if(grp.groups)
+                {
+                  grp.groups.forEach(subgrp => { 
+                  arr.push({label: `${subgrp.name} - (${subgrp.uniqueName})`, value: subgrp.uniqueName});
+                  });
+                }
+              }
+              });
+              }
+           }
           });
           this.flattenAccountsOptions = arr;
         }
