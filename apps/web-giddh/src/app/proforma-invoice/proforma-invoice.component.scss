@@ -1571,6 +1571,10 @@ label.salesCountryLabel {
 .wrap-td-data .icon-rupees {
     font-size: 11px;
 }
+b, strong {
+    font-family: 'opensans-bold';
+    font-weight: 500;
+}
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {
     display: block;

@@ -83,7 +83,10 @@ background-color: transparent !important;
     color: #fff;
 }
 .inventoryStockTable input.form-control.stock-input {
-    color: #1c1c1c;
+    color: #1c1c1c;    text-align: left;
+}
+.table-border input.form-control.stock-input {
+    color: #1c1c1c;    text-align: left;
 }
 .footer-tr td {
   background-color: #e5e5e5;
@@ -233,7 +236,7 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-dsc {
   line-height: 20px;
   width: 15px;
-  color: #a9a9a9;
+  color: #757BB9;
 }
 .icon-pointer .activeTextColor {
   color: $activeIconTh;
