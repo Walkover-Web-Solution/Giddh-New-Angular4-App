@@ -2811,10 +2811,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.email = result.account.email;
     voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
     //code for voucher details
-    voucherDetails.voucherDate = result.date;
+    voucherDetails.voucherDate = result.date ? result.date: '';
     voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
     //need to check usage
-    voucherDetails.dueDate = moment(result.dueDate, 'DD-MM-YYYY').toDate();
+    voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
     voucherDetails.balanceStatus = result.balanceStatus;
     voucherDetails.customerName = result.account.name;
     voucherDetails.customerUniquename = result.account.uniqueName;

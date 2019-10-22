@@ -435,7 +435,7 @@
             <span class="right-currency">
               <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
               <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
-                class="form-control edit-currency"> INR
+                class="form-control edit-currency"> {{companyCurrency}}
             </span>
 
             <span class="edit-icon cp">
