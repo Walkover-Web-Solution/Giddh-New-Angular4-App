@@ -10,8 +10,6 @@ import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
-import { group } from '@angular/animations';
-import { GroupsAccountSidebarComponent } from '../header/components';
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -67,18 +65,18 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
       .subscribe(data => {
         if (data) {
           let arr: IOption[] = [];
-          data.forEach(f => {
-            if(f.uniqueName === "currentliabilities")
+          data.forEach(acc => {
+            if(acc.uniqueName === "currentliabilities")
             {
-              if(f.groups)
+              if(acc.groups)
               {
-               f.groups.forEach(f => { 
-               if(f.uniqueName === "dutiestaxes")
+               acc.groups.forEach(grp => { 
+               if(grp.uniqueName === "dutiestaxes")
                {
-                if(f.groups)
+                if(grp.groups)
                 {
-                  f.groups.forEach(f => { 
-                  arr.push({label: `${f.name} - (${f.uniqueName})`, value: f.uniqueName});
+                  grp.groups.forEach(subgrp => { 
+                  arr.push({label: `${subgrp.name} - (${subgrp.uniqueName})`, value: subgrp.uniqueName});
                   });
                 }
               }
