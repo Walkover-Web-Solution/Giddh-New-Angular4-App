@@ -172,6 +172,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isSubscribedPlanHaveAdditnlChrgs: any;
   public activeCompany: any;
   public createNewCompanyUser: CompanyCreateRequest;
+  public totalNumberOfcompanies$: Observable<number>;
+  public totalNumberOfcompanies: number;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -328,6 +330,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.menuItemsFromIndexDB = DEFAULT_MENUS;
       this.accountItemsFromIndexDB = DEFAULT_AC;
     });
+    this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
+
   }
 
   public ngOnInit() {
@@ -548,6 +552,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.doEntryInDb('menus', menuItem);
         }
       }
+    });
+    this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+      this.totalNumberOfcompanies = res;
     });
   }
 
