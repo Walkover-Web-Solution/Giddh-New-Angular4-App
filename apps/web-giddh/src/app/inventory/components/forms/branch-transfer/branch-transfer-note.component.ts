@@ -23,10 +23,12 @@ import {ToasterService} from '../../../../services/toaster.service';
 import {InventoryService} from '../../../../services/inventory.service';
 import {CompanyResponse} from "../../../../models/api-models/Company";
 import {Observable, ReplaySubject} from "rxjs";
-import {takeUntil} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../store";
 import {ShSelectComponent} from "../../../../theme/ng-virtual-select/sh-select.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {InvViewService} from "../../../inv.view.service";
 
 @Component({
   selector: 'branch-transfer-note',
@@ -65,7 +67,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-              private _zone: NgZone, private _store: Store<AppState>) {
+              private _zone: NgZone, private _store: Store<AppState>, private invViewService: InvViewService, private _router: Router) {
     this.initializeForm(true);
     this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
   }
@@ -520,5 +522,10 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     });
     linkedStocks = _.cloneDeep(rawArr);
     return linkedStocks;
+  }
+
+  public redirectToReciptNote() {
+    this.invViewService.setActiveView('receipt', null);
+    this._router.navigate(['/pages/inventory/receipt-note']);
   }
 }
