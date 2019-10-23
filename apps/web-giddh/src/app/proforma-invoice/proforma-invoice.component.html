@@ -107,8 +107,8 @@
                         </ng-container>
                         <!-- endregion -->
 
-                        <!-- region previous details -->
-                        <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                        <!-- region previous details commented for multicurrency changes-->
+                        <!--<div class="d-flex cp aquaColor" #copyPreviousEstimate
                           *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isMulticurrencyAccount"
                           style="align-items: center;margin-left: 2%">
                           <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
@@ -120,7 +120,7 @@
                             *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
                           </ng-container>
 
-                        </div>
+                        </div>-->
                         <!-- endregion -->
                       </div>
 
@@ -430,9 +430,9 @@
           *ngIf="!isMobileView">
 
           <!-- switch currency on click, remaining functional work , UI is completed -->
-          <div class="switch-currency" *ngIf="isMulticurrencyAccount">
+          <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
             <span class="left-currency">1 {{companyCurrencyName}}</span>
-            <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon">
+            <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(true)">
             <span class="right-currency">
               <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
               <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
@@ -445,6 +445,26 @@
               <img src=" assets/images/autosave.svg" class="edit-pencil"
                 (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue"
                 *ngIf="autoSaveIcon">
+            </span>
+
+
+          </div>
+          <!-- switch currency on click, remaining functional work , UI is completed -->
+          <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchedCurr">
+            <span class="left-currency">1 {{companyCurrency}}</span>
+            <img class="switchIcon" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(false)">
+            <span class="right-currency">
+              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+              <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate" *ngIf="showCurrencyValue"
+                     class="form-control edit-currency"> {{companyCurrencyName}}
+            </span>
+
+            <span class="edit-icon cp">
+              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil"
+                   (click)="saveCancelExcRate(false)">
+              <img src=" assets/images/autosave.svg" class="edit-pencil"
+                   (click)="saveCancelExcRate(true)"
+                   *ngIf="autoSaveIcon">
             </span>
 
 
