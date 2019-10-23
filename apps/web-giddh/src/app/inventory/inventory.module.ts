@@ -45,6 +45,7 @@ import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.si
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { ReceiptNoteComponent } from "./components/receipt-note-components/receipt.note.component";
 
+
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -108,7 +109,7 @@ import { ReceiptNoteComponent } from "./components/receipt-note-components/recei
     OutwardNoteComponent,
     JobworkSidebarComponent,
     ManufacturingComponent,
-    ReceiptNoteComponent
+    ReceiptNoteComponent,
   ],
   providers: [],
   imports: [
