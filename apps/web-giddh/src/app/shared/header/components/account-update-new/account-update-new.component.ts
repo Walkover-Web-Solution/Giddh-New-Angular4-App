@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
@@ -74,6 +74,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isDebtorCreditor: boolean = false;
   @Input() public showDeleteButton: boolean = true;
   @Input() public accountDetails: any;
+  @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+
 
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
@@ -303,6 +305,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
       }
     });
+    setTimeout(() => {
+      this.autoFocusUpdate.nativeElement.focus();
+    }, 50);
   }
 
   public onViewReady(ev) {

@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -66,6 +66,8 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = true;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
+  @ViewChild('autoFocus') public autoFocus: ElementRef;
+
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
@@ -230,6 +232,9 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.addAccountForm.patchValue({ uniqueName: '' });
       }
     });
+    setTimeout(() => {
+      this.autoFocus.nativeElement.focus();
+    }, 50);
   }
 
   public setCountryByCompany(company: CompanyResponse) {

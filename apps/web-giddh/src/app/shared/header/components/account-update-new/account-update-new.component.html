@@ -6,7 +6,7 @@
       <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
       <div class="form-group col-xs-12 col-sm-6">
         <label for="">Account Name</label>
-        <input type="text" class="form-control" formControlName="name" name="accountName"/>
+        <input type="text" class="form-control"  #autoFocusUpdate formControlName="name" name="accountName"/>
       </div>
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-xs-12 col-sm-6" formGroupName="country">
