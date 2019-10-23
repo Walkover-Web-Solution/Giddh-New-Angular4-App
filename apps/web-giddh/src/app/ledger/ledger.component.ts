@@ -843,6 +843,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
+    this.trxRequest.count = 50;
     this.isAdvanceSearchImplemented = false;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
