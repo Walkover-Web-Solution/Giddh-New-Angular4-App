@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
@@ -58,7 +58,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
     }
   `]
 })
-export class AccountUpdateNewComponent implements OnInit, OnDestroy {
+export class AccountUpdateNewComponent implements OnInit, OnDestroy, AfterViewInit {
   public addAccountForm: FormGroup;
   @Input() public activeGroupUniqueName: string;
   @Input() public fetchingAccUniqueName$: Observable<boolean>;
@@ -509,5 +509,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       let phoneCode = event.additional;
       this.addAccountForm.get('mobileCode').patchValue(phoneCode);
     }
+  }
+  public ngAfterViewInit() {
+
+    // fristElementToFocus to focus on customer search box
+    setTimeout(function () {
+      // tslint:disable-next-line:prefer-for-of
+      let firstElementToFocus = $('.classFoucs');
+      firstElementToFocus[0].focus();
+    }, 200);
   }
 }

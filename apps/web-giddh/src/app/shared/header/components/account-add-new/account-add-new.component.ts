@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -53,7 +53,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
   `]
 })
 
-export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
+export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   public addAccountForm: FormGroup;
   @Input() public activeGroupUniqueName: string;
   @Input() public fetchingAccUniqueName$: Observable<boolean>;
@@ -476,6 +476,16 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public ngAfterViewInit() {
+
+    // fristElementToFocus to focus on customer search box
+    setTimeout(function () {
+      // tslint:disable-next-line:prefer-for-of
+      let firstElementToFocus = $('.addFocusClass');
+      firstElementToFocus[0].focus();
+    }, 200);
   }
   public selectCountry(event: IOption) {
     if (event) {
