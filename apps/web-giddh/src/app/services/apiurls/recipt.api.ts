@@ -7,5 +7,6 @@ export const RECEIPT_API = {
   GET_ALL: 'company/:companyUniqueName/vouchers/get-all?',
   DELETE: COMMON_URL_FOR_RECIPT,
   DOWNLOAD_VOUCHER: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=pdf',
-  GET_DETAILS_V4: COMMON_URL_FOR_RECIPT_V4
+  GET_DETAILS_V4: COMMON_URL_FOR_RECIPT_V4,
+  GET_ALL_BAL_SALE_DUE: 'company/:companyUniqueName/vouchers/get-all-vouchers-balances?'
 };

@@ -276,6 +276,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public baseCurrencySymbol: string = '';
   public depositCurrSymbol: string = '';
   public grandTotalMulDum;
+  public showSwitchedCurr = false;
+  public reverseExchangeRate: number;
+  public originalReverseExchangeRate: number;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1871,7 +1874,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       if (this.isMulticurrencyAccount) {
         if (this.isCashInvoice) {
-          this.getAccountDetails(event.value);
+          //this.getAccountDetails(event.value);
           this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
           this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
         }
@@ -2802,11 +2805,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
 
     voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
-    voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.billingDetails.panNumber;
-    voucherClassConversion.accountDetails.shippingDetails.address = result.account.billingDetails.address;
-    voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.billingDetails.gstNumber;
-    voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.billingDetails.stateCode;
-    voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.billingDetails.stateName;
+    voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+    voucherClassConversion.accountDetails.shippingDetails.address = result.account.shippingDetails.address;
+    voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
+    voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
+    voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
@@ -2884,5 +2887,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       });
     });
     return _.orderBy(bankAccounts, 'label');
+  }
+
+  public switchCurrencyImg(switchCurr) {
+    this.showSwitchedCurr = switchCurr;
+    if (switchCurr) {
+      this.reverseExchangeRate = 1 / this.exchangeRate;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
+    } else {
+      this.exchangeRate = 1 / this.reverseExchangeRate;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+
+  public saveCancelExcRate(toSave) {
+    if (toSave) {
+      if (this.showSwitchedCurr) {
+        this.exchangeRate = 1 / this.reverseExchangeRate;
+      } else {
+        this.originalExchangeRate = this.exchangeRate;
+      }
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.showCurrencyValue = !this.showCurrencyValue;
+      this.originalReverseExchangeRate = this.reverseExchangeRate
+    } else {
+      this.showCurrencyValue = !this.showCurrencyValue;
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.exchangeRate = this.originalExchangeRate;
+      this.reverseExchangeRate = this.originalReverseExchangeRate;
+    }
   }
 }
