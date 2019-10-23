@@ -62,7 +62,7 @@
                             </div>
                             <div class="form-group pdT">
                                 <label for="">State
-                  <sup *ngIf="isDebtorCreditor">*</sup>
+                  <sup>*</sup>
                 </label>
                                 <div class="custom-select pos-rel">
                                     <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" formControlName="stateCode" style="width:100%"></sh-select>
