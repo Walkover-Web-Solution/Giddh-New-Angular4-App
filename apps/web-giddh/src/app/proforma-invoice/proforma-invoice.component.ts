@@ -308,14 +308,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
-      // tslint:disable-next-line:prefer-for-of
+      // tslint:disable-next-line:prefer-for-of 
       let firstElementToFocus = $('.fristElementToFocus');
-      //for (let i = 0; i < firstElementToFocus.length; i++) {
-      //if (firstElementToFocus[i].tabIndex === 0) {
       firstElementToFocus[0].focus();
-      //}
-      // }
-    }, 200);
+      if(!this.isCashInvoice)
+      {
+        let cashInvoiceInput = $('.focusClasses');
+        cashInvoiceInput[0].focus();
+      }
+    }, 200); 
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
 
