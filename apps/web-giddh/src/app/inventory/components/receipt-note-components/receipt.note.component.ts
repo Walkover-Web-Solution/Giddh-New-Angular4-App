@@ -15,17 +15,41 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import * as _ from 'lodash';
-import {InvViewService} from "../../inv.view.service";
+import { InvViewService } from "../../inv.view.service";
 
 @Component({
   selector: 'receipt-note',  // <home></home>
-  templateUrl: './receipt.note.component.html'
+  templateUrl: './receipt.note.component.html',
+  styleUrls: ['./receipt.note.component.scss'],
 })
 export class ReceiptNoteComponent {
-  constructor(private _router: Router, private invViewService: InvViewService){
+  public sendersOptions = [{
+    label: 'Shalinee', value: 'Shalinee'
+  }, {
+    label: 'Shalinee12', value: 'Shalinee12'
+  }];
+
+  public gstinOptions = [
+    { label: 'GSTIN1', value: 'GSTIN1' },
+    { label: 'GSTIN2', value: 'GSTIN1' }
+  ];
+
+  public selectRefDoc = [
+    { label: 'Ref doc 1', vaue: 'Ref doc 1' },
+    { label: 'Ref doc 2', vaue: 'Ref doc 2' }
+  ];
+
+  public recGstinOptions = [
+    { label: '23KSJDOS48293K', value: '23KSJDOS48293K' },
+    { label: '23KSJDOS48293S', value: '23KSJDOS48293S' }
+  ];
+
+
+
+  constructor(private _router: Router, private invViewService: InvViewService) {
 
   }
-  public backToInv(){
+  public backToInv() {
     this.invViewService.setActiveView(null, null);
     this._router.navigate(['/pages/inventory']);
   }

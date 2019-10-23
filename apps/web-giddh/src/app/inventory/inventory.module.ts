@@ -43,7 +43,7 @@ import { InwardNoteComponent } from './components/forms/inward-note/inward-note.
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-import {ReceiptNoteComponent} from "./components/receipt-note-components/receipt.note.component";
+import { ReceiptNoteComponent } from "./components/receipt-note-components/receipt.note.component";
 
 @NgModule({
   declarations: [
@@ -107,7 +107,8 @@ import {ReceiptNoteComponent} from "./components/receipt-note-components/receipt
     InwardNoteComponent,
     OutwardNoteComponent,
     JobworkSidebarComponent,
-    ManufacturingComponent
+    ManufacturingComponent,
+    ReceiptNoteComponent
   ],
   providers: [],
   imports: [

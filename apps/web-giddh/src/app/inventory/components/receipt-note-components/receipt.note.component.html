@@ -1,4 +1,123 @@
-<section class="" autocomplete="off">
-  receipt note
-  <button (click) = "backToInv()">back</button>
+<section class="reciptNote" autocomplete="off">
+  <div class="reciptNoteHeader d-flex">
+    <h3>Receipt Note</h3>
+
+    <div class="closeRecipt" (click)="backToInv()">
+      <span class="icon-cross"></span>
+    </div>
+  </div>
+  <div class="reciptNoteRadioBtn">
+    <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
+        type="radio" [value]="'Multiple Products'">Multiple Products
+    </span>
+
+    <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio"
+        [value]="'Multiple Senders'">Multiple Senders</span>
+  </div>
+  <div class="reciptNoteContent">
+    <div class="multipleProducts clearfix">
+      <div class="col-sm-6">
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Date of Supply<span class="red-text">*</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Receipt Note #
+            </label>
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Sender’s Name<span class="red-text">*</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <sh-select [options]="sendersOptions">
+
+            </sh-select>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Sender’s GSTIN<span class="red-text">*</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <sh-select [options]="gstinOptions">
+
+            </sh-select>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Sender’s Address
+            </label>
+          </div>
+          <div class="col-md-4">
+            <textarea class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Reference Docs <span class="gray-text"> (Optional) </span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <sh-select [options]="selectRefDoc">
+
+            </sh-select>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Receiver’s Name<span class="red-text">*</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <input type="text" value="walkover web soution" disabled class="form-control">
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Receiver’s GSTIN<span class="red-text">*</span>
+            </label>
+          </div>
+          <div class="col-md-4">
+            <sh-select [options]="recGstinOptions">
+
+            </sh-select>
+          </div>
+        </div>
+        <div class="row mrB2">
+          <div class="col-md-3">
+            <label>
+              Receiver’s Address
+            </label>
+          </div>
+          <div class="col-md-4">
+            <textarea class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </section>
