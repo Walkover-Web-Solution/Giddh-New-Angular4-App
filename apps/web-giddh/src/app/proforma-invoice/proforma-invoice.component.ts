@@ -1874,7 +1874,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       if(this.isMulticurrencyAccount){
         if(this.isCashInvoice){
-          this.getAccountDetails(event.value);
+          //this.getAccountDetails(event.value);
           this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
           this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
         }
