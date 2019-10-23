@@ -64,7 +64,7 @@
                     <div class="d-flex">
 
                       <!-- region if not cashinvoice show customer dropdown -->
-                      <ng-container *ngIf="!isCashInvoice">
+                      <ng-container *ngIf="isCashInvoice">
                         <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName"
                           #customerNameDropDown [options]="customerAcList$ | async"
                           [(ngModel)]="invFormData.voucherDetails.customerUniquename"
@@ -96,10 +96,10 @@
                       <!-- endregion -->
 
                       <!-- region if not cashinvoice show customer dropdown -->
-                      <ng-container *ngIf="isCashInvoice">
+                      <!-- <ng-container *ngIf="isCashInvoice">
                         <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
                           [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
-                      </ng-container>
+                      </ng-container> -->
                       <!-- endregion -->
 
                       <!-- region previous details -->
