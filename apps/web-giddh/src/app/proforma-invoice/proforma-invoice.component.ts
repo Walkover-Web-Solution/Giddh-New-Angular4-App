@@ -2805,11 +2805,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
 
     voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
-    voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.billingDetails.panNumber;
-    voucherClassConversion.accountDetails.shippingDetails.address = result.account.billingDetails.address;
-    voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.billingDetails.gstNumber;
-    voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.billingDetails.stateCode;
-    voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.billingDetails.stateName;
+    voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+    voucherClassConversion.accountDetails.shippingDetails.address = result.account.shippingDetails.address;
+    voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
+    voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
+    voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
