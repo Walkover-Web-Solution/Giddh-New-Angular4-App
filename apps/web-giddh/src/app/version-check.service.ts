@@ -21,7 +21,7 @@ export class VersionCheckService {
      */
     public initVersionCheck(url, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
         setInterval(() => {
-            this.checkVersion(url);
+            //this.checkVersion(url);
         }, frequency);
     }
 

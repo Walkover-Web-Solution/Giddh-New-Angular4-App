@@ -243,6 +243,38 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "app": {
+              "outputPath": "dist/apps/web-giddh-app",
+              "extraWebpackConfig": "./webpack.test.partial.js",
+              "baseHref": "./",
+              "baseUrl": "test.giddh.com",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.local.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
