@@ -195,4 +195,22 @@ export class ReceiptService implements OnInit {
     }
     return url;
   }
+
+  public GetAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let requestType = type;
+    let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
+      page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
+    });
+
+    return this._http.post(url
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
+      map((res) => {
+        let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
+        data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
+        data.request = body;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+  }
 }
