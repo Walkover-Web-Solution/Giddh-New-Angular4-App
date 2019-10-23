@@ -435,8 +435,8 @@
             </td>
 
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
-            <td class="text-right">{{item.balanceDue?.amountForAccount | giddhCurrency}}</td>
+            <td class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+            <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}</td>
             <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
 

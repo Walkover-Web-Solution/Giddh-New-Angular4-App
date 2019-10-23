@@ -45,6 +45,7 @@ export interface ReceiptItem {
   dueDate: string;
   isSelected?: boolean;
   cashInvoice: boolean;
+  accountCurrencySymbol?: string;
 }
 
 export interface ReciptResponse {

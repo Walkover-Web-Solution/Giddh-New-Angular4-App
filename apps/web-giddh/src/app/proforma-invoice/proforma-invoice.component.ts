@@ -377,9 +377,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.companyCurrency = profile.baseCurrency || 'INR';
         this.baseCurrencySymbol = profile.baseCurrencySymbol;
         this.depositCurrSymbol = this.baseCurrencySymbol;
-        if(profile.baseCurrency !== 'INR'){
-          this.companyCurrencyName = profile.baseCurrency;
-        }
+        this.companyCurrencyName = profile.baseCurrency;
+
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
       } else {
@@ -645,7 +644,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
               convertedRes1 = this.modifyMulticurrencyRes(results[1]);
-              if(results[1].account.currency && results[1].account.currency.code !== 'INR'){
+              if(results[1].account.currency){
                 this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -1632,9 +1631,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
       if(this.isMulticurrencyAccount){
-        if(item.additional.currency !== 'INR'){
           this.companyCurrencyName = item.additional.currency;
-        }
       }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
         this.getCurrencyRate(this.companyCurrency, item.additional.currency);
@@ -1874,6 +1871,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       if(this.isMulticurrencyAccount){
         if(this.isCashInvoice){
+          this.getAccountDetails(event.value);
           this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
           this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
         }
@@ -1881,12 +1879,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
       }
-      if(event.additional.currency !== 'INR' && this.isCashInvoice){
+      if(this.isCashInvoice){
         this.companyCurrencyName = event.additional.currency;
       }
     } else {
       this.depositAccountUniqueName = '';
     }
+    if(this.isMulticurrencyAccount){
+      this.getCurrencyRate(this.companyCurrency, event.additional.currency);
+    }
+
     this.calculateBalanceDue();
   }
 
@@ -2811,12 +2813,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.email = result.account.email;
     voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
     //code for voucher details
-    voucherDetails.voucherDate = result.date;
+    voucherDetails.voucherDate = result.date ? result.date: '';
     voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
     //need to check usage
-    voucherDetails.dueDate = moment(result.dueDate, 'DD-MM-YYYY').toDate();
+    voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
     voucherDetails.balanceStatus = result.balanceStatus;
-    voucherDetails.customerName = result.account.name;
+
     voucherDetails.customerUniquename = result.account.uniqueName;
     voucherDetails.grandTotal = result.grandTotal.amountForAccount;
     voucherDetails.voucherNumber = result.number;
@@ -2836,6 +2838,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.invoiceUniqueName = result.uniqueName;
     this.invoiceType = result.type;
     this.prepareInvoiceTypeFlags();
+    if(result.cashInvoice){
+      this.isCashInvoice = true;
+      this.isSalesInvoice = false;
+    }
+    if(this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()){
+      voucherDetails.customerName = result.account.customerName;
+    }else{
+      voucherDetails.customerName = result.account.name;
+    }
     return voucherClassConversion;
   }
 

@@ -790,7 +790,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public currencyChange() {
     this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
     let rate = 0;
-    if (this.blankLedger.exchangeRateForDisplay) {
+    if (Number(this.blankLedger.exchangeRateForDisplay)) {
       rate = 1 / this.blankLedger.exchangeRate;
     }
     this.blankLedger.exchangeRate = rate;
@@ -799,7 +799,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public exchangeRateChanged() {
-    this.blankLedger.exchangeRate = this.blankLedger.exchangeRateForDisplay || 0;
+    this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
     this.amountChanged();
     this.calculateTotal();
   }
