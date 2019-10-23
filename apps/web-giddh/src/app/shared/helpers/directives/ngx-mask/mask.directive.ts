@@ -10,6 +10,85 @@ import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
+const unSupportedPrefixAndSuffix = [
+  {
+    "code": "AED",
+    "symbol": "د.إ"
+  },
+  {
+    "code": "BHD",
+    "symbol": ".د.ب"
+  },
+  {
+    "code": "BOB",
+    "symbol": "Bs."
+  },
+  {
+    "code": "DZD",
+    "symbol": "د.ج"
+  },
+  {
+    "code": "IQD",
+    "symbol": "ع.د"
+  },
+  {
+    "code": "JOD",
+    "symbol": "د.ا"
+  },
+  {
+    "code": "KWD",
+    "symbol": "د.ك"
+  },
+  {
+    "code": "LBP",
+    "symbol": "ل.ل"
+  },
+  {
+    "code": "LYD",
+    "symbol": "ل.د"
+  },
+  {
+    "code": "MAD",
+    "symbol": "د.م."
+  },
+  {
+    "code": "OMR",
+    "symbol": "ر.ع."
+  },
+  {
+    "code": "PAB",
+    "symbol": "B/."
+  },
+  {
+    "code": "PEN",
+    "symbol": "S/."
+  },
+  {
+    "code": "QAR",
+    "symbol": "ر.ق"
+  },
+  {
+    "code": "RSD",
+    "symbol": "дин."
+  },
+  {
+    "code": "SAR",
+    "symbol": "ر.س"
+  },
+  {
+    "code": "SDG",
+    "symbol": "ج.س."
+  },
+  {
+    "code": "TND",
+    "symbol": "د.ت"
+  },
+  {
+    "code": "VEF",
+    "symbol": "Bs F"
+  }
+];
+
 @Directive({
   selector: '[mask]',
   providers: [
@@ -110,10 +189,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
       this._maskService.maskAvailablePatterns = patterns.currentValue;
     }
     if (prefix) {
-      this._maskService.prefix = prefix.currentValue;
+      this._maskService.prefix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(prefix.currentValue) ? '' : prefix.currentValue;
     }
     if (suffix) {
-      this._maskService.suffix = suffix.currentValue;
+      this._maskService.suffix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(suffix.currentValue) ? '' : suffix.currentValue;
     }
     if (dropSpecialCharacters) {
       this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
