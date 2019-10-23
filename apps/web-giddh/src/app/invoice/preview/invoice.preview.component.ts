@@ -35,6 +35,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
+import {ReceiptService} from "../../services/receipt.service";
+import {BaseResponse} from "../../models/api-models/BaseResponse";
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -196,6 +198,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public baseCurrencySymbol: string = '';
 
   constructor(
     private modalService: BsModalService,
@@ -212,7 +215,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private cdr: ChangeDetectorRef,
     private _breakPointObservar: BreakpointObserver,
     private _router: Router,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private _receiptServices: ReceiptService
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -227,6 +231,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
     this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    //this._invoiceService.getTotalAndBalDue();
   }
 
   public ngOnInit() {
@@ -698,6 +703,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
       }
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
+      this._receiptServices.GetAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res=>{
+          this.parseBalRes(res);
+      });
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
         this.invoiceSearchRequest.sort = type;
@@ -712,6 +720,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public getVoucher(isUniversalDateSelected: boolean) {
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
+    this._receiptServices.GetAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res=>{
+      this.parseBalRes(res);
+    });
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }
 
@@ -978,6 +989,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       request.to = this.invoiceSearchRequest.to;
     }
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
+    this._receiptServices.GetAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res=>{
+      this.parseBalRes(res);
+    });
   }
 
   public resetAdvanceSearch() {
@@ -1090,5 +1104,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       })
     })
     return voucherData;
+  }
+
+  private parseBalRes(res) {
+    this.totalSale =  res.body.grandTotal;
+    this.totalDue = res.body.totalDue;
+    // get user country from his profile
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+      if (profile) {
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+      }
+    });
   }
 }
