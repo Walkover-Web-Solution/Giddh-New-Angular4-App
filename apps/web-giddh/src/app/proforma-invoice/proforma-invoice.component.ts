@@ -276,6 +276,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public baseCurrencySymbol: string = '';
   public depositCurrSymbol: string ='';
   public grandTotalMulDum;
+  public showSwitchedCurr = false;
+  public reverseExchangeRate: number;
+  public originalReverseExchangeRate: number;
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -2884,5 +2887,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
        });
     });
     return _.orderBy(bankAccounts, 'label');
+  }
+
+  public switchCurrencyImg(switchCurr){
+    this.showSwitchedCurr = switchCurr;
+    if(switchCurr){
+      this.reverseExchangeRate = 1/this.exchangeRate;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
+    }else{
+      this.exchangeRate = 1/this.reverseExchangeRate;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+
+  public saveCancelExcRate(toSave){
+    if(toSave){
+      if(this.showSwitchedCurr){
+        this.exchangeRate = 1/this.reverseExchangeRate;
+      }else{
+        this.originalExchangeRate = this.exchangeRate;
+      }
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.showCurrencyValue= !this.showCurrencyValue;
+      this.originalReverseExchangeRate = this.reverseExchangeRate
+    }else{
+      this.showCurrencyValue = !this.showCurrencyValue ;
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.exchangeRate = this.originalExchangeRate;
+      this.reverseExchangeRate = this.originalReverseExchangeRate;
+    }
   }
 }
