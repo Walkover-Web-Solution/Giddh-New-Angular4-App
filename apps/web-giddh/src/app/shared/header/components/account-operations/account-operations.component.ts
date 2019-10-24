@@ -598,10 +598,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.showTaxes=false
+    this.showTaxes = false;
     if ('breadcrumbUniquePath' in changes && changes.breadcrumbUniquePath.currentValue !== changes.breadcrumbUniquePath.previousValue) {
       // debugger;
       this.isDebtorCreditor = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors') || changes.breadcrumbUniquePath.currentValue.includes('sundrydebtors');
+      this.showBankDetail = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors');
     }
   }
 
