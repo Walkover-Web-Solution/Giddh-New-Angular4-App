@@ -1,0 +1,11 @@
+stock name,stock unique name,stock group name/unique name,stock unit code*,opening amount,opening quantity,hsn number,sac number,tax value,tax type,purchase account name/unique name,purchase rate,purchase stock unit code,sales account name/unique name ,sales rate,sales stock unit code
+Bed traction kit,bedtractionkit,maingroup,nos,0,1,null,,5,GST,purchases,1000,nos,sales,1250,nos
+Arm sling pouch,armslingpouch,maingroup,nos,0,0,null,,5,GST,purchases,299,nos,sales,399,nos
+Cockup splint,cockupsplint,maingroup,nos,0,1,null,,5,GST,purchases,360,nos,sales,460,nos
+Cervical collar,cervicalcollar,maingroup,nos,0,0,null,,5,GST,purchases,150,nos,sales,250,nos
+Bed traction kit -Universal,bedtractionkituniversal,Group1,nos,1250,1,90211000,,"5,12","GST, INPUTGST",purchases,1000,nos,sales,1250,nos
+Cockup splint-XLarge,cockupsplintxlarge,Group1,nos,460,1,90211000,,"5,12","GST, INPUTGST",purchases,360,nos,sales,460,nos
+Knee immobilizer-XLarge,kneeimmobilizerxlarge,Group1,nos,1400,1,90211000,,"5,18","GST, INPUTGST",purchases,1100,nos,sales,1400,nos
+Foot drop splint right-Large,footdropsplintrightlarge,Group2,nos,1900,2,90211000,,"5,18","GST, INPUTGST",purchases,550,nos,sales,950,nos
+Ankle support-Universal,anklesupportuniversal,Group2,nos,5310,9,90211000,,"5,28","GST, INPUTGST",purchases,450,nos,sales,590,nos
+Shoulder pully,shoulderpully,Group2,nos,150,1,90211000,,"5,12","GST, INPUTGST",purchases,80,nos,sales,150,nos
