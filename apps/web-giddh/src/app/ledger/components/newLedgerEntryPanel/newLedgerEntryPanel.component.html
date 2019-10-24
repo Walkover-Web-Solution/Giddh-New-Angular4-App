@@ -118,7 +118,7 @@
               </p>
             </td>
 
-            <td class="text-center equal-2">
+            <td class="text-center equal-2" *ngIf="(companyTaxesList$ | async)?.length">
               <label class="d-block">&nbsp;</label>
               <label class="fs20">=</label>
             </td>
@@ -141,7 +141,7 @@
 
     </div>
 
-    <div class="text-right mrB1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+    <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
       <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
         *ngIf="!blankLedger.isOtherTaxesApplicable"
@@ -149,15 +149,12 @@
 
       <p *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</p>
 
-      <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1"
-        style="margin-right:6px;display: flex;flex-direction: column"
+      <div class="clearfix">
+        <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1 pull-right"
         [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
-
         <label>Other Tax</label>
-
-        <span style="display: flex;align-items: center;">
-
-          <span>
+        <span class="d-flex">
+          <span class="d-flex align-item-center">
             <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true)">
               <img src="assets/images/edit-pencilicon.svg">
             </a>
@@ -167,8 +164,9 @@
             name="entry.otherTaxesSum" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
             [mask]="inputMaskFormat" />
         </span>
-
       </div>
+      </div>
+
     </div>
 
     <div class="pdB1 inWords" *ngIf="currentTxn.total">

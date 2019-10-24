@@ -135,6 +135,10 @@ ng-select .select_drop i.fa.fa-caret-up::before {
   align-items: flex-end;
   padding: 0 10px 10px;
 }
+.add-multicurrency .icon-box {
+  padding-bottom: 0px;
+  align-items: center;
+}
 .width-80 {
   width: 80px !important;
   min-width: 80px;
