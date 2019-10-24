@@ -498,12 +498,12 @@ export class MaskApplierService {
             inputValue = splitter.join('.');
           } else {
             // add necessary decimal points
-            let missingPoints = precision - splitter[1].length;
-            while (missingPoints) {
-              splitter[1] = splitter[1] + '0';
-              missingPoints--;
-            }
-            inputValue = splitter.join('.');
+            // let missingPoints = precision - splitter[1].length;
+            // while (missingPoints) {
+            //   splitter[1] = splitter[1] + '0';
+            //   missingPoints--;
+            // }
+            // inputValue = splitter.join('.');
           }
         } else {
           // if no decimal points then add missing

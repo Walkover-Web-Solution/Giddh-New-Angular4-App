@@ -31,6 +31,7 @@ export interface ReceiptAccount {
   uniqueName: string;
   accountType?: any;
   name: string;
+  currency?: CurrencyClass;
 }
 
 export interface ReceiptItem {
@@ -175,4 +176,7 @@ export interface ReciptRequest {
 export interface DownloadVoucherRequest {
   voucherNumber: string[];
   voucherType: string;
+}
+class CurrencyClass {
+  public code: string;
 }

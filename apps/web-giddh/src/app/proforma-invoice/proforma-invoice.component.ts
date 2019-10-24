@@ -2847,6 +2847,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     if (this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()) {
       voucherDetails.customerName = result.account.customerName;
+      this.depositAccountUniqueName = result.account.uniqueName;
     } else {
       voucherDetails.customerName = result.account.name;
     }

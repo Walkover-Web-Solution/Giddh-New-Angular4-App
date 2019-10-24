@@ -452,7 +452,6 @@
 
                 <div>
                   <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
-                    *ngIf="hoveredItemForAction === item.uniqueName || clickedHoveredItemForAction === item.uniqueName"
                     class="icon-ellipse selectAction">
                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
                       aria-controls="dropdown-basic">
@@ -819,7 +818,7 @@ tooltip="Invoice sent" placement="left" />-->
     tabindex="-1">
     <div class="modal-dialog modal-md">
       <div class="modal-content">
-        <invoice-payment-model (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+        <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
       </div>
     </div>
   </div>
