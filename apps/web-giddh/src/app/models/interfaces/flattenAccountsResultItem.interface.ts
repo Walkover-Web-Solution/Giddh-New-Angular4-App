@@ -7,6 +7,7 @@ export interface IFlattenAccountsResultItem extends IAccountsInfo, IHelpersForSe
   isFixed: boolean;
   parentGroups: INameUniqueName[];
   currency?: string;
+  currencySymbol?: string;
 }
 
 export interface IFlattenAccountItem extends IFlattenAccountsResultItem {
