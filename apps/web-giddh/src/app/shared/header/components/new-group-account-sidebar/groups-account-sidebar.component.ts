@@ -72,7 +72,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
-      // this.resetData();
+      this.resetData();
     }
   }
 
@@ -94,7 +94,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.resetData();
+    // this.resetData();
 
     this._generalServices.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
