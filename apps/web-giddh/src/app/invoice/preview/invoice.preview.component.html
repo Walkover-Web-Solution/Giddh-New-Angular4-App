@@ -219,7 +219,7 @@
                         </div>
                     </th>
 
-                    <th width="13%" class="td_in_searchBox" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+                    <th width="13%" class="td_in_searchBox positon-inherit" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
@@ -238,7 +238,7 @@
 
       </th> -->
 
-                    <th width="19%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+                    <th width="19%" class="td_in_searchBox positon-inherit" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
 
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: 'Customer'}"></ng-container>

@@ -81,6 +81,11 @@
 .onMobileView{
   margin-bottom: 0;
 }
+.table {
+  border-collapse: initial;
+}
+
+
 @media(max-width:768px){
   .justify-content-sm{
     justify-content: left !important;
