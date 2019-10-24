@@ -843,6 +843,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getTransactionData() {
+    this.trxRequest.count = 50;
     this.isAdvanceSearchImplemented = false;
     this.closingBalanceBeforeReconcile = null;
     this.store.dispatch(this._ledgerActions.GetLedgerBalance(this.trxRequest));
@@ -1082,6 +1083,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._loaderService.hide();
             return;
           }
+        } else if (this.profileObj.country !== 'India') {
+          //
         } else {
           this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
           this._loaderService.hide();
@@ -1499,7 +1502,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // endregion
 
   public getAdvanceSearchTxn(fromPageChange?: boolean) {
-    this.advanceSearchRequest.count = 15; // because getTransactionData have 15 count
+    this.advanceSearchRequest.count = 50; // because getTransactionData have 15 count
     if (!fromPageChange) {
       this.isAdvanceSearchImplemented = true;
     }
