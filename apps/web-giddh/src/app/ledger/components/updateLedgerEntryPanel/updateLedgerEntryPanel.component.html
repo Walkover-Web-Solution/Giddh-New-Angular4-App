@@ -428,7 +428,7 @@
                         <label class="fs20">+</label>
                       </td>
 
-                      <td class="pos-rel dropdown-container pItem amount" *ngIf="(vm.companyTaxesList$ | async)?.length">
+                      <td class="pos-rel dropdown-container pItem amount dropdow-tooltip" *ngIf="(vm.companyTaxesList$ | async)?.length">
                         <span auto-close="outsideClick">
                           <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
                             [totalForTax]="vm.totalForTax" [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
@@ -605,12 +605,12 @@
                   <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.generateInvoice" [disabled]="vm.isInvoiceGeneratedAlready"> Generate Invoice
                 </label>
               </div>
-              
+
               <div class="pull-right">
                 <span class="primary_clr">Compound Total: {{vm.compoundTotal | giddhCurrency}}</span>
                 <span *ngIf="totalPrice">Total in USD: $454</span>
               </div>
-             
+
                 <div class="col-xs-12 clearfix ">
                 <div class="file_attached pull-right mr-15" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                   <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
