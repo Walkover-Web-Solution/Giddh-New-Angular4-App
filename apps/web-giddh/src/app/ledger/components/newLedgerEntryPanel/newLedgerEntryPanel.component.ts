@@ -422,7 +422,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.taxControll) {
       taxTotal = this.taxControll.taxRenderData.filter(f => f.isChecked)
         .reduce((pv, cv) => {
-          return Number(pv) + Number(cv.amount)
+          return Number(pv) + Number(cv.amount);
         }, 0) || 0;
     }
     // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
@@ -832,10 +832,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalTaxes += tax.taxDetail[0].taxValue;
       }
       this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+      this.blankLedger.otherTaxModal = modal;
+      this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
+      this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
+    } else {
+      this.blankLedger.otherTaxesSum = 0;
+      this.blankLedger.isOtherTaxesApplicable = false;
+      this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
     }
-
-    this.blankLedger.otherTaxModal = modal;
-    this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-    this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), 2);
   }
 }
