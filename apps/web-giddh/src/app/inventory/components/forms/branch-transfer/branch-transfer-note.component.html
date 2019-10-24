@@ -29,7 +29,7 @@
 
 
 
-  <div class="form_bg clearfix">
+  <div class="form_bg clearfix" *ngIf="hideForm">
     <form [formGroup]="form" class="form-group">
       <div class="row">
         <div class="col-xs-4 form-group">

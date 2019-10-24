@@ -8044,7 +8044,16 @@ button.btn.btn-filter{
     top: 0;
     color: red;
 }
-
+ .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs{
+  padding: 0 !important;
+    background-color: #fff !important;
+}
+ .aside-pane-form #asidePaneFormTabs .nav > li > a{
+      padding-bottom: 10px !important;
+}
+.custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
+    padding-right: 0;
+}
 /* responsive */
 
 @media (max-width: 1440px) {

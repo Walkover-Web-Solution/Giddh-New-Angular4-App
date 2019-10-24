@@ -57,14 +57,30 @@ import { Configuration } from '../../../app.constant';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../../models/api-models/Ledger';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 
 @Component({
   selector: 'receipt-note',  // <home></home>
   templateUrl: './receipt.note.component.html',
   styleUrls: ['./receipt.note.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
-export class ReceiptNoteComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+
+export class ReceiptNoteComponent {
+  public asideMenuState: string = 'out';
+  public selectedAction: string = 'Multiple Products';
   public sendersOptions = [{
     label: 'Shalinee', value: 'Shalinee'
   }, {
@@ -96,6 +112,22 @@ export class ReceiptNoteComponent implements OnInit, OnDestroy, AfterViewInit, O
   public backToInv() {
     this.invViewService.setActiveView(null, null);
     this._router.navigate(['/pages/inventory']);
+  }
+
+  public toggleBodyClass() {
+    if (this.asideMenuState === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
+
+  public toggleAsidePane(event?): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
   }
 }
 

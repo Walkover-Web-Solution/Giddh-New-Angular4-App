@@ -8,14 +8,15 @@
   </div>
   <div class="reciptNoteRadioBtn">
     <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-        type="radio" [value]="'Multiple Products'">Multiple Products
+        type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction">Multiple Products
     </span>
 
     <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio"
-        [value]="'Multiple Senders'">Multiple Senders</span>
+        [value]="'Multiple Senders'" [(ngModel)]="selectedAction">Multiple Senders</span>
   </div>
+
   <div class="reciptNoteContent">
-    <div class="multipleProductsWrapper">
+    <div class="multipleProductsWrapper" *ngIf="selectedAction === 'Multiple Products'">
       <div class="multipleProducts clearfix">
         <div class="col-sm-6">
           <div class="row mrB2">
@@ -48,7 +49,7 @@
               <sh-select [options]="sendersOptions">
 
               </sh-select>
-              <div class="senderDetails"><i class="fa fa-user"></i> Sender’s Details</div>
+              <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s Details</div>
               <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt Note</p>
             </div>
           </div>
@@ -94,7 +95,7 @@
             </div>
             <div class="col-md-4">
               <input type="text" value="walkover web soution" disabled class="form-control">
-              <div class="senderDetails"><i class="fa fa-user"></i> Sender’s Details</div>
+              <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's Details</div>
             </div>
           </div>
           <div class="row mrB2">
@@ -274,7 +275,7 @@
     </div>
 
 
-    <div class="multipleReciverWrapper clearfix">
+    <div class="multipleReciverWrapper clearfix" *ngIf="selectedAction === 'Multiple Senders'">
       <div class="multipleProducts ">
         <div class="col-sm-6">
           <div class="row mrB2">
@@ -307,7 +308,7 @@
               <sh-select [options]="sendersOptions">
 
               </sh-select>
-              <div class="senderDetails"><i class="fa fa-user"></i> Sender’s Details</div>
+              <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s Details</div>
               <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt Note</p>
             </div>
           </div>
@@ -353,7 +354,7 @@
             </div>
             <div class="col-md-4">
               <input type="text" value="walkover web soution" disabled class="form-control">
-              <div class="senderDetails"><i class="fa fa-user"></i> Sender’s Details</div>
+              <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's Details</div>
             </div>
           </div>
           <div class="row mrB2">
@@ -539,3 +540,10 @@
 
 
 </section>
+
+
+<!-- open account aside -->
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-sender-receiver-details-pane [class]="asideMenuState" [@slideInOut]="asideMenuState"
+  (closeAsideEvent)="toggleAsidePane($event)">
+</aside-sender-receiver-details-pane>

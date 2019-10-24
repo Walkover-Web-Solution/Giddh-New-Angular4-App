@@ -10,25 +10,25 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {BsDatepickerConfig} from 'ngx-bootstrap';
-import {InventoryEntry, InventoryUser} from '../../../../models/api-models/Inventory-in-out';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 
-import {IStocksItem} from '../../../../models/interfaces/stocksItem.interface';
-import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
-import {StockUnitRequest} from '../../../../models/api-models/Inventory';
-import {stockManufacturingDetailsValidator} from '../../../../shared/helpers';
-import {ToasterService} from '../../../../services/toaster.service';
-import {InventoryService} from '../../../../services/inventory.service';
-import {CompanyResponse} from "../../../../models/api-models/Company";
-import {Observable, ReplaySubject} from "rxjs";
-import {take, takeUntil} from "rxjs/operators";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../../store";
-import {ShSelectComponent} from "../../../../theme/ng-virtual-select/sh-select.component";
-import {ActivatedRoute, Router} from "@angular/router";
-import {InvViewService} from "../../../inv.view.service";
+import { StockUnitRequest } from '../../../../models/api-models/Inventory';
+import { stockManufacturingDetailsValidator } from '../../../../shared/helpers';
+import { ToasterService } from '../../../../services/toaster.service';
+import { InventoryService } from '../../../../services/inventory.service';
+import { CompanyResponse } from "../../../../models/api-models/Company";
+import { Observable, ReplaySubject } from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../../../store";
+import { ShSelectComponent } from "../../../../theme/ng-virtual-select/sh-select.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { InvViewService } from "../../../inv.view.service";
 
 @Component({
   selector: 'branch-transfer-note',
@@ -49,12 +49,13 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   @Input() public currentCompany: CompanyResponse;
   @ViewChild('shDestination') public shDestination: ShSelectComponent;
 
+  public hideForm = false;
   public stockListOptions: IOption[];
   public stockUnitsOptions: IOption[];
   public userListOptions: IOption[];
   public branchListOptions: IOption[];
   public form: FormGroup;
-  public config: Partial<BsDatepickerConfig> = {dateInputFormat: 'DD-MM-YYYY'};
+  public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
   public mode: 'receiver' | 'product' = 'product';
   public today = new Date();
   public editLinkedStockIdx: any = null;
@@ -63,11 +64,11 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   public InventoryEntryValue: InventoryEntry = {};
   public entrySuccess$: Observable<boolean>;
   public errorMessage: string;
-  public stockUnitCode:string;
+  public stockUnitCode: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-              private _zone: NgZone, private _store: Store<AppState>, private invViewService: InvViewService, private _router: Router) {
+    private _zone: NgZone, private _store: Store<AppState>, private invViewService: InvViewService, private _router: Router) {
     this.initializeForm(true);
     this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
   }
@@ -138,7 +139,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     this.setSource();
   }
 
-  public  setSource(){
+  public setSource() {
     setTimeout(() => {
       if (this.currentCompany.uniqueName) {
         this.InventoryEntryValue.source.uniqueName = this.currentCompany.uniqueName;
@@ -167,7 +168,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         linkedStockUniqueName: [''],
         linkedQuantity: ['',],
         linkedStockUnitCode: [''],
-      }, {validator: stockManufacturingDetailsValidator})
+      }, { validator: stockManufacturingDetailsValidator })
     });
     if (initialRequest) {
       this.addTransactionItem();
@@ -184,7 +185,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   }
 
   public modeChanged(mode: 'receiver' | 'product') {
-    if(this.mode===mode){
+    if (this.mode === mode) {
       return;
     }
     this.mode = mode;
@@ -210,16 +211,16 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.stockList && this.stockList) {
-      this.stockListOptions = this.stockList.map(p => ({label: p.name, value: p.uniqueName}));
+      this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
     }
     if (changes.stockUnits && this.stockUnits) {
-      this.stockUnitsOptions = this.stockUnits.map(p => ({label: `${p.name} (${p.code})`, value: p.code}));
+      this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
     }
     if (changes.userList && this.userList) {
-      this.userListOptions = this.userList.map(p => ({label: p.name, value: p.uniqueName}));
+      this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
     }
     if (changes.branchList && this.branchList) {
-      this.branchListOptions = this.branchList.map(p => ({label: p.name, value: p.uniqueName}));
+      this.branchListOptions = this.branchList.map(p => ({ label: p.name, value: p.uniqueName }));
     }
   }
 
@@ -279,7 +280,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
       return;
     }
 
-    if (this.mode === 'receiver' && type!=='source') {
+    if (this.mode === 'receiver' && type !== 'source') {
       const stockItem = this.branchListOptions.find(p => p.value === option.value);
       const entityDetails = {
         uniqueName: stockItem ? stockItem.value : null,
@@ -287,10 +288,10 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
       }
       if (index) {
         const control = items.at(index);
-        control.patchValue({...control.value, entityDetails});
+        control.patchValue({ ...control.value, entityDetails });
         control.get('stockUnit').patchValue(this.stockUnitCode);
       } else {
-        items.controls.forEach(c => c.patchValue({...c.value, entityDetails}));
+        items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
       }
     } else {
 
@@ -300,7 +301,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
           ...control.value
         });
       } else {
-        items.controls.forEach(c => c.patchValue({...c.value}));
+        items.controls.forEach(c => c.patchValue({ ...c.value }));
       }
     }
   }
@@ -308,7 +309,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
   public async stockChanged(option: IOption, index: number, type?: string) {
     const items = this.transfers;
     const stockItem = this.stockList.find(p => p.uniqueName === option.value);
-    const stock = stockItem ? {uniqueName: stockItem.uniqueName} : null;
+    const stock = stockItem ? { uniqueName: stockItem.uniqueName } : null;
     const stockUnit = stockItem ? stockItem.stockUnit.code : null;
     const entityDetails = {
       uniqueName: stockItem ? stockItem.uniqueName : null,
@@ -319,7 +320,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
       if (type) {
         this.InventoryEntryValue.product.uniqueName = option.value;
         this.InventoryEntryValue.product.entity = type;
-        this.stockUnitCode=stockUnit;
+        this.stockUnitCode = stockUnit;
       }
 
 
@@ -356,12 +357,12 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     }
 
 
-    if (index || index===0) {
+    if (index || index === 0) {
       const control = items.at(index);
-      control.patchValue({...control.value, entityDetails});
+      control.patchValue({ ...control.value, entityDetails });
       control.get('stockUnit').patchValue(stockUnit);
     } else {
-      items.controls.forEach(c => c.patchValue({...c.value, entityDetails}));
+      items.controls.forEach(c => c.patchValue({ ...c.value, entityDetails }));
     }
   }
 
@@ -499,7 +500,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         this.InventoryEntryValue.isManufactured = this.isManufactured.value;
       }
       console.log("this.InventoryEntryValue", this.InventoryEntryValue);
-      this.onSave.emit({...this.InventoryEntryValue});
+      this.onSave.emit({ ...this.InventoryEntryValue });
     }
   }
 

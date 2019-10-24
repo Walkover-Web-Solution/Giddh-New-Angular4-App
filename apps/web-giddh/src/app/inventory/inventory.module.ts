@@ -44,6 +44,7 @@ import { OutwardNoteComponent } from './components/forms/outward-note/outward-no
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { ReceiptNoteComponent } from "./components/receipt-note-components/receipt.note.component";
+import { AsideSenderReceiverDetailsPaneComponent } from './components/aside-sender-receiver-details/aside-sender-receiver-details.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { ReceiptNoteComponent } from "./components/receipt-note-components/recei
     OutwardNoteComponent,
     JobworkSidebarComponent,
     ManufacturingComponent,
-    ReceiptNoteComponent
+    ReceiptNoteComponent,
+    AsideSenderReceiverDetailsPaneComponent
   ],
   exports: [
     InventoryComponent,
