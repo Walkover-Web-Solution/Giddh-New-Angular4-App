@@ -13,6 +13,7 @@ import { select, Store } from '@ngrx/store';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import {orderBy} from '../../../../lodash-optimized';
 import {LedgerService} from "../../../../services/ledger.service";
+import {ReceiptItem} from "../../../../models/api-models/recipt";
 
 @Component({
   selector: 'invoice-payment-model',
@@ -24,7 +25,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
-  @Input() public selectedInvoiceForPayment: ILedgersInvoiceResult;
+  @Input() public selectedInvoiceForPayment: ReceiptItem;
 
   public paymentActionFormObj: InvoicePaymentRequest;
   public moment = moment;
@@ -138,14 +139,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.paymentActionFormObj.chequeClearanceDate = '';
         this.paymentActionFormObj.chequeNumber = '';
       }
-      if(event.additional.currencySymbol && event.additional.currencySymbol !== this.baseCurrencySymbol){
-        this.isMulticurrencyAccount = true;
-        this.accountCurrency = event.additional.currency;
-        this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
-      }else{
-        this.isMulticurrencyAccount = false;
-        this.exchangeRate = 1;
-      }
     } else {
       this.paymentActionFormObj.accountUniqueName = '';
       this.isBankSelected = false;
@@ -187,8 +180,15 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         }
       });
       this.paymentMode = paymentModeChanges;
+      if(this.baseCurrencySymbol !== c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol){
+        this.isMulticurrencyAccount = true;
+        this.accountCurrency = this.selectedInvoiceForPayment.account.currency.code;
+        this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
+      }else{
+        this.isMulticurrencyAccount = false;
+        this.exchangeRate = 1;
+      }
     }
-    this.isMulticurrencyAccount = false;
   }
   public switchCurrencyImg(switchCurr){
     this.showSwitchedCurr = switchCurr;
