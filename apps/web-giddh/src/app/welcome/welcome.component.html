@@ -47,7 +47,7 @@
             </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox" (clickOutside)="resetbussinessType()">
+                    <div class="col-xs-12 mrB2 selectBox">
                         <div class="">
                             <label for="bussinessType">Select Business Type</label>
                             <div class="custom-select select-caret pos-rel">
@@ -56,11 +56,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox" (clickOutside)="resetbussinessNature()">
+                    <div class="col-xs-12 mrB2 selectBox">
                         <div class="">
                             <label for="bussinessNature">Select Business Nature</label>
                             <div class="custom-select select-caret pos-rel">
-                                <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false" id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" (onClear)="resetbussinessNature(null)" [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33">
+                                <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false" id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33">
                                 </sh-select>
                             </div>
                         </div>
