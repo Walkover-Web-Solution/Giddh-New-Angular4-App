@@ -1502,7 +1502,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   // endregion
 
   public getAdvanceSearchTxn(fromPageChange?: boolean) {
-    this.advanceSearchRequest.count = 15; // because getTransactionData have 15 count
+    this.advanceSearchRequest.count = 50; // because getTransactionData have 15 count
     if (!fromPageChange) {
       this.isAdvanceSearchImplemented = true;
     }
