@@ -357,6 +357,22 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.selectedBusinesstype = event.value;
     }
   }
+
+  public resetbussinessType()
+  {
+    setTimeout(() => {
+      this.companyProfileObj.bussinessType = '';
+    }, 100);
+  }
+
+  public resetbussinessNature()
+  {
+    setTimeout(() => {
+      this.companyProfileObj.bussinessNature = '';
+    }, 100);
+  }
+
+
   public selectApplicableTaxes(tax, event) {
     if (event && tax) {
       if (event.target.checked) {
