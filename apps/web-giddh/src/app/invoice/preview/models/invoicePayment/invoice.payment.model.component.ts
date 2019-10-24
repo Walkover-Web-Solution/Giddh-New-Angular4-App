@@ -217,7 +217,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
       this.reverseExchangeRate = this.originalReverseExchangeRate;
     }
   }
-  public getCurrencyRate(to, from) {
+  public getCurrencyRate(from, to) {
     let date = moment().format('DD-MM-YYYY');
     this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
       let rate = response.body;
