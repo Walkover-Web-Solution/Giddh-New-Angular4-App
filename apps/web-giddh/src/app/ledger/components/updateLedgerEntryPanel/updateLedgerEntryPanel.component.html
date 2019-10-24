@@ -360,7 +360,7 @@
       <!-- region amount and discount container -->
       <div class="clearfix">
         <ng-container *ngIf="vm.showNewEntryPanel">
-          <div class="width100 total-detail-table">
+          <div class="width100 total-detail-table" [ngClass]="{'add-multicurrency': vm.isMultiCurrencyAvailable}">
             <!-- <div *ngIf="vm.stockTrxEntry" class="table-amount">
               <table>
                 <tbody>
@@ -491,7 +491,7 @@
               </p>
             </div>
 
-            <div class="text-center icon-box">
+            <div class="text-center icon-box" *ngIf="(vm.companyTaxesList$ | async)?.length">
               <label class="fs20">=</label>
             </div>
 
