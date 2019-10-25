@@ -440,6 +440,15 @@ a[vr-item]:focus {
 .mobile_menu_icon {
     display: none;
 }
+.readyToUpgrade .list-inline>li {
+    display: inline-block;
+    padding-right: 0;
+    padding-left: 0;
+}
+.readyToUpgrade  .list-inline {
+    padding-left: 0;
+    margin-left: 0;
+}
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
