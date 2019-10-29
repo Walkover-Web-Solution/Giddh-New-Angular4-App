@@ -443,7 +443,7 @@
               <img src="assets/images/edit-pencilicon.svg" class="edit-pencil"
                 (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
               <img src=" assets/images/autosave.svg" class="edit-pencil"
-                (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue"
+                (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
                 *ngIf="autoSaveIcon">
             </span>
 
