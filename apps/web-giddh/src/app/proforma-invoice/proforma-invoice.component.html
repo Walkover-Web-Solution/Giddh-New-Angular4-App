@@ -1186,7 +1186,7 @@
 
                               <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                 <span class="amountField pull-right max100 amountFiledCash">
-                                  {{invFormData.accountDetails.currencySymbol}} {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
+                                  <span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
                                 <label class="pull-right">Amount</label>
                               </li>
 
