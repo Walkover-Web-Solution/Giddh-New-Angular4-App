@@ -58,7 +58,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     private _toaster: ToasterService,
   ) {
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
       this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     });
     // Country phone Code
@@ -246,6 +246,12 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         this._toaster.errorToast('Invalid Contact number');
         ele.classList.add('error-box');
       }
+    }
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.company.phoneCode = phoneCode;
     }
   }
 

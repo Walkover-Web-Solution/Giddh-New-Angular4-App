@@ -738,7 +738,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
-
+            if(!obj.accountDetails.currencySymbol){
+              obj.accountDetails.currencySymbol = '';
+            }
             this.invFormData = obj;
           } else {
             this.invoiceDataFound = false;
