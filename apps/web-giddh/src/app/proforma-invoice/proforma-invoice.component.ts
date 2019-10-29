@@ -2911,6 +2911,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.autoSaveIcon = !this.autoSaveIcon;
       this.showCurrencyValue= !this.showCurrencyValue;
       this.originalReverseExchangeRate = this.reverseExchangeRate
+      this.calculateGrandTotal();
     }else{
       this.showCurrencyValue = !this.showCurrencyValue ;
       this.autoSaveIcon = !this.autoSaveIcon;
