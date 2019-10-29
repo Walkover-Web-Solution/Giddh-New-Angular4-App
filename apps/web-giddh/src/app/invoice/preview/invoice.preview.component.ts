@@ -1008,8 +1008,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.advanceSearchFilter.page = 1;
     this.advanceSearchFilter.count = 20;
 
-    this.sortRequestForUi = {sortBy: '', sort: 'asc'};
-    this.invoiceSearchRequest.sort = 'asc';
+    this.sortRequestForUi = {sortBy: '', sort: ''};
+    this.invoiceSearchRequest.sort = '';
     this.invoiceSearchRequest.sortBy = '';
     this.invoiceSearchRequest.q = '';
     this.invoiceSearchRequest.page = 1;
