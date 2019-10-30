@@ -1889,6 +1889,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(this.isSalesInvoice){
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
+      }else{
+        this.invFormData.accountDetails.currencySymbol = '';
       }
       if(this.isCashInvoice){
         this.companyCurrencyName = event.additional.currency;
@@ -2701,7 +2703,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public modifyMulticurrencyRes(result: any) {
     let voucherClassConversion = new VoucherClass();
     let voucherDetails = new VoucherDetailsClass();
-    this.getUpdatedStateCodes(result.account.billingDetails.countryName);
+    this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
     //voucherClassConversion.entries = result.entries;
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
@@ -2930,9 +2932,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private getUpdatedStateCodes(currency: any) {
-    this.salesService.getStateCode(currency).subscribe(resp=>{
-        this.statesSource = this.modifyStateResp(resp.body.stateList);
-    });
+    if(currency){
+      this.salesService.getStateCode(currency).subscribe(resp=>{
+          this.statesSource = this.modifyStateResp(resp.body.stateList);
+      });
+    }
   }
 
   private modifyStateResp(stateList: StateCode[]) {
