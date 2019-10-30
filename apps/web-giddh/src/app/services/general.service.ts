@@ -4,6 +4,10 @@ import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
+import {COMPANY_API} from "./apiurls/comapny.api";
+import {catchError, map} from "rxjs/operators";
+import {BaseResponse} from "../models/api-models/BaseResponse";
+import {ReportsDetailedRequestFilter, SalesRegisteDetailedResponse} from "../models/api-models/Reports";
 
 @Injectable()
 export class GeneralService {
@@ -112,4 +116,5 @@ export class GeneralService {
   public setIsMobileView(isMobileView: boolean) {
     this.isMobileSite.next(isMobileView);
   }
+
 }
