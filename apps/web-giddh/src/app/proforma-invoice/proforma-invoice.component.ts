@@ -386,7 +386,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         this.countryCode = profile.countryCode;
-        this.getUpdatedStateCodes(this.countryCode);
+        if(!this.isUpdateMode){
+          this.getUpdatedStateCodes(this.countryCode);
+        }
       } else {
         this.customerCountryName = '';
         this.companyCurrency = 'INR';
@@ -2699,7 +2701,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public modifyMulticurrencyRes(result: any) {
     let voucherClassConversion = new VoucherClass();
     let voucherDetails = new VoucherDetailsClass();
-
+    this.getUpdatedStateCodes(result.account.billingDetails.countryName);
     //voucherClassConversion.entries = result.entries;
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
@@ -2857,6 +2859,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }else{
       voucherDetails.customerName = result.account.name;
     }
+
     return voucherClassConversion;
   }
 
@@ -2934,9 +2937,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   private modifyStateResp(stateList: StateCode[]) {
     let stateListRet:IOption[] = [];
-    stateList.forEach(stateR=>{
+    stateList.forEach(stateR =>{
       stateListRet.push({label: stateR.name, value: stateR.code});
     });
     return stateListRet;
+  }
+
+  public fillShippingBillingDetails($event: any, isBilling) {
+    let cityName = $event.label;
+    if(!isBilling && !this.autoFillShipping){
+      this.invFormData.accountDetails.shippingDetails.stateName = cityName;
+      this.invFormData.accountDetails.shippingDetails.state.name = cityName;
+    }
+    this.invFormData.accountDetails.billingDetails.state.name = cityName;
+    this.invFormData.accountDetails.billingDetails.stateName = cityName;
   }
 }
