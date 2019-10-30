@@ -9,6 +9,7 @@ import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import {ReportsDetailedRequestFilter, SalesRegisteDetailedResponse} from "../models/api-models/Reports";
 
 @Injectable()
 export class SalesService {
@@ -103,5 +104,13 @@ export class SalesService {
           return data;
         }),
         catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+  }
+
+  public getStateCode(country) {
+    let url = this.config.apiUrl + 'country/'+country;
+    return this._http.get(url).pipe(map((res) => {
+      let data = res;
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch(e)));
   }
 }
