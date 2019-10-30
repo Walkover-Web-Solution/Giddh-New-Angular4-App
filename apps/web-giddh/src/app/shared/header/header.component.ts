@@ -1291,8 +1291,4 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
     return name;
   }
-
-  public headerClickedOutside(menu) {
-    debugger;
-  }
 }
