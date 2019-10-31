@@ -308,7 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
-      // tslint:disable-next-line:prefer-for-of 
+      // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
       firstElementToFocus[0].focus();
       if (!this.isCashInvoice) {
@@ -1353,7 +1353,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
     this.invFormData.voucherDetails.balanceDue =
       ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
-    this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+    if (this.calculatedRoundOff > 0) {
+      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue - this.calculatedRoundOff;
+    } else {
+      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+    }
   }
 
   public calculateSubTotal() {
