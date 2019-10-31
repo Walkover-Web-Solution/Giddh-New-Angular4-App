@@ -378,7 +378,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         tax.isSelected = event.target.checked;
         this.selectedTaxes.push(tax.value);
       } else {
-        let indx = this.selectedTaxes.indexOf(tax.label);
+        let indx = this.selectedTaxes.indexOf(tax.value);
         this.selectedTaxes.splice(indx, 1);
       }
     }
@@ -395,5 +395,24 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public removeTax(tax) {
+    let i = 0;
+    let matchedIndex = -1;
+
+    for(i; i < this.taxesList.length; i++) {
+        if(tax === this.taxesList[i].value) {
+          matchedIndex = i;
+          break;
+        }
+    }
+
+    let indx = this.selectedTaxes.indexOf(tax);
+    this.selectedTaxes.splice(indx, 1);
+
+    if(matchedIndex > -1) {
+      this.taxesList[matchedIndex].isSelected = false;
+    }
   }
 }
