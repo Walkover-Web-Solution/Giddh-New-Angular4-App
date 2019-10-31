@@ -40,6 +40,8 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 
+
+import { WarehouseComponent } from './warehouse/warehouse.component'
 @NgModule({
   declarations: [
     // components here
@@ -62,7 +64,8 @@ import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-
     BunchComponent,
     CreateBunchModalComponent,
     BunchAddCompanyModalComponent,
-    GetBunchModalComponent
+    GetBunchModalComponent,
+    WarehouseComponent
   ],
   imports: [
     CommonModule,

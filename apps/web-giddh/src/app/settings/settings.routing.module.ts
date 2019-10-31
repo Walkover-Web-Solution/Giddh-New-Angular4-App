@@ -11,6 +11,9 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
       },
       {
         path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication]
+      },
+      {
+        path: ':type', component: SettingsComponent, canActivate: [NeedsAuthentication], redirectTo: 'warehouse'
       }
     ])
   ],

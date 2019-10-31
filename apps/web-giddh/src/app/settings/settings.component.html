@@ -93,6 +93,12 @@
           </div>
         </tab>
 
+        <tab heading="Warehouse" [active]="activeTab === 'warehouse'" (select)="tabChanged('warehouse')">
+          <div class="setting-container">
+            <setting-warehouse></setting-warehouse>
+          </div>
+        </tab>
+
       </tabset>
 
     </div>
