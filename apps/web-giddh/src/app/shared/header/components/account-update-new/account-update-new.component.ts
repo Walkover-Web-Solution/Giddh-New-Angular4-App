@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
@@ -74,6 +74,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isDebtorCreditor: boolean = false;
   @Input() public showDeleteButton: boolean = true;
   @Input() public accountDetails: any;
+  @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+
 
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
@@ -84,10 +86,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
-    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
-    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
-    {value: 'SEZ', label: 'SEZ'}
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
@@ -100,12 +102,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
-  public  activeAccountName: string = '';
+  public activeAccountName: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService) {
     this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
@@ -116,7 +118,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(states);
@@ -126,7 +128,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({label: d.code, value: d.code});
+          currencies.push({ label: d.code, value: d.code });
         });
       }
       this.currencySource$ = observableOf(currencies);
@@ -134,12 +136,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({value: c.value, label: c.value});
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
 
     this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -162,7 +164,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileCode: ['91'],
+      mobileCode: [''],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -174,8 +176,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{value: '', disabled: false}],
-      sacNumber: [{value: '', disabled: false}],
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }],
       accountBankDetails: this._fb.array([
         this._fb.group({
           bankName: [''],
@@ -192,14 +194,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       closingBalanceTriggerAmountType: ['CREDIT']
     });
     // fill form with active account
-    this.activeAccount$.subscribe(acc => {
+    this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
         // && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India'
         if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
-            this.renderGstDetails(a);
+            this.renderGstDetails(a, accountDetails.addresses.length);
           });
         } else {
           // this.addBlankGstForm();
@@ -303,6 +305,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
       }
     });
+    setTimeout(() => {
+      this.autoFocusUpdate.nativeElement.focus();
+    }, 50);
   }
 
   public onViewReady(ev) {
@@ -325,7 +330,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{value: '', disabled: false}],
+      stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -357,9 +362,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     addresses.push(this.initialGstDetailsForm(null));
   }
 
-  public renderGstDetails(val: IAccountAddress = null) {
+  public renderGstDetails(val: IAccountAddress = null, addressLength: any) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
-    addresses.push(this.initialGstDetailsForm(val));
+    if (addresses.length !== addressLength) {
+      addresses.push(this.initialGstDetailsForm(val));
+    }
   }
 
   public isDefaultAddressSelected(val: boolean, i: number) {
@@ -435,10 +442,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
 
-     if(this.accountDetails) {
-     this.activeAccountName = this.accountDetails.uniqueName;
+    if (this.accountDetails) {
+      this.activeAccountName = this.accountDetails.uniqueName;
     } else {
-  this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+      this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
     }
 
     if (this.isHsnSacEnabledAcc) {
@@ -474,18 +481,19 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
     //   return;
     // }
-    if (this.showBankDetail) {
-      if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
-        if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-          accountRequest['accountBankDetails'] = [];
-        }
-      }
-    } else {
+    // if (this.showBankDetail) {
+    //   if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
+    //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+    //       accountRequest['accountBankDetails'] = [];
+    //     }
+    //   }
+    // } else {
+    if (!this.showBankDetail) {
       delete accountRequest['accountBankDetails'];
     }
 
     this.submitClicked.emit({
-      value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName},
+      value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
       accountRequest: this.addAccountForm.value
     });
   }
@@ -500,5 +508,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.resetUpdateAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.addAccountForm.get('mobileCode').patchValue(phoneCode);
+    }
   }
 }

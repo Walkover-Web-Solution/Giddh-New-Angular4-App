@@ -18,8 +18,6 @@
 
 .td_in_searchBox {
   padding: 0px !important;
-  position: relative;
-
 }
 
 .td_in_searchBox .input-container input {
@@ -81,6 +79,8 @@
 .onMobileView{
   margin-bottom: 0;
 }
+
+
 @media(max-width:768px){
   .justify-content-sm{
     justify-content: left !important;

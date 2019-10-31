@@ -1,4 +1,4 @@
-<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }"
+<div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': totalNumberOfcompanies===0 }"
   (clickOutside)="closeSidebarMobile($event)">
 
   <div class="menu_wrapper">
@@ -24,10 +24,11 @@
           <!-- dropdown  #dropdown="bs-dropdown" [autoClose]="false" -->
           <li class="pos-rel pdT1" tooltip="{{seletedCompanywithBranch}}" placement="bottom">
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-              <div class="ellp bold">{{ (selectedCompany | async)?.name }} <span
+              <div class="ellp bold">{{ (selectedCompany | async)?.name }}{{totalNumberOfcompanies}} <span
                   *ngIf="(selectedCompany | async)?.nameAlias"
                   style="color: #ff5e01;">({{ (selectedCompany | async)?.nameAlias }})</span></div>
-              <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}</small>
+              <small class="ellp">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
+                {{totalNumberOfcompanies$ | async}}</small>
             </a>
             <!-- commented due to not required now
 <ul class="company-list dropdown-menu sub_menu_nav" dropdown role="menu" *dropdownMenu>
@@ -194,11 +195,11 @@ Create Company
                 <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
                   <i class="fa fa-apple"></i> IOS</a>
               </li>
-              <li>
+              <!-- <li>
                 <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank"
                   title="macOS app">
                   <i class="fa fa-apple"></i> MacOS</a>
-              </li>
+              </li> -->
               <li>
                 <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe"
                   target="_blank" title="windows app">
@@ -236,7 +237,7 @@ Create Company
 
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
-          <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
+          <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="left"
               class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
@@ -358,7 +359,7 @@ Create Company
 
 </div>
 
-<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': companyList.length===0 }">
+<header class="clearfix header-container desktopHeader " [ngClass]="{'unvisible': totalNumberOfcompanies===0 }">
   <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="container-fluid mrT1">
       <div class="navbar_header">
@@ -617,9 +618,9 @@ Create Company
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body pd-2 font-14">
+  <div class="modal-body pd-2 font-14 readyToUpgrade">
     <div class="clearfix mb-3">
-      <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}}
+      <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}} <strong>FREE</strong>
         {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. We hope you enjoyed using Giddh
         Accounting Software as much as we loved building
         it for you. To continue your subscription buy any plan or contact us for more assistance.</p>

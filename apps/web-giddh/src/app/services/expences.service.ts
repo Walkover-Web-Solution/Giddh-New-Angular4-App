@@ -60,6 +60,15 @@ export class ExpenseService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
+  public getPettycashEntry(uniqueName: string): Observable<BaseResponse<any, any>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', uniqueName)).pipe(
+      map((res) => {
+        let data: BaseResponse<any, any> = res;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+  }
 
   private createQueryString(str, model) {
     let url = str + '?';

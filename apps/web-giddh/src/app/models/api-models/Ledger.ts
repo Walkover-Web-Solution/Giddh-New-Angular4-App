@@ -83,7 +83,7 @@ export class LedgerResponse {
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry: boolean;
   public uniqueName: string;
-  public voucher: IVoucherItem = {name: '', shortCode: ''};
+  public voucher: IVoucherItem = { name: '', shortCode: '' };
   public voucherNo: string;
   public voucherType?: string;
   public voucherNumber?: string;
@@ -182,7 +182,7 @@ export class TransactionsResponse implements ITransactions {
 export class TransactionsRequest {
   public q: string = '';
   public page: number = 0;
-  public count: number = 15;
+  public count: number = 50;
   public accountUniqueName: string = '';
   public from: string = '';
   public to: string = '';
