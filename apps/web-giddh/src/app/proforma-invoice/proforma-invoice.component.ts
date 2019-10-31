@@ -311,8 +311,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
       firstElementToFocus[0].focus();
-      if(!this.isCashInvoice)
-      {
+      if (!this.isCashInvoice) {
         let cashInvoiceInput = $('.focusClasses');
         cashInvoiceInput[0].focus();
       }
@@ -1377,7 +1376,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     //Save the Grand Total for Edit
     if (calculatedGrandTotal > 0) {
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
-      calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      if (this.calculatedRoundOff > 0) {
+        calculatedGrandTotal = calculatedGrandTotal - this.calculatedRoundOff;
+      } else {
+        calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      }
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
