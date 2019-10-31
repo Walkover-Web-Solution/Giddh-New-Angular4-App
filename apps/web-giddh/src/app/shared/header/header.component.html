@@ -81,9 +81,8 @@
 
                   <li style="padding:0px;">
 
-                    <perfect-scrollbar class="scrClas" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
-                      auto-height [scrollIndicators]="true">
 
+                    <perfect-scrollbar class="" [scrollIndicators]="true">
                       <ul class="sub-list" *ngIf="companyList && companyList.length">
 
                         <li class="cmp posrelative headerTooltip" *ngFor="let cmp of companyList; let i = index"
@@ -115,8 +114,8 @@
                         </li>
 
                       </ul>
-
                     </perfect-scrollbar>
+
 
                   </li>
 

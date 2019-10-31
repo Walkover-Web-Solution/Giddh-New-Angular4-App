@@ -612,6 +612,10 @@ padding-right: 15px;
 .company-name .dropdown-menu {
     padding-top: 15px;
 }
+ul.sub-list{
+      min-height: 50px ;
+    max-height: 400px;
+}
 /* responsive */
 @media(max-width:991px) {
     .modal-liq90 {
