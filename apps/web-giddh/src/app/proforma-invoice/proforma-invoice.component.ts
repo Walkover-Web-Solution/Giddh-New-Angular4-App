@@ -1351,8 +1351,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return pv + cv.total;
       }, 0);
     });
+
+    if(this.invFormData.voucherDetails.totalDepositAmount === undefined) {
+      this.invFormData.voucherDetails.totalDepositAmount = 0;
+    }
+
     this.invFormData.voucherDetails.balanceDue =
-      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.invFormData.voucherDetails.totalDepositAmount);
     this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
