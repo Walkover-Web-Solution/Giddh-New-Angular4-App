@@ -1,5 +1,5 @@
 import { skipWhile, take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -9,6 +9,7 @@ import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { isNullOrUndefined } from 'util';
+import { FormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 
@@ -96,7 +97,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public overDueObj: any = {};
   public ReceivableDurationAmt: number = 0;
   public PaybaleDurationAmt: number = 0;
-
+  public moment = moment;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -151,6 +152,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         if (p.length) {
+          console.log(p);
           this.overDueObj = p;
           this.overDueObj.forEach((grp) => {
             if (grp.uniqueName === 'sundrydebtors') {
@@ -165,9 +167,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             }
           });
 
-          // console.log(p);
           this.generateCharts();
-          this.requestInFlight = false;
         }
 
       });
@@ -245,9 +245,12 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       },
       series: [{
         name: 'Total Overdues',
-        data: [['Total Recievable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
+        data: [['Total Receivable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
       }],
     };
+
+    this.requestInFlight = false;
+    console.log(this.requestInFlight);
   }
 
   public ngOnDestroy() {
@@ -255,4 +258,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public getFilterDate(dates: any) {
+    if (dates !== null) {
+      this.requestInFlight = true;
+      this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
+    }
+  }
 }
