@@ -391,7 +391,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.advanceSearchRequest.page = event.page;
     this.trxRequest.page = event.page;
     // this.lc.currentPage = event.page;
-    this.getAdvanceSearchTxn(true);
+    this.getTransactionData();
+    // this.getAdvanceSearchTxn(true);
 
   }
 
