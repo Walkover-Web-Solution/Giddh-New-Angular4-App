@@ -94,7 +94,7 @@
         <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
           [ladda]="exportInvoiceRequestInProcess$ | async"
           *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" data-spinner-size="20px">
-          <span class="icon-export"></span>
+          <span class="icon-export-icon"></span>
         </button>
         <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
           <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView"
@@ -184,7 +184,7 @@
             <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
               [ladda]="exportInvoiceRequestInProcess$ | async"
               *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
-              data-spinner-size="20px"><span class="icon-export"></span>
+              data-spinner-size="20px"><span class="icon-export-icon"></span>
             </button>
 
             <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales' && !isMobileView" [autoClose]="true">
@@ -435,8 +435,10 @@
             </td>
 
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}</td>
+            <td class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
+            </td>
+            <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+            </td>
             <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
 
@@ -452,8 +454,7 @@
 
                 <div>
 
-                <div dropdown container="body"
-                    class="icon-ellipse selectAction">
+                  <div dropdown container="body" class="icon-ellipse selectAction">
                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
                       aria-controls="dropdown-basic"></a>
 
@@ -817,7 +818,8 @@ tooltip="Invoice sent" placement="left" />-->
     tabindex="-1">
     <div class="modal-dialog modal-md perform-payment">
       <div class="modal-content">
-        <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+        <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice"
+          (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
       </div>
     </div>
   </div>
@@ -879,16 +881,17 @@ tooltip="Invoice sent" placement="left" />-->
 
   <!--total sale & Total Due-->
   <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
-      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
-        <div class="col-sm-6">
-          <h3 class="font-xxlarge text-light-2">Total Sale</h3>
-          <h1 class="" style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalSale | giddhCurrency }}/-</h1>
-        </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
+      <div class="col-sm-6">
+        <h3 class="font-xxlarge text-light-2">Total Sale</h3>
+        <h1 class="" style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalSale | giddhCurrency }}/-
+        </h1>
+      </div>
 
-        <div class="col-sm-6">
-          <h3 class="color-giddh font-xxlarge">Total Due</h3>
-          <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}/-</h1>
-        </div>
+      <div class="col-sm-6">
+        <h3 class="color-giddh font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}/-</h1>
+      </div>
     </div>
   </div>
 

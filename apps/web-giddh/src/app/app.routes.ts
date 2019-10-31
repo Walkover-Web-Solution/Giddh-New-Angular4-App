@@ -18,6 +18,7 @@ import { BrowserDetectComponent } from './browser-support/browserDetect.componen
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 
+
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '404', component: NotFoundComponent },
