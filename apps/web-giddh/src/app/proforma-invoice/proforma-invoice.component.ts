@@ -308,7 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
-      // tslint:disable-next-line:prefer-for-of 
+      // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
       firstElementToFocus[0].focus();
       if(!this.isCashInvoice)
@@ -316,7 +316,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let cashInvoiceInput = $('.focusClasses');
         cashInvoiceInput[0].focus();
       }
-    }, 200); 
+    }, 200);
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
 
@@ -1706,7 +1706,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public closeTaxControlPopup() {
     if (this.taxControlComponent) {
-      this.taxControlComponent.showTaxPopup = false;
+      this.taxControlComponent.toggleTaxPopup(false);
     }
   }
 
