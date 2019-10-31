@@ -163,7 +163,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
           taxObj.amount = tx.taxDetail[0].taxValue;
         }
 
-        taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
         taxObj.isDisabled = false;
         this.taxRenderData.push(taxObj);
       }

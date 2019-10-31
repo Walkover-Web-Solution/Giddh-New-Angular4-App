@@ -14,8 +14,8 @@ import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from '../models/interfaces/groupsWithAccounts.interface';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
-import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
-import { eventsConst }  from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -86,7 +86,7 @@ export class GroupWithAccountsAction {
         let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         this._toasty.successToast(action.payload.body, action.payload.status);
         let grouName = null;
@@ -149,7 +149,7 @@ export class GroupWithAccountsAction {
         let data: BaseResponse<GroupResponse, string> = action.payload;
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
-          return {type: 'EmptyAction'};
+          return { type: 'EmptyAction' };
         }
         // return this.sharedGroupWith(data.body.uniqueName); // JIRA CARD EL-351
         return {
@@ -172,7 +172,8 @@ export class GroupWithAccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
-          this._generalService.eventHandler.next({name: eventsConst.groupAdded, payload: action.payload});
+          this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+          this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
           this._toasty.successToast('Sub group added successfully', 'Success');
         }
         return {
@@ -311,7 +312,7 @@ export class GroupWithAccountsAction {
           //   payload: { groups, groupUniqueName: data.request.parentGroupUniqueName }
           // });
 
-          this._generalService.eventHandler.next({name: eventsConst.groupMoved, payload: data});
+          this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
           this._toasty.successToast('Group moved successfully', '');
           return this.getGroupDetails(data.request.parentGroupUniqueName);
         }
@@ -357,7 +358,7 @@ export class GroupWithAccountsAction {
             type: 'EmptyAction'
           };
         } else {
-          this._generalService.eventHandler.next({name: eventsConst.groupUpdated, payload: action.payload});
+          this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
           this._toasty.successToast('Group Updated Successfully');
           return {
             type: 'EmptyAction'
@@ -374,7 +375,7 @@ export class GroupWithAccountsAction {
         this.store.select(s => s.groupwithaccounts.groupswithaccounts).pipe(take(1)).subscribe(a => {
           activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
         });
-        response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName};
+        response.queryString = { groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
         return this.deleteGroupResponse(response);
       }));
 
@@ -385,7 +386,7 @@ export class GroupWithAccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
-          this._generalService.eventHandler.next({name: eventsConst.groupDeleted, payload: action.payload});
+          this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
           this._toasty.successToast(action.payload.body, '');
           if (action.payload.queryString.parentUniqueName) {
             this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
@@ -414,12 +415,12 @@ export class GroupWithAccountsAction {
       }));
 
   constructor(private action$: Actions,
-              private _groupService: GroupService,
-              private _accountService: AccountService,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _generalActions: GeneralActions,
-              private _generalService: GeneralService) {
+    private _groupService: GroupService,
+    private _accountService: AccountService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _generalActions: GeneralActions,
+    private _generalService: GeneralService) {
     //
   }
 
@@ -644,7 +645,7 @@ export class GroupWithAccountsAction {
   public updateGroup(value: GroupUpateRequest, groupUniqueName: string): CustomActions {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP,
-      payload: Object.assign({}, {groupUniqueName}, {data: value})
+      payload: Object.assign({}, { groupUniqueName }, { data: value })
     };
   }
 

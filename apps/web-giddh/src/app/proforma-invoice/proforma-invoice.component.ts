@@ -32,7 +32,7 @@ import {
   VoucherTypeEnum,
   SalesEntryClassMulticurrency,
   TransactionClassMulticurrency, DiscountMulticurrency,
-  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency
+  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency, StateCode
 } from '../models/api-models/Sales';
 import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -279,6 +279,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public showSwitchedCurr = false;
   public reverseExchangeRate: number;
   public originalReverseExchangeRate: number;
+  public countryCode: string = '';
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -384,6 +385,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        this.countryCode = profile.countryCode;
+        if (!this.isUpdateMode) {
+          this.getUpdatedStateCodes(this.countryCode);
+        }
       } else {
         this.customerCountryName = '';
         this.companyCurrency = 'INR';
@@ -452,15 +457,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     // bind state sources
-    this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.forEach(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource = arr;
-    });
+    /* this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
+       let arr: IOption[] = [];
+       if (states) {
+         states.forEach(d => {
+           arr.push({ label: `${d.name}`, value: d.code });
+         });
+       }
+       this.statesSource = arr;
+     });*/
 
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
@@ -738,7 +743,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
-
+            if (!obj.accountDetails.currencySymbol) {
+              obj.accountDetails.currencySymbol = '';
+            }
             this.invFormData = obj;
           } else {
             this.invoiceDataFound = false;
@@ -979,6 +986,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
     this.customerCountryName = data.country.countryName;
+    this.getUpdatedStateCodes(data.country.countryCode);
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
@@ -1881,6 +1889,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isSalesInvoice) {
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
+      } else {
+        this.invFormData.accountDetails.currencySymbol = '';
       }
       if (this.isCashInvoice) {
         this.companyCurrencyName = event.additional.currency;
@@ -2693,7 +2703,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public modifyMulticurrencyRes(result: any) {
     let voucherClassConversion = new VoucherClass();
     let voucherDetails = new VoucherDetailsClass();
-
+    this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
     //voucherClassConversion.entries = result.entries;
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
@@ -2851,6 +2861,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       voucherDetails.customerName = result.account.name;
     }
+
     return voucherClassConversion;
   }
 
@@ -2911,11 +2922,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.autoSaveIcon = !this.autoSaveIcon;
       this.showCurrencyValue = !this.showCurrencyValue;
       this.originalReverseExchangeRate = this.reverseExchangeRate
+      this.calculateGrandTotal();
     } else {
       this.showCurrencyValue = !this.showCurrencyValue;
       this.autoSaveIcon = !this.autoSaveIcon;
       this.exchangeRate = this.originalExchangeRate;
       this.reverseExchangeRate = this.originalReverseExchangeRate;
     }
+  }
+
+  private getUpdatedStateCodes(currency: any) {
+    if (currency) {
+      this.salesService.getStateCode(currency).subscribe(resp => {
+        this.statesSource = this.modifyStateResp(resp.body.stateList);
+      });
+    }
+  }
+
+  private modifyStateResp(stateList: StateCode[]) {
+    let stateListRet: IOption[] = [];
+    stateList.forEach(stateR => {
+      stateListRet.push({ label: stateR.name, value: stateR.code });
+    });
+    return stateListRet;
+  }
+
+  public fillShippingBillingDetails($event: any, isBilling) {
+    let cityName = $event.label;
+    if (!isBilling && !this.autoFillShipping) {
+      this.invFormData.accountDetails.shippingDetails.stateName = cityName;
+      this.invFormData.accountDetails.shippingDetails.state.name = cityName;
+    }
+    this.invFormData.accountDetails.billingDetails.state.name = cityName;
+    this.invFormData.accountDetails.billingDetails.stateName = cityName;
   }
 }

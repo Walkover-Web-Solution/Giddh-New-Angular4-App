@@ -40,6 +40,8 @@ export interface DueAmountReportResponse {
   totalItems: number;
   results: Result[];
   size: number;
+  overAllDueAmount?: number;
+  overAllFutureDueAmount?: number;
 }
 
 export interface AgingDropDownoptions {

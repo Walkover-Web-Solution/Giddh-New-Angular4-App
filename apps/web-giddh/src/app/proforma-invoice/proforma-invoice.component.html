@@ -185,7 +185,7 @@
 
                                   <div class="col-sm-6 pd ">
                                     <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom"
-                                      (selected)="autoFillShippingDetails()" #statesBilling
+                                      (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()" #statesBilling
                                       [showBottomBorderOnly]="true" [options]="statesSource"
                                       name="billingDetails.stateCode"
                                       [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
@@ -242,7 +242,7 @@
                                     <div class="col-sm-6 pd ">
 
                                       <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'"
-                                        class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true"
+                                        class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" (selected)="fillShippingBillingDetails($event, false)"
                                         [options]="statesSource" name="shippingDetails.stateCode"
                                         [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
                                       </sales-sh-select>
@@ -443,7 +443,7 @@
               <img src="assets/images/edit-pencilicon.svg" class="edit-pencil"
                 (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
               <img src=" assets/images/autosave.svg" class="edit-pencil"
-                (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue"
+                (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
                 *ngIf="autoSaveIcon">
             </span>
 
@@ -1186,7 +1186,7 @@
 
                               <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                 <span class="amountField pull-right max100 amountFiledCash">
-                                  {{invFormData.accountDetails.currencySymbol}} {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
+                                  <span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
                                 <label class="pull-right">Amount</label>
                               </li>
 

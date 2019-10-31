@@ -451,12 +451,11 @@
                 </div>
 
                 <div>
-                  <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
+
+                <div dropdown container="body"
                     class="icon-ellipse selectAction">
                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
-                      aria-controls="dropdown-basic">
-
-                    </a>
+                      aria-controls="dropdown-basic"></a>
 
                     <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
                       aria-labelledby="edit-model-basic">
@@ -479,9 +478,9 @@
                         </li>
 
                       </ul>
-
                     </div>
                   </div>
+
                 </div>
 
 
@@ -816,7 +815,7 @@ tooltip="Invoice sent" placement="left" />-->
   <!-- Perform action on invoice model -->
   <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
     tabindex="-1">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md perform-payment">
       <div class="modal-content">
         <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
       </div>

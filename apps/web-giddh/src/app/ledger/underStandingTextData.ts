@@ -57,8 +57,8 @@ export const underStandingTextData = [
   {
     accountType: 'Liability',
     text: {
-      cr: '<accountName> is increasing :(',
-      dr: '<accountName> is decreasing :)'
+      cr: `<accountName> is increasing ↑`,
+      dr: '<accountName> is decreasing ↓'
     },
     balanceText: {
       cr: 'Liability Payable',
