@@ -1,4 +1,15 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component, ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
@@ -82,6 +93,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @ViewChild('taxInptEle') public taxInptEle: ElementRef;
 
   public taxSum: number = 0;
   public taxTotalAmount: number = 0;
@@ -175,7 +188,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * hide menus on outside click of span
    */
   public toggleTaxPopup(action: any) {
-    console.log(action);
+    console.log("showTaxPopup : " + action);
     this.showTaxPopup = action;
   }
 
@@ -300,5 +313,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
+  }
+
+  public taxInputBlur(event) {
+    if (event && event.relatedTarget && this.taxInptEle && !this.taxInptEle.nativeElement.contains(event.relatedTarget)) {
+      this.toggleTaxPopup(false);
+    }
   }
 }

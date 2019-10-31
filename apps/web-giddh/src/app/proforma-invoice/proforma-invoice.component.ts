@@ -1351,8 +1351,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return pv + cv.total;
       }, 0);
     });
-    this.invFormData.voucherDetails.balanceDue =
-      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+
+    if(this.invFormData.voucherDetails.totalDepositAmount === undefined) {
+      this.invFormData.voucherDetails.totalDepositAmount = 0;
+    }
+
+    this.invFormData.voucherDetails.balanceDue = ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.invFormData.voucherDetails.totalDepositAmount);
+
     if (this.calculatedRoundOff > 0) {
       this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue - this.calculatedRoundOff;
     } else {
@@ -1713,7 +1718,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public closeTaxControlPopup() {
     if (this.taxControlComponent) {
-      this.taxControlComponent.showTaxPopup = false;
+      this.taxControlComponent.toggleTaxPopup(false);
     }
   }
 
