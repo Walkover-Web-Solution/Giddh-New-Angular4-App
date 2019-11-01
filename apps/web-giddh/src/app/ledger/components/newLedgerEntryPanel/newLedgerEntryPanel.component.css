@@ -29,6 +29,15 @@
 .equal-2, .table-minus {
     line-height: 1.6;
 }
+.pt-04 {
+  padding-top: 4px;
+}
+.table-minus label {
+  font-size: 40px;
+  line-height: 23px;
+}
+
+
 
 @media only screen and (max-width: 767px) {
   .ledger-panel .btn {
