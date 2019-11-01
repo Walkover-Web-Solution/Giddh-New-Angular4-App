@@ -1,0 +1,22 @@
+.createWarehouse {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 250px);
+}
+.createWarehouse h2 {
+    font-size: 20px;
+    font-family: 'opensans-semibold';
+    margin: 10px 0;
+}
+.createWarehouse p {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.createWarehouse p  span{
+  color: #5B64C9;
+}
+.createWarehouse img {
+    margin-bottom: 20px;
+}
