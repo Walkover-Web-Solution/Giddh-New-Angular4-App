@@ -47,20 +47,22 @@
             </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox" >
+                    <div class="col-xs-12 mrB2 selectBox">
                         <div class="">
                             <label for="bussinessType">Select Business Type</label>
-                            <div class="custom-select select-caret pos-rel" (clickOutside)="resetbussinessType()">
-                                <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType" autocomplete="false" (selected)="selectedbusinessType($event)" [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33">
+                            <div class="custom-select  pos-rel" [ngClass]="{'select-caret': companyProfileObj.bussinessType === ''}">
+                                <sh-select placeholder="Select Business Type" name="bussinessType" (onClear)="onClearBusinessType()" [showClear]="true" id="bussinessType" autocomplete="false" (selected)="selectedbusinessType($event)" [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList"
+                                    [ItemHeight]="33">
                                 </sh-select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox" >
+                    <div class="col-xs-12 mrB2 selectBox">
                         <div class="">
                             <label for="bussinessNature">Select Business Nature</label>
-                            <div class="custom-select select-caret pos-rel" (clickOutside)="resetbussinessNature()">
-                                <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false" id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33">
+                            <div class="custom-select select-caret pos-rel" [ngClass]="{'select-caret': companyProfileObj.bussinessNature ===''}">
+                                <sh-select placeholder="Select Business Nature" name="bussinessNature" (onClear)="onClearBusinessNature()" [showClear]="true" autocomplete="false" id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList" [isFilterEnabled]="true"
+                                    [ItemHeight]="33">
                                 </sh-select>
                             </div>
                         </div>
@@ -98,14 +100,14 @@
                                     </ul>
                                 </div>
                                 <div style="margin-top: 5px;">
-                                  <ul class="list-inline custom-multi-select">
-                                    <li *ngFor="let tax of selectedTaxes">
-                                      <a style="color: gray">
+                                    <ul class="list-inline custom-multi-select">
+                                        <li *ngFor="let tax of selectedTaxes">
+                                            <a style="color: gray">
                                         {{tax}} <span class="pdL" (click)="removeTax(tax)">×</span>
                                       </a>
-                                    </li>
+                                        </li>
 
-                                  </ul>
+                                    </ul>
 
                                 </div>
                             </div>

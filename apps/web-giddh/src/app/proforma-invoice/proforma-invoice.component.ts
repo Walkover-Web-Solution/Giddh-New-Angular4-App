@@ -1352,17 +1352,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }, 0);
     });
 
-    if(this.invFormData.voucherDetails.totalDepositAmount === undefined) {
+    if (this.invFormData.voucherDetails.totalDepositAmount === undefined) {
       this.invFormData.voucherDetails.totalDepositAmount = 0;
     }
 
     this.invFormData.voucherDetails.balanceDue = ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.invFormData.voucherDetails.totalDepositAmount);
+    this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
 
-    if (this.calculatedRoundOff > 0) {
-      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue - this.calculatedRoundOff;
-    } else {
-      this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
-    }
+    // if (this.calculatedRoundOff > 0) {
+    //   this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue - this.calculatedRoundOff;
+    // } else {
+    //   this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+    // }
   }
 
   public calculateSubTotal() {
@@ -1385,11 +1386,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     //Save the Grand Total for Edit
     if (calculatedGrandTotal > 0) {
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
-      if (this.calculatedRoundOff > 0) {
-        calculatedGrandTotal = calculatedGrandTotal - this.calculatedRoundOff;
-      } else {
-        calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
-      }
+      calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      // if (this.calculatedRoundOff > 0) {
+      //   calculatedGrandTotal = calculatedGrandTotal - this.calculatedRoundOff;
+      // } else {
+      //   calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      // }
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
