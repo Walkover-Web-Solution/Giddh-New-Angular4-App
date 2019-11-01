@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox" > 
+                    <div class="col-xs-12 mrB2 selectBox" >
                         <div class="">
                             <label for="bussinessNature">Select Business Nature</label>
                             <div class="custom-select select-caret pos-rel" (clickOutside)="resetbussinessNature()">
@@ -97,7 +97,17 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div style="margin-top: 5px;">
+                                  <ul class="list-inline custom-multi-select">
+                                    <li *ngFor="let tax of selectedTaxes">
+                                      <a style="color: gray">
+                                        {{tax}} <span class="pdL" (click)="removeTax(tax)">×</span>
+                                      </a>
+                                    </li>
 
+                                  </ul>
+
+                                </div>
                             </div>
                         </div>
 
