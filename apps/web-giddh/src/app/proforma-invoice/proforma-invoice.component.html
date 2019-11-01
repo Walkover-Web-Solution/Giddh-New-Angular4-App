@@ -60,7 +60,7 @@
                 <div class="row">
                   <!-- region customer name -->
                   <div class=" col-sm-2">
-                    <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name *</label>
+                    <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name <span class="red-text">*</span></label>
                   </div>
                   <!-- endregion -->
 
@@ -350,6 +350,24 @@
                 </div>
               </div>
               <!-- endregion-->
+
+              <!-- warehouse selection -->
+              <!-- make it dynamic by ( Developer end ) -->
+              <div class="row mTB1">
+                <div class="col-sm-2">
+                  <label>Warehouse <span class="red-text">*</span> </label>
+                </div>
+
+                <div class="col-sm-9">
+                  <div class="col-sm-6 pl-0">
+                    <sh-select [options]="selectWarehouse">
+
+                    </sh-select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- end warehouse field -->
 
               <!-- region invoice no, invoice date, Expiry date -->
               <div class="row mTB1">
@@ -740,7 +758,8 @@
                                 <label>HSN/SAC</label>
                                 <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                   name="transaction.hsnNumber_{{entryIdx}}" class=""
-                                  [(ngModel)]="transaction.hsnNumber" /> <a>
+                                  [(ngModel)]="transaction.hsnNumber" />
+                                <a>
                                   <!--                            <i class="fa fa-search"></i> -->
                                 </a>
                                 <div class="btngroup m-t-10">

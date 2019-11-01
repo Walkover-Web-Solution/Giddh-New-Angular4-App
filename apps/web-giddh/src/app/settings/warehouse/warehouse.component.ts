@@ -30,8 +30,41 @@ export const IsyncData = [
 })
 
 export class WarehouseComponent implements OnInit {
-
+  @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+  constructor(
+    private store: Store<AppState>,
+    private settingsBranchActions: SettingsBranchActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private companyActions: CompanyActions,
+    private settingsProfileActions: SettingsProfileActions
+  ) { }
   public ngOnInit() {
   }
+  public openCreateCompanyModal() {
+    this.loadAddCompanyComponent();
+    this.addCompanyModal.show();
+  }
+  public hideAddCompanyModal() {
+    this.addCompanyModal.hide();
+  }
 
+
+  public loadAddCompanyComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
+    let viewContainerRef = this.companyadd.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).createBranch = true;
+    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
+  }
+  public hideCompanyModalAndShowAddAndManage() {
+    this.addCompanyModal.hide();
+  }
+  public warehouseDetails = false;
 }

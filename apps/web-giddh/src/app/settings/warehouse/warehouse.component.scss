@@ -20,3 +20,75 @@
 .createWarehouse img {
     margin-bottom: 20px;
 }
+.warehouseCard {
+    background-color: #EBECEE;
+    padding: 15px;
+    min-height: 270px;
+    margin-bottom: 15px;
+
+}
+.warehouseOptions .btn-group.show{
+  display: inline-block !important;
+}
+.warehouseOptions .btn-group .btn{
+  background-color: transparent;
+    padding: 0;
+    color: #707070;
+    margin-right: 0;
+    font-size: 20px;
+}
+.warehouseOptions .btn-group .btn:focus{
+
+  box-shadow: none;
+}
+.warehouseCard .d-flex{
+justify-content: space-between;
+align-items: center;
+    border-bottom: 1px solid #CBCBCB;
+    padding-bottom: 10px;
+}
+
+.warehouseCard h3 {
+    font-size: 16px;
+    font-family: 'opensans-semibold';
+}
+span.setAsDefault {
+    background-color: #D9D9D9;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 13px;
+    margin-right: 10px;
+}
+.warehouse-details{
+  font-size: 14px;
+}
+.warehouse-details label {
+    font-family: 'opensans-semibold';
+    float: left;
+    width: 160px;
+}
+.warehouse-details p {
+    float: left;
+    width: 68%;
+}
+.about-warehaouse {
+    margin: 15px 0;
+}
+.gray-text{
+  color: #8F9091;
+  font-size: 12px;
+}
+.warehouseOptions ul#dropdown-basic {
+    left: auto !important;
+    right: 0 !important;
+    min-width: 100px;
+}
+.setAsDefault i.icon-favorite-selected {
+    color: #5B64C9;
+}
+ .createNewWarehouseBtn{
+     justify-content: center;
+    align-items: center;
+    display: flex;
+
+ }
