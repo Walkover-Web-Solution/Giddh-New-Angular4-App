@@ -2,14 +2,14 @@
   style="position: relative">
   <label *ngIf="showHeading">Tax</label>
 
-  <a id="tax" class="clearfix {{showTaxPopup}}">
+  <a id="tax" class="clearfix">
 
     <div class="multi-select adjust" id="tax-control-multi-select">
 
       <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput"
         [(ngModel)]="taxTotalAmount" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" (blur)="taxInputBlur($event)"
         style="padding-right:20px !important;" />
-      <span class="caret cp no-select" (click)="showTaxPopup = true;hideOtherPopups.emit(true)"></span>
+<!--      <span class="caret cp no-select" (click)="showTaxPopup = true;hideOtherPopups.emit(true)"></span>-->
 
     </div>
   </a>

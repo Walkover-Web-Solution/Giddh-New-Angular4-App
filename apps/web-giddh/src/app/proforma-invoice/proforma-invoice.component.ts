@@ -313,7 +313,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       firstElementToFocus[0].focus();
       if (!this.isCashInvoice) {
         let cashInvoiceInput = $('.focusClasses');
-        cashInvoiceInput[0].focus();
+        if(cashInvoiceInput[0] !== undefined) {
+          cashInvoiceInput[0].focus();
+        }
       }
     }, 200);
     // this.fristElementToFocus.nativeElement.focus(); // not working
