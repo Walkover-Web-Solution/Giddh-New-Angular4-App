@@ -141,6 +141,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
     }
 
+    this.taxRenderData = [];
+
     this.taxes.map(tx => {
       let index = this.taxRenderData.findIndex(f => f.uniqueName === tx.uniqueName);
 
