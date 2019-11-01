@@ -2821,6 +2821,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
     voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
+    voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
+    voucherClassConversion.accountDetails.billingDetails =  this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
+
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
     voucherClassConversion.accountDetails.email = result.account.email;
@@ -2955,5 +2958,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     this.invFormData.accountDetails.billingDetails.state.name = cityName;
     this.invFormData.accountDetails.billingDetails.stateName = cityName;
+  }
+
+  private updateAddressShippingBilling(obj) {
+    if (obj) {
+      let shippigAddrss = '';
+      obj.address.forEach(res => {
+        shippigAddrss = shippigAddrss + res + '\n'
+      });
+      obj.address[0] = shippigAddrss;
+    }
+    return obj;
   }
 }
