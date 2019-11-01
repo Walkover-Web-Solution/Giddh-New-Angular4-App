@@ -155,11 +155,14 @@ export class AccountDetailsClass {
       if(attrs.currencySymbol){
         this.currencySymbol = attrs.currencySymbol;
       }
-      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email']));
+      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email', 'attentionTo']));
       this.contactNumber = attrs.mobileNo || '';
       //this.mobileNo = attrs.mobileNo || '';
       this.email = attrs.email || '';
       this.customerName = attrs.updatedBy.name || '';
+      if(attrs.country){
+        this.country = new CountryClass(attrs.country);
+      }
       if (attrs.addresses.length > 0) {
         let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
         // set billing
