@@ -5,39 +5,86 @@
 </div> -->
 
   <div class="container-fluid top_bar">
-    <div class="row">
-
-      <div class="col-xs-4 col-lg-3">
-        <!-- <live-accounts #liveaccount></live-accounts> -->
-        <toal-overdues-chart #overdues></toal-overdues-chart>
+    <div class="dashboard-container">
+      <div class="dashboard-notification">
+        <div class="white-row">
+          <p> <span class="icon-traingle-info"></span> Your plan 1 ended on 10/09/2019. Apply to upgrade your
+            subscription. <span class="clickHere ">Click
+              here</span></p>
+        </div>
+        <div class="white-row">
+          <p><span class="icon-info-icon"></span> GSTR 2A Mismatch report for FY 2018-19 is now available for download.
+            <span class="clickHere ">Visit
+              Reports</span></p>
+        </div>
+        <div class="white-row">
+          <p><span class="icon-info-icon"></span>New feature JobWork added <span class="clickHere ">NEW
+            </span></p>
+        </div>
       </div>
+      <div class="row">
 
-      <div class="col-xs-4 col-lg-5">
-        <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
+
+        <!-- total overdues -->
+        <div class="col-xs-4 col-lg-4 pdR1">
+          <!-- <live-accounts #liveaccount></live-accounts> -->
+          <toal-overdues-chart #overdues></toal-overdues-chart>
+        </div>
+        <!-- profit loss -->
+        <div class="col-xs-4 col-lg-4 pdL1 pdR1">
+          <!-- <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart> -->
+          <profit-loss></profit-loss>
+        </div>
+
+        <!-- bank accounts -->
+        <div class="col-xs-4 col-lg-4 pdL1">
+          <bank-accounts></bank-accounts>
+        </div>
+
+
+        <!-- sales graph -->
+        <div class="col-xs-12 col-lg-12 ">
+          <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
+
+        </div>
+        <!-- ratio analysis -->
+        <div class="col-xs-8 pdR1">
+          <ratio-analysis-chart #ratio></ratio-analysis-chart>
+        </div>
+        <!-- GST -->
+        <div class="col-xs-4 col-lg-4 pdL1">
+
+          <gst-dash></gst-dash>
+        </div>
+        <!-- Debtors / Creditors table -->
+        <div class="col-xs-12">
+          <cr-dr-list></cr-dr-list>
+        </div>
+
+
+
+
+        <!-- <div class="col-xs-6">
+          <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
+        </div>
+
+        <div class="col-xs-6">
+          <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
+        </div> -->
+
+
+
       </div>
-
-
-      <div class="col-xs-4">
-        <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
-      </div>
-
-      <div class="col-xs-6">
-        <ratio-analysis-chart #ratio></ratio-analysis-chart>
-      </div>
-
     </div>
+
+
+
+
+
   </div>
 
   <!--<div class="col-xs-6">-->
