@@ -4764,9 +4764,7 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color: #d6d6d6;
-    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+     border-color:#D9D9D9;
 }
 
 #dashboard .panel-default>.panel-heading {
@@ -7670,7 +7668,7 @@ div#getGroupModal {
     width: 100%;
     left: 215px;
     bottom: 0;
-    z-index: 999;
+    z-index: 99;
 }
 
 ul#dropdown-nested li {
@@ -7845,6 +7843,46 @@ span.red-text {
 .pageCount span {
     font-size: 14px;
 }
+.total-salesTabs .nav.nav-tabs{
+  position: absolute;
+  top:0;
+  right: 12px;
+}
+.total-salesTabs .nav-tabs {
+    border-bottom: none;
+}
+.total-salesTabs .nav-tabs li a {
+color: #484848;
+    font-size: 16px;
+    padding: 0 5px;
+    position: relative;
+}
+.total-salesTabs .nav-tabs li a:after{
+  position: absolute;
+  content: '';
+    height: 15px;
+    width: 1px;
+    background-color: #484848;
+    right: 0;
+    top: 5px;
+}
+.total-salesTabs .nav-tabs li:last-child a:after{
+  display: none;
+}
+.total-salesTabs .nav-tabs>li.active a {
+    font-family: 'LatoWebBold';
+}
+.total-salesTabs .nav-tabs>li.active>a, .total-salesTabs .nav-tabs>li.active>a:focus, .total-salesTabs .nav-tabs>li.active>a:hover{
+  border:none;
+}
+.total-salesTabs  .nav>li>a:focus, .total-salesTabs  .nav>li>a:hover {
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+}
+.total-salesTabs .nav-tabs>li>a{
+  border:none;
+}
 
 .unvisible {
     visibility: hidden !important;
@@ -7853,6 +7891,31 @@ span.red-text {
 .main-company-name .input-group .tooltip-inner {
     white-space: inherit;
     word-break: normal;
+
+
+}
+.ratio-chart-block:first-child span.pie-text_center {
+    color: #2681EF  ;
+}
+.ratio-chart-block:nth-child(2) span.pie-text_center {
+    color: #EDAF12;
+}
+.ratio-chart-block:nth-child(3) span.pie-text_center {
+    color: #F74074;
+}
+.ratio-chart-block:nth-child(4) span.pie-text_center {
+    color: #27A264;
+}
+
+.dashboard-container input[type="checkbox"]:checked:after{
+      background-color: #5B64C9;
+          border: 1px solid #5B64C9;
+}
+.dashboard-container input[type="checkbox"]:checked:before{
+         border-color: #fff;
+}
+.dashboard-container input[type="checkbox"]:after{
+      border: 1px solid #999999;
 }
 .table-custom-invoice ul.dropdown-menu{
       min-width: 160px !important;
