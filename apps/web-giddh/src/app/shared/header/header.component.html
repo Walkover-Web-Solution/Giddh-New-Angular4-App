@@ -620,7 +620,8 @@ Create Company
   </div>
   <div class="modal-body pd-2 font-14 readyToUpgrade">
     <div class="clearfix mb-3">
-      <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}} <strong>FREE</strong>
+      <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit | lowercase}}
+        <strong>FREE</strong>
         {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. We hope you enjoyed using Giddh
         Accounting Software as much as we loved building
         it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
