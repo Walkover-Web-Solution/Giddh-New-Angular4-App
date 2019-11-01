@@ -243,7 +243,7 @@
                   [disabled]="!isGmailIntegrated" class="hideOnMobile" />
 
                 <span class="ml-1 integratdeEmail">
-                  <a *ngIf="!isGmailIntegrated" [href]="gmailAuthCodeStaticUrl">Integrate Gmail</a>
+                  <a *ngIf="!isGmailIntegrated" [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                 </span>
               </div>
 
