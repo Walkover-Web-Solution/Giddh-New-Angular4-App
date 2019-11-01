@@ -252,4 +252,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public getFilterDate(dates: any) {
+    if (dates !== null) {
+      this.requestInFlight = true;
+      this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
+    }
+  }
 }
