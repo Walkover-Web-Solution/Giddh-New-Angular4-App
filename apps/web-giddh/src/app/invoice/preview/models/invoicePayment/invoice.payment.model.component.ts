@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren, ViewChild } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
@@ -23,6 +23,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
+  @ViewChild('amountField') amountField;
 
   public paymentActionFormObj: InvoicePaymentRequest;
   public moment = moment;
@@ -143,5 +144,9 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public focusAmountField() {
+      this.amountField.nativeElement.focus();
   }
 }
