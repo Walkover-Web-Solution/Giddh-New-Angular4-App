@@ -21,7 +21,7 @@
           <label>Amount <sup>*</sup></label>
           <input type="text" class="form-control" decimalDigitsDirective [(ngModel)]="paymentActionFormObj.amount"
                  placeholder="Enter Amount"
-                 name="amount" autocomplete="off" required/>
+                 name="amount" #amountField autocomplete="off" required/>
         </div>
 
       </div>
