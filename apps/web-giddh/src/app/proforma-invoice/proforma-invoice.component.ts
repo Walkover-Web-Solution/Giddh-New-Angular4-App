@@ -772,6 +772,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
             this.isCustomerSelected = true;
+            this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
+            this.customerCountryName = tempSelectedAcc.country.countryName;
+            if(this.isMulticurrencyAccount){
+              this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
+              this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode);
+              this.companyCurrencyName = tempSelectedAcc.currency;
+            }
             // reset customer details so we don't have conflicts when we create voucher second time
             this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
           } else {
@@ -2821,6 +2828,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
     voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
+    voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
+    voucherClassConversion.accountDetails.billingDetails =  this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
+
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
     voucherClassConversion.accountDetails.email = result.account.email;
@@ -2955,5 +2965,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     this.invFormData.accountDetails.billingDetails.state.name = cityName;
     this.invFormData.accountDetails.billingDetails.stateName = cityName;
+  }
+
+  private updateAddressShippingBilling(obj) {
+    if (obj) {
+      let shippigAddrss = '';
+      obj.address.forEach(res => {
+        shippigAddrss = shippigAddrss + res + '\n'
+      });
+      obj.address[0] = shippigAddrss;
+    }
+    return obj;
   }
 }
