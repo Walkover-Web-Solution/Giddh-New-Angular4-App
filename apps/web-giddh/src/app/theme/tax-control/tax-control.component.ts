@@ -68,9 +68,9 @@ export class TaxControlData {
       display: block !important;
     }
 
-    #tax-control-multi-select.multi-select input.form-control[readonly] {
-      background-image: unset !important;
-    }
+    // #tax-control-multi-select.multi-select input.form-control[readonly] {
+    //   background-image: unset !important;
+    // }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
