@@ -323,4 +323,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.toggleTaxPopup(false);
     }
   }
+
 }
