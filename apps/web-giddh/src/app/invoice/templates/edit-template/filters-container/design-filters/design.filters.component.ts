@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { Font } from 'ngx-font-picker/dist';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -78,6 +78,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public companyUniqueName: string = '';
   public templateType: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public showUploadButton: boolean = false;
+  public showDeleteButton: boolean = false;
+  @ViewChild('fileInput') logoFile: ElementRef;
 
   constructor(
     private _invoiceUiDataService: InvoiceUiDataService,
@@ -130,6 +133,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
           this.templateType = 'invoice';
         }
       });
+
       if (this.customTemplate && this.customTemplate.sections) {
         // _.forIn(this.customTemplate.sections, (section, ind) => {
         //   let out = section.data;
@@ -154,6 +158,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
         this._invoiceUiDataService.setFieldsAndVisibility(op);
 
         if (this.customTemplate.logoUniqueName) {
+          this.showDeleteButton = true;
+          this.showUploadButton = false;
           this.logoAttached = true;
           this.isFileUploaded = false;
           let preview: any = document.getElementById('logoImage');
@@ -262,17 +268,23 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
 
   public onUploadMyFileOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
+      this.showUploadButton = true;
+      this.showDeleteButton = false;
       this.logoAttached = true;
       this.previewFile(output.file);
       this.toogleLogoVisibility(true);
        this.isFileUploaded = false;
     } else if (output.type === 'start') {
       this.isFileUploadInProgress = true;
+      this.showUploadButton = false;
+      this.showDeleteButton = false;
       this.removeAllFiles();
       this.isFileUploaded = false;
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
+        this.showUploadButton = false;
+        this.showDeleteButton = true;
         this.startUpload();
         //this.updateTemplate(output.file.response.body.uniqueName); //unused call to save template after logo upload
         this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
@@ -390,7 +402,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
     this.logoAttached = false;
     this.isFileUploaded = false;
     this.isFileUploadInProgress = false;
-   
+    this.showDeleteButton = false;
+    this.showUploadButton = false;
+    this.logoFile.nativeElement.value = "";
   }
 
   /**

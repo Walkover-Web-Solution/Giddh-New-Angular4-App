@@ -311,6 +311,9 @@ ul.selectActionDropdown {
 .addInvoice .dropdown-toggle {
   color: #fff;
 }
+.positon-inherit {
+  position: inherit;
+}
 
 
 @media (max-width: 768px) {

@@ -156,6 +156,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public hideDiscountMenu() {
+    console.log("HIDE DISCOUNT");
     this.discountMenu = false;
   }
 

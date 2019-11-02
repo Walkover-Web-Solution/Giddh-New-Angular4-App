@@ -1,13 +1,13 @@
-<span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false" (click)="$event.stopPropagation()"
+<span class="pr tax-control-cmp" (clickOutside)="toggleTaxPopup(false)" (click)="$event.stopPropagation()"
   style="position: relative">
   <label *ngIf="showHeading">Tax</label>
 
-  <a id="tax" class="clearfix">
+  <a id="tax" class="clearfix {{showTaxPopup}}">
 
     <div class="multi-select adjust" id="tax-control-multi-select">
 
       <input type="text" readonly name="sum" class="form-control cursor-pointer text-right taxInput"
-        [(ngModel)]="taxTotalAmount" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"
+        [(ngModel)]="taxTotalAmount" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" (blur)="taxInputBlur($event)"
         style="padding-right:20px !important;" />
       <span class="caret cp no-select" (click)="showTaxPopup = true;hideOtherPopups.emit(true)"></span>
 
@@ -16,7 +16,7 @@
 
   <ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
     (click)="$event.stopPropagation()" [style.max-height.px]="102" [style.min-height.px]="40"
-    style="left: unset;top: auto;">
+    style="left: unset;top: auto;" #taxInptEle>
     <li *ngIf="taxRenderData.length === 0">
       <p class="lead pd">No Taxes Found</p>
     </li>

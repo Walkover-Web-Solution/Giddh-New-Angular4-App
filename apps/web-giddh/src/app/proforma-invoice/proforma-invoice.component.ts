@@ -308,15 +308,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
     // fristElementToFocus to focus on customer search box
     setTimeout(function () {
-      // tslint:disable-next-line:prefer-for-of 
+      // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
       firstElementToFocus[0].focus();
-      if(!this.isCashInvoice)
-      {
+      if (!this.isCashInvoice) {
         let cashInvoiceInput = $('.focusClasses');
         cashInvoiceInput[0].focus();
       }
-    }, 200); 
+    }, 200);
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
 
@@ -1352,9 +1351,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return pv + cv.total;
       }, 0);
     });
-    this.invFormData.voucherDetails.balanceDue =
-      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+
+    if (this.invFormData.voucherDetails.totalDepositAmount === undefined) {
+      this.invFormData.voucherDetails.totalDepositAmount = 0;
+    }
+
+    this.invFormData.voucherDetails.balanceDue = ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.invFormData.voucherDetails.totalDepositAmount);
     this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+
+    // if (this.calculatedRoundOff > 0) {
+    //   this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue - this.calculatedRoundOff;
+    // } else {
+    //   this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
+    // }
   }
 
   public calculateSubTotal() {
@@ -1378,6 +1387,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (calculatedGrandTotal > 0) {
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
       calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      // if (this.calculatedRoundOff > 0) {
+      //   calculatedGrandTotal = calculatedGrandTotal - this.calculatedRoundOff;
+      // } else {
+      //   calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+      // }
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
@@ -1706,7 +1720,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public closeTaxControlPopup() {
     if (this.taxControlComponent) {
-      this.taxControlComponent.showTaxPopup = false;
+      this.taxControlComponent.toggleTaxPopup(false);
     }
   }
 

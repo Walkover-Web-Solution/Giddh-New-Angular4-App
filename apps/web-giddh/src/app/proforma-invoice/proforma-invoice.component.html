@@ -100,7 +100,7 @@
                        <ng-container *ngIf="isCashInvoice">
                         <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput focusClasses"
                           [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
-                      </ng-container> 
+                      </ng-container>
                       <!-- endregion -->
 
                       <!-- region previous details -->
@@ -917,7 +917,7 @@
                   </div>
 
                   <!--region balance due for non-purchase-->
-                  <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
+                  <div class="tableRow" *ngIf="!isUpdateMode && (isSalesInvoice || isCashInvoice)">
 
                     <div class="tableCell depositeSection">
 
@@ -1329,7 +1329,7 @@
 
                         <discount-control-component #discountComponent [discountMenu]="false"
                           [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
-                          [showHeaderText]="false" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)">
+                          [showHeaderText]="false" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeTaxControlPopup()">
                         </discount-control-component>
 
                       </div>

@@ -116,7 +116,6 @@ export class SettingIntegrationComponent implements OnInit {
     this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
     this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
     this.isPaymentUpdationSuccess$ = this.store.select(s => s.settings.isPaymentUpdationSuccess).pipe(takeUntil(this.destroyed$));
-
   }
 
   public ngOnInit() {
@@ -512,10 +511,14 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   public openNewRegistartionForm() {
+    if(this.openNewRegistration){
+      //logic to get all registered account for integration tab
+      this.store.dispatch(this._companyActions.getAllRegistrations());
+      this.store.dispatch(this.settingsIntegrationActions.ResetICICIFlags());
+    }else{
+      this.openNewRegistration = true;
+    }
     this.paymentFormObj = new PaymentClass();
-    //logic to get all registered account for integration tab
-    this.store.dispatch(this._companyActions.getAllRegistrations());
-    this.openNewRegistration = true;
   }
 
   public deRegisterForm(regAcc: IRegistration) {
