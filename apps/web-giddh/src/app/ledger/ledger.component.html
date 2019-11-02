@@ -905,20 +905,19 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
-      <div *ngIf="closingBalanceBeforeReconcile" class="box mrT2 clearfix text-center">
+      <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm" (click)="getReconciledBack();">Back
+      </button>
+      <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box mrT2 mrB2 clearfix text-center">
         <div class="col-xs-6 text-right">Balance as per bank
-          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
-            {{reconcileClosingBalanceForBank?.type}}
+          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}} {{reconcileClosingBalanceForBank?.type}}
           </h3>
         </div>
         <div class="col-xs-6 text-left">Pending cheque
-          <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}}
-            {{closingBalanceBeforeReconcile?.type}}
+          <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}} {{closingBalanceBeforeReconcile?.type}}
           </h3>
         </div>
       </div>
-      <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
-        (click)="getReconciliation();">Reconciliation
+      <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation
       </button>
     </div>
   </div>
