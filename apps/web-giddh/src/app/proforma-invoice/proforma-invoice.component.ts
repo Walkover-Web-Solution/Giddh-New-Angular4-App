@@ -2723,6 +2723,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.amount = t.amount.amountForAccount;
         salesTransactionItemClass.hsnNumber =  entry.hsnNumber;
         salesTransactionItemClass.sacNumber = entry.sacNumber;
+        salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
         salesEntryClass.transactions.push(salesTransactionItemClass);
         entry.taxes.forEach(ta=>{
           let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
