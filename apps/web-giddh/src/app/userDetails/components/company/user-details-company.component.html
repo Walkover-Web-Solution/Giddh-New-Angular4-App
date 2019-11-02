@@ -21,14 +21,15 @@
         <div class="inner-company-box clearfix">
           <ul>
               <li>
-                <span>Unique Name:</span> {{company.uniqueName}} </li>
+                <span>Unique Name:</span> <div class="box-name" tooltip="{{company.uniqueName}}">{{company.uniqueName}}</div> </li>
             <li>
-              <span>Created On: </span> {{company.createdAt}}</li>
+              <span>Created On: </span> <div class="box-name">{{company.createdAt}}</div></li>
             <li>
               <span>Address: </span>
-              {{company.address}}
+              <div class="address">{{company.address}}</div>
             </li>
           </ul>
+
         </div>
       </div>
     </div>
