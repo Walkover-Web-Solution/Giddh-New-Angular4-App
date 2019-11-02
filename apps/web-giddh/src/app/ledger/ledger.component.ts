@@ -516,6 +516,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.transactionData$.subscribe((lt: any) => {
       if (lt) {
+        if (lt.closingBalance) {
+          this.closingBalanceBeforeReconcile = lt.closingBalance;
+          this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';;
+        }
         if (lt.closingBalanceForBank) {
           this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
           this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -1303,7 +1307,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.transactionData$.pipe(take(1)).subscribe((val) => {
       if (val) {
         this.closingBalanceBeforeReconcile = val.closingBalance;
-        this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+        if (this.closingBalanceBeforeReconcile) {
+          this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+        }
       }
     });
     let dataToSend = {
@@ -1587,5 +1593,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this.keydownClassAdded = false;
     }
 
+  }
+  public getReconciledBack() {
+    this.closingBalanceBeforeReconcile = null;
+    this.getBankTransactions();
+    this.getTransactionData();
   }
 }
