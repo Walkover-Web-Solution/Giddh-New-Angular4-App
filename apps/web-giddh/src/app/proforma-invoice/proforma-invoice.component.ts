@@ -453,6 +453,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
+      if(!this.isUpdateMode) {
+        this.resetInvoiceForm(this.invoiceForm);
+      }
+
       this.getAllLastInvoices();
     });
 
@@ -1029,7 +1033,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     f.form.reset();
     this.invFormData = new VoucherClass();
     this.depositAccountUniqueName = 'cash';
-
+    this.accountUniqueName = "";
+    this.invoiceNo = "";
     this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
