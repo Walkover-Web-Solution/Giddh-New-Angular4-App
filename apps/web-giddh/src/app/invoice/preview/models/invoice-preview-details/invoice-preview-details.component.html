@@ -413,7 +413,7 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <invoice-payment-model (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
+      <invoice-payment-model [selectedInvoiceForPayment]="selectedItem" (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
       </invoice-payment-model>
     </div>
   </div>

@@ -1093,6 +1093,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.voucherType = this.selectedVoucher === VoucherTypeEnum.sales ? (invoice.cashInvoice ? VoucherTypeEnum.cash : VoucherTypeEnum.sales) : this.selectedVoucher;
     obj.account = invoice.account;
     obj.voucherStatus = invoice.balanceStatus;
+    obj.accountCurrencySymbol = invoice.accountCurrencySymbol;
     return obj;
   }
   public checkSelectedInvoice(voucherData:ReciptResponse){
