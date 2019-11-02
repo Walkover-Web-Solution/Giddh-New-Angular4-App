@@ -148,10 +148,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
-    this.isGenerateSalesOrderFromEstimateSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateSalesOrderFromEstimateSuccess), takeUntil(this.destroyed$));  
-    this.isGenerateInvoiceFromProformaOrEstimatesSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateInvoiceFromProformaOrEstimatesSuccess), takeUntil(this.destroyed$));  
-    this.isUpdateProformaActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));    
-    
+    this.isGenerateSalesOrderFromEstimateSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateSalesOrderFromEstimateSuccess), takeUntil(this.destroyed$));
+    this.isGenerateInvoiceFromProformaOrEstimatesSuccess$ = this.store.pipe(select(s => s.proforma.isGenerateInvoiceFromProformaOrEstimatesSuccess), takeUntil(this.destroyed$));
+    this.isUpdateProformaActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
+
     this._breakPointObservar.observe([
       '(max-width: 1023px)'
     ]).subscribe(result => {
@@ -364,7 +364,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     this.isUpdateProformaActionSuccess$.subscribe(res => {
       if(res && this.selectedVoucher) {
         this.selectedVoucher.voucherStatus = this.selectedAction;
-      } 
+      }
     });
 
 
@@ -498,6 +498,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.selectedVoucher) {
       document.querySelector('body').classList.add('fixed');
     } else {
+      this.getAll();
       document.querySelector('body').classList.remove('fixed');
     }
   }
