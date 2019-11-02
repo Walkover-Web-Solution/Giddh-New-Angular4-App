@@ -1432,7 +1432,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if(this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol){
         depositAmount = depositAmount*this.exchangeRate;
       }
-      depositAmount = depositAmount/this.exchangeRate;
+      depositAmount = depositAmount/this.exchangeRate || 0;
     }
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
@@ -2881,9 +2881,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public updateExchangeRate(val) {
     val = val.replace(this.baseCurrencySymbol, '');
-    let total = parseFloat(val.replace(/,/g,""));
+    let total = parseFloat(val.replace(/,/g,"")) || 0;
     if(this.isMulticurrencyAccount){
-      this.exchangeRate = total/this.invFormData.voucherDetails.grandTotal;
+      this.exchangeRate = total/this.invFormData.voucherDetails.grandTotal || 0;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
@@ -2918,10 +2918,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public switchCurrencyImg(switchCurr){
     this.showSwitchedCurr = switchCurr;
     if(switchCurr){
-      this.reverseExchangeRate = 1/this.exchangeRate;
+      this.reverseExchangeRate = 1/this.exchangeRate || 0;
       this.originalReverseExchangeRate = this.reverseExchangeRate;
     }else{
-      this.exchangeRate = 1/this.reverseExchangeRate;
+      this.exchangeRate = 1/this.reverseExchangeRate || 0;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
@@ -2929,7 +2929,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public saveCancelExcRate(toSave){
     if(toSave){
       if(this.showSwitchedCurr){
-        this.exchangeRate = 1/this.reverseExchangeRate;
+        this.exchangeRate = 1/this.reverseExchangeRate || 0;
       }else{
         this.originalExchangeRate = this.exchangeRate;
       }
