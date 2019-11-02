@@ -33,6 +33,7 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from 
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -185,6 +186,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private smartCombinedList$: Observable<any>;
   public isMobileSite: boolean;
   public CurrentCmpPlanAmount: any;
+  public tagManagerUrl;
+  public isProdMode: boolean = false;
   public companyCountry: CompanyCountry = {
     baseCurrency: '',
     country: ''
@@ -213,9 +216,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private changeDetection: ChangeDetectorRef,
     private _windowRef: WindowRef,
     private _breakpointObserver: BreakpointObserver,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
   ) {
-
+    this.isProdMode = AppUrl === 'https://giddh.com/';
+    this.isElectron = isElectron;
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
@@ -335,6 +339,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+
     this.sideBarStateChange(true);
     this.getElectronAppVersion();
     this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -490,6 +495,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
               return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
             });
+            if (this.isProdMode && !this.isElectron) {
+              this.callGoogleTagManager();
+            }
+
             if (menuItem) {
               this.doEntryInDb('menus', menuItem);
             }
@@ -1285,6 +1294,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         name = url;
     }
     return name;
+  }
+  private callGoogleTagManager() {
+    let ifram = document.getElementById('someId');
+    if (ifram) {
+      ifram.parentNode.removeChild(ifram);
+    }
+    let newFrame = document.createElement("iframe");
+    newFrame.setAttribute("style", "display:none;visibility:hidden");
+    newFrame.setAttribute("src", "https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG");
+    newFrame.setAttribute("id", "someId");
+    document.getElementsByTagName("body")[0].appendChild(newFrame);
+
   }
 
 }

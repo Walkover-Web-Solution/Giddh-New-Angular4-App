@@ -102,11 +102,11 @@ export class LoginActions {
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
       map((action: CustomActions) => {
         let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-        if (response.status === 'error') {
+        if (response && response.status === 'error') {
           this._toaster.errorToast(action.payload.message, action.payload.code);
           return {type: 'EmptyAction'};
         }
-        if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+        if (response && response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
           return {
             type: 'EmptyAction'
@@ -970,6 +970,9 @@ export class LoginActions {
     this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
     this._router.navigate([stateDetail.body.lastState]);
+    if (isElectron) {
+      window.location.reload();
+    }
     return {type: 'EmptyAction'};
   }
 }
