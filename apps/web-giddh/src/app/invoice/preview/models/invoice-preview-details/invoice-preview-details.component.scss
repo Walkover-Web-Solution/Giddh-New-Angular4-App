@@ -4,7 +4,7 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
-    top: 92px;
+    top: 170px;
     bottom: 0;
     left: 0;
     z-index: -1;
@@ -21,12 +21,12 @@
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 92px;
+    top: 59px;
     width: 100%;
     background-color: #fff;
     margin: 0 0;
     height: 100vh;
-    z-index: 9;
+    z-index: 99;
     left: 0;
     //padding-left: 215px;
 }
@@ -280,7 +280,7 @@ span.close-modal.cp.pull-right {
     width: 160px;
 }
 
-.dropdown-toggle.btn-blue {
+.dropdown-toggle.btn-pink {
     padding: 6px 16px;
 }
 
@@ -466,7 +466,7 @@ label.labeled {
 }
 
 .btn-dropdown-ddl-newinv {
-    padding: 8.5px 16px!important;
+    padding: 5px 16px!important;
 }
 
 @media(max-width:1024px) {
@@ -482,7 +482,7 @@ label.labeled {
         vertical-align: top;
         margin-top: 4px;
     }
-    .dropdown-toggle.btn-blue {
+    .dropdown-toggle.btn-pink {
         padding: 6px 8px;
     }
     .invoice-sidebar .singleInvoiceDetail {

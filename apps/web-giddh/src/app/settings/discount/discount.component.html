@@ -1,4 +1,4 @@
-<div class="box clearfix mrT2">
+<div class="box clearfix mrT1">
   <div class="row">
     <h1 class="section_head pdT0 col-xs-6">Create Discount</h1>
   </div>
@@ -35,11 +35,11 @@
 
         <div class="col-sm-6 col-md-2 col-xs-12 form-group d-flex" style="align-items: flex-end">
           <label class="d-block"></label>
-          <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-            [ladda]="isDiscountCreateInProcess$ | async" style="height: 34px">Add
+          <button type="submit" class="btn btn-success mrTop" *ngIf="!(createRequest.discountUniqueName)"
+            [ladda]="isDiscountCreateInProcess$ | async" style="height: 32px">Add
           </button>
-          <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-            [ladda]="isDiscountUpdateInProcess$ | async" style="height: 34px">Update
+          <button type="submit" class="btn btn-success mrTop" *ngIf="createRequest.discountUniqueName"
+            [ladda]="isDiscountUpdateInProcess$ | async" style="height: 32px">Update
           </button>
         </div>
       </ng-container>
@@ -58,7 +58,7 @@
             <tr>
               <th [style.width.px]="'50'">#</th>
               <th>Name</th>
-              <th class="text-center">Action</th>
+              <th class="">Action</th>
             </tr>
           </thead>
 

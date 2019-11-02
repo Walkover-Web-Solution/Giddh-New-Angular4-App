@@ -532,5 +532,6 @@ export class SettingIntegrationComponent implements OnInit {
       accountUniqueName: regAcc.account.uniqueName
     }
     this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
+    this.paymentFormObj = new PaymentClass();
   }
 }

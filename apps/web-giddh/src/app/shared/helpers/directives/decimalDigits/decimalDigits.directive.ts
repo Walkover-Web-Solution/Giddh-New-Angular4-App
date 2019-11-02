@@ -123,7 +123,7 @@ export class DecimalDigitsDirective implements OnDestroy {
     if ('decimaldigitsdirective' in event.target.attributes) {
       let cl = event.clipboardData.getData('text/plain');
       if (cl.includes('\'') || cl.includes(',') || cl.includes(' ')) {
-        cl = cl.replace(/\'/g, '');
+        cl = cl.replace(/'/g, '');
         cl = cl.replace(/,/g, '');
         cl = cl.replace(/ /g, '');
 

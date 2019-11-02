@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .menu {
   margin: 0;
   padding: 0;
@@ -27,20 +29,16 @@
   text-transform: capitalize;
 }
 
-.item:hover {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
-}
-
 .item.selected {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+      color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 
 .item.hilighted {
-  background-color: rgb(244, 245, 248);
-  color: rgb(210, 95, 42);
+      color: $border-blue !important;
+    background: #e3e4ed !important;
 }
+
 
 .item > a {
   padding: 6px 10px;

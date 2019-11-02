@@ -186,7 +186,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       sectionName: 'table',
       content: [{
         field: 'sNo',
-        label: 'S. No.',
+        label: '#',
         display: true,
         width: '10'
       }, {
@@ -477,7 +477,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       sectionName: 'table',
       content: [{
         field: 'sNo',
-        label: 'S. No.',
+        label: '#',
         display: true,
         width: '10'
       }, {

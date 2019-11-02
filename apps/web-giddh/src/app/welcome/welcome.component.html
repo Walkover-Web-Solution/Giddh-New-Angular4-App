@@ -1,22 +1,24 @@
 <div id="main" class="welcome_outer">
 
-    <layout-main>
+  <layout-main>
 
-        <div class="welcome-header">
-            <h2>Welcome To Giddh! </h2>
-        </div>
-        <hr />
+    <div class="welcome-header">
+      <h2>Welcome To Giddh! </h2>
+    </div>
+    <hr />
 
-        <div class="welcome-container ">
-            <p class="welcome_title">Set up your organisation profile and start accounting with Giddh.</p>
-            <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form" autocomplete="off">
-                <div class=" clearfix row">
-                    <div class="col-xs-12 mrB2">
-                        <label for="name" class="m-t-30">Company Name<sup class="text-danger">*</sup></label>
-                        <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name" placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
-                    </div>
-                    <div class="col-xs-6 mrB2 ">
-                        <span>
+    <div class="welcome-container ">
+      <p class="welcome_title">Set up your organisation profile and start accounting with Giddh.</p>
+      <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
+        autocomplete="off">
+        <div class=" clearfix row">
+          <div class="col-xs-12 mrB2">
+            <label for="name" class="m-t-30">Company Name<sup class="text-danger">*</sup></label>
+            <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name"
+              placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+          </div>
+          <div class="col-xs-6 mrB2 ">
+            <span>
               <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
               <div class="custom-select pos-rel">
                 <sh-select id="country" [options]="countrySource" required [isFilterEnabled]="true"
@@ -26,15 +28,17 @@
               </div>
             </span>
 
-                    </div>
-                    <div class="col-xs-6 mrB2 ">
-                        <label for="">Currency<sup class="text-danger">*</sup></label>
-                        <div class="custom-select select-caret pos-rel">
-                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 mrB2">
-                        <span>
+          </div>
+          <div class="col-xs-6 mrB2 ">
+            <label for="">Currency<sup class="text-danger">*</sup></label>
+            <div class="custom-select select-caret pos-rel">
+              <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true"
+                [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
+            </div>
+          </div>
+          <div class="col-xs-12 mrB2">
+            <span>
               <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
               <div class="d-flex">
                 <sh-select class="pull-left select-caret" [disabled]="createNewCompanyPreparedObj.phoneCode"
@@ -45,103 +49,103 @@
                   autocomplete="off" [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
               </div>
             </span>
-                    </div>
+          </div>
 
-                    <div class="col-xs-12 mrB2 selectBox">
-                        <div class="">
-                            <label for="bussinessType">Select Business Type</label>
-                            <div class="custom-select  pos-rel" [ngClass]="{'select-caret': companyProfileObj.bussinessType === ''}">
-                                <sh-select placeholder="Select Business Type" name="bussinessType" (onClear)="onClearBusinessType()" [showClear]="true" id="bussinessType" autocomplete="false" (selected)="selectedbusinessType($event)" [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList"
-                                    [ItemHeight]="33">
-                                </sh-select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 mrB2 selectBox">
-                        <div class="">
-                            <label for="bussinessNature">Select Business Nature</label>
-                            <div class="custom-select select-caret pos-rel" [ngClass]="{'select-caret': companyProfileObj.bussinessNature ===''}">
-                                <sh-select placeholder="Select Business Nature" name="bussinessNature" (onClear)="onClearBusinessNature()" [showClear]="true" autocomplete="false" id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList" [isFilterEnabled]="true"
-                                    [ItemHeight]="33">
-                                </sh-select>
-                            </div>
-                        </div>
-                    </div>
-                    <ng-container *ngIf="selectedBusinesstype === 'Registered'">
-                        <div class="col-xs-12 mrB2 selectBox">
-                            <div class="clearfix">
+          <div class="col-xs-12 mrB2 selectBox">
+            <div class="">
+              <label for="bussinessType">Select Business Type</label>
+              <div class="custom-select select-caret pos-rel">
+                <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType"
+                  autocomplete="false" (selected)="selectedbusinessType($event)"
+                  [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33">
+                </sh-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 mrB2 selectBox">
+            <div class="">
+              <label for="bussinessNature">Select Business Nature</label>
+              <div class="custom-select select-caret pos-rel">
+                <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false"
+                  id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList"
+                  [isFilterEnabled]="true" [ItemHeight]="33">
+                </sh-select>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="selectedBusinesstype === 'Registered'">
+            <div class="col-xs-12 mrB2 selectBox">
+              <div class="clearfix">
 
-                                <label for="gstinNum" class="d-block">GSTIN<sup class="text-danger">*</sup></label>
-                                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15" required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);" (keyup)="getStateCode(gstNumberField, states)" name="gstNumber" [(ngModel)]="companyProfileObj.gstNumber"
-                                    placeholder="Enter GSTIN" />
+                <label for="gstinNum" class="d-block">GSTIN<sup class="text-danger">*</sup></label>
+                <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15"
+                  required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);"
+                  (keyup)="getStateCode(gstNumberField, states)" name="gstNumber"
+                  [(ngModel)]="companyProfileObj.gstNumber" placeholder="Enter GSTIN" />
 
-                            </div>
-                        </div>
-                        <div class="col-xs-12 mrB2 selectBox">
-                            <div class=" ">
-                                <label>State<sup class="text-danger">*</sup></label><br>
-                                <div class=" ">
-                                    <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state" [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 mrB2 selectBox">
-                            <div class="">
-                                <label for="taxes_dd">Applicable Tax</label>
-                                <div class="btn-group btn-block select-caret invoice-btn" dropdown>
-                                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                    Select Taxes <span class="select_drop pull-right mrT1"><!--<i class="fa fa-caret-down"></i>--></span>
+              </div>
+            </div>
+            <div class="col-xs-12 mrB2 selectBox">
+              <div class=" ">
+                <label>State<sup class="text-danger">*</sup></label><br>
+                <div class=" ">
+                  <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state"
+                    [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 mrB2 selectBox">
+              <div class="">
+                <label for="taxes_dd">Applicable Tax</label>
+                <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                  <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                    Select Taxes <span class="select_drop pull-right mrT1">
+                      <!--<i class="fa fa-caret-down"></i>--></span>
                   </button>
-                                    <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
-                                        <li *ngIf="taxesList.length==0">No results found</li>
-                                        <li *ngFor="let tax of taxesList">
-                                            <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" /> {{tax.label}}
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div style="margin-top: 5px;">
-                                    <ul class="list-inline custom-multi-select">
-                                        <li *ngFor="let tax of selectedTaxes">
-                                            <a style="color: gray">
-                                        {{tax}} <span class="pdL" (click)="removeTax(tax)">×</span>
-                                      </a>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </ng-container>
-                    <div class="col-xs-12 mrB2 selectBox " *ngIf="selectedBusinesstype === 'Registered'">
-                        <div class="clearfix ">
-                            <label for="address " class="d-block ">Company Address <sup class="text-danger">*</sup></label>
-                            <textarea placeholder="Address " class="form-control mrT1 " name="address" required id="address" [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
-                        <div class="clearfix ">
-                            <label for="address " class="d-block ">Company Address</label>
-                            <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address" [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 ">
-                        <p class="change-preference ">Note: You can always change your preferences later in Settings.</p>
-                    </div>
-                    <div class="col-xs-12 d-flex mrT5">
-                        <button *ngIf="!isbranch" class="btn btn-default" (click)="back(isbranch)">Back</button>
-                        <button *ngIf="isbranch" class="btn btn-default" (click)="back(isbranch)">Back</button>
-                        <button type="submit " class="btn btn-blue  " (click)="submit() " [disabled]="welcomeForm.invalid || !isGstValid">
-              Next
-            </button>
-                    </div>
+                  <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                    <li *ngIf="taxesList.length==0">No results found</li>
+                    <li *ngFor="let tax of taxesList">
+                      <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" />
+                      {{tax.label}}
+                    </li>
+                  </ul>
                 </div>
 
-            </form>
+              </div>
+            </div>
 
-
+          </ng-container>
+          <div class="col-xs-12 mrB2 selectBox " *ngIf="selectedBusinesstype === 'Registered'">
+            <div class="clearfix ">
+              <label for="address " class="d-block ">Company Address <sup class="text-danger">*</sup></label>
+              <textarea placeholder="Address " class="form-control mrT1 " name="address" required id="address"
+                [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
+            </div>
+          </div>
+          <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
+            <div class="clearfix ">
+              <label for="address " class="d-block ">Company Address</label>
+              <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address"
+                [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
+            </div>
+          </div>
+          <div class="col-xs-12 ">
+            <p class="change-preference ">Note: You can always change your preferences later in Settings.</p>
+          </div>
+          <div class="col-xs-12 d-flex mrT5">
+            <button *ngIf="!isbranch" class="btn btn-primary" (click)="back(isbranch)">Back</button>
+            <button *ngIf="isbranch" class="btn btn-primary" (click)="back(isbranch)">Back</button>
+            <button type="submit " class="btn btn-pink  " (click)="submit() "
+              [disabled]="welcomeForm.invalid || !isGstValid">
+              Next
+            </button>
+          </div>
         </div>
 
-    </layout-main>
+      </form>
+
+
+    </div>
+
+  </layout-main>
 </div>

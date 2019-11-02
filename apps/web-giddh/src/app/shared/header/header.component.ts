@@ -36,7 +36,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public userIsSuperUser: boolean = true; // Protect permission module
@@ -1163,7 +1163,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuScrollEnd(ev) {
     let offset = $('#other').position();
     if (offset) {
-      let exactPosition = offset.top - 60;
+      let exactPosition = offset.top - 120;
       $('#other_sub_menu').css('top', exactPosition);
     }
   }

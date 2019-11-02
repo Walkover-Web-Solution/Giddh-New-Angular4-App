@@ -17,18 +17,62 @@ import { DashboardService } from '../../../services/dashboard.service';
   templateUrl: 'total-overdues-chart.component.html',
   styleUrls: ['../../home.component.scss'],
   styles: [
-      `
+    `
       .total_amt {
         font-size: 18px;
       }
 
-      .primary_text {
-        color: #005b77;
+      .customerDueText {
+        color: #0CB1AF;
+      }
+      .vendorDueText{
+        color:#F85C88;
       }
 
       .secondary_text {
-        color: #d37c59;
+        color: #5B64C9;
       }
+      span.monthDropdown {
+        font-size: 12px;
+        color: #666666;
+        vertical-align: top;
+      }
+      .dashboard-filter .btn-group {
+          display: block;
+              line-height: 1;
+      }
+       .dashboard-filter .btn-group span{
+        vertical-align: middle;
+         color: #666666;
+       }
+       .underline{
+         text-decoration:underline;
+       }
+       .dashboard-filter{
+         display:inline-flex;
+         color:#666666;
+             align-items: flex-end;
+
+       }
+
+       .dashboard-filter .icon-collapse-icon{
+        margin-left: 8px;
+    font-size: 14px;
+}
+
+.dueAmount {
+    color: #262626;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+     span.icon-rupees {
+    font-size: 15px;
+}
+.panel-body small {
+    color: #666666;
+}
+
     `
   ]
 })
@@ -52,6 +96,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public overDueObj: any = {};
   public ReceivableDurationAmt: number = 0;
   public PaybaleDurationAmt: number = 0;
+
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -142,7 +187,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
   public generateCharts() {
     this.totaloverDueChart = {
-      colors: ['#005b77', '#d37c59'],
+      colors: ['#F85C88', '#0CB1AF'],
       chart: {
         type: 'pie',
         polar: false,

@@ -11,7 +11,6 @@
     </div>
   </div>
 
-
   <div class="clearfix"
        *ngIf="voucherType !== 'proforma' && voucherType !== 'proformas' && voucherType !== 'estimates' && voucherType !== 'estimate'">
     <h3 class="fs16 mrB">Invoice Copy</h3>
@@ -33,12 +32,13 @@
   </div>
 
 
+  <!-- region buttons -->
   <div class="row mrT2 mrB1">
     <div class="col-sm-12">
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <button type="button" class="btn btn-success"
+        <button type="button" class="btn btn-success" [disabled]="!emailAddresses"
                 (click)="sendEmail()"
         >Send
         </button>
@@ -48,6 +48,6 @@
       </div>
     </div>
   </div>
-
+  <!-- endregion -->
 
 </div>
