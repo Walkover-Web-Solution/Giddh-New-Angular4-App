@@ -19,6 +19,7 @@ export class LedgerDiscountClass {
   public isActive?: boolean;
   public particular: string;
   public amount: number;
+  public uniqueName?:string;
 }
 
 export class CreateDiscountRequest {

@@ -426,8 +426,11 @@ textarea:focus {
 .sp-rupees {
   display: block;
   font-size: 26px;
+  line-height: 1.2;
 }
-
+.sp-rupees  span.icon-rupees {
+    font-size: 20px;
+}
 .table-custom-invoice {
   > thead {
     > tr {
@@ -450,11 +453,13 @@ textarea:focus {
         &:nth-child(3) {
           white-space: normal;
           width: 90px;
+          min-width: 90px;
         }
 
         &:last-child {
           //border-right: none !important;
           vertical-align: middle !important;
+          display: none;
         }
       }
     }
@@ -466,6 +471,7 @@ textarea:focus {
         border: 1px solid #c7c7c7 !important;
         padding: 10px 8px;
         white-space: nowrap;
+        position: relative;
 
         &:first-child {
           //  border-left: none !important;
@@ -474,6 +480,7 @@ textarea:focus {
         &:last-child {
           // border-right: none !important;
           vertical-align: middle !important;
+
         }
         &:nth-child(2) {
           white-space: normal;
@@ -740,7 +747,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 input[type="text"] {
   outline: none;
   width: 100%;
-  height: 34px !important;
+  height: 36px !important;
 }
 
 a.copyInvoice {
@@ -781,15 +788,19 @@ a.copyInvoice img {
 
 .entryDate label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate input {
   border: none;
   display: inline-block;
-  width: 80px;
+  width: 73px;
   background: transparent !important;
   height: 25px !important;
   font-size: 12px;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
 }
 
 .entryDate input:focus {
@@ -803,6 +814,7 @@ a.copyInvoice img {
 
 .hsnCode label {
   font-size: 12px;
+  display: block;
 }
 
 .entryDate {
@@ -849,8 +861,8 @@ a.copyInvoice img {
 }
 
 span.edit-icon {
-  line-height: 10px;
-  vertical-align: top;
+  line-height: 17px;
+
   position: relative;
   top: -2px;
 }
@@ -956,9 +968,6 @@ span.edit-icon {
   height: 15px !important;
 }
 
-.wrap-billing-address label {
-  margin-bottom: 5px;
-}
 
 .customerInvoiceTable tr,
 .customerInvoiceTable td,
@@ -1020,6 +1029,8 @@ section.staticInvoiceTable {
 
 .customerInvoiceTable.bg-white {
   margin-top: 10px;
+  border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
 }
 
 // .customerInvoiceTable section.form-inline {
@@ -1058,13 +1069,23 @@ section.newtable {
 .customerInvoiceTable label {
   line-height: 2.3;
 }
-
+.customerInvoiceTable label.salesCountryLabel {
+    min-height: 36px;
+}
 .table-custom-invoice.table > tfoot > tr > td {
   border-top: none;
 }
 
 .cashinvoice_tipImg.tip_img {
   max-width: 215px;
+}
+.texIncurrency {
+    margin-bottom: 7px;
+    color:#999 !important;
+    white-space: initial;
+}
+.pd {
+    padding: 3px 5px;
 }
 
 @media (min-width: 768px) {
@@ -1210,7 +1231,7 @@ section.newtable {
   }
 }
 
- x
+
 .salesCountryLabel {
   margin-bottom: 0;
   vertical-align: middle;
@@ -1403,17 +1424,10 @@ table.table.table-custom-invoice.basic {
   width: 100%;
   height: 100%;
   bottom: 0;
-  top: 80px;
+  top: 100px;
   opacity: 0.6;
   z-index: 99;
   background: #F7F8FA;
-}
-
-@media (min-width: 768px) {
-  .table.customerInvoiceTable .form-group {
-    display: block;
-    margin-bottom: 0;
-  }
 }
 
 .cashInvoiceInput {
@@ -1430,8 +1444,9 @@ table.table.table-custom-invoice.basic {
 }
 
 .amountField, .balanceDueText {
-  max-width: 129px !important;
+  min-width: 129px !important;
   margin-left: 20px;
+
 }
 
 #deposit-dropdown p {
@@ -1440,4 +1455,130 @@ table.table.table-custom-invoice.basic {
 .sku_and_customfields{
   white-space: normal;
   font-size: 12px!important;
+}
+
+.differ-currency {
+    color: #999999;
+    font-size: 14px;
+    text-align: right;
+    bottom:3px;
+    right: 8px;
+    white-space: nowrap;
+    padding-left: 2px;
+    align-self: flex-end;
+    justify-self: flex-end;
+}
+.differ-currency span.icon-rupees{
+
+  font-size: 11px;
+}
+.dateHsnCode {
+    position: relative;
+    top: 7px;
+}
+.switch-currency {
+    font-size: 14px;
+    color: #333;
+    max-width: 1025px;
+    text-align: right;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.switch-currency .switchIcon{
+  padding: 0 10px;
+  cursor: pointer;
+}
+input.form-control.edit-currency {
+    display: inline-block;
+    width: 80px;
+    height: 26px !important;
+}
+.icon-dollar:before{
+  content:'$';
+  height: 20px;
+  width: 20px;
+      font-weight: 600;
+}
+
+.wrap-td-data{
+  padding-bottom: 30px;
+  min-height: 50px;
+}
+.biggerDollar .icon-dollar:before {
+    font-size: 17px;
+}
+label.salesCountryLabel {
+    padding-bottom: 0;
+}
+.biggerDollar .icon-rupees {
+    font-size: 12px;
+}
+.tableCell.figureCell span.icon-rupees {
+    font-size: 11px;
+    margin-right: 2px;
+
+}
+.tableCell.figureCell span.icon-dollar {
+
+    margin-right: 2px;
+
+}
+.texIncurrency span.icon-rupees {
+    font-size: 11px;
+    color: #999;
+}
+
+
+.theadOfSalesInvoice {
+    max-width: 100%;
+}
+.table-custom-invoice .Rate {
+    width: 8%;
+}
+.table-custom-invoice .Amount {
+    width: 12%;
+}
+.table-custom-invoice .Discount {
+    width: 10%;
+}
+.table-custom-invoice .Tax {
+    width: 10%;
+}
+.table-custom-invoice .Total {
+    width: 12%;
+}
+.td_Wrapper{
+  display: flex; flex-direction: column; height: 100%;
+}
+.setActive .td_Wrapper{
+   height:77%;
+}
+.setActive td:last-child .td_Wrapper {
+    height: 105% !important;
+}
+.dlt-abs {
+    position: relative;
+}
+.trashIconDlt {
+    position: absolute;
+    right: -30px;
+    transform: translateY(-40px);
+    width: 20px;
+    height: 20px;
+    border: 1px solid #999;
+    border-radius: 50%;
+    text-align: center;
+}
+.wrap-td-data .icon-rupees {
+    font-size: 11px;
+}
+b, strong {
+    font-family: 'opensans-bold';
+    font-weight: 500;
+}
+@media (min-width: 768px) {
+  .table.customerInvoiceTable .form-group {
+    display: block;
+    margin-bottom: 0;
+  }
 }

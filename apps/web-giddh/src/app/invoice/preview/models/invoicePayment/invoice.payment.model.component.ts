@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren, SimpleChanges, OnChanges } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
@@ -11,19 +11,21 @@ import { AppState } from '../../../../store';
 import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';
 import { select, Store } from '@ngrx/store';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { orderBy } from '../../../../lodash-optimized';
+import {orderBy} from '../../../../lodash-optimized';
+import {LedgerService} from "../../../../services/ledger.service";
+import {ReceiptItem} from "../../../../models/api-models/recipt";
 
 @Component({
   selector: 'invoice-payment-model',
   templateUrl: './invoice.payment.model.component.html'
 })
 
-export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
+export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
-  @ViewChild('amountField') amountField;
+  @Input() public selectedInvoiceForPayment: ReceiptItem;
 
   public paymentActionFormObj: InvoicePaymentRequest;
   public moment = moment;
@@ -38,9 +40,23 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  //Multicurrency changes
+  private originalPaymentMode: IOption[] = [];
+  private baseCurrencySymbol: string;
+  public showSwitchedCurr: false;
+  public originalExchangeRate: number;
+  public exchangeRate: number;
+  public originalReverseExchangeRate: number;
+  public reverseExchangeRate: number;
+  public isMulticurrencyAccount = false;
+  public companyCurrencyName:string;
+  public showCurrencyValue: boolean;
+  public accountCurrency: any;
+  public autoSaveIcon: boolean;
   constructor(
     private store: Store<AppState>,
-    private _settingsTagActions: SettingsTagActions
+    private _settingsTagActions: SettingsTagActions,
+    private _ledgerService: LedgerService
   ) {
     this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
 
@@ -48,6 +64,26 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
     this.paymentActionFormObj.paymentDate = moment().toDate();
     this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
+    // get user country from his profile
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+      if (profile) {
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        this.companyCurrencyName = profile.baseCurrency;
+      }
+    });
+    this.flattenAccountsStream$.subscribe(data => {
+      if (data) {
+        let paymentMode: IOption[] = [];
+        data.forEach((item) => {
+          let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
+          if (findBankIndx !== -1) {
+            paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol:item.currencySymbol}});
+          }
+        });
+        this.paymentMode = paymentMode;
+        this.originalPaymentMode = paymentMode;
+      }
+    });
   }
 
   public ngOnInit() {
@@ -61,18 +97,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.flattenAccountsStream$.subscribe(data => {
-      if (data) {
-        let paymentMode: IOption[] = [];
-        data.forEach((item) => {
-          let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
-          if (findBankIndx !== -1) {
-            paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName}});
-          }
-        });
-        this.paymentMode = paymentMode;
-      }
-    });
     this.isActionSuccess$.subscribe(a => {
       if (a) {
         this.resetFrom();
@@ -82,6 +106,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
 
   public onConfirmation(formObj) {
     formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
+    formObj.exchangeRate = this.exchangeRate;
     this.closeModelEvent.emit(formObj);
     this.resetFrom();
   }
@@ -146,7 +171,62 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  public focusAmountField() {
-      this.amountField.nativeElement.focus();
+  public ngOnChanges(c: SimpleChanges) {
+    if(c.selectedInvoiceForPayment.currentValue){
+      let paymentModeChanges: IOption[] = [];
+      this.originalPaymentMode.forEach(payMode=>{
+        if(!payMode.additional.currencySymbol || payMode.additional.currencySymbol === this.baseCurrencySymbol || payMode.additional.currencySymbol === c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol){
+          paymentModeChanges.push(payMode);
+        }
+      });
+      this.paymentMode = paymentModeChanges;
+      if(this.baseCurrencySymbol !== c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol){
+        this.isMulticurrencyAccount = true;
+        this.accountCurrency = this.selectedInvoiceForPayment.account.currency.code;
+        this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
+      }else{
+        this.isMulticurrencyAccount = false;
+        this.exchangeRate = 1;
+      }
+    }
+  }
+  public switchCurrencyImg(switchCurr){
+    this.showSwitchedCurr = switchCurr;
+    if(switchCurr){
+      this.reverseExchangeRate = 1/this.exchangeRate;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
+    }else{
+      this.exchangeRate = 1/this.reverseExchangeRate;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+  public saveCancelExcRate(toSave){
+    if(toSave){
+      if(this.showSwitchedCurr){
+        this.exchangeRate = 1/this.reverseExchangeRate;
+      }else{
+        this.originalExchangeRate = this.exchangeRate;
+      }
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.showCurrencyValue= !this.showCurrencyValue;
+      this.originalReverseExchangeRate = this.reverseExchangeRate
+    }else{
+      this.showCurrencyValue = !this.showCurrencyValue ;
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.exchangeRate = this.originalExchangeRate;
+      this.reverseExchangeRate = this.originalReverseExchangeRate;
+    }
+  }
+  public getCurrencyRate(from, to) {
+    let date = moment().format('DD-MM-YYYY');
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+      let rate = response.body;
+      if (rate) {
+        this.originalExchangeRate = rate;
+        this.exchangeRate = rate;
+      }
+    }, (error => {
+
+    }));
   }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'layout-main',
@@ -12,6 +12,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
     `]
 })
 export class LayoutComponent implements OnInit, AfterViewInit {
+  @Input() public sideMenu: { isopen: boolean } = { isopen: true };
   // tslint:disable-next-line:no-empty
   constructor() {
   }

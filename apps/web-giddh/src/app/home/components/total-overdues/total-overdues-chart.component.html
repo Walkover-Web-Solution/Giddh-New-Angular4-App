@@ -4,7 +4,21 @@
     <div class="panel-heading">
       <strong>Total Overdues</strong>
       <div class="pull-right dashboard-filter">
-        <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
+        <div class="btn-group" dropdown>
+          <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
+            <span class="underline"> This Month</span> <span class="icon-arrow-down"></span>
+          </span>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
+            </li>
+          </ul>
+        </div>
+
+        <span class="icon-collapse-icon"></span>
       </div>
     </div>
 
@@ -18,11 +32,12 @@
           <chart [options]="totaloverDueChart" #currentRatio></chart>
           <div class="clearfix mrB2">
             <div class="">
-              <span class="mrB1">Total Receivable</span>
-              <span class="total_amt pull-right primary_text">{{ totalRecievable | number:'1.2-2' }}</span>
+              <span class="mrB1 dueAmount">Customer Due</span>
+              <span class="total_amt pull-right customerDueText"> <span class="icon-rupees"></span>
+                {{ totalRecievable | number:'1.2-2' }}</span>
             </div>
             <div class="clearfix">
-              <small>Last 30 days</small>
+              <small>Pending Invoices</small>
               <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
             </div>
             <!-- <div class="">
@@ -48,11 +63,12 @@
           </div>
           <div class="clearfix mrB2">
             <div class="">
-              <span class="mrB1">Total Payable</span>
-              <span class="total_amt pull-right secondary_text">{{ totalPayable | number:'1.2-2' }}</span>
+              <span class="mrB1 dueAmount">Vendor Due</span>
+              <span class="total_amt pull-right vendorDueText"><span class="icon-rupees"></span>
+                {{ totalPayable | number:'1.2-2' }}</span>
             </div>
             <div class="clearfix">
-              <small>Last 30 days</small>
+              <small>Pending Invoices</small>
               <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
             </div>
           </div>

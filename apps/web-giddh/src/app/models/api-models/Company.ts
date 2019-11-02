@@ -140,9 +140,11 @@ export interface ActiveFinancialYear {
 export interface ValidateInvoice {
   invoiceNumber: string;
 }
+
 export interface ExportInvoice {
   accountUniqueName: string;
 }
+
 /*
 * Model for taxes api request
 * GET call
@@ -182,6 +184,7 @@ export class GetCouponResp {
 
 export interface ICurrencyResponse {
   code: string;
+  symbol: string;
 }
 
 export class BankTransferRequest {
@@ -192,6 +195,7 @@ export class BankTransferRequest {
   public payeeName: string;
   public remarks: string;
 }
+
 export class SubscriptionRequest {
   planUniqueName: string;
   subscriptionId: string;

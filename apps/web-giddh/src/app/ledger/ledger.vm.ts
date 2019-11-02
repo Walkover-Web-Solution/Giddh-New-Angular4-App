@@ -13,12 +13,16 @@ import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { ICurrencyResponse } from '../models/api-models/Company';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
+  public activeAccount: AccountResponse;
+  public currencies: ICurrencyResponse[] = [];
   public transactionData$: Observable<TransactionsResponse>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public companyProfile$: Observable<any>;
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
@@ -55,47 +59,31 @@ export class LedgerVM {
   public showBankLedgerPanel: boolean = false;
   public currentBankEntry: BlankLedgerVM;
   public reckoningDebitTotal: number = 0;
+  public convertedReckoningDebitTotal: number = 0;
   public reckoningCreditTotal: number = 0;
+  public convertedReckoningCreditTotal: number = 0;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
     this.blankLedger = {
       transactions: [
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'DEBIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         },
         {
+          ...new TransactionVM(),
           id: uuid.v4(),
-          amount: 0,
-          particular: '',
           type: 'CREDIT',
-          taxes: [],
-          tax: 0,
-          total: 0,
-          discount: 0,
-          discounts: [
-            this.staticDefaultDiscount()
-          ],
+          discounts: [this.staticDefaultDiscount()],
           selectedAccount: null,
           applyApplicableTaxes: true,
           isInclusiveTax: true,
-          isChecked: false,
-          showTaxationDiscountBox: false
         }],
       voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -109,40 +97,65 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: '',
       compoundTotal: 0,
+      convertedCompoundTotal: 0,
       invoicesToBePaid: [],
       otherTaxModal: new SalesOtherTaxesModal(),
       tdsTcsTaxesSum: 0,
       otherTaxesSum: 0,
-      otherTaxType: 'tcs'
+      otherTaxType: 'tcs',
+      exchangeRate: 1,
+      exchangeRateForDisplay: 1,
+      valuesInAccountCurrency: true
     };
   }
 
-  public calculateReckonging(transactions: TransactionsResponse) {
+  public calculateReckonging(transactions: any) {
     if (transactions.forwardedBalance.amount === 0) {
       let recTotal = 0;
+      let convertedTotal = 0;
       if (transactions.creditTotal > transactions.debitTotal) {
         recTotal = transactions.creditTotal;
+        convertedTotal = transactions.convertedCreditTotal;
       } else {
         recTotal = transactions.debitTotal;
+        convertedTotal = transactions.convertedDebitTotal;
       }
       this.reckoningCreditTotal = recTotal;
-      return this.reckoningDebitTotal = recTotal;
+      this.convertedReckoningCreditTotal = convertedTotal;
+
+      this.reckoningDebitTotal = recTotal;
+      this.convertedReckoningDebitTotal = convertedTotal;
     } else {
       if (transactions.forwardedBalance.type === 'DEBIT') {
         if ((transactions.forwardedBalance.amount + transactions.debitTotal) <= transactions.creditTotal) {
           this.reckoningCreditTotal = transactions.creditTotal;
-          return this.reckoningDebitTotal = transactions.creditTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedCreditTotal;
+
+          this.reckoningDebitTotal = transactions.creditTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedCreditTotal;
+          return;
         } else {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
-          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+
+          this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedDebitTotal;
+          return;
         }
       } else {
         if ((transactions.forwardedBalance.amount + transactions.creditTotal) <= transactions.debitTotal) {
           this.reckoningCreditTotal = transactions.debitTotal;
-          return this.reckoningDebitTotal = transactions.debitTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedDebitTotal;
+
+          this.reckoningDebitTotal = transactions.debitTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedDebitTotal;
+          return;
         } else {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
-          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
+          this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+
+          this.reckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+          this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
         }
       }
     }
@@ -172,7 +185,7 @@ export class LedgerVM {
       // delete local id
       delete bl['id'];
 
-      if (requestObj.isOtherTaxesApplicable) {
+      if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
         bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
       }
     });
@@ -191,23 +204,13 @@ export class LedgerVM {
    */
   public addNewTransaction(type: string = 'DEBIT'): TransactionVM {
     return {
+      ...new TransactionVM(),
       id: uuid.v4(),
-      amount: 0,
-      tax: 0,
-      total: 0,
-      particular: '',
       type,
-      taxes: [],
-      taxesVm: [],
-      discount: 0,
-      discounts: [
-        this.staticDefaultDiscount()
-      ],
+      discounts: [this.staticDefaultDiscount()],
       selectedAccount: null,
       applyApplicableTaxes: true,
-      isInclusiveTax: true,
-      isChecked: false,
-      showTaxationDiscountBox: false
+      isInclusiveTax: true
     };
   }
 
@@ -318,6 +321,7 @@ export class BlankLedgerVM {
   public chequeNumber: string;
   public chequeClearanceDate: string;
   public compoundTotal: number;
+  public convertedCompoundTotal: number = 0;
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
@@ -330,27 +334,37 @@ export class BlankLedgerVM {
   public otherTaxesSum: number;
   public tdsTcsTaxesSum: number;
   public otherTaxType: 'tcs' | 'tds';
+  public exchangeRate: number = 1;
+  public exchangeRateForDisplay: number = 1;
+  public valuesInAccountCurrency: boolean = true;
+  public baseCurrencyToDisplay?: ICurrencyResponse;
+  public foreignCurrencyToDisplay?: ICurrencyResponse;
+  public selectedCurrencyToDisplay?: 0 | 1 = 0;
 }
 
 export class TransactionVM {
   public id?: string;
-  public amount: number;
-  public particular: string;
+  public amount: number = 0;
+  public particular: string = '';
   public applyApplicableTaxes: boolean;
   public isInclusiveTax: boolean;
   public type: string;
-  public taxes: string[];
-  public taxesVm?: TaxControlData[];
-  public tax?: number;
-  public total: number;
+  public taxes: string[] = [];
+  public taxesVm?: TaxControlData[] = [];
+  public tax?: number = 0;
+  public convertedTax?: number = 0;
+  public total: number = 0;
+  public convertedTotal?: number = 0;
   public discounts: LedgerDiscountClass[];
-  public discount?: number;
+  public discount?: number = 0;
+  public convertedDiscount?: number = 0;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
   public isStock?: boolean = false;
   public inventory?: IInventory | any;
+  public convertedRate?: number = 0;
   public currency?: string;
-  public convertedAmount?: number;
+  public convertedAmount?: number = 0;
   public isChecked: boolean = false;
   public showTaxationDiscountBox: boolean = false;
 }

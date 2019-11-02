@@ -44,7 +44,7 @@ label .required {
 
 .welcome_header h1 {
     font-size: 40px;
-    font-family: 'LatoWebSemibold';
+    font-family: 'opensans-regular';
     color: #2F2F2F;
 }
 
@@ -56,7 +56,7 @@ label .required {
     width: 100%;
 }
 
-#shareModal .btn.btn-blue {
+#shareModal .btn.btn-pink {
     width: 100%;
 }
 

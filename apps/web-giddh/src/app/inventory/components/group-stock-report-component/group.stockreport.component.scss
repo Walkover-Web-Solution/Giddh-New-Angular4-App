@@ -1,3 +1,5 @@
+@import'../../../../assets/css/color.scss';
+
 .bdrT {
   border-color: #ccc;
 }
@@ -74,7 +76,7 @@ tfoot {
 
 .td_in_searchBox div i {
   margin-top: 3px;
-  color: #8080808c;
+  color: #a9a9a9;
   padding-right: 8px;
   cursor: pointer;
 }
@@ -116,7 +118,7 @@ tfoot {
 }
 
 .td_in_searchBox div i:hover {
-  color: #ff5f00;
+  color: #999;
 }
 
 .dropdown-menu > li > a:hover {
@@ -124,14 +126,15 @@ tfoot {
   background: #f4f5f8;
 }
 .stock-input {
-  background-color: transparent !important;
-  border-bottom: 1px dotted black !important;
-  border: none;
-  width: auto;
-  padding: 0 !important;
-  height: auto;
-  text-align: center;
-  min-width: 155px;
+background-color: transparent !important;
+    border-bottom: 1px dotted #fff !important;
+    border: none;
+    width: auto;
+    padding: 0 !important;
+    height: auto;
+    text-align: center;
+    min-width: 155px;
+    color: #fff;
 }
 .footer-tr td {
   background-color: #e5e5e5;
@@ -184,14 +187,14 @@ tfoot {
   padding-left: 3px;
   text-transform: lowercase;
 }
-.icon-pointer .fa-long-arrow-up,
-.icon-pointer .fa-long-arrow-down {
+.icon-pointer .icon-sort-asc,
+.icon-pointer .icon-sort-dsc {
   line-height: 20px;
   width: 15px;
-  color: #a9a9a9;
+  color: #757BB9;
 }
 .icon-pointer .activeTextColor {
-  color: #ff5200;
+  color: $activeIconTh;
 }
 
 .stickyFooterSaleAmount {
@@ -244,7 +247,7 @@ tfoot {
   z-index: 1;
 }*/
 .text-orange {
-  color: #ff5f00;
+  color: #5B64C9;
 }
 .btn-link-2 {
   color: #0c8fe6;
@@ -258,4 +261,40 @@ th.brNone , td.brNone {
 
 .inventoryStockTable td{
   white-space: inherit;
+}
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid #5B64C9;
+    border-radius: 2px;
+    color: #1A237E;
+    background: #fff;
+}
+.inventoryStockTable .d-flex{
+  align-items: center;
+}
+.icon-pointer {
+    padding-left: 5px;
+}
+button.btn.btn-filter {
+    background: #E4E4E4;
+    border: 1px solid #E4E4E4;
+    font-size: 16px;
+    color: #1A237E;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 10px;
+}
+.table-border .d-flex {
+    align-items: center;
+}
+.inventoryStockTable input.form-control.stock-input {
+    color: #1c1c1c;
+    text-align: left;
 }

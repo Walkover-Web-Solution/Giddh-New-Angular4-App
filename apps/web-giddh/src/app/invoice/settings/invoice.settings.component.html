@@ -40,9 +40,12 @@
 
                 <div class="row">
                   <div class="col-xs-12 col-sm-5">
+
                     <input type="checkbox" [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                       name="enableNarrationOnInvAndVoucher" class="showOnMobile" />
-                    <label>Show Narration on Ledger</label></div>
+                    <label>Show Narration on Ledger</label>
+                  </div>
+
                   <div class="col-xs-6 col-sm-7 form-group">
                     <input type="checkbox" [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                       name="enableNarrationOnInvAndVoucher" class="hideOnMobile" />
@@ -53,14 +56,17 @@
 
               <div class="clearfix pdT1" *ngIf="false">
                 <div class="row">
-                  <div class="col-xs-12 col-sm-5"><input type="checkbox"
-                      [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" class="pull-left"
-                      name="autoCreateVirtualAccountsForDebtors" class="showOnMobile" /><label>Create virtual accounts
-                      for customers</label></div>
+
+                  <div class="col-xs-12 col-sm-5">
+                    <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors"
+                      name="autoCreateVirtualAccountsForDebtors" class="pull-left showOnMobile" />
+                    <label>Create virtual accounts for customers</label>
+                  </div>
+
                   <div class="col-xs-6 col-sm-7">
                     <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
                       <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors"
-                        class="pull-left" name="autoCreateVirtualAccountsForDebtors" class="hideOnMobile" />
+                        name="autoCreateVirtualAccountsForDebtors" class="pull-left hideOnMobile" />
                     </div>
                   </div>
                 </div>
@@ -732,16 +738,31 @@
 
             <div class="clearfix pdT1">
               <div class="row">
-                <div class="col-xs-12 col-sm-5">
-                  <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left"
-                    name="autoEntryVoucherAndEmail" class="showOnMobile" />
-                  <label>Enable send invoice via SMS</label></div>
-                <div class="col-xs-12 col-sm-7 ">
-                  <div class="form-group clearfix">
-                    <input type="checkbox" [(ngModel)]="invoiceSetting.autoEntryVoucherAndEmail" class="pull-left"
-                      name="autoEntryVoucherAndEmail" class="hideOnMobile" />
 
+                <div class="col-xs-12 col-sm-5">
+
+                  <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
+                    (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
+                    name="invoiceSetting.sendInvLinkOnSms" class="pull-left showOnMobile" />
+
+                  <label>Enable send invoice via SMS</label>
+                </div>
+
+                <div class="col-xs-12 col-sm-7">
+
+                  <div class="form-group clearfix">
+
+                    <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
+                      (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
+                      name="invoiceSetting.sendInvLinkOnSms" class="pull-left hideOnMobile" />
+
+                    <div class="pull-left smsTextarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
+
+                      <textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control"
+                        name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
+                    </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -1011,7 +1032,7 @@
 
   <div class="btn-group mrT2" role="group" aria-label="Basic example">
     <button type="button" class="btn btn-success mrR1" (click)="UpdateForm()">Save</button>
-    <button type="button" class="btn btn-danger" (click)="resetForm()">Cancel</button>
+    <button type="button" class="btn btn-cancel" (click)="resetForm()">Cancel</button>
   </div>
 
 </ng-template>

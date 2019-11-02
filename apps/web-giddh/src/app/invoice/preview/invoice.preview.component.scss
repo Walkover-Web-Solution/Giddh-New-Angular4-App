@@ -1,8 +1,10 @@
+@import '../../../assets/css/color.scss';
+
 .flex-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    flex-flow: row wrap;
+     flex-flow: row wrap;
 }
 
 
@@ -49,11 +51,14 @@
 }
 
 .td_in_searchBox div span {
-    flex: 1 1 auto;
-    padding: 8px 0 8px 8px;
+    // flex: 1 1 auto;
+    padding: 8px 0 8px 10px;
 }
 
-
+.perform-payment {
+  max-width: 420px !important;
+  min-width: 420px !important;
+}
 /*.td_in_searchBox input {*/
 /*background-color: whitesmoke;*/
 /*}*/
@@ -62,22 +67,23 @@
 /*.td_in_searchBox input::placeholder {*/
 /*color: #262626;*/
 /*border: 0;*/
-/*font-family: 'LatoWebbold';*/
+/*font-family: ''opensans-semibold'';*/
 /*text-transform: capitalize;*/
 /*font-size: 14px;*/
 /*}*/
 
 .td_in_searchBox div i {
-    margin-top: 3px;
-    color: #8080808c;
+    margin-top: 1px;
+    color:$iconColorTh;;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
+     padding-left: 8px;
 }
 
 .td_in_searchBox div i:hover {
-    color: #ff5f00;
+    color: $activeIconTh;
 }
 
 .td_in_searchBox {
@@ -86,10 +92,13 @@
 }
 
 .td_in_searchBox .input-container input {
-    height: 56px;
-    width: 100%;
+    height: 50px;
+    min-width: 100%;
     padding: 11px;
     padding-right: 40px;
+    color: #1c1c1c;
+    border: none;
+    background-color: #f2f2f2;
 }
 
 .td_in_searchBox .input-container i {
@@ -100,15 +109,16 @@
 
 .icon-pointer .glyphicon {
     cursor: pointer;
+        color:$iconColorTh;
 }
 
 .icon-pointer .glyphicon:hover {
-    color: #ff5f00;
+   color: $activeIconTh;
 }
 
 .dropdown-menu>li>a:hover {
-    color: #ff5e01;
-    background: #f4f5f8;
+  color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 
 .dropdown-menu {
@@ -164,7 +174,7 @@
     display: none;
 }
 
-.btn.btn-blue:focus, .btn.btn-blue:hover {
+.btn.btn-pink:focus, .btn.btn-pink:hover {
   color: #fff;
   text-decoration: none;
   outline: none !important;
@@ -256,6 +266,7 @@ td.card-header.clearfix {
 .paginationWrapper {
   background-color:transparent;
   padding: 20px 0;
+  margin-bottom: 120px;
 }
 
 .invoice-table {
@@ -277,14 +288,16 @@ td.card-header.clearfix {
 
 .icon-pointer {
   cursor: pointer;
+    color:$iconColorTh;
+    margin-left: 6px;
 }
 
 .icon-pointer .activeTextColor {
-  color: #ff5200;
+color: $activeIconTh;
 }
 
 .btn-dropdown-ddl-newinv {
-  padding: 6px 16px !important;
+  padding: 7px 16px !important;
 }
 
 button.btn.btn-orange.ladda-button {
@@ -302,8 +315,8 @@ ul.selectActionDropdown {
   display: block;
 }
 .selectActionDropdown a:hover{
-  background-color: #e5e5e5;
-  color: #ff5f00;
+      color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 .dropdown-toggle{
   color: #333;
@@ -311,11 +324,103 @@ ul.selectActionDropdown {
 .addInvoice .dropdown-toggle {
   color: #fff;
 }
-.positon-inherit {
-  position: inherit;
+.invoice-container{
+  padding: 0 15px;
+}
+.input-group {
+    position: relative;
+}
+.input-group input.form-control {
+    padding-left: 35px !important;
+    border-color:$inputBorderColor;
+}
+.input-group input.form-control:focus{
+    border-color:$inputBorderColor;
+}
+.icon-calender{
+   position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $inputBorderColor;
+    color: #999999;
+}
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid $inputBorderColor;
+    border-radius: 2px;
+    color: $dark-blue00;
+    background: #fff;
+}
+.advance-icon:hover{
+    background: #EAEAEA;
+}
+.dropdown-toggle.spcl_dropdown{
+  color: $border-blueDark !important;
+  border: 1px solid $border-blue;
+      width: 91px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 15px;
+    color: $dark-blue00;
+    background-color: #fff;
+
+}
+.dropdown-toggle.spcl_dropdown:hover{
+  background-color: #EAEAEA;
+  color:$dark-blue00;
+}
+.dropdown-toggle.spcl_dropdown .caret{
+  color: #999999;
+}
+button.btn.btn-default.ladda-button {
+    margin-right: 15px;
+    width: 36px;
+    padding: 0;
+    height: 36px;
+}
+button.btn.btn-filter {
+    background: #E4E4E4;
+    border: 1px solid #E4E4E4;
+    font-size: 16px;
+    color: #1A237E;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 10px;
+}
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
+}
+.invoice-table th .d-flex {
+    align-items: center;
+}
+.btn-link-2{
+  color: #1C1C1C;
 }
 
-
+// table{
+//   position: relative;
+// }
+// .basic > thead > tr > th{
+//     position: sticky !important;
+//     top: 59px;
+//     z-index: 99;
+//     box-shadow: 1px 1px 0 #d9d9d9;
+// }
+/* responsive */
 @media (max-width: 768px) {
   .mobileTable {
     display: block;
@@ -334,6 +439,10 @@ ul.selectActionDropdown {
     margin-top: 20px;
     border: none;
     background-color: transparent;
+  }
+  .perform-payment {
+    max-width: 100% !important;
+    min-width: 100% !important;
   }
 }
 
@@ -495,7 +604,7 @@ ul.selectActionDropdown {
     width: 144px;
   }
   .btn-dropdown-ddl-newinv {
-    padding: 6px 10px !important;
+    padding: 5px 10px !important;
   }
   .mobileSearch .input-container input{
     letter-spacing: -0.99px;

@@ -35,7 +35,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
-import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
+import {ReceiptService} from "../../services/receipt.service";
+import {BaseResponse} from "../../models/api-models/BaseResponse";
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -50,7 +51,7 @@ const COMPARISON_FILTER = [
 @Component({
   selector: 'app-invoice-preview',
   templateUrl: './invoice.preview.component.html',
-  styleUrls: ['./invoice.preview.component.css'],
+  styleUrls: ['./invoice.preview.component.scss'],
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -67,7 +68,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
-  @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {
@@ -197,6 +198,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public baseCurrencySymbol: string = '';
 
   constructor(
     private modalService: BsModalService,
@@ -213,7 +215,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private cdr: ChangeDetectorRef,
     private _breakPointObservar: BreakpointObserver,
     private _router: Router,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private _receiptServices: ReceiptService
   ) {
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 20;
@@ -228,6 +231,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
     this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    //this._invoiceService.getTotalAndBalDue();
   }
 
   public ngOnInit() {
@@ -335,7 +339,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         setTimeout(() => {
           this.voucherData = _.cloneDeep(res[0]);
-          this.cdr.detectChanges();
+          if (!this.cdr['destroyed']) {
+            this.cdr.detectChanges();
+          }
         }, 100);
       });
 
@@ -565,9 +571,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (actionToPerform === 'paid') {
         this.selectedInvoice = objItem;
         this.performActionOnInvoiceModel.show();
-        setTimeout(() => {
-          this.invoicePaymentModelComponent.focusAmountField();
-        }, 500);
       } else {
         this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
       }
@@ -700,6 +703,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
       }
       this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
+      this._receiptServices.GetAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res=>{
+          this.parseBalRes(res);
+      });
     } else {
       if (this.invoiceSearchRequest.sort !== type || this.invoiceSearchRequest.sortBy !== columnName) {
         this.invoiceSearchRequest.sort = type;
@@ -714,6 +720,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
   public getVoucher(isUniversalDateSelected: boolean) {
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
+    this._receiptServices.GetAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res=>{
+      this.parseBalRes(res);
+    });
     // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
   }
 
@@ -870,7 +879,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.selectedInvoicesList = this.selectedInvoicesList.filter((ele)=>{
         return ele.isSelected;
       });
-
+      
       this.voucherData.items.forEach((ele)=>{
         this.selectedInvoicesList = this.selectedInvoicesList.filter((s)=>{
           return ele.uniqueName!==s.uniqueName;
@@ -980,6 +989,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       request.to = this.invoiceSearchRequest.to;
     }
     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
+    this._receiptServices.GetAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res=>{
+      this.parseBalRes(res);
+    });
   }
 
   public resetAdvanceSearch() {
@@ -1006,13 +1018,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.getVoucher(this.isUniversalDateApplicable);
   }
 
-  public sendEmail(obj: { email: string, invoiceType: string[] }) {
-    this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
-      emailId: obj.email.split(','),
-      voucherNumber: [this.selectedInvoice.voucherNumber],
-      voucherType: this.selectedVoucher,
-      typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
-    }));
+  public sendEmail(obj: any) {
+    if (obj.email) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+        emailId: obj.email.split(','),
+        voucherNumber: [this.selectedInvoice.voucherNumber],
+        voucherType: this.selectedVoucher,
+        typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
+      }));
+    } else {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, {
+        numbers: obj.numbers.split(',')
+      }, this.selectedVoucher))
+    }
   }
 
   public ngOnDestroy() {
@@ -1071,10 +1089,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     obj.voucherDate = invoice.voucherDate;
     obj.voucherNumber = invoice.voucherNumber;
     obj.uniqueName = invoice.uniqueName;
-    obj.grandTotal = invoice.grandTotal;
+    obj.grandTotal = invoice.grandTotal.amountForAccount;
     obj.voucherType = this.selectedVoucher === VoucherTypeEnum.sales ? (invoice.cashInvoice ? VoucherTypeEnum.cash : VoucherTypeEnum.sales) : this.selectedVoucher;
     obj.account = invoice.account;
     obj.voucherStatus = invoice.balanceStatus;
+    obj.accountCurrencySymbol = invoice.accountCurrencySymbol;
     return obj;
   }
   public checkSelectedInvoice(voucherData:ReciptResponse){
@@ -1086,5 +1105,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       })
     })
     return voucherData;
+  }
+
+  private parseBalRes(res) {
+    this.totalSale =  res.body.grandTotal;
+    this.totalDue = res.body.totalDue;
+    // get user country from his profile
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+      if (profile) {
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+      }
+    });
   }
 }

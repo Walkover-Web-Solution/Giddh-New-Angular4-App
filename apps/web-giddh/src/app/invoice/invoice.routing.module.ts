@@ -71,6 +71,7 @@ import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/in
 import { SharedModule } from '../shared/shared.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
+import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -128,7 +129,8 @@ const INVOICE_ROUTES: Routes = [
     EWayBillCredentialsComponent,
     DownloadOrPreviewEwayComponent,
     InvoicePreviewDetailsComponent,
-    ProformaListComponent
+    ProformaListComponent,
+    DownloadVoucherComponent
   ],
   imports: [
     FormsModule,

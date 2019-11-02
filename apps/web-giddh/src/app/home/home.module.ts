@@ -11,11 +11,19 @@ import { HistoryChartComponent } from './components/history/history-chart.compon
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartModule } from 'angular2-highcharts';
+import { TooltipModule } from 'ngx-bootstrap';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { RatioAnalysisChartComponent } from './components/ratio-analysis/ratio-analysis-chart.component';
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
+import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
+import { gstComponent } from './components/gst/gst.component';
+import { bankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
+import { crDrComponent } from './components/cr-dr-list/cr-dr-list.component';
+import { TotalSalesComponent } from './components/total-sales/total-sales.component';
+
 
 export function highchartsFactory() {
   // @ts-ignore
@@ -43,7 +51,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     HistoryChartComponent,
     NetworthChartComponent,
     RatioAnalysisChartComponent,
-    TotalOverduesChartComponent
+    TotalOverduesChartComponent,
+    ProfitLossComponent,
+    gstComponent,
+    bankAccountsComponent,
+    crDrComponent,
+    TotalSalesComponent,
+
   ],
   exports: [HomeComponent],
   providers: [
@@ -63,7 +77,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalModule,
     ChartModule,
     LaddaModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    BsDropdownModule,
+    TabsModule,
+    BsDatepickerModule,
+    TooltipModule.forRoot(),
   ],
 })
 export class HomeModule {

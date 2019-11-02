@@ -32,6 +32,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() public discountSum: number;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
   public discountAccountsList$: Observable<IDiscountList[]>;
   public discountFromPer: boolean = true;
   public discountFromVal: boolean = true;
@@ -74,7 +77,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     this.prepareDiscountList();
 
-    if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+    if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
       this.discountFixedValueModal = this.defaultDiscount.amount;
     } else {
       this.discountPercentageModal = this.defaultDiscount.amount;
