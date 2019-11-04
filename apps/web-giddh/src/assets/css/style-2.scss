@@ -1139,7 +1139,8 @@ modal-container.modal.fade.show {
 }
 
 .form_box .btn {
-  width: 73px;
+  min-width: 73px;
+      margin-right: 2px;
 }
 
 .table-no-border tr th,
@@ -3782,7 +3783,10 @@ select.form-control {
   height: calc(100% - 56px);
   font-size: 14px;
 }
-
+#getGroupModal.getGroupModal .modal-body {
+  min-height: auto;
+  height: auto;
+}
 .searchBar {
   position: relative;
 }
@@ -7880,6 +7884,9 @@ span.red-text {
   word-break: normal;
 }
 
+.multicurrencyTooltipInfo .tooltip-inner , .sidebarTooltip .tooltip-inner {
+   white-space: normal;
+}
 .ratio-chart-block:first-child span.pie-text_center {
   color: #2681EF;
 }

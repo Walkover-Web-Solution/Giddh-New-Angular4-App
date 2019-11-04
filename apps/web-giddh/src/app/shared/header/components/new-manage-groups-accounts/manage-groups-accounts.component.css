@@ -7,3 +7,6 @@
     top:10px;
   }
 }
+.hieghtInVH{
+  height: calc(100vh - 70px);
+}
