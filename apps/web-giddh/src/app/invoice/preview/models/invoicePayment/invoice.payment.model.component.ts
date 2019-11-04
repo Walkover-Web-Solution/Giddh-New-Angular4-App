@@ -64,19 +64,13 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     this.paymentActionFormObj.paymentDate = moment().toDate();
     this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
     this.store.dispatch(this._settingsTagActions.GetALLTags());
-  }
-
-  public ngOnInit() {
-    this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
-      if (tags && tags.length) {
-        let arr: IOption[] = [];
-        tags.forEach(tag => {
-          arr.push({value: tag.name, label: tag.name});
-        });
-        this.tags = orderBy(arr, 'name');
+    // get user country from his profile
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+      if (profile) {
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        this.companyCurrencyName = profile.baseCurrency;
       }
-    }));
-
+    });
     this.flattenAccountsStream$.subscribe(data => {
       if (data) {
         let paymentMode: IOption[] = [];
@@ -90,16 +84,22 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.originalPaymentMode = paymentMode;
       }
     });
+  }
+
+  public ngOnInit() {
+    this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
+      if (tags && tags.length) {
+        let arr: IOption[] = [];
+        tags.forEach(tag => {
+          arr.push({value: tag.name, label: tag.name});
+        });
+        this.tags = orderBy(arr, 'name');
+      }
+    }));
+
     this.isActionSuccess$.subscribe(a => {
       if (a) {
         this.resetFrom();
-      }
-    });
-    // get user country from his profile
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
-      if (profile) {
-        this.baseCurrencySymbol = profile.baseCurrencySymbol;
-        this.companyCurrencyName = profile.baseCurrency;
       }
     });
   }
