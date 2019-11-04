@@ -72,7 +72,7 @@
                   <sup *ngIf="isDebtorCreditor">*</sup>
                 </label>
                 <div class="custom-select pos-rel">
-                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
+                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
                     formControlName="stateCode" style="width:100%"></sh-select>
                 </div>
               </div>

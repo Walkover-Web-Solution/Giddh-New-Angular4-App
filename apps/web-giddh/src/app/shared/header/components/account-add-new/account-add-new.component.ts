@@ -17,6 +17,7 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {IForceClear} from "../../../../models/api-models/Sales";
 
 @Component({
   selector: 'account-add-new',
@@ -68,7 +69,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
   @ViewChild('autoFocus') public autoFocus: ElementRef;
 
-
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
     { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
@@ -172,6 +173,8 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
           }
           this.isIndia = true;
         }
+
+        this.resetGstStateForm();
       }
     });
     // get openingblance value changes
@@ -231,9 +234,12 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.addAccountForm.patchValue({ uniqueName: '' });
       }
     });
-    setTimeout(() => {
-      this.autoFocus.nativeElement.focus();
-    }, 50);
+
+    if(this.autoFocus !== undefined) {
+      setTimeout(() => {
+        this.autoFocus.nativeElement.focus();
+      }, 50);
+    }
   }
 
   public setCountryByCompany(company: CompanyResponse) {
@@ -290,6 +296,16 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       partyType: ['NOT APPLICABLE']
     });
     return gstFields;
+  }
+
+  public resetGstStateForm() {
+    this.forceClear$ = observableOf({status: true});
+
+    let addresses = this.addAccountForm.get('addresses') as FormArray;
+    for (let control of addresses.controls) {
+      control.get('stateCode').patchValue(null);
+      control.get('gstNumber').setValue("");
+    }
   }
 
   // public generateUniqueName() {
