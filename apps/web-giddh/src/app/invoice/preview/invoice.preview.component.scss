@@ -331,8 +331,17 @@ ul.selectActionDropdown {
     position: relative;
 }
 .input-group input.form-control {
-    padding-left: 35px !important;
-    border-color:$inputBorderColor;
+     padding-left: 35px !important;
+    border-color:$border-blue;
+    background-image: url('../../../assets/images/calender.svg') !important;
+    background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 45px !important;
+    position: relative;
+    z-index: 99;
+    cursor: default;
+
 }
 .input-group input.form-control:focus{
     border-color:$inputBorderColor;
@@ -420,6 +429,27 @@ button.btn.btn-filter span.icon-cross {
 //     z-index: 99;
 //     box-shadow: 1px 1px 0 #d9d9d9;
 // }
+.inputWrapper {
+      display: block !important;
+    width: 100% !important;
+    position: relative;
+    height: 36px !important;
+}
+.inputWrapper:before {
+       position: absolute;
+    content: '';
+    display: block;
+    height: 36px;
+    width: 1px;
+    background-color: #d9d9d9;
+    left: 37px !important;
+    z-index: 999;
+    top: 0;
+}
+
+
+
+
 /* responsive */
 @media (max-width: 768px) {
   .mobileTable {

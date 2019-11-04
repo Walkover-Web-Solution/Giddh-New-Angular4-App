@@ -8,10 +8,11 @@
         <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
           <div class="input-group ">
-            <span class="icon-calender"></span>
-
-            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions" class="form-control"
-              (applyDaterangepicker)="dateRangeChanged($event)" />
+            <!-- <span class="icon-calender"></span> -->
+            <span class="inputWrapper">
+              <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions" class="form-control"
+                (applyDaterangepicker)="dateRangeChanged($event)" />
+            </span>
           </div>
 
           <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
