@@ -24,6 +24,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { AccountService } from '../services/account.service';
 import { Configuration } from '../app.constant';
 import { ROUTES } from '../routes-array';
+import {SettingsProfileActions} from "./settings/profile/settings.profile.action";
 
 @Injectable()
 export class LoginActions {
@@ -408,6 +409,7 @@ export class LoginActions {
           // get groups with accounts for general use
           this.store.dispatch(this._generalAction.getGroupWithAccounts());
           this.store.dispatch(this._generalAction.getFlattenAccount());
+          this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         }
         return {type: 'EmptyAction'};
       }));
@@ -598,7 +600,8 @@ export class LoginActions {
     private _accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private _generalAction: GeneralActions,
-    private _dbService: DbService
+    private _dbService: DbService,
+    private settingsProfileActions: SettingsProfileActions
   ) {
   }
 
