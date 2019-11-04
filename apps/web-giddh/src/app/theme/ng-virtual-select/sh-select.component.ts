@@ -48,6 +48,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public useInBuiltFilterForFlattenAc: boolean = false;
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
+  @Input() public defaultValue: string = "";
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -68,6 +69,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public filteredData: IOption[] = [];
   public _selectedValues: IOption[] = [];
   public _options: IOption[] = [];
+  public defaultValueUpdated: boolean = false;
   /** Keys. **/
 
   private KEYS: any = {
@@ -419,6 +421,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       if (this.forceClearReactive.status) {
         this.filter = '';
         this.clear();
+      }
+    }
+
+    if('defaultValue' in changes && this.defaultValueUpdated === false) {
+      if(this.defaultValue) {
+        this.defaultValueUpdated = true;
+        this.filter = changes.defaultValue.currentValue;
       }
     }
   }
