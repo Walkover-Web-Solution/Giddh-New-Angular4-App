@@ -1088,6 +1088,9 @@ position: relative; */
   -webkit-overflow-scrolling: touch;
 }
 
+#getGroupModal.getGroupModal #middleBody {
+  height: auto;
+}
 .scroll-btn {
   position: absolute;
   right: 30px;
@@ -5402,6 +5405,9 @@ form#groupDetailForm {
 }
 #getGroupModal #middleBody {
   height: 100%;
+}
+#getGroupModal.getGroupModal #middleBody {
+  height: auto;
 }
 .select2-ledger .menu .item {
   white-space: initial;
