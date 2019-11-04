@@ -38,8 +38,8 @@
   </div>
 
   <!--add/edit group form-->
-  <div class=" form_box ng-scope" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
-    <group-add *ngIf="(showAddNewGroup$ | async)"></group-add>
+  <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
+    <group-add class="form_box" *ngIf="(showAddNewGroup$ | async)"></group-add>
     <group-update *ngIf="(showEditGroup$ | async)"></group-update>
   </div>
   <!--add/edit group form-->
@@ -69,8 +69,8 @@
     </account-update-new>
 
     <!--move account-->
-    <div class="col-xs-12 form-group" *ngIf="(activeAccount$ | async)">
-      <form name="moveAccountForm" class="horizontal-form" novalidate (submit)="moveAccount()"
+    <div class="horizontal-form form-group" *ngIf="(activeAccount$ | async)">
+      <form name="moveAccountForm" class="clearfix moveTOgroup" novalidate (submit)="moveAccount()"
         [formGroup]="moveAccountForm">
         <label class="d-block">Move to group</label>
         <span>
@@ -100,14 +100,14 @@
   <!--account operation  -->
 
   <!--merge and taxes and discount-->
-  <div class="container-fluid clearfix">
-    <div class="row">
-      <div class="  col-xs-12 form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
+  <div class=" horizontal-form clearfix">
+    <div class="">
+      <div class="moveTOgroup form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
         <!--merge and taxes-->
 
 
         <!--merge account-->
-        <div class=" horizontal-form">
+        <div class="">
           <label class="d-block">Select A/c to merge with
             <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span>
           </label>
@@ -153,7 +153,7 @@
         <!--taxes-->
         <!-- Taxes collapse -->
         <div class="clearfix tax-operation" *ngIf="isTaxableAccount$ | async">
-          <div class="col-xs-12">
+          <div class="">
             <div class="form-group toggle-btn mrB">
               <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
                 <i class="fa cp" aria-hidden="true"
@@ -163,7 +163,7 @@
           </div>
           <!-- taxes container -->
           <ng-container *ngIf="showTaxes">
-            <div class="col-xs-12">
+            <div class="">
 
               <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">

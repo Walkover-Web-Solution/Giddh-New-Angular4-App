@@ -128,6 +128,14 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     contriesWithCodes.map(c => {
       this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
+    _.uniqBy(this.countryPhoneCode, 'value');
+    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
+      return {
+        value: value,
+        label: this.countryPhoneCode.find(s => s.value === value).label
+      };
+    });
+    this.countryPhoneCode = ss;
 
     this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());

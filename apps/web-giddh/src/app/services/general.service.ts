@@ -11,7 +11,7 @@ import {ReportsDetailedRequestFilter, SalesRegisteDetailedResponse} from "../mod
 
 @Injectable()
 export class GeneralService {
-
+  invokeEvent: Subject<any> = new Subject();
   public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public isCurrencyPipeLoaded: boolean = false;
 

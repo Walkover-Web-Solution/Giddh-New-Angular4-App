@@ -4,19 +4,19 @@
       <div class="col-sm-5">
         <ul class="main-company-name">
           <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
-          <li class="company-name pos-rel" dropdown #dropdown="bs-dropdown" [autoClose]="false"
-            [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
+          <li class="company-name pos-rel" dropdown #companyDetailsDropDownWeb="bs-dropdown" [autoClose]="false"
+            [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
             <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1" dropdownToggle>
               <ng-template #CompanyBranchnamealias> {{ (selectedCompany | async)?.name }}<span
                   *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }} )</span>
               </ng-template>
               <!-- <span class="icon-dots-three-vertical"></span> -->
               <div class="cText">
-                <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name ) | slice: 0 : 1}}
+                <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                 </span>
 
                 <div class="companyName-financeYear" placement="bottom">
-                  <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name )}}
+                  <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
                   </span>
 
                   <div class="uniqNmae-finaclYear"> <span *ngIf="(selectedCompany | async)?.nameAlias"
@@ -80,6 +80,7 @@
                   </div>
 
                   <li style="padding:0px;">
+
 
 
                     <perfect-scrollbar class="" [scrollIndicators]="true">
@@ -246,7 +247,8 @@
                 <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
               </li>
               <li class="row text-center">
-                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
+                <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button>
+                |
                 <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                     class="btn btn-link tdUndr">FAQs</a></span>
               </li>
@@ -278,11 +280,11 @@
           </ng-template>
           <!-- <span class="icon-dots-three-vertical"></span> -->
           <div class="cText">
-            <span class="cName ellp pdR1 alice">{{ ((selectedCompany | async)?.name ) | slice: 0 : 1}}
+            <span class="cName ellp pdR1 alice">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
             </span>
 
             <div class="companyName-financeYear" placement="bottom">
-              <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name )}}
+              <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
               </span>
 
               <div class="uniqNmae-finaclYear"> <span *ngIf="(selectedCompany | async)?.nameAlias"
@@ -461,7 +463,6 @@
       </li>
 
 
-
       <div class="input-group account-search" (click)="showNavigationModal()">
         <span class="input-group-addon" id="">
           <i class="icon-search"></i>
@@ -479,7 +480,8 @@
         <!-- Accounts menu -->
         <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
           <h6 class="mrB1">ACCOUNTS <i *ngIf="!isMobileSite" tooltip="Create account" placement="bottom"
-              container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i></h6>
+              container="body" class="fa fa-plus cp" (click)="showManageGroupsModal()"></i>
+          </h6>
           <!-- [checkPermission]="['MENU', 'DASHBOARD']" -->
           <li *ngFor="let acc of accountItemsFromIndexDB">
             <a [tooltip]="acc.name" placement="right" routerLink="ledger/{{acc.uniqueName}}"
@@ -649,8 +651,6 @@
         <div class="pull-right">
 
 
-
-
         </div>
       </div>
     </div>
@@ -694,7 +694,8 @@
                   <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
                 </li>
                 <li class="row text-center">
-                  <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button> |
+                  <button class="btn btn-link tdUndr" (click)="openScheduleModal()">Talk to Sales</button>
+                  |
                   <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                       class="btn btn-link tdUndr">FAQs</a></span>
                 </li>
@@ -850,7 +851,8 @@
           <button class="btn btn-green" (click)="goToSelectPlan();">Change Plan</button>
         </li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
-            (click)="openScheduleModal();modelRefExpirePlan.hide();"> Contact
+            (click)="openScheduleModal();modelRefExpirePlan.hide();">
+            Contact
             Us</a></li>
       </ul>
     </div>
@@ -877,7 +879,8 @@
           <button class="btn btn-pink" (click)="goToSelectPlan();">Buy Plan</button>
         </li>
         <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
-            (click)="openScheduleModal();modelRefCrossLimit.hide();"> Contact
+            (click)="openScheduleModal();modelRefCrossLimit.hide();">
+            Contact
             Us</a></li>
       </ul>
     </div>

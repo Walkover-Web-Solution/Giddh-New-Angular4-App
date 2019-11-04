@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
   @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
   @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
-
+  @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -188,7 +188,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyCountry: CompanyCountry = {
     baseCurrency: '',
     country: ''
-  }
+  };
 
   /**
    *
@@ -315,7 +315,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
-
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
@@ -331,7 +330,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.accountItemsFromIndexDB = DEFAULT_AC;
     });
     this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
-
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'openschedulemodal') {
+        this.openScheduleModal();
+      }
+    });
   }
 
   public ngOnInit() {
@@ -640,6 +643,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       e.stopPropagation();
     }
     this.companyDropdown.isOpen = false;
+    if (this.companyDetailsDropDownWeb) {
+      this.companyDetailsDropDownWeb.hide();
+    }
 
     // entry in db with confirmation
     let menu: any = {};
@@ -916,6 +922,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
     this.companyDropdown.isOpen = false;
+    if (this.companyDetailsDropDownWeb) {
+      this.companyDetailsDropDownWeb.hide();
+    }
     this.menuStateChange.emit(event);
   }
 
