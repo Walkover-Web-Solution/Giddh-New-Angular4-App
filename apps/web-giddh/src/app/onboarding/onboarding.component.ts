@@ -11,6 +11,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
+import { HeaderComponent } from '../shared/header/header.component';
 
 @Component({
   selector: 'onboarding-component',
@@ -36,7 +37,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private companyActions: CompanyActions,
     private generalActions: GeneralActions
   ) {
-    this._window.nativeWindow.superformIds = ['Jkvq'];
+    //this._window.nativeWindow.superformIds = ['Jkvq'];
   }
 
   public ngOnInit() {
@@ -78,7 +79,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public openScheduleModal() {
-    this.talkSalesModal.show();
+    this._generalService.invokeEvent.next("openschedulemodal");
   }
 
   public loadScript() {

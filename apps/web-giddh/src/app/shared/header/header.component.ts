@@ -332,6 +332,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
     this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
 
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'openschedulemodal') {
+        this.openScheduleModal();
+      }
+    });
   }
 
   public ngOnInit() {
