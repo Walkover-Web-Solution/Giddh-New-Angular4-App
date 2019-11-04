@@ -73,7 +73,7 @@
                   <sup *ngIf="isDebtorCreditor">*</sup>
                 </label>
                 <div class="custom-select pos-rel">
-                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
+                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
                              [disabled]="gst.get('gstNumber').value" formControlName="stateCode"></sh-select>
                 </div>
               </div>

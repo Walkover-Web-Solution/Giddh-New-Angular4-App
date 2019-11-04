@@ -16,6 +16,7 @@ import * as _ from '../../../../lodash-optimized';
 import { CompanyResponse, States } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {IForceClear} from "../../../../models/api-models/Sales";
 
 @Component({
   selector: 'account-update-new',
@@ -84,6 +85,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
     { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
@@ -267,6 +270,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
           }
           this.isIndia = true;
         }
+
+        this.resetGstStateForm();
       }
     });
 
@@ -339,6 +344,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       gstFields.patchValue(val);
     }
     return gstFields;
+  }
+
+  public resetGstStateForm() {
+    this.forceClear$ = observableOf({status: true});
+
+    let addresses = this.addAccountForm.get('addresses') as FormArray;
+    for (let control of addresses.controls) {
+      control.get('stateCode').patchValue(null);
+      control.get('gstNumber').setValue("");
+    }
   }
 
   public addGstDetailsForm(value: string) {
