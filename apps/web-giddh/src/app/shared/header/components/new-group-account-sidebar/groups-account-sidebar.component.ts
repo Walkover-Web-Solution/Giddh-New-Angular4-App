@@ -20,7 +20,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
   selector: 'groups-account-sidebar',
   templateUrl: './groups-account-sidebar.component.html',
   styles: [`
-    .list-item:focus {
+    .list-item:focus , .list-item:focus .list-item  {
       color: #fff !important;
       background: #2D9EE0;
     }
