@@ -361,15 +361,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
-      for (let i = 0; i < firstElementToFocus.length; i++) {
-        if (firstElementToFocus[i].tabIndex === 0) {
-          firstElementToFocus[i].focus();
-        }
+      if (firstElementToFocus[0]) {
+        firstElementToFocus[0].focus();
       }
-    }, 200);
+      if (!this.isCashInvoice) {
+        let cashInvoiceInput = $('.focusClasses');
+        cashInvoiceInput[0].focus();
+      }
+    }, 400);
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
-
   public ngOnInit() {
     // this.invoiceNo = '';
     this.isUpdateMode = false;
@@ -1051,6 +1052,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
         moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
     }
+    this.ngAfterViewInit();
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {

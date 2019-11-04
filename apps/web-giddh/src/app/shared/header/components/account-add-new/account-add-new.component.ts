@@ -163,10 +163,11 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         let lengthofFormArray = addressFormArray.controls.length;
         if (a !== 'IN') {
           this.isIndia = false;
-          // for (let index = 0; index < lengthofFormArray; index++) {
-          //   addressFormArray.removeAt(index);
-          // }
-          // addresses.push(this.initialGstDetailsForm());
+          for (let index = 0; index < lengthofFormArray; index++) {
+            if(index > 0) {
+              addressFormArray.removeAt(index);
+            }
+          }
         } else {
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
