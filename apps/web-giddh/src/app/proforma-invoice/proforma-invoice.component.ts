@@ -781,7 +781,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCustomerSelected = true;
             this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
             this.customerCountryName = tempSelectedAcc.country.countryName;
-            if(this.isMulticurrencyAccount){
+            if (this.isMulticurrencyAccount) {
               this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
               this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode);
               this.companyCurrencyName = tempSelectedAcc.currency;
@@ -1439,7 +1439,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol) {
         depositAmount = depositAmount * this.exchangeRate;
       }
-      depositAmount = depositAmount / this.exchangeRate;
+      depositAmount = depositAmount / this.exchangeRate || 0;
     }
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
@@ -2669,6 +2669,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         transactionClassMul.amount.amountForAccount = tr.amount;
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
+        salesEntryClass.description = tr.description;
         if (tr.isStockTxn) {
           let saalesAddBulkStockItems = new SalesAddBulkStockItems();
           saalesAddBulkStockItems.name = tr.stockDetails.name;
@@ -2730,6 +2731,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.amount = t.amount.amountForAccount;
         salesTransactionItemClass.hsnNumber = entry.hsnNumber;
         salesTransactionItemClass.sacNumber = entry.sacNumber;
+        salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
+        salesTransactionItemClass.description = t.description;
+        salesTransactionItemClass.date = t.date;
         salesEntryClass.transactions.push(salesTransactionItemClass);
         entry.taxes.forEach(ta => {
           let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
@@ -2836,7 +2840,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
     voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
-    voucherClassConversion.accountDetails.billingDetails =  this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
+    voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
@@ -2884,9 +2888,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public updateExchangeRate(val) {
     val = val.replace(this.baseCurrencySymbol, '');
-    let total = parseFloat(val.replace(/,/g, ""));
+    let total = parseFloat(val.replace(/,/g, "")) || 0;
     if (this.isMulticurrencyAccount) {
-      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal;
+      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
@@ -2921,10 +2925,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public switchCurrencyImg(switchCurr) {
     this.showSwitchedCurr = switchCurr;
     if (switchCurr) {
-      this.reverseExchangeRate = 1 / this.exchangeRate;
+      this.reverseExchangeRate = 1 / this.exchangeRate || 0;
       this.originalReverseExchangeRate = this.reverseExchangeRate;
     } else {
-      this.exchangeRate = 1 / this.reverseExchangeRate;
+      this.exchangeRate = 1 / this.reverseExchangeRate || 0;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
@@ -2932,7 +2936,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public saveCancelExcRate(toSave) {
     if (toSave) {
       if (this.showSwitchedCurr) {
-        this.exchangeRate = 1 / this.reverseExchangeRate;
+        this.exchangeRate = 1 / this.reverseExchangeRate || 0;
       } else {
         this.originalExchangeRate = this.exchangeRate;
       }
