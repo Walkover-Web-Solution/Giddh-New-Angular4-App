@@ -56,6 +56,9 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
       letter-spacing: 1px;
       background-color: #dcdde4;
     }
+   .horizontal-form .mobileCode .error-msg {
+    position: absolute;
+}
   `]
 })
 export class AccountUpdateNewComponent implements OnInit, OnDestroy {

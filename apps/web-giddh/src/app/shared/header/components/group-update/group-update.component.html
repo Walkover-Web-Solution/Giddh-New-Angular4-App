@@ -4,7 +4,7 @@
     <div class="row">
       <div class="form-group col-xs-12 col-sm-6">
         <label>Group Name</label>
-        <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
+        <input type="text" class="form-control" #autoFocused placeholder="Enter Group Name" formControlName="name">
       </div>
       <div class="form-group col-xs-12 col-sm-6">
         <label>Unique Name</label>
@@ -54,10 +54,10 @@
     <div class="form-group text-right">
 
       <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-        (click)="showDeleteGroupModal()">DELETE
+        (click)="showDeleteGroupModal()">Delete
       </button>
 
-      <button class="btn btn-primary" type="submit" *ngIf="(showEditGroup$ | async)"
+      <button class="btn btn-primary mrL1" type="submit" *ngIf="(showEditGroup$ | async)"
         [ladda]="isUpdateGroupInProcess$ | async"
         [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
       </button>
@@ -70,7 +70,7 @@
 
 
 <!--move group-->
-<div class="horizontal-form form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+<div class="horizontal-form  form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
   <form name="moveGroupForm" class="col-xs-12 " novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
     <label class="d-block">Move to group</label>
     <span>
