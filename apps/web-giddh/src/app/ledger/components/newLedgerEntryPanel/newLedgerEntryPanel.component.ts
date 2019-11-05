@@ -808,10 +808,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (!baseModel || !this.blankLedger.exchangeRate) {
       return 0;
     }
+    //multiplying AND DIVIDING with exchange rate for display instead of original exchange rate
     if (this.blankLedger.selectedCurrencyToDisplay === 0) {
-      return giddhRoundOff(baseModel * this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+      return giddhRoundOff(baseModel * this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
     } else {
-      return giddhRoundOff(baseModel / this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+      return giddhRoundOff(baseModel / this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
     }
   }
 }
