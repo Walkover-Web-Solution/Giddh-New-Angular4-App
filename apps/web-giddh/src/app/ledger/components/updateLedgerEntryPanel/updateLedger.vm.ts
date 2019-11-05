@@ -123,11 +123,15 @@ export class UpdateLedgerVm {
           return this.isValidCategory(category);
         }
       });
+
       let discountEntryType = 'CREDIT';
+      let totalAmount = 0;
       if (incomeExpenseEntryIndex > -1) {
         discountEntryType = this.selectedLedger.transactions[incomeExpenseEntryIndex].type === 'DEBIT' ? 'CREDIT' : 'DEBIT';
+        totalAmount = this.selectedLedger.transactions[incomeExpenseEntryIndex].amount;
       } else {
         discountEntryType = 'CREDIT';
+        totalAmount = 0;
       }
 
       this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
@@ -135,7 +139,7 @@ export class UpdateLedgerVm {
 
         trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
         trx.particular.name = dx.name ? dx.name : 'discount';
-        trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * this.totalAmount) / 100), this.giddhBalanceDecimalPlaces);
+        trx.amount = dx.discountType === 'FIX_AMOUNT' ? dx.amount : giddhRoundOff(((dx.discountValue * totalAmount) / 100), this.giddhBalanceDecimalPlaces);
         trx.convertedAmount = this.calculateConversionRate(trx.amount);
         trx.isStock = false;
         trx.isTax = false;
