@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group">
                             <label>State</label>
-                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
+                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="selectedState" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
 
                         </div>
                         <div class="form-group">
