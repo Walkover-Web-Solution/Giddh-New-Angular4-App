@@ -57,6 +57,9 @@ import {IForceClear} from "../../../../models/api-models/Sales";
       letter-spacing: 1px;
       background-color: #dcdde4;
     }
+   .horizontal-form .mobileCode .error-msg {
+    position: absolute;
+}
   `]
 })
 export class AccountUpdateNewComponent implements OnInit, OnDestroy {

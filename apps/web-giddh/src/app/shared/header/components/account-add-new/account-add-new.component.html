@@ -11,7 +11,7 @@
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12" formGroupName="country">
         <label for="">Country</label>
-        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode" style="width:100%">
+        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"  (selected)="selectCountry($event)" style="width:100%">
         </sh-select>
       </div>
 
@@ -72,8 +72,9 @@
                   <sup *ngIf="isDebtorCreditor">*</sup>
                 </label>
                 <div class="custom-select pos-rel">
-                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
-                    formControlName="stateCode" style="width:100%"></sh-select>
+                  <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
+                    [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
+                  </sh-select>
                 </div>
               </div>
               <div class="row"
@@ -207,7 +208,7 @@
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-          <label class="d-block" *ngIf="!isMultipleCurrency">
+          <label class="d-block multicurrencyTooltipInfo" *ngIf="!isMultipleCurrency">
             <i class="fa fa-info-circle" aria-hidden="true"
               tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"></i>
             Currency</label>

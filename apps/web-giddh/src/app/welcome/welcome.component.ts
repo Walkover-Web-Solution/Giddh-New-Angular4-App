@@ -136,6 +136,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         data.map(d => {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
+
+        this.reFillState();
       }
       const filteredArr = this.states.reduce((acc, current) => {
         const x = acc.find(item => item.value === current.value);
@@ -225,6 +227,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       _.map(res.body, (o) => {
         this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
       });
+
+      this.reFillTax();
     });
     this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
       this.businessNatureList = [];
@@ -232,6 +236,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.businessNatureList.push({ label: o, value: o });
       });
     });
+
+    this.reFillForm();
   }
 
   public ngAfterViewInit() {
@@ -241,15 +247,51 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public skip() {
     this._router.navigate(['/onboarding']);
   }
-  // public reFillForm() {
-  //   this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
-  //   this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
-  //   this.selectedBusinesstype = this.createNewCompany.bussinessType;
-  //   if (this.selectedBusinesstype === 'Registered') {
-  //     this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
-  //   }
-  //   this.companyProfileObj.address = this.createNewCompany.address;
-  // }
+
+  public reFillForm() {
+    this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
+    this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
+    this.selectedBusinesstype = this.createNewCompany.bussinessType;
+    if (this.selectedBusinesstype === 'Registered') {
+      this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+    }
+    this.companyProfileObj.address = this.createNewCompany.address;
+  }
+
+  public reFillState() {
+    if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
+      this.companyProfileObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
+
+      let stateLoop = 0;
+      for(stateLoop; stateLoop < this.states.length; stateLoop++) {
+        if(this.states[stateLoop].value === this.companyProfileObj.state) {
+          this.companyProfileObj.selectedState = this.states[stateLoop].label;
+        }
+      }
+    }
+  }
+
+  public reFillTax() {
+    if(this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
+
+      let currentTaxList = [];
+
+      for (let i = 0; i < this.taxesList.length; i++) {
+        currentTaxList[this.taxesList[i].value] = [];
+        currentTaxList[this.taxesList[i].value] = i;
+      }
+
+      this.createNewCompany.taxes.forEach(tax => {
+        this.selectedTaxes.push(tax);
+
+        let matchedIndex = currentTaxList[tax];
+        if (matchedIndex > -1) {
+          this.taxesList[matchedIndex].isSelected = true;
+        }
+      });
+    }
+  }
+
   public prepareWelcomeForm() {
     if (this.company) {
       this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
