@@ -2676,6 +2676,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         salesEntryClass.description = tr.description;
+        //transactionClassMul.description =  tr.description;
         if (tr.isStockTxn) {
           let saalesAddBulkStockItems = new SalesAddBulkStockItems();
           saalesAddBulkStockItems.name = tr.stockDetails.name;
@@ -2735,8 +2736,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
         salesTransactionItemClass.accountName = t.account.name;
         salesTransactionItemClass.amount = t.amount.amountForAccount;
-        salesTransactionItemClass.hsnNumber = entry.hsnNumber;
-        salesTransactionItemClass.sacNumber = entry.sacNumber;
+        salesTransactionItemClass.hsnNumber = t.hsnNumber;
+        salesTransactionItemClass.sacNumber = t.sacNumber;
         salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
         salesTransactionItemClass.description = t.description;
         salesTransactionItemClass.date = t.date;
