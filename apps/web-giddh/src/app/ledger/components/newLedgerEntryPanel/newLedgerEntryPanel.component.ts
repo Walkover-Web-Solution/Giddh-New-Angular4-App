@@ -393,10 +393,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateAmount() {
-
-    if (!(typeof this.currentTxn.total === 'string')) {
-      return;
-    }
+    //
+    // if (!(typeof this.currentTxn.total === 'string')) {
+    //   return;
+    // }
     let fixDiscount = 0;
     let percentageDiscount = 0;
     if (this.discountControl) {
