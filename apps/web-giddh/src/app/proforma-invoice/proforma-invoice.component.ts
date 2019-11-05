@@ -2739,7 +2739,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesTransactionItemClass.hsnNumber = t.hsnNumber;
         salesTransactionItemClass.sacNumber = t.sacNumber;
         salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
-        salesTransactionItemClass.description = t.description;
+        salesTransactionItemClass.description = entry.description;
         salesTransactionItemClass.date = t.date;
         salesEntryClass.transactions.push(salesTransactionItemClass);
         entry.taxes.forEach(ta => {
