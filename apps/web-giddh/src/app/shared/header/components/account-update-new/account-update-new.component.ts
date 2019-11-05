@@ -16,6 +16,7 @@ import * as _ from '../../../../lodash-optimized';
 import { CompanyResponse, States } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {IForceClear} from "../../../../models/api-models/Sales";
 
 @Component({
   selector: 'account-update-new',
@@ -106,6 +107,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public isIndia: boolean = false;
   public companyCountry: string = '';
   public activeAccountName: string = '';
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -257,13 +259,17 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
         let lengthofFormArray = addressFormArray.controls.length;
+
+        this.resetGstStateForm();
+
         if (a !== 'IN') {
           this.isIndia = false;
-          for (let index = 0; index < lengthofFormArray; index++) {
-            if(index > 0) {
-              addressFormArray.removeAt(index);
+
+          Object.keys(addressFormArray.controls).forEach((key) => {
+            if(parseInt(key) > 0) {
+              addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
             }
-          }
+          });
         } else {
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
@@ -367,7 +373,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public renderGstDetails(val: IAccountAddress = null, addressLength: any) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
-    if (addresses.length !== addressLength) {
+    if (addresses.length < addressLength) {
       addresses.push(this.initialGstDetailsForm(val));
     }
   }
@@ -516,6 +522,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (event) {
       let phoneCode = event.additional;
       this.addAccountForm.get('mobileCode').patchValue(phoneCode);
+    }
+  }
+
+  public resetGstStateForm() {
+    this.forceClear$ = observableOf({status: true});
+
+    let addresses = this.addAccountForm.get('addresses') as FormArray;
+    for (let control of addresses.controls) {
+      control.get('stateCode').patchValue(null);
+      control.get('gstNumber').setValue("");
     }
   }
 }
