@@ -8167,7 +8167,9 @@ button.btn.btn-filter {
   white-space: initial;
   word-break: break-all;
 }
-
+.addManageGroupAcc{
+  overflow-y: hidden !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
