@@ -36,3 +36,12 @@
 .choose-ur-plan label.radio-inline {
     display: block;
 }
+@media(max-width:767px){
+  .welcome-msg .btn-default {
+    margin-top: 10px;
+}
+.select-plan-block {
+    border-bottom: 1px solid #dddd;
+    margin-bottom: 10px;
+}
+}
