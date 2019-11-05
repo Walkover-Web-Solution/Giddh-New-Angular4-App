@@ -245,6 +245,9 @@ export class GroupStockReportResponse {
   public totalItems: number;
   public totalPages: number;
   public stockReport: IGroupStockReport[];
+  public profit?:number;
+  public from?: any;
+  public to?: any;
 }
 
 interface IGroupStockReport {
