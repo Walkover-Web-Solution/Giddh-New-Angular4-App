@@ -110,6 +110,7 @@ export class LedgerVM {
   }
 
   public calculateReckonging(transactions: any) {
+    debugger
     if (transactions.forwardedBalance.amount === 0) {
       let recTotal = 0;
       let convertedTotal = 0;
@@ -154,7 +155,7 @@ export class LedgerVM {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
           this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
 
-          this.reckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+          this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
           this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
         }
       }
