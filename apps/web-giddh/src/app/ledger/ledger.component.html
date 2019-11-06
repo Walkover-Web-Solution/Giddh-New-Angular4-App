@@ -84,10 +84,10 @@
             <span class="d-flex icomoon_ico advnceSearchFilter" [tooltip]="'Reset Filter'" [placement]="'top'">
 
               <i class="fa fa-filter" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
-              <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
+              <!-- <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
                 style="margin-right: 7px;">
                 <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"></i>
-              </a>
+              </a> -->
             </span>
             <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
               [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
@@ -976,11 +976,13 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
-      <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm" (click)="getReconciledBack();">Back
+      <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
+        (click)="getReconciledBack();">Back
       </button>
       <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box mrT2 mrB2 clearfix text-center">
         <div class="col-xs-6 text-right">Balance as per bank
-          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}} {{reconcileClosingBalanceForBank?.type}}
+          <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
+            {{reconcileClosingBalanceForBank?.type}}
           </h3>
         </div>
         <div class="col-xs-6 text-left">Pending cheque
@@ -988,7 +990,8 @@
           </h3>
         </div>
       </div>
-      <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm" (click)="getReconciliation();">Reconciliation
+      <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
+        (click)="getReconciliation();">Reconciliation
       </button>
     </div>
   </div>
@@ -1164,8 +1167,8 @@
 <!-- modal sections -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 1045;">
-  <div class="modal-dialog modal-lg">
+<div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg advanceSearchModal">
     <div class="modal-content">
       <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
         (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
