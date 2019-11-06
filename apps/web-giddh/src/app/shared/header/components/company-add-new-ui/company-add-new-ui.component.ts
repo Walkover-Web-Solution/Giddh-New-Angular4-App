@@ -6,7 +6,8 @@ import { LocationService } from '../../../../services/location.service';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { LoginActions } from '../../../../actions/login.action';
-import { Store } from '@ngrx/store';
+import { CommonActions } from '../../../../actions/common.actions';
+import {select, Store} from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
@@ -21,6 +22,7 @@ import { CommonService } from '../../../../services/common.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import { NgForm } from '@angular/forms';
+import {CountryRequest} from "../../../../models/api-models/Common";
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -53,12 +55,13 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public isMobileNumberValid: boolean = false;
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public isNewUser: boolean = false;
 
   constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
     private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-    private _toaster: ToasterService, private _commonService: CommonService
+    private _toaster: ToasterService, private commonActions: CommonActions
   ) {
     this.getCountry();
     this.getCurrency();
@@ -83,9 +86,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$.subscribe(s => {
       if (s && !this.createBranch) {
-        let isNewUSer = false;
         this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
-          isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
+          this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
         });
         let prevTab = '';
         this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
@@ -93,7 +95,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         });
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'onboarding';
+        stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
         this._generalService.companyUniqueName = this.company.uniqueName;
         if (prevTab !== 'user-details') {
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
@@ -102,7 +104,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           if (prevTab !== 'user-details') {
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-            this._route.navigate([isNewUSer ? 'welcome' : 'onboarding']);
+            this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
           }
           this.closeModal();
         }, 500);
@@ -260,48 +262,61 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   }
 
   public getCountry() {
-    this._commonService.GetCountry("onboarding").subscribe((response) => {
-      if (response.status === 'success') {
-        Object.keys(response.body).forEach(key => {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
           // Creating Country List
-          this.countrySource.push({value: response.body[key].countryName, label: response.body[key].alpha2CountryCode + ' - ' + response.body[key].countryName, additional: response.body[key].callingCode});
+          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
-          this.countryCurrency[response.body[key].countryName] = [];
-          this.countryCurrency[response.body[key].countryName] = response.body[key].currency.code;
+          this.countryCurrency[res[key].countryName] = [];
+          this.countryCurrency[res[key].countryName] = res[key].currency.code;
         });
-
         this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = 'onboarding';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
       }
-    }, (error => {
-
-    }));
+    });
   }
 
   public getCurrency() {
-    this._commonService.GetCurrency().subscribe((response) => {
-      if(response.status === 'success') {
-        Object.keys(response.body).forEach(key => {
-          this.currencies.push({ label: response.body[key].code, value: response.body[key].code });
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
         });
-
         this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
       }
-    }, (error => {
-
-    }));
+    });
   }
 
   public getCallingCodes() {
-    this._commonService.GetCallingCodes().subscribe((response) => {
-      if(response.status === 'success') {
-        Object.keys(response.body.callingCodes).forEach(key => {
-          this.countryPhoneCode.push({ label: response.body.callingCodes[key], value: response.body.callingCodes[key] });
-        });
+    // this._commonService.GetCallingCodes().subscribe((response) => {
+    //   if(response.status === 'success') {
+    //     Object.keys(response.body.callingCodes).forEach(key => {
+    //       this.countryPhoneCode.push({ label: response.body.callingCodes[key], value: response.body.callingCodes[key] });
+    //     });
+    //
+    //     this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+    //   }
+    // }, (error => {
+    //
+    // }));
 
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+
+        console.log(res);
+        // Object.keys(res.callingCodes).forEach(key => {
+        //   this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        // });
         this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
       }
-    }, (error => {
-
-    }));
+    });
   }
 }

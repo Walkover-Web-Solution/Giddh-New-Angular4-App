@@ -1,3 +1,7 @@
+export class CountryRequest {
+  formName: string;
+}
+
 export class CountryResponse {
   alpha2CountryCode: string;
   alpha3CountryCode: string;
@@ -6,7 +10,7 @@ export class CountryResponse {
   currency: {
     code: string;
     symbol: string;
-  }
+  };
 }
 
 export class CurrencyResponse {
@@ -15,5 +19,25 @@ export class CurrencyResponse {
 }
 
 export class CallingCodesResponse {
-  callingCodes: [];
+  callingCodes: string;
+}
+
+export class FormResponse {
+  mobileNumber: {
+    callingCode: string;
+    regex: string;
+  };
+  applicableTaxes: [ {
+    name: string;
+    uniqueName: string;
+  }];
+  currency: {
+    code: string;
+    symbol: string;
+  };
+  fields: [{
+    regex: string;
+    name: string;
+    label: string;
+  }];
 }

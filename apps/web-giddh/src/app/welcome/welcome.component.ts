@@ -16,6 +16,7 @@ import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { CompanyActions } from '../actions/company.actions';
 import { CompanyService } from '../services/companyService.service';
+import { CommonService } from '../services/common.service';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
@@ -108,18 +109,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   public updateProfileSuccess$: Observable<boolean>;
   public businessType: IOption[] = [];
-
   public BusinessOptions: IOption[] = [];
-
-
   public hideTextarea = true;
   public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
-
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions) {
+    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions) {
     this.companyProfileObj = {};
     this.store.dispatch(this._generalActions.getAllState());
     contriesWithCodes.map(c => {

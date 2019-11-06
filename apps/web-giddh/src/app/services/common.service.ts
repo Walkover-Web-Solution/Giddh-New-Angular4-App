@@ -4,8 +4,8 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMMON_API } from './apiurls/common.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import {UserDetails} from "../models/api-models/loginModels";
-import { CountryResponse, CurrencyResponse, CallingCodesResponse } from '../models/api-models/Common';
+import { UserDetails } from "../models/api-models/loginModels";
+import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, FormResponse } from '../models/api-models/Common';
 import {ErrorHandler} from "./catchManager/catchmanger";
 import {HttpWrapperService} from "./httpWrapper.service";
 import {Observable} from "rxjs";
@@ -18,9 +18,10 @@ export class CommonService {
     this.user = this._generalService.user;
   }
 
-  public GetCountry(formName: string): Observable<BaseResponse<any, any>> {
+  public GetCountry(request: CountryRequest): Observable<BaseResponse<any, any>> {
     let url = this.config.apiUrl + COMMON_API.COUNTRY;
-    return this._http.get(url.replace(':formName', formName)).pipe(
+    url = url.replace(':formName', request.formName);
+    return this._http.get(url).pipe(
       map((res) => {
         let data: BaseResponse<CountryResponse, any> = res;
         return data;
@@ -41,6 +42,17 @@ export class CommonService {
     return this._http.get(url).pipe(
       map((res) => {
         let data: BaseResponse<CallingCodesResponse, any> = res;
+        return data;
+      }));
+  }
+
+  public GetForm(formName: string, refresh: any): Observable<BaseResponse<any, any>> {
+    let url = this.config.apiUrl + COMMON_API.FORM;
+    url = url.replace(':formName', formName);
+    url = url.replace(':refresh', refresh);
+    return this._http.get(url).pipe(
+      map((res) => {
+        let data: BaseResponse<FormResponse, any> = res;
         return data;
       }));
   }
