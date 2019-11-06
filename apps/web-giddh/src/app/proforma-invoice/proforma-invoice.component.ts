@@ -2932,24 +2932,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public switchCurrencyImg(switchCurr) {
     this.showSwitchedCurr = switchCurr;
     if (switchCurr) {
-      this.reverseExchangeRate = 1 / this.exchangeRate || 0;
+      this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
       this.originalReverseExchangeRate = this.reverseExchangeRate;
     } else {
-      this.exchangeRate = 1 / this.reverseExchangeRate || 0;
-      this.originalExchangeRate = this.exchangeRate;
+      this.exchangeRate = this.reverseExchangeRate  ? 1 / this.reverseExchangeRate : 0;
+      this.originalExchangeRate = this.exchangeRate ;
     }
   }
 
   public saveCancelExcRate(toSave) {
     if (toSave) {
       if (this.showSwitchedCurr) {
-        this.exchangeRate = 1 / this.reverseExchangeRate || 0;
+        this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
       } else {
         this.originalExchangeRate = this.exchangeRate;
       }
       this.autoSaveIcon = !this.autoSaveIcon;
       this.showCurrencyValue = !this.showCurrencyValue;
-      this.originalReverseExchangeRate = this.reverseExchangeRate
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
       this.calculateGrandTotal();
     } else {
       this.showCurrencyValue = !this.showCurrencyValue;
