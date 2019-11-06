@@ -89,7 +89,7 @@
                               </a>
                             </ng-template>
 
-                            <ng-template #notFoundLinkTemplate>
+                            <ng-template #notFoundLinkTempdepositAccountUniqueNamelate>
                               <a href="javascript:void(0)" class="list-item" [keyboardShortcut]="'alt+c'"
                                 style="width:100%; display: flex;justify-content: space-between;">
                                 <div class="item">{{ customerNotFoundText }}</div>
@@ -103,7 +103,7 @@
                         <!-- region if not cashinvoice show customer dropdown -->
                         <ng-container *ngIf="isCashInvoice">
                           <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
-                            [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
+                            [(ngModel)]="invFormData.voucherDetails.customerName" (blur)='selectDefaultbank()'[readOnly]="isUpdateMode">
                         </ng-container>
                         <!-- endregion -->
 
