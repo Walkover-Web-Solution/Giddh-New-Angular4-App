@@ -263,9 +263,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
-  //Multicurrency changes
-  public exchangeRate = 71.9034;
-  public originalExchangeRate = 71.9034;
+  //Multi-currency changes
+  public exchangeRate = 1;
+  public originalExchangeRate = 1;
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;

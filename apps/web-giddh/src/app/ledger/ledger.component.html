@@ -671,10 +671,10 @@
               <td data-title="B/F Balance" class="col-xs-6">B/F Balance</td>
               <td data-title="Amount" class="col-xs-3 text-right">
                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
-                  {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
+                  {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                 </span><br>
                 <span class="amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                  {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
+                  {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency }}
                 </span>
                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
                 <!--              <p class="mb-0 amnt-total">$454</p>-->
