@@ -21,6 +21,8 @@ import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
 import { GeneralActions } from '../actions/general/general.actions';
+import { CommonActions } from '../actions/common.actions';
+import {CountryRequest} from "../models/api-models/Common";
 
 @Component({
   selector: 'welcome-component',
@@ -30,6 +32,13 @@ import { GeneralActions } from '../actions/general/general.actions';
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
+  public countryPhoneCode: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
   public companyProfileObj: any = null;
   public countryCodeList: IOption[] = [];
   public company: any = {};
@@ -43,10 +52,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedCountry = '';
   //public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public isGstValid: boolean = true;
-  public countrySource: IOption[] = [];
-  public currencies: IOption[] = [];
-  public countryPhoneCode: IOption[] = [];
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public taxesList: any = [];
   public businessTypeList: IOption[] = [];
   public businessNatureList: IOption[] = [];
@@ -115,16 +120,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions) {
+              private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
     this.store.dispatch(this._generalActions.getAllState());
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
-    });
-    // Country phone Code
-    contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
-    });
+
+    this.getCountry();
+    this.getCurrency();
+    this.getCallingCodes();
 
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -155,7 +157,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (cmp.country && this.companyProfileObj && !this.companyProfileObj.country) {
             this.selectedCountry = cmp.country;
-            this.autoSelectCountryCode(cmp.country);
           }
         }
       });
@@ -163,16 +164,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
     // GET APPLICABLE TAXES
     // this.store.dispatch(this.companyActions.GetApplicableTaxes());
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      this.currencies = [];
-      if (data) {
-        data.map(d => {
-          this.currencies.push({ label: d.code, value: d.code });
-        });
-      }
-      this.currencySource$ = observableOf(this.currencies);
-    });
-
   }
 
   public ngOnInit() {
@@ -238,13 +229,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this._router.navigate(['/onboarding']);
   }
   // public reFillForm() {
-  //   this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
-  //   this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
-  //   this.selectedBusinesstype = this.createNewCompany.bussinessType;
-  //   if (this.selectedBusinesstype === 'Registered') {
-  //     this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
-  //   }
-  //   this.companyProfileObj.address = this.createNewCompany.address;
+  // this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
+  // this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
+  // this.selectedBusinesstype = this.createNewCompany.bussinessType;
+  // if (this.selectedBusinesstype === 'Registered') {
+  // this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+  // }
+  // this.companyProfileObj.address = this.createNewCompany.address;
   // }
   public prepareWelcomeForm() {
     if (this.company) {
@@ -383,7 +374,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public back(isbranch: boolean) {
     //this._router.navigate(['']);
     if (isbranch) {
-      this._router.navigate(['pages', 'settings', 'branch']);  // <!-- pages/settings/branch -->
+      this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
     } else {
       this._router.navigate(['new-user']);
     }
@@ -391,5 +382,50 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          // Creating Country List
+          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          this.countryCurrency[res[key].countryName] = [];
+          this.countryCurrency[res[key].countryName] = res[key].currency.code;
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = 'onboarding';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getCallingCodes() {
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
   }
 }

@@ -9,7 +9,7 @@ import { CustomActions } from '../customActions';
 export interface CurrentCommonState {
   countries: CountryResponse[];
   currencies: CurrencyResponse[];
-  callingcodes: CallingCodesResponse[];
+  callingcodes: CallingCodesResponse;
 }
 
 const initialState: CurrentCommonState = {
@@ -40,7 +40,7 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
       return Object.assign({}, state, {});
 
     case CommonActions.GET_CALLING_CODES_RESPONSE:
-      let callingcodes: BaseResponse<CallingCodesResponse[], string> = action.payload;
+      let callingcodes: BaseResponse<CallingCodesResponse, string> = action.payload;
       if (callingcodes.status === 'success') {
         return Object.assign({}, state, {
           callingcodes: callingcodes.body

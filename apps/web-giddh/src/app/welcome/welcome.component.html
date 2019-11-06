@@ -21,7 +21,7 @@
             <span>
               <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
               <div class="custom-select pos-rel">
-                <sh-select id="country" [options]="countrySource" required [isFilterEnabled]="true"
+                <sh-select id="country" [options]="countrySource$ | async" required [isFilterEnabled]="true"
                   [disabled]="createNewCompanyPreparedObj.country" name="country"
                   [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left  select-caret" style="width: 100%">
                 </sh-select>
@@ -43,7 +43,7 @@
               <div class="d-flex">
                 <sh-select class="pull-left select-caret" [disabled]="createNewCompanyPreparedObj.phoneCode"
                   style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
-                  [options]="countryPhoneCode" [(ngModel)]="createNewCompanyPreparedObj.phoneCode"></sh-select>
+                  [options]="callingCodesSource$ | async" [(ngModel)]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                 <input type="number" class="form-control pull-right  select-caret" required
                   [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988" id="contactNo"
                   autocomplete="off" [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />

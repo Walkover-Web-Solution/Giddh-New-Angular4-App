@@ -19,7 +19,7 @@ export class CurrencyResponse {
 }
 
 export class CallingCodesResponse {
-  callingCodes: string;
+  callingCodes: [];
 }
 
 export class FormResponse {

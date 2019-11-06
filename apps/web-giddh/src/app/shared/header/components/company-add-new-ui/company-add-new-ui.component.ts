@@ -47,8 +47,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public isCompanyCreated$: Observable<boolean>;
   public logedInuser: UserDetails;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public countryPhoneCode: IOption[] = [];
   public callingCodesSource$: Observable<IOption[]> = observableOf([]);
   public countryCurrency: any[] = [];
@@ -294,25 +294,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   }
 
   public getCallingCodes() {
-    // this._commonService.GetCallingCodes().subscribe((response) => {
-    //   if(response.status === 'success') {
-    //     Object.keys(response.body.callingCodes).forEach(key => {
-    //       this.countryPhoneCode.push({ label: response.body.callingCodes[key], value: response.body.callingCodes[key] });
-    //     });
-    //
-    //     this.callingCodesSource$ = observableOf(this.countryPhoneCode);
-    //   }
-    // }, (error => {
-    //
-    // }));
-
     this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-
-        console.log(res);
-        // Object.keys(res.callingCodes).forEach(key => {
-        //   this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
-        // });
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
         this.callingCodesSource$ = observableOf(this.countryPhoneCode);
       } else {
         this.store.dispatch(this.commonActions.GetCallingCodes());
