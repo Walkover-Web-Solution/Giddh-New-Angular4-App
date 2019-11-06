@@ -404,7 +404,7 @@
                         *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                     </div>
                     <div class="mt-2" *ngIf="groupStockReport.profit">
-                      <span class="text-orange">&nbsp;{{groupStockReport.profit | giddhCurrency}} ({{dateRangePickerCmp.nativeElement.value}})</span>
+                      <span class="text-orange">&nbsp;{{groupStockReport.profit | giddhCurrency}} ({{dateRangePickerCmp.nativeElement.value | replaceHyphens}})</span>
                     </div>
                   </h4>
                 </div>
