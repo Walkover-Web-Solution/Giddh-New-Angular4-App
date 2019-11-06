@@ -77,11 +77,11 @@
             <div class="col-xs-12 mrB2 selectBox">
               <div class="clearfix">
 
-                <label for="gstinNum" class="d-block">GSTIN<sup class="text-danger">*</sup></label>
+                <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
                 <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15"
                   required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);"
                   (keyup)="getStateCode(gstNumberField, states)" name="gstNumber"
-                  [(ngModel)]="companyProfileObj.gstNumber" placeholder="Enter GSTIN" />
+                  [(ngModel)]="companyProfileObj.gstNumber" placeholder="Enter {{formFields['taxName'].label}}" />
 
               </div>
             </div>

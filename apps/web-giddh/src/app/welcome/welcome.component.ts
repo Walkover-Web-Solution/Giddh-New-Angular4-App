@@ -32,6 +32,7 @@ import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  public countryNameCode: any[] = [];
   public countrySource: IOption[] = [];
   public countrySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
@@ -118,6 +119,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public hideTextarea = true;
   public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public formFields: any[] = [];
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
               private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
@@ -127,7 +129,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getCountry();
     this.getCurrency();
     this.getCallingCodes();
-    this.getOnboardingForm();
 
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -148,6 +149,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }, (err) => {
       // console.log(err);
     });
+
     this.store.select(state => {
       if (!state.session.companies) {
         return;
@@ -390,12 +392,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       if (res) {
         Object.keys(res).forEach(key => {
           // Creating Country List
+          this.countryNameCode[res[key].countryName] = [];
+          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
+
           this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
           this.countryCurrency[res[key].countryName] = [];
           this.countryCurrency[res[key].countryName] = res[key].currency.code;
         });
         this.countrySource$ = observableOf(this.countrySource);
+
+        this.getOnboardingForm();
       } else {
         let countryRequest = new CountryRequest();
         countryRequest.formName = 'onboarding';
@@ -433,13 +440,18 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public getOnboardingForm() {
     this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
+        Object.keys(res.fields).forEach(key => {
+          this.formFields[res.fields[key].name] = [];
+          this.formFields[res.fields[key].name] = res.fields[key];
+        });
+
         Object.keys(res.applicableTaxes).forEach(key => {
           this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
         });
       } else {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = 'IN';
+        onboardingFormRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
