@@ -650,7 +650,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
           }
 
-          this.depositAccountUniqueName = 'cash';
+          this.depositAccountUniqueName = '';
         }
 
         // update mode because voucher details is available
@@ -1040,7 +1040,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     this.invFormData = new VoucherClass();
-    this.depositAccountUniqueName = 'cash';
+    this.depositAccountUniqueName = '';
     this.accountUniqueName = "";
     this.invoiceNo = "";
     this.typeaheadNoResultsOfCustomer = false;
@@ -3002,5 +3002,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       obj.address[0] = shippigAddrss;
     }
     return obj;
+  }
+
+  public selectDefaultbank() {
+    if(!this.depositAccountUniqueName){
+      this.depositAccountUniqueName = 'cash';
+    }
   }
 }
