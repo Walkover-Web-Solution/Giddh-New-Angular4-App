@@ -562,7 +562,7 @@ export class TransactionClassMulticurrency {
   public account: INameUniqueName;
   public amount: AmountClassMulticurrency;
   public stock?: SalesAddBulkStockItems;
-
+  public description?: string;
   constructor() {
     this.account = new class implements INameUniqueName {
       name: 'sales';
