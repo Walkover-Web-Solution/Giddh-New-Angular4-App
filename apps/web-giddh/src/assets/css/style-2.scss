@@ -708,7 +708,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top strong,
-.aging-table-top .top-aging-table-top span .date-range-picker {
+ .aging-table-top .top-aging-table-top span .date-range-picker {
   color: #1c1c1c;
 }
 
@@ -3285,7 +3285,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #tax-control-multi-select.multi-select input.form-control[readonly] {
   background-image: url('../images/caret.svg') !important;
-  background-position: 92% !important;
+  background-position: 96% !important;
 }
 
 .pItem .multi-select input.form-control {
@@ -5694,8 +5694,9 @@ typeahead-container .dropdown-menu li.active>a>a {
 }
 
 .company-form-body {
-  width: 422px;
-  margin: auto;
+    max-width: 422px;
+    margin: auto;
+    width: 100%;
 }
 
 .welcome-header h2 {
@@ -8415,6 +8416,9 @@ button.btn.btn-filter {
 }
 
 @media (max-width: 767px) {
+  .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child{
+        border-right: none;
+  }
   header .navbar {
     background-color: $top_header;
     border-bottom: 2px solid #e6e7e8;
@@ -8511,6 +8515,13 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+    #companyList {
+    background: #fff;
+    padding-bottom: 4px;
+    left: 0px;
+    top: 30px;
+    padding-top: 0;
+}
 }
 
 @media (max-width: 500px) {
@@ -8560,7 +8571,7 @@ button.btn.btn-filter {
     margin-bottom: 5px;
   }
   .welcome_header h1 {
-    font-size: 40px;
+    font-size: 25px !important;
   }
   .welcome_header:after {
     bottom: 0;
@@ -8720,4 +8731,9 @@ button.btn.btn-filter {
   td.pItem.price .my-dropdown-menu {
     width: 180px !important;
   }
+
+.user_dropdown > li > a .glyphicon-menu-right{
+  transform: rotate(90deg);
+}
+
 }

@@ -306,6 +306,11 @@ a.text-dark {
 #sFform-V6Lc input {
     font-family: "AvenirLTStdMedium" !important;
 }
+@media(max-width:767px){
+  .scheduleImg{
+    display: none;
+  }
+}
 
 @media (max-width: 600px) {
     .white-popup {

@@ -27,6 +27,7 @@
 
 .choose-ur-plan {
     padding-top: 40px;
+
 }
 
 .your-account {
@@ -35,4 +36,23 @@
 
 .choose-ur-plan label.radio-inline {
     display: block;
+}
+@media(max-width:767px){
+  .welcome-msg .btn-default {
+    margin-top: 10px;
+}
+.select-plan-block {
+    border-bottom: 1px solid #dddd;
+    margin-bottom: 10px;
+}
+}
+@media(max-width:414px){
+  .your-account span  ,   .your-account p{
+   font-size: 14px;
+
+}
+.choose-ur-plan {
+    padding-top: 0px;
+        margin-bottom: 20px;
+}
 }
