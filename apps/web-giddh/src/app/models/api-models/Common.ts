@@ -13,3 +13,7 @@ export class CurrencyResponse {
   code: string;
   symbol: string;
 }
+
+export class CallingCodesResponse {
+  callingCodes: [];
+}

@@ -5,7 +5,7 @@ import { COMMON_API } from './apiurls/common.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import {UserDetails} from "../models/api-models/loginModels";
-import { CountryResponse, CurrencyResponse } from '../models/api-models/common';
+import { CountryResponse, CurrencyResponse, CallingCodesResponse } from '../models/api-models/Common';
 import {ErrorHandler} from "./catchManager/catchmanger";
 import {HttpWrapperService} from "./httpWrapper.service";
 import {Observable} from "rxjs";
@@ -32,6 +32,15 @@ export class CommonService {
     return this._http.get(url).pipe(
       map((res) => {
         let data: BaseResponse<CurrencyResponse, any> = res;
+        return data;
+      }));
+  }
+
+  public GetCallingCodes(): Observable<BaseResponse<any, any>> {
+    let url = this.config.apiUrl + COMMON_API.CALLING_CODES;
+    return this._http.get(url).pipe(
+      map((res) => {
+        let data: BaseResponse<CallingCodesResponse, any> = res;
         return data;
       }));
   }

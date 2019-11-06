@@ -15,7 +15,6 @@ import { AppState } from '../../../../store';
 import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest, CompanyCreateRequest } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { IContriesWithCodes } from '../../../../models/interfaces/common.interface';
 import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CommonService } from '../../../../services/common.service';
@@ -29,15 +28,15 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./company-add-new-ui.component.css']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
   @ViewChild('companyForm') public companyForm: NgForm;
   @Input() public createBranch: boolean = false;
 
-  public contriesWithCodes: IContriesWithCodes[] = [];
   public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
   // public company: CompanyRequest2 = new CompanyRequest2();
   public company: CompanyCreateRequest = new CompanyCreateRequest();
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
@@ -49,7 +48,8 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   public currencySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
   public countryPhoneCode: IOption[] = [];
-  public countryCurrency: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
   public isMobileNumberValid: boolean = false;
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -62,6 +62,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   ) {
     this.getCountry();
     this.getCurrency();
+    this.getCallingCodes();
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
   }
@@ -118,9 +119,6 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         }
       }
     });
-  }
-  public ngAfterViewInit() {
-    _.uniqBy(this.countryPhoneCode, 'value');
   }
 
   /**
@@ -235,6 +233,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     if (event) {
       let phoneCode = event.additional;
       this.company.phoneCode = phoneCode;
+      this.company.baseCurrency = this.countryCurrency[event.value];
     }
   }
 
@@ -263,52 +262,15 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   public getCountry() {
     this._commonService.GetCountry("onboarding").subscribe((response) => {
       if (response.status === 'success') {
-        // let countries = [];
-        // Object.keys(response.body).forEach(key => {
-        //   countries.push({
-        //     value: response.body[key].callingCode, countryName: response.body[key].countryName, countryflag: response.body[key].alpha2CountryCode
-        //   });
-        //   this.countryCurrency.push({ value: response.body[key].currency.code, label: response.body[key].currency.code });
-        // });
-        //
-        // this.contriesWithCodes = countries;
-        //
-        // this.contriesWithCodes.map(c => {
-        //   this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
-        // });
-        //
-        // // Country phone Code
-        // this.contriesWithCodes.map(c => {
-        //   this.countryPhoneCode.push({ value: c.value, label: c.value });
-        // });
-        // _.uniqBy(this.countryPhoneCode, 'value');
-        // const cpc = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
-        //   return {
-        //     value: value,
-        //     label: this.countryPhoneCode.find(s => s.value === value).label
-        //   };
-        // });
-        // this.countryPhoneCode = cpc;
-        //
-        // // Country currency
-        // _.uniqBy(this.countryCurrency, 'value');
-        // const cc = Array.from(new Set(this.countryCurrency.map(s => s.value))).map(value => {
-        //   return {
-        //     value: value,
-        //     label: this.countryCurrency.find(s => s.value === value).label
-        //   };
-        // });
-        // this.countryCurrency = cc;
-
         Object.keys(response.body).forEach(key => {
+          // Creating Country List
           this.countrySource.push({value: response.body[key].countryName, label: response.body[key].alpha2CountryCode + ' - ' + response.body[key].countryName, additional: response.body[key].callingCode});
-          this.countryCurrency.push({ value: response.body[key].currency.code, label: response.body[key].currency.code });
-          this.countryPhoneCode.push({ value: response.body[key].callingCode, label: response.body[key].callingCode });
+          // Creating Country Currency List
+          this.countryCurrency[response.body[key].countryName] = [];
+          this.countryCurrency[response.body[key].countryName] = response.body[key].currency.code;
         });
 
-        console.log(this.countrySource);
-        console.log(this.countryPhoneCode);
-        console.log(this.countryCurrency);
+        this.countrySource$ = observableOf(this.countrySource);
       }
     }, (error => {
 
@@ -323,6 +285,20 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         });
 
         this.currencySource$ = observableOf(this.currencies);
+      }
+    }, (error => {
+
+    }));
+  }
+
+  public getCallingCodes() {
+    this._commonService.GetCallingCodes().subscribe((response) => {
+      if(response.status === 'success') {
+        Object.keys(response.body.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: response.body.callingCodes[key], value: response.body.callingCodes[key] });
+        });
+
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
       }
     }, (error => {
 
