@@ -22,7 +22,12 @@ export class CallingCodesResponse {
   callingCodes: [];
 }
 
-export class FormResponse {
+export class OnboardingFormRequest {
+  formName: string;
+  country: string;
+}
+
+export class OnboardingFormResponse {
   mobileNumber: {
     callingCode: string;
     regex: string;

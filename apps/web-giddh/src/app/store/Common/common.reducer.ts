@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { CountryResponse, CurrencyResponse, CallingCodesResponse } from '../../models/api-models/Common';
+import { CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormResponse } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { CustomActions } from '../customActions';
 
@@ -10,12 +10,14 @@ export interface CurrentCommonState {
   countries: CountryResponse[];
   currencies: CurrencyResponse[];
   callingcodes: CallingCodesResponse;
+  onboardingform: OnboardingFormResponse
 }
 
 const initialState: CurrentCommonState = {
   countries: null,
   currencies: null,
-  callingcodes: null
+  callingcodes: null,
+  onboardingform: null
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -44,6 +46,15 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
       if (callingcodes.status === 'success') {
         return Object.assign({}, state, {
           callingcodes: callingcodes.body
+        });
+      }
+      return Object.assign({}, state, {});
+
+    case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
+      let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
+      if (onboardingform.status === 'success') {
+        return Object.assign({}, state, {
+          onboardingform: onboardingform.body
         });
       }
       return Object.assign({}, state, {});

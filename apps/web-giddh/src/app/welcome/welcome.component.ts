@@ -22,7 +22,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CommonActions } from '../actions/common.actions';
-import {CountryRequest} from "../models/api-models/Common";
+import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
 
 @Component({
   selector: 'welcome-component',
@@ -127,6 +127,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getCountry();
     this.getCurrency();
     this.getCallingCodes();
+    this.getOnboardingForm();
 
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -207,12 +208,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.businessTypeList.push({ label: o, value: o });
       });
     });
-    this._companyService.getApplicabletaxes().subscribe((res: any) => {
-      this.taxesList = [];
-      _.map(res.body, (o) => {
-        this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
-      });
-    });
+    // this._companyService.getApplicabletaxes().subscribe((res: any) => {
+    //   this.taxesList = [];
+    //   _.map(res.body, (o) => {
+    //     this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
+    //   });
+    // });
     this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
       this.businessNatureList = [];
       _.map(res.body, (o) => {
@@ -425,6 +426,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.callingCodesSource$ = observableOf(this.countryPhoneCode);
       } else {
         this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
+  }
+
+  public getOnboardingForm() {
+    this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.applicableTaxes).forEach(key => {
+          this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
+        });
+      } else {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = 'IN';
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
   }

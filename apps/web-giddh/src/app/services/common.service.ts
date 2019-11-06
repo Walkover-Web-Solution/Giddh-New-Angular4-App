@@ -5,7 +5,7 @@ import { COMMON_API } from './apiurls/common.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { UserDetails } from "../models/api-models/loginModels";
-import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, FormResponse } from '../models/api-models/Common';
+import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import {ErrorHandler} from "./catchManager/catchmanger";
 import {HttpWrapperService} from "./httpWrapper.service";
 import {Observable} from "rxjs";
@@ -46,13 +46,13 @@ export class CommonService {
       }));
   }
 
-  public GetForm(formName: string, refresh: any): Observable<BaseResponse<any, any>> {
+  public GetOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
     let url = this.config.apiUrl + COMMON_API.FORM;
-    url = url.replace(':formName', formName);
-    url = url.replace(':refresh', refresh);
+    url = url.replace(':formName', request.formName);
+    url = url.replace(':country', request.country);
     return this._http.get(url).pipe(
       map((res) => {
-        let data: BaseResponse<FormResponse, any> = res;
+        let data: BaseResponse<OnboardingFormResponse, any> = res;
         return data;
       }));
   }
