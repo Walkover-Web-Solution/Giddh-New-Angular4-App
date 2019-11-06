@@ -280,6 +280,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public reverseExchangeRate: number;
   public originalReverseExchangeRate: number;
   public countryCode: string = '';
+  private entriesListBeforeTax: SalesEntryClass[];
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1314,6 +1315,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+
     if (!modalBool) {
       let entry = this.invFormData.entries[this.activeIndx];
       if (entry) {
@@ -1323,6 +1325,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     } else {
       if (index !== null) {
+        this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
         // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
       }
     }
@@ -2312,7 +2315,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!entry) {
       return;
     }
-
     if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
       let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
       if (!modal.appliedOtherTax.name) {
@@ -2342,6 +2344,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entry.otherTaxModal = new SalesOtherTaxesModal();
       entry.tcsTaxList = [];
       entry.tdsTaxList = [];
+    }
+    if(this.activeIndx && !entryObj){
+      this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
+      this.invFormData.entries[this.activeIndx] = entry;
     }
     // this.selectedEntry = null;
   }
@@ -2730,9 +2736,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
       let salesEntryClass = new SalesEntryClass();
+      let salesTransactionItemClass = new SalesTransactionItemClass();
       salesEntryClass.transactions = [];
       entry.transactions.forEach(t => {
-        let salesTransactionItemClass = new SalesTransactionItemClass();
+        salesTransactionItemClass = new SalesTransactionItemClass();
         salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
         salesTransactionItemClass.accountName = t.account.name;
         salesTransactionItemClass.amount = t.amount.amountForAccount;
@@ -2821,11 +2828,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.uniqueName = entry.uniqueName;
       salesEntryClass.description = entry.description;
       salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
-
+      this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
+      console.log(salesEntryClass);
       voucherClassConversion.entries.push(salesEntryClass);
     });
 
-
+    this.entriesListBeforeTax = voucherClassConversion.entries;
     voucherClassConversion.companyDetails = result.company;
     voucherClassConversion.templateDetails = result.templateDetails;
 
