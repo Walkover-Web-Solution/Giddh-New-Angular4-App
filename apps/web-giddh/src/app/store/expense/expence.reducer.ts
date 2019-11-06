@@ -11,6 +11,7 @@ export interface ExpensePettyCash {
   showLoader: boolean;
   getPettycashReportInprocess: boolean;
   getPettycashReportSuccess: boolean;
+  ispPettycashEntrySuccess: boolean;
   getPettycashRejectedReportInprocess: boolean;
   getPettycashRejectedReportSuccess: boolean;
   noData: boolean;
@@ -23,6 +24,7 @@ export const initialState: ExpensePettyCash = {
   noData: true,
   getPettycashReportInprocess: false,
   getPettycashReportSuccess: false,
+  ispPettycashEntrySuccess: false,
   getPettycashRejectedReportInprocess: false,
   getPettycashRejectedReportSuccess: false,
   showLoader: false
@@ -70,7 +72,7 @@ export function expensesReducer(state = initialState, action: CustomActions): Ex
         return {
           ...state,
           getPettycashRejectedReportInprocess: false,
-          getPettycashRejectedReportSuccess: false,
+          ispPettycashEntrySuccess: false,
         }
       }
     }
@@ -78,11 +80,15 @@ export function expensesReducer(state = initialState, action: CustomActions): Ex
     case ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE: {
       let res: BaseResponse<any, string> = action.payload;
       if (res.status === 'success') {
-        return {
-          ...state, pettycashEntry: res.body,
+        return Object.assign({}, state, {
+          pettycashEntry: res.body,
           getPettycashReportInprocess: false,
-          getPettycashReportSuccess: true,
-        };
+          ispPettycashEntrySuccess: true,
+        });
+        //   ...state, pettycashEntry: res.body,
+        //   getPettycashReportInprocess: false,
+        //   getPettycashReportSuccess: true,
+        // };
 
       } else {
         return {

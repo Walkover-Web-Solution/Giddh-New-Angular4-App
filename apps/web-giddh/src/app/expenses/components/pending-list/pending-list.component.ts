@@ -113,6 +113,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     this.isRowExpand = true;
     this.selectedRowInput.emit(item);
     this.selectedRowToggle.emit(true);
+    this.store.dispatch(this._expenceActions.getPettycashEntryRequest(item.uniqueName));
   }
   public ngOnChanges(changes: SimpleChanges): void {
 

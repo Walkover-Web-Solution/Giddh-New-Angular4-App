@@ -42,8 +42,8 @@
 
 <div class="bg-white p-15">
     <div class="form-group mb-2">
-        <label>Comment</label>
-        <textarea name="" class="textarea form-control" placeholder="Add Comment"></textarea>
+        <label>Comment{{comments}}</label>
+        <textarea name="comment" class="textarea form-control" [placeholder]='comments'></textarea>
     </div>
 
     <div class="row">
@@ -88,15 +88,21 @@
             <a href="javascript:void(0)" class="d-inline-block pt-3">Entry against {{accountType}}</a>
         </div>
     </div>
-
-<!--    <div class="clearfix">-->
-<!--        <ledger [selectedAccountUniqueName]="selectedAccountUniqueName"></ledger>-->
-<!--    </div>-->
-
 </div>
 
-
-
+<div>
+    <update-ledger-entry-panel [isPettyCash]="true" [accountEntryPettyCash]="accountEntryPettyCash"></update-ledger-entry-panel>
+    <!-- <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
+</div> -->
+</div>
+<!-- <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-ledger">
+            <div class="modal-content">
+                <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
+                </div>
+            </div>
+        </div>
+    </div> -->
 <!-- modal start -->
 <ng-template #RejectionReason>
     <div class="modal-header">
