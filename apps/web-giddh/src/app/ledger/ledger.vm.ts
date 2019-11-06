@@ -154,7 +154,7 @@ export class LedgerVM {
           this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
           this.convertedReckoningCreditTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
 
-          this.reckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
+          this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
           this.convertedReckoningDebitTotal = transactions.convertedForwardedBalance.amount + transactions.convertedCreditTotal;
         }
       }
