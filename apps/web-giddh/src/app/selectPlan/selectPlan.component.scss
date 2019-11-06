@@ -27,6 +27,7 @@
 
 .choose-ur-plan {
     padding-top: 40px;
+
 }
 
 .your-account {
@@ -43,5 +44,15 @@
 .select-plan-block {
     border-bottom: 1px solid #dddd;
     margin-bottom: 10px;
+}
+}
+@media(max-width:414px){
+  .your-account span  ,   .your-account p{
+   font-size: 14px;
+
+}
+.choose-ur-plan {
+    padding-top: 0px;
+        margin-bottom: 20px;
 }
 }

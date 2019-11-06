@@ -532,11 +532,11 @@ background-color:$headerBtnColor;
 
  }
  span.icon-support.dropdown-toggle {
-    background-color:$border-blue;
+    background-color:$headerBtnColor;
     color: #fff;
     padding:6px 7px;
     font-size: 17px;
-    border:1px solid $border-blue;
+    border:1px solid $headerBtnColor;
     border-radius: 1px;
     position: relative;
     top: 1px;

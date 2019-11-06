@@ -63,7 +63,10 @@ label .required {
 @media (min-width: 414px) {
 
 .welcome_header h1 {
-    font-size: 30px;
+    font-size: 30px !important;
+}
+.welcome_wrapper {
+    padding: 20px 0;
 }
 }
 

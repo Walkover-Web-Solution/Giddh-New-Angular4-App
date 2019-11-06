@@ -8416,6 +8416,9 @@ button.btn.btn-filter {
 }
 
 @media (max-width: 767px) {
+  .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child{
+        border-right: none;
+  }
   header .navbar {
     background-color: $top_header;
     border-bottom: 2px solid #e6e7e8;
@@ -8568,7 +8571,7 @@ button.btn.btn-filter {
     margin-bottom: 5px;
   }
   .welcome_header h1 {
-    font-size: 40px;
+    font-size: 25px !important;
   }
   .welcome_header:after {
     bottom: 0;
