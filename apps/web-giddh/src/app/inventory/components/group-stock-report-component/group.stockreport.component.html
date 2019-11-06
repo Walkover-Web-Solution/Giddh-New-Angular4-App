@@ -404,7 +404,7 @@
                         *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                     </div>
                     <div class="mt-2" *ngIf="groupStockReport.profit">
-                      <span class="text-orange">&nbsp;{{groupStockReport.profit | giddhCurrency}} ({{groupStockReport.from | date: 'dd MMM yy'}} - {{groupStockReport.to| date: 'dd MMM yy'}})</span>
+                      <span class="text-orange">&nbsp;{{groupStockReport.profit | giddhCurrency}} ({{dateRangePickerCmp.nativeElement.value}})</span>
                     </div>
                   </h4>
                 </div>
