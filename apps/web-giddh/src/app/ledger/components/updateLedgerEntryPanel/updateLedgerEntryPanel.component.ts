@@ -566,7 +566,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['isPettyCash']) {
       this.isPettyCash = changes['isPettyCash'].currentValue;
-    } if (changes['accountEntryPettyCash']) {
+    } if (changes['accountEntryPettyCash'] && changes['accountEntryPettyCash'].currentValue) {
       this.accountPettyCashStream = changes['accountEntryPettyCash'].currentValue.body;
     }
   }

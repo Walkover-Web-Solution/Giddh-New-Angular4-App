@@ -42,8 +42,8 @@
 
 <div class="bg-white p-15">
     <div class="form-group mb-2">
-        <label>Comment{{comments}}</label>
-        <textarea name="comment" class="textarea form-control" [placeholder]='comments'></textarea>
+        <label>Comment</label>
+        <textarea name="comment" class="textarea form-control" [(ngModel)]="comment" placeholder='Add comments'></textarea>
     </div>
 
     <div class="row">
@@ -53,11 +53,6 @@
           <span class="text-danger">*</span>
                     </label>
                 <div class="select-style">
-                    <!-- <select name="">
-            <option value="">Standard Chartered Bank Indore A/c</option>
-            <option value="">Option 2</option>
-            <option value="">Option 3</option>
-          </select> -->
                     <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                         [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
                         <ng-template #optionTemplate1 let-option="option">
@@ -71,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="d-inline-block">
+            <!-- <div class="d-inline-block">
                 <span class="mr-1 d-inilne-block font-14">USD</span>
                 <div class="toggle d-inline-block" data-key="disabled">
                     <input type="checkbox" class="toggle-checkbox" id="disabled">
@@ -81,7 +76,7 @@
           </label>
                 </div>
                 <span class="ml-1 d-inline-block font-14">INR</span>
-            </div>
+            </div> -->
 
         </div>
         <div class="col-sm-4 text-right xs-left">

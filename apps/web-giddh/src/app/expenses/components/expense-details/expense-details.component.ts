@@ -64,17 +64,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public accountType: string;
   public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
+  public comment: string = '';
 
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
   public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
   public showUpdateLedgerForm: boolean = false;
   public accountEntryPettyCash: any;
-  public comments = 'Add comments';
-  // public txData: any = {
-  //   images: '',
-  //   comments: ''
-  // }
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private sundryDebtorsAcList: IOption[] = [];
@@ -95,7 +91,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
     this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-    // this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
+    this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
     this.ispPettycashEntrySuccess$ = this.store.pipe(select(p => p.expense.ispPettycashEntrySuccess), takeUntil(this.destroyed$));
   }
 
@@ -130,15 +126,28 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
       this.bankAccounts$ = observableOf(bankaccounts);
     });
     this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
-    // this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-    //   if (res) {
-    //     this.actionPettyCashRequestBody = null;
-    //     this.accountEntryPettyCash = res;
-    //     this.prepareApproveRequestObject(this.accountEntryPettyCash);
-    //     this.comments = this.accountEntryPettyCash.description;
-    //   }
-    //   console.log('this.accountEntryPettyCash', this.accountEntryPettyCash);
-    // });;
+    this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        this.actionPettyCashRequestBody = null;
+        this.accountEntryPettyCash = res;
+        this.prepareApproveRequestObject(this.accountEntryPettyCash);
+        this.preFillData(res);
+      }
+    });;
+  }
+  public preFillData(res: any) {
+    this.companyUniqueName = null;
+    this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
+    this.comment = res.description;
+    let imgs = res.attachedFiles;
+    let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
+    this.imageURL = [];
+    if (imgs.length) {
+      imgs.forEach(imgUniqeName => {
+        let imgUrls = imgPrefix + imgUniqeName;
+        this.imageURL.push(imgUrls);
+      })
+    }
   }
   public closeDetailsMode() {
     this.toggleDetailsMode.emit(true);
@@ -195,9 +204,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         if (res.status === 'success') {
           this.accountEntryPettyCash = res;
           this.prepareApproveRequestObject(this.accountEntryPettyCash);
-          this.comments = this.accountEntryPettyCash.body.description;
+          this.comment = this.accountEntryPettyCash.body.description;
         }
-        console.log('this.accountEntryPettyCash', this.accountEntryPettyCash);
       });
     }
   }
