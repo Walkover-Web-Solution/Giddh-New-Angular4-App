@@ -7648,7 +7648,7 @@ div#getGroupModal {
   width: 100%;
   left: 215px;
   bottom: 0;
-  z-index: 99;
+  z-index: 10;
 }
 
 ul#dropdown-nested li {
@@ -8171,8 +8171,11 @@ button.btn.btn-filter {
 .addManageGroupAcc{
   overflow-y: hidden !important;
 }
-.modal{
+.modal-backdrop{
   z-index:9991;
+}
+.modal{
+  z-index:9992;
 }
 
 /* responsive */
@@ -8382,7 +8385,7 @@ button.btn.btn-filter {
     padding: 0 3px;
     border: none;
   }
-  td.text-center.empty_table {
+  table.table td.text-center.empty_table {
     padding: 5px 10px 5px 0% !important;
     text-align: center;
   }
@@ -8503,6 +8506,10 @@ button.btn.btn-filter {
     width: 100%;
     top: 0;
   }
+
+.user_dropdown > li > a .glyphicon-menu-right{
+  transform: rotate(90deg);
+}
 }
 
 @media (max-width: 575px) {
@@ -8519,13 +8526,7 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
-    #companyList {
-    background: #fff;
-    padding-bottom: 4px;
-    left: 0px;
-    top: 30px;
-    padding-top: 0;
-}
+
 }
 
 @media (max-width: 500px) {
@@ -8557,7 +8558,15 @@ button.btn.btn-filter {
     right: 272px;
   }
 }
-
+@media(max-width:411px){
+        #companyList {
+    background: #fff;
+    padding-bottom: 4px;
+    left: 0px;
+    top: 30px;
+    padding-top: 0;
+}
+}
 @media (max-width: 360px) {
   .pagination-sm>li>a,
   .pagination-sm>li>span {
@@ -8736,8 +8745,6 @@ button.btn.btn-filter {
     width: 180px !important;
   }
 
-.user_dropdown > li > a .glyphicon-menu-right{
-  transform: rotate(90deg);
-}
+
 
 }
