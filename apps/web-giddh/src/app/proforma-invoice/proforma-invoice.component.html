@@ -664,7 +664,7 @@
                           (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'"
                           [notFoundLink]="true" [forceClearReactive]="forceClear$ | async"
                           (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
-                          (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true" [showClear]="true">
+                          (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
 
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">
