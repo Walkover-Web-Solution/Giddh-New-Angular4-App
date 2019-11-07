@@ -103,7 +103,7 @@
                         <!-- region if not cashinvoice show customer dropdown -->
                         <ng-container *ngIf="isCashInvoice">
                           <input type="text" name="voucherDetails.customerName" class="form-control cashInvoiceInput"
-                            [(ngModel)]="invFormData.voucherDetails.customerName" [readOnly]="isUpdateMode">
+                            [(ngModel)]="invFormData.voucherDetails.customerName" (blur)='selectDefaultbank()'[readOnly]="isUpdateMode">
                         </ng-container>
                         <!-- endregion -->
 
@@ -548,18 +548,20 @@
                     </div>
                   </td>
                   <td class="text-right tra-rate item-rate " style="height:1px;">
-                    <div class="td_Wrapper">
-                      <div style="flex: 1;">
-                        <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount">
-                            {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency}}
+                    <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
+                      <div class="td_Wrapper">
+                        <div style="flex: 1;">
+                          <div class="wrap-td-data"> <span *ngIf="isMulticurrencyAccount">
+                              {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency}}
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div *ngIf="isMulticurrencyAccount" class="differ-currency">
-                      <span>{{baseCurrencySymbol}}</span>
-                      <span>{{transaction.rate*exchangeRate | giddhCurrency}}</span>
+                      <div *ngIf="isMulticurrencyAccount" class="differ-currency">
+                        <span>{{baseCurrencySymbol}}</span>
+                        <span>{{transaction.rate*exchangeRate | giddhCurrency}}</span>
 
+                      </div>
                     </div>
                   </td>
                   <td class="text-right  item-amount" style="height:1px;">
@@ -662,7 +664,7 @@
                           (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'"
                           [notFoundLink]="true" [forceClearReactive]="forceClear$ | async"
                           (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67"
-                          (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
+                          (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true" [showClear]="true">
 
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">

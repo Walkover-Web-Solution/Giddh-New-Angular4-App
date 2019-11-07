@@ -198,11 +198,38 @@
     position: absolute;
     width: 600px;
 }
+
 .daterange_picker_ledger {
     border: 0;
-    background: #fff !important;
+    background-color: #fff !important;
     text-decoration-line: none;
     text-decoration-style: none;
+    background-image: url(../../assets/images/calender.svg) !important;
+        background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 45px !important;
+    position: relative;
+    z-index: 99;
+    cursor: default;
+
+}
+.inputWrapper {
+      display: block !important;
+    width: 100% !important;
+    position: relative;
+    height: 36px !important;
+}
+.inputWrapper:before {
+       position: absolute;
+    content: '';
+    display: block;
+    height: 36px;
+    width: 1px;
+    background-color: #d9d9d9;
+    left: 37px !important;
+    z-index: 100;
+    top: 0;
 }
 
 .C-flex-end {
@@ -339,15 +366,15 @@ sh-select:focus {
     right: -33%;
     top: 17px;
 }
-.advanceSearchByDate span{
-  width: 45px;
-    height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    border-right: 1px solid $border-blue;
-}
+// .advanceSearchByDate span{
+//   width: 45px;
+//     height: 34px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     background-color: #fff;
+//     border-right: 1px solid $border-blue;
+// }
 .ledger-head {
     margin-top: 46px;
 }

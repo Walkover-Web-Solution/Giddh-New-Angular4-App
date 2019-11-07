@@ -393,10 +393,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateAmount() {
-
-    if (!(typeof this.currentTxn.total === 'string')) {
-      return;
-    }
+    //
+    // if (!(typeof this.currentTxn.total === 'string')) {
+    //   return;
+    // }
     let fixDiscount = 0;
     let percentageDiscount = 0;
     if (this.discountControl) {
@@ -808,10 +808,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (!baseModel || !this.blankLedger.exchangeRate) {
       return 0;
     }
+    //multiplying AND DIVIDING with exchange rate for display instead of original exchange rate
     if (this.blankLedger.selectedCurrencyToDisplay === 0) {
-      return giddhRoundOff(baseModel * this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+      return giddhRoundOff(baseModel * this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
     } else {
-      return giddhRoundOff(baseModel / this.blankLedger.exchangeRate, this.giddhBalanceDecimalPlaces);
+      return giddhRoundOff(baseModel / this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
     }
   }
 }

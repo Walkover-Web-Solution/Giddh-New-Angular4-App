@@ -66,9 +66,9 @@ import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recip
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
 import { GeneralService } from '../services/general.service';
-import {LoaderState} from "../loader/loader";
-import {LoaderService} from "../loader/loader.service";
-import {LedgerResponseDiscountClass} from "../models/api-models/Ledger";
+import { LoaderState } from "../loader/loader";
+import { LoaderService } from "../loader/loader.service";
+import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 
 const THEAD_ARR_READONLY = [
   {
@@ -263,23 +263,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
-  //Multicurrency changes
-  public exchangeRate = 71.9034;
-  public originalExchangeRate = 71.9034;
+  //Multi-currency changes
+  public exchangeRate = 1;
+  public originalExchangeRate = 1;
   public isMulticurrencyAccount = false;
   public invoiceUniqueName: string;
   public showLoader: boolean = false;
-  public inputMaskFormat: string ='';
+  public inputMaskFormat: string = '';
   public isPrefixAppliedForCurrency: boolean;
-  public selectedSuffixForCurrency: string ='';
+  public selectedSuffixForCurrency: string = '';
   public companyCurrencyName: string;
   public baseCurrencySymbol: string = '';
-  public depositCurrSymbol: string ='';
+  public depositCurrSymbol: string = '';
   public grandTotalMulDum;
   public showSwitchedCurr = false;
   public reverseExchangeRate: number;
   public originalReverseExchangeRate: number;
-  public countryCode:string = '';
+  public countryCode: string = '';
+  private entriesListBeforeTax: SalesEntryClass[];
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -361,15 +362,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
-      for (let i = 0; i < firstElementToFocus.length; i++) {
-        if (firstElementToFocus[i].tabIndex === 0) {
-          firstElementToFocus[i].focus();
+      if (firstElementToFocus[0]) {
+        firstElementToFocus[0].focus();
+      }
+      if (!this.isCashInvoice) {
+        let cashInvoiceInput = $('.focusClasses');
+        if (cashInvoiceInput[0]) {
+          cashInvoiceInput[0].focus();
         }
       }
-    }, 200);
+    }, 400);
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
-
   public ngOnInit() {
     // this.invoiceNo = '';
     this.isUpdateMode = false;
@@ -386,7 +390,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         this.countryCode = profile.countryCode;
-        if(!this.isUpdateMode){
+        if (!this.isUpdateMode) {
           this.getUpdatedStateCodes(this.countryCode);
         }
       } else {
@@ -453,19 +457,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
+      if (!this.isUpdateMode) {
+        this.resetInvoiceForm(this.invoiceForm);
+      }
+
       this.getAllLastInvoices();
     });
 
     // bind state sources
-   /* this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.forEach(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource = arr;
-    });*/
+    /* this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
+       let arr: IOption[] = [];
+       if (states) {
+         states.forEach(d => {
+           arr.push({ label: `${d.name}`, value: d.code });
+         });
+       }
+       this.statesSource = arr;
+     });*/
 
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
@@ -475,18 +483,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     // get tax list and assign values to local vars
-    this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
-      if (o) {
-        this.companyTaxesList = o;
-        this.theadArrReadOnly.forEach((item: IContentCommon) => {
-          // show tax label
-          if (item.label === 'Tax') {
-            item.display = true;
+    this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+      if (isGetTaxes) {
+        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+          if (o) {
+            this.companyTaxesList = o;
+            this.theadArrReadOnly.forEach((item: IContentCommon) => {
+              // show tax label
+              if (item.label === 'Tax') {
+                item.display = true;
+              }
+              return item;
+            });
+          } else {
+            this.companyTaxesList = [];
           }
-          return item;
         });
-      } else {
-        this.companyTaxesList = [];
       }
     });
 
@@ -638,7 +650,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
           }
 
-          this.depositAccountUniqueName = 'cash';
+          this.depositAccountUniqueName = '';
         }
 
         // update mode because voucher details is available
@@ -652,12 +664,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.invoiceType === VoucherTypeEnum.sales) {
               let convertedRes1 = results[1];
               convertedRes1 = this.modifyMulticurrencyRes(results[1]);
-              if(results[1].account.currency){
+              if (results[1].account.currency) {
                 this.companyCurrencyName = results[1].account.currency.code;
               }
               obj = cloneDeep(convertedRes1) as VoucherClass;
               this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
-                obj.accountDetails.currencySymbol = acc.currencySymbol||'';
+                obj.accountDetails.currencySymbol = acc.currencySymbol || '';
               });
 
             } else {
@@ -727,23 +739,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               }
             }
 
-            if(!obj.accountDetails.billingDetails.state){
+            if (!obj.accountDetails.billingDetails.state) {
               obj.accountDetails.billingDetails.state = {};
               obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
               obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
             }
-            if(!obj.accountDetails.shippingDetails.state){
+            if (!obj.accountDetails.shippingDetails.state) {
               obj.accountDetails.shippingDetails.state = {};
               obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
               obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
             }
 
-            if(!obj.voucherDetails.customerUniquename){
+            if (!obj.voucherDetails.customerUniquename) {
               obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
             }
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
-            if(!obj.accountDetails.currencySymbol){
+            if (!obj.accountDetails.currencySymbol) {
               obj.accountDetails.currencySymbol = '';
             }
             this.invFormData = obj;
@@ -774,7 +786,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCustomerSelected = true;
             this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
             this.customerCountryName = tempSelectedAcc.country.countryName;
-            if(this.isMulticurrencyAccount){
+            if (this.isMulticurrencyAccount) {
               this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
               this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode);
               this.companyCurrencyName = tempSelectedAcc.currency;
@@ -1023,13 +1035,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public resetInvoiceForm(f: NgForm) {
-    if (!f) {
-      return;
+    if (f) {
+      f.form.reset();
     }
-    f.form.reset();
-    this.invFormData = new VoucherClass();
-    this.depositAccountUniqueName = 'cash';
 
+    this.invFormData = new VoucherClass();
+    this.depositAccountUniqueName = '';
+    this.accountUniqueName = "";
+    this.invoiceNo = "";
     this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
@@ -1046,6 +1059,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
         moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
     }
+    this.ngAfterViewInit();
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
@@ -1246,7 +1260,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     } else {
       let updatedData = obj;
       let isVoucherV4 = false;
-      if(this.isSalesInvoice || this.isCashInvoice){
+      if (this.isSalesInvoice || this.isCashInvoice) {
         updatedData = this.updateData(obj, data);
         isVoucherV4 = true;
       }
@@ -1256,11 +1270,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           this.resetInvoiceForm(f);
 
 
-          if(response.body.account){
+          if (response.body.account) {
             this.voucherNumber = response.body.number;
             this.invoiceNo = this.voucherNumber;
             this.accountUniqueName = response.body.account.uniqueName;
-          }else{
+          } else {
             this.voucherNumber = response.body.voucherDetails.voucherNumber;
             this.invoiceNo = this.voucherNumber;
             this.accountUniqueName = response.body.accountDetails.uniqueName;
@@ -1301,6 +1315,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+
     if (!modalBool) {
       let entry = this.invFormData.entries[this.activeIndx];
       if (entry) {
@@ -1310,6 +1325,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     } else {
       if (index !== null) {
+        this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
         // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
       }
     }
@@ -1428,11 +1444,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public calculateBalanceDue() {
     let count: number = 0;
     let depositAmount = Number(this.depositAmount);
-    if(this.isMulticurrencyAccount){
-      if(this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol){
-        depositAmount = depositAmount*this.exchangeRate;
+    if (this.isMulticurrencyAccount) {
+      if (this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol) {
+        depositAmount = depositAmount * this.exchangeRate;
       }
-      depositAmount = depositAmount/this.exchangeRate || 0;
+      depositAmount = depositAmount / this.exchangeRate || 0;
     }
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
@@ -1468,7 +1484,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-    this.grandTotalMulDum = calculatedGrandTotal*this.exchangeRate;
+    this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -1648,14 +1664,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
       this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
-      if(this.isMulticurrencyAccount){
-          this.companyCurrencyName = item.additional.currency;
+      if (this.isMulticurrencyAccount) {
+        this.companyCurrencyName = item.additional.currency;
       }
       if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
         this.getCurrencyRate(this.companyCurrency, item.additional.currency);
       }
     }
-    if(this.isSalesInvoice && this.isMulticurrencyAccount){
+    if (this.isSalesInvoice && this.isMulticurrencyAccount) {
       this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
     }
   }
@@ -1879,33 +1895,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public onSelectPaymentMode(event) {
     if (event && event.value) {
-      if(this.isCashInvoice){
+      if (this.isCashInvoice) {
         this.invFormData.accountDetails.name = event.label;
         this.invFormData.accountDetails.uniqueName = event.value;
       }
       this.depositAccountUniqueName = event.value;
-      if(this.isCashInvoice){
+      if (this.isCashInvoice) {
         this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
       }
-      if(this.isMulticurrencyAccount){
-        if(this.isCashInvoice){
+      if (this.isMulticurrencyAccount) {
+        if (this.isCashInvoice) {
           //this.getAccountDetails(event.value);
           this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
           this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
         }
-        if(this.isSalesInvoice){
+        if (this.isSalesInvoice) {
           this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
         }
-      }else{
+      } else {
         this.invFormData.accountDetails.currencySymbol = '';
       }
-      if(this.isCashInvoice){
+      if (this.isCashInvoice) {
         this.companyCurrencyName = event.additional.currency;
       }
     } else {
       this.depositAccountUniqueName = '';
     }
-    if(this.isMulticurrencyAccount){
+    if (this.isMulticurrencyAccount) {
       this.getCurrencyRate(this.companyCurrency, event.additional.currency);
     }
 
@@ -2299,10 +2315,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!entry) {
       return;
     }
-
     if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
       let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-      if(!modal.appliedOtherTax.name){
+      if (!modal.appliedOtherTax.name) {
         entry.otherTaxModal.appliedOtherTax.name = tax.name;
       }
       if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
@@ -2329,6 +2344,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entry.otherTaxModal = new SalesOtherTaxesModal();
       entry.tcsTaxList = [];
       entry.tdsTaxList = [];
+    }
+    if(this.activeIndx && !entryObj){
+      this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
+      this.invFormData.entries[this.activeIndx] = entry;
     }
     // this.selectedEntry = null;
   }
@@ -2388,12 +2407,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-      if(this.isSalesInvoice || this.isCashInvoice){
+      if (this.isSalesInvoice || this.isCashInvoice) {
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.parseVoucherType(this.invoiceType)
         }));
-      }else{
+      } else {
         this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
           invoiceNumber: this.invoiceNo,
           voucherType: this.parseVoucherType(this.invoiceType)
@@ -2550,8 +2569,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         isActive: true
       });
     } else {
-      if(entry.discounts.length > 0){
-        entry.discounts.forEach(ds=>{
+      if (entry.discounts.length > 0) {
+        entry.discounts.forEach(ds => {
           discountArray.push({
             discountType: ds.discountType,
             amount: ds.amount,
@@ -2561,7 +2580,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             discountValue: ds.discountValue
           });
         })
-      }else {
+      } else {
         discountArray.push({
           discountType: 'FIX_AMOUNT',
           amount: 0,
@@ -2663,8 +2682,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         salesEntryClass.hsnNumber = tr.hsnNumber;
         salesEntryClass.sacNumber = tr.sacNumber;
         salesEntryClass.description = tr.description;
-        if(tr.isStockTxn){
-         let saalesAddBulkStockItems = new SalesAddBulkStockItems();
+        //transactionClassMul.description =  tr.description;
+        if (tr.isStockTxn) {
+          let saalesAddBulkStockItems = new SalesAddBulkStockItems();
           saalesAddBulkStockItems.name = tr.stockDetails.name;
           saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
           saalesAddBulkStockItems.quantity = tr.quantity;
@@ -2679,7 +2699,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         salesEntryClass.transactions.push(transactionClassMul);
       });
-      e.discounts.forEach(ds=>{
+      e.discounts.forEach(ds => {
         salesEntryClass.discounts.push(new DiscountMulticurrency(ds));
       });
 
@@ -2701,7 +2721,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
     delete obj.account.shippingDetails.state;
 
-    if(this.isCashInvoice){
+    if (this.isCashInvoice) {
       obj.account.customerName = data.voucherDetails.customerName;
       obj.account.name = data.voucherDetails.customerName;
     }
@@ -2716,38 +2736,39 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
       let salesEntryClass = new SalesEntryClass();
-      salesEntryClass.transactions =[];
+      let salesTransactionItemClass = new SalesTransactionItemClass();
+      salesEntryClass.transactions = [];
       entry.transactions.forEach(t => {
-        let salesTransactionItemClass = new SalesTransactionItemClass();
+        salesTransactionItemClass = new SalesTransactionItemClass();
         salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
         salesTransactionItemClass.accountName = t.account.name;
         salesTransactionItemClass.amount = t.amount.amountForAccount;
-        salesTransactionItemClass.hsnNumber =  entry.hsnNumber;
-        salesTransactionItemClass.sacNumber = entry.sacNumber;
+        salesTransactionItemClass.hsnNumber = t.hsnNumber;
+        salesTransactionItemClass.sacNumber = t.sacNumber;
         salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
         salesTransactionItemClass.description = entry.description;
         salesTransactionItemClass.date = t.date;
         salesEntryClass.transactions.push(salesTransactionItemClass);
-        entry.taxes.forEach(ta=>{
+        entry.taxes.forEach(ta => {
           let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
-          if(taxTypeArr.indexOf(ta.taxType) > -1 ){
-           salesEntryClass.isOtherTaxApplicable = true;
-           let otherTaxModal = new SalesOtherTaxesModal();
-           otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
-           otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
-           salesEntryClass.otherTaxModal = otherTaxModal;
-          }else{
+          if (taxTypeArr.indexOf(ta.taxType) > -1) {
+            salesEntryClass.isOtherTaxApplicable = true;
+            let otherTaxModal = new SalesOtherTaxesModal();
+            otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
+            otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
+            salesEntryClass.otherTaxModal = otherTaxModal;
+          } else {
             salesEntryClass.taxes.push({
               amount: ta.taxPercent,
               uniqueName: ta.uniqueName,
               isChecked: true,
-              isDisabled:false,
+              isDisabled: false,
               type: ta.taxType,
-              name: ta.name||''
+              name: ta.name || ''
             });
           }
         });
-        if(t.stock){
+        if (t.stock) {
           salesTransactionItemClass.isStockTxn = true;
           salesTransactionItemClass.stockDetails = {};
           salesTransactionItemClass.stockDetails.name = t.stock.name;
@@ -2756,50 +2777,50 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           salesTransactionItemClass.rate = t.stock.rate.amountForAccount;
           salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
           salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
-          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName+'#'+t.stock.uniqueName
+          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName
         }
       });
 
 
-      if(entry.discounts && entry.discounts.length){
+      if (entry.discounts && entry.discounts.length) {
         let discountArray = [];
-        let tradeDiscountArray=[];
-        entry.discounts.forEach(discount=>{
+        let tradeDiscountArray = [];
+        entry.discounts.forEach(discount => {
 
-            let discountLedger = new LedgerDiscountClass();
-            discountLedger.amount = discount.discountValue;
-            discountLedger.discountType = discount.calculationMethod;
-            discountLedger.discountValue = discount.discountValue;
-            discountLedger.isActive = true;
-            discountLedger.discountUniqueName = discount.uniqueName;
-            discountLedger.name = discount.name;
-            discountLedger.particular = discount.particular;
-            if(discountLedger.discountUniqueName){
-              discountLedger.uniqueName = discountLedger.discountUniqueName;
-              let tradeDiscount = new LedgerResponseDiscountClass();
-              tradeDiscount.discount = {
-                uniqueName: '',
-                name: '',
-                discountType: "PERCENTAGE",
-                discountValue: 10
-              };
-              tradeDiscount.account = {
-                accountType: '',
-                uniqueName: entry.uniqueName,
-                name: ''
-              };
-              tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
-              tradeDiscount.discount.discountValue = discountLedger.discountValue;
-              tradeDiscount.discount.discountType = discountLedger.discountType;
-              tradeDiscount.discount.name = discountLedger.name;
-              tradeDiscountArray.push(tradeDiscount);
-            }else{
-              discountArray.push(discountLedger);
-            }
+          let discountLedger = new LedgerDiscountClass();
+          discountLedger.amount = discount.discountValue;
+          discountLedger.discountType = discount.calculationMethod;
+          discountLedger.discountValue = discount.discountValue;
+          discountLedger.isActive = true;
+          discountLedger.discountUniqueName = discount.uniqueName;
+          discountLedger.name = discount.name;
+          discountLedger.particular = discount.particular;
+          if (discountLedger.discountUniqueName) {
+            discountLedger.uniqueName = discountLedger.discountUniqueName;
+            let tradeDiscount = new LedgerResponseDiscountClass();
+            tradeDiscount.discount = {
+              uniqueName: '',
+              name: '',
+              discountType: "PERCENTAGE",
+              discountValue: 10
+            };
+            tradeDiscount.account = {
+              accountType: '',
+              uniqueName: entry.uniqueName,
+              name: ''
+            };
+            tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+            tradeDiscount.discount.discountValue = discountLedger.discountValue;
+            tradeDiscount.discount.discountType = discountLedger.discountType;
+            tradeDiscount.discount.name = discountLedger.name;
+            tradeDiscountArray.push(tradeDiscount);
+          } else {
+            discountArray.push(discountLedger);
+          }
         });
         salesEntryClass.discounts = discountArray;
         salesEntryClass.tradeDiscounts = tradeDiscountArray;
-      }else{
+      } else {
         salesEntryClass.discounts = [new LedgerDiscountClass()];
       }
       salesEntryClass.discounts = this.parseDiscountFromResponse(salesEntryClass);
@@ -2807,11 +2828,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.uniqueName = entry.uniqueName;
       salesEntryClass.description = entry.description;
       salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
-
+      this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
+      console.log(salesEntryClass);
       voucherClassConversion.entries.push(salesEntryClass);
     });
 
-
+    this.entriesListBeforeTax = voucherClassConversion.entries;
     voucherClassConversion.companyDetails = result.company;
     voucherClassConversion.templateDetails = result.templateDetails;
 
@@ -2833,14 +2855,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
     voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
-    voucherClassConversion.accountDetails.billingDetails =  this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
+    voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
     voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
     voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
     voucherClassConversion.accountDetails.email = result.account.email;
     voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
     //code for voucher details
-    voucherDetails.voucherDate = result.date ? result.date: '';
+    voucherDetails.voucherDate = result.date ? result.date : '';
     voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
     //need to check usage
     voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
@@ -2865,14 +2887,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.invoiceUniqueName = result.uniqueName;
     this.invoiceType = result.type;
     this.prepareInvoiceTypeFlags();
-    if(result.cashInvoice){
+    if (result.cashInvoice) {
       this.isCashInvoice = true;
       this.isSalesInvoice = false;
     }
-    if(this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()){
+    if (this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()) {
       voucherDetails.customerName = result.account.customerName;
       this.depositAccountUniqueName = result.account.uniqueName;
-    }else{
+    } else {
       voucherDetails.customerName = result.account.name;
     }
 
@@ -2881,9 +2903,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public updateExchangeRate(val) {
     val = val.replace(this.baseCurrencySymbol, '');
-    let total = parseFloat(val.replace(/,/g,"")) || 0;
-    if(this.isMulticurrencyAccount){
-      this.exchangeRate = total/this.invFormData.voucherDetails.grandTotal || 0;
+    let total = parseFloat(val.replace(/,/g, "")) || 0;
+    if (this.isMulticurrencyAccount) {
+      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
       this.originalExchangeRate = this.exchangeRate;
     }
   }
@@ -2901,44 +2923,44 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }));
   }
 
-  public updateBankAccountObject(accCurr){
+  public updateBankAccountObject(accCurr) {
     let bankAccounts: IOption[] = [];
-    this.flattenAccountListStream$.pipe(take(1)).subscribe(a =>{
-       a.forEach(acc=> {
-         if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-           if (!acc.currency || acc.currency === accCurr || acc.currency === this.companyCurrency) {
-             bankAccounts.push({ label: acc.name, value: acc.uniqueName, additional: acc });
-           }
-         }
-       });
+    this.flattenAccountListStream$.pipe(take(1)).subscribe(a => {
+      a.forEach(acc => {
+        if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+          if (!acc.currency || acc.currency === accCurr || acc.currency === this.companyCurrency) {
+            bankAccounts.push({ label: acc.name, value: acc.uniqueName, additional: acc });
+          }
+        }
+      });
     });
     return _.orderBy(bankAccounts, 'label');
   }
 
-  public switchCurrencyImg(switchCurr){
+  public switchCurrencyImg(switchCurr) {
     this.showSwitchedCurr = switchCurr;
-    if(switchCurr){
-      this.reverseExchangeRate = 1/this.exchangeRate || 0;
+    if (switchCurr) {
+      this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
       this.originalReverseExchangeRate = this.reverseExchangeRate;
-    }else{
-      this.exchangeRate = 1/this.reverseExchangeRate || 0;
-      this.originalExchangeRate = this.exchangeRate;
+    } else {
+      this.exchangeRate = this.reverseExchangeRate  ? 1 / this.reverseExchangeRate : 0;
+      this.originalExchangeRate = this.exchangeRate ;
     }
   }
 
-  public saveCancelExcRate(toSave){
-    if(toSave){
-      if(this.showSwitchedCurr){
-        this.exchangeRate = 1/this.reverseExchangeRate || 0;
-      }else{
+  public saveCancelExcRate(toSave) {
+    if (toSave) {
+      if (this.showSwitchedCurr) {
+        this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+      } else {
         this.originalExchangeRate = this.exchangeRate;
       }
       this.autoSaveIcon = !this.autoSaveIcon;
-      this.showCurrencyValue= !this.showCurrencyValue;
-      this.originalReverseExchangeRate = this.reverseExchangeRate
+      this.showCurrencyValue = !this.showCurrencyValue;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
       this.calculateGrandTotal();
-    }else{
-      this.showCurrencyValue = !this.showCurrencyValue ;
+    } else {
+      this.showCurrencyValue = !this.showCurrencyValue;
       this.autoSaveIcon = !this.autoSaveIcon;
       this.exchangeRate = this.originalExchangeRate;
       this.reverseExchangeRate = this.originalReverseExchangeRate;
@@ -2946,24 +2968,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   private getUpdatedStateCodes(currency: any) {
-    if(currency){
-      this.salesService.getStateCode(currency).subscribe(resp=>{
-          this.statesSource = this.modifyStateResp(resp.body.stateList);
+    if (currency) {
+      this.salesService.getStateCode(currency).subscribe(resp => {
+        this.statesSource = this.modifyStateResp(resp.body.stateList);
       });
     }
   }
 
   private modifyStateResp(stateList: StateCode[]) {
-    let stateListRet:IOption[] = [];
-    stateList.forEach(stateR =>{
-      stateListRet.push({label: stateR.name, value: stateR.code});
+    let stateListRet: IOption[] = [];
+    stateList.forEach(stateR => {
+      stateListRet.push({ label: stateR.name, value: stateR.code });
     });
     return stateListRet;
   }
 
   public fillShippingBillingDetails($event: any, isBilling) {
     let cityName = $event.label;
-    if(!isBilling && !this.autoFillShipping){
+    if (!isBilling && !this.autoFillShipping) {
       this.invFormData.accountDetails.shippingDetails.stateName = cityName;
       this.invFormData.accountDetails.shippingDetails.state.name = cityName;
     }
@@ -2980,5 +3002,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       obj.address[0] = shippigAddrss;
     }
     return obj;
+  }
+
+  public selectDefaultbank() {
+    if(!this.depositAccountUniqueName){
+      this.depositAccountUniqueName = 'cash';
+    }
   }
 }

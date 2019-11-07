@@ -60,33 +60,42 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.store
-      .pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$))
-      .subscribe(data => {
-        if (data) {
-          let arr: IOption[] = [];
-          data.forEach(acc => {
-            if(acc.uniqueName === "currentliabilities")
-            {
-              if(acc.groups)
-              {
-               acc.groups.forEach(grp => { 
-               if(grp.uniqueName === "dutiestaxes")
-               {
-                if(grp.groups)
-                {
-                  grp.groups.forEach(subgrp => { 
-                  arr.push({label: `${subgrp.name} - (${subgrp.uniqueName})`, value: subgrp.uniqueName});
-                  });
-                }
-              }
-              });
-              }
-           }
+    this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
+      let arr: IOption[] = [];
+      if (res) {
+        res
+          .filter(f => f.parentGroups.some(s => s.uniqueName === 'dutiestaxes'))
+          .forEach(r => {
+            arr.push({label: `${r.name} - (${r.uniqueName})`, value: r.uniqueName});
           });
-          this.flattenAccountsOptions = arr;
-        }
-      });
+      } else {
+        arr = [];
+      }
+      this.flattenAccountsOptions = arr;
+    });
+    // this.store
+    //   .pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$))
+    //   .subscribe(data => {
+    //     if (data) {
+    //       let arr: IOption[] = [];
+    //       data.forEach(acc => {
+    //         if (acc.uniqueName === "currentliabilities") {
+    //           if (acc.groups) {
+    //             acc.groups.forEach(grp => {
+    //               if (grp.uniqueName === "dutiestaxes") {
+    //                 if (grp.groups) {
+    //                   grp.groups.forEach(subgrp => {
+    //                     arr.push({label: `${subgrp.name} - (${subgrp.uniqueName})`, value: subgrp.uniqueName});
+    //                   });
+    //                 }
+    //               }
+    //             });
+    //           }
+    //         }
+    //       });
+    //       this.flattenAccountsOptions = arr;
+    //     }
+    //   });
 
     this.store
       .pipe(select(p => p.company.taxes), takeUntil(this.destroyed$))

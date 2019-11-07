@@ -88,9 +88,14 @@
               </p>
             </td>
 
-            <td class="text-center equal-2">
+            <td class="text-center equal-2" *ngIf="(companyTaxesList$ | async)?.length">
               <label class="d-block">&nbsp;</label>
               <label class="fs20">+</label>
+            </td>
+
+            <td class="text-center equal-2" *ngIf="!(companyTaxesList$ | async)?.length">
+              <label class="d-block">&nbsp;</label>
+              <label class="fs20">=</label>
             </td>
 
             <td *ngIf="(companyTaxesList$ | async)?.length" class="pItem amount pos-rel dropdown-container text-right dropdown-width"

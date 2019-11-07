@@ -42,6 +42,7 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public sidebarStatusChange(event) {
+
     this.sideMenu.isopen = event;
     this.store.dispatch(this.generalActions.setSideMenuBarState(event));
   }
