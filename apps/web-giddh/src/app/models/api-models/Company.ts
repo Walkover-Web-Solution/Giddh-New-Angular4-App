@@ -168,9 +168,26 @@ export class TaxResponse implements ITax {
   public isDisabled?: boolean;
 }
 
+export class StatesRequest {
+  country: string;
+}
+
 export class States {
-  public name: string;
-  public code: string;
+  public country: {
+    alpha2CountryCode: string;
+    alpha3CountryCode: string;
+    callingCode: string;
+    countryName: string;
+    currency: {
+      code: string;
+      symbol: string;
+    }
+  };
+  public stateList: [{
+    stateGstCode: string;
+    name: string;
+    code: string;
+  }]
 }
 
 export class GetCouponResp {

@@ -10,7 +10,7 @@ export const COMPANY_API = {
   DELETE_COMPANY: 'company/:companyUniqueName',
   TAX: 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
-  GET_ALL_STATES: 'states',
+  GET_ALL_STATES: 'country/:country',
   GET_COUPON: 'coupon/:code',
   UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
   CONTACT_FORM: 'contact/submitDetails',

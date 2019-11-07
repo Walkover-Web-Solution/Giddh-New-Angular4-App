@@ -32,7 +32,7 @@ export class OnboardingFormResponse {
     callingCode: string;
     regex: string;
   };
-  applicableTaxes: [ {
+  applicableTaxes: [{
     name: string;
     uniqueName: string;
   }];

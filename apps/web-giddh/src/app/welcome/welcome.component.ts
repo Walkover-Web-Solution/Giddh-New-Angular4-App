@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { States, CompanyRequest, CompanyCreateRequest, GstDetail } from '../models/api-models/Company';
+import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, GstDetail } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -124,31 +124,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
               private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
-    this.store.dispatch(this._generalActions.getAllState());
 
     this.getCountry();
     this.getCurrency();
     this.getCallingCodes();
-
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    this.stateStream$.subscribe((data) => {
-      if (data) {
-        data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-      }
-      const filteredArr = this.states.reduce((acc, current) => {
-        const x = acc.find(item => item.value === current.value);
-        if (!x) {
-          return acc.concat([current]);
-        } else {
-          return acc;
-        }
-      }, []);
-      this.statesSource$ = observableOf(filteredArr);
-    }, (err) => {
-      // console.log(err);
-    });
 
     this.store.select(state => {
       if (!state.session.companies) {
@@ -165,8 +144,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }).pipe(takeUntil(this.destroyed$)).subscribe();
     this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
-    // GET APPLICABLE TAXES
-    // this.store.dispatch(this.companyActions.GetApplicableTaxes());
   }
 
   public ngOnInit() {
@@ -210,12 +187,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.businessTypeList.push({ label: o, value: o });
       });
     });
-    // this._companyService.getApplicabletaxes().subscribe((res: any) => {
-    //   this.taxesList = [];
-    //   _.map(res.body, (o) => {
-    //     this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
-    //   });
-    // });
+
     this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
       this.businessNatureList = [];
       _.map(res.body, (o) => {
@@ -403,6 +375,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.countrySource$ = observableOf(this.countrySource);
 
         this.getOnboardingForm();
+        this.getStates();
       } else {
         let countryRequest = new CountryRequest();
         countryRequest.formName = 'onboarding';
@@ -453,6 +426,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+      }
+    });
+  }
+
+  public getStates() {
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+        });
+        this.statesSource$ = observableOf(this.states);
+      } else {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
       }
     });
   }
