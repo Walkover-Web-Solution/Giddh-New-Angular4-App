@@ -313,7 +313,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       for(stateLoop; stateLoop < this.states.length; stateLoop++) {
         if(this.states[stateLoop].value === this.billingDetailsObj.state) {
           this.selectedState = this.states[stateLoop].label;
-          console.log(this.selectedState);
         }
       }
     }

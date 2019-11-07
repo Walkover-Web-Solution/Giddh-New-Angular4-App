@@ -319,9 +319,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {
-    let isInvalid: boolean = false;
+    let isValid: boolean = false;
+
     if (ele.value) {
-      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(ele.value)) {
+            isValid = true;
+          }
+        }
+      } else {
+        isValid = true;
+      }
+
+      if (!isValid) {
         this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;

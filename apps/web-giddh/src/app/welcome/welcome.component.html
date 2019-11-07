@@ -79,8 +79,8 @@
 
                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
                 <input type="text" class="form-control" autocomplete="false" autocomplete="false" minlength="15"
-                  required maxlength="15" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);"
-                  (keyup)="getStateCode(gstNumberField, states)" name="gstNumber"
+                  required maxlength="15" #gstNumberField
+                  (keyup)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);" name="gstNumber"
                   [(ngModel)]="companyProfileObj.gstNumber" placeholder="Enter {{formFields['taxName'].label}}" />
 
               </div>
