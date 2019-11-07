@@ -101,6 +101,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           this.UserCurrency = this.createNewCompany.baseCurrency;
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+          this.getStates();
         }
       }
     });
@@ -111,6 +112,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           this.UserCurrency = this.createNewCompany.baseCurrency;
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
+          this.getStates();
         }
       }
     });
@@ -316,23 +318,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  public getCountry() {
-    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
-      if (res) {
-        Object.keys(res).forEach(key => {
-          // Creating Country List
-          this.countryNameCode[res[key].countryName] = [];
-          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
-        });
-        this.getStates();
-      } else {
-        let countryRequest = new CountryRequest();
-        countryRequest.formName = 'onboarding';
-        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
-      }
-    });
-  }
-
   public getStates() {
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
@@ -344,9 +329,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.statesSource$ = observableOf(this.states);
       } else {
-        //let statesRequest = new StatesRequest();
-        //statesRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
-        //this.store.dispatch(this._generalActions.getAllState(statesRequest));
+        let statesRequest = new StatesRequest();
+        statesRequest.country = this.createNewCompany.countryCode;
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
       }
     });
   }

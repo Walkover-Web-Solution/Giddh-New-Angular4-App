@@ -267,7 +267,7 @@ export class CompanyCreateRequest {
   amountPaid?: string;
   orderId?: string;
   razorpaySignature?: string;
-
+  countryCode: string;
 }
 
 export class CreateCompanyUsersPlan {

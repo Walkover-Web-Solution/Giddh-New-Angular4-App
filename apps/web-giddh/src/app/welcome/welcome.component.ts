@@ -99,8 +99,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     nameAlias: '',
     paymentId: '',
     amountPaid: '',
-    razorpaySignature: ''
+    razorpaySignature: '',
+    countryCode: ''
   };
+
   public GstDetailsObj: GstDetail = {
     gstNumber: '',
     addressList: [
@@ -210,9 +212,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
     this.selectedBusinesstype = this.createNewCompany.bussinessType;
     if (this.selectedBusinesstype === 'Registered') {
-      this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+      if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined) {
+        this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+      }
     }
     this.companyProfileObj.address = this.createNewCompany.address;
+    console.log(this.companyProfileObj);
   }
 
   public reFillState() {
@@ -230,7 +235,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public reFillTax() {
     if(this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
-
       let currentTaxList = [];
 
       for (let i = 0; i < this.taxesList.length; i++) {
@@ -239,11 +243,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.createNewCompany.taxes.forEach(tax => {
-        this.selectedTaxes.push(tax);
+        if(this.selectedTaxes.indexOf(tax) === -1) {
+          this.selectedTaxes.push(tax);
 
-        let matchedIndex = currentTaxList[tax];
-        if (matchedIndex > -1) {
-          this.taxesList[matchedIndex].isSelected = true;
+          let matchedIndex = currentTaxList[tax];
+          if (matchedIndex > -1) {
+            this.taxesList[matchedIndex].isSelected = true;
+          }
         }
       });
     }
@@ -278,14 +284,16 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
     if (gstDetails.gstNumber) {
       this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
-      this.createNewCompanyPreparedObj.address = '';
     } else {
       this.createNewCompanyPreparedObj.gstDetails = [];
     }
+
+    this.createNewCompanyPreparedObj.countryCode = this.countryNameCode[this.createNewCompanyPreparedObj.country];
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
     this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
     this._router.navigate(['select-plan']);
   }
+
   public prepareGstDetail(obj) {
     if (obj.gstNumber) {
       this.GstDetailsObj.gstNumber = obj.gstNumber;
@@ -296,6 +304,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return this.GstDetailsObj;
   }
+
   /**
    * autoSelectCountryCode
    */
@@ -308,8 +317,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.companyProfileObj.country = selectedCountry.value;
       }
     }
-
   }
+
   public checkGstNumValidation(ele: HTMLInputElement) {
     let isInvalid: boolean = false;
     if (ele.value) {
@@ -325,6 +334,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       ele.classList.remove('error-box');
     }
   }
+
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
     let gstVal: string = gstNo.value;
     this.companyProfileObj.gstNumber = gstVal;
@@ -477,6 +487,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
         this.statesSource$ = observableOf(this.states);
+        this.reFillState();
       } else {
         let statesRequest = new StatesRequest();
         statesRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];

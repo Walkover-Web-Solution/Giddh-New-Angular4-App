@@ -61,6 +61,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
       if (res) {
         if (!res.isBranch && !res.city) {
           this.createNewCompanyPreObj = res;
+          this.getSubscriptionPlans();
           if (this.createNewCompanyPreObj.baseCurrency) {
             this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
           }
@@ -71,14 +72,12 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
       if (res) {
         if (res.isBranch && res.city) {
           this.createNewCompanyPreObj = res;
+          this.getSubscriptionPlans();
           if (this.createNewCompanyPreObj.baseCurrency) {
             this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
           }
         }
       }
-    });
-    this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-      this.SubscriptionPlans = res.body;
     });
 
     this.logedInUser = this._generalService.user;
@@ -97,6 +96,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     });
 
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -160,5 +160,11 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
       this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
       this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
     }
+  }
+
+  public getSubscriptionPlans() {
+    this._authenticationService.getAllUserSubsciptionPlans(this.createNewCompanyPreObj.countryCode).subscribe(res => {
+      this.SubscriptionPlans = res.body;
+    });
   }
 }

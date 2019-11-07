@@ -74,7 +74,7 @@
             </div>
           </div>
           <ng-container *ngIf="selectedBusinesstype === 'Registered'">
-            <div class="col-xs-12 mrB2 selectBox">
+            <div class="col-xs-12 mrB2 selectBox" *ngIf="formFields['taxName'] !== undefined">
               <div class="clearfix">
 
                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
