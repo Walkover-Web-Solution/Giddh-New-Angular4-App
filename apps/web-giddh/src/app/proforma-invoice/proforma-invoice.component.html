@@ -442,7 +442,7 @@
             </span>
 
             <span class="edit-icon cp">
-              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil"
+              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" *ngIf="!autoSaveIcon"
                 (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
               <img src=" assets/images/autosave.svg" class="edit-pencil"
                 (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
@@ -464,7 +464,7 @@
             </span>
 
             <span class="edit-icon cp">
-              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" (click)="saveCancelExcRate(false)">
+              <img *ngIf="!autoSaveIcon" src="assets/images/edit-pencilicon.svg" class="edit-pencil" (click)="saveCancelExcRate(false)">
               <img src=" assets/images/autosave.svg" class="edit-pencil" (click)="saveCancelExcRate(true)"
                 *ngIf="autoSaveIcon">
             </span>
