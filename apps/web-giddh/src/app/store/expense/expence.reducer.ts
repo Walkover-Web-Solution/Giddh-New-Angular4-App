@@ -1,16 +1,17 @@
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { PettyCashReportResponse } from '../../models/api-models/Expences';
+import { PettyCashReportResponse, PettyCashResonse } from '../../models/api-models/Expences';
 import { ExpencesAction } from '../../actions/expences/expence.action';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export interface ExpensePettyCash {
   pettycashReport?: PettyCashReportResponse;
-  pettycashEntry?: any;
+  pettycashEntry?: PettyCashResonse;
   pettycashRejectedReport?: PettyCashReportResponse;
   showLoader: boolean;
   getPettycashReportInprocess: boolean;
   getPettycashReportSuccess: boolean;
+  ispPettycashEntryInprocess: boolean;
   ispPettycashEntrySuccess: boolean;
   getPettycashRejectedReportInprocess: boolean;
   getPettycashRejectedReportSuccess: boolean;
@@ -25,6 +26,7 @@ export const initialState: ExpensePettyCash = {
   getPettycashReportInprocess: false,
   getPettycashReportSuccess: false,
   ispPettycashEntrySuccess: false,
+  ispPettycashEntryInprocess: false,
   getPettycashRejectedReportInprocess: false,
   getPettycashRejectedReportSuccess: false,
   showLoader: false
@@ -76,25 +78,23 @@ export function expensesReducer(state = initialState, action: CustomActions): Ex
         }
       }
     }
-
+    case ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST: {
+      return { ...state, ispPettycashEntryInprocess: true, ispPettycashEntrySuccess: false };
+    }
     case ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE: {
-      let res: BaseResponse<any, string> = action.payload;
+      let res: BaseResponse<PettyCashResonse, string> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {
           pettycashEntry: res.body,
-          getPettycashReportInprocess: false,
+          ispPettycashEntryInprocess: false,
           ispPettycashEntrySuccess: true,
         });
-        //   ...state, pettycashEntry: res.body,
-        //   getPettycashReportInprocess: false,
-        //   getPettycashReportSuccess: true,
-        // };
 
       } else {
         return {
           ...state,
-          getPettycashReportInprocess: false,
-          getPettycashReportSuccess: false,
+          ispPettycashEntryInprocess: false,
+          ispPettycashEntrySuccess: false,
         }
       }
 

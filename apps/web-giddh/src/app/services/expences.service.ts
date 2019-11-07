@@ -10,7 +10,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
-import { PettyCashReportResponse, ActionPettycashRequest } from '../models/api-models/Expences';
+import { PettyCashReportResponse, ActionPettycashRequest, PettyCashResonse } from '../models/api-models/Expences';
 import { EXPENSE_API } from './apiurls/expense.api';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class ExpenseService {
       }),
       catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
   }
-  public getPettycashEntry(uniqueName: string): Observable<BaseResponse<any, any>> {
+  public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {
     this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', uniqueName)).pipe(
       map((res) => {

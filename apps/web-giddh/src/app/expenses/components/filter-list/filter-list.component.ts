@@ -87,6 +87,6 @@ export class FilterListComponent implements OnInit, OnChanges {
   public rowClicked(item: ExpenseResults) {
     this.selectedItem = item;
     this.selectedDetailedRowInput.emit(item);
-    // this.store.dispatch(this._expenceActions.getPettycashEntryRequest(item.uniqueName));
+    this.store.dispatch(this._expenceActions.getPettycashEntryRequest(item.uniqueName));
   }
 }

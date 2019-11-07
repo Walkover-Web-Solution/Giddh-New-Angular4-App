@@ -32,7 +32,8 @@ export class ExpensesComponent implements OnInit, OnChanges {
   public modalRef: BsModalRef;
   public isClearFilter: boolean = false;
   public isFilterSelected: boolean = false;
-
+  public currentSelectedTab: string = 'pending';
+  public activeTab: string;
 
   public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -97,6 +98,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private companyActions: CompanyActions,
+    public _route: ActivatedRoute,
     private _cdRf: ChangeDetectorRef) {
 
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -105,6 +107,15 @@ export class ExpensesComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
+    this._route.params.subscribe(params => {
+      if (params['type'] && this.activeTab !== params['type']) {
+        // if active tab is null or undefined then it means component initialized for the first time
+        if (!this.activeTab) {
+          // this.saveLastState(params['type']);
+        }
+        this.activeTab = params['type'];
+      }
+    });
     observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
       if (!Array.isArray(resp[0])) {
         return;
@@ -213,13 +224,14 @@ export class ExpensesComponent implements OnInit, OnChanges {
   }
   public tabChanged(tab: string) {
     this.saveLastState(tab);
+    this.currentSelectedTab = tab;
   }
   private saveLastState(state: string) {
     let companyUniqueName = null;
     this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = `app/pages/expenses${state}`;
+    stateDetailsRequest.lastState = `app/pages/expenses-manager/${state}`;
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }

@@ -82,7 +82,8 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
   { type: 'MENU', name: 'User-Details > Api', uniqueName: '/pages/user-details', additional: { tab: 'api', tabIndex: 0 } },
   { type: 'MENU', name: 'Reports > Sales Register', uniqueName: '/pages/reports/reports-details' },
   { type: 'MENU', name: 'Reports', uniqueName: '/pages/reports/sales-detailed-expand' },
-  { type: 'MENU', name: 'Petty Cash Management', uniqueName: '/pages/expenses' },
+  { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 } },
+  { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 } },
 
 
 ];

@@ -1,3 +1,7 @@
+import { IClosingBalance, LedgerResponseDiscountClass } from './Ledger';
+import { ILedgerTransactionItem, IVoucherItem } from '../interfaces/ledger.interface';
+import { INameUniqueName } from './Inventory';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 
 
 export class PettyCashReportResponse {
@@ -66,4 +70,68 @@ export class Transaction {
   applyApplicableTaxes: boolean;
   isInclusiveTax: boolean;
   convertedAmount?: any;
+}
+export class PettyCashResonse {
+  public attachedFile?: string;
+  public description?: string;
+  public entryDate: string;
+  public attachedFileUniqueNames: string[];
+  public transactions: ILedgerTransactionItem[];
+  public uniqueName: string;
+  public pettyCashEntryStatus: PettyCashEntryStatus;
+  public ledgerUniqueNames: any[];
+  public othersCategory: boolean = false;
+
+  public chequeClearanceDate?: string;
+  public chequeNumber?: string;
+  public generateInvoice?: boolean;
+  public invoiceGenerated?: boolean;
+  public invoiceNumber?: string;
+  public invoiceNumberAgainstVoucher: string;
+  public tag?: string;
+  public taxes?: string[];
+  public total: IClosingBalance;
+  public convertedTotal: IClosingBalance;
+  public unconfirmedEntry?: boolean;
+  public voucher?: IVoucherItem = { name: '', shortCode: '' };
+  public voucherNo?: string;
+  public voucherType?: string;
+  public voucherNumber?: string;
+  public tagNames?: string[];
+  public voucherGenerated?: boolean;
+  public voucherName?: string;
+  public voucherGeneratedType?: string;
+  public particular?: INameUniqueName;
+  public particularType?: string;
+  public actualAmount?: number;
+  public invoicesToBePaid?: string[];
+  public linkedInvoices?: string[];
+  public warning?: string;
+  public availItc?: boolean;
+  public sendToGstr2?: boolean;
+  public discounts: LedgerResponseDiscountClass[] = [];
+  public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
+  public isOtherTaxesApplicable?: boolean;
+  public otherTaxModal?: SalesOtherTaxesModal;
+  public otherTaxesSum?: number;
+  public tdsTcsTaxesSum?: number;
+  public cessSum?: number;
+  public tcsTaxes?: string[];
+  public tdsTaxes?: string[];
+  public otherTaxType?: 'tcs' | 'tds';
+  public exchangeRate?: number = 1;
+  public exchangeRateForDisplay?: number = 1;
+  public valuesInAccountCurrency?: boolean = false;
+  public discountResources?: any[];
+}
+export class PettyCashEntryStatus {
+  status: string;
+  message?: any;
+  updatedAt: string;
+  updatedBy: UpdatedBy;
+}
+
+export class UpdatedBy {
+  name: string;
+  uniqueName: string;
 }

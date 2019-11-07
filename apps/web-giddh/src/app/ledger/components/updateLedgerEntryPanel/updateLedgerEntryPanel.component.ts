@@ -34,6 +34,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { ResizedEvent } from 'angular-resize-event';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
+import { PettyCashResonse } from '../../../models/api-models/Expences';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -193,7 +194,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public tcsOrTds: 'tcs' | 'tds' = 'tcs';
   public totalTdElementWidth: number = 0;
   public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
-  public selectedPettycashEntry$: Observable<any>;
+  public selectedPettycashEntry$: Observable<PettyCashResonse>;
   public accountPettyCashStream: any;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
@@ -286,7 +287,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           //#region flatten group list assign process
           if (this.isPettyCash) {
-            resp[1] = this.traspetty;
+            resp[1] = resp[4];
           }
 
           this.vm.flatternAccountList = resp[0];
@@ -469,28 +470,35 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.baseAccountName$ = resp[1].particular.uniqueName;
           this.baseAcc = resp[1].particular.uniqueName;
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
+          if (!this.isPettyCash) {
+            this.vm.selectedLedger.transactions.map(t => {
 
-          this.vm.selectedLedger.transactions.map(t => {
-
-            if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-              let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
-              if (this.vm.isValidCategory(category)) {
-                t.amount = this.vm.selectedLedger.actualAmount;
+              if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+                let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+                if (this.vm.isValidCategory(category)) {
+                  t.amount = this.vm.selectedLedger.actualAmount;
+                }
               }
-            }
 
-            // if (!this.isMultiCurrencyAvailable) {
-            //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
-            // }
+              // if (!this.isMultiCurrencyAvailable) {
+              //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
+              // }
 
-            if (t.inventory) {
-              let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
-              if (findStocks) {
-                let findUnitRates = findStocks.additional.stock;
-                if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
-                  let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                  tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                  t.unitRate = tempUnitRates;
+              if (t.inventory) {
+                let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
+                if (findStocks) {
+                  let findUnitRates = findStocks.additional.stock;
+                  if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
+                    let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                    tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                    t.unitRate = tempUnitRates;
+                  } else {
+                    t.unitRate = [{
+                      code: t.inventory.unit.code,
+                      rate: t.inventory.rate,
+                      stockUnitCode: t.inventory.unit.code
+                    }];
+                  }
                 } else {
                   t.unitRate = [{
                     code: t.inventory.unit.code,
@@ -498,16 +506,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     stockUnitCode: t.inventory.unit.code
                   }];
                 }
-              } else {
-                t.unitRate = [{
-                  code: t.inventory.unit.code,
-                  rate: t.inventory.rate,
-                  stockUnitCode: t.inventory.unit.code
-                }];
+                t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
               }
-              t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+            });
+            this.vm.reInitilizeDiscount(resp[1]);
+            if (this.vm.stockTrxEntry) {
+              this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
             }
-          });
+          }
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           // check if entry allows to show discount and taxes box
@@ -520,14 +526,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
           }
 
-          this.vm.reInitilizeDiscount(resp[1]);
 
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
 
-          if (this.vm.stockTrxEntry) {
-            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
-          }
+
           this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
           //#endregion
         }
@@ -1079,4 +1082,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let date = moment().format('DD-MM-YYYY');
     return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
+  // private preparePettyCashResposneUpdateLedger(res: PettyCashResonse) {
+  //   let selectedLedger = new LedgerResponse();
+  //   selectedLedger.description = res.description;
+  //   selectedLedger.entryDate = res.entryDate;
+  //   selectedLedger.transactions = res.transactions;
+  //   selectedLedger.particular = res.particular;
+  //   selectedLedger.exchangeRate = res.exchangeRate;
+  //   selectedLedger.chequeNumber = res.chequeNumber;
+  //   selectedLedger.pettyCashEntryStatus = res.pettyCashEntryStatus;
+
+  // }
 }

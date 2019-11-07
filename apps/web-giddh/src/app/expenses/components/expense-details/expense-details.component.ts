@@ -43,6 +43,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedPettycashEntry$: Observable<any>;
   public ispPettycashEntrySuccess$: Observable<boolean>;
+  public ispPettycashEntryInprocess$: Observable<boolean>;
+
   public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
   public bankAccounts$: Observable<IOption[]>;
   public imgAttached: boolean = false;
@@ -65,11 +67,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
   public comment: string = '';
-
-  @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
-  @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
-  public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-  public showUpdateLedgerForm: boolean = false;
   public accountEntryPettyCash: any;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -93,6 +90,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
     this.ispPettycashEntrySuccess$ = this.store.pipe(select(p => p.expense.ispPettycashEntrySuccess), takeUntil(this.destroyed$));
+    this.ispPettycashEntryInprocess$ = this.store.pipe(select(p => p.expense.ispPettycashEntryInprocess), takeUntil(this.destroyed$));
+
   }
 
   openModal(RejectionReason: TemplateRef<any>) {
@@ -139,10 +138,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.companyUniqueName = null;
     this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
     this.comment = res.description;
-    let imgs = res.attachedFiles;
+    let imgs = res.attachedFileUniqueNames;
     let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
     this.imageURL = [];
-    if (imgs.length) {
+    if (imgs) {
       imgs.forEach(imgUniqeName => {
         let imgUrls = imgPrefix + imgUniqeName;
         this.imageURL.push(imgUrls);
@@ -216,12 +215,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.actionPettycashRequest.actionType = 'reject';
     this.actionPettycashRequest.uniqueName = this.selectedItem.uniqueName;
     this.pettyCashAction(this.actionPettycashRequest);
-  }
-  public openUpdateLedger() {
-    this.showUpdateLedgerForm = true;
-    //  this.lc.selectedTxnUniqueName = txn.entryUniqueName;
-    this.loadUpdateLedgerComponent();
-    this.updateLedgerModal.show();
   }
 
   public onSelectPaymentMode(event) {
@@ -314,34 +307,34 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.isImageZoomView = false;
     this.zoomViewImageSrc = '';
   }
-  public loadUpdateLedgerComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
-    let viewContainerRef = this.updateledgercomponent.viewContainerRef;
-    viewContainerRef.remove();
-    let componentRef = viewContainerRef.createComponent(componentFactory);
-    let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-    componentInstance.tcsOrTds = this.tcsOrTds;
-    this.updateLedgerComponentInstance = componentInstance;
+  // public loadUpdateLedgerComponent() {
+  //   let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
+  //   let viewContainerRef = this.updateledgercomponent.viewContainerRef;
+  //   viewContainerRef.remove();
+  //   let componentRef = viewContainerRef.createComponent(componentFactory);
+  //   let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
+  //   componentInstance.tcsOrTds = this.tcsOrTds;
+  //   this.updateLedgerComponentInstance = componentInstance;
 
-    componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
-      // this.toggleOtherTaxesAsidePane(res);
-    });
+  //   componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
+  //     // this.toggleOtherTaxesAsidePane(res);
+  //   });
 
-    componentInstance.closeUpdateLedgerModal.subscribe(() => {
-      // this.hideUpdateLedgerModal();
-    });
+  //   componentInstance.closeUpdateLedgerModal.subscribe(() => {
+  //     // this.hideUpdateLedgerModal();
+  //   });
 
-    this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
-      if (this.showUpdateLedgerForm) {
-        // this.hideUpdateLedgerModal();
-      }
-      // this.entryManipulated();
-      this.updateLedgerComponentInstance = null;
-      componentRef.destroy();
-    });
+  //   this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
+  //     if (this.showUpdateLedgerForm) {
+  //       // this.hideUpdateLedgerModal();
+  //     }
+  //     // this.entryManipulated();
+  //     this.updateLedgerComponentInstance = null;
+  //     componentRef.destroy();
+  //   });
 
-    componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
-      // this.showQuickAccountModal();
-    });
-  }
+  //   componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+  //     // this.showQuickAccountModal();
+  //   });
+  // }
 }
