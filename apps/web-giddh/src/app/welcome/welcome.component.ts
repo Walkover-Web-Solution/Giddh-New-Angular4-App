@@ -139,6 +139,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (cmp.country && this.companyProfileObj && !this.companyProfileObj.country) {
             this.selectedCountry = cmp.country;
+            this.autoSelectCountryCode(cmp.country);
           }
         }
       });
@@ -194,6 +195,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.businessNatureList.push({ label: o, value: o });
       });
     });
+
+    this.reFillForm();
   }
 
   public ngAfterViewInit() {
@@ -203,15 +206,51 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public skip() {
     this._router.navigate(['/onboarding']);
   }
-  // public reFillForm() {
-  // this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
-  // this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
-  // this.selectedBusinesstype = this.createNewCompany.bussinessType;
-  // if (this.selectedBusinesstype === 'Registered') {
-  // this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
-  // }
-  // this.companyProfileObj.address = this.createNewCompany.address;
-  // }
+
+  public reFillForm() {
+    this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
+    this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
+    this.selectedBusinesstype = this.createNewCompany.bussinessType;
+    if (this.selectedBusinesstype === 'Registered') {
+      this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+    }
+    this.companyProfileObj.address = this.createNewCompany.address;
+  }
+
+  public reFillState() {
+    if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
+      this.companyProfileObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
+
+      let stateLoop = 0;
+      for(stateLoop; stateLoop < this.states.length; stateLoop++) {
+        if(this.states[stateLoop].value === this.companyProfileObj.state) {
+          this.companyProfileObj.selectedState = this.states[stateLoop].label;
+        }
+      }
+    }
+  }
+
+  public reFillTax() {
+    if(this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
+
+      let currentTaxList = [];
+
+      for (let i = 0; i < this.taxesList.length; i++) {
+        currentTaxList[this.taxesList[i].value] = [];
+        currentTaxList[this.taxesList[i].value] = i;
+      }
+
+      this.createNewCompany.taxes.forEach(tax => {
+        this.selectedTaxes.push(tax);
+
+        let matchedIndex = currentTaxList[tax];
+        if (matchedIndex > -1) {
+          this.taxesList[matchedIndex].isSelected = true;
+        }
+      });
+    }
+  }
+
   public prepareWelcomeForm() {
     if (this.company) {
       this.createNewCompanyPreparedObj.name = this.company.name ? this.company.name : '';
@@ -320,19 +359,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public resetbussinessType()
-  {
-    setTimeout(() => {
-      this.companyProfileObj.bussinessType = '';
-    }, 100);
-  }
+  // public resetbussinessType() {
+  //   setTimeout(() => {
+  //     this.companyProfileObj.bussinessType = '';
+  //   }, 100);
+  // }
 
-  public resetbussinessNature()
-  {
-    setTimeout(() => {
-      this.companyProfileObj.bussinessNature = '';
-    }, 100);
-  }
+  // public resetbussinessNature() {
+  //   setTimeout(() => {
+  //     this.companyProfileObj.bussinessNature = '';
+  //   }, 100);
+  // }
 
   public selectApplicableTaxes(tax, event) {
     if (event && tax) {
@@ -340,7 +377,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         tax.isSelected = event.target.checked;
         this.selectedTaxes.push(tax.value);
       } else {
-        let indx = this.selectedTaxes.indexOf(tax.label);
+        let indx = this.selectedTaxes.indexOf(tax.value);
         this.selectedTaxes.splice(indx, 1);
       }
     }
@@ -421,6 +458,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         Object.keys(res.applicableTaxes).forEach(key => {
           this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
         });
+        this.reFillTax();
       } else {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
@@ -443,5 +481,32 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this._generalActions.getAllState(statesRequest));
       }
     });
+  }
+
+  public removeTax(tax) {
+    let i = 0;
+    let matchedIndex = -1;
+
+    for (i; i < this.taxesList.length; i++) {
+      if (tax === this.taxesList[i].value) {
+        matchedIndex = i;
+        break;
+      }
+    }
+
+    let indx = this.selectedTaxes.indexOf(tax);
+    this.selectedTaxes.splice(indx, 1);
+
+    if (matchedIndex > -1) {
+      this.taxesList[matchedIndex].isSelected = false;
+    }
+  }
+  public onClearBusinessType() {
+    this.selectedBusinesstype = '';
+    this.companyProfileObj.bussinessType = '';
+
+  }
+  public onClearBusinessNature() {
+    this.companyProfileObj.bussinessNature = '';
   }
 }

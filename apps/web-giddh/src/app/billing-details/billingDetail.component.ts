@@ -42,7 +42,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public selectedPlans: CreateCompanyUsersPlan;
   public states: IOption[] = [];
   public isGstValid: boolean;
-
+  public selectedState: any = ''
   public subscriptionPrice: any = '';
   public razorpayAmount: any;
   public orderId: string;
@@ -73,6 +73,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         data.map(d => {
           this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
+        this.reFillState();
       }
       const filteredArr = this.states.reduce((acc, current) => {
         const x = acc.find(item => item.value === current.value);
@@ -235,7 +236,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this._route.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 
-
   public payWithRazor(billingDetail: NgForm) {
     if (!(this.validateEmail(billingDetail.value.email))) {
       this._toasty.warningToast('Enter valid Email ID', 'Warning');
@@ -299,6 +299,33 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.razorpay = new (window as any).Razorpay(this.options);
     }, 1000);
     console.log('this.razorpayAmount', this.razorpayAmount, this.UserCurrency);
+
+    console.log(this.createNewCompany);
+    this.reFillForm();
   }
 
+  public reFillForm() {
+    this.billingDetailsObj.name = this.createNewCompany.name;
+    this.billingDetailsObj.mobile = this.createNewCompany.contactNo;
+    this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
+
+    let selectedBusinesstype = this.createNewCompany.bussinessType;
+    if (selectedBusinesstype === 'Registered') {
+      this.billingDetailsObj.gstin = this.createNewCompany.gstDetails[0].gstNumber;
+    }
+    this.billingDetailsObj.address = this.createNewCompany.address;
+  }
+
+  public reFillState() {
+    if(this.createNewCompany !== undefined && this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
+      this.billingDetailsObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
+
+      let stateLoop = 0;
+      for(stateLoop; stateLoop < this.states.length; stateLoop++) {
+        if(this.states[stateLoop].value === this.billingDetailsObj.state) {
+          this.selectedState = this.states[stateLoop].label;
+        }
+      }
+    }
+  }
 }

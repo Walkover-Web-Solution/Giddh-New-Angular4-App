@@ -82,8 +82,8 @@ public GetSMSKey$: Observable<Action> = this.action$
         if (data.status === 'error') {
           this.toasty.errorToast(data.message, data.code);
         } else {
-          let responseData = JSON.parse(data.body);
-          this.toasty.successToast(responseData.message, '');
+          //let responseData = data.body;
+          this.toasty.successToast('Account created successfully', '');
         }
         return {type: 'EmptyAction'};
 
@@ -465,7 +465,7 @@ public GetSMSKey$: Observable<Action> = this.action$
   public RemoveICICI$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT)
     .pipe(switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveICICI(action.payload))
-      , map(response => this.DeleteAmazonSellerResponse(response)));
+      , map(response => this.RemovePaymentInfoResponse(response)));
 
   @Effect()
   public RemoveICICIResponse$: Observable<Action> = this.action$
@@ -475,7 +475,7 @@ public GetSMSKey$: Observable<Action> = this.action$
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.toasty.successToast(data.body, '');
+        this.toasty.successToast('Account removed successfully');
         this.store.dispatch(this._companyAction.getAllRegistrations());
       }
       return {type: 'EmptyAction'};
@@ -827,7 +827,11 @@ public GetSMSKey$: Observable<Action> = this.action$
       payload: response
     };
   }
-
+  public ResetICICIFlags() : CustomActions{
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.RESET_PAYMENT_STATUS_RESPONSE
+    };
+  }
   public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {

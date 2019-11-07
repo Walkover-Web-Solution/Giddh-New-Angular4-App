@@ -214,11 +214,11 @@ input[type=number]::-webkit-inner-spin-button {
   margin: 0;
 }
 
-// a,
-// button,
-// input {
-//   transition: all 0.3s ease;
-// }
+a,
+button,
+input {
+  transition: all 0.3s ease;
+}
 
 .margineT #dropdown-nested {
   top: 34px !important;
@@ -708,7 +708,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top strong,
-.aging-table-top .top-aging-table-top span .date-range-picker {
+ .aging-table-top .top-aging-table-top span .date-range-picker {
   color: #1c1c1c;
 }
 
@@ -3285,7 +3285,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #tax-control-multi-select.multi-select input.form-control[readonly] {
   background-image: url('../images/caret.svg') !important;
-  background-position: 92% !important;
+  background-position: 96% !important;
 }
 
 .pItem .multi-select input.form-control {
@@ -5694,8 +5694,9 @@ typeahead-container .dropdown-menu li.active>a>a {
 }
 
 .company-form-body {
-  width: 422px;
-  margin: auto;
+    max-width: 422px;
+    margin: auto;
+    width: 100%;
 }
 
 .welcome-header h2 {
@@ -7647,7 +7648,7 @@ div#getGroupModal {
   width: 100%;
   left: 215px;
   bottom: 0;
-  z-index: 99;
+  z-index: 10;
 }
 
 ul#dropdown-nested li {
@@ -8170,6 +8171,13 @@ button.btn.btn-filter {
 .addManageGroupAcc{
   overflow-y: hidden !important;
 }
+.modal-backdrop{
+  z-index:9991;
+}
+.modal{
+  z-index:9992;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8377,7 +8385,7 @@ button.btn.btn-filter {
     padding: 0 3px;
     border: none;
   }
-  td.text-center.empty_table {
+  table.table td.text-center.empty_table {
     padding: 5px 10px 5px 0% !important;
     text-align: center;
   }
@@ -8415,6 +8423,9 @@ button.btn.btn-filter {
 }
 
 @media (max-width: 767px) {
+  .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child{
+        border-right: none;
+  }
   header .navbar {
     background-color: $top_header;
     border-bottom: 2px solid #e6e7e8;
@@ -8495,6 +8506,10 @@ button.btn.btn-filter {
     width: 100%;
     top: 0;
   }
+
+.user_dropdown > li > a .glyphicon-menu-right{
+  transform: rotate(90deg);
+}
 }
 
 @media (max-width: 575px) {
@@ -8511,6 +8526,7 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+
 }
 
 @media (max-width: 500px) {
@@ -8542,7 +8558,15 @@ button.btn.btn-filter {
     right: 272px;
   }
 }
-
+@media(max-width:411px){
+        #companyList {
+    background: #fff;
+    padding-bottom: 4px;
+    left: 0px;
+    top: 30px;
+    padding-top: 0;
+}
+}
 @media (max-width: 360px) {
   .pagination-sm>li>a,
   .pagination-sm>li>span {
@@ -8560,7 +8584,7 @@ button.btn.btn-filter {
     margin-bottom: 5px;
   }
   .welcome_header h1 {
-    font-size: 40px;
+    font-size: 25px !important;
   }
   .welcome_header:after {
     bottom: 0;
@@ -8720,4 +8744,7 @@ button.btn.btn-filter {
   td.pItem.price .my-dropdown-menu {
     width: 180px !important;
   }
+
+
+
 }

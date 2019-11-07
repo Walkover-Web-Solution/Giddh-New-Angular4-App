@@ -6,12 +6,12 @@
       <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12">
         <label for="">Account Name</label>
-        <input type="text" class="form-control" formControlName="name" name="accountName" />
+        <input type="text" class="form-control" #autoFocus formControlName="name" name="accountName" />
       </div>
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12" formGroupName="country">
         <label for="">Country</label>
-        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode" style="width:100%">
+        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"  (selected)="selectCountry($event)" style="width:100%">
         </sh-select>
       </div>
 

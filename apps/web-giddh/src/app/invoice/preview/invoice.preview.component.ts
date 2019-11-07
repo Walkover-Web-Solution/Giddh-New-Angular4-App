@@ -37,6 +37,7 @@ import { saveAs } from 'file-saver';
 import { GeneralService } from '../../services/general.service';
 import {ReceiptService} from "../../services/receipt.service";
 import {BaseResponse} from "../../models/api-models/BaseResponse";
+import { InvoicePaymentModelComponent } from './models/invoicePayment/invoice.payment.model.component';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -68,7 +69,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('searchBox') public searchBox: ElementRef;
   @ViewChild('advanceSearchComponent', {read: InvoiceAdvanceSearchComponent}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
   @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
-
+  @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
 
   public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
   public bsConfig: Partial<BsDatepickerConfig> = {
@@ -571,6 +572,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       if (actionToPerform === 'paid') {
         this.selectedInvoice = objItem;
         this.performActionOnInvoiceModel.show();
+        setTimeout(() => {
+          this.invoicePaymentModelComponent.focusAmountField();
+        }, 500);
       } else {
         this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
       }
@@ -879,7 +883,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       this.selectedInvoicesList = this.selectedInvoicesList.filter((ele)=>{
         return ele.isSelected;
       });
-      
+
       this.voucherData.items.forEach((ele)=>{
         this.selectedInvoicesList = this.selectedInvoicesList.filter((s)=>{
           return ele.uniqueName!==s.uniqueName;
@@ -1103,7 +1107,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
           v.isSelected=true;
         }
       })
-    })
+    });
     return voucherData;
   }
 
