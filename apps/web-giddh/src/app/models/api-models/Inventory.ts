@@ -98,6 +98,7 @@ export class StockReportResponse implements IStockReport {
   public totalItems: number;
   public totalPages: number;
   public transactions: IStockTransaction[];
+  public profit: number;
 }
 
 export class StockReportRequest {
