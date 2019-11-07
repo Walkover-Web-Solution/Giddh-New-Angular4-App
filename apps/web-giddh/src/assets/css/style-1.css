@@ -312,7 +312,7 @@ textarea {
 
 ul.dropdown-menu {
   list-style-type: none;
-  z-index: 991;
+  z-index: 990;
 }
 
 header .navbar {
@@ -5205,7 +5205,7 @@ strong {
 
 b,
 strong {
-  font-family: 'opensans-regular';
+  font-family: 'opensans-semibold';
   font-weight: 500;
 }
 

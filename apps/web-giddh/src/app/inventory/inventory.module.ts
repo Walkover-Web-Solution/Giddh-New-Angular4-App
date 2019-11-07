@@ -43,6 +43,7 @@ import { InwardNoteComponent } from './components/forms/inward-note/inward-note.
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
+import {DateFormatterPipe} from "./dateFormatter.pipe";
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
     InwardNoteComponent,
     OutwardNoteComponent,
     JobworkSidebarComponent,
-    ManufacturingComponent
+    ManufacturingComponent,
+    DateFormatterPipe
   ],
   exports: [
     InventoryComponent,

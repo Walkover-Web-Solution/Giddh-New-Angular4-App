@@ -8,13 +8,13 @@
 
       <input type="text" readonly name="sum" *ngIf="!maskInput" class="form-control cursor-pointer text-right taxInput"
         [(ngModel)]="taxTotalAmount" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"
-        style="padding-right:20px !important;" (blur)="taxInputBlur($event)" />
+        style="padding-right:28px !important;" (blur)="taxInputBlur($event)" />
 
 
       <input type="text" readonly name="sum" *ngIf="maskInput" class="form-control cursor-pointer text-right taxInput"
         [(ngModel)]="taxTotalAmount" [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput"
         (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" (blur)="taxInputBlur($event)"
-        style="padding-right:20px !important;" />
+        style="padding-right:24px !important;" />
 
       <!-- <span class="caret cp no-select" (click)="showTaxPopup = !showTaxPopup"></span> -->
 

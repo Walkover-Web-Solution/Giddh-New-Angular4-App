@@ -59,7 +59,7 @@
               <!-- #dropdown="bs-dropdown" -->
               <!--  -->
               <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
-                (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()" *ngIf="!isMobileSite">
+                (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
                 <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                   Switch company
                   <span class="glyphicon glyphicon-menu-right"></span>
@@ -327,7 +327,7 @@
           <!-- #dropdown="bs-dropdown" -->
           <!--  -->
           <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true"
-            (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()" *ngIf="!isMobileSite">
+            (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
             <a href="javascript:void(0)" class="clearfix" dropdownToggle>
               Switch company
               <span class="glyphicon glyphicon-menu-right"></span>
@@ -349,8 +349,7 @@
 
               <li style="padding:0px;">
 
-                <perfect-scrollbar class="scrClas" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
-                  auto-height [scrollIndicators]="true">
+                <perfect-scrollbar class="" [scrollIndicators]="true">
 
                   <ul class="sub-list" *ngIf="companyList && companyList.length">
 
@@ -737,7 +736,7 @@
 
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
-  class="modal fade fullScreenMy mangeAccountPopup" role="dialog" (onShown)="onShown()">
+  class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
   <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>

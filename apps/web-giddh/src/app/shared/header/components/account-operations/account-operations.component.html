@@ -1,5 +1,5 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
-  [ngStyle]="{'min-height':height+'px'}" *ngIf="!(showNewForm$ | async)">
+  *ngIf="!(showNewForm$ | async)">
   <!--breadcrumbs-->
   <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath?.length > 0">
     <div class="col-xs-8">
@@ -285,11 +285,11 @@
 </div>
 <!-- modals -->
 
-<!--ng-busy-->
-<div class="" *ngIf="activeGroupInProgress$ | async ">
-  <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
+<!--ng-busy   " -->
+<div class="">
+  <div class="ng-busy ng-trigger ng-trigger-flyInOut" *ngIf="activeGroupInProgress$ | async">
     <div class="">
-      <div class="ng-busy-default-wrapper">
+      <div class=" ng-busy-default-wrapper">
         <div class="ng-busy-default-sign">
           <div class="ng-busy-default-spinner">
             <div class="bar1"></div>

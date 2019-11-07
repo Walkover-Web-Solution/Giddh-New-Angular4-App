@@ -156,7 +156,10 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
   { type: 'MENU', name: 'Invoice > Recurring', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'recurring', tabIndex: 1 } },
   { type: 'MENU', name: 'Invoice > Preview', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 } },
   { type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: { tab: 'estimates', tabIndex: 0 } },
-  { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } }
+  { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } },
+  { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding' }
+
+
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 
