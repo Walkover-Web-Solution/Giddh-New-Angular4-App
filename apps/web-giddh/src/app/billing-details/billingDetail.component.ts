@@ -1,7 +1,15 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest, CompanyCountry } from '../models/api-models/Company';
+import {
+  BillingDetails,
+  CompanyCreateRequest,
+  CreateCompanyUsersPlan,
+  States,
+  SubscriptionRequest,
+  CompanyCountry,
+  StatesRequest
+} from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
@@ -16,6 +24,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import {CountryRequest} from "../models/api-models/Common";
+import { CommonActions } from '../actions/common.actions';
 
 @Component({
   selector: 'billing-details',
@@ -64,29 +74,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   };
   public ChangePaidPlanAMT: any = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public countryNameCode: any[] = [];
 
-  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions) {
-    this.store.dispatch(this._generalActions.getAllState());
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    this.stateStream$.subscribe((data) => {
-      if (data) {
-        data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-        this.reFillState();
-      }
-      const filteredArr = this.states.reduce((acc, current) => {
-        const x = acc.find(item => item.value === current.value);
-        if (!x) {
-          return acc.concat([current]);
-        } else {
-          return acc;
-        }
-      }, []);
-      this.statesSource$ = observableOf(filteredArr);
-    }, (err) => {
-      // console.log(err);
-    });
+  constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
     this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
   }
@@ -298,9 +288,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     setTimeout(() => {
       this.razorpay = new (window as any).Razorpay(this.options);
     }, 1000);
-    console.log('this.razorpayAmount', this.razorpayAmount, this.UserCurrency);
-
-    console.log(this.createNewCompany);
     this.reFillForm();
   }
 
@@ -327,5 +314,40 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
       }
     }
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          // Creating Country List
+          this.countryNameCode[res[key].countryName] = [];
+          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
+        });
+        this.getStates();
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = 'onboarding';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getStates() {
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({
+            label: res.stateList[key].code + ' - ' + res.stateList[key].name,
+            value: res.stateList[key].code
+          });
+        });
+        this.statesSource$ = observableOf(this.states);
+      } else {
+        //let statesRequest = new StatesRequest();
+        //statesRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
+        //this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
   }
 }

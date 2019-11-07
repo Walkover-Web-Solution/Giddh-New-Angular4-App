@@ -16,7 +16,6 @@ import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { CompanyActions } from '../actions/company.actions';
 import { CompanyService } from '../services/companyService.service';
-import { CommonService } from '../services/common.service';
 import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
@@ -122,12 +121,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public formFields: any[] = [];
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-              private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _commonService: CommonService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
+              private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
-
-    this.getCountry();
-    this.getCurrency();
-    this.getCallingCodes();
 
     this.store.select(state => {
       if (!state.session.companies) {
@@ -260,6 +255,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
       this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
       this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+      this.getCountry();
+      this.getCurrency();
+      this.getCallingCodes();
     }
   }
 
@@ -391,7 +389,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this._router.navigate(['new-user']);
     }
   }
+
   public ngOnDestroy() {
+    this.store.dispatch(this._generalActions.resetStatesList());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -501,11 +501,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.taxesList[matchedIndex].isSelected = false;
     }
   }
+
   public onClearBusinessType() {
     this.selectedBusinesstype = '';
     this.companyProfileObj.bussinessType = '';
 
   }
+
   public onClearBusinessNature() {
     this.companyProfileObj.bussinessNature = '';
   }

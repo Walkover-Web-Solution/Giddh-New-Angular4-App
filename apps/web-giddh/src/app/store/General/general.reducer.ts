@@ -88,6 +88,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       }
       return state;
     }
+    case GENERAL_ACTIONS.RESET_STATES_LIST: {
+      return {...state, states: null};
+    }
     // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
     case GENERAL_ACTIONS.RESET_SMART_LIST: {
       return {...state, smartList: []};
