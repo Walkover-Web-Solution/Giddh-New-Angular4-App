@@ -217,7 +217,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     this.companyProfileObj.address = this.createNewCompany.address;
-    console.log(this.companyProfileObj);
   }
 
   public reFillState() {

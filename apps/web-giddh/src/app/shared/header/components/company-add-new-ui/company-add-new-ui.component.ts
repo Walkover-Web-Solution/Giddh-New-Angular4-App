@@ -128,8 +128,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
    */
   public createCompany(mobileNoEl) {
 
+    this.checkMobileNo(mobileNoEl);
+
     if (!this.isMobileNumberValid) {
-      this._toaster.errorToast('Invalid Contact number', 'Error');
       if (mobileNoEl) {
         mobileNoEl.focus();
       }
@@ -218,16 +219,21 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
       this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
     }
   }
+
   public isValidMobileNumber(ele: HTMLInputElement) {
     if (ele.value) {
-      if (ele.value.length > 9 && ele.value.length < 16) {
-        ele.classList.remove('error-box');
-        this.isMobileNumberValid = true;
-      } else {
-        this.isMobileNumberValid = false;
-        this._toaster.errorToast('Invalid Contact number');
-        ele.classList.add('error-box');
-      }
+      this.checkMobileNo(ele);
+    }
+  }
+
+  public checkMobileNo(ele) {
+    if (ele.value.length > 9 && ele.value.length < 16) {
+      ele.classList.remove('error-box');
+      this.isMobileNumberValid = true;
+    } else {
+      this.isMobileNumberValid = false;
+      this._toaster.errorToast('Invalid Contact number');
+      ele.classList.add('error-box');
     }
   }
 
