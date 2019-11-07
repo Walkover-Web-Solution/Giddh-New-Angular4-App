@@ -53,13 +53,6 @@ export class GeneralActions {
       switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
       map(resp => this.getAllStateResponse(resp)));
 
-  @Effect()
-  public resetStatesList$: Observable<Action> = this.action$
-    .ofType(GENERAL_ACTIONS.RESET_STATES_LIST).pipe(
-      map((action: CustomActions) => {
-        return {type: 'EmptyAction'};
-    }));
-
   constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService) {
     //
   }

@@ -2,6 +2,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormResponse } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { CustomActions } from '../customActions';
+import {GENERAL_ACTIONS} from "../../actions/general/general.const";
 
 /**
  * Keeping Track of the CommonState
@@ -58,6 +59,10 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
         });
       }
       return Object.assign({}, state, {});
+
+    case CommonActions.RESET_ONBOARDING_FORM_RESPONSE: {
+      return {...state, onboardingform: null};
+    }
 
     default:
       return state;

@@ -9,6 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import {GENERAL_ACTIONS} from "./general/general.const";
 
 @Injectable()
 
@@ -21,6 +22,7 @@ export class CommonActions {
   public static GET_CALLING_CODES_RESPONSE = "GetCallingCodesResponse";
   public static GET_ONBOARDING_FORM = 'GetOnboardingForm';
   public static GET_ONBOARDING_FORM_RESPONSE = "GetOnboardingFormResponse";
+  public static RESET_ONBOARDING_FORM_RESPONSE = "ResetOnboardingFormResponse";
 
   @Effect()
   public getCountry$: Observable<Action> = this.action$
@@ -103,6 +105,12 @@ export class CommonActions {
     return {
       type: CommonActions.GET_ONBOARDING_FORM_RESPONSE,
       payload: value
+    };
+  }
+
+  public resetOnboardingForm(): CustomActions {
+    return {
+      type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
     };
   }
 }

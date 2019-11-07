@@ -124,6 +124,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
               private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
 
+    this.store.dispatch(this._generalActions.resetStatesList());
+    this.store.dispatch(this.commonActions.resetOnboardingForm());
+
     this.store.select(state => {
       if (!state.session.companies) {
         return;
@@ -311,7 +314,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     let isInvalid: boolean = false;
     if (ele.value) {
       if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-        this._toasty.errorToast('Invalid GST number');
+        this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;
       } else {
@@ -341,7 +344,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.companyProfileObj.state = '';
           statesEle.setDisabledState(false);
           this._toasty.clearAllToaster();
-          this._toasty.warningToast('Invalid GSTIN.');
+          this._toasty.warningToast('Invalid '+this.formFields['taxName'].label);
         }
       });
     } else {
@@ -391,7 +394,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnDestroy() {
-    this.store.dispatch(this._generalActions.resetStatesList());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
