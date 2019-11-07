@@ -49,7 +49,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
-  @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[] }> = new EventEmitter<string | { email: string, invoiceType: string[] }>();
+  @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
 

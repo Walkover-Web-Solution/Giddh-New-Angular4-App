@@ -1038,7 +1038,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (f) {
       f.form.reset();
     }
-
+    this.showSwitchedCurr = false;
+    this.autoSaveIcon = false;
+    this.showCurrencyValue = false;
     this.invFormData = new VoucherClass();
     this.depositAccountUniqueName = '';
     this.accountUniqueName = "";
