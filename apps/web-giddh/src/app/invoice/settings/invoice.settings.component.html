@@ -249,7 +249,7 @@
                   [disabled]="!isGmailIntegrated" class="hideOnMobile" />
 
                 <span class="ml-1 integratdeEmail">
-                  <a *ngIf="!isGmailIntegrated" [href]="gmailAuthCodeStaticUrl">Integrate Gmail</a>
+                  <a *ngIf="!isGmailIntegrated" [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                 </span>
               </div>
 
@@ -685,10 +685,10 @@
 
                 <div class="col-xs-12 col-sm-7">
                   <div class="form-group date-pickerInvoice invoice-lock-date  mb-0">
-                    <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker
+                    <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker #dp="bsDatepicker"
                       [(ngModel)]="invoiceSetting.lockDate"
                       [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
-                    <span class="icon-calender "></span>
+                    <span class="icon-calender " (click)="dp.toggle()"></span>
                   </div>
                 </div>
 

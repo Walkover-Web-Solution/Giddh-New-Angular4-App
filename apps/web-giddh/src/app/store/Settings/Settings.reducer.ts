@@ -643,6 +643,11 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         return Object.assign({}, state, { isGmailIntegrated: true });
       }
     }
+    case SETTINGS_INTEGRATION_ACTIONS.RESET_PAYMENT_STATUS_RESPONSE: {
+      newState.isPaymentAdditionSuccess = false;
+      newState.isPaymentUpdationSuccess = false;
+      return Object.assign({}, state, newState);
+    }
     //  endregion discount reducer
     default: {
       return state;

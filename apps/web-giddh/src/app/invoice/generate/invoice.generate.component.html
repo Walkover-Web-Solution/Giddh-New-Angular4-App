@@ -25,10 +25,11 @@
       <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
 
         <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
-          <span class="icon-calender"></span>
-
-          <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
-            [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+          <!-- <span class="icon-calender"></span> -->
+          <span class="inputWrapper">
+            <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
+              [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+          </span>
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
 

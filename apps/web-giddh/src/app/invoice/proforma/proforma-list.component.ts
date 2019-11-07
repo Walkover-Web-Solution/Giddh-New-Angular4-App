@@ -467,6 +467,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     if (this.selectedVoucher) {
       document.querySelector('body').classList.add('fixed');
     } else {
+      this.getAll();
       document.querySelector('body').classList.remove('fixed');
     }
   }

@@ -140,7 +140,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                  */
                 this.activeTab = null;
                 setTimeout(() => {
-                  this.tabChanged(queryParams.tab);
+                  this.tabChanged(queryParams.tab, null);
                 }, 500);
               }
             }
@@ -179,10 +179,12 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.selectedVoucherType = VoucherTypeEnum[tab];
   }
 
-  public tabChanged(tab: string) {
+  public tabChanged(tab: string, e) {
     this.activeTab = tab;
     this.router.navigate(['pages', 'invoice', 'preview', tab]);
-    this.saveLastState(tab);
+    if(e && !e.target){
+      this.saveLastState(tab);
+    }
   }
 
   public ngOnDestroy() {
