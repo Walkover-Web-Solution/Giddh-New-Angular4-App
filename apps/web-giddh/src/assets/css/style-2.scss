@@ -8170,6 +8170,9 @@ button.btn.btn-filter {
 .addManageGroupAcc{
   overflow-y: hidden !important;
 }
+.modal{
+  z-index:9991;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
