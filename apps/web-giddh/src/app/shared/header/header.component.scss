@@ -14,9 +14,11 @@
     /* padding-bottom: 120px; */
     left: -215px;
     z-index: 990;
-    box-shadow:-2px -2px 15px rgba(0,0,0,0.2);
-}
 
+}
+.nav-left-bar.open{
+  box-shadow:-2px -2px 15px rgba(0,0,0,0.2);
+}
 .account-search .input-group-addon {
 
     border-color:$inputBorderColor;
@@ -161,7 +163,7 @@ a[vr-item]:focus {
 
 .left_fixed_header>li>a {
     display: block;
-    padding:10px 15px;
+    padding:7px 15px;
     color: #1c1c1c;
     position: relative;
     /* width: 32px; */
@@ -215,6 +217,8 @@ a[vr-item]:focus {
     // overflow: hidden;
     text-overflow: ellipsis;
     max-width: 170px;
+    white-space: inherit;
+    line-height: 1.3;
 }
 
 .left_fixed_header>li:hover a,
@@ -530,11 +534,11 @@ background-color:$headerBtnColor;
 
  }
  span.icon-support.dropdown-toggle {
-    background-color:$border-blue;
+    background-color:$headerBtnColor;
     color: #fff;
     padding:6px 7px;
     font-size: 17px;
-    border:1px solid $border-blue;
+    border:1px solid $headerBtnColor;
     border-radius: 1px;
     position: relative;
     top: 1px;
@@ -613,7 +617,7 @@ padding-right: 15px;
     padding-top: 15px;
 }
 ul.sub-list{
-      min-height: 50px ;
+ min-height: 50px ;
     max-height: 400px;
 }
 /* responsive */
@@ -692,7 +696,27 @@ span.icon-support.dropdown-toggle{
 }
 
 }
+@media(min-width:412px) and (max-width:840px){
+  ul.sub-list{
+      min-height: 30px ;
+    max-height: 140px;
+}
+.sub_menu_nav{
+      top: -60px;
+}
+}
+@media(max-width:411px){
+  ul.sub-list{
+      min-height: 50px ;
+    max-height: 190px;
+}
+}
 
+@media(min-width:768px){
+  .sidebarLishowMob {
+    display: none !important;
+}
+}
 @media(max-width:375px){
   .universal_date li.dateRangPicker {
     display: block ;
@@ -718,10 +742,5 @@ button#AddManage {
 }
 .lowerLayerHeader {
     padding-top:5px;
-}
-}
-@media(min-width:768px){
-  .sidebarLishowMob {
-    display: none;
 }
 }

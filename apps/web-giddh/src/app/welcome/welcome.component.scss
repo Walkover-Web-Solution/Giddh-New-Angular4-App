@@ -68,7 +68,9 @@
 
 .welcome-container {
     max-width: 400px;
-    margin: 0 auto;
+    margin: 0 auto 20px;
+        width: 100%;
+    padding: 0 15px;
 }
 
 .addCmpnyAddrs p {
@@ -112,4 +114,13 @@
 }
 .pos-rel{
   position: relative;
+}
+.custom-multi-select li {
+  background: #f1f1f1;
+  color: white;
+  margin: 4px;
+  padding: 2px 10px;
+  font-size: 14px;
+  border-radius: 3px;
+  cursor: pointer;
 }

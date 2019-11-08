@@ -1,6 +1,6 @@
 <div id="main" class="welcome_outer">
 
-  <layout-main>
+  <layout-main [sideMenu]="false">
 
     <div class="welcome-header">
       <h2>Welcome To Giddh! </h2>
@@ -56,10 +56,10 @@
           <div class="col-xs-12 mrB2 selectBox">
             <div class="pos-rel">
               <label for="bussinessType">Select Business Type</label>
-              <div class="custom-select select-caret pos-rel">
-                <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType"
+              <div class="custom-select pos-rel">
+                <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType" (onClear)="onClearBusinessType()" [showClear]="true"
                   autocomplete="false" (selected)="selectedbusinessType($event)"
-                  [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33">
+                  [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33" [defaultValue]="companyProfileObj.bussinessType">
                 </sh-select>
               </div>
               <!-- Need to add functionality by developer end -->
@@ -69,10 +69,10 @@
           <div class="col-xs-12 mrB2 selectBox">
             <div class="pos-rel">
               <label for="bussinessNature">Select Business Nature</label>
-              <div class="custom-select select-caret pos-rel">
-                <sh-select placeholder="Select Business Nature" name="bussinessNature" autocomplete="false"
+              <div class="custom-select  pos-rel">
+                <sh-select placeholder="Select Business Nature" name="bussinessNature" (onClear)="onClearBusinessNature()" [showClear]="true" autocomplete="false"
                   id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList"
-                  [isFilterEnabled]="true" [ItemHeight]="33">
+                  [isFilterEnabled]="true" [ItemHeight]="33" [defaultValue]="companyProfileObj.bussinessNature">
                 </sh-select>
               </div>
               <!-- Need to add functionality by developer end -->
@@ -96,7 +96,7 @@
                 <label>State<sup class="text-danger">*</sup></label><br>
                 <div class=" ">
                   <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state"
-                    [(ngModel)]="companyProfileObj.state" style="width:100%"></sh-select>
+                    [(ngModel)]="companyProfileObj.state" style="width:100%" [defaultValue]="companyProfileObj.selectedState"></sh-select>
                 </div>
               </div>
             </div>
@@ -115,6 +115,17 @@
                       {{tax.label}}
                     </li>
                   </ul>
+                </div>
+                <div style="margin-top: 5px;">
+                  <ul class="list-inline custom-multi-select">
+                    <li *ngFor="let tax of selectedTaxes">
+                      <a style="color: gray">
+                        {{tax}} <span class="pdL" (click)="removeTax(tax)">×</span>
+                      </a>
+                    </li>
+
+                  </ul>
+
                 </div>
 
               </div>
