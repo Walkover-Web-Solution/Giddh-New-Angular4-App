@@ -54,6 +54,7 @@ export class CompanyResponse {
   public city: string;
   public pincode: string;
   public country: string;
+  public countryCode: string;
   public updatedAt: string;
   public updatedBy: ICommonItem;
   public createdAt: string;

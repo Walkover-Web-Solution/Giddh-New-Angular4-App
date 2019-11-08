@@ -23,6 +23,7 @@ import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import { NgForm } from '@angular/forms';
 import {CountryRequest} from "../../../../models/api-models/Common";
+import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -56,6 +57,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public isNewUser: boolean = false;
+  public countryNameCode: any[] = [];
+  public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
 
   constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -235,10 +238,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   }
 
   public checkMobileNo(ele) {
-    if (ele.value.length > 9 && ele.value.length < 16) {
-      ele.classList.remove('error-box');
-      this.isMobileNumberValid = true;
-    } else {
+    try {
+      let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.countryNameCode[this.company.country]);
+      if (this.phoneUtility.isValidNumber(parsedNumber)) {
+        ele.classList.remove('error-box');
+        this.isMobileNumberValid = true;
+      } else {
+        this.isMobileNumberValid = false;
+        this._toaster.errorToast('Invalid Contact number');
+        ele.classList.add('error-box');
+      }
+    } catch(error) {
       this.isMobileNumberValid = false;
       this._toaster.errorToast('Invalid Contact number');
       ele.classList.add('error-box');
@@ -279,6 +289,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res).forEach(key => {
+          this.countryNameCode[res[key].countryName] = [];
+          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
+
           // Creating Country List
           this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List

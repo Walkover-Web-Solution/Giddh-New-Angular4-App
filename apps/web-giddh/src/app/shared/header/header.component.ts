@@ -9,7 +9,13 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
+import {
+  ActiveFinancialYear,
+  CompanyCountry,
+  CompanyCreateRequest,
+  CompanyResponse,
+  StatesRequest
+} from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -255,7 +261,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-
       // Sagar told to change the logic
       // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
       //   this.userIsSuperUser = true;
@@ -296,8 +301,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
+
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
+        console.log(res);
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
           if (res.baseCurrency) {
@@ -572,7 +579,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         // get groups with accounts for general use
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
-        this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._generalActions.getFlattenGroupsReq());
       }
@@ -1297,7 +1303,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return name;
   }
 
-  public headerClickedOutside(menu) {
-    debugger;
+  public getStates() {
+    console.log(this.createNewCompanyUser);
+    if(this.createNewCompanyUser.countryCode !== undefined && this.createNewCompanyUser.countryCode !== null && this.createNewCompanyUser.countryCode !== "") {
+      let statesRequest = new StatesRequest();
+      statesRequest.country = this.createNewCompanyUser.countryCode;
+      this.store.dispatch(this._generalActions.getAllState(statesRequest));
+    }
   }
 }
