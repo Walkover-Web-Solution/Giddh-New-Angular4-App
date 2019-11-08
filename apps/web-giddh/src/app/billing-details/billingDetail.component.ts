@@ -24,7 +24,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import {CountryRequest} from "../models/api-models/Common";
+import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 
 @Component({
@@ -52,7 +52,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public selectedPlans: CreateCompanyUsersPlan;
   public states: IOption[] = [];
   public isGstValid: boolean;
-  public selectedState: any = ''
+  public selectedState: any = '';
   public subscriptionPrice: any = '';
   public razorpayAmount: any;
   public orderId: string;
@@ -74,7 +74,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   };
   public ChangePaidPlanAMT: any = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public countryNameCode: any[] = [];
+  public formFields: any[] = [];
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -102,6 +102,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
           this.getStates();
+          this.getOnboardingForm();
         }
       }
     });
@@ -113,6 +114,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
           this.orderId = this.createNewCompany.orderId;
           this.razorpayAmount = this.getPayAmountForTazorPay(this.createNewCompany.amountPaid);
           this.getStates();
+          this.getOnboardingForm();
         }
       }
     });
@@ -142,16 +144,27 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {
-    let isInvalid: boolean = false;
+    let isValid: boolean = false;
+
     if (ele.value) {
-      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-        this._toasty.errorToast('Invalid GST number');
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(ele.value)) {
+            isValid = true;
+          }
+        }
+      } else {
+        isValid = true;
+      }
+
+      if (!isValid) {
+        this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
-        // this.checkGstDetails();
       }
     } else {
       ele.classList.remove('error-box');
@@ -159,30 +172,33 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
-    let gstVal: string = gstNo.value;
-    this.billingDetailsObj.gstin = gstVal;
+    if(this.createNewCompany.countryCode === "IN") {
+      let gstVal: string = gstNo.value;
+      this.billingDetailsObj.gstin = gstVal;
 
-    if (gstVal.length >= 2) {
-      this.statesSource$.pipe(take(1)).subscribe(state => {
-        let s = state.find(st => st.value === gstVal.substr(0, 2));
-        statesEle.setDisabledState(false);
-
-        if (s) {
-          this.billingDetailsObj.state = s.value;
-          statesEle.setDisabledState(true);
-
-        } else {
-          this.billingDetailsObj.state = '';
+      if (gstVal.length >= 2) {
+        this.statesSource$.pipe(take(1)).subscribe(state => {
+          let s = state.find(st => st.value === gstVal.substr(0, 2));
           statesEle.setDisabledState(false);
-          this._toasty.clearAllToaster();
-          this._toasty.warningToast('Invalid GSTIN.');
-        }
-      });
-    } else {
-      statesEle.setDisabledState(false);
-      this.billingDetailsObj.state = '';
+
+          if (s) {
+            this.billingDetailsObj.state = s.value;
+            statesEle.setDisabledState(true);
+
+          } else {
+            this.billingDetailsObj.state = '';
+            statesEle.setDisabledState(false);
+            this._toasty.clearAllToaster();
+            this._toasty.warningToast('Invalid GSTIN.');
+          }
+        });
+      } else {
+        statesEle.setDisabledState(false);
+        this.billingDetailsObj.state = '';
+      }
     }
   }
+
   public validateEmail(emailStr) {
     let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return pattern.test(emailStr);
@@ -305,34 +321,44 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.billingDetailsObj.address = this.createNewCompany.address;
   }
 
-  public reFillState() {
-    if(this.createNewCompany !== undefined && this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
-      this.billingDetailsObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
-
-      let stateLoop = 0;
-      for(stateLoop; stateLoop < this.states.length; stateLoop++) {
-        if(this.states[stateLoop].value === this.billingDetailsObj.state) {
-          this.selectedState = this.states[stateLoop].label;
-        }
-      }
-    }
-  }
-
   public getStates() {
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.stateList).forEach(key => {
           this.states.push({
-            label: res.stateList[key].code + ' - ' + res.stateList[key].name,
-            value: res.stateList[key].code
+            label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name,
+            value: res.stateList[key].stateGstCode
           });
+
+          if(this.createNewCompany !== undefined && this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
+            if(res.stateList[key].stateGstCode === this.createNewCompany.gstDetails[0]['addressList'][0].stateCode) {
+              this.selectedState = res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name;
+              this.billingDetailsObj.state = res.stateList[key].stateGstCode;
+            }
+          }
         });
+
         this.statesSource$ = observableOf(this.states);
-        this.reFillState();
       } else {
         let statesRequest = new StatesRequest();
         statesRequest.country = this.createNewCompany.countryCode;
         this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
+  }
+
+  public getOnboardingForm() {
+    this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.fields).forEach(key => {
+          this.formFields[res.fields[key].name] = [];
+          this.formFields[res.fields[key].name] = res.fields[key];
+        });
+      } else {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = this.createNewCompany.countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
   }

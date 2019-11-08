@@ -89,7 +89,7 @@
               <div class=" ">
                 <label>State<sup class="text-danger">*</sup></label><br>
                 <div class=" ">
-                  <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" name="state"
+                  <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
                     [(ngModel)]="companyProfileObj.state" style="width:100%" [defaultValue]="companyProfileObj.selectedState"></sh-select>
                 </div>
               </div>

@@ -22,6 +22,7 @@ import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/
 import { GeneralActions } from '../actions/general/general.actions';
 import { CommonActions } from '../actions/common.actions';
 import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
+import {IForceClear} from "../models/api-models/Sales";
 
 @Component({
   selector: 'welcome-component',
@@ -121,6 +122,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public formFields: any[] = [];
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
               private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
@@ -347,37 +349,52 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
-    let gstVal: string = gstNo.value;
-    this.companyProfileObj.gstNumber = gstVal;
+    if(this.createNewCompanyPreparedObj.countryCode === "IN") {
+      let gstVal: string = gstNo.value;
+      this.companyProfileObj.gstNumber = gstVal;
 
-    if (gstVal.length >= 2) {
-      this.statesSource$.pipe(take(1)).subscribe(state => {
-        let s = state.find(st => st.value === gstVal.substr(0, 2));
-        _.uniqBy(s, 'value');
-        statesEle.setDisabledState(false);
-
-        if (s) {
-          this.companyProfileObj.state = s.value;
-          this.selectedstateName = s.label
-          statesEle.setDisabledState(true);
-
-        } else {
-          this.companyProfileObj.state = '';
+      if (gstVal.length >= 2) {
+        this.statesSource$.pipe(take(1)).subscribe(state => {
+          let s = state.find(st => st.value === gstVal.substr(0, 2));
+          _.uniqBy(s, 'value');
           statesEle.setDisabledState(false);
-          this._toasty.clearAllToaster();
-          this._toasty.warningToast('Invalid '+this.formFields['taxName'].label);
-        }
-      });
-    } else {
-      statesEle.setDisabledState(false);
-      this.companyProfileObj.state = '';
+
+          if (s) {
+            this.companyProfileObj.state = s.value;
+            this.selectedstateName = s.label;
+            statesEle.setDisabledState(true);
+
+          } else {
+            this.companyProfileObj.state = '';
+            statesEle.setDisabledState(false);
+            this._toasty.clearAllToaster();
+            this._toasty.warningToast('Invalid ' + this.formFields['taxName'].label);
+          }
+        });
+      } else {
+        statesEle.setDisabledState(false);
+        this.companyProfileObj.state = '';
+      }
     }
   }
 
   public selectedbusinessType(event) {
-    //
     if (event) {
       this.selectedBusinesstype = event.value;
+      this.selectedTaxes = [];
+      this.companyProfileObj.gstNumber = '';
+      this.forceClear$ = observableOf({status: true});
+      this.companyProfileObj.selectedState = '';
+
+      if(this.selectedBusinesstype === 'Unregistered') {
+        this.isGstValid = true;
+      }  else {
+        this.isGstValid = false;
+      }
+
+      for (let i = 0; i < this.taxesList.length; i++) {
+        this.taxesList[i].isSelected = false;
+      }
     }
   }
 
@@ -433,6 +450,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           this.countryCurrency[res[key].countryName] = res[key].currency.code;
         });
         this.countrySource$ = observableOf(this.countrySource);
+
+        this.createNewCompanyPreparedObj.countryCode = this.countryNameCode[this.createNewCompanyPreparedObj.country];
 
         this.getOnboardingForm();
         this.getStates();
@@ -495,7 +514,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.stateList).forEach(key => {
-          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+          this.states.push({ label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
         });
         this.statesSource$ = observableOf(this.states);
         this.reFillState();

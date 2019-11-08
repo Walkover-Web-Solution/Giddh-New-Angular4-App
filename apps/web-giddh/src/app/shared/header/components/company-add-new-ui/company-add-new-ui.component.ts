@@ -121,6 +121,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (!res.isBranch) {
+          this.company  = res;
+        }
+      }
+    });
   }
 
   /**

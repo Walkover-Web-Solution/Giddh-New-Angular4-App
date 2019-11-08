@@ -58,7 +58,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
+    this._authenticationService.getAllUserSubsciptionPlans('').subscribe(res => {
       this.SubscriptionPlans = res.body;
     });
     if (this._generalService.user) {

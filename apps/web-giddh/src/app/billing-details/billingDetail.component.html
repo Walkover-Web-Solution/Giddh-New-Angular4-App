@@ -41,9 +41,9 @@
                             <input type="text" id="mobile" class="form-control" name="mobile" [(ngModel)]="billingDetailsObj.mobile">
                         </div>
 
-                        <div class="form-group">
-                            <label>GSTIN</label>
-                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (blur)="checkGstNumValidation(gstinNumberField);" (keyup)="getStateCode(gstinNumberField, states)"
+                        <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
+                            <label>{{formFields['taxName'].label}}</label>
+                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (keyup)="getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField);"
                                 placeholder="">
                         </div>
                         <div class="form-group">
