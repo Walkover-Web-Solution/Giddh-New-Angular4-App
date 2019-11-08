@@ -60,7 +60,7 @@ label .required {
     width: 100%;
 }
 
-@media (min-width: 414px) {
+@media (max-width: 414px) {
 
 .welcome_header h1 {
     font-size: 30px !important;

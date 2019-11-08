@@ -650,7 +650,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
           }
 
-          this.depositAccountUniqueName = 'cash';
+          this.depositAccountUniqueName = '';
         }
 
         // update mode because voucher details is available
@@ -1038,9 +1038,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (f) {
       f.form.reset();
     }
-
+    this.showSwitchedCurr = false;
+    this.autoSaveIcon = false;
+    this.showCurrencyValue = false;
     this.invFormData = new VoucherClass();
-    this.depositAccountUniqueName = 'cash';
+    this.depositAccountUniqueName = '';
     this.accountUniqueName = "";
     this.invoiceNo = "";
     this.typeaheadNoResultsOfCustomer = false;
@@ -2097,7 +2099,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.resetInvoiceForm(f);
             this._toasty.successToast('Voucher updated Successfully');
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
 
@@ -2724,6 +2727,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.isCashInvoice) {
       obj.account.customerName = data.voucherDetails.customerName;
       obj.account.name = data.voucherDetails.customerName;
+    }else{
+      delete obj.account.customerName;
     }
     return obj;
   }
@@ -2829,7 +2834,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.description = entry.description;
       salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
       this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
-      console.log(salesEntryClass);
       voucherClassConversion.entries.push(salesEntryClass);
     });
 
@@ -3002,5 +3006,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       obj.address[0] = shippigAddrss;
     }
     return obj;
+  }
+
+  public selectDefaultbank() {
+    if(!this.depositAccountUniqueName){
+      this.depositAccountUniqueName = 'cash';
+    }
   }
 }
