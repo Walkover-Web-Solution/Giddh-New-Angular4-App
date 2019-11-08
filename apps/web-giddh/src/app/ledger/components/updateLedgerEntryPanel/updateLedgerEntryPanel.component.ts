@@ -421,8 +421,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.transactions.forEach(f => {
               f.isDiscount = false;
               f.isTax = false;
+              f.type = f.type === 'cr' ? 'CREDIT' : 'DEBIT';
             });
             this.vm.selectedLedger.taxes = [];
+            this.vm.selectedLedger.discounts = [];
             this.vm.selectedLedger.attachedFile = '';
           }
 
@@ -462,35 +464,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.baseAccountName$ = resp[1].particular.uniqueName;
           this.baseAcc = resp[1].particular.uniqueName;
           this.firstBaseAccountSelected = resp[1].particular.uniqueName;
-          if (!this.isPettyCash) {
-            this.vm.selectedLedger.transactions.map(t => {
 
-              if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-                let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
-                if (this.vm.isValidCategory(category)) {
-                  t.amount = this.vm.selectedLedger.actualAmount;
-                }
+          this.vm.selectedLedger.transactions.map(t => {
+
+            if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+              let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+              if (this.vm.isValidCategory(category)) {
+                t.amount = this.vm.selectedLedger.actualAmount;
               }
+            }
 
-              // if (!this.isMultiCurrencyAvailable) {
-              //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
-              // }
+            // if (!this.isMultiCurrencyAvailable) {
+            //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
+            // }
 
-              if (t.inventory) {
-                let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
-                if (findStocks) {
-                  let findUnitRates = findStocks.additional.stock;
-                  if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
-                    let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                    tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                    t.unitRate = tempUnitRates;
-                  } else {
-                    t.unitRate = [{
-                      code: t.inventory.unit.code,
-                      rate: t.inventory.rate,
-                      stockUnitCode: t.inventory.unit.code
-                    }];
-                  }
+            if (t.inventory) {
+              let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
+              if (findStocks) {
+                let findUnitRates = findStocks.additional.stock;
+                if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
+                  let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                  tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                  t.unitRate = tempUnitRates;
                 } else {
                   t.unitRate = [{
                     code: t.inventory.unit.code,
@@ -498,14 +493,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     stockUnitCode: t.inventory.unit.code
                   }];
                 }
-                t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+              } else {
+                t.unitRate = [{
+                  code: t.inventory.unit.code,
+                  rate: t.inventory.rate,
+                  stockUnitCode: t.inventory.unit.code
+                }];
               }
-            });
-            this.vm.reInitilizeDiscount(resp[1]);
-            if (this.vm.stockTrxEntry) {
-              this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+              t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
             }
+          });
+          this.vm.reInitilizeDiscount(resp[1]);
+          if (this.vm.stockTrxEntry) {
+            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
           }
+
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           // check if entry allows to show discount and taxes box
