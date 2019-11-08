@@ -5340,8 +5340,8 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 }
 
 .customItem:hover {
-  background-color: rgb(244, 245, 248) !important;
-  color: rgb(210, 95, 42) !important;
+  background-color: #e3e4ed !important;
+  color: #5B64C9 !important;
 }
 
 .or-line::before {

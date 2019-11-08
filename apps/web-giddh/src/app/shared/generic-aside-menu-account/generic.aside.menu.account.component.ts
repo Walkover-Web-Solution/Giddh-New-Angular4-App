@@ -19,8 +19,9 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
       top: 0;
       right: 0;
       bottom: 0;
-      width: 480px;
-      max-width: 100%;
+
+  max-width: 480px;
+       width: 100%;
       z-index: 99999;
     }
 
@@ -44,12 +45,41 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
     }
 
     :host .aside-pane {
-      width: 480px;
+     width: 100%;
+  max-width: 480px;
     }
 
     .aside-body {
       margin-bottom: 80px;
     }
+
+
+
+    @media(max-width:575px){
+    :host {
+      max-width: 370px;
+    }
+    :host .aside-pane {
+      max-width: 370px;
+    }
+}
+@media(max-width:375px){
+  :host {
+    max-width: 310px;
+  }
+  :host .aside-pane {
+      max-width: 310px;
+    }
+}
+@media(max-width:320px){
+  :host {
+    max-width: 280px;
+  }
+  :host .aside-pane {
+      max-width: 280px;
+      }
+}
+
   `],
   templateUrl: './generic.aside.menu.account.component.html'
 })
@@ -113,7 +143,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     });
 
     let flatGrps: IOption[] = items.map(m => {
-      return {label: m.groupName, value: m.groupUniqueName};
+      return { label: m.groupName, value: m.groupUniqueName };
     });
 
     this.flatAccountWGroupsList$ = of(flatGrps);
