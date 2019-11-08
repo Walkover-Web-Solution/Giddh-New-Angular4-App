@@ -46,7 +46,7 @@
                             <td class="pull-right">
                                 <table>
                                     <tbody>
-                                        <ng-container>
+                                        <ng-container *ngIf="voucherType==='sales'">
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
                                                 <td>
                                                     <strong>{{(fieldsAndVisibility.header.invoiceDate?.label?.length > 0) ? fieldsAndVisibility.header.invoiceDate?.label
