@@ -227,42 +227,8 @@
                         </tr>
                     </thead>
                     <tbody>
-
-
-                        <!-- <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
-          <td *ngIf="fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.date?.display"
-              [attr.colspan]="columnsVisibled-3">&nbsp;
-          </td>
-          <td *ngIf="!fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.date?.display"
-              [attr.colspan]="columnsVisibled-2">&nbsp;
-          </td>
-          <td *ngIf="fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display"
-              [attr.colspan]="columnsVisibled-2">&nbsp;
-          </td>
-          <td *ngIf="!fieldsAndVisibility.table.item?.display && !fieldsAndVisibility.table.date?.display"
-              [attr.colspan]="columnsVisibled-2">&nbsp;
-          </td>
-          <td colspan="2" class="font-16">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label :'Previous Due'}}</td>
-          <td colspan="3" class="font-16" ><span [innerHTML]="rupeeSymbol"></span>5000.00</td>
-        </tr> -->
-
-
-
                         <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
-                            <td *ngIf="fieldsAndVisibility.table.sNo?.display && (fieldsAndVisibility.table.hsnSac?.display || fieldsAndVisibility.table.discount?.display)"></td>
-                            <td *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"></td>
-                            <td *ngIf="fieldsAndVisibility.table.hsnSac?.display && fieldsAndVisibility.table.discount?.display"></td>
-                            <!-- <td *ngIf="!(fieldsAndVisibility.table.hsnSac?.display || fieldsAndVisibility.table.discount?.display)">3-2 </td> -->
-                            <td *ngIf="fieldsAndVisibility.table.quantity?.display"></td>
-                            <td *ngIf="fieldsAndVisibility.table.rate?.display"></td>
-                            <!-- <td *ngIf="fieldsAndVisibility.table.discount?.display"></td>
-          <td *ngIf="fieldsAndVisibility.table.taxableValue?.display"></td> -->
-                            <td *ngIf="fieldsAndVisibility.table.total?.display"></td>
-                            <td *ngIf="fieldsAndVisibility.table.total?.display"></td>
-                            <td *ngIf="fieldsAndVisibility.table.total?.display"></td>
-                            <td *ngIf="fieldsAndVisibility.table.total?.display"></td>
-                            <td class="font-16" *ngIf="fieldsAndVisibility.table.taxableValue?.display"></td>
-                            <td class="font-16">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label :'Previous Due'}}<span [innerHTML]="rupeeSymbol"></span>5000.00</td>
+                            <td [attr.colspan]="columnsVisibled" class="font-16 pr-2">{{(fieldsAndVisibility.table.previousDue?.label?.length > 0) ? fieldsAndVisibility.table.previousDue?.label :'Previous Due'}}<span class="pl-2" [innerHTML]="rupeeSymbol"></span>5000.00</td>
                         </tr>
 
 
