@@ -75,7 +75,8 @@
                 </label>
                 <div class="custom-select pos-rel">
                   <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
-                    [disabled]="gst.get('gstNumber').value" formControlName="stateCode"></sh-select>
+                    [forceClearReactive]="forceClear$ | async" [disabled]="gst.get('gstNumber').value"
+                    formControlName="stateCode"></sh-select>
                 </div>
               </div>
               <div class="row">

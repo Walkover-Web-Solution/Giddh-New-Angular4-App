@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -7,7 +7,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { GeneralService }  from 'apps/web-giddh/src/app/services/general.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { digitsOnly } from '../../../helpers';
 
 @Component({
@@ -24,11 +24,12 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   public showAddNewGroup$: Observable<boolean>;
   public isCreateGroupInProcess$: Observable<boolean>;
   public isCreateGroupSuccess$: Observable<boolean>;
+  @ViewChild('autoFocused') public autoFocus: ElementRef;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private _generalServices: GeneralService) {
+    private _generalServices: GeneralService) {
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).pipe(takeUntil(this.destroyed$));
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
@@ -60,17 +61,20 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.isGroupNameAvailable$.subscribe(a => {
           if (a !== null && a !== undefined) {
             if (a) {
-              this.groupDetailForm.patchValue({uniqueName: val});
+              this.groupDetailForm.patchValue({ uniqueName: val });
             } else {
               let num = 1;
-              this.groupDetailForm.patchValue({uniqueName: val + num});
+              this.groupDetailForm.patchValue({ uniqueName: val + num });
             }
           }
         });
       } else {
-        this.groupDetailForm.patchValue({uniqueName: ''});
+        this.groupDetailForm.patchValue({ uniqueName: '' });
       }
     });
+    setTimeout(() => {
+      this.autoFocus.nativeElement.focus();
+    }, 50);
   }
 
   // public generateUniqueName() {

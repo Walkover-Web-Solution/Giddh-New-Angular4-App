@@ -22,6 +22,9 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+.noHeight{
+  height: auto !important;
+}
 .payment-log-list > li {
   padding: 7px 0;
 }

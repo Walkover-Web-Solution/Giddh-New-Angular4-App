@@ -74,7 +74,7 @@
                     Date
                   </span>
                 </th>
-                <th class="col-xs-6" style="border-top:none">Paticular</th>
+                <th class="col-xs-6" style="border-top:none">Particular</th>
 
                 <th class="col-xs-2" style="border-top:none">
                   Amount
@@ -93,7 +93,7 @@
                       placeholder="date">
                   </td>
 
-                  <td data-title="Paticular" id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
+                  <td data-title="Particular" id="DbtTd" class="col-xs-6 pos-rel select2-parent select2-ledger">
 
                     <ng-template [ngIf]="!txn.isDiscount">
                       <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
@@ -117,17 +117,6 @@
                               <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                               <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
                             </a>
-                          </ng-container>
-
-                        </ng-template>
-
-                        <ng-template #notFoundLinkTemplate>
-
-                          <a id="createNewId" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
-                            [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
-                            <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                            <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
-                          </a>
                         </ng-template>
 
                       </sh-select>
@@ -229,10 +218,16 @@
                   <span class="cursor-pointer">
                     Date
                   </span>
+                  <<<<<<< HEAD </th> <th class="col-xs-6" style="border-top:none">Paticular
                 </th>
-                <th class="col-xs-6" style="border-top:none">Paticular</th>
                 <th class="col-xs-2" style="border-top:none">Amount</th>
               </tr>
+              =======
+              </th>
+              <th class="col-xs-6" style="border-top:none">Particular<</th> <th class="col-xs-2"
+                  style="border-top:none">Amount</th>
+              </tr>
+              >>>>>>> development
             </thead>
 
             <tbody class="ledger-main">
@@ -459,6 +454,10 @@
 
             <div class="text-center icon-box" *ngIf="(vm.companyTaxesList$ | async)?.length">
               <label class="icon-plus font-12"></label>
+            </div>
+
+            <div class="text-center icon-box" *ngIf="!(vm.companyTaxesList$ | async)?.length">
+              <label class="fs20">=</label>
             </div>
 
             <div class="dropdown-container dropdown-left text-right table-amount"

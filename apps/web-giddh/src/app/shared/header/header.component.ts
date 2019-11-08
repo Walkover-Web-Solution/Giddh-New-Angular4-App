@@ -330,7 +330,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.accountItemsFromIndexDB = DEFAULT_AC;
     });
     this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
-
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'openschedulemodal') {
+        this.openScheduleModal();
+      }
+    });
   }
 
   public ngOnInit() {
@@ -925,6 +929,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public closeSidebarMobile(e) {
+
     if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
       this.sideMenu.isopen = false;
       this.menuStateChange.emit(false);

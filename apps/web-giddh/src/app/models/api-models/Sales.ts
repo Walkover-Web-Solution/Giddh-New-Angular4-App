@@ -6,7 +6,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
-import {typeofExpr} from "@angular/compiler/src/output/output_ast";
+import { typeofExpr } from "@angular/compiler/src/output/output_ast";
 
 
 export enum VoucherTypeEnum {
@@ -107,12 +107,12 @@ export class GstDetailsClass {
   public address: string[];
   public state?: StateCode;
   public panNumber?: any;
-  public countryName?:string;
+  public countryName?: string;
   /*Keeping both as API team is too confused to Map one variable type
   *thus kept both whichever is needed on run time we can send that in request mapping.
   * */
-  public stateCode?:string;
-  public stateName?:string;
+  public stateCode?: string;
+  public stateName?: string;
   constructor() {
     this.address = [];
     this.state = new StateCode();
@@ -124,7 +124,7 @@ class CurrencyClass {
   constructor(attrs?: any) {
     if (attrs) {
       this.code = attrs.currency;
-    }else{
+    } else {
       this.code = "IN";
     }
   }
@@ -143,7 +143,7 @@ export class AccountDetailsClass {
   public shippingDetails: GstDetailsClass;
   public country?: CountryClass;
   public currency?: CurrencyClass;
-  public currencySymbol:string = '';
+  public currencySymbol: string = '';
   public customerName: string;
   public mobileNumber?: string;
   constructor(attrs?: any) {
@@ -152,7 +152,7 @@ export class AccountDetailsClass {
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
     if (attrs) {
-      if(attrs.currencySymbol){
+      if (attrs.currencySymbol) {
         this.currencySymbol = attrs.currencySymbol;
       }
       Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email', 'attentionTo']));
@@ -160,7 +160,7 @@ export class AccountDetailsClass {
       //this.mobileNo = attrs.mobileNo || '';
       this.email = attrs.email || '';
       this.customerName = attrs.updatedBy.name || '';
-      if(attrs.country){
+      if (attrs.country) {
         this.country = new CountryClass(attrs.country);
       }
       if (attrs.addresses.length > 0) {
@@ -295,7 +295,7 @@ export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
   public tradeDiscounts?: LedgerResponseDiscountClass[];
-  public taxes: TaxControlData[];
+  public taxes: TaxControlData[] = [];
   public transactions: SalesTransactionItemClass[];
   public description: string;
   public taxableValue: number;
@@ -412,8 +412,8 @@ export interface GenericRequestForGenerateSCD {
   date?: string,
   exchangeRate?: number,
   type?: string,
-  number?:string,
-  uniqueName?:string,
+  number?: string,
+  uniqueName?: string,
   templateDetails?: TemplateDetailsClass
   deposit?: AmountClassMulticurrency;
 }
@@ -515,16 +515,16 @@ export class SalesAddBulkStockItems {
   stockUnit?: CodeStockMulticurrency;
 }
 
-export class CodeStockMulticurrency{
-  code:string;
+export class CodeStockMulticurrency {
+  code: string;
 }
 export class SalesStockItemMulticurrency {
   name: string;
   uniqueName: string;
   quantity: number = 1;
   rate: number = 0;
-  skuCode:string;
-  skuCodeHeading?:string;
+  skuCode: string;
+  skuCodeHeading?: string;
   stockUnit?: string;
 }
 export class StateCode {
@@ -536,7 +536,7 @@ export class SalesEntryClassMulticurrency {
   public date: string;
   public description: string;
   public hsnNumber: string;
-  public sacNumber:string;
+  public sacNumber: string;
   public taxes: TaxControlData[];
   public transactions: TransactionClassMulticurrency[];
   public uniqueName: string;
@@ -558,11 +558,11 @@ export class SalesEntryClassMulticurrency {
   }
 }
 
-export class TransactionClassMulticurrency{
+export class TransactionClassMulticurrency {
   public account: INameUniqueName;
   public amount: AmountClassMulticurrency;
   public stock?: SalesAddBulkStockItems;
-
+  public description?: string;
   constructor() {
     this.account = new class implements INameUniqueName {
       name: 'sales';
@@ -572,18 +572,18 @@ export class TransactionClassMulticurrency{
   }
 }
 
-export class AmountClassMulticurrency{
+export class AmountClassMulticurrency {
   public amountForAccount: number;
   public amountForCompany: string;
   public type?: string;
-  public accountUniqueName?:string;
+  public accountUniqueName?: string;
 
-  constructor(){
+  constructor() {
     this.type = 'DEBIT';
   }
 }
 
-export class DiscountMulticurrency{
+export class DiscountMulticurrency {
   public calculationMethod: string;
   public uniqueName: string;
   public amount: AmountClassMulticurrency;
@@ -591,7 +591,7 @@ export class DiscountMulticurrency{
   public particular: string;
   public name: string;
 
-  constructor(ledgerDiscountClass:LedgerDiscountClass){
+  constructor(ledgerDiscountClass: LedgerDiscountClass) {
     this.calculationMethod = ledgerDiscountClass.discountType;
     this.uniqueName = ledgerDiscountClass.discountUniqueName;
     this.amount = new AmountClassMulticurrency();
