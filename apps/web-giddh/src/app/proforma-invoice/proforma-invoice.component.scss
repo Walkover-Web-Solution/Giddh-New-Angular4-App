@@ -1395,7 +1395,7 @@ table.table.table-custom-invoice.basic {
 }
 
 .cashInvoiceInput {
-  max-width: 440px !important;
+  max-width: 400px !important;
   width: 100% !important;
 }
 
@@ -1562,6 +1562,9 @@ b, strong {
 }
 
 @media(max-width: 990px) {
+  .tip_img{
+    left: 181px;
+  }
  .wrap-billing-address  .bill-add {
       width: 100%;
     max-width: 50.01%;
@@ -1569,9 +1572,7 @@ b, strong {
  .wrap-billing-address  .bill-add:nth-child(2) {
     margin-top: 20px;
 }
-.tip_img{
-  left: 157px;
-}
+
 .customerInvoiceTable label{
       font-size: 13px;
 }
@@ -1584,7 +1585,10 @@ b, strong {
 .wrapperCustomerTable .col-sm-2 {
     padding-right: 0;
 }
-
+.cashInvoiceInput {
+  max-width:63% !important;
+  width: 100% !important;
+}
 }
 
 @media(max-width:840px){
@@ -1658,7 +1662,25 @@ b, strong {
     max-width: 100%;
     padding-right: 30px !important;
 }
+.otherTaxsinput {
+    width: 99px;
+    background-color: #eee;
+    border: 1px solid #eee;
+    padding: 3px;
+    font-size: 13px;
+}
+.sp-rupees{
 
+    font-size: 20px;
+}
+.wrap-otherTax {
+    padding-top: 2px;
+}
+.cashInvoiceInput{
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-right: 15px;
+}
 }
 
 
@@ -1669,6 +1691,25 @@ b, strong {
     display: block;
     margin-bottom: 0;
   }
+}
+@media(max-width:575px){
+  #actionPane .btn-group.dropup {
+    display: block;
+    margin-top: 5px;
+}
+#actionPane .d-inline-block {
+    display: block !important;
+}
+#actionPane .btn-danger{
+  margin-bottom: 5px;
+}
+#actionPane .updateMode{
+      display: flex;
+    flex-direction: column;
+}
+#actionPane .generateInvoie{
+      min-width: 189px;
+}
 }
 @media(max-width:414px){
   .quantityUnitW100 .col-xs-6{
@@ -1683,5 +1724,49 @@ b, strong {
 }
 .otherDetail-card .form-group.col-xs-4 {
     width: 50%;
+}
+.depositeSection {
+  transform: translateX(100px);
+}
+}
+@media(max-width:375px){
+  .depositeSection {
+   transform: translateX(60px);
+}
+.total-amountDiscription .tableSec{
+      display: block;
+    width: 100%;
+}
+.total-amountDiscription .tableSec .tableRow{
+     display: flex;
+    justify-content: space-between;
+}
+
+.total-amountDiscription .tableSec .tableRow .tableCell {
+  min-width: 160px;
+      text-align: left;
+}
+.total-amountDiscription  .tableSec .tableRow .figureCell{
+      min-width: 150px;
+      padding-right: 0 !important;
+      text-align: right;
+}
+  .balanceDueText{
+      text-align: right;
+}
+#actionPane .updateMode{
+   justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+}
+@media(max-width:320px){
+  .depositeSection {
+   transform: translateX(20px);
+}
+.total-amountDiscription  .tableSec .tableRow .figureCell{
+
+      padding-right: 20px !important;
+
 }
 }

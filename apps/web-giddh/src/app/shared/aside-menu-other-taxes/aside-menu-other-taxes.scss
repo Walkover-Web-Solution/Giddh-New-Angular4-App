@@ -36,6 +36,11 @@
 :host ::ng-deep .selectTaxDropdown .dropdown-menu {
   //position:  static !important;
 }
+@media(max-width:767px){
+  button.btn.btn-success {
+    margin-top: 20px;
+}
+}
 @media(max-width:575px){
  :host {
    max-width: 370px;
@@ -44,5 +49,10 @@
 @media(max-width:375px){
  :host {
    max-width: 310px;
+ }
+}
+@media(max-width:320px){
+ :host {
+   max-width: 280px;
  }
 }

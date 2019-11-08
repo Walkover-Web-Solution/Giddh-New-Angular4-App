@@ -8230,6 +8230,17 @@ button.btn.btn-filter {
   }
 }
 
+@media(max-width:840px){
+  .card-invoiceTable #tax-control-multi-select.multi-select input.form-control[readonly] ,   .card-invoiceTable .multi-select input.form-control {
+
+    background-position: 98% !important;
+}
+.single-card-row .my-dropdown-menu.pd{
+  left: auto !important;
+  right: 0 !important;
+}
+}
+
 @media (max-width: 768px) {
   .aging-table tr td:first-child,
   .aging-table tr th:first-child,
@@ -8510,6 +8521,7 @@ button.btn.btn-filter {
 .user_dropdown > li > a .glyphicon-menu-right{
   transform: rotate(90deg);
 }
+
 }
 
 @media (max-width: 575px) {
@@ -8526,6 +8538,9 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+#content_wrapper{
+      overflow-x: hidden;
+}
 
 }
 
