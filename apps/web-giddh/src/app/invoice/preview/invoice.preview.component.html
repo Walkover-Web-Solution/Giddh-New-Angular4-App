@@ -444,7 +444,7 @@
             <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
             </td>
             <td>{{item.dueDate ? item.dueDate : '-' }}</td>
-
+            
 
 
 
@@ -556,7 +556,7 @@
             </td>
             <td>{{item.account.name}}</td>
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+            <td class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
 
           </tr>
 
