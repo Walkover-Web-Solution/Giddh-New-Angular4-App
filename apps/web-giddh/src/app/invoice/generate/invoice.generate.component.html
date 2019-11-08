@@ -33,17 +33,17 @@
           <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
         </div>
 
-        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(false)">
+        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
           Generate Multiple
         </button>
 
-        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-add" (click)="generateBulkInvoice(true)">
+        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">
           Generate Compound
         </button>
 
         <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
           [hidden]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1 || !togglePrevGenBtn"
-          class="btn btn-add" (click)="previewInvoice()">Preview &amp; Generate
+          class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
         </button>
       </div>
 
