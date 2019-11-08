@@ -245,14 +245,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
     // get entry name and ledger account uniquename
     observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
-      if (resp[0] || resp[1]) {
+      if (resp[0] && resp[1]) {
         this.entryUniqueName = resp[0];
         this.accountUniqueName = resp[1];
-        if (this.isPettyCash) {
-
-        } else {
-          this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
-        }
+        this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
+        // this.firstBaseAccountSelected = this.accountUniqueName;
       }
     });
 
@@ -262,13 +259,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.fileUploadOptions = {concurrency: 0};
 
     // get flatten_accounts list && get transactions list && get ledger account list
-    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$, this.selectedPettycashEntry$)
+    observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
       .subscribe((resp: any[]) => {
-        if (resp[0] && resp[2].status === 'success' && resp[3]) {
+        if (resp[0] && resp[1] && resp[2].status === 'success' && resp[3]) {
 
           //#region flatten group list assign process
           if (this.isPettyCash) {
-            resp[1] = resp[4];
+            // resp[1] = resp[1];
           }
 
           this.vm.flatternAccountList = resp[0];
@@ -280,6 +277,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           // set account details for multi currency account
           this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
+          console.log(resp[1].particular.uniqueName);
           this.vm.isMultiCurrencyAvailable = !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency);
 
           this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
@@ -503,11 +501,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
             }
           });
-          this.vm.reInitilizeDiscount(resp[1]);
-          if (this.vm.stockTrxEntry) {
-            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
-          }
-
           this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
           // check if entry allows to show discount and taxes box
@@ -520,9 +513,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
           }
 
+          this.vm.reInitilizeDiscount(resp[1]);
+
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
           this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
 
+          if (this.vm.stockTrxEntry) {
+            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+          }
           this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
           //#endregion
         }
