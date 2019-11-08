@@ -265,6 +265,77 @@
                   [ngClass]="{'text-light-2': !item.action}">{{ item.action ? item.action : 'Select Action' }}</span>
               </div>
 
+
+
+              <!-- dropdown -->
+
+              <div class="btn-group" dropdown *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
+                <a href="javascript:void(0)" id="button-basic" dropdownToggle type="button" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
+
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00"
+                    role="menu" aria-labelledby="button-basic">
+                    <li (click)="updateVoucherAction('Accepted', item)">
+                        <a class="cp" href="javascript:void(0)">Accepted</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('Decline', item)">
+                        <a class="cp" href="javascript:void(0)">Declined</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
+                        *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                        <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('ConvertToInvoice', item)">
+                        <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                      </li>
+                      <li (click)="updateVoucherAction('Expired', item)">
+                        <a class="cp" href="javascript:void(0)">Expired</a>
+                      </li>
+                </ul>
+              </div>
+
+
+
+
+              <!-- <div *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
+                <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
+                  class="icon-ellipse selectAction">
+                  <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
+                    aria-controls="dropdown-basic"></a>
+
+                  <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
+                    aria-labelledby="edit-model-basic">
+                    <ul class="selectActionDropdown">
+
+                      <li (click)="updateVoucherAction('Accepted', item)">
+                        <a class="cp" href="javascript:void(0)">Accepted</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('Decline', item)">
+                        <a class="cp" href="javascript:void(0)">Declined</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
+                        *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                        <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
+                      </li>
+
+                      <li (click)="updateVoucherAction('ConvertToInvoice', item)">
+                        <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                      </li>
+                      <li (click)="updateVoucherAction('Expired', item)">
+                        <a class="cp" href="javascript:void(0)">Expired</a>
+                      </li>
+
+                    </ul>
+
+                  </div>
+                </div>
+              </div> -->
+
+
               <!-- <div class="click-dropdwon">
 
               <i class="fa fa-ellipsis-v"
@@ -296,44 +367,6 @@
             </div> -->
 
 
-              <!-- dropdown -->
-              <div *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
-                <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
-                  class="icon-ellipse selectAction">
-                  <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
-                    aria-controls="dropdown-basic">
-
-                  </a>
-
-                  <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
-                    aria-labelledby="edit-model-basic">
-                    <ul class="selectActionDropdown">
-
-                      <li (click)="updateVoucherAction('Accepted', item)">
-                        <a class="cp" href="javascript:void(0)">Accepted</a>
-                      </li>
-
-                      <li (click)="updateVoucherAction('Decline', item)">
-                        <a class="cp" href="javascript:void(0)">Declined</a>
-                      </li>
-
-                      <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
-                        *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
-                        <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
-                      </li>
-
-                      <li (click)="updateVoucherAction('ConvertToInvoice', item)">
-                        <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
-                      </li>
-                      <li (click)="updateVoucherAction('Expired', item)">
-                        <a class="cp" href="javascript:void(0)">Expired</a>
-                      </li>
-
-                    </ul>
-
-                  </div>
-                </div>
-              </div>
 
 
             </div>
