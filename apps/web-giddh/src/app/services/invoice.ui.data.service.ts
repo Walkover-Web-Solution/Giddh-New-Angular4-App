@@ -25,6 +25,7 @@ export class InvoiceUiDataService {
   public companyGSTIN: BehaviorSubject<string> = new BehaviorSubject(null);
   public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
   public fieldsAndVisibility: BehaviorSubject<any> = new BehaviorSubject(null);
+  public templateVoucherType: BehaviorSubject<string> = new BehaviorSubject(null);
 
   private companyName: string;
   private companyAddress: string;
@@ -79,7 +80,7 @@ export class InvoiceUiDataService {
     template.sections['header'].data['companyName'].label = this.companyName;
     if (template.sections && template.sections.footer.data.companyName) {
       template.sections['footer'].data['companyName'].label = this.companyName;
-    //  template.sections['footer'].data['companyAddress'].label = this.companyAddress;
+      //  template.sections['footer'].data['companyAddress'].label = this.companyAddress;
     }
 
     this.BRToNewLine(template);
@@ -105,6 +106,15 @@ export class InvoiceUiDataService {
    */
   public setLogoPath(path: string) {
     this.logoPath.next(path);
+  }
+  /**
+    * setVoucher Type
+    */
+  public setTemplateVoucherType(type: string) {
+    if (type === 'invoice') {
+      type = 'sales'
+    }
+    this.templateVoucherType.next(type);
   }
 
   /**
@@ -165,8 +175,8 @@ export class InvoiceUiDataService {
         if (this.companyName && mode === 'create') {
           selectedTemplate.sections['footer'].data['companyName'].label = this.companyName;
         }
-        if (this.companyAddress ) { // due to this on edit mode company address was not pre-filling
-         // selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
+        if (this.companyAddress) { // due to this on edit mode company address was not pre-filling
+          // selectedTemplate.sections['footer'].data['companyAddress'].label = this.companyAddress;
         }
         selectedTemplate.sections['header'].data['companyName'].label = this.companyName;
         if (!selectedTemplate.logoUniqueName) {

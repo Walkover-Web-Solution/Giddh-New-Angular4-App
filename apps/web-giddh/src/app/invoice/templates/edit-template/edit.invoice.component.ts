@@ -685,6 +685,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.templateType = 'invoice';
     }
+    this._invoiceUiDataService.setTemplateVoucherType(this.templateType);
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 

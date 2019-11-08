@@ -112,7 +112,6 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
           this.columnsVisibled++;
         }
       }
-      console.log('columnsVisibled', this.columnsVisibled);
     }
   }
 }
