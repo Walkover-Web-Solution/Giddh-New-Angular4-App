@@ -159,6 +159,7 @@ $greyClr: #6d6d6d;
   textarea.form-control {
     resize: none;
     padding-left: 7px !important;
+        overflow-y: auto;
   }
 
   label {
@@ -1087,7 +1088,7 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-.showOnsmall-screen , .card-invoiceTable-wrapper{
+.showOnsmall-screen , .card-invoiceTable-wrapper, .add-btn , .otherDetail-card, .total-amountDiscription{
   display: none;
 }
 
@@ -1189,7 +1190,7 @@ section.newtable {
 
 .saveCard-data {
   position: absolute;
-  top: 10px;
+  top: 11px;
   right: 40px;
   color: #0C8FE6;
 }
@@ -1592,7 +1593,7 @@ b, strong {
 }
 
 @media(max-width:840px){
-  .card-invoiceTable-wrapper{
+  .card-invoiceTable-wrapper,  .add-btn , .otherDetail-card, .total-amountDiscription{
   display: block;
 }
 .customerInvoiceTable.bg-white{
@@ -1613,11 +1614,28 @@ b, strong {
   width: 100%;
   max-width: 100%;
 }
+.otherTaxsinput {
+    width: 99px;
+    background-color: #eee;
+    border: 1px solid #eee;
+    padding: 3px;
+    font-size: 13px;
 }
-@media (min-width: 768px) {
-  .table.customerInvoiceTable .form-group {
-    display: block;
-    margin-bottom: 0;
+.othertaxes div{
+  align-items: flex-end !important;
+    justify-content: flex-end !important;
+}
+.othertaxes{
+  text-align: right;
+}
+.billing-address .col-sm-6.pd {
+    width: 100%;
+}
+}
+
+@media(max-width:768px){
+     .tip_img{
+    left: 143px;
   }
 }
 @media(max-width: 767px) {
@@ -1662,13 +1680,7 @@ b, strong {
     max-width: 100%;
     padding-right: 30px !important;
 }
-.otherTaxsinput {
-    width: 99px;
-    background-color: #eee;
-    border: 1px solid #eee;
-    padding: 3px;
-    font-size: 13px;
-}
+
 .sp-rupees{
 
     font-size: 20px;
@@ -1681,16 +1693,6 @@ b, strong {
     width: 100% !important;
     margin-right: 15px;
 }
-}
-
-
-
-
-@media (min-width: 768px) {
-  .table.customerInvoiceTable .form-group {
-    display: block;
-    margin-bottom: 0;
-  }
 }
 @media(max-width:575px){
   #actionPane .btn-group.dropup {

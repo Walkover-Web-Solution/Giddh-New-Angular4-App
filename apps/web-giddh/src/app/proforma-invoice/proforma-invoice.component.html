@@ -671,7 +671,8 @@
                             </span>{{transaction.total | giddhCurrency}}</span>
                           <br>
                           <span *ngIf="entry.isOtherTaxApplicable">
-                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
+                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
+                              *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
                             </span>{{ entry.otherTaxSum }}
                           </span>
                         </div>
@@ -1196,13 +1197,16 @@
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
                       <div class="tableCell">TCS</div>
-                      <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                      <div class="tableCell figureCell"><span
+                          *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                         {{invFormData.voucherDetails.tcsTotal | giddhCurrency}}</div>
                     </div>
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
                       <div class="tableCell">TDS</div>
-                      <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}</div>
+                      <div class="tableCell figureCell"><span
+                          *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}
+                      </div>
                     </div>
 
                     <!--region balance due for non-purchase-->
@@ -1369,14 +1373,20 @@
                     <div class="single-card-row">
                       <div class="card-rate">
                         <label class="card-label">Rate</label>
-                        <p> <span *ngIf="isMulticurrencyAccount">
-                            {{invFormData.accountDetails.currencySymbol}}</span>{{transaction.rate}}</p>
+                        <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
 
-                        <div *ngIf="isMulticurrencyAccount" class="differ-currency">
-                          <span>{{baseCurrencySymbol}}</span>
-                          <span>{{transaction.rate*exchangeRate | giddhCurrency}}</span>
+                          <p> <span *ngIf="isMulticurrencyAccount">
+                              {{invFormData.accountDetails.currencySymbol}}</span> {{transaction.rate | giddhCurrency}}
+                          </p>
 
+
+                          <div *ngIf="isMulticurrencyAccount" class="differ-currency">
+                            <span>{{baseCurrencySymbol}}</span>
+                            <span>{{transaction.rate*exchangeRate | giddhCurrency}}</span>
+
+                          </div>
                         </div>
+
                       </div>
                     </div>
 
@@ -1740,7 +1750,7 @@
                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable"
                               class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
                           </div>
-                          <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+                          <div *ngIf="entry.isOtherTaxApplicable" class="mrT1 othertaxes">
 
                             <span>
 
@@ -2295,7 +2305,7 @@
 <!-- endregion -->
 
 <!-- region bulk items -->
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style="z-index : 2000;"
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style=""
   [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
   <ng-container *ngIf="showBulkItemModal">
