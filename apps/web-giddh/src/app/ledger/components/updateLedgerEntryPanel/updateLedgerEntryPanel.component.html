@@ -236,59 +236,6 @@
             </thead>
 
             <tbody class="ledger-main">
-<<<<<<< HEAD
-            <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
-              <ng-container *ngIf="txn.type == 'CREDIT'">
-                <td data-title="Date" class="col-xs-2">
-                  <input class="form-control" autocomplete="off" name="datepic" type="text"
-                         [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
-                         #cbs='bsDatepicker' bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-                </td>
-                <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
-                  <ng-template [ngIf]="!txn?.isDiscount">
-                    <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                               (keydown)="keydownPressed($event)"
-                               [options]="vm.flatternAccountList4Select | async" #crdSelect
-                               (click)="addBlankTrx('CREDIT', txn, $event)"
-                               (selected)="selectAccount($event,txn, crdSelect)" (onShow)="cbs.hide()"
-                               [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
-                               [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
-
-                      <ng-template #optionTemplate let-option="option">
-                        <ng-container *ngIf="!option.additional?.stock">
-                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                          </a>
-                        </ng-container>
-
-                        <ng-container *ngIf="option.additional?.stock">
-                          <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                            <div class="item">{{ option.label }}</div>
-                            <div class="item_unq">{{ option.additional?.uniqueName }}</div>
-                            <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
-                          </a>
-                        </ng-container>
-
-                      </ng-template>
-
-                      <ng-template #notFoundLinkTemplate>
-                        <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
-                           [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
-                          <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
-                          <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
-                        </a>
-                      </ng-template>
-                    </sh-select>
-                  </ng-template>
-                  <ng-template [ngIf]="txn?.isDiscount">
-                    <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
-                  </ng-template>
-                  <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
-                        [placement]="'left'" [containerClass]="'col-xs-3'"
-                        tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
-                        (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
-=======
               <tr *ngFor="let txn of vm.selectedLedger.transactions" class="credit-blank-row">
                 <ng-container *ngIf="txn.type == 'CREDIT'">
                   <td data-title="Date" class="col-xs-2">
@@ -297,7 +244,7 @@
                       #cbs='bsDatepicker' bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                   </td>
                   <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
-                    <ng-template [ngIf]="!txn.isDiscount">
+                    <ng-template [ngIf]="!txn?.isDiscount">
                       <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
                         (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async" #crdSelect
                         (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)"
@@ -331,14 +278,13 @@
                         </ng-template>
                       </sh-select>
                     </ng-template>
-                    <ng-template [ngIf]="txn.isDiscount">
+                    <ng-template [ngIf]="txn?.isDiscount">
                       <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput" />
                     </ng-template>
                     <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                       [placement]="'left'" [containerClass]="'col-xs-3'"
                       tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
                       (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
->>>>>>> staging
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
                     <span class="download-invoice-ledger"
