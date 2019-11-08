@@ -2726,6 +2726,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.isCashInvoice) {
       obj.account.customerName = data.voucherDetails.customerName;
       obj.account.name = data.voucherDetails.customerName;
+    }else{
+      delete obj.account.customerName;
     }
     return obj;
   }
@@ -2831,7 +2833,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.description = entry.description;
       salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
       this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
-      console.log(salesEntryClass);
       voucherClassConversion.entries.push(salesEntryClass);
     });
 
