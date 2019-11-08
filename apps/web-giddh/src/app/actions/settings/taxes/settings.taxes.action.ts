@@ -77,6 +77,14 @@ export class SettingsTaxesActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  public GetTaxList$: Observable<Action> = this.action$
+    .ofType(SETTINGS_TAXES_ACTIONS.GET_TAX).pipe(
+      switchMap((action: CustomActions) => {
+        return this.settingsTaxesService.GetTaxList(action.payload).pipe(
+          map(response => this.GetTaxListResponse(response)));
+      }));
+
   constructor(private action$: Actions,
               private toasty: ToasterService,
               private router: Router,
@@ -140,4 +148,17 @@ export class SettingsTaxesActions {
     return successAction;
   }
 
+  public GetTaxList(value) {
+    return {
+      type: SETTINGS_TAXES_ACTIONS.GET_TAX,
+      payload: value
+    };
+  }
+
+  public GetTaxListResponse(value) {
+    return {
+      type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
+      payload: value
+    };
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TaxResponse } from '../../models/api-models/Company';
-import { ReplaySubject } from 'rxjs';
+import {StatesRequest, TaxResponse} from '../../models/api-models/Company';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -22,16 +22,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   @Input() public tax: TaxResponse;
   @Input() public asidePaneState: string;
 
-  public taxList: IOption[] = [
-    {label: 'GST', value: 'gst'},
-    {label: 'COMMONGST', value: 'commongst'},
-    {label: 'InputGST', value: 'inputgst'},
-    {label: 'TDS', value: 'tds'},
-    {label: 'TCS', value: 'tcs'},
-    {label: 'CESS', value: 'gstcess'},
-    {label: 'Others', value: 'others'},
-
-  ];
+  // public taxList: IOption[] = [
+  //   {label: 'GST', value: 'gst'},
+  //   {label: 'COMMONGST', value: 'commongst'},
+  //   {label: 'InputGST', value: 'inputgst'},
+  //   {label: 'TDS', value: 'tds'},
+  //   {label: 'TCS', value: 'tcs'},
+  //   {label: 'CESS', value: 'gstcess'},
+  //   {label: 'Others', value: 'others'},
+  //
+  // ];
+  public taxList: IOption[] = [];
   public duration: IOption[] = [
     {label: 'Monthly', value: 'MONTHLY'},
     {label: 'Quarterly', value: 'QUARTERLY'},
@@ -49,6 +50,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   public flattenAccountsOptions: IOption[] = [];
   public isTaxCreateInProcess: boolean = false;
   public isUpdateTaxInProcess: boolean = false;
+  public taxListSource$: Observable<IOption[]> = observableOf([]);
+  public taxNameTypesMapping: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -60,6 +63,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.getTaxList();
+
     this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
       let arr: IOption[] = [];
       if (res) {
@@ -195,5 +200,24 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     } else {
       this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
     }
+  }
+
+  public getTaxList() {
+    this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.taxes).forEach(key => {
+          // CREATED TAX VALUE AND TAX TYPES LIST MAPPING TO SHOW SELECT TYPE DROPDOWN VALUES BASED ON SELECTED TAX
+          if(res.taxes[key].types.length > 0) {
+            this.taxNameTypesMapping[res.taxes[key].value] = [];
+            this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
+          }
+
+          this.taxList.push({ label: res.taxes[key].label, value: res.taxes[key].value });
+        });
+        this.taxListSource$ = observableOf(this.taxList);
+      } else {
+        this.store.dispatch(this._settingsTaxesActions.GetTaxList("IN"));
+      }
+    });
   }
 }
