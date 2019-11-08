@@ -671,21 +671,18 @@
                             </span>{{transaction.total | giddhCurrency}}</span>
                           <br>
                           <span *ngIf="entry.isOtherTaxApplicable">
-                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : {{ entry.otherTaxSum }}
+                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
+                            </span>{{ entry.otherTaxSum }}
                           </span>
                         </div>
                       </div>
 
                       <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount">
                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                        <span>{{baseCurrencySymbol}}</span>
                         :
+                        <span>{{baseCurrencySymbol}}</span>
                         <span>{{entry.otherTaxSum*exchangeRate | giddhCurrency}}</span>
 
-
-                      </div>
-                      <div class="differ-currency" *ngIf="isMulticurrencyAccount"><span>{{baseCurrencySymbol}}</span>
-                        <span>{{transaction.total*exchangeRate | giddhCurrency}}</span>
 
                       </div>
 
@@ -1199,12 +1196,13 @@
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tcsTotal > 0">
                       <div class="tableCell">TCS</div>
-                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tcsTotal | giddhCurrency}}</div>
+                      <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                        {{invFormData.voucherDetails.tcsTotal | giddhCurrency}}</div>
                     </div>
 
                     <div class="tableRow" *ngIf="invFormData.voucherDetails.tdsTotal > 0">
                       <div class="tableCell">TDS</div>
-                      <div class="tableCell figureCell">{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}</div>
+                      <div class="tableCell figureCell"><span *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.tdsTotal | giddhCurrency}}</div>
                     </div>
 
                     <!--region balance due for non-purchase-->
