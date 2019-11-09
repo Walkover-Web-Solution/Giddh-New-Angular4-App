@@ -563,6 +563,17 @@ button.btn.btn-filter span.icon-cross {
   margin-bottom: 10px;
 }
 }
+
+@media(max-width:767px){
+  .mobileSearch {
+
+    margin-top: 20px;
+}
+.invoice-modal-content:after, .invoice-modal-content {
+    top: 131px;
+}
+}
+
 @media (max-width: 500px) {
   .invoce-controll .nav.nav-tabs {
     margin-bottom: 28px;

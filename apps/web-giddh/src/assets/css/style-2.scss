@@ -8527,6 +8527,11 @@ button.btn.btn-filter {
 .user_dropdown > li > a .glyphicon-menu-right{
   transform: rotate(90deg);
 }
+#settingTab .tab-container .nav.nav-tabs {
+    position: fixed;
+    width: 100%;
+    top: 85px;
+}
 
 }
 
@@ -8578,6 +8583,10 @@ button.btn.btn-filter {
   .vendorPayNow .accountAsideMenuState2 #close {
     right: 272px;
   }
+  #settingTab .tab-container .nav.nav-tabs {
+
+    top: 75px;
+}
 }
 @media(max-width:411px){
         #companyList {
