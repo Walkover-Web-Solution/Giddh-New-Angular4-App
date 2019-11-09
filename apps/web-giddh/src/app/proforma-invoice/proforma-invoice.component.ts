@@ -1807,12 +1807,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public setActiveIndx(indx: number) {
-    setTimeout(function () {
-      let focused = $('.focused');
-      if (focused && focused[indx]) {
-        $('.focused')[indx].focus();
-      }
-    }, 200);
+    // BELOW CODE WAS PUTTING FOCUS ON PAYMENT MODE DROPDOWN SO COMMENTED THE CODE
+    // setTimeout(function () {
+    //   let focused = $('.focused');
+    //   if (focused && focused[indx]) {
+    //     $('.focused')[indx].focus();
+    //   }
+    // }, 200);
 
     this.activeIndx = indx;
   }
