@@ -31,7 +31,7 @@ import {IForceClear} from "../models/api-models/Sales";
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  public stateGstCode: any[] = [];
   public countryNameCode: any[] = [];
   public countrySource: IOption[] = [];
   public countrySource$: Observable<IOption[]> = observableOf([]);
@@ -355,7 +355,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (gstVal.length >= 2) {
         this.statesSource$.pipe(take(1)).subscribe(state => {
-          let s = state.find(st => st.value === gstVal.substr(0, 2));
+          let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
+          let s = state.find(st => st.value === stateCode);
           _.uniqBy(s, 'value');
           statesEle.setDisabledState(false);
 
@@ -398,18 +400,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
   }
-
-  // public resetbussinessType() {
-  //   setTimeout(() => {
-  //     this.companyProfileObj.bussinessType = '';
-  //   }, 100);
-  // }
-
-  // public resetbussinessNature() {
-  //   setTimeout(() => {
-  //     this.companyProfileObj.bussinessNature = '';
-  //   }, 100);
-  // }
 
   public selectApplicableTaxes(tax, event) {
     if (event && tax) {
@@ -515,7 +505,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.stateList).forEach(key => {
-          this.states.push({ label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
+
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
         this.statesSource$ = observableOf(this.states);
         this.reFillState();

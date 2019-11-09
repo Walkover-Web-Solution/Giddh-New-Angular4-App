@@ -99,7 +99,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
     { value: 'SEZ', label: 'SEZ' }
   ];
-  public countryNameCode: any[] = [];
+
   public states: any[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
   public moreGstDetailsVisible: boolean = false;
@@ -117,6 +117,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public countryCurrency: any[] = [];
   public countryPhoneCode: IOption[] = [];
   public callingCodesSource$: Observable<IOption[]> = observableOf([]);
+  public stateGstCode: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -128,10 +129,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.getCountry();
     this.getCurrency();
     this.getCallingCodes();
-
-    //this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((profile) => {
-      // this.store.dispatch(this.companyActions.RefreshCompanies());
-    //});
 
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
       if (a) {
@@ -187,14 +184,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        // && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India'
         if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a, accountDetails.addresses.length);
           });
-        } else {
-          // this.addBlankGstForm();
         }
+
         // hsn/sac enable disable
         if (acc.hsnNumber) {
           this.addAccountForm.get('sacNumber').disable();
@@ -225,12 +220,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
       if (a === 'hsn') {
-        // hsn.reset();
         sac.reset();
         hsn.enable();
         sac.disable();
       } else {
-        // sac.reset();
         hsn.reset();
         sac.enable();
         hsn.disable();
@@ -263,12 +256,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get active company
-    // this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
-    //   if (a) {
-    //     this.addAccountForm.get('companyName').patchValue(a);
-    //   }
-    // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
@@ -294,7 +281,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
           } else {
             this.addAccountForm.get('currency').disable();
           }
-          this.companyCountry = currentCompany.country;
+          this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
         }
       }
     });
@@ -381,7 +368,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     if (gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(state => {
-        let s = state.find(st => st.value === gstVal.substr(0, 2));
+        let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
+        let s = state.find(st => st.value === stateCode);
         statesEle.setDisabledState(false);
         // statesEle.disabled = true;
         if (s) {
@@ -470,17 +459,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (!this.showVirtualAccount) {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
-    // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-    //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
-    //   return;
-    // }
-    // if (this.showBankDetail) {
-    //   if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
-    //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-    //       accountRequest['accountBankDetails'] = [];
-    //     }
-    //   }
-    // } else {
+
     if (!this.showBankDetail) {
       delete accountRequest['accountBankDetails'];
     }
@@ -506,7 +485,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (event) {
       let phoneCode = event.additional;
       this.addAccountForm.get('mobileCode').patchValue(phoneCode);
-      this.getStates(this.countryNameCode[event.value]);
+      this.getStates(event.value);
     }
   }
 
@@ -524,11 +503,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res).forEach(key => {
-          // Creating Country List
-          this.countryNameCode[res[key].countryName] = [];
-          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
-
-          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
           if(res[key].currency !== undefined && res[key].currency !== null) {
             this.countryCurrency[res[key].countryName] = [];
@@ -575,7 +550,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.stateList).forEach(key => {
-          this.states.push({ label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
+
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
         this.statesSource$ = observableOf(this.states);
       } else {

@@ -1,15 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
-import {
-  BillingDetails,
-  CompanyCreateRequest,
-  CreateCompanyUsersPlan,
-  States,
-  SubscriptionRequest,
-  CompanyCountry,
-  StatesRequest
-} from '../models/api-models/Company';
+import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, SubscriptionRequest, StatesRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IOption } from '../theme/sales-ng-virtual-select/sh-options.interface';
 import { select, Store } from '@ngrx/store';
@@ -24,7 +16,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
+import { OnboardingFormRequest} from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 
 @Component({
@@ -75,6 +67,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public ChangePaidPlanAMT: any = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public formFields: any[] = [];
+  public stateGstCode: any[] = [];
+  public disableState: boolean = false;
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -106,6 +100,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
       }
     });
+
     this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         if (res.isBranch && res.city) {
@@ -172,24 +167,25 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
+    this.disableState = false;
     if(this.createNewCompany.countryCode === "IN") {
       let gstVal: string = gstNo.value;
       this.billingDetailsObj.gstin = gstVal;
 
       if (gstVal.length >= 2) {
         this.statesSource$.pipe(take(1)).subscribe(state => {
-          let s = state.find(st => st.value === gstVal.substr(0, 2));
+          let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+          let s = state.find(st => st.value === stateCode);
           statesEle.setDisabledState(false);
 
           if (s) {
             this.billingDetailsObj.state = s.value;
             statesEle.setDisabledState(true);
-
           } else {
             this.billingDetailsObj.state = '';
             statesEle.setDisabledState(false);
             this._toasty.clearAllToaster();
-            this._toasty.warningToast('Invalid GSTIN.');
+            this._toasty.warningToast('Invalid .' + this.formFields['taxName'].label);
           }
         });
       } else {
@@ -209,6 +205,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       this.billingDetailsObj.autorenew = event.target.checked;
     }
   }
+
   public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
     this.subscriptionPrice = plan.planDetails.amount;
     this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
@@ -325,15 +322,19 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.stateList).forEach(key => {
-          this.states.push({
-            label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name,
-            value: res.stateList[key].stateGstCode
-          });
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
+
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
 
           if(this.createNewCompany !== undefined && this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
-            if(res.stateList[key].stateGstCode === this.createNewCompany.gstDetails[0]['addressList'][0].stateCode) {
-              this.selectedState = res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name;
-              this.billingDetailsObj.state = res.stateList[key].stateGstCode;
+            if(res.stateList[key].code === this.createNewCompany.gstDetails[0]['addressList'][0].stateCode) {
+              this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
+              this.billingDetailsObj.state = res.stateList[key].code;
+              this.disableState = true;
             }
           }
         });

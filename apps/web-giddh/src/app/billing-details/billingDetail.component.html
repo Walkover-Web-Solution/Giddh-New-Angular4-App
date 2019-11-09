@@ -48,11 +48,10 @@
                         </div>
                         <div class="form-group">
                             <label>State</label>
-                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="selectedState" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
-
+                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [disabled]="disableState" [defaultValue]="selectedState" [(ngModel)]="billingDetailsObj.state" id="state" name="state" style="width:100%"></sh-select>
                         </div>
                         <div class="form-group">
-                            <label>Addres</label>
+                            <label>Address</label>
                             <textarea class="form-control" name="address" id="address" [(ngModel)]="billingDetailsObj.address" placeholder="Address" rows="5" cols="12"></textarea>
                         </div>
                         <div class="form-group">
