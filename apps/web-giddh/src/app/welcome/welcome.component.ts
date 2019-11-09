@@ -32,7 +32,6 @@ import {IForceClear} from "../models/api-models/Sales";
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public stateGstCode: any[] = [];
-  public countryNameCode: any[] = [];
   public countrySource: IOption[] = [];
   public countrySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
@@ -51,7 +50,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public selectedBusinesstype: string = '';
   public selectedstateName: string = '';
   public selectedCountry = '';
-  //public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public isGstValid: boolean = true;
   public taxesList: any = [];
   public businessTypeList: IOption[] = [];
@@ -100,8 +98,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     nameAlias: '',
     paymentId: '',
     amountPaid: '',
-    razorpaySignature: '',
-    countryCode: ''
+    razorpaySignature: ''
   };
 
   public GstDetailsObj: GstDetail = {
@@ -137,12 +134,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       state.session.companies.forEach(cmp => {
         if (cmp.uniqueName === state.session.companyUniqueName) {
-          this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'india';
-
-          if (cmp.country && this.companyProfileObj && !this.companyProfileObj.country) {
-            this.selectedCountry = cmp.country;
-            this.autoSelectCountryCode(cmp.country);
-          }
+          this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'in';
         }
       });
     }).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -272,7 +264,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public submit() {
-    // this.selectedTaxes = [];
     this.createNewCompanyPreparedObj.bussinessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
     this.createNewCompanyPreparedObj.bussinessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
@@ -289,7 +280,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.gstDetails = [];
     }
 
-    this.createNewCompanyPreparedObj.countryCode = this.countryNameCode[this.createNewCompanyPreparedObj.country];
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
     this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
     this._router.navigate(['select-plan']);
@@ -304,20 +294,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.GstDetailsObj.addressList[0].stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
     }
     return this.GstDetailsObj;
-  }
-
-  /**
-   * autoSelectCountryCode
-   */
-  public autoSelectCountryCode(country) {
-    if (this.countryCodeList) {
-      let selectedCountry = _.find(this.countryCodeList, function (o) {
-        return o.additional === country;
-      });
-      if (selectedCountry && selectedCountry.value) {
-        this.companyProfileObj.country = selectedCountry.value;
-      }
-    }
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {
@@ -349,7 +325,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
-    if(this.createNewCompanyPreparedObj.countryCode === "IN") {
+    if(this.createNewCompanyPreparedObj.country === "IN") {
       let gstVal: string = gstNo.value;
       this.companyProfileObj.gstNumber = gstVal;
 
@@ -431,18 +407,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res).forEach(key => {
-          // Creating Country List
-          this.countryNameCode[res[key].countryName] = [];
-          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
+
+          if (this.createNewCompanyPreparedObj.country === res[key].alpha2CountryCode) {
+            this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
+          }
 
           this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
-          this.countryCurrency[res[key].countryName] = [];
-          this.countryCurrency[res[key].countryName] = res[key].currency.code;
+          this.countryCurrency[res[key].alpha2CountryCode] = [];
+          this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
         });
         this.countrySource$ = observableOf(this.countrySource);
-
-        this.createNewCompanyPreparedObj.countryCode = this.countryNameCode[this.createNewCompanyPreparedObj.country];
 
         this.getOnboardingForm();
         this.getStates();
@@ -495,7 +470,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
+        onboardingFormRequest.country = this.createNewCompanyPreparedObj.country;
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
@@ -517,7 +492,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.reFillState();
       } else {
         let statesRequest = new StatesRequest();
-        statesRequest.country = this.countryNameCode[this.createNewCompanyPreparedObj.country];
+        statesRequest.country = this.createNewCompanyPreparedObj.country;
         this.store.dispatch(this._generalActions.getAllState(statesRequest));
       }
     });

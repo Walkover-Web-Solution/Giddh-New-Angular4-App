@@ -40,7 +40,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public countrySource: IOption[] = [];
   public countrySource$: Observable<IOption[]> = observableOf([]);
-  // public company: CompanyRequest2 = new CompanyRequest2();
   public company: CompanyCreateRequest = new CompanyCreateRequest();
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
@@ -57,7 +56,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public isNewUser: boolean = false;
-  public countryNameCode: any[] = [];
   public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
 
   constructor(private socialAuthService: AuthService,
@@ -203,7 +201,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
     if (isElectron) {
-      // this._aunthenticationServer.GoogleProvider.signOut();
       this.store.dispatch(this._loginAction.ClearSession());
     } else {
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -239,7 +236,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
   public checkMobileNo(ele) {
     try {
-      let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.countryNameCode[this.company.country]);
+      let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
       if (this.phoneUtility.isValidNumber(parsedNumber)) {
         ele.classList.remove('error-box');
         this.isMobileNumberValid = true;
@@ -289,14 +286,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res).forEach(key => {
-          this.countryNameCode[res[key].countryName] = [];
-          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
-
           // Creating Country List
-          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
-          this.countryCurrency[res[key].countryName] = [];
-          this.countryCurrency[res[key].countryName] = res[key].currency.code;
+          this.countryCurrency[res[key].alpha2CountryCode] = [];
+          this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
         });
         this.countrySource$ = observableOf(this.countrySource);
       } else {

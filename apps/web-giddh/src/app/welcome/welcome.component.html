@@ -23,7 +23,7 @@
               <div class="custom-select pos-rel">
                 <sh-select id="country" [options]="countrySource$ | async" required [isFilterEnabled]="true"
                   [disabled]="createNewCompanyPreparedObj.country" name="country"
-                  [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left  select-caret" style="width: 100%" [defaultValue]="createNewCompanyPreparedObj.country">
+                  [(ngModel)]="createNewCompanyPreparedObj.country" class="pull-left  select-caret" style="width: 100%" [defaultValue]="selectedCountry">
                 </sh-select>
               </div>
             </span>

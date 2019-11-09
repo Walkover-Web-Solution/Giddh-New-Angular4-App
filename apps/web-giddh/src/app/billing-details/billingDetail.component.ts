@@ -168,7 +168,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
     this.disableState = false;
-    if(this.createNewCompany.countryCode === "IN") {
+    if(this.createNewCompany.country === "IN") {
       let gstVal: string = gstNo.value;
       this.billingDetailsObj.gstin = gstVal;
 
@@ -342,7 +342,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.statesSource$ = observableOf(this.states);
       } else {
         let statesRequest = new StatesRequest();
-        statesRequest.country = this.createNewCompany.countryCode;
+        statesRequest.country = this.createNewCompany.country;
         this.store.dispatch(this._generalActions.getAllState(statesRequest));
       }
     });
@@ -358,7 +358,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       } else {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = this.createNewCompany.countryCode;
+        onboardingFormRequest.country = this.createNewCompany.country;
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
