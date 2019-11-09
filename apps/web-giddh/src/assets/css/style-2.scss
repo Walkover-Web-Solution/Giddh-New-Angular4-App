@@ -8177,7 +8177,12 @@ button.btn.btn-filter {
 .modal{
   z-index:9992;
 }
-
+.select2-ledger .menu .item:hover {
+    background-color: #e3e4ed;
+}
+.select2-ledger .menu .item:hover a {
+    color: #5B64C9;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
