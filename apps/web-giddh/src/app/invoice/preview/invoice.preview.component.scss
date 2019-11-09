@@ -446,8 +446,13 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
-
-
+.invoice-preview {
+  padding-bottom: 250px;
+}
+.paginationWrapper {
+  position: relative;
+  top: -150px;
+}
 
 
 /* responsive */
@@ -543,6 +548,9 @@ button.btn.btn-filter span.icon-cross {
   .date-advanceSearch .dropdown-menu > li > a {
     padding: 8px 10px;
   }
+  .paginationWrapper {
+    top: 0px;
+  }
 }
 
 @media(max-width:768px){
@@ -563,6 +571,14 @@ button.btn.btn-filter span.icon-cross {
   margin-bottom: 10px;
 }
 }
+
+@media (max-width: 767px) {
+  .invoice-preview {
+    padding-bottom: 0px;
+  }
+}
+
+
 @media (max-width: 500px) {
   .invoce-controll .nav.nav-tabs {
     margin-bottom: 28px;
