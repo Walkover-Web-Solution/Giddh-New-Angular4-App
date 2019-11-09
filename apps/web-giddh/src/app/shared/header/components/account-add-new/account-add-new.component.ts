@@ -6,18 +6,21 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States } from '../../../../models/api-models/Company';
+import {CompanyResponse, States, StatesRequest} from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import {IForceClear} from "../../../../models/api-models/Sales";
+import {CountryRequest} from "../../../../models/api-models/Common";
+import { CommonActions } from '../../../../actions/common.actions';
+import {GeneralActions} from "../../../../actions/general/general.actions";
 
 @Component({
   selector: 'account-add-new',
@@ -77,69 +80,38 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
     { value: 'SEZ', label: 'SEZ' }
   ];
-  public countrySource: IOption[] = [];
-  public stateStream$: Observable<States[]>;
+  public countryNameCode: any[] = [];
+  public states: any[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
-  public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
   public isDiscount: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
+  public countryPhoneCode: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    this.stateStream$.subscribe((data) => {
-      // console.log('state Called');
-      let states: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource$ = observableOf(states);
-    }, (err) => {
-      // console.log(err);
-    });
 
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      let currencies: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
-        });
-      }
-      this.currencySource$ = observableOf(currencies);
-    });
+    this.getCountry();
+    this.getCurrency();
+    this.getCallingCodes();
 
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
-    });
-
-    // Country phone Code
-    contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
-    });
-    _.uniqBy(this.countryPhoneCode, 'value');
-    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
-      return {
-        value: value,
-        label: this.countryPhoneCode.find(s => s.value === value).label
-      };
-    });
-    this.countryPhoneCode = ss;
-
-    this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
+    //this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
-    });
+    //});
   }
 
   public ngOnInit() {
@@ -198,6 +170,9 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       if (a) {
         this.companiesList$.pipe(take(1)).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
+          if(this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+            this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
+          }
         });
       }
     });
@@ -510,7 +485,73 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     if (event) {
       let phoneCode = event.additional;
       this.addAccountForm.get('mobileCode').setValue(phoneCode);
+      this.getStates(this.countryNameCode[event.value]);
     }
   }
 
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          // Creating Country List
+          this.countryNameCode[res[key].countryName] = [];
+          this.countryNameCode[res[key].countryName] = res[key].alpha2CountryCode;
+
+          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          if(res[key].currency !== undefined && res[key].currency !== null) {
+            this.countryCurrency[res[key].countryName] = [];
+            this.countryCurrency[res[key].countryName] = res[key].currency.code;
+          }
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getCallingCodes() {
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
+  }
+
+  public getStates(countryCode) {
+    this.store.dispatch(this._generalActions.resetStatesList());
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].stateGstCode + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
+        });
+        this.statesSource$ = observableOf(this.states);
+      } else {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = countryCode;
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
+  }
 }

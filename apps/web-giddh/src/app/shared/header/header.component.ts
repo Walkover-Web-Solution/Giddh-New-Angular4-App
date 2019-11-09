@@ -304,7 +304,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
-        console.log(res);
+        if(res.countryV2 !== null && res.countryV2 !== undefined) {
+          this.getStates(res.countryV2.alpha2CountryCode);
+        }
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
           if (res.baseCurrency) {
@@ -1303,11 +1305,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return name;
   }
 
-  public getStates() {
-    console.log(this.createNewCompanyUser);
-    if(this.createNewCompanyUser.countryCode !== undefined && this.createNewCompanyUser.countryCode !== null && this.createNewCompanyUser.countryCode !== "") {
+  public getStates(countryCode) {
+    if(countryCode !== undefined && countryCode !== null && countryCode !== "") {
       let statesRequest = new StatesRequest();
-      statesRequest.country = this.createNewCompanyUser.countryCode;
+      statesRequest.country = countryCode;
       this.store.dispatch(this._generalActions.getAllState(statesRequest));
     }
   }

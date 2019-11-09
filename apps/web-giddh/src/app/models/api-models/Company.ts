@@ -54,7 +54,7 @@ export class CompanyResponse {
   public city: string;
   public pincode: string;
   public country: string;
-  public countryCode: string;
+  public countryV2: CountryResponse;
   public updatedAt: string;
   public updatedBy: ICommonItem;
   public createdAt: string;
@@ -315,4 +315,15 @@ export class CompanyCountry {
   baseCurrency: string;
   country: string;
 
+}
+
+export class CountryResponse {
+  alpha2CountryCode: string;
+  alpha3CountryCode: string;
+  callingCode: string;
+  countryName: string;
+  currency: {
+    code: string;
+    symbol: string;
+  };
 }
