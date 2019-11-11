@@ -1484,6 +1484,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
       calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
     }
+    if (this.calculatedRoundOff === 0.5) {
+      this.calculatedRoundOff = -this.calculatedRoundOff;
+    }
 
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
     this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
@@ -2349,7 +2352,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entry.tcsTaxList = [];
       entry.tdsTaxList = [];
     }
-    if(this.activeIndx && !entryObj){
+    if (this.activeIndx && !entryObj) {
       this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
       this.invFormData.entries[this.activeIndx] = entry;
     }
@@ -2728,7 +2731,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.isCashInvoice) {
       obj.account.customerName = data.voucherDetails.customerName;
       obj.account.name = data.voucherDetails.customerName;
-    }else{
+    } else {
       delete obj.account.customerName;
     }
     return obj;
@@ -2948,8 +2951,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
       this.originalReverseExchangeRate = this.reverseExchangeRate;
     } else {
-      this.exchangeRate = this.reverseExchangeRate  ? 1 / this.reverseExchangeRate : 0;
-      this.originalExchangeRate = this.exchangeRate ;
+      this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+      this.originalExchangeRate = this.exchangeRate;
     }
   }
 
@@ -3010,7 +3013,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public selectDefaultbank() {
-    if(!this.depositAccountUniqueName){
+    if (!this.depositAccountUniqueName) {
       this.depositAccountUniqueName = 'cash';
     }
   }

@@ -105,6 +105,9 @@
                         <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor}" />
                     </h2>
                 </div>
+                <ng-container *ngIf="!fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                    <div class="green-row " [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } "></div>
+                </ng-container>
             </header>
             <table class="meta cargoDetail">
                 <tbody>
