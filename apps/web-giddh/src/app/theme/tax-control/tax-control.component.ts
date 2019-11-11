@@ -191,7 +191,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * hide menus on outside click of span
    */
   public toggleTaxPopup(action: any) {
-    console.log("showTaxPopup : " + action);
     this.showTaxPopup = action;
   }
 

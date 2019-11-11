@@ -178,8 +178,15 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     this.companies$.pipe(take(1)).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
+        let previousState;
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getFlattenAccount());
+        this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+          previousState = se;
+        });
+        if (previousState) {
+          this._route.navigate([`pages/${previousState}`]);
+        }
         this.closeCompanyModal.emit();
       } else {
         this.showLogoutModal();

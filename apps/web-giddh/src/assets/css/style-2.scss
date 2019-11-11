@@ -2266,7 +2266,7 @@ input[type=checkbox]:checked:after {
 
 .subscription-title {
   font-size: 20px;
-  font-family: ''opensans-semibold'';
+  font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -7636,6 +7636,7 @@ div#getGroupModal {
   left: 0;
   bottom: 0;
   z-index: 3;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
 
 .menu_open .invoiceFooter {
@@ -7649,6 +7650,7 @@ div#getGroupModal {
   left: 215px;
   bottom: 0;
   z-index: 10;
+
 }
 
 ul#dropdown-nested li {
@@ -8177,7 +8179,12 @@ button.btn.btn-filter {
 .modal{
   z-index:9992;
 }
-
+.select2-ledger .menu .item:hover {
+    background-color: #e3e4ed;
+}
+.select2-ledger .menu .item:hover a {
+    color: #5B64C9;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8230,6 +8237,17 @@ button.btn.btn-filter {
   }
 }
 
+@media(max-width:840px){
+  .card-invoiceTable #tax-control-multi-select.multi-select input.form-control[readonly] ,   .card-invoiceTable .multi-select input.form-control {
+
+    background-position: 98% !important;
+}
+.single-card-row .my-dropdown-menu.pd{
+  left: auto !important;
+  right: 0 !important;
+}
+}
+
 @media (max-width: 768px) {
   .aging-table tr td:first-child,
   .aging-table tr th:first-child,
@@ -8259,6 +8277,7 @@ button.btn.btn-filter {
     border: none;
     background-color: transparent;
     padding: 0;
+        margin-bottom: 50px !important;
   }
   .overlayBg:after {
     position: fixed;
@@ -8432,6 +8451,7 @@ button.btn.btn-filter {
   }
   header .hamburger_menu h4 {
     color: #fff;
+    font-size: 16px;
   }
   header .hamburger_menu i.icon-bar {
     color: #fff;
@@ -8510,6 +8530,22 @@ button.btn.btn-filter {
 .user_dropdown > li > a .glyphicon-menu-right{
   transform: rotate(90deg);
 }
+#settingTab .tab-container .nav.nav-tabs {
+    position: fixed;
+    width: 100%;
+    top: 85px;
+}
+.custom-tabs .nav.nav-tabs {
+    position: fixed;
+    width: 100%;
+    top: 85px;
+}
+.custom-tabs .top_bar{
+      margin-top: 40px;
+}
+.custom-tabs.hide-header .top_bar {
+    margin-top: 0;
+}
 }
 
 @media (max-width: 575px) {
@@ -8526,6 +8562,9 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+#content_wrapper{
+      overflow-x: hidden;
+}
 
 }
 
@@ -8536,7 +8575,7 @@ button.btn.btn-filter {
   }
   .daterangepicker.dropdown-menu {
     max-width: 100% !important;
-    z-index: 3001;
+    z-index: 9999;
     text-align: left;
     float: left;
   }
@@ -8557,6 +8596,10 @@ button.btn.btn-filter {
   .vendorPayNow .accountAsideMenuState2 #close {
     right: 272px;
   }
+  #settingTab .tab-container .nav.nav-tabs {
+
+    top: 75px;
+}
 }
 @media(max-width:411px){
         #companyList {
@@ -8645,7 +8688,7 @@ button.btn.btn-filter {
   }
   .daterangepicker.dropdown-menu {
     max-width: 100% !important;
-    z-index: 3001;
+    z-index: 9999;
   }
 }
 

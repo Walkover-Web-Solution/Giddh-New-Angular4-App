@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import {take, takeUntil} from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -62,6 +62,10 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
       this.voucherType = a.voucherType;
       // this.getVoucher(false);
     });
+    this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
+      this.voucherType = _.cloneDeep(voucherType);
+    });
+
     this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
       this.fieldsAndVisibility = _.cloneDeep(obj);
     });
@@ -96,11 +100,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.imageSignatureSrc = '';
       }
       this.inputTemplate = _.cloneDeep(template);
-      if(this.inputTemplate.fontSize) {
-        this.inputTemplate.fontSmall = this.inputTemplate.fontSize-4;
+      if (this.inputTemplate.fontSize) {
+        this.inputTemplate.fontSmall = this.inputTemplate.fontSize - 4;
         this.inputTemplate.fontDefault = this.inputTemplate.fontSize;
-        this.inputTemplate.fontMedium = this.inputTemplate.fontSize-2;
-        this.inputTemplate.fontLarge = this.inputTemplate.fontSize-1+4;
+        this.inputTemplate.fontMedium = this.inputTemplate.fontSize - 2;
+        this.inputTemplate.fontLarge = this.inputTemplate.fontSize - 1 + 4;
       }
       // console.log('inputTemplate..', this.inputTemplate);
     });

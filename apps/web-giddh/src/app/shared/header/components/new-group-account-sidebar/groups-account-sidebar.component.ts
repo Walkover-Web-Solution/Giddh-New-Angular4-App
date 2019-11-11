@@ -57,6 +57,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private navigateStack: any[] = [];
+  public currentGroup: any;
+  public currentGroupIndex: number = 0;
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -74,6 +76,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
       this.resetData();
+
+      if(this.currentGroup !== undefined) {
+        this.onGroupClick(this.currentGroup, this.currentGroupIndex);
+      }
     }
   }
 
@@ -278,10 +284,12 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         }
       }
     }
-
   }
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
+    this.currentGroup = item;
+    this.currentGroupIndex = currentIndex;
+
     this.breadcrumbPath = [];
     this.breadcrumbUniqueNamePath = [];
 

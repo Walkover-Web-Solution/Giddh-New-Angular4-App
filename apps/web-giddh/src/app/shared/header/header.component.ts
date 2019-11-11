@@ -371,9 +371,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-    if (this.selectedPlanStatus === 'expired') {// active expired
-      this.openExpiredPlanModel(this.expiredPlanModel);
-    }
+
     if (this.isSubscribedPlanHaveAdditnlChrgs) {
       this.openCrossedTxLimitModel(this.crossedTxLimitModel);
     }
@@ -571,6 +569,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngAfterViewInit() {
+
+    if (this.selectedPlanStatus === 'expired') {// active expired
+      this.openExpiredPlanModel(this.expiredPlanModel);
+    }
     this.session$.subscribe((s) => {
       if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
@@ -1103,7 +1105,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-    this.modelRefExpirePlan = this.modalService.show(template);
+    if (!this.modalService.getModalsCount()) {
+      this.modelRefExpirePlan = this.modalService.show(template);
+    }
   }
 
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
