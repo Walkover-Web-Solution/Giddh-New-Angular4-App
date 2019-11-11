@@ -236,7 +236,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.createNewCompany.taxes.forEach(tax => {
-        if(this.selectedTaxes.indexOf(tax) === -1) {
+        if(currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
           this.selectedTaxes.push(tax);
 
           let matchedIndex = currentTaxList[tax];

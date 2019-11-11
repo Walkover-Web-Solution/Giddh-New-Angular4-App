@@ -36,7 +36,7 @@
               <span>
                 <label for="country" class="d-block">Country<sup>*</sup></label>
                 <sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
-                  [(ngModel)]="company.country" class="pull-left select-caret" [required]='true' (selected)="selectCountry($event)" [defaultValue]="company.country"  style="width: 100%">
+                  [(ngModel)]="company.country" class="pull-left select-caret" [required]='true' (selected)="selectCountry($event)" [defaultValue]="selectedCountry"  style="width: 100%">
                 </sh-select>
               </span>
 

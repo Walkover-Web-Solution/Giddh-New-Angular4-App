@@ -57,6 +57,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public isNewUser: boolean = false;
   public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
+  public selectedCountry: string = '';
 
   constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -291,6 +292,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
           // Creating Country Currency List
           this.countryCurrency[res[key].alpha2CountryCode] = [];
           this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+
+          if(this.company.country === res[key].alpha2CountryCode) {
+            this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
+          }
         });
         this.countrySource$ = observableOf(this.countrySource);
       } else {
