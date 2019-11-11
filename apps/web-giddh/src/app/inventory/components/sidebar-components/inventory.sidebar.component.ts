@@ -1,4 +1,4 @@
-import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
+import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
@@ -12,7 +12,6 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
-import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
 import { InvViewService } from '../../inv.view.service';
 
@@ -25,12 +24,16 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
   public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;
   public sidebarRect: any;
   public isSearching: boolean = false;
-  public groupUniqueName:string;
-  public stockUniqueName:string;
-  public fromDate:string;
-  public toDate:string;
+  public groupUniqueName: string;
+  public stockUniqueName: string;
+  public fromDate: string;
+  public toDate: string;
+  /** Stores data related to stock group for inventory module */
+  public stockGroupData: Array<any>;
   @ViewChild('search') public search: ElementRef;
   @ViewChild('sidebar') public sidebar: ElementRef;
+  /** Subscription to new data obtained from the service */
+  private stockGroupDataSubscription: Subscription;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -40,9 +43,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     private inventoryService: InventoryService,
     private invViewService: InvViewService,
     private _toasty: ToasterService) {
-    this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
+    this.stockGroupDataSubscription = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
+      this.stockGroupData = data;
+    });
     this.sidebarRect = window.screen.height;
-    // console.log(this.sidebarRect);
   }
 
   @HostListener('window:resize')
@@ -54,15 +58,14 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 
   public ngOnInit() {
     this.invViewService.getActiveDate().pipe(takeUntil(this.destroyed$)).subscribe(v => {
-      this.fromDate=v.from;
-      this.toDate=v.to;
+      this.fromDate = v.from;
+      this.toDate = v.to;
     });
 
     this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
   }
 
   public ngAfterViewInit() {
-    this.groupsWithStocks$.subscribe();
     this.invViewService.getActiveView().subscribe(v => {
       this.groupUniqueName = v.groupUniqueName;
       this.stockUniqueName = v.stockUniqueName;
@@ -73,7 +76,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
       map((e: any) => e.target.value))
       .subscribe((val: string) => {
         if (val) {
-          this.isSearching=true;
+          this.isSearching = true;
         }
         this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
       });
@@ -86,19 +89,19 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     // this.router.navigate(['inventory']);
   }
 
-  public downloadAllInventoryReports(reportType:string, reportFormat:string) {
-    console.log('Called : download',reportType, 'format',reportFormat);
-    let obj= new InventoryDownloadRequest();
-    if(this.groupUniqueName){
-      obj.stockGroupUniqueName=this.groupUniqueName;
+  public downloadAllInventoryReports(reportType: string, reportFormat: string) {
+    console.log('Called : download', reportType, 'format', reportFormat);
+    let obj = new InventoryDownloadRequest();
+    if (this.groupUniqueName) {
+      obj.stockGroupUniqueName = this.groupUniqueName;
     }
-    if(this.stockUniqueName){
-      obj.stockUniqueName=this.stockUniqueName;
+    if (this.stockUniqueName) {
+      obj.stockUniqueName = this.stockUniqueName;
     }
-    obj.format=reportFormat;
-    obj.reportType=reportType;
-    obj.from=this.fromDate;
-    obj.to=this.toDate;
+    obj.format = reportFormat;
+    obj.reportType = reportType;
+    obj.from = this.fromDate;
+    obj.to = this.toDate;
     this.inventoryService.downloadAllInventoryReports(obj)
       .subscribe(res => {
         if (res.status === 'success') {
@@ -108,8 +111,15 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         }
       });
   }
-  public ngOnDestroy() {
+  
+  /**
+   * Unsubscribe to all subscriptions
+   *
+   * @memberof InventorySidebarComponent
+   */
+  public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+    this.stockGroupDataSubscription.unsubscribe();
   }
 }
