@@ -8237,6 +8237,85 @@ button.btn.btn-filter {
   }
 }
 
+@media(max-width:991px){
+    .form-bg {
+    width: 100%;
+  }
+  .col_wrapper:nth-child(1) {
+    position: relative !important;
+    height: auto !important;
+    width: 100% !important;
+  }
+  .grp_col {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .grp_list .list-item {
+    display: inline-block;
+  }
+  .col_wrapper {
+    white-space: initial;
+  }
+  .col_wrapper:nth-child(2) {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .grp_list {
+    padding: 0px;
+    background: #f4f5f8;
+    width: 100%;
+    display: block;
+  }
+  .usesr-last-list > li:last-child {
+    height: inherit !important;
+  }
+  .xs-left {
+    text-align: left !important;
+  }
+  .form_box.form-bg {
+    height: auto !important;
+    min-height: auto;
+  }
+  .left-account-opration {
+    height: initial !important;
+    width: 100%;
+    background: #fff;
+  }
+  .usesr-last-list > li {
+    display: inline-block;
+  }
+  #inventory-sidebar {
+    min-height: initial;
+    width: 100% !important;
+  }
+  .stock-grp-list:first-child {
+    max-height: initial !important;
+    min-height: initial !important;
+  }
+  .rightBar {
+    width: 100% !important;
+  }
+  .sticky-footer {
+    position: relative;
+  }
+  .stock-lists {
+    position: absolute;
+    box-shadow: 0 3px 6px #ccc;
+    background: #fff;
+    min-width: 200px;
+    display: inline-block;
+    z-index: 9;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .stock-grp-list > li {
+    display: inline-block;
+    border: 0px;
+    position: relative;
+  }
+}
+
 @media(max-width:840px){
   .card-invoiceTable #tax-control-multi-select.multi-select input.form-control[readonly] ,   .card-invoiceTable .multi-select input.form-control {
 

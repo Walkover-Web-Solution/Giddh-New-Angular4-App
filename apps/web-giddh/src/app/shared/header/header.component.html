@@ -726,7 +726,7 @@
               <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
             </li>
           </ul>
-          <button id="AddManage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+          <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
             [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span class="icon-edit-ico"></span>
             Accounts
           </button>
