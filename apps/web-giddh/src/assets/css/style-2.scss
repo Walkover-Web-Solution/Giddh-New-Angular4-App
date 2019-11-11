@@ -7636,6 +7636,7 @@ div#getGroupModal {
   left: 0;
   bottom: 0;
   z-index: 3;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
 
 .menu_open .invoiceFooter {
@@ -7649,6 +7650,7 @@ div#getGroupModal {
   left: 215px;
   bottom: 0;
   z-index: 10;
+
 }
 
 ul#dropdown-nested li {
@@ -8275,6 +8277,7 @@ button.btn.btn-filter {
     border: none;
     background-color: transparent;
     padding: 0;
+        margin-bottom: 50px !important;
   }
   .overlayBg:after {
     position: fixed;

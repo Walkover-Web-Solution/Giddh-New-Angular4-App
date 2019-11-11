@@ -457,6 +457,9 @@ button.btn.btn-filter span.icon-cross {
 
 /* responsive */
 @media (max-width: 768px) {
+  .card-header .mh18_img {
+    margin-right: 5px;
+}
   .mobileTable {
     display: block;
   }
@@ -583,6 +586,14 @@ button.btn.btn-filter span.icon-cross {
 .invoice-modal-content:after, .invoice-modal-content {
     top: 131px;
 }
+ .invoiceFooter .font-xxlarge {
+    font-size: 16px;
+
+  }
+
+  .invoiceFooter h1 {
+    font-size: 18px !important;
+  }
 
 }
 
@@ -620,14 +631,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 420px) {
-  .invoiceFooter .font-xxlarge {
-    font-size: 16px;
-    height: 32px;
-  }
 
-  .invoiceFooter h1 {
-    font-size: 32px !important;
-  }
   .smallLoading{
     padding-left: 0;
     color: #333333;
