@@ -8241,11 +8241,11 @@ button.btn.btn-filter {
     .form-bg {
     width: 100%;
   }
-  .col_wrapper:nth-child(1) {
-    position: relative !important;
-    height: auto !important;
-    width: 100% !important;
-  }
+  // .col_wrapper:nth-child(1) {
+  //   position: relative !important;
+  //   height: auto !important;
+  //   width: 100% !important;
+  // }
   .grp_col {
     float: none !important;
     width: 100% !important;
@@ -8775,14 +8775,16 @@ button.btn.btn-filter {
   .form-bg {
     width: 100%;
   }
-  .col_wrapper:nth-child(1) {
-    position: relative;
-    height: auto;
-    width: 100%;
-  }
+  // .col_wrapper:nth-child(1) {
+  //   position: relative;
+  //   height: auto;
+  //   width: 100%;
+  // }
   .grp_col {
-    float: none;
-    width: 100%;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
   }
   .grp_list .list-item {
     display: inline-block;
@@ -8795,7 +8797,7 @@ button.btn.btn-filter {
     width: 100%;
   }
   .grp_list {
-    padding: 0px;
+    padding: 10px 0px !important;
     background: #f4f5f8;
     width: 100%;
     display: block;
@@ -8815,7 +8817,7 @@ button.btn.btn-filter {
   }
   .left-account-opration {
     height: initial !important;
-    width: 100%;
+    width: 100% !important;
   }
   .usesr-last-list>li {
     display: inline-block;
@@ -8844,12 +8846,13 @@ button.btn.btn-filter {
   }
   .col_wrapper:nth-child(1) {
     background: transparent;
+    position: relative;
   }
   .grp_list:nth-child(2) {
     background-color: #fff;
   }
   .col_wrapper.left-account-opration:nth-child(3),
-  .col_wrapper.left-account-opration:nth-child(2) {
+  .col_wrapper.left-account-opration:nth-child(2), .col_wrapper.left-account-opration:nth-child(4) {
     border-top: 1px solid #ddd;
   }
   .mangeAccountPopup.modal {
@@ -8860,13 +8863,29 @@ button.btn.btn-filter {
     box-shadow: none;
     border: none;
   }
+  .wrapAccountSidebar ,  .wrapAccountSidebar .grp_wrapper {
+    width: 100% !important;
+
+}
+.addManageGroupAcc {
+    overflow-y: auto !important;
+}
+ .grp_list li a, .new_btn_ul li a{
+       display: initial;
+ }
 }
 
 @media only screen and (max-width: 480px) {
   td.pItem.price .my-dropdown-menu {
     width: 180px !important;
   }
-
+// manage group account
+.addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-8 , .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
+    width: 100%;
+}
+.addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
+    margin-top: 5px;
+}
 
 
 }

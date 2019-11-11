@@ -43,7 +43,8 @@
           <!-- ngIf: showListGroupsNow -->
           <perfect-scrollbar #perfectdirective class="scroll-container" fxFlex="auto" [config]="config"
             [scrollIndicators]="true">
-            <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
+            <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}"
+              class="wrapAccountSidebar">
               <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
                 [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
                 [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
