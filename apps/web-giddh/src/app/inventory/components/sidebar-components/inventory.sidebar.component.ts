@@ -1,18 +1,16 @@
-import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { AppState } from '../../../store';
-
-import { Store } from '@ngrx/store';
-
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
-import { ToasterService } from '../../../services/toaster.service';
-import { InventoryService } from '../../../services/inventory.service';
+import { Store } from '@ngrx/store';
+import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { InventoryService } from '../../../services/inventory.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from '../../../store';
 import { InvViewService } from '../../inv.view.service';
 
 @Component({
