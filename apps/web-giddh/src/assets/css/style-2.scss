@@ -8177,7 +8177,12 @@ button.btn.btn-filter {
 .modal{
   z-index:9992;
 }
-
+.select2-ledger .menu .item:hover {
+    background-color: #e3e4ed;
+}
+.select2-ledger .menu .item:hover a {
+    color: #5B64C9;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8228,6 +8233,17 @@ button.btn.btn-filter {
     height: 90px;
     font-size: 14px;
   }
+}
+
+@media(max-width:840px){
+  .card-invoiceTable #tax-control-multi-select.multi-select input.form-control[readonly] ,   .card-invoiceTable .multi-select input.form-control {
+
+    background-position: 98% !important;
+}
+.single-card-row .my-dropdown-menu.pd{
+  left: auto !important;
+  right: 0 !important;
+}
 }
 
 @media (max-width: 768px) {
@@ -8432,6 +8448,7 @@ button.btn.btn-filter {
   }
   header .hamburger_menu h4 {
     color: #fff;
+    font-size: 16px;
   }
   header .hamburger_menu i.icon-bar {
     color: #fff;
@@ -8510,6 +8527,7 @@ button.btn.btn-filter {
 .user_dropdown > li > a .glyphicon-menu-right{
   transform: rotate(90deg);
 }
+
 }
 
 @media (max-width: 575px) {
@@ -8526,6 +8544,9 @@ button.btn.btn-filter {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+#content_wrapper{
+      overflow-x: hidden;
+}
 
 }
 
@@ -8536,7 +8557,7 @@ button.btn.btn-filter {
   }
   .daterangepicker.dropdown-menu {
     max-width: 100% !important;
-    z-index: 3001;
+    z-index: 9999;
     text-align: left;
     float: left;
   }
@@ -8645,7 +8666,7 @@ button.btn.btn-filter {
   }
   .daterangepicker.dropdown-menu {
     max-width: 100% !important;
-    z-index: 3001;
+    z-index: 9999;
   }
 }
 

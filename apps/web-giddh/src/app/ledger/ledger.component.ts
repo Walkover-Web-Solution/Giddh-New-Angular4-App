@@ -184,7 +184,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public selectedSuffixForCurrency: string;
   public inputMaskFormat: string;
   public giddhBalanceDecimalPlaces: number = 2;
-
+  public activeAccountParentGroupsUniqueName: string = '';
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1137,11 +1137,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public entryManipulated() {
     if (this.isAdvanceSearchImplemented) {
       this.getAdvanceSearchTxn();
+    } else if (this.activeAccountParentGroupsUniqueName === 'bankaccounts' && this.closingBalanceBeforeReconcile) {
+      this.getReconciliation();
     } else {
       this.getTransactionData();
     }
   }
-
   public resetAdvanceSearch() {
     this.advanceSearchComp.resetAdvanceSearchModal();
     this.getTransactionData();
@@ -1226,7 +1227,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (this.showUpdateLedgerForm) {
         this.hideUpdateLedgerModal();
       }
-      this.entryManipulated();
+      if(this.updateLedgerComponentInstance.activeAccount$) {
+        this.updateLedgerComponentInstance.activeAccount$.subscribe(res => {
+          this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
+        });
+      }this.entryManipulated();
       this.updateLedgerComponentInstance = null;
       componentRef.destroy();
     });

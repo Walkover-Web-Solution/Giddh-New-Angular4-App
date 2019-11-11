@@ -1,4 +1,4 @@
-<div class="container-fluid mrT1">
+<div class="mrT1">
 
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
@@ -11,7 +11,8 @@
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12" formGroupName="country">
         <label for="">Country</label>
-        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"  (selected)="selectCountry($event)" style="width:100%">
+        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"
+          (selected)="selectCountry($event)" style="width:100%">
         </sh-select>
       </div>
 
@@ -38,7 +39,8 @@
                 </div>
               </div>
             </div>
-            <div class="form-group col-sm-6 col-xs-12">
+            <div class="form-group col-sm-6 col-xs-12"
+              [ngStyle]="{display : gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15 ? 'block' : ' none' }">
               <label class="d-block">&nbsp;</label>
               <div class="mrT1">
                 <label *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
