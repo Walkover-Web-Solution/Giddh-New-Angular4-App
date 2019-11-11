@@ -534,6 +534,21 @@ label.labeled {
     .invoice-modal-content {
       top: 131px;
 }
+.invoice-modal-content {
+    height: 100vh !important;
+    overflow-y: auto !important;
+}
+.invoice-modal-content  .invoice-detail{
+  height: 100vh;
+}
+.single-paymentDetail{
+      margin-bottom: 10px;
+}
+.payment-detail .payment-icon{
+      margin-right: 10px;
+      margin-bottom: 40px;
+      float: left;
+}
 }
 
 @media(max-width:375px) {
