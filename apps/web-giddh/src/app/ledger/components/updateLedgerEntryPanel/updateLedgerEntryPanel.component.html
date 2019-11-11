@@ -117,6 +117,14 @@
                               <div class="item_unq">{{ option.additional?.uniqueName }}</div>
                               <div class="item_stock">Stock: {{ option.additional?.stock.name }}</div>
                             </a>
+                            <<<<<<< HEAD=======</ng-container> </ng-template> <ng-template #notFoundLinkTemplate>
+
+                              <a id="createNewId" [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                                [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAsidePaneOpen()">
+                                <span [ngClass]="{'active': keydownClassAdded}">Create New</span>
+                                <span [ngClass]="{'active': keydownClassAdded}" class="pull-right">Alt+C</span>
+                              </a>
+                              >>>>>>> development
                         </ng-template>
 
                       </sh-select>
@@ -218,16 +226,10 @@
                   <span class="cursor-pointer">
                     Date
                   </span>
-                  <<<<<<< HEAD </th> <th class="col-xs-6" style="border-top:none">Paticular
                 </th>
+                <th class="col-xs-6" style="border-top:none">Particular</th>
                 <th class="col-xs-2" style="border-top:none">Amount</th>
               </tr>
-              =======
-              </th>
-              <th class="col-xs-6" style="border-top:none">Particular<</th> <th class="col-xs-2"
-                  style="border-top:none">Amount</th>
-              </tr>
-              >>>>>>> development
             </thead>
 
             <tbody class="ledger-main">
@@ -568,267 +570,270 @@
                 </div>
               </div>
 
-              <div class="col-sm-12 mrT2">
-                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
-                  placeholder="Description"></textarea>
+
+              <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
+                <div class="row">
+                  <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                    placeholder="Description"></textarea>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="col-md-6 font-14 pt-1 bl-1">
-          <table class="width100">
-            <tbody>
-              <tr>
-                <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
-                  <i class="fa cp"
-                    [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-                  <button class="no-btn pdL0">&nbsp; More Details</button>
-                </td>
-                <td class="text-right">
-                  <span class="primary_clr" *ngIf="vm.isMultiCurrencyAvailable">
-                    Total in {{ vm.baseCurrencyDetails?.code }}:
-                    <span>{{ vm.baseCurrencyDetails?.symbol }}</span> {{vm.compoundTotal | giddhCurrency}}
-                  </span>
-                </td>
+            <div class="col-md-6 font-14 pt-1 bl-1">
+              <table class="width100">
+                <tbody>
+                  <tr>
+                    <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                      <i class="fa cp"
+                        [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
+                      <button class="no-btn pdL0">&nbsp; More Details</button>
+                    </td>
+                    <td class="text-right">
+                      <span class="primary_clr" *ngIf="vm.isMultiCurrencyAvailable">
+                        Total in {{ vm.baseCurrencyDetails?.code }}:
+                        <span>{{ vm.baseCurrencyDetails?.symbol }}</span> {{vm.compoundTotal | giddhCurrency}}
+                      </span>
+                    </td>
 
-              </tr>
+                  </tr>
 
-            </tbody>
-          </table>
-          <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
-            <table class="xs-table-block">
-              <tr>
-                <td class="select2-parent pdR1">
-                  <div class="form-group">
-                    <label class="default_clr">Voucher Type</label>
-                    <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
-                      [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
-                      (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
-                  </div>
-                </td>
+                </tbody>
+              </table>
+              <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
+                <table class="xs-table-block">
+                  <tr>
+                    <td class="select2-parent pdR1">
+                      <div class="form-group">
+                        <label class="default_clr">Voucher Type</label>
+                        <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                          [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
+                          (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'" [width]="'161px'"></sh-select>
+                      </div>
+                    </td>
 
-                <td class="pdR1"
-                  *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
-                  <div class="form-group">
-                    <label class="default_clr">Invoice No.</label>
-                    <input type="text" placeholder="Invoice no." class="form-control"
-                      [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
-                  </div>
-                </td>
+                    <td class="pdR1"
+                      *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'credit note'  || vm.selectedLedger.voucher.shortCode == 'pay')">
+                      <div class="form-group">
+                        <label class="default_clr">Invoice No.</label>
+                        <input type="text" placeholder="Invoice no." class="form-control"
+                          [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
+                      </div>
+                    </td>
 
-                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                    <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
 
-                  <div class="form-group">
+                      <div class="form-group">
 
-                    <label class="default_clr">Invoice No.</label>
-                    <div class="btn-group btn-block invoice-btn" dropdown>
-                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                        Select Invoices
-                        <span class="select_drop pull-right mrT1">
-                          <i class="fa fa-caret-down"></i>
-                        </span>
-                      </button>
-                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
-                        <li *ngIf="invoiceList.length==0">No results found</li>
-                        <li *ngFor="let invoice of invoiceList">
+                        <label class="default_clr">Invoice No.</label>
+                        <div class="btn-group btn-block invoice-btn" dropdown>
+                          <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                            Select Invoices
+                            <span class="select_drop pull-right mrT1">
+                              <i class="fa fa-caret-down"></i>
+                            </span>
+                          </button>
+                          <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                            <li *ngIf="invoiceList.length==0">No results found</li>
+                            <li *ngFor="let invoice of invoiceList">
 
-                          <input type="checkbox" [checked]="invoice.isSelected"
-                            (click)="selectInvoice (invoice, $event)" /> {{invoice.label}}
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                              <input type="checkbox" [checked]="invoice.isSelected"
+                                (click)="selectInvoice (invoice, $event)" /> {{invoice.label}}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
 
-                </td>
+                    </td>
 
-                <td class="">
-                  <div class="form-group">
-                    <label class="default_clr">Voucher No.</label>
-                    <input type="text" placeholder="Voucher no." class="form-control"
-                      [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />
-                  </div>
-                </td>
+                    <td class="">
+                      <div class="form-group">
+                        <label class="default_clr">Voucher No.</label>
+                        <input type="text" placeholder="Voucher no." class="form-control"
+                          [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true" [style.width.px]="80" />
+                      </div>
+                    </td>
 
-              </tr>
+                  </tr>
 
-            </table>
+                </table>
 
-            <table class="mrT1 xs-table-block">
+                <table class="mrT1 xs-table-block">
 
-              <tbody>
-                <tr>
-                  <td class="pdR1">
-                    <label class="default_clr">Cheque Number</label>
-                    <input type="text" placeholder="XXXX2619" class="form-control"
-                      [(ngModel)]="vm.selectedLedger.chequeNumber" />
-                  </td>
+                  <tbody>
+                    <tr>
+                      <td class="pdR1">
+                        <label class="default_clr">Cheque Number</label>
+                        <input type="text" placeholder="XXXX2619" class="form-control"
+                          [(ngModel)]="vm.selectedLedger.chequeNumber" />
+                      </td>
 
-                  <td>
-                    <label class="default_clr">Cheque Clearance Date</label>
-                    <input type="text" autocomplete="off" class="form-control"
-                      [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
-                      [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
-                  </td>
+                      <td>
+                        <label class="default_clr">Cheque Clearance Date</label>
+                        <input type="text" autocomplete="off" class="form-control"
+                          [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
+                          [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                      </td>
 
-                </tr>
+                    </tr>
 
-              </tbody>
+                  </tbody>
 
-            </table>
+                </table>
 
-            <table class="mrT1">
+                <table class="mrT1">
 
-              <tbody>
+                  <tbody>
 
-                <tr>
-                  <td class="pdR1">
-                    <label class="default_clr">Assign Tag</label>
-                    <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'"
-                      [showClear]="false" [multiple]="true" name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames"
-                      [ItemHeight]="'auto'"></sh-select>
-                  </td>
-                </tr>
+                    <tr>
+                      <td class="pdR1">
+                        <label class="default_clr">Assign Tag</label>
+                        <sh-select [options]="tags$ | async" [isFilterEnabled]="true" [placeholder]="'Select Tag'"
+                          [showClear]="false" [multiple]="true" name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames"
+                          [ItemHeight]="'auto'"></sh-select>
+                      </td>
+                    </tr>
 
-              </tbody>
+                  </tbody>
 
-            </table>
+                </table>
 
-          </div>
-
-          <div class="row">
-
-            <div class="col-xs-12 clearfix mrT1">
-
-              <div class="mrR1 form-group pull-left cp">
-                <label class="pull-left cp fs16">
-                  <input class="pull-left" type="checkbox" name="generateInvoice"
-                    [(ngModel)]="vm.selectedLedger.generateInvoice" [disabled]="vm.isInvoiceGeneratedAlready">
-                  Generate Invoice
-                </label>
               </div>
 
+              <div class="row">
 
-              <div class="pull-right">
+                <div class="col-xs-12 clearfix mrT1">
 
-                <span class="primary_clr" *ngIf="!vm.isMultiCurrencyAvailable">
-                  Compound Total: {{ vm.baseCurrencyDetails?.symbol}}{{vm.compoundTotal | giddhCurrency}}
-                </span>
+                  <div class="mrR1 form-group pull-left cp">
+                    <label class="pull-left cp fs16">
+                      <input class="pull-left" type="checkbox" name="generateInvoice"
+                        [(ngModel)]="vm.selectedLedger.generateInvoice" [disabled]="vm.isInvoiceGeneratedAlready">
+                      Generate Invoice
+                    </label>
+                  </div>
 
-                <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
-                  Total in {{ vm.foreignCurrencyDetails?.code }}
-                  : {{ vm.foreignCurrencyDetails?.symbol }} {{ vm.convertedCompoundTotal | giddhCurrency
+
+                  <div class="pull-right">
+
+                    <span class="primary_clr" *ngIf="!vm.isMultiCurrencyAvailable">
+                      Compound Total: {{ vm.baseCurrencyDetails?.symbol}}{{vm.compoundTotal | giddhCurrency}}
+                    </span>
+
+                    <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
+                      Total in {{ vm.foreignCurrencyDetails?.code }}
+                      : {{ vm.foreignCurrencyDetails?.symbol }} {{ vm.convertedCompoundTotal | giddhCurrency
                   }}
-                </span>
+                    </span>
 
-              </div>
+                  </div>
 
-            </div>
-
-            <div class="clearfix mb-2">
-
-              <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
-
-                <ul class="list-inline font-14">
-
-                  <li>
-                    1
-                    {{ vm.selectedCurrencyForDisplay === 0 ? vm.baseCurrencyDetails?.code : vm.foreignCurrencyDetails?.code }}
-                  </li>
-
-                  <li>
-                    <a href="javascript:void(0)" class="text-light" (click)="toggleCurrency()">
-                      <i class="icon-switch-icon"></i>
-                    </a>
-                  </li>
-
-                  <li>
-                    <input type="text" class="price-input" [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
-                      (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code
-                    }}
-                  </li>
-
-                </ul>
-              </div>
-
-              <div class="pull-right pr-15">
-                <div class="file_attached pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
-                  <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
-                  <label class="remove cp pl-1 text-danger" (click)="showDeleteAttachedFileModal()">(remove)</label>
                 </div>
 
-                <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                  <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
-                    (uploadOutput)="onUploadOutputUpdate($event)">
-                  <label for="invoiceFile" class="cp fs16">
-                    <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-                </label>
+                <div class="clearfix mb-2">
+
+                  <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
+
+                    <ul class="list-inline font-14">
+
+                      <li>
+                        1
+                        {{ vm.selectedCurrencyForDisplay === 0 ? vm.baseCurrencyDetails?.code : vm.foreignCurrencyDetails?.code }}
+                      </li>
+
+                      <li>
+                        <a href="javascript:void(0)" class="text-light" (click)="toggleCurrency()">
+                          <i class="icon-switch-icon"></i>
+                        </a>
+                      </li>
+
+                      <li>
+                        <input type="text" class="price-input" [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
+                          (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code
+                    }}
+                      </li>
+
+                    </ul>
+                  </div>
+
+                  <div class="pull-right pr-15">
+                    <div class="file_attached pull-right text-right"
+                      *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
+                      <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
+                      <label class="remove cp pl-1 text-danger" (click)="showDeleteAttachedFileModal()">(remove)</label>
+                    </div>
+
+                    <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
+                      <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
+                        (uploadOutput)="onUploadOutputUpdate($event)">
+                      <label for="invoiceFile" class="cp fs16">
+                        <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-xs-12 pdT1">
+                  <div class="pull-right">
+                    <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
+                    <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
+                      (click)="saveLedgerTransaction()">Update
+                    </button>
+                  </div>
+
+                </div>
               </div>
             </div>
 
-            <div class="col-xs-12 pdT1">
-              <div class="pull-right">
-                <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async"
-                  (click)="saveLedgerTransaction()">Update
-                </button>
-              </div>
-
-            </div>
           </div>
         </div>
 
       </div>
+      <!-- endregion -->
+
     </div>
 
-  </div>
-  <!-- endregion -->
-
-</div>
-
-<!-- region modals -->
-<!--deleteAttachedFile  -->
-<div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
-        (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
-      </confirm-modal>
+    <!-- region modals -->
+    <!--deleteAttachedFile  -->
+    <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
+            (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
+          </confirm-modal>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!--delete entry  -->
-<div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
-        (cancelCallBack)="hideDeleteEntryModal()" (successCallBack)="deleteTrxEntry()">
-      </confirm-modal>
+    <!--delete entry  -->
+    <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
+            (cancelCallBack)="hideDeleteEntryModal()" (successCallBack)="deleteTrxEntry()">
+          </confirm-modal>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- update base account popup -->
-<div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName"
-        (closeBaseAccountModal)="hideBaseAccountModal()" [flattenAccountList]="vm.flatternAccountList4Select | async"
-        (updateBaseAccount)="changeBaseAccount($event)"></base-account>
+    <!-- update base account popup -->
+    <div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName"
+            (closeBaseAccountModal)="hideBaseAccountModal()"
+            [flattenAccountList]="vm.flatternAccountList4Select | async"
+            (updateBaseAccount)="changeBaseAccount($event)"></base-account>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- endregion -->
+    <!-- endregion -->
 
-<!-- region totalWithCurrencySymbol template -->
-<ng-template #totalWithCurrencySymbol let-amountToDispaly>
+    <!-- region totalWithCurrencySymbol template -->
+    <ng-template #totalWithCurrencySymbol let-amountToDispaly>
 
-  <span>
-    {{ vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol }} {{ amountToDispaly |
+      <span>
+        {{ vm.selectedCurrency === 0 ? vm.foreignCurrencyDetails?.symbol : vm.baseCurrencyDetails?.symbol }} {{ amountToDispaly |
       giddhCurrency }}
-  </span>
+      </span>
 
-</ng-template>
-<!-- endregion -->
+    </ng-template>
+    <!-- endregion -->
