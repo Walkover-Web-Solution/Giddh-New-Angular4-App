@@ -875,6 +875,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public getInvoiveListsData(e: any) {
     if (e.value === 'rcpt') {
+      if (this.isPettyCash && !this.accountUniqueName) {
+        this._toasty.errorToast('Please Select Base Account for entry..');
+        return;
+      }
       this.invoiceList = [];
       this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
         _.map(res.body.invoiceList, (o) => {
@@ -888,6 +892,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public getInvoiveLists() {
     if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+      if (this.isPettyCash && !this.accountUniqueName) {
+
+      }
       this.invoiceList = [];
       this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
         _.map(res.body.invoiceList, (o) => {

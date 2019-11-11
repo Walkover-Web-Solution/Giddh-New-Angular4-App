@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, TemplateRef, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, } from '@angular/core';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
@@ -19,7 +19,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
   styleUrls: ['./expenses.component.scss'],
 })
 
-export class ExpensesComponent implements OnInit, OnChanges {
+export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
   public universalDate: Date[];
   public universalDate$: Observable<any>;
   public todaySelected: boolean = false;
@@ -121,7 +121,8 @@ export class ExpensesComponent implements OnInit, OnChanges {
       let dateObj = resp[0];
       let params = resp[1];
       this.todaySelected = resp[2];
-      if (dateObj && !this.todaySelected) {
+
+      if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
         this.unaiversalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.unaiversalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -252,5 +253,10 @@ export class ExpensesComponent implements OnInit, OnChanges {
     if (!this._cdRf['destroyed']) {
       this._cdRf.detectChanges();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
