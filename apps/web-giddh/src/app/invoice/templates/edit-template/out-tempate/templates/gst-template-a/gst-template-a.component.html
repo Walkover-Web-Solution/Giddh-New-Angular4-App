@@ -94,14 +94,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <!--<div class="docTitle">-->
-                <!--<h2 [ngStyle]="{ 'color': color}" *ngIf="this.taxInvoiceLabelFlag{{dollarSymbol}} | async" title="{{this.formNameInvoice{{dollarSymbol}} | async}}">-->
-                <!--<hr [ngStyle]="{ 'background-color': color}" />-->
-                <!--</h2>-->
-                <!--</div>-->
-                <!--*ngIf="inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].display"-->
-                <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display>
-                    <h2 [ngStyle]=" { 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } " title="INVOICE ">
+                <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                    <h2 [ngStyle]=" { 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } " [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label">
                         <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor} " />
                     </h2>
                 </div>

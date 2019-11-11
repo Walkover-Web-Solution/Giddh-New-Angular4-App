@@ -484,4 +484,5 @@ strong {
 
 .green-row {
     border-bottom: solid 1px rgb(121, 189, 88);
+    padding: 6px 16px;
 }
