@@ -266,7 +266,7 @@ td.card-header.clearfix {
 .paginationWrapper {
   background-color:transparent;
   padding: 20px 0;
-  margin-bottom: 120px;
+  margin-bottom: 0;
 }
 
 .invoice-table {
@@ -446,8 +446,13 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
-
-
+.invoice-preview {
+  padding-bottom: 170px;
+}
+.paginationWrapper {
+  position: relative;
+  top: -150px;
+}
 
 
 /* responsive */
@@ -543,6 +548,9 @@ button.btn.btn-filter span.icon-cross {
   .date-advanceSearch .dropdown-menu > li > a {
     padding: 8px 10px;
   }
+  .paginationWrapper {
+    top: 0px;
+  }
 }
 
 @media(max-width:768px){
@@ -562,6 +570,9 @@ button.btn.btn-filter span.icon-cross {
 .input-grp-dateRangePicker .form-group {
   margin-bottom: 10px;
 }
+.invoice-preview {
+    padding-bottom: 0px;
+  }
 }
 
 @media(max-width:767px){
@@ -572,7 +583,10 @@ button.btn.btn-filter span.icon-cross {
 .invoice-modal-content:after, .invoice-modal-content {
     top: 131px;
 }
+
 }
+
+
 
 @media (max-width: 500px) {
   .invoce-controll .nav.nav-tabs {

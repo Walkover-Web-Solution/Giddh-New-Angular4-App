@@ -406,8 +406,12 @@
                 </table>
             </article>
         </div>
-        <div id="Template-table" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }" (click)="onClickSection('table')">
-            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
+
+
+
+
+        <div id="Template-footer" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
                 <i class="fa fa-pencil"></i>
             </a>
             <article>

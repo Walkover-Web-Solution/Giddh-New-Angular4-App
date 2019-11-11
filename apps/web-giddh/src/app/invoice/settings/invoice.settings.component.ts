@@ -64,6 +64,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
   public isGmailIntegrated: boolean;
   public gmailAuthCodeUrl$: Observable<string> = null;
+  /** True, if Gmail integration is to be displayed (TODO: Should be removed once URIs become secured) */
+  shouldShowGmailIntegration: boolean;
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -440,6 +442,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else {
+      /* All the above URIs are not secured and Google has blocked
+        addition of unsecured URIs therefore show Gmail integration text only
+        for PROD. This flag need to be removed once all the above URIs become secure */
+      this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
       return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     }
   }
