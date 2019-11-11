@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
@@ -18,13 +18,26 @@ import { Configuration } from '../../../app.constant';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-
-;
+import { TaxResponse } from '../../../models/api-models/Company';
+import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-expense-details',
   templateUrl: './expense-details.component.html',
   styleUrls: ['./expense-details.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in => out', animate('400ms ease-in-out')),
+      transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges {
@@ -32,10 +45,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public modalRef: BsModalRef;
   public message: string;
   public actionPettyCashRequestBody: ExpenseActionRequest;
+
   @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
   @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
   @Input() public selectedRowItem: string;
   @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild(UpdateLedgerEntryPanelComponent) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
 
   public selectedItem: ExpenseResults;
   public rejectReason = new FormControl();
@@ -59,7 +74,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public companyUniqueName: string;
   public signatureSrc: string = '';
   public zoomViewImageSrc: string = '';
-  public tcsOrTds: 'tcs' | 'tds' = 'tcs';
+  public asideMenuStateForOtherTaxes: string = 'out';
 
   public depositAccountUniqueName: string;
   public accountType: string;
@@ -67,6 +82,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
   public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
   public comment: string = '';
   public accountEntryPettyCash: any;
+  public companyTaxesList: TaxResponse[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private sundryDebtorsAcList: IOption[] = [];
@@ -97,11 +113,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.modalRef = this.modalService.show(RejectionReason, {class: 'modal-md'});
   }
 
-  decline(): void {
-    this.message = 'Declined!';
-    this.modalRef.hide();
-  }
-
   public ngOnInit() {
     this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
       let flattenAccounts: IFlattenAccountsResultItem[] = res;
@@ -123,7 +134,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
       bankaccounts = _.orderBy(bankaccounts, 'label');
       this.bankAccounts$ = observableOf(bankaccounts);
     });
+
     this.fileUploadOptions = {concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg']};
+
     this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         this.actionPettyCashRequestBody = null;
@@ -132,7 +145,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this.preFillData(res);
       }
     });
-    ;
+
+    this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      this.companyTaxesList = res || [];
+    });
   }
 
   public preFillData(res: any) {
@@ -317,34 +333,16 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     this.zoomViewImageSrc = '';
   }
 
-  // public loadUpdateLedgerComponent() {
-  //   let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
-  //   let viewContainerRef = this.updateledgercomponent.viewContainerRef;
-  //   viewContainerRef.remove();
-  //   let componentRef = viewContainerRef.createComponent(componentFactory);
-  //   let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-  //   componentInstance.tcsOrTds = this.tcsOrTds;
-  //   this.updateLedgerComponentInstance = componentInstance;
+  public toggleBodyClass() {
+    if (this.asideMenuStateForOtherTaxes === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    } else {
+      document.querySelector('body').classList.remove('fixed');
+    }
+  }
 
-  //   componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
-  //     // this.toggleOtherTaxesAsidePane(res);
-  //   });
-
-  //   componentInstance.closeUpdateLedgerModal.subscribe(() => {
-  //     // this.hideUpdateLedgerModal();
-  //   });
-
-  //   this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
-  //     if (this.showUpdateLedgerForm) {
-  //       // this.hideUpdateLedgerModal();
-  //     }
-  //     // this.entryManipulated();
-  //     this.updateLedgerComponentInstance = null;
-  //     componentRef.destroy();
-  //   });
-
-  //   componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
-  //     // this.showQuickAccountModal();
-  //   });
-  // }
+  public toggleOtherTaxesAsidePane(modal) {
+    this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+  }
 }

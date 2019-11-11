@@ -58,79 +58,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
-  @Input() isPettyCash: boolean = false;
 
+  @Input() isPettyCash: boolean = false;
   @Input() accountEntryPettyCash: any;
-  public traspetty = {
-    "transactions": [
-      {
-        "particular": {
-          "name": "Round Off",
-          "uniqueName": "roundoff"
-        },
-        "amount": 399.00,
-        "amountSymbol": "₹",
-        "amountCurrency": "INR",
-        "amountForCompany": null,
-        "convertedAmount": 399.00,
-        "convertedAmountSymbol": "₹",
-        "convertedAmountCurrency": "INR",
-        "type": "DEBIT",
-        "inventory": null,
-        "isTax": false,
-        "isBaseAccount": true
-      }
-    ],
-    "total": {
-      "amount": 399.00,
-      "type": "DEBIT",
-      "code": "INR",
-      "symbol": "₹"
-    },
-    "convertedTotal": {
-      "amount": 399.00,
-      "type": "DEBIT",
-      "code": "INR",
-      "symbol": "₹"
-    },
-    "particular": {
-      "name": "Cash",
-      "uniqueName": "cash"
-    },
-    "particularType": "Asset",
-    "discountResources": [],
-    "actualAmount": 0,
-    "exchangeRate": 1.000000000000000,
-    "tagNames": [],
-    "uniqueName": "8hi1573019730888",
-    "voucherNo": 20,
-    "attachedFile": "",
-    "sendToGstr2": true,
-    "availItc": true,
-    "tcsTaxes": [],
-    "tdsTaxes": [],
-    "warning": null,
-    "invoicesToBePaid": [],
-    "voucherGeneratedType": null,
-    "tcsCalculationMethod": null,
-    "invoiceNumberAgainstVoucher": "",
-    "voucherNumber": null,
-    "entryDate": "06-11-2019",
-    "voucher": {
-      "name": "receipt",
-      "shortCode": "rcpt"
-    },
-    "taxes": [],
-    "discounts": [],
-    "voucherGenerated": false,
-    "unconfirmedEntry": false,
-    "attachedFileName": "",
-    "chequeNumber": "",
-    "chequeClearanceDate": "",
-    "linkedInvoices": [],
-    "description": "",
-    "tag": null
-  };
 
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -236,14 +166,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (this.isPettyCash) {
       this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
         if (res) {
-          this.accountPettyCashStream = res;
+          // this.accountPettyCashStream = res;
           // this.editAccUniqueName$ = observableOf(this.accountPettyCashStream.baseAccount.uniqueName);
-          this.entryUniqueName = this.accountPettyCashStream.uniqueName;
-          this.selectedLedgerStream$ = observableOf(this.accountPettyCashStream);
+          this.entryUniqueName = res.uniqueName;
+          // this.accountUniqueName = res.particular.uniqueName;
+          this.selectedLedgerStream$ = observableOf(res as LedgerResponse);
         }
       });
     }
-    // get entry name and ledger account uniquename
+
+    // get entry name and ledger account uniqueName
     observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
       if (resp[0] && resp[1]) {
         this.entryUniqueName = resp[0];
@@ -261,15 +193,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // get flatten_accounts list && get transactions list && get ledger account list
     observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
       .subscribe((resp: any[]) => {
-        if (resp[0] && resp[1] && resp[2].status === 'success' && resp[3]) {
+        if (resp[0] && resp[1] && resp[3]) {
 
-          //#region flatten group list assign process
-          if (this.isPettyCash) {
-            // resp[1] = resp[1];
+          // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
+          if (this.isPettyCash && this.accountUniqueName && resp[2].status !== 'success') {
+            return;
           }
 
+          //#region flatten group list assign process
           this.vm.flatternAccountList = resp[0];
-          this.activeAccount$ = observableOf(resp[2].body);
           this.activeAccount = cloneDeep(resp[2].body);
           this.profileObj = resp[3];
           this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
@@ -277,8 +209,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
           // set account details for multi currency account
           this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
-          console.log(resp[1].particular.uniqueName);
-          this.vm.isMultiCurrencyAvailable = !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency);
+
+          this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
+            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
+            : false;
 
           this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
 
@@ -298,41 +232,40 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           // end multi currency assign
 
           let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-          if (resp[0]) {
-            stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === resp[2].body.uniqueName);
+          if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
+            stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
           }
 
-          let accountDetails: AccountResponse = resp[2].body;
+          let isStockableAccount: boolean = false;
 
-          if (accountDetails && accountDetails.currency && this.vm.isMultiCurrencyAvailable) {
-            this.baseCurrency = accountDetails.currency;
+          if (this.activeAccount) {
+            if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
+              this.baseCurrency = this.activeAccount.currency;
+            }
+
+            // check if current account category is type 'income' or 'expenses'
+            let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
+            let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+            let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+            let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+
+            if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+              let appTaxes = [];
+              this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+              this.currentAccountApplicableTaxes = appTaxes;
+            }
+
+            // check if account is stockable
+            isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
           }
-
-          // check if current account category is type 'income' or 'expenses'
-          let parentAcc = accountDetails.parentGroups[0].uniqueName;
-          let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-          let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-          let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
-
-          if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-            let appTaxes = [];
-            accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-            this.currentAccountApplicableTaxes = appTaxes;
-          }
-          //    this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
 
           this.vm.getUnderstandingText(resp[1].particularType, resp[1].particular.name);
-
-          // check if account is stockable
-          let isStockableAccount = accountDetails.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
-          // (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-          //   parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
 
           let accountsArray: IOption[] = [];
           let accountsForBaseAccountArray: IOption[] = [];
           if (isStockableAccount) {
             // stocks from ledger account
-            resp[0].map(acc => {
+            this.vm.flatternAccountList.map(acc => {
               // normal entry
               accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
 
@@ -348,7 +281,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 });
               }
 
-              // check if taxable or roundoff account then don't assign stocks
+              // check if taxable or round off account then don't assign stocks
               let notRoundOff = acc.uniqueName === 'roundoff';
               let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
               if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
@@ -376,9 +309,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               // add current account entry in base account array
               accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
             });
-            // accountsArray = uniqBy(accountsArray, 'value');
+
           } else {
-            resp[0].map(acc => {
+            this.vm.flatternAccountList.map(acc => {
               if (acc.stocks) {
                 acc.stocks.map(as => {
                   accountsArray.push({
@@ -406,11 +339,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 });
               }
             });
-            // accountsArray = uniqBy(accountsArray, 'value');
           }
+
           this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'text'));
           this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'text');
           //#endregion
+
           //#region transaction assignment process
           this.vm.selectedLedger = resp[1];
 
@@ -424,6 +358,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.taxes = [];
             this.vm.selectedLedger.discounts = [];
             this.vm.selectedLedger.attachedFile = '';
+            this.vm.selectedLedger.voucher = {name: '', shortCode: ''};
           }
 
           this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
@@ -566,16 +501,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
-    // let isMultiCurrencyAvailable: boolean = false;
-    // if (txn.selectedAccount && txn.selectedAccount.currency) {
-    //   this.activeAccount$.pipe(take(1)).subscribe((acc) => {
-    //     if (acc.currency !== txn.selectedAccount.currency) {
-    //       // this.isMultiCurrencyAvailable = true;
-    //       isMultiCurrencyAvailable = true;
-    //       this.baseCurrency = acc.currency;
-    //     }
-    //   });
-    // }
+
     if (Number(txn.amount) === 0) {
       txn.amount = undefined;
     }
@@ -1072,16 +998,4 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let date = moment().format('DD-MM-YYYY');
     return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
   }
-
-  // private preparePettyCashResposneUpdateLedger(res: PettyCashResonse) {
-  //   let selectedLedger = new LedgerResponse();
-  //   selectedLedger.description = res.description;
-  //   selectedLedger.entryDate = res.entryDate;
-  //   selectedLedger.transactions = res.transactions;
-  //   selectedLedger.particular = res.particular;
-  //   selectedLedger.exchangeRate = res.exchangeRate;
-  //   selectedLedger.chequeNumber = res.chequeNumber;
-  //   selectedLedger.pettyCashEntryStatus = res.pettyCashEntryStatus;
-
-  // }
 }

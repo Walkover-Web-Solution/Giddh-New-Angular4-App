@@ -232,6 +232,9 @@ export class UpdateLedgerVm {
   }
 
   public checkDiscountTaxesAllowedOnOpenedLedger(acc: AccountResponse): boolean {
+    if (!acc) {
+      return false;
+    }
     let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
     return allowedUniqueNameArr.indexOf(acc.parentGroups[0].uniqueName) > -1;
   }

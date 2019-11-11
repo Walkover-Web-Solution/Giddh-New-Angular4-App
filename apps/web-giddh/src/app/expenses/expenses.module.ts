@@ -17,6 +17,7 @@ import { PaginationModule, ModalModule } from 'ngx-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { SalesModule } from '../sales/sales.module';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
     SharedModule,
     ShSelectModule,
     ModalModule,
-    ElementViewChildModule
+    ElementViewChildModule, SalesModule
   ],
   exports: [
     ExpensesComponent,

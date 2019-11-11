@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, TemplateRef, OnChanges, SimpleChanges, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, TemplateRef, } from '@angular/core';
 import { AppState } from '../store';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
-import { ReplaySubject, Observable, of as observableOf, combineLatest as observableCombineLatest } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults } from '../models/api-models/Expences';
@@ -12,7 +12,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
-
 
 @Component({
   selector: 'app-expenses',
@@ -89,21 +88,19 @@ export class ExpensesComponent implements OnInit, OnChanges {
   public selectedDate = {
     dateFrom: '',
     dateTo: ''
-  }
-
-
+  };
 
   constructor(private store: Store<AppState>,
-    private _expenceActions: ExpencesAction,
-    private route: ActivatedRoute,
-    private modalService: BsModalService,
-    private companyActions: CompanyActions,
-    public _route: ActivatedRoute,
-    private _cdRf: ChangeDetectorRef) {
+              private _expenceActions: ExpencesAction,
+              private route: ActivatedRoute,
+              private modalService: BsModalService,
+              private companyActions: CompanyActions,
+              public _route: ActivatedRoute,
+              private _cdRf: ChangeDetectorRef) {
 
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-
+    this.store.dispatch(this.companyActions.getTax());
   }
 
   public ngOnInit() {
@@ -116,6 +113,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
         this.activeTab = params['type'];
       }
     });
+
     observableCombineLatest(this.universalDate$, this.route.params, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
       if (!Array.isArray(resp[0])) {
         return;
@@ -144,30 +142,37 @@ export class ExpensesComponent implements OnInit, OnChanges {
         }
       }
     });
+
     this.saveLastState('');
   }
+
   public selectedRowToggle(e) {
     this.isSelectedRow = e;
   }
+
   public selectedRowInput(item: ExpenseResults) {
     this.selectedRowItem = item;
   }
+
   public selectedDetailedRowInput(item: ExpenseResults) {
     this.selectedRowItem = item;
   }
+
   public isFilteredSelected(isSelect: boolean) {
     this.isFilterSelected = isSelect;
   }
+
   public closeDetailedMode(e) {
     this.isSelectedRow = !e;
   }
+
   public refreshPendingItem(e) {
     if (e) {
       this.getPettyCashPendingReports(this.pettycashRequest);
       this.getPettyCashRejectedReports(this.pettycashRequest);
       setTimeout(() => {
         this.detectChanges();
-      }, 600)
+      }, 600);
     }
   }
 
@@ -175,13 +180,16 @@ export class ExpensesComponent implements OnInit, OnChanges {
     SalesDetailedfilter.status = 'pending';
     this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
   }
+
   public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
     SalesDetailedfilter.status = 'rejected';
     this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
   }
+
   public openModal(filterModal: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+    this.modalRef = this.modalService.show(filterModal, {class: 'modal-md'});
   }
+
   public bsValueChange(event: any) {
     if (event) {
       this.pettycashRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
@@ -193,6 +201,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
       this.getPettyCashRejectedReports(this.pettycashRequest);
     }
   }
+
   public ngOnChanges(changes: SimpleChanges): void {
     // if (changes['dateFrom']) {
     //   this.pettycashRequest.from = changes['dateFrom'].currentValue;
@@ -209,7 +218,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
         ...this.datePickerOptions, startDate: res[0],
         endDate: res[1]
       };
-    })
+    });
     this.pettycashRequest.from = this.unaiversalFrom;
     this.pettycashRequest.to = this.unaiversalTo;
     this.pettycashRequest.sortBy = '';
@@ -218,14 +227,17 @@ export class ExpensesComponent implements OnInit, OnChanges {
     // this.isClearFilter = true;
     this.isFilterSelected = false;
 
-
     this.getPettyCashPendingReports(this.pettycashRequest);
     this.getPettyCashRejectedReports(this.pettycashRequest);
   }
-  public tabChanged(tab: string) {
-    this.saveLastState(tab);
+
+  public tabChanged(tab: string, e) {
+    if (e && !e.target) {
+      this.saveLastState(tab);
+    }
     this.currentSelectedTab = tab;
   }
+
   private saveLastState(state: string) {
     let companyUniqueName = null;
     this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -235,6 +247,7 @@ export class ExpensesComponent implements OnInit, OnChanges {
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
+
   detectChanges() {
     if (!this._cdRf['destroyed']) {
       this._cdRf.detectChanges();
