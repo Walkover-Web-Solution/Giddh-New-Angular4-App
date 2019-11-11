@@ -161,4 +161,10 @@ export class SettingsTaxesActions {
       payload: value
     };
   }
+
+  public resetTaxList(): CustomActions {
+    return {
+      type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
+    };
+  }
 }

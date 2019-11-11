@@ -687,6 +687,11 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       }
       return Object.assign({}, state, {});
 
+    case SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE: {
+      return {...state, taxes: null};
+    }
+
+
     //  endregion discount reducer
     default: {
       return state;

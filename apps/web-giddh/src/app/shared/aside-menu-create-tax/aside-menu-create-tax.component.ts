@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import {StatesRequest, TaxResponse} from '../../models/api-models/Company';
+import {CompanyResponse, StatesRequest, TaxResponse} from '../../models/api-models/Company';
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
+import {createSelector} from "reselect";
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -52,6 +53,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   public isUpdateTaxInProcess: boolean = false;
   public taxListSource$: Observable<IOption[]> = observableOf([]);
   public taxNameTypesMapping: any[] = [];
+  public selectedCompany: Observable<CompanyResponse>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -63,7 +65,29 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.getTaxList();
+    // tslint:disable-next-line:no-shadowed-variable
+    this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+      if (!selectedCmp) {
+        return;
+      }
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$));
+
+    this.selectedCompany.subscribe((res: any) => {
+      if (res) {
+        this.getTaxList(res.countryV2.alpha2CountryCode);
+      }
+    });
 
     this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
       let arr: IOption[] = [];
@@ -202,7 +226,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     }
   }
 
-  public getTaxList() {
+  public getTaxList(countryCode) {
+    this.store.dispatch(this._settingsTaxesActions.resetTaxList());
     this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         Object.keys(res.taxes).forEach(key => {
@@ -216,7 +241,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         });
         this.taxListSource$ = observableOf(this.taxList);
       } else {
-        this.store.dispatch(this._settingsTaxesActions.GetTaxList("IN"));
+        this.store.dispatch(this._settingsTaxesActions.GetTaxList(countryCode));
       }
     });
   }
