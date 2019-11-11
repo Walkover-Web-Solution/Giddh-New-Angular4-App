@@ -152,7 +152,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         if (p.length) {
-          console.log(p);
           this.overDueObj = p;
           this.overDueObj.forEach((grp) => {
             if (grp.uniqueName === 'sundrydebtors') {
@@ -250,7 +249,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     };
 
     this.requestInFlight = false;
-    console.log(this.requestInFlight);
   }
 
   public ngOnDestroy() {

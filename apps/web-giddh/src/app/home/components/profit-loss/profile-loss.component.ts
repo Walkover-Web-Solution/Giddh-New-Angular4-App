@@ -11,6 +11,8 @@ import * as _ from '../../../lodash-optimized';
 import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
+import {TBPlBsActions} from "../../../actions/tl-pl.actions";
+import {ProfitLossRequest} from "../../../models/api-models/tb-pl-bs";
 
 @Component({
   selector: 'profit-loss',
@@ -84,8 +86,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   public requestInFlight = true;
-  public totaloverDueChart: Options;
-  public totalOverDuesResponse$: Observable<any>;
+  public profitLossChart: Options;
+  public profitLossResponse$: Observable<any>;
   public sundryDebtorResponse: any = {};
   public sundryCreditorResponse: any = {};
   public totalRecievable: number = 0;
@@ -97,10 +99,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService) {
+  constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-    this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
+    this.profitLossResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -144,7 +146,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
 
-    this.totalOverDuesResponse$.pipe(
+    this.profitLossResponse$.pipe(
       skipWhile(p => (isNullOrUndefined(p))))
       .subscribe(p => {
         if (p.length) {
@@ -158,7 +160,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
               this.sundryCreditorResponse = grp;
               this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
               this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-              // this.totalPayable = this.calculateTotalRecievable(this.sundryCreditorResponse);
             }
           });
 
@@ -183,7 +184,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
   }
 
   public generateCharts() {
-    this.totaloverDueChart = {
+    this.profitLossChart = {
       colors: ['#FED46A', '#4693F1'],
       chart: {
         type: 'pie',
@@ -252,4 +253,15 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public getFilterDate(dates: any) {
+    if (dates !== null) {
+      this.requestInFlight = true;
+      this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
+    }
+  }
+
+  public filterData() {
+    let request: ProfitLossRequest;
+    this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
+  }
 }

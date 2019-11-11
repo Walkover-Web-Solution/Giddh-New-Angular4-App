@@ -420,6 +420,27 @@ export class HomeActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  public GetProfitLoss$: Observable<Action> = this.action$
+    .ofType(HOME.GET_PROFIT_LOSS).pipe(
+      switchMap((action: CustomActions) => {
+        return observableZip(
+          this._dashboardService.GetClosingBalance('sundrydebtors', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
+          this._dashboardService.GetClosingBalance('sundrycreditors', action.payload.fromDate, action.payload.toDate, action.payload.refresh)
+        );
+      }), map((res) => {
+        if (res[0].status === 'success' && res[1].status === 'success') {
+          let obj: ITotalOverDuesResponse[] = [];
+          obj.push(res[0].body[0]);
+          obj.push(res[1].body[0]);
+          return {
+            type: HOME.GET_PROFIT_LOSS_RESPONSE,
+            payload: obj
+          };
+        }
+        return {type: 'EmptyAction'};
+      }));
+
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
   }
@@ -535,5 +556,19 @@ export class HomeActions {
       return errorAction;
     }
     return successAction;
+  }
+
+  public getProfitLoss(fromDate: string, toDate: string, refresh: boolean) {
+    return {
+      type: HOME.GET_PROFIT_LOSS,
+      payload: {fromDate, toDate, refresh}
+    };
+  }
+
+  public getProfitLossResponse(res) {
+    return {
+      type: HOME.GET_PROFIT_LOSS_RESPONSE,
+      payload: res
+    };
   }
 }
