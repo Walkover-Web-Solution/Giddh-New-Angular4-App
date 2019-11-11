@@ -129,14 +129,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
               this.activeFinancialYear.financialYearStarts,
               this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
 
-            this.expence.fetchChartData();
-            this.revenue.fetchChartData();
+            if(this.expence !== undefined) {
+              this.expence.fetchChartData();
+            }
 
-            this.history.requestInFlight = true;
-            // this.history.refresh = true;
-            // this.history.fetchChartData();
+            if(this.revenue !== undefined) {
+              this.revenue.fetchChartData();
+            }
 
-            this.networth.requestInFlight = true;
+            if(this.history !== undefined) {
+              this.history.requestInFlight = true;
+            }
+
+            if(this.networth !== undefined) {
+              this.networth.requestInFlight = true;
+            }
+
             this.cdRef.detectChanges();
           }
         }
