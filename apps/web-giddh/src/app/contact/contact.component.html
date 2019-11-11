@@ -481,7 +481,7 @@
           <th class="text-right  pr-3">
             <div class="d-flex justify-content-end align-items-center">
               {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'debitTotal'}">
+              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: (activeTab === 'customer') ? 'debitTotal' : 'creditTotal'}">
               </ng-container>
             </div>
           </th>
@@ -489,7 +489,7 @@
           <th class="text-right  pr-3">
             <div class="d-flex justify-content-end align-items-center">
               {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'creditTotal'}">
+              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: activeTab === 'customer' ? 'creditTotal' : 'debitTotal'}">
               </ng-container>
             </div>
           </th>
@@ -550,9 +550,7 @@
               <span class="accountNameCustomer"> {{account.name}} </span>
               <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                 <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"
-                  (click)="dropdown.show()">
-
-                </a>
+                  (click)="dropdown.show()"></a>
 
                 <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
                   <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
@@ -670,13 +668,10 @@
             <td class="WordWrap text-right  " data-title="Opening" *ngIf="showFieldFilter.openingBalance">
               {{account.openingBalance?.amount |giddhCurrency}}
             </td>
-            <td class="WordWrap text-right " data-title=" Sales">
-              {{account.creditTotal |giddhCurrency}}</td>
-
             <td class="WordWrap text-right " data-title=" Receipts">
               {{account.debitTotal |giddhCurrency}}</td>
-
-
+            <td class="WordWrap text-right " data-title=" Sales">
+              {{account.creditTotal |giddhCurrency}}</td>
             <td class="WordWrap text-right " data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
             </td>
             <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">
