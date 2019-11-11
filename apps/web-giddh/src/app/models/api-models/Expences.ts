@@ -3,7 +3,6 @@ import { ILedgerTransactionItem, IVoucherItem } from '../interfaces/ledger.inter
 import { INameUniqueName } from './Inventory';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 
-
 export class PettyCashReportResponse {
   page: number;
   count: number;
@@ -36,12 +35,14 @@ export class ExpenseResults {
   description: string;
   status: string;
   statusMessage?: any;
+  entryType?: string;
 }
 
 export class CreatedBy {
   name: string;
   uniqueName: string;
 }
+
 export class ActionPettycashRequest {
   actionType: string;
   uniqueName: string;
@@ -71,6 +72,7 @@ export class Transaction {
   isInclusiveTax: boolean;
   convertedAmount?: any;
 }
+
 export class PettyCashResonse {
   public attachedFile?: string;
   public description?: string;
@@ -93,7 +95,7 @@ export class PettyCashResonse {
   public total: IClosingBalance;
   public convertedTotal: IClosingBalance;
   public unconfirmedEntry?: boolean;
-  public voucher?: IVoucherItem = { name: '', shortCode: '' };
+  public voucher?: IVoucherItem = {name: '', shortCode: ''};
   public voucherNo?: string;
   public voucherType?: string;
   public voucherNumber?: string;
@@ -124,6 +126,7 @@ export class PettyCashResonse {
   public valuesInAccountCurrency?: boolean = false;
   public discountResources?: any[];
 }
+
 export class PettyCashEntryStatus {
   status: string;
   message?: any;
