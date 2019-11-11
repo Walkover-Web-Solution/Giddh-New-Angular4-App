@@ -102,7 +102,7 @@
             <div class="form-group">
               <label>Country</label><br>
               <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"
-                [options]="countrySource" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
+                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
               <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
             </div>
 

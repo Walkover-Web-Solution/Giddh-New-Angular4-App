@@ -194,25 +194,26 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
-      let val: string = name;
-      val = uniqueNameInvalidStringReplace(val);
-      if (val) {
-        this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-        this.isAccountNameAvailable$.subscribe(a => {
-          if (a !== null && a !== undefined) {
-            if (a) {
-              this.addAccountForm.patchValue({ uniqueName: val });
-            } else {
-              let num = 1;
-              this.addAccountForm.patchValue({ uniqueName: val + num });
-            }
-          }
-        });
-      } else {
-        this.addAccountForm.patchValue({ uniqueName: '' });
-      }
-    });
+    // COMMENTED BELOW CODE TO REMOVE AUTOCOMPLETE ON ACCOUNT NAME SINCE API TEAM IS HANDING THE ACCOUNT UNIQUE NAME
+    // this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
+    //   let val: string = name;
+    //   val = uniqueNameInvalidStringReplace(val);
+    //   if (val) {
+    //     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+    //     this.isAccountNameAvailable$.subscribe(a => {
+    //       if (a !== null && a !== undefined) {
+    //         if (a) {
+    //           this.addAccountForm.patchValue({ uniqueName: val });
+    //         } else {
+    //           let num = 1;
+    //           this.addAccountForm.patchValue({ uniqueName: val + num });
+    //         }
+    //       }
+    //     });
+    //   } else {
+    //     this.addAccountForm.patchValue({ uniqueName: '' });
+    //   }
+    // });
 
     if(this.autoFocus !== undefined) {
       setTimeout(() => {
@@ -235,7 +236,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   public initializeNewForm() {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-      uniqueName: ['', [Validators.required]],
+      uniqueName: [''],
       openingBalanceType: ['CREDIT'],
       foreignOpeningBalance: [0],
       openingBalance: [0],
@@ -374,15 +375,6 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
 
   public resetAddAccountForm() {
     this.addAccountForm.reset();
-    // const addresses = this.addAccountForm.get('addresses') as FormArray;
-    // const countries = this.addAccountForm.get('country') as FormGroup;
-    // addresses.controls.map((a, index) => {
-    //   a.reset();
-    //   addresses.removeAt(index);
-    // });
-    // // countries.reset();
-    // this.addAccountForm.reset();
-    // // this.addBlankGstForm();
   }
 
   public submit() {
