@@ -258,36 +258,32 @@
 
                 <!-- dropdown -->
 
+                <div class="btn-group icon-ellipse selectAction" dropdown #dropdown="bs-dropdown" container="body">
+                  <a href="javascript:void(0)" id="button-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic">
+                  </a>
 
-                <div class="btn-group icon-ellipse selectAction" container="body" dropdown *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
-                  <a href="javascript:void(0)" id="button-basic" dropdownToggle type="button" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
-                    aria-controls="dropdown-basic"></a>
-
-                  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="button-basic">
-                    <li (click)="updateVoucherAction('Accepted', item)">
-                      <a class="cp" href="javascript:void(0)">Accepted</a>
-                    </li>
-
-                    <li (click)="updateVoucherAction('Decline', item)">
-                      <a class="cp" href="javascript:void(0)">Declined</a>
-                    </li>
-
-                    <li (click)="updateVoucherAction('ConvertToSalesOrder', item)" *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
-                      <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
-                    </li>
-
-                    <li (click)="updateVoucherAction('ConvertToInvoice', item)">
-                      <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
-                    </li>
-                    <li (click)="updateVoucherAction('Expired', item)">
-                      <a class="cp" href="javascript:void(0)">Expired</a>
-                    </li>
-                  </ul>
+                  <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
+                  aria-labelledby="edit-model-basic">
+                    <ul role="menu" class="selectActionDropdown" aria-labelledby="button-basic">
+                        <li (click)="updateVoucherAction('Accepted', item)">
+                          <a class="cp" href="javascript:void(0)">Accepted</a>
+                        </li>
+                        <li (click)="updateVoucherAction('Decline', item)">
+                          <a class="cp" href="javascript:void(0)">Declined</a>
+                        </li>
+                        <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
+                          *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                          <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
+                        </li>
+                        <li (click)="updateVoucherAction('ConvertToInvoice', item)">
+                          <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
+                        </li>
+                        <li (click)="updateVoucherAction('Expired', item)">
+                          <a class="cp" href="javascript:void(0)">Expired</a>
+                        </li>
+                    </ul>
+                  </div>
                 </div>
-
-
-
-
 
 
 
@@ -326,37 +322,6 @@
                   </div>
                 </div>
               </div> -->
-
-
-                <!-- <div class="click-dropdwon">
-
-              <i class="fa fa-ellipsis-v"
-                *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName"></i>
-
-              <ul *ngIf="clickedItemUniqueName === item.uniqueName">
-
-                <li (click)="updateVoucherAction('Accepted', item)">
-                  <a class="cp" href="javascript:void(0)">Accepted</a>
-                </li>
-
-                <li (click)="updateVoucherAction('Decline', item)">
-                  <a class="cp" href="javascript:void(0)">Declined</a>
-                </li>
-
-                <li (click)="updateVoucherAction('ConvertToSalesOrder', item)"
-                  *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
-                  <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
-                </li>
-
-                <li (click)="updateVoucherAction('ConvertToInvoice', item)">
-                  <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
-                </li>
-                <li (click)="updateVoucherAction('Expired', item)">
-                  <a class="cp" href="javascript:void(0)">Expired</a>
-                </li>
-
-              </ul>
-            </div> -->
 
 
 
