@@ -2266,7 +2266,7 @@ input[type=checkbox]:checked:after {
 
 .subscription-title {
   font-size: 20px;
-  font-family: ''opensans-semibold'';
+  font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -8535,7 +8535,17 @@ button.btn.btn-filter {
     width: 100%;
     top: 85px;
 }
-
+.custom-tabs .nav.nav-tabs {
+    position: fixed;
+    width: 100%;
+    top: 85px;
+}
+.custom-tabs .top_bar{
+      margin-top: 40px;
+}
+.custom-tabs.hide-header .top_bar {
+    margin-top: 0;
+}
 }
 
 @media (max-width: 575px) {
