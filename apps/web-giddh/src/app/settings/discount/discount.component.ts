@@ -14,6 +14,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
   selector: 'setting-discount',
   templateUrl: './discount.component.html',
+  styleUrls: ['./discount.component.scss'],
   animations: [
     trigger('slideInOut', [
       state('in', style({
