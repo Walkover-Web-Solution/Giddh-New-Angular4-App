@@ -22,6 +22,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
   public fromDate: string;
   public crAccounts: any[] = [];
   public drAccounts: any[] = [];
+  public showRecords: number = 5;
 
   constructor(private store: Store<AppState>, private _contactService: ContactService) {
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
@@ -37,13 +38,16 @@ export class CrDrComponent implements OnInit, OnDestroy {
         };
         this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
         this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-        this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, '', 'closingBalance', 'desc');
-        this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, '', 'closingBalance', 'desc');
+        this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
+        this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
+    this.drAccounts = [];
+    this.crAccounts = [];
+    
     pageNumber = pageNumber ? pageNumber : 1;
     refresh = refresh ? refresh : 'false';
     this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
@@ -61,5 +65,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public changeShowRecords(showRecords) {
+    this.showRecords = showRecords;
+    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
+    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', this.showRecords, '', 'closingBalance', 'desc');
   }
 }
