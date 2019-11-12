@@ -20,7 +20,7 @@ import { TotalOverduesChartComponent } from './components/total-overdues/total-o
 import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
-import { bankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
+import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { crDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import {Daterangepicker} from "../theme/ng2-daterangepicker/daterangepicker.module";
@@ -57,7 +57,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TotalOverduesChartComponent,
     ProfitLossComponent,
     gstComponent,
-    bankAccountsComponent,
+    BankAccountsComponent,
     crDrComponent,
     TotalSalesComponent,
     DatepickeroptionsComponent

@@ -99,6 +99,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
   public plRequest: ProfitLossRequest = {from: '', to: '', refresh: false};
   public amountSettings: any = {baseCurrencySymbol: '', balanceDecimalPlaces: ''};
   public isDefault: boolean = true;
+  public universalDate$: Observable<any>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -106,6 +107,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
     this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -150,14 +152,14 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     });
 
     // listen for universal date
-    this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
+    this.universalDate$.subscribe(dateObj => {
       if (this.isDefault && dateObj) {
         let dates = [];
         dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
         this.getFilterDate(dates);
         this.isDefault = false;
       }
-    })).subscribe();
+    });
 
     this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
       if (p) {
