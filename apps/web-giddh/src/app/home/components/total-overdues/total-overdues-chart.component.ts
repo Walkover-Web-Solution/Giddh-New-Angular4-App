@@ -14,7 +14,7 @@ import { FormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import {TBPlBsActions} from "../../../actions/tl-pl.actions";
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'toal-overdues-chart',
@@ -78,8 +78,7 @@ import {TBPlBsActions} from "../../../actions/tl-pl.actions";
 }
 
     `
-  ],
-  providers: [ GiddhCurrencyPipe ]
+  ]
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
@@ -102,6 +101,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
   public PaybaleDurationAmt: number = 0;
   public moment = moment;
   public amountSettings: any = {baseCurrencySymbol: '', balanceDecimalPlaces: ''};
+  public isDefault: boolean = true;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -151,7 +151,15 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
+    // listen for universal date
+    this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
+      if (this.isDefault && dateObj) {
+        let dates = [];
+        dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+        this.getFilterDate(dates);
+        this.isDefault = false;
+      }
+    })).subscribe();
 
     this.totalOverDuesResponse$.pipe(
       skipWhile(p => (isNullOrUndefined(p))))
@@ -174,20 +182,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         }
 
       });
-
-  }
-
-  public hardRefresh() {
-    this.refresh = true;
-    this.fetchChartData();
-  }
-
-  public fetchChartData() {
-    this.requestInFlight = true;
-    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), true));
   }
 
   public generateCharts() {
+    let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
     let balanceDecimalPlaces = this.amountSettings.balanceDecimalPlaces;
     let cPipe = this.currencyPipe;
 
@@ -237,14 +235,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         }
       },
       tooltip: {
-        // headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
-        // pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.y:,.1f}</b> </td>' +
-        //   '</tr>',
-        // footerFormat: '</table>',
         shared: true,
         useHTML: true,
         formatter: function() {
-          return cPipe.transform(this.point.y) + '/-';
+          return baseCurrencySymbol+ " " + cPipe.transform(this.point.y) + '/-';
         }
       },
       series: [{

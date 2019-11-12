@@ -26,6 +26,7 @@ import { TotalSalesComponent } from './components/total-sales/total-sales.compon
 import {Daterangepicker} from "../theme/ng2-daterangepicker/daterangepicker.module";
 import {DatepickeroptionsComponent} from './components/datepickeroptions/datepickeroptions.component';
 import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import {GiddhCurrencyPipe} from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 
 export function highchartsFactory() {
   // @ts-ignore
@@ -70,7 +71,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }
+    },
+    GiddhCurrencyPipe
   ],
   imports: [
     CommonModule,

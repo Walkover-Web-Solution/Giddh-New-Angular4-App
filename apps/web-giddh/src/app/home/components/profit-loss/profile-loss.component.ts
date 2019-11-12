@@ -15,6 +15,7 @@ import {ProfitLossData, ProfitLossRequest, GetRevenueResponse, GetTotalExpenseRe
 import {TBPlBsActions} from "../../../actions/tl-pl.actions";
 import * as Highcharts from 'highcharts';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'profit-loss',
@@ -75,8 +76,7 @@ import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/curr
 }
 
     `
-  ],
-  providers: [ GiddhCurrencyPipe ]
+  ]
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
@@ -98,6 +98,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
   public netProfitLossType: string = '';
   public plRequest: ProfitLossRequest = {from: '', to: '', refresh: false};
   public amountSettings: any = {baseCurrencySymbol: '', balanceDecimalPlaces: ''};
+  public isDefault: boolean = true;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -148,7 +149,15 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.filterData(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT));
+    // listen for universal date
+    this.store.select(createSelector([(p: AppState) => p.session.applicationDate], (dateObj: Date[]) => {
+      if (this.isDefault && dateObj) {
+        let dates = [];
+        dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+        this.getFilterDate(dates);
+        this.isDefault = false;
+      }
+    })).subscribe();
 
     this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
       if (p) {
@@ -180,17 +189,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     });
   }
 
-  public hardRefresh() {
-    this.refresh = true;
-    this.fetchChartData();
-  }
-
-  public fetchChartData() {
-    this.requestInFlight = true;
-    this.filterData(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT));
-  }
-
   public generateCharts() {
+    let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
     let balanceDecimalPlaces = this.amountSettings.balanceDecimalPlaces;
     let cPipe = this.currencyPipe;
 
@@ -240,14 +240,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         }
       },
       tooltip: {
-        //headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
-        //pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.y:,.2f}/-</b> </td>' +
-        //  '</tr>',
-        //footerFormat: '</table>',
         shared: true,
         useHTML: true,
         formatter: function() {
-          return cPipe.transform(this.point.y) + '/-';
+          return baseCurrencySymbol + " " +cPipe.transform(this.point.y) + '/-';
         }
       },
       series: [{
@@ -255,6 +251,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
       }],
     };
+
     this.requestInFlight = false;
   }
 
@@ -266,15 +263,12 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
   public getFilterDate(dates: any) {
     if (dates !== null) {
       this.requestInFlight = true;
-      this.filterData(dates[0], dates[1]);
+
+      this.plRequest.from = dates[0];
+      this.plRequest.to = dates[1];
+      this.plRequest.refresh = false;
+
+      this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
     }
-  }
-
-  public filterData(from, to) {
-    this.plRequest.from = from;
-    this.plRequest.to = to;
-    this.plRequest.refresh = false;
-
-    this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
   }
 }
