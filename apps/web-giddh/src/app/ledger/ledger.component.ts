@@ -1108,10 +1108,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._loaderService.hide();
             return;
           }
-        }  else if (this.profileObj.countryV2) {
-            if(this.profileObj.countryV2.alpha2CountryCode !== 'IN') {
-            // we are not defining any code here because here we are skipping this step due to not mendatory GSTIN no to apply tax
-           }
+        }  else if (this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode !== 'IN') {
+          // // we are not defining any code here because here we are skipping this step due to not mendatory GSTIN no to apply ta
         } else {
           this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
           this._loaderService.hide();
