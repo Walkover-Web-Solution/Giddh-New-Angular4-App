@@ -2,14 +2,15 @@
 
   <div class="invoice-container">
     <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
-      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
+      <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
+        class="form-inline input-grp-dateRangePicker pr">
         <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
 
           <div class="input-group">
             <!-- <span class="icon-calender"></span> -->
             <span class="inputWrapper">
-              <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
-                class="form-control" />
+              <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
+                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
               <!-- <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker [bsConfig]="bsConfig" required /> -->
             </span>
           </div>
@@ -37,13 +38,16 @@
 
         <div style="height: 30px; " *ngIf="selectedItems.length === 1">
 
-          <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
+          <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+            style="margin-bottom: 10px;display: inline-block !important;">
 
-            <button dropdownToggle type="button" class="btn spcl_dropdown  dropdown-toggle" aria-controls="dropdown-basic" *ngIf="!isMobileView">
+            <button dropdownToggle type="button" class="btn spcl_dropdown  dropdown-toggle"
+              aria-controls="dropdown-basic" *ngIf="!isMobileView">
               More
               <span class="caret"></span>
             </button>
-            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn" aria-controls="dropdown-basic" *ngIf="isMobileView">
+            <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn" aria-controls="dropdown-basic"
+              *ngIf="isMobileView">
               +
             </button>
 
@@ -71,7 +75,8 @@
             </li> -->
 
               <li role="menuitem">
-                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales' && !isMobileView">
+                <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
+                  *ngIf="selectedVoucher === 'sales' && !isMobileView">
                   Generate E-way Bill</a>
               </li>
 
@@ -88,13 +93,14 @@
                 <button class="btn btn-pink">+ New Invoice</button>
               </div> -->
 
-        <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
+        <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
+          [ladda]="exportInvoiceRequestInProcess$ | async"
           *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" data-spinner-size="20px">
           <span class="icon-export-icon"></span>
         </button>
         <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-          <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView" class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-            aria-controls="dropdown-ddl-newinv">
+          <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView"
+            class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
             + New Invoice
             <span class="caret"></span>
           </button>
@@ -132,14 +138,14 @@
       <div class="row">
         <div class="col-sm-6 col-xs-6">
           <div class="input-container">
-            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput"
-            />
+            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
+              name="voucherNumberInput" [formControl]="voucherNumberInput" />
           </div>
         </div>
         <div class="col-sm-6 col-xs-6">
           <div class="input-container">
-            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput"
-            />
+            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
+              name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
           </div>
         </div>
 
@@ -152,16 +158,19 @@
 
             <div style="height: 30px; " *ngIf="selectedItems.length === 1">
 
-              <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
+              <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+                style="margin-bottom: 10px;display: inline-block !important;">
 
-                <button dropdownToggle type="button" class="btn spcl_dropdown btn-default dropdown-toggle" aria-controls="dropdown-basic">
+                <button dropdownToggle type="button" class="btn spcl_dropdown btn-default dropdown-toggle"
+                  aria-controls="dropdown-basic">
                   More
                   <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
 
                   <li role="menuitem">
-                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()" *ngIf="selectedVoucher === 'sales' && !isMobileView">
+                    <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
+                      *ngIf="selectedVoucher === 'sales' && !isMobileView">
                       Generate E-way Bill</a>
                   </li>
 
@@ -175,13 +184,15 @@
             </div>
 
 
-            <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()" [ladda]="exportInvoiceRequestInProcess$ | async"
+            <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
+              [ladda]="exportInvoiceRequestInProcess$ | async"
               *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported" data-spinner-size="20px">
               <span class="icon-export-icon"></span>
             </button>
 
             <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales' && !isMobileView" [autoClose]="true">
-              <button id="ddl-newinv" dropdownToggle type="button" class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
+              <button id="ddl-newinv" dropdownToggle type="button"
+                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-ddl-newinv">
                 + New Invoice
                 <span class="caret"></span>
               </button>
@@ -203,12 +214,14 @@
 
 
             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr. Note
+              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+ New Cr.
+                Note
               </button>
             </div>
 
             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr. Note
+              <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New Dr.
+                Note
               </button>
             </div>
 
@@ -217,7 +230,8 @@
       </div>
     </div>
 
-    <perfect-scrollbar class="invoice-preview" [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
+    <perfect-scrollbar class="invoice-preview" [scrollIndicators]="true"
+      [config]="{suppressScrollX: false, suppressScrollY: false}">
       <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
 
         <!--sales-->
@@ -239,14 +253,16 @@
               </div>
             </th>
 
-            <th width="13%" class="td_in_searchBox" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+            <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+              (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
               <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
 
             </th>
 
-            <th width="19%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+            <th width="19%" class="td_in_searchBox" #searchCustomerContainer
+              (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
 
               <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: 'Customer'}"></ng-container>
@@ -323,14 +339,16 @@
               </div>
             </th>
 
-            <th width="25%" class="td_in_searchBox" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
+            <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
+              (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
               <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
             title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"></ng-container>
 
             </th>
 
-            <th width="25%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+            <th width="25%" class="td_in_searchBox" #searchCustomerContainer
+              (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
 
               <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: 'Customer'}"></ng-container>
@@ -339,7 +357,7 @@
 
             <th>
               <div class="d-flex">
-                <div class="flex-fill">Date</div>
+                <div class="">Date</div>
 
                 <div class="icon-pointer">
                   <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
@@ -349,7 +367,7 @@
 
             <th>
               <div class="d-flex">
-                <div class="flex-fill text-right pr-1">Total amount</div>
+                <div class="flex-fill text-right ">Total amount</div>
 
                 <div class="icon-pointer">
                   <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
@@ -361,12 +379,15 @@
         </thead>
 
         <!--sales-->
-        <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+        <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+          (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
           *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales'">
 
-          <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
+          <tr *ngFor="let item of voucherData.items; let i = index"
+            (mouseover)="hoveredItemForAction = item.uniqueName">
 
-            <td class="mh18_img" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
+            <td class="mh18_img"
+              *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
               <div class="mh18_img" style="justify-content: center;display: flex">
                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
                 <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
@@ -386,7 +407,8 @@
 
             <td>
               <div style="position: relative" class="d-flex">
-                <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
+                <a href="javascript:void(0);" class="btn-link-2"
+                  (click)="onSelectInvoice(item)">{{item.voucherNumber}}</a>
                 <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
                 <!--               tooltip="Invoice sent" placement="left"/>-->
               </div>
@@ -408,10 +430,12 @@
 
             <!-- <td><a href="javascript:void(0);" class="btn-link-2">13643131</a></td> -->
 
-            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+            <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+              (clickOutside)="modalUniqueName = ''">
               {{item.account.name}}
-              <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName"
-                [from]="this.invoiceSearchRequest.from" [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+              <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
+                [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
               </div>
             </td>
 
@@ -429,15 +453,18 @@
             <td class="cp" *ngIf="item.balanceStatus !== 'cancel'">
               <div class="d-flex" style="align-items: center">
                 <div class="flex-fill selectAction">
-                  <span [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+                  <span
+                    [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
                 </div>
 
                 <div>
 
                   <div dropdown container="body" class="icon-ellipse selectAction">
-                    <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
+                    <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
+                      aria-controls="dropdown-basic"></a>
 
-                    <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
+                    <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
+                      aria-labelledby="edit-model-basic">
                       <ul class="selectActionDropdown">
 
                         <li (click)="onPerformAction(item, 'paid')">
@@ -501,12 +528,16 @@
         </tbody>
 
         <!--non sales-->
-        <tbody *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'"
-          (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+        <tbody
+          *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher !== 'sales'"
+          (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+          (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
-          <tr *ngFor="let item of voucherData.items; let i = index" (mouseover)="hoveredItemForAction = item.uniqueName">
+          <tr *ngFor="let item of voucherData.items; let i = index"
+            (mouseover)="hoveredItemForAction = item.uniqueName">
 
-            <td class="mh18_img" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
+            <td class="mh18_img"
+              *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
               <div class="mh18_img" style="justify-content: center;display: flex">
                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
                 <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
@@ -536,7 +567,8 @@
           <tr>
             <td colspan="8">
               <!--loading-->
-              <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+              <div class="no-data mrT2 d-flex"
+                style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
                 <div class="giddh-spinner vertical-center-spinner"></div>
               </div>
             </td>
@@ -548,7 +580,8 @@
     </perfect-scrollbar>
 
 
-    <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
+    <ng-container
+      *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && selectedVoucher === 'sales' && isMobileView">
       <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
         <table class="table basic table-bordered mrT2 invoice-table" *ngIf="selectedVoucher === 'sales'">
           <tr>
@@ -610,15 +643,18 @@ tooltip="Invoice sent" placement="left" />-->
           </tr>
           <tr>
             <td>
-              <div class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
+              <div class="td_in_searchBox" #searchCustomerContainer
+                (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                 <div [hidden]="showCustomerSearch">
                   <strong> Customer</strong>
                 </div>
               </div>
-              <div (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
+              <div (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                (clickOutside)="modalUniqueName = ''">
                 {{item.account.name}}
-                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName"
-                  [from]="this.invoiceSearchRequest.from" [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                  [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
+                  [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                 </div>
               </div>
             </td>
@@ -650,14 +686,17 @@ tooltip="Invoice sent" placement="left" />-->
                 <div class="cp" *ngIf="item.balanceStatus !== 'cancel'">
                   <div class="d-flex" style="align-items: center">
                     <div class="flex-fill selectAction">
-                      <span [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+                      <span
+                        [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
                     </div>
 
                     <div class="click-dropdwon">
 
-                      <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
+                      <i class="fa fa-ellipsis-v"
+                        (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
 
-                      <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
+                      <ul class="dropdown-menu displayBlock"
+                        *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
 
                         <li (click)="onPerformAction(item, 'paid')">
                           <a class="cp" href="javascript:void(0)">paid</a>
@@ -752,8 +791,9 @@ tooltip="Invoice sent" placement="left" />-->
       </div>
     </ng-container>
     <div *ngIf="voucherData && voucherData?.totalItems > 20" class="paginationWrapper">
-      <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
-        [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
+      <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
+        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;"
+        nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
     </div>
 
   </div>
@@ -779,27 +819,31 @@ tooltip="Invoice sent" placement="left" />-->
   </div> -->
 
   <!-- Delete invoice confirmation model -->
-  <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+  <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
     <div class="modal-dialog modal-md">
       <div class="modal-content">
-        <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()"
-          (closeModelEvent)="closeConfirmationPopup()">
+        <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice"
+          (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()">
         </delete-role-confirmation-model>
       </div>
     </div>
   </div>
 
   <!-- Perform action on invoice model -->
-  <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+  <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
     <div class="modal-dialog modal-md perform-payment">
       <div class="modal-content">
-        <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
+        <invoice-payment-model [selectedInvoiceForPayment]="selectedInvoice"
+          (closeModelEvent)="closePerformActionPopup($event)"></invoice-payment-model>
       </div>
     </div>
   </div>
 
   <!-- Download or Send Invoice on mail -->
-  <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+  <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+    tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
@@ -822,8 +866,10 @@ tooltip="Invoice sent" placement="left" />-->
   <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <invoice-advance-search-component #advanceSearchComponent [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
-          [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+        <invoice-advance-search-component #advanceSearchComponent
+          [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : 'invoice'"
+          [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
+          (closeModelEvent)="toggleAdvanceSearchPopup()">
         </invoice-advance-search-component>
       </div>
     </div>
@@ -856,22 +902,27 @@ tooltip="Invoice sent" placement="left" />-->
       <div class="col-sm-6">
         <h3 class="font-xxlarge text-light-2">Total Sale</h3>
         <h1 class="" style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalSale | giddhCurrency }}
+          <!-- <span *ngIf="">/-</span> -->
         </h1>
       </div>
 
       <div class="col-sm-6">
-        <h3 class="color-giddh font-xxlarge">Total Due</h3>
-        <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}</h1>
+        <h3 class="text-light-2 font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}
+          <!-- <span *ngIf="">/-</span> -->
+        </h1>
       </div>
     </div>
   </div>
 
   <!-- region invoice-preview-details -->
   <div *ngIf="selectedInvoiceForDetails">
-    <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails" [invoiceSetting]="invoiceSetting"
-      (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)" (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
-      (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)"
-      [appSideMenubarIsOpen]="appSideMenubarIsOpen" (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
+    <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
+      [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)"
+      (closeEvent)="selectedInvoice = null;selectedInvoiceForDetails = null;toggleBodyClass()"
+      (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
+      (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+      (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
   </div>
   <!-- endregion -->
 
@@ -895,12 +946,15 @@ tooltip="Invoice sent" placement="left" />-->
 <!-- region sort icon template -->
 <ng-template #sortTemplate let-column="column">
 
-  <div class="icon-sort-asc" *ngIf="sortRequestForUi.sortBy !== column" (click)="sortButtonClicked('asc', column)" [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
-
-  <div class="icon-sort-asc" *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'" (click)="sortButtonClicked('desc', column)"
+  <div class="icon-sort-asc" *ngIf="sortRequestForUi.sortBy !== column" (click)="sortButtonClicked('asc', column)"
     [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
 
-  <div class="icon-sort-dsc" *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'" (click)="sortButtonClicked('asc', column)"
+  <div class="icon-sort-asc" *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'"
+    (click)="sortButtonClicked('desc', column)"
+    [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'asc'}"></div>
+
+  <div class="icon-sort-dsc" *ngIf="sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'"
+    (click)="sortButtonClicked('asc', column)"
     [ngClass]="{'activeTextColor': sortRequestForUi.sortBy === column && sortRequestForUi.sort === 'desc'}"></div>
 
 </ng-template>
