@@ -2589,6 +2589,7 @@ input[type=checkbox]:checked:after {
   box-shadow: 0 3px 28px 0 rgba(0, 0, 0, .14);
   color: #616161;
   border: 1px solid #ccc;
+  z-index: 9989 !important;
 }
 
 .daterangepicker .input-mini.active {
@@ -8249,6 +8250,7 @@ button.btn.btn-filter {
 }
 
 @media (max-width: 768px) {
+
   .aging-table tr td:first-child,
   .aging-table tr th:first-child,
   .aging-table.table-aging-report tr td:first-child,
@@ -8442,6 +8444,13 @@ button.btn.btn-filter {
 }
 
 @media (max-width: 767px) {
+    .setting-container  {
+
+    margin-top: 65px;
+}
+   .hideLableOnMobile button {
+    margin-top: 0 !important;
+}
   .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child{
         border-right: none;
   }
