@@ -21,7 +21,7 @@ import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap'
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
-import { crDrComponent } from './components/cr-dr-list/cr-dr-list.component';
+import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import {Daterangepicker} from "../theme/ng2-daterangepicker/daterangepicker.module";
 import {DatepickeroptionsComponent} from './components/datepickeroptions/datepickeroptions.component';
@@ -58,7 +58,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ProfitLossComponent,
     gstComponent,
     BankAccountsComponent,
-    crDrComponent,
+    CrDrComponent,
     TotalSalesComponent,
     DatepickeroptionsComponent
   ],

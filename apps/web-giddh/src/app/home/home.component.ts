@@ -21,14 +21,15 @@ import { AccountService } from 'apps/web-giddh/src/app/services/account.service'
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
-import { crDrComponent } from './components/cr-dr-list/cr-dr-list.component';
+import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 
 @Component({
-  selector: 'home',  // <home></home>
+  selector: 'home',
   styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html'
 })
+
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
@@ -47,10 +48,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('profitloss') public profitloss: ProfitLossComponent;
   @ViewChild('gst') public gst: gstComponent;
   @ViewChild('bankaccount') public bankaccount: BankAccountsComponent;
-  @ViewChild('crdrlist') public crdrlist: crDrComponent;
+  @ViewChild('crdrlist') public crdrlist: CrDrComponent;
   @ViewChild('totalSales') public totalSales: TotalSalesComponent;
-
-
 
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;

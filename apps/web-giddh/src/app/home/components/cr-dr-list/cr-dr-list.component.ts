@@ -1,54 +1,65 @@
-
-import { Component, OnInit } from '@angular/core';
-
-
-
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, ReplaySubject} from "rxjs";
+import { Store} from "@ngrx/store";
+import {AppState} from "../../../store";
+import {ContactService} from "../../../services/contact.service";
+import {takeUntil} from "rxjs/operators";
+import {createSelector} from "reselect";
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'cr-dr-list',
   templateUrl: 'cr-dr-list.component.html',
-  styleUrls: ['cr-dr-list.component.scss', '../../home.component.scss'],
-
+  styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
 })
-export class crDrComponent implements OnInit {
+
+export class CrDrComponent implements OnInit, OnDestroy {
+  public universalDate$: Observable<any>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public datePickerOptions: any;
+  public moment = moment;
+  public toDate: string;
+  public fromDate: string;
+  public crAccounts: any[] = [];
+  public drAccounts: any[] = [];
+
+  constructor(private store: Store<AppState>, private _contactService: ContactService) {
+    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+  }
 
   public ngOnInit() {
-
+    this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+      if (dateObj) {
+        let universalDate = _.cloneDeep(dateObj);
+        this.datePickerOptions = {
+          ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
+          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+        };
+        this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
+        this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, null, 'true', 20, '', 'closingBalance', 'desc');
+        this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, null, 'true', 20, '', 'closingBalance', 'desc');
+      }
+    })).pipe(takeUntil(this.destroyed$)).subscribe();
   }
-  addTableData = [
-    {
 
+  private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
+    pageNumber = pageNumber ? pageNumber : 1;
+    refresh = refresh ? refresh : 'false';
+    this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
+      if (res.status === 'success') {
+        if(groupUniqueName === "sundrydebtors") {
+          this.drAccounts = res.body.results;
+        }
+        if(groupUniqueName === "sundrycreditors") {
+          this.crAccounts = res.body.results;
+        }
+      }
+    });
+  }
 
-      Debetors: "Walkover Web Solution pvt ltd.",
-      InvoicedOn: "12/09/2019",
-      BillAmount: "11,12,55,733.00",
-      DueAs: "8,12,55,000.00"
-
-    },
-    {
-
-      Debetors: "Walkover Web Solution pvt ltd.",
-      InvoicedOn: "12/09/2019",
-      BillAmount: "11,12,55,733.00",
-      DueAs: "8,12,55,000.00"
-    },
-    {
-
-
-      Debetors: "Walkover Web Solution pvt ltd.",
-      InvoicedOn: "12/09/2019",
-      BillAmount: "11,12,55,733.00",
-      DueAs: "8,12,55,000.00"
-    },
-    {
-
-
-      Debetors: "Walkover Web Solution pvt ltd.",
-      InvoicedOn: "12/09/2019",
-      BillAmount: "11,12,55,733.00",
-      DueAs: "8,12,55,000.00"
-    }
-
-
-  ]
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
 }

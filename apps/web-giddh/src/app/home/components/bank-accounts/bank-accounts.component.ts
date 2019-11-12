@@ -1,18 +1,8 @@
-import {ChangeDetectorRef, Component, ComponentFactoryResolver, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import {Observable, of as observableOf, ReplaySubject} from "rxjs";
-import {select, Store} from "@ngrx/store";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, ReplaySubject} from "rxjs";
+import { Store} from "@ngrx/store";
 import {AppState} from "../../../store";
-import {ToasterService} from "../../../services/toaster.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {CompanyService} from "../../../services/companyService.service";
-import {DashboardService} from "../../../services/dashboard.service";
 import {ContactService} from "../../../services/contact.service";
-import {SettingsIntegrationActions} from "../../../actions/settings/settings.integration.action";
-import {CompanyActions} from "../../../actions/company.actions";
-import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
-import {GeneralService} from "../../../services/general.service";
-import {GeneralActions} from "../../../actions/general/general.actions";
-import {BreakpointObserver} from "@angular/cdk/layout";
 import {takeUntil} from "rxjs/operators";
 import {createSelector} from "reselect";
 import * as moment from 'moment/moment';
@@ -20,8 +10,7 @@ import * as moment from 'moment/moment';
 @Component({
   selector: 'bank-accounts',
   templateUrl: 'bank-accounts.component.html',
-  styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
-
+  styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss']
 })
 
 export class BankAccountsComponent implements OnInit, OnDestroy {

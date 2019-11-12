@@ -7,9 +7,8 @@
           <span class=""> <strong>Top 5</strong> </span> <span class="icon-arrow-down mrL1"></span>
         </span>
         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-          <li role="menuitem"><a class="dropdown-item" href="#">Top 5</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Top 10 </a></li>
-
+          <li role="menuitem"><a class="dropdown-item">Top 5</a></li>
+          <li role="menuitem"><a class="dropdown-item">Top 10 </a></li>
         </ul>
       </div>
       <span class="thisWeek pull-right">September 2019 <span class="icon-collapse-icon mrL1"></span> </span>
@@ -25,15 +24,13 @@
               <th>Invoiced on</th>
               <th class="text-right">Bill Amount</th>
               <th class="text-right">Due as on 31 Sep19</th>
-
-
             </thead>
             <tbody>
-              <tr *ngFor="let addTableData of addTableData">
-                <td> {{ addTableData.Debetors }} </td>
-                <td> {{ addTableData.InvoicedOn }} </td>
-                <td class="text-right"> {{ addTableData.BillAmount }} </td>
-                <td class="text-right"> {{ addTableData.DueAs }} </td>
+              <tr *ngFor="let account of drAccounts">
+                <td> {{ account.name }} </td>
+                <td> &nbsp; </td>
+                <td class="text-right"> {{ account.debitTotal | giddhCurrency }} </td>
+                <td class="text-right"> {{ account.closingBalance.amount | giddhCurrency }} </td>
               </tr>
             </tbody>
           </table>
@@ -46,16 +43,14 @@
               <th>Invoiced on</th>
               <th class="text-right">Bill Amount</th>
               <th class="text-right">Due as on 31 Sep19</th>
-
-
             </thead>
             <tbody>
-              <tr *ngFor="let addTableData of addTableData">
-                <td> {{ addTableData.Debetors }} </td>
-                <td> {{ addTableData.InvoicedOn }} </td>
-                <td class="text-right"> {{ addTableData.BillAmount }} </td>
-                <td class="text-right"> {{ addTableData.DueAs }} </td>
-              </tr>
+            <tr *ngFor="let account of drAccounts">
+              <td> {{ account.name }} </td>
+              <td> &nbsp; </td>
+              <td class="text-right"> {{ account.debitTotal | giddhCurrency }} </td>
+              <td class="text-right"> {{ account.closingBalance.amount | giddhCurrency }} </td>
+            </tr>
             </tbody>
           </table>
         </div>
