@@ -9,7 +9,7 @@ import { AppState } from '../../../store';
 
 import { select, Store } from '@ngrx/store';
 
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -43,7 +43,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
   ]
 })
 
-export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild("productName") productName: ElementRef;
@@ -97,7 +97,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     {id: 2, uniqueName: 'transfer', name: 'Transfer'},
     {id: 3, uniqueName: 'all', name: 'All Transactions'},
   ];
-  public CategoryOptions: any[] = [
+  public CategoryOptions: any[] = [ 
     {
       value: "inwards",
       label: "Inwards",
@@ -214,7 +214,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private invViewService: InvViewService,
     private cdr: ChangeDetectorRef
   ) {
-
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
 
     this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -418,13 +417,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.destroyed$.complete();
   }
 
-  public ngAfterViewInit() {
-    this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
-      if (!a) {
-        // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-      }
-    });
-  }
 
   public goToManageGroup() {
     if (this.groupUniqueName) {
