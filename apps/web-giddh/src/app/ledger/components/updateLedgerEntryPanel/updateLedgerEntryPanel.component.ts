@@ -740,6 +740,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this._loaderService.hide();
           return;
         }
+      } else if (this.profileObj.country !== 'India') {
+        //
       } else {
         this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
         this._loaderService.hide();
