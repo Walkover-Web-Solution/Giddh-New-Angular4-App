@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -1581,11 +1581,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
       _.uniqBy(this.invoiceList, 'value');
     });
-  }
-
-  @HostListener('window:scroll')
-  public onScrollEvent() {
-    this.datepickers.hide();
   }
 
   public keydownPressed(e) {
