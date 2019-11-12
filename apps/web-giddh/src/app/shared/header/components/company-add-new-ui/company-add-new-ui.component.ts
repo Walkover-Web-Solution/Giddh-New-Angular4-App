@@ -154,8 +154,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
       this.closeCompanyModal.emit();
       this._route.navigate(['welcome']);
-      //this.store.dispatch(this.companyActions.CreateCompany(this.company));
-      //this.store.dispatch(this.companyActions.GetApplicableTaxes());
+
       if (companies) {
         if (companies.length === 0) {
           this.fireSocketCompanyCreateRequest();

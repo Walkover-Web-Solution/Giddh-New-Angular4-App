@@ -18,6 +18,7 @@ import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { OnboardingFormRequest} from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
+import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
   selector: 'billing-details',
@@ -69,6 +70,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
   public formFields: any[] = [];
   public stateGstCode: any[] = [];
   public disableState: boolean = false;
+  public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
+  public isMobileNumberValid: boolean = true;
 
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef, private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
     this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -362,5 +365,29 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
+  }
+
+  public isValidMobileNumber(ele: HTMLInputElement) {
+    if (ele.value) {
+      this.checkMobileNo(ele);
+    }
+  }
+
+  public checkMobileNo(ele) {
+    try {
+      let parsedNumber = this.phoneUtility.parse('+' + this.createNewCompany.phoneCode + ele.value, this.createNewCompany.country);
+      if (this.phoneUtility.isValidNumber(parsedNumber)) {
+        ele.classList.remove('error-box');
+        this.isMobileNumberValid = true;
+      } else {
+        this.isMobileNumberValid = false;
+        this._toasty.errorToast('Invalid Contact number');
+        ele.classList.add('error-box');
+      }
+    } catch(error) {
+      this.isMobileNumberValid = false;
+      this._toasty.errorToast('Invalid Contact number');
+      ele.classList.add('error-box');
+    }
   }
 }
