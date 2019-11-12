@@ -4,13 +4,17 @@ import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { isNullOrUndefined } from 'util';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
+import {ProfitLossData, ProfitLossRequest, GetRevenueResponse, GetTotalExpenseResponse, GetIncomeBeforeTaxes} from "../../../models/api-models/tb-pl-bs";
+import {TBPlBsActions} from "../../../actions/tl-pl.actions";
+import * as Highcharts from 'highcharts';
+import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 
 @Component({
   selector: 'profit-loss',
@@ -71,39 +75,40 @@ import { DashboardService } from '../../../services/dashboard.service';
 }
 
     `
-  ]
+  ],
+  providers: [ GiddhCurrencyPipe ]
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
   @Input() public refresh: boolean = false;
 
-  // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   public requestInFlight = true;
-  public totaloverDueChart: Options;
+  public profitLossChart: Options;
   public totalOverDuesResponse$: Observable<any>;
-  public sundryDebtorResponse: any = {};
-  public sundryCreditorResponse: any = {};
-  public totalRecievable: number = 0;
-  public totalPayable: number = 0;
-  public overDueObj: any = {};
-  public ReceivableDurationAmt: number = 0;
-  public PaybaleDurationAmt: number = 0;
-
+  public totalIncome: number = 0;
+  public totalIncomeType: string = '';
+  public totalExpense: number = 0;
+  public totalExpenseType: string = '';
+  public netProfitLoss: number = 0;
+  public netProfitLossType: string = '';
+  public plRequest: ProfitLossRequest = {from: '', to: '', refresh: false};
+  public amountSettings: any = {baseCurrencySymbol: '', balanceDecimalPlaces: ''};
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService) {
+  constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
     this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
+
     // get activeFinancialYear and lastFinancialYear
     this.companies$.subscribe(c => {
       if (c) {
@@ -114,6 +119,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
           if (activeCompany) {
+            this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+            this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
             this.activeFinancialYear = activeCompany.activeFinancialYear;
           }
         });
@@ -138,37 +145,39 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             }
           }
         }
-        // if (activeCmpUniqueName) { this.fetchChartData(); }
       }
     });
 
-    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), false));
+    this.filterData(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT));
 
-    this.totalOverDuesResponse$.pipe(
-      skipWhile(p => (isNullOrUndefined(p))))
-      .subscribe(p => {
-        if (p.length) {
-          this.overDueObj = p;
-          this.overDueObj.forEach((grp) => {
-            if (grp.uniqueName === 'sundrydebtors') {
-              this.sundryDebtorResponse = grp;
-              this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-              this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
-            } else {
-              this.sundryCreditorResponse = grp;
-              this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-              this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-              // this.totalPayable = this.calculateTotalRecievable(this.sundryCreditorResponse);
-            }
-          });
+    this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
+      if (p) {
+        let data = _.cloneDeep(p) as ProfitLossData;
+        let revenue;
+        let expense;
+        let npl;
 
-          // console.log(p);
-          this.generateCharts();
-          this.requestInFlight = false;
+        if (data && data.incomeStatment && data.incomeStatment.revenue) {
+          revenue = _.cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
+          this.totalIncome = revenue.amount;
+          this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
         }
 
-      });
+        if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
+          expense = _.cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
+          this.totalExpense = expense.amount;
+          this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
+        }
 
+        if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
+          npl = _.cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
+          this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
+          this.netProfitLoss = npl.amount;
+        }
+
+        this.generateCharts();
+      }
+    });
   }
 
   public hardRefresh() {
@@ -178,17 +187,19 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
   public fetchChartData() {
     this.requestInFlight = true;
-    // this.ApiToCALL = [];
-    this.store.dispatch(this._homeActions.getTotalOverdues(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT), true));
+    this.filterData(moment().subtract(29, 'days').format(GIDDH_DATE_FORMAT), moment().format(GIDDH_DATE_FORMAT));
   }
 
   public generateCharts() {
-    this.totaloverDueChart = {
+    let balanceDecimalPlaces = this.amountSettings.balanceDecimalPlaces;
+    let cPipe = this.currencyPipe;
+
+    this.profitLossChart = {
       colors: ['#FED46A', '#4693F1'],
       chart: {
         type: 'pie',
         polar: false,
-        className: 'overdue_chart',
+        className: 'profit_loss_chart',
         width: 300,
         height: '180px'
       },
@@ -221,11 +232,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             crop: true,
             defer: true
           },
-          shadow: false,
-          // center: [
-          //     '50%',
-          //     '50%'
-          // ],
+          shadow: false
         },
         series: {
           animation: false,
@@ -233,18 +240,22 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         }
       },
       tooltip: {
-        headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.percentage:.1f} %</b> </td>' +
-          '</tr>',
-        footerFormat: '</table>',
+        //headerFormat: '<span style="font-size:12px">{point.key}</span><table>',
+        //pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{point.y:,.2f}/-</b> </td>' +
+        //  '</tr>',
+        //footerFormat: '</table>',
         shared: true,
-        useHTML: true
+        useHTML: true,
+        formatter: function() {
+          return cPipe.transform(this.point.y) + '/-';
+        }
       },
       series: [{
-        name: 'Total Overdues',
-        data: [['Total Recievable', this.totalRecievable * 100 / (this.totalRecievable + this.totalPayable)], ['Total Payable', this.totalPayable * 100 / (this.totalPayable + this.totalRecievable)]],
+        name: 'Profit & Loss',
+        data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
       }],
     };
+    this.requestInFlight = false;
   }
 
   public ngOnDestroy() {
@@ -252,4 +263,18 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  public getFilterDate(dates: any) {
+    if (dates !== null) {
+      this.requestInFlight = true;
+      this.filterData(dates[0], dates[1]);
+    }
+  }
+
+  public filterData(from, to) {
+    this.plRequest.from = from;
+    this.plRequest.to = to;
+    this.plRequest.refresh = false;
+
+    this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
+  }
 }
