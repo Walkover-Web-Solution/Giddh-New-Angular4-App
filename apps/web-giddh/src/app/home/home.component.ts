@@ -29,7 +29,6 @@ import { TotalSalesComponent } from './components/total-sales/total-sales.compon
   styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html'
 })
-
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;

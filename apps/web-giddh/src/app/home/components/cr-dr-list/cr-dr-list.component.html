@@ -11,23 +11,24 @@
           <li role="menuitem"><a class="dropdown-item" (click)="changeShowRecords(10);">Top 10 </a></li>
         </ul>
       </div>
-      <span class="thisWeek pull-right">September 2019 <span class="icon-collapse-icon mrL1"></span> </span>
+      <span class="thisWeek pull-right"><datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions> <!--<span class="icon-collapse-icon mrL1"></span>--> </span>
     </div>
     <div class="cr-dr-body pos-rel">
       <div class="top-five-cr-dr-table">
+
         <div class="table-responsive debtorsTable">
           <table class="table basic ">
             <thead>
               <th>Debtors (Customers)</th>
               <th>Invoiced on</th>
               <th class="text-right">Bill Amount</th>
-              <th class="text-right">Due as on 31 Sep19</th>
+              <th class="text-right">Due as on {{dueDate | date}}</th>
             </thead>
             <tbody>
               <tr *ngFor="let account of drAccounts">
                 <td> {{ account.name }} </td>
                 <td> &nbsp; </td>
-                <td class="text-right"> {{ account.debitTotal | giddhCurrency }} </td>
+                <td class="text-right"> {{ account.creditTotal | giddhCurrency }} </td>
                 <td class="text-right"> {{ account.closingBalance.amount | giddhCurrency }} </td>
               </tr>
             </tbody>
@@ -40,10 +41,10 @@
               <th>Creditors (Vendors)</th>
               <th>Invoiced on</th>
               <th class="text-right">Bill Amount</th>
-              <th class="text-right">Due as on 31 Sep19</th>
+              <th class="text-right">Due as on {{dueDate | date}}</th>
             </thead>
             <tbody>
-            <tr *ngFor="let account of drAccounts">
+            <tr *ngFor="let account of crAccounts">
               <td> {{ account.name }} </td>
               <td> &nbsp; </td>
               <td class="text-right"> {{ account.debitTotal | giddhCurrency }} </td>
@@ -53,10 +54,6 @@
           </table>
         </div>
       </div>
-
-
-
-
     </div>
   </div>
 </div>
