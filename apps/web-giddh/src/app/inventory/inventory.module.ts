@@ -1,6 +1,4 @@
 import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { InventoryComponent } from './inventory.component';
@@ -14,13 +12,10 @@ import { StockgrpListComponent } from './components/sidebar-components/stockgrpl
 import { StockListComponent } from './components/sidebar-components/stockList.component';
 import { InventoryUpdateGroupComponent } from './components/update-group-component/inventory.updategroup.component';
 
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { LaddaModule } from 'angular2-ladda';
-import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
-import { BsDropdownModule, ModalModule, PaginationModule, PaginationComponent, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, PaginationComponent, TabsModule } from 'ngx-bootstrap';
 import { AsideCustomStockComponent } from '../inventory/components/aside-custom-stock.components/aside-custom-stock.component';
 import { AsideInventoryComponent } from '../inventory/components/aside-inventory.components/aside-inventory.components';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -34,7 +29,6 @@ import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/we
 import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pane.components';
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
 import { AsideBranchTransferPaneComponent } from '../inventory/components/aside-branch-transfer-pane/aside-branch-transfer-pane.component';
-import { ClickOutsideModule } from 'ng-click-outside';
 import { InOutStockListComponent } from './components/sidebar-components/in-out-stock-list.component';
 import { InventoryUserComponent } from './components/forms/inventory-user/transfer-inventory-user.component';
 import { TransferNoteComponent } from './components/forms/transfer-note/transfer-note.component';
@@ -43,7 +37,7 @@ import { InwardNoteComponent } from './components/forms/inward-note/inward-note.
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-import {DateFormatterPipe} from "./dateFormatter.pipe";
+import { DateFormatterPipe } from "./dateFormatter.pipe";
 
 @NgModule({
   declarations: [
@@ -111,25 +105,15 @@ import {DateFormatterPipe} from "./dateFormatter.pipe";
   ],
   providers: [],
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     InventoryRoutingModule,
     TooltipModule,
-    DatepickerModule,
-    LaddaModule,
-    DecimalDigitsModule,
-    ShSelectModule,
     SharedModule,
-    ModalModule,
     Daterangepicker,
     TextCaseChangeModule,
     BsDropdownModule,
     BsDatepickerModule.forRoot(),
-    PaginationModule,
     CurrencyModule,
     TabsModule,
-    ClickOutsideModule
   ],
   entryComponents: [
     PaginationComponent
