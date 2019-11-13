@@ -9,7 +9,7 @@
           <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
             <p class="bankName "> {{bankaccount.name}} </p>
             <p class="bankBalnc">
-              <span>In Giddh </span><span>{{bankaccount.closingBalance.amount | giddhCurrency}} <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">Cr.</span><span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">Dr.</span></span>
+              <span>In Giddh </span><span>{{activeCompany.baseCurrencySymbol}} {{bankaccount.closingBalance.amount | giddhCurrency}} <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">Cr.</span><span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">Dr.</span></span>
             </p>
           </div>
         </perfect-scrollbar>

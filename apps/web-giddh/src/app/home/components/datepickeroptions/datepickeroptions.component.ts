@@ -1,7 +1,11 @@
-import {Component, Input, Output, OnInit, ViewChild, ElementRef, EventEmitter} from '@angular/core';
+import {Component, Input, Output, OnInit, ViewChild, ElementRef, EventEmitter, OnDestroy} from '@angular/core';
 import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
+import {Observable, ReplaySubject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../store";
 
 @Component({
   selector: 'datepickeroptions',
@@ -9,11 +13,11 @@ import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
   styleUrls: ['../../home.component.scss']
 })
 
-export class DatepickeroptionsComponent implements OnInit {
-
+export class DatepickeroptionsComponent implements OnInit, OnDestroy {
   @Output() public filterDates: EventEmitter<any> = new EventEmitter(null);
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   public moment = moment;
+  public universalDate$: Observable<any>;
   public datePickerOptions: any = {
     hideOnEsc: true,
     opens: 'left',
@@ -64,12 +68,22 @@ export class DatepickeroptionsComponent implements OnInit {
     endDate: moment()
   };
 
-  constructor() {
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public isDefault: boolean = true;
 
+  constructor(private store: Store<AppState>) {
+      this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
-
+    // listen for universal date
+    this.universalDate$.subscribe(dateObj => {
+      if (this.isDefault && dateObj) {
+        this.datePickerOptions.startDate = moment(dateObj[0]);
+        this.datePickerOptions.endDate = moment(dateObj[1]);
+        this.isDefault = false;
+      }
+    });
   }
 
   public setFilterDate(ev) {
@@ -77,5 +91,10 @@ export class DatepickeroptionsComponent implements OnInit {
     if (data && data.picker) {
       this.filterDates.emit([moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT), moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT)]);
     }
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

@@ -3,9 +3,10 @@ import {Observable, ReplaySubject} from "rxjs";
 import { Store} from "@ngrx/store";
 import {AppState} from "../../../store";
 import {ContactService} from "../../../services/contact.service";
-import {takeUntil} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
 import {createSelector} from "reselect";
 import * as moment from 'moment/moment';
+import {CompanyResponse} from "../../../models/api-models/Company";
 
 @Component({
   selector: 'cr-dr-list',
@@ -24,8 +25,13 @@ export class CrDrComponent implements OnInit, OnDestroy {
   public drAccounts: any[] = [];
   public showRecords: number = 5;
   public dueDate: any;
+  public companies$: Observable<CompanyResponse[]>;
+  public activeCompanyUniqueName$: Observable<string>;
+  public activeCompany: any = {};
 
   constructor(private store: Store<AppState>, private _contactService: ContactService) {
+    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
     this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
   }
 
@@ -44,6 +50,19 @@ export class CrDrComponent implements OnInit, OnDestroy {
         this.getAccountsReport();
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
+
+    // get activeFinancialYear and lastFinancialYear
+    this.companies$.subscribe(c => {
+      if (c) {
+        let activeCompany: CompanyResponse;
+        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
+          activeCompany = c.find(p => p.uniqueName === a);
+          if (activeCompany) {
+            this.activeCompany = activeCompany;
+          }
+        });
+      }
+    });
   }
 
   private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
