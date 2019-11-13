@@ -7894,8 +7894,10 @@ span.red-text {
   word-break: normal;
 }
 
-.multicurrencyTooltipInfo .tooltip-inner , .sidebarTooltip .tooltip-inner {
-   white-space: normal;
+.multicurrencyTooltipInfo, .invoice-preview, .sidebarTooltip {
+    .tooltip-inner {
+        white-space: normal;
+    }
 }
 .ratio-chart-block:first-child span.pie-text_center {
   color: #2681EF;
