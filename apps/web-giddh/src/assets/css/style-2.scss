@@ -1845,6 +1845,12 @@ p.table-email {
   border-left: 1px solid #ddd !important;
 }
 
+.top-five-cr-dr-table .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child{
+  border-right: none !important;
+}
+.top-five-cr-dr-table .basic > tbody > tr td:first-child, .basic > thead > tr th:first-child{
+   border-left:none !important;
+}
 /*
 .basic>tbody>tr>td a {
     color: #ff5e01;
