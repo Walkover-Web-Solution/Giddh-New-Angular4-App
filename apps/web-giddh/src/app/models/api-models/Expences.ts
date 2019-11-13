@@ -47,6 +47,7 @@ export class CreatedBy {
 export class ActionPettycashRequest {
     actionType: string;
     uniqueName: string;
+    accountUniqueName: string;
 }
 
 export class ExpenseActionRequest {

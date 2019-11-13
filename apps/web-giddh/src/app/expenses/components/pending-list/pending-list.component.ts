@@ -97,7 +97,8 @@ export class PendingListComponent implements OnInit, OnChanges {
         let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: this.selectedEntryForApprove.uniqueName
+            uniqueName: this.selectedEntryForApprove.uniqueName,
+            accountUniqueName: this.selectedEntryForApprove.baseAccount.uniqueName
         };
         try {
             ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
@@ -110,7 +111,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest: ledgerRequest.body}).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
-            res.status === 'success' ? this._toasty.successToast(res.message) : this._toasty.errorToast(res.message);
+            res.status === 'success' ? this._toasty.successToast(res.body) : this._toasty.errorToast(res.message);
             this.hideApproveConfirmPopup();
         });
     }

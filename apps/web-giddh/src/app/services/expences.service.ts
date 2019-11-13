@@ -54,7 +54,11 @@ export class ExpenseService {
 
     public actionPettycashReports(requestObj: ActionPettycashRequest, model?: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + EXPENSE_API.ACTION.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', requestObj.uniqueName).replace(':actionType', requestObj.actionType), model).pipe(
+        return this._http.post(this.config.apiUrl + EXPENSE_API.ACTION
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':uniqueName', requestObj.uniqueName)
+            .replace(':accountUniqueName', requestObj.accountUniqueName)
+            .replace(':actionType', requestObj.actionType), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = requestObj;
@@ -65,7 +69,9 @@ export class ExpenseService {
 
     public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', uniqueName)).pipe(
+        return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', uniqueName)).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
