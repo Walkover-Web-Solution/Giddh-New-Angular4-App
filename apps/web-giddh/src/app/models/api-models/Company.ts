@@ -81,6 +81,7 @@ export class CompanyResponse {
   public nameAlias?: string;
   public balanceDisplayFormat?: string;
   public balanceDecimalPlaces?: string;
+  public baseCurrencySymbol?: string;
 }
 
 export interface UserEntityRole {

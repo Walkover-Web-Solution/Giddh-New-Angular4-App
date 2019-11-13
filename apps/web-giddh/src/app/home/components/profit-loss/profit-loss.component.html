@@ -1,5 +1,6 @@
 <div id="live">
   <div class="panel panel-default">
+
     <div class="panel-heading">
       <strong>Profit & Loss</strong>
       <div class="pull-right dashboard-filter">
@@ -8,9 +9,11 @@
             <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
           </span>
         </div>
-        <span class="icon-collapse-icon"></span>
+
+<!--        <span class="icon-collapse-icon"></span>-->
       </div>
     </div>
+
     <div class="panel-body pos-rel">
       <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
@@ -21,24 +24,23 @@
           <chart [options]="profitLossChart" #currentRatio></chart>
           <div class="clearfix mrB2">
             <div class="">
-              <span class="mrB1 dueAmount">Total Income</span>
-              <span class="total_amt pull-right totalIncomeText"> <span class="icon-rupees"></span>
-                {{ totalRecievable | number:'1.2-2' }}</span>
+              <span class="mrB1 dueAmount">Net Profit/Loss</span>
+              <span class="total_amt pull-right"> {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ netProfitLoss | giddhCurrency }}</span>
             </div>
-            <div class="clearfix">
-              <small>Total Receipts</small>
-              <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
+          </div>
+          <div class="clearfix mrB2">
+            <div class="">
+              <span class="mrB1 dueAmount">Total Income</span>
+              <span class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
             </div>
           </div>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Total Expenses</span>
-              <span class="total_amt pull-right totalExpensesText"><span class="icon-rupees"></span>
-                {{ totalPayable | number:'1.2-2' }}</span>
-            </div>
-            <div class="clearfix">
-              <small>Total Payment</small>
-              <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
+              <span class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
             </div>
           </div>
         </perfect-scrollbar>
