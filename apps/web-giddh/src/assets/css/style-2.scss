@@ -313,9 +313,15 @@ input {
 
 /* my css start */
 
-// .basic, .table {
-//   border-collapse: collapse;
-// }
+
+.vat-report .tab-content .tab-pane {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+.vat-report .tab-content {
+  padding: 0 15px;
+}
 .custom-tooltipe {
   position: absolute;
   top: -22px;
