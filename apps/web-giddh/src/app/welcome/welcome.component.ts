@@ -354,7 +354,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (event) {
       this.selectedBusinesstype = event.value;
       this.selectedTaxes = [];
-      this.companyProfileObj.gstNumber = '';
+      this.companyProfileObj.taxNumber = '';
       this.companyProfileObj.selectedState = '';
       this.companyProfileObj.state = '';
       this.forceClear$ = observableOf({status: true});
