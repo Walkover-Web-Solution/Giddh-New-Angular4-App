@@ -87,7 +87,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
   public selectAllVendor: boolean = false;
   public selectAllCustomer: boolean = false;
   public selectedCheckedContacts: string[] = [];
-  public selectedAllContacts: string[] = [];
   public activeAccountDetails: any;
   public allSelectionModel: boolean = false;
   public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
@@ -1019,11 +1018,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.totalDue = res.body.closingBalance.amount || 0;
         this.totalSales = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
         this.totalReceipts = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
-        this.selectedAllContacts = [];
         this.Totalcontacts = 0;
-        for (let resp of res.body.results) {
-          this.selectedAllContacts.push(resp.uniqueName);
-        }
 
         if (groupUniqueName === 'sundrydebtors') {
           this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
