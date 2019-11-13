@@ -26,10 +26,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let account of drAccounts">
-                <td> {{ account.name }} </td>
+                <td>{{ account.name }}</td>
                 <td> &nbsp; </td>
-                <td class="text-right"> {{ account.creditTotal | giddhCurrency }} </td>
-                <td class="text-right"> {{ account.closingBalance.amount | giddhCurrency }} </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.creditTotal | giddhCurrency }} </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }} </td>
               </tr>
             </tbody>
           </table>
@@ -45,10 +45,10 @@
             </thead>
             <tbody>
             <tr *ngFor="let account of crAccounts">
-              <td> {{ account.name }} </td>
+              <td>{{ account.name }}</td>
               <td> &nbsp; </td>
-              <td class="text-right"> {{ account.debitTotal | giddhCurrency }} </td>
-              <td class="text-right"> {{ account.closingBalance.amount | giddhCurrency }} </td>
+              <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.debitTotal | giddhCurrency }} </td>
+              <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }} </td>
             </tr>
             </tbody>
           </table>
