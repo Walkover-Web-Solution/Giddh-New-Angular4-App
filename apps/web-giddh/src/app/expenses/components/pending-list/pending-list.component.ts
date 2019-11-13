@@ -5,7 +5,7 @@ import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
+import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
@@ -50,6 +50,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     public paymentReceiveSearchInput: FormControl = new FormControl();
 
     public approveEntryModalRef: BsModalRef;
+    public approveEntryRequestInProcess: boolean = false;
 
     constructor(private store: Store<AppState>,
                 private _expenceActions: ExpencesAction,
@@ -85,39 +86,32 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.selectedEntryForApprove = null;
     }
 
-    public approveEntry(item: ExpenseResults) {
+    public async approveEntry() {
+        if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
+            this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
+            this.hideApproveConfirmPopup();
+            return;
+        }
+
+        this.approveEntryRequestInProcess = true;
+        let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: item.uniqueName
+            uniqueName: this.selectedEntryForApprove.uniqueName
         };
+        try {
+            ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
+        } catch (e) {
+            this.approveEntryRequestInProcess = false;
+            this._toasty.errorToast(e);
+            this.hideApproveConfirmPopup();
+            return;
+        }
 
-        debugger;
-        let request: ExpenseActionRequest = new ExpenseActionRequest();
-
-        request.ledgerRequest = {
-            transactions: [{
-                amount: item.amount,
-                applyApplicableTaxes: true,
-                convertedAmount: null,
-                isInclusiveTax: false,
-                particular: '',
-                taxes: [],
-                type: item.entryType
-            }],
-            entryDate: item.entryDate,
-            attachedFile: '',
-            attachedFileName: '',
-            description: item.description,
-            generateInvoice: false,
-            chequeNumber: ''
-        };
-
-        this.expenseService.actionPettycashReports(actionType, request).subscribe(res => {
-            if (res.status === 'success') {
-                this._toasty.successToast(res.body);
-            } else {
-                this._toasty.successToast(res.message);
-            }
+        this.expenseService.actionPettycashReports(actionType, {ledgerRequest: ledgerRequest.body}).subscribe((res) => {
+            this.approveEntryRequestInProcess = false;
+            res.status === 'success' ? this._toasty.successToast(res.message) : this._toasty.errorToast(res.message);
+            this.hideApproveConfirmPopup();
         });
     }
 

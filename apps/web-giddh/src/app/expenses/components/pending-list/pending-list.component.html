@@ -202,7 +202,7 @@
 
         <div>
             <button class="btn btn-warning" (click)="hideApproveConfirmPopup()">No</button>
-            <button class="btn btn-success" (click)="approveEntry(selectedEntryForApprove)">Yes</button>
+            <button class="btn btn-success" (click)="approveEntry()" [ladda]="approveEntryRequestInProcess">Yes</button>
         </div>
 
     </div>
