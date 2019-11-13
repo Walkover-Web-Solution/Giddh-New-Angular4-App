@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, GstDetail } from '../models/api-models/Company';
+import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -40,11 +40,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public countryPhoneCode: IOption[] = [];
   public callingCodesSource$: Observable<IOption[]> = observableOf([]);
   public companyProfileObj: any = null;
-  public countryCodeList: IOption[] = [];
   public company: any = {};
   public createNewCompany: any = {};
   public statesSource$: Observable<IOption[]> = observableOf([]);
-  public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
   public countryIsIndia: boolean = false;
   public selectedBusinesstype: string = '';
@@ -75,9 +73,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       userUniqueName: '',
       licenceKey: ''
     },
-    gstDetails: [],
-    bussinessNature: '',
-    bussinessType: '',
+    addresses: [],
+    businessNature: '',
+    businessType: '',
     address: '',
     industry: '',
     baseCurrency: '',
@@ -101,17 +99,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     razorpaySignature: ''
   };
 
-  public GstDetailsObj: GstDetail = {
-    gstNumber: '',
-    addressList: [
-      {
-        stateCode: '',
-        address: '',
-        isDefault: false,
-        stateName: ''
-      }
-    ]
+  public addressesObj: Addresses = {
+    stateCode: '',
+    address: '',
+    isDefault: false,
+    stateName: '',
+    taxNumber: ''
   };
+
   public updateProfileSuccess$: Observable<boolean>;
   public businessType: IOption[] = [];
   public BusinessOptions: IOption[] = [];
@@ -264,8 +259,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public submit() {
-    this.createNewCompanyPreparedObj.bussinessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
-    this.createNewCompanyPreparedObj.bussinessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
+    this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
+    this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
@@ -274,10 +269,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-    if (gstDetails.gstNumber) {
-      this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
+    if (gstDetails.taxNumber) {
+      this.createNewCompanyPreparedObj.addresses.push(gstDetails);
     } else {
-      this.createNewCompanyPreparedObj.gstDetails = [];
+      this.createNewCompanyPreparedObj.addresses = [];
     }
 
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
@@ -287,13 +282,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public prepareGstDetail(obj) {
     if (obj.gstNumber) {
-      this.GstDetailsObj.gstNumber = obj.gstNumber;
-      this.GstDetailsObj.addressList[0].stateCode = obj.state;
-      this.GstDetailsObj.addressList[0].address = obj.address;
-      this.GstDetailsObj.addressList[0].isDefault = false;
-      this.GstDetailsObj.addressList[0].stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
+      this.addressesObj.taxNumber = obj.gstNumber;
+      this.addressesObj.stateCode = obj.state;
+      this.addressesObj.address = obj.address;
+      this.addressesObj.isDefault = false;
+      this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
     }
-    return this.GstDetailsObj;
+    return this.addressesObj;
   }
 
   public checkGstNumValidation(ele: HTMLInputElement) {

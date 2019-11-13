@@ -9,7 +9,6 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import {GENERAL_ACTIONS} from "./general/general.const";
 
 @Injectable()
 

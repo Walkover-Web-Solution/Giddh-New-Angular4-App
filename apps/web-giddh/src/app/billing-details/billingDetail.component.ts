@@ -314,9 +314,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     this.billingDetailsObj.mobile = this.createNewCompany.contactNo;
     this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
 
-    let selectedBusinesstype = this.createNewCompany.bussinessType;
+    let selectedBusinesstype = this.createNewCompany.businessType;
     if (selectedBusinesstype === 'Registered') {
-      this.billingDetailsObj.gstin = this.createNewCompany.gstDetails[0].gstNumber;
+      this.billingDetailsObj.gstin = this.createNewCompany.addresses[0].taxNumber;
     }
     this.billingDetailsObj.address = this.createNewCompany.address;
   }
@@ -333,8 +333,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
           this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
 
-          if(this.createNewCompany !== undefined && this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
-            if(res.stateList[key].code === this.createNewCompany.gstDetails[0]['addressList'][0].stateCode) {
+          if(this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+            if(res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
               this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
               this.billingDetailsObj.state = res.stateList[key].code;
               this.disableState = true;

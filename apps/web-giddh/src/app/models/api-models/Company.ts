@@ -41,9 +41,12 @@ export class AddressList {
   public stateName: string;
 }
 
-export class GstDetail {
-  public addressList: AddressList[];
-  public gstNumber: string;
+export class Addresses {
+  public stateCode: string;
+  public address: string;
+  public isDefault: boolean;
+  public stateName: string;
+  public taxNumber: string;
 }
 
 export class CompanyResponse {
@@ -71,7 +74,7 @@ export class CompanyResponse {
   public alias?: any;
   public role: Role;
   public name: string;
-  public gstDetails: GstDetail[];
+  public addresses: Addresses[];
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
   public userEntityRoles?: UserEntityRole[];
@@ -228,11 +231,6 @@ export interface AddressList {
   stateName: string;
 }
 
-// export interface GstDetail {
-//     gstNumber: string;
-//     addressList: AddressList[];
-// }
-
 export class BillingDetails {
   name: string;
   email: string;
@@ -251,9 +249,9 @@ export class CompanyCreateRequest {
   uniqueName: string;
   isBranch?: boolean;
   subscriptionRequest?: SubscriptionRequest;
-  gstDetails?: GstDetail[];
-  bussinessNature?: string;
-  bussinessType?: string;
+  addresses?: Addresses[];
+  businessNature?: string;
+  businessType?: string;
   address?: string;
   industry?: string;
   baseCurrency: string;

@@ -57,7 +57,7 @@
               <div class="custom-select pos-rel">
                 <sh-select placeholder="Select Business Type" name="bussinessType" id="bussinessType" (onClear)="onClearBusinessType()" [showClear]="true"
                   autocomplete="false" (selected)="selectedbusinessType($event)"
-                  [(ngModel)]="companyProfileObj.bussinessType" [options]="businessTypeList" [ItemHeight]="33" [defaultValue]="companyProfileObj.bussinessType">
+                  [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList" [ItemHeight]="33" [defaultValue]="companyProfileObj.bussinessType">
                 </sh-select>
               </div>
             </div>
@@ -67,7 +67,7 @@
               <label for="bussinessNature">Select Business Nature</label>
               <div class="custom-select  pos-rel">
                 <sh-select placeholder="Select Business Nature" name="bussinessNature" (onClear)="onClearBusinessNature()" [showClear]="true" autocomplete="false"
-                  id="bussinessNature" [(ngModel)]="companyProfileObj.bussinessNature" [options]="businessNatureList"
+                  id="bussinessNature" [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
                   [isFilterEnabled]="true" [ItemHeight]="33" [defaultValue]="companyProfileObj.bussinessNature">
                 </sh-select>
               </div>

@@ -63,12 +63,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       }))
     ).subscribe(activeCompany => {
       if (activeCompany) {
-        if (activeCompany.gstDetails && activeCompany.gstDetails.length) {
-          let defaultGst = activeCompany.gstDetails.find(f => !!(f.addressList.find(a => a.isDefault)));
+        if (activeCompany.addresses && activeCompany.addresses.length) {
+          let defaultGst = activeCompany.addresses.find(a => a.isDefault);
           if (defaultGst) {
-            this.activeCompanyGstNumber = defaultGst.gstNumber;
+            this.activeCompanyGstNumber = defaultGst.taxNumber;
           } else {
-            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+            this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
           }
           this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
