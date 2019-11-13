@@ -1,95 +1,49 @@
-<!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="20" min-scrollbar-length="20" auto-height> -->
 <section id="dashboard" class="clearfix">
-  <!-- <div class=" col-xs-12 clearfix">
-  <button class="btn btn-default pull-right" (click)="hardRefresh()">Clear Cache & Refresh</button>
-</div> -->
-
   <div class="container-fluid top_bar">
     <div class="dashboard-container">
       <div class="dashboard-notification">
-        <div class="white-row">
-          <p> <span class="icon-traingle-info"></span> Your plan 1 ended on 10/09/2019. Apply to upgrade your
-            subscription. <span class="clickHere ">Click
-              here</span></p>
+        <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'">
+          <p> <span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="clickHere" (click)="goToSelectPlan()">Click here</a></p>
         </div>
-        <div class="white-row">
-          <p><span class="icon-info-icon"></span> GSTR 2A Mismatch report for FY 2018-19 is now available for download.
-            <span class="clickHere ">Visit
-              Reports</span></p>
+        <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges">
+          <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your assigned plan {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To continue your accounting with Giddh, Please renew your current plan or switch to another one. Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a></p>
         </div>
-        <div class="white-row">
-          <p><span class="icon-info-icon"></span>New feature JobWork added <span class="clickHere ">NEW
-            </span></p>
-        </div>
+<!--        <div class="white-row">-->
+<!--          <p><span class="icon-info-icon"></span> GSTR 2A Mismatch report for FY 2018-19 is now available for download.-->
+<!--            <span class="clickHere ">Visit-->
+<!--              Reports</span></p>-->
+<!--        </div>-->
+<!--        <div class="white-row">-->
+<!--          <p><span class="icon-info-icon"></span>New feature JobWork added <span class="clickHere ">NEW-->
+<!--            </span></p>-->
+<!--        </div>-->
       </div>
       <div class="row">
-
-
         <!-- total overdues -->
         <div class="col-xs-4 col-lg-4 pdR1">
-          <!-- <live-accounts #liveaccount></live-accounts> -->
           <toal-overdues-chart #overdues></toal-overdues-chart>
         </div>
         <!-- profit loss -->
         <div class="col-xs-4 col-lg-4 pdL1 pdR1">
-          <!-- <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart> -->
           <profit-loss></profit-loss>
         </div>
-
         <!-- bank accounts -->
         <div class="col-xs-4 col-lg-4 pdL1">
           <bank-accounts></bank-accounts>
         </div>
-
-
         <!-- sales graph -->
         <div class="col-xs-12 col-lg-12 ">
           <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
-
         </div>
         <!-- ratio analysis -->
         <div class="col-xs-12 pdR1">
           <ratio-analysis-chart #ratio></ratio-analysis-chart>
         </div>
-        <!-- GST -->
-<!--        <div class="col-xs-4 col-lg-4 pdL1">-->
-
-<!--          <gst-dash></gst-dash>-->
-<!--        </div>-->
         <!-- Debtors / Creditors table -->
         <div class="col-xs-12">
           <cr-dr-list></cr-dr-list>
         </div>
-
-
-
-
-        <!-- <div class="col-xs-6">
-          <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
-        </div>
-
-        <div class="col-xs-6">
-          <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
-        </div>
-
-        <div class="col-xs-6">
-          <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
-        </div> -->
-
-
-
       </div>
     </div>
-
-
-
-
-
   </div>
-
-  <!--<div class="col-xs-6">-->
-  <!--<profit-loss ng-controller="profitlossController"></profit-loss>-->
-  <!--</div>-->
-  <!--<combined ng-controller="combinedController"></combined>-->
 </section>
-<!-- </perfect-scrollbar> -->
