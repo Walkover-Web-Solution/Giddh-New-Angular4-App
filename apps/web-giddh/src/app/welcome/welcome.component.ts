@@ -107,7 +107,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     taxNumber: ''
   };
 
-  public updateProfileSuccess$: Observable<boolean>;
   public businessType: IOption[] = [];
   public BusinessOptions: IOption[] = [];
   public hideTextarea = true;
@@ -132,7 +131,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     }).pipe(takeUntil(this.destroyed$)).subscribe();
-    this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -162,12 +160,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           this.prepareWelcomeForm();
         }
-      }
-    });
-
-    this.updateProfileSuccess$.subscribe(s => {
-      if (s) {
-        this._router.navigate(['select-plan']);
       }
     });
 
