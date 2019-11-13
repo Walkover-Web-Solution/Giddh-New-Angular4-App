@@ -132,6 +132,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
           startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
           endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
         };
+
         if (this.unaiversalFrom && this.unaiversalTo) {
           this.pettycashRequest.from = this.unaiversalFrom;
           this.pettycashRequest.to = this.unaiversalTo;
@@ -177,14 +178,14 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
-    SalesDetailedfilter.status = 'pending';
-    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
+  public getPettyCashPendingReports(request: CommonPaginatedRequest) {
+    request.status = 'pending';
+    this.store.dispatch(this._expenceActions.GetPettycashReportRequest(request));
   }
 
-  public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
-    SalesDetailedfilter.status = 'rejected';
-    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
+  public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
+    request.status = 'rejected';
+    this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(request));
   }
 
   public openModal(filterModal: TemplateRef<any>) {

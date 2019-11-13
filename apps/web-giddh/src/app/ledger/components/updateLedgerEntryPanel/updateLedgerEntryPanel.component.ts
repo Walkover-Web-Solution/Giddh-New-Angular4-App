@@ -169,7 +169,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           // this.accountPettyCashStream = res;
           // this.editAccUniqueName$ = observableOf(this.accountPettyCashStream.baseAccount.uniqueName);
           this.entryUniqueName = res.uniqueName;
-          // this.accountUniqueName = res.particular.uniqueName;
+          this.accountUniqueName = null;
           this.selectedLedgerStream$ = observableOf(res as LedgerResponse);
         }
       });
