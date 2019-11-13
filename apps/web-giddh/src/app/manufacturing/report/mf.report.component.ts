@@ -30,6 +30,7 @@ const filter2 = [
 ];
 
 @Component({
+  selector: 'manufacturing-report',
   templateUrl: './mf.report.component.html',
   styleUrls: ['./mf.report.component.css']
 })
