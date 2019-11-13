@@ -293,6 +293,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             } else {
               item.dueDays = null;
             }
+            if (this.selectedVoucher === VoucherTypeEnum.sales) {
+                // For 'Invoices' tab in Invoice
+                item = this.addToolTiptext(item );
+            }
             this.itemsListForDetails.push(this.parseItemForVm(item));
             return item;
           });
@@ -1122,4 +1126,26 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
   }
+
+  /**
+     * Adds tooltip text for grand total and total due amount
+     * to item supplied (only for Invoices)
+     *
+     * @private
+     * @param {ReceiptItem} item Receipt item received from service
+     * @returns {*} Modified item with tooltup text for grand total and total due amount
+     * @memberof InvoicePreviewComponent
+     */
+    private addToolTiptext(item: ReceiptItem): any {
+        try {
+            if (item.account && item.account.currency) {
+                const currencyCode = item.account.currency.code;
+                const balanceDueAmountForCompany = item.balanceDue.amountForCompany;
+                const grandTotalAmountForCompany = item.grandTotal.amountForCompany;
+                item['grandTotalTooltipText'] = `In ${currencyCode}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${(item.grandTotal.amountForAccount / Number(grandTotalAmountForCompany)).toFixed(2)})`;
+                item['balanceDueTooltipText'] = `In ${currencyCode}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${(item.balanceDue.amountForAccount / Number(balanceDueAmountForCompany)).toFixed(2)})`;
+            }
+        } catch (error) {}
+        return item;
+    }
 }
