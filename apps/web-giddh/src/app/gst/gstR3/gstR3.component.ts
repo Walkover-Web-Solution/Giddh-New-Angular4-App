@@ -35,9 +35,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
   public gstAuthenticated: boolean = false;
   public dateSelected: boolean = false;
   public userEmail: string = '';
-  public selectedMMYYYY: string = ''
-
-
+  public selectedMMYYYY: string = '';
   private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
   private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
   private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;

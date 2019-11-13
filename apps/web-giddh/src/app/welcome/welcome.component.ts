@@ -116,8 +116,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public formFields: any[] = [];
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-              private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
 
     this.store.dispatch(this._generalActions.resetStatesList());
@@ -197,20 +196,20 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public reFillForm() {
-    this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
-    this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
-    this.selectedBusinesstype = this.createNewCompany.bussinessType;
+    this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
+    this.companyProfileObj.businessType = this.createNewCompany.businessType;
+    this.selectedBusinesstype = this.createNewCompany.businessType;
     if (this.selectedBusinesstype === 'Registered') {
-      if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined) {
-        this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+      if(this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+        this.companyProfileObj.taxNumber = this.createNewCompany.addresses[0].taxNumber;
       }
     }
     this.companyProfileObj.address = this.createNewCompany.address;
   }
 
   public reFillState() {
-    if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
-      this.companyProfileObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
+    if(this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+      this.companyProfileObj.state = this.createNewCompany.addresses[0].stateCode;
 
       let stateLoop = 0;
       for(stateLoop; stateLoop < this.states.length; stateLoop++) {
@@ -259,8 +258,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public submit() {
-    this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
-    this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
+    this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
+    this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
@@ -281,8 +280,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public prepareGstDetail(obj) {
-    if (obj.gstNumber) {
-      this.addressesObj.taxNumber = obj.gstNumber;
+    if (obj.taxNumber) {
+      this.addressesObj.taxNumber = obj.taxNumber;
       this.addressesObj.stateCode = obj.state;
       this.addressesObj.address = obj.address;
       this.addressesObj.isDefault = false;
@@ -514,11 +513,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onClearBusinessType() {
     this.selectedBusinesstype = '';
-    this.companyProfileObj.bussinessType = '';
+    this.companyProfileObj.businessType = '';
 
   }
 
   public onClearBusinessNature() {
-    this.companyProfileObj.bussinessNature = '';
+    this.companyProfileObj.businessNature = '';
   }
 }
