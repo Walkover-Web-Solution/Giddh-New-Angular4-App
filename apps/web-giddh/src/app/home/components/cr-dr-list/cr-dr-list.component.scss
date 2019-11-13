@@ -37,7 +37,7 @@ table.basic td{
 table.basic th{
   color: #1A237E;
   font-size: 14px;
-      font-family: latoWebBold;
+
 }
 .cr-dr-body{
   padding: 15px;
@@ -49,4 +49,7 @@ span.thisWeek {
     color: #666666;
     text-decoration: underline;
     font-size: 16px;
+}
+.top-five-cr-dr-table td{
+  white-space: normal;
 }
