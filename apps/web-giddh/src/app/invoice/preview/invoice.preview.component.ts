@@ -1138,10 +1138,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private addToolTiptext(item: ReceiptItem): any {
         try {
             if (item.account && item.account.currency) {
-                const balanceDueAmountForCompany = Number(item.balanceDue.amountForCompany);
-                const grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany);
-                const balanceDueAmountForAccount = Number(item.balanceDue.amountForAccount);
-                const grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount);
+                const balanceDueAmountForCompany = Number(item.balanceDue.amountForCompany) || 0;
+                const grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
+                const balanceDueAmountForAccount = Number(item.balanceDue.amountForAccount) || 0;
+                const grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
                 let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                     grandTotalConversionRate = +((grandTotalAmountForAccount / grandTotalAmountForCompany) || 0).toFixed(2);
