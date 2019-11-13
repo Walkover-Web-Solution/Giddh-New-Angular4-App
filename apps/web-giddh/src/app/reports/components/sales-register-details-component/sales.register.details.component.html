@@ -12,9 +12,6 @@
               <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
             </div>
 
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'Date'}"></ng-container>
-            </div>
 
           </div>
         </th>
@@ -34,9 +31,7 @@
               <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
               <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
             </div>
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'Voucher Type'}"></ng-container>
-            </div>
+
           </div>
         </th>
 
@@ -58,9 +53,7 @@
               <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
               <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
             </div>
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'Sales'}"></ng-container>
-            </div>
+
           </div>
         </th>
 
@@ -73,9 +66,7 @@
               <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
               <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
             </div>
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'Return'}"></ng-container>
-            </div>
+
           </div>
         </th>
 
@@ -88,9 +79,7 @@
               <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
               <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
             </div>
-            <div class="icon-pointer">
-              <ng-container *ngTemplateOutlet="sortTemplate;context: {column: ' Net Sales'}"></ng-container>
-            </div>
+
           </div>
         </th>
       </tr>
@@ -146,23 +135,7 @@
 </div>
 
 <!-- region sort icon template -->
-<ng-template #sortTemplate let-column="column">
 
-  <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy !== column" (click)="sortButtonClicked('asc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
-  </div>
-
-  <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
-    (click)="sortButtonClicked('desc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
-  </div>
-
-  <div class="icon-sort-dsc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
-    (click)="sortButtonClicked('asc', column)"
-    [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">
-  </div>
-
-</ng-template>
 <!-- endregion -->
 
 <div class="text-center">
