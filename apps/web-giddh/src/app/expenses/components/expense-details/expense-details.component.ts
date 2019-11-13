@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults } from '../../../models/api-models/Expences';
+import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
@@ -55,12 +55,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-    public selectedPettycashEntry$: Observable<any>;
+    public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public ispPettycashEntrySuccess$: Observable<boolean>;
     public ispPettycashEntryInprocess$: Observable<boolean>;
 
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
-    public bankAccounts$: Observable<IOption[]>;
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
     public isFileUploaded: boolean = false;
@@ -81,12 +80,20 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
     public comment: string = '';
-    public accountEntryPettyCash: any;
+    public accountEntryPettyCash: PettyCashResonse;
     public companyTaxesList: TaxResponse[] = [];
 
+    public debtorsAccountsOptions: IOption[] = [];
+    public creditorsAccountsOptions: IOption[] = [];
+    public cashAndBankAccountsOptions: IOption[] = [];
+    public entryAgainstObject = {
+        base: '',
+        against: '',
+        dropDownOption: [],
+        model: ''
+    };
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private sundryDebtorsAcList: IOption[] = [];
-    private sundryCreditorsAcList: IOption[] = [];
 
     constructor(private modalService: BsModalService,
                 private _toasty: ToasterService,
@@ -95,8 +102,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 private store: Store<AppState>,
                 private _expenceActions: ExpencesAction,
                 private expenseService: ExpenseService,
-                private _cdRf: ChangeDetectorRef,
-                private componentFactoryResolver: ComponentFactoryResolver
+                private _cdRf: ChangeDetectorRef
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -115,24 +121,27 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     public ngOnInit() {
         this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            let flattenAccounts: IFlattenAccountsResultItem[] = res;
-            let bankaccounts: IOption[] = [];
-            this.sundryDebtorsAcList = [];
-            this.sundryCreditorsAcList = [];
-            flattenAccounts.forEach(item => {
-                if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                    this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
-                }
+            let debtorsAccountsOptions = [];
+            let creditorsAccountsOptions = [];
+            let cashAndBankAccountsOptions = [];
+            if (res) {
+                res.forEach(acc => {
+                    if (acc.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
+                        debtorsAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                    }
 
-                if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                    this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
-                }
-                if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                    bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
-                }
-            });
-            bankaccounts = _.orderBy(bankaccounts, 'label');
-            this.bankAccounts$ = observableOf(bankaccounts);
+                    if (acc.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
+                        creditorsAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                    }
+                    if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+                        cashAndBankAccountsOptions.push({label: acc.name, value: acc.uniqueName, additional: acc});
+                    }
+                });
+            }
+
+            this.debtorsAccountsOptions = debtorsAccountsOptions;
+            this.creditorsAccountsOptions = creditorsAccountsOptions;
+            this.cashAndBankAccountsOptions = cashAndBankAccountsOptions;
         });
 
         this.fileUploadOptions = {concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg']};
@@ -151,7 +160,28 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         });
     }
 
-    public preFillData(res: any) {
+    public preFillData(res: PettyCashResonse) {
+        // prepare entryAgainstObject
+        switch (res.pettyCashEntryStatus.entryType) {
+            case 'sales':
+                this.entryAgainstObject.base = 'Receipt Mode';
+                this.entryAgainstObject.against = 'Entry against Creditors';
+                break;
+
+            case 'purchase':
+                this.entryAgainstObject.base = 'Payment Mode';
+                this.entryAgainstObject.against = 'Entry against Debtors';
+                break;
+
+            case 'deposit':
+                this.entryAgainstObject.base = 'Deposit To';
+                this.entryAgainstObject.against = null;
+                break;
+        }
+
+        this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+        this.entryAgainstObject.model = res.particular.uniqueName;
+
         this.companyUniqueName = null;
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
         this.comment = res.description;
@@ -166,14 +196,50 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         }
     }
 
+    public toggleEntryAgainst() {
+        switch (this.entryAgainstObject.against) {
+            case 'Entry against Creditors':
+                this.entryAgainstObject.base = 'Creditor Name';
+                this.entryAgainstObject.against = 'Cash Sales';
+                this.entryAgainstObject.dropDownOption = this.creditorsAccountsOptions;
+                break;
+
+            case 'Entry against Debtors':
+                this.entryAgainstObject.base = 'Debtor Name';
+                this.entryAgainstObject.against = 'Cash Expenses';
+                this.entryAgainstObject.dropDownOption = this.debtorsAccountsOptions;
+                break;
+
+            case 'Cash Sales':
+                this.entryAgainstObject.base = 'Receipt Mode';
+                this.entryAgainstObject.against = 'Entry against Creditors';
+                this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+                break;
+
+            case 'Cash Expenses':
+                this.entryAgainstObject.base = 'Payment Mode';
+                this.entryAgainstObject.against = 'Entry against Debtors';
+                this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+                break;
+
+        }
+        this.entryAgainstObject.model = null;
+
+    }
+
     public closeDetailsMode() {
         this.toggleDetailsMode.emit(true);
     }
 
     public approvedActionClicked(item: ExpenseResults) {
+        if (!item.baseAccount.uniqueName) {
+            this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
+            return;
+        }
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: item.uniqueName
+            uniqueName: item.uniqueName,
+            accountUniqueName: item.baseAccount.uniqueName
         };
         this.pettyCashAction(actionType);
         this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
@@ -186,7 +252,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         });
     }
 
-    public prepareApproveRequestObject(pettyCashEntryObj: any) {
+    public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse) {
         if (pettyCashEntryObj && this.actionPettyCashRequestBody) {
             this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
             this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
@@ -224,9 +290,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
             this._expenseService.getPettycashEntry(this.selectedItem.uniqueName).subscribe(res => {
                 if (res.status === 'success') {
-                    this.accountEntryPettyCash = res;
+                    this.accountEntryPettyCash = res.body;
                     this.prepareApproveRequestObject(this.accountEntryPettyCash);
-                    this.comment = this.accountEntryPettyCash.body.description;
+                    this.comment = this.accountEntryPettyCash.description;
                 }
             });
         }

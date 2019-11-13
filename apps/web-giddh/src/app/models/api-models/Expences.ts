@@ -134,6 +134,7 @@ export class PettyCashEntryStatus {
     message?: any;
     updatedAt: string;
     updatedBy: UpdatedBy;
+    entryType: string;
 }
 
 export class UpdatedBy {
