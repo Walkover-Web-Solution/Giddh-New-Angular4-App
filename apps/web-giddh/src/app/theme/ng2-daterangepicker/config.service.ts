@@ -35,7 +35,7 @@ export class DaterangepickerConfig {
                   .daterangepicker.dropup{margin-top:-5px}.daterangepicker.dropup:before{top:initial;bottom:-7px;
                     border-bottom:initial;border-top:7px solid #ccc}.daterangepicker.dropup:after{top:initial;
                       bottom:-6px;border-bottom:initial;border-top:6px solid #fff}
-                      .daterangepicker.dropdown-menu{max-width:none;z-index:3001}.daterangepicker.show-calendar
+                      .daterangepicker.dropdown-menu{max-width:none;z-index:9999;}.daterangepicker.show-calendar
                       .calendar{display:block}.daterangepicker .calendar{display:none;max-width:270px;margin:4px}
                       .daterangepicker .calendar.single .calendar-table{border:none}.daterangepicker .calendar td,
                       .daterangepicker .calendar th{white-space:nowrap;text-align:center;min-width:32px}

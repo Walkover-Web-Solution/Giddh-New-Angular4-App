@@ -11,14 +11,15 @@ import { ToasterService } from '../../../../../services/toaster.service';
 import * as moment from 'moment';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../../../shared/helpers/defaultDateFormat';
-import { contriesWithCodes } from '../../../../../shared/helpers/countryWithCodes';
 import { AppState } from '../../../../../store';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { SelectComponent } from '../../../../../theme/ng-select/select.component';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { ICommonItemOfTransaction } from '../../../../../models/api-models/Invoice';
 import { LedgerDiscountClass } from '../../../../../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../../../../../theme/tax-control/tax-control.component';
+import { CommonActions } from '../../../../../actions/common.actions';
+import {CountryRequest} from "../../../../../models/api-models/Common";
 
 @Component({
   selector: 'letter-template',
@@ -80,13 +81,16 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   public isFormSubmitted: boolean = false;
   public isIndia: boolean = false;
 
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+
   constructor(
     private _sanitizer: DomSanitizer,
     private _createHttpService: CreateHttpService,
     private _toasty: ToasterService,
     private fb: FormBuilder,
     private store: Store<AppState>,
-    private generalAction: GeneralActions
+    private generalAction: GeneralActions,
+    private commonActions: CommonActions
   ) {
     this.invFormData = new VoucherClass();
     this.setCreateInvoiceForm();
@@ -107,23 +111,8 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.generalAction.getAllState());
+    this.getCountry();
     this.data = new VoucherClass();
-    // bind countries
-    contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
-    });
-
-    // bind state sources
-    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.map(d => {
-          arr.push({label: `${d.code} - ${d.name}`, value: d.code});
-        });
-      }
-      this.statesSource$ = observableOf(arr);
-    });
 
     this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.subscribe((val) => {
       let data = _.cloneDeep(this.CreateInvoiceForm.value);
@@ -467,5 +456,20 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 
   public txnChangeOccurred() {
     //
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
   }
 }

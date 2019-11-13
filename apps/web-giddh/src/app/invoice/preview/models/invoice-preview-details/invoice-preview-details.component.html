@@ -196,7 +196,7 @@
 
                 <div class="col-sm-4 pd0"
                   *ngIf="selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel'">
-                  <div class="single-paymentDetail">
+                  <div class="single-paymentDetail clearfix">
                     <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                     <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
                     <a href="javascript: void 0" (click)="receivePaymentPopup.toggle()">Receive Payment</a>
@@ -205,7 +205,7 @@
 
 
                 <div class="col-sm-4 pd0">
-                  <div class="single-paymentDetail">
+                  <div class="single-paymentDetail clearfix">
                     <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
                     <p class="payment-content">You can now email this invoice to your customer or mark it as sent. </p>
                     <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send Invoice</a>
@@ -368,7 +368,8 @@
       <!-- endregion -->
 
       <app-send-email-invoice-component [voucherType]="voucherType"
-        (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" (cancelEvent)="showEmailSendModal.hide()">
+        (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]='selectedItem'
+        (cancelEvent)="showEmailSendModal.hide()">
       </app-send-email-invoice-component>
 
     </div>
@@ -379,16 +380,13 @@
 
 <!-- region download modal-->
 <div bsModal #downloadVoucherModal="bs-modal" class="modal fade" role="dialog"
-     [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+  [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
 
   <div class="modal-dialog semdMailModal">
 
     <div class="modal-content">
 
-      <download-voucher
-        [selectedItem]="selectedItem"
-        (cancelEvent)="downloadVoucherModal.hide()"
-      ></download-voucher>
+      <download-voucher [selectedItem]="selectedItem" (cancelEvent)="downloadVoucherModal.hide()"></download-voucher>
 
     </div>
   </div>
@@ -413,7 +411,8 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
-      <invoice-payment-model [selectedInvoiceForPayment]="selectedItem" (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
+      <invoice-payment-model [selectedInvoiceForPayment]="selectedItem"
+        (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
       </invoice-payment-model>
     </div>
   </div>

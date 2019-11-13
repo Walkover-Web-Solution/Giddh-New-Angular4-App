@@ -78,6 +78,9 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.voucherType = a.voucherType;
       // this.getVoucher(false);
     });
+    this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
+      this.voucherType = _.cloneDeep(voucherType);
+    });
     this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
       this.customTemplate = _.cloneDeep(template);
     });

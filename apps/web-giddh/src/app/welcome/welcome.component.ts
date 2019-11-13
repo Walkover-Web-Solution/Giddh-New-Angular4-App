@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { States, CompanyRequest, CompanyCreateRequest, GstDetail } from '../models/api-models/Company';
+import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -20,6 +20,9 @@ import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
 import { GeneralActions } from '../actions/general/general.actions';
+import { CommonActions } from '../actions/common.actions';
+import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
+import {IForceClear} from "../models/api-models/Sales";
 
 @Component({
   selector: 'welcome-component',
@@ -28,24 +31,24 @@ import { GeneralActions } from '../actions/general/general.actions';
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  public stateGstCode: any[] = [];
+  public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
+  public countryPhoneCode: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
   public companyProfileObj: any = null;
-  public countryCodeList: IOption[] = [];
   public company: any = {};
   public createNewCompany: any = {};
   public statesSource$: Observable<IOption[]> = observableOf([]);
-  public stateStream$: Observable<States[]>;
   public states: IOption[] = [];
   public countryIsIndia: boolean = false;
   public selectedBusinesstype: string = '';
   public selectedstateName: string = '';
   public selectedCountry = '';
-  //public gstKeyDownSubject$: Subject<any> = new Subject<any>();
   public isGstValid: boolean = true;
-  public countrySource: IOption[] = [];
-  public currencies: IOption[] = [];
-  public countryPhoneCode: IOption[] = [];
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public taxesList: any = [];
   public businessTypeList: IOption[] = [];
   public businessNatureList: IOption[] = [];
@@ -70,9 +73,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       userUniqueName: '',
       licenceKey: ''
     },
-    gstDetails: [],
-    bussinessNature: '',
-    bussinessType: '',
+    addresses: [],
+    businessNature: '',
+    businessType: '',
     address: '',
     industry: '',
     baseCurrency: '',
@@ -95,90 +98,41 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     amountPaid: '',
     razorpaySignature: ''
   };
-  public GstDetailsObj: GstDetail = {
-    gstNumber: '',
-    addressList: [
-      {
-        stateCode: '',
-        address: '',
-        isDefault: false,
-        stateName: ''
-      }
-    ]
+
+  public addressesObj: Addresses = {
+    stateCode: '',
+    address: '',
+    isDefault: false,
+    stateName: '',
+    taxNumber: ''
   };
+
   public updateProfileSuccess$: Observable<boolean>;
   public businessType: IOption[] = [];
-
   public BusinessOptions: IOption[] = [];
-
-
   public hideTextarea = true;
   public collapseTextarea = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public formFields: any[] = [];
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
-
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-    private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
     this.companyProfileObj = {};
-    this.store.dispatch(this._generalActions.getAllState());
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
-    });
-    // Country phone Code
-    contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
-    });
 
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    this.stateStream$.subscribe((data) => {
-      if (data) {
-        data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
+    this.store.dispatch(this._generalActions.resetStatesList());
+    this.store.dispatch(this.commonActions.resetOnboardingForm());
 
-        this.reFillState();
-      }
-      const filteredArr = this.states.reduce((acc, current) => {
-        const x = acc.find(item => item.value === current.value);
-        if (!x) {
-          return acc.concat([current]);
-        } else {
-          return acc;
-        }
-      }, []);
-      this.statesSource$ = observableOf(filteredArr);
-    }, (err) => {
-      // console.log(err);
-    });
     this.store.select(state => {
       if (!state.session.companies) {
         return;
       }
       state.session.companies.forEach(cmp => {
         if (cmp.uniqueName === state.session.companyUniqueName) {
-          this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'india';
-
-          if (cmp.country && this.companyProfileObj && !this.companyProfileObj.country) {
-            this.selectedCountry = cmp.country;
-            this.autoSelectCountryCode(cmp.country);
-          }
+          this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'in';
         }
       });
     }).pipe(takeUntil(this.destroyed$)).subscribe();
     this.updateProfileSuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
-    // GET APPLICABLE TAXES
-    // this.store.dispatch(this.companyActions.GetApplicableTaxes());
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      this.currencies = [];
-      if (data) {
-        data.map(d => {
-          this.currencies.push({ label: d.code, value: d.code });
-        });
-      }
-      this.currencySource$ = observableOf(this.currencies);
-    });
-
   }
 
   public ngOnInit() {
@@ -222,14 +176,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.businessTypeList.push({ label: o, value: o });
       });
     });
-    this._companyService.getApplicabletaxes().subscribe((res: any) => {
-      this.taxesList = [];
-      _.map(res.body, (o) => {
-        this.taxesList.push({ label: o.name, value: o.uniqueName, isSelected: false });
-      });
 
-      this.reFillTax();
-    });
     this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
       this.businessNatureList = [];
       _.map(res.body, (o) => {
@@ -249,18 +196,20 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public reFillForm() {
-    this.companyProfileObj.bussinessNature = this.createNewCompany.bussinessNature;
-    this.companyProfileObj.bussinessType = this.createNewCompany.bussinessType;
-    this.selectedBusinesstype = this.createNewCompany.bussinessType;
+    this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
+    this.companyProfileObj.businessType = this.createNewCompany.businessType;
+    this.selectedBusinesstype = this.createNewCompany.businessType;
     if (this.selectedBusinesstype === 'Registered') {
-      this.companyProfileObj.gstNumber = this.createNewCompany.gstDetails[0].gstNumber;
+      if(this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+        this.companyProfileObj.taxNumber = this.createNewCompany.addresses[0].taxNumber;
+      }
     }
     this.companyProfileObj.address = this.createNewCompany.address;
   }
 
   public reFillState() {
-    if(this.createNewCompany.gstDetails !== undefined && this.createNewCompany.gstDetails[0] !== undefined && this.createNewCompany.gstDetails[0].addressList !== undefined && this.createNewCompany.gstDetails[0].addressList[0] !== undefined) {
-      this.companyProfileObj.state = this.createNewCompany.gstDetails[0]['addressList'][0].stateCode;
+    if(this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+      this.companyProfileObj.state = this.createNewCompany.addresses[0].stateCode;
 
       let stateLoop = 0;
       for(stateLoop; stateLoop < this.states.length; stateLoop++) {
@@ -273,7 +222,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public reFillTax() {
     if(this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
-
       let currentTaxList = [];
 
       for (let i = 0; i < this.taxesList.length; i++) {
@@ -282,11 +230,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.createNewCompany.taxes.forEach(tax => {
-        this.selectedTaxes.push(tax);
+        if(currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
+          this.selectedTaxes.push(tax);
 
-        let matchedIndex = currentTaxList[tax];
-        if (matchedIndex > -1) {
-          this.taxesList[matchedIndex].isSelected = true;
+          let matchedIndex = currentTaxList[tax];
+          if (matchedIndex > -1) {
+            this.taxesList[matchedIndex].isSelected = true;
+          }
         }
       });
     }
@@ -301,13 +251,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
       this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
       this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+      this.getCountry();
+      this.getCurrency();
+      this.getCallingCodes();
     }
   }
 
   public submit() {
-    // this.selectedTaxes = [];
-    this.createNewCompanyPreparedObj.bussinessNature = this.companyProfileObj.bussinessNature ? this.companyProfileObj.bussinessNature : '';
-    this.createNewCompanyPreparedObj.bussinessType = this.companyProfileObj.bussinessType ? this.companyProfileObj.bussinessType : '';
+    this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
+    this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
     this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
     this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
     if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
@@ -316,45 +268,45 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-    if (gstDetails.gstNumber) {
-      this.createNewCompanyPreparedObj.gstDetails.push(gstDetails);
-      //this.createNewCompanyPreparedObj.address = '';
+    if (gstDetails.taxNumber) {
+      this.createNewCompanyPreparedObj.addresses.push(gstDetails);
     } else {
-      this.createNewCompanyPreparedObj.gstDetails = [];
+      this.createNewCompanyPreparedObj.addresses = [];
     }
+
     this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
     this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
     this._router.navigate(['select-plan']);
   }
-  public prepareGstDetail(obj) {
-    if (obj.gstNumber) {
-      this.GstDetailsObj.gstNumber = obj.gstNumber;
-      this.GstDetailsObj.addressList[0].stateCode = obj.state;
-      this.GstDetailsObj.addressList[0].address = obj.address;
-      this.GstDetailsObj.addressList[0].isDefault = false;
-      this.GstDetailsObj.addressList[0].stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
-    }
-    return this.GstDetailsObj;
-  }
-  /**
-   * autoSelectCountryCode
-   */
-  public autoSelectCountryCode(country) {
-    if (this.countryCodeList) {
-      let selectedCountry = _.find(this.countryCodeList, function (o) {
-        return o.additional === country;
-      });
-      if (selectedCountry && selectedCountry.value) {
-        this.companyProfileObj.country = selectedCountry.value;
-      }
-    }
 
+  public prepareGstDetail(obj) {
+    if (obj.taxNumber) {
+      this.addressesObj.taxNumber = obj.taxNumber;
+      this.addressesObj.stateCode = obj.state;
+      this.addressesObj.address = obj.address;
+      this.addressesObj.isDefault = false;
+      this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
+    }
+    return this.addressesObj;
   }
+
   public checkGstNumValidation(ele: HTMLInputElement) {
-    let isInvalid: boolean = false;
+    let isValid: boolean = false;
+
     if (ele.value) {
-      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-        this._toasty.errorToast('Invalid GST number');
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(ele.value)) {
+            isValid = true;
+          }
+        }
+      } else {
+        isValid = true;
+      }
+
+      if (!isValid) {
+        this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;
       } else {
@@ -365,52 +317,59 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       ele.classList.remove('error-box');
     }
   }
+
   public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
-    let gstVal: string = gstNo.value;
-    this.companyProfileObj.gstNumber = gstVal;
+    if(this.createNewCompanyPreparedObj.country === "IN") {
+      let gstVal: string = gstNo.value;
+      this.companyProfileObj.gstNumber = gstVal;
 
-    if (gstVal.length >= 2) {
-      this.statesSource$.pipe(take(1)).subscribe(state => {
-        let s = state.find(st => st.value === gstVal.substr(0, 2));
-        _.uniqBy(s, 'value');
-        statesEle.setDisabledState(false);
+      if (gstVal.length >= 2) {
+        this.statesSource$.pipe(take(1)).subscribe(state => {
+          let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-        if (s) {
-          this.companyProfileObj.state = s.value;
-          this.selectedstateName = s.label
-          statesEle.setDisabledState(true);
-
-        } else {
-          this.companyProfileObj.state = '';
+          let s = state.find(st => st.value === stateCode);
+          _.uniqBy(s, 'value');
           statesEle.setDisabledState(false);
-          this._toasty.clearAllToaster();
-          this._toasty.warningToast('Invalid GSTIN.');
-        }
-      });
-    } else {
-      statesEle.setDisabledState(false);
-      this.companyProfileObj.state = '';
+
+          if (s) {
+            this.companyProfileObj.state = s.value;
+            this.selectedstateName = s.label;
+            statesEle.setDisabledState(true);
+
+          } else {
+            this.companyProfileObj.state = '';
+            statesEle.setDisabledState(false);
+            this._toasty.clearAllToaster();
+            this._toasty.warningToast('Invalid ' + this.formFields['taxName'].label);
+          }
+        });
+      } else {
+        statesEle.setDisabledState(false);
+        this.companyProfileObj.state = '';
+      }
     }
   }
 
   public selectedbusinessType(event) {
-    //
     if (event) {
       this.selectedBusinesstype = event.value;
+      this.selectedTaxes = [];
+      this.companyProfileObj.taxNumber = '';
+      this.companyProfileObj.selectedState = '';
+      this.companyProfileObj.state = '';
+      this.forceClear$ = observableOf({status: true});
+
+      if(this.selectedBusinesstype === 'Unregistered') {
+        this.isGstValid = true;
+      }  else {
+        this.isGstValid = false;
+      }
+
+      for (let i = 0; i < this.taxesList.length; i++) {
+        this.taxesList[i].isSelected = false;
+      }
     }
   }
-
-  // public resetbussinessType() {
-  //   setTimeout(() => {
-  //     this.companyProfileObj.bussinessType = '';
-  //   }, 100);
-  // }
-
-  // public resetbussinessNature() {
-  //   setTimeout(() => {
-  //     this.companyProfileObj.bussinessNature = '';
-  //   }, 100);
-  // }
 
   public selectApplicableTaxes(tax, event) {
     if (event && tax) {
@@ -427,14 +386,110 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public back(isbranch: boolean) {
     //this._router.navigate(['']);
     if (isbranch) {
-      this._router.navigate(['pages', 'settings', 'branch']);  // <!-- pages/settings/branch -->
+      this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
     } else {
       this._router.navigate(['new-user']);
     }
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+
+          if (this.createNewCompanyPreparedObj.country === res[key].alpha2CountryCode) {
+            this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
+          }
+
+          this.countrySource.push({value: res[key].countryName, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          this.countryCurrency[res[key].alpha2CountryCode] = [];
+          this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+
+        this.getOnboardingForm();
+        this.getStates();
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = 'onboarding';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getCallingCodes() {
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
+  }
+
+  public getOnboardingForm() {
+    this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.fields).forEach(key => {
+          this.formFields[res.fields[key].name] = [];
+          this.formFields[res.fields[key].name] = res.fields[key];
+        });
+
+        Object.keys(res.applicableTaxes).forEach(key => {
+          this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
+        });
+        this.reFillTax();
+      } else {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = this.createNewCompanyPreparedObj.country;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+      }
+    });
+  }
+
+  public getStates() {
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
+
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+        });
+        this.statesSource$ = observableOf(this.states);
+        this.reFillState();
+      } else {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = this.createNewCompanyPreparedObj.country;
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
   }
 
   public removeTax(tax) {
@@ -455,12 +510,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.taxesList[matchedIndex].isSelected = false;
     }
   }
+
   public onClearBusinessType() {
     this.selectedBusinesstype = '';
-    this.companyProfileObj.bussinessType = '';
+    this.companyProfileObj.businessType = '';
 
   }
+
   public onClearBusinessNature() {
-    this.companyProfileObj.bussinessNature = '';
+    this.companyProfileObj.businessNature = '';
   }
 }

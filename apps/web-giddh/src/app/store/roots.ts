@@ -33,6 +33,7 @@ import * as fromGstReconcile from './GstReconcile/GstReconcile.reducer';
 import * as fromGstR from './GstR/GstR.reducer';
 import * as fromSubscriptions from './userSubscriptions/subscriptions.reducer';
 import * as fromProforma from './proforma/proforma.reducer';
+import * as fromCommon from './Common/common.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -72,6 +73,7 @@ export interface AppState {
   gstR: fromGstR.GstRReducerState;
   subscriptions: fromSubscriptions.SubscriptionState;
   proforma: fromProforma.ProformaState
+  common: fromCommon.CurrentCommonState
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -110,5 +112,6 @@ export const reducers: ActionReducerMap<AppState> = {
   gstReconcile: fromGstReconcile.GstReconcileReducer,
   gstR: fromGstR.GstRReducer,
   subscriptions: fromSubscriptions.SubscriptionReducer,
-  proforma: fromProforma.ProformaReducer
+  proforma: fromProforma.ProformaReducer,
+  common: fromCommon.CommonReducer
 };

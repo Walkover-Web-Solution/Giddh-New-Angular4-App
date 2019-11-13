@@ -41,9 +41,12 @@ export class AddressList {
   public stateName: string;
 }
 
-export class GstDetail {
-  public addressList: AddressList[];
-  public gstNumber: string;
+export class Addresses {
+  public stateCode: string;
+  public address: string;
+  public isDefault: boolean;
+  public stateName: string;
+  public taxNumber: string;
 }
 
 export class CompanyResponse {
@@ -54,6 +57,7 @@ export class CompanyResponse {
   public city: string;
   public pincode: string;
   public country: string;
+  public countryV2: CountryResponse;
   public updatedAt: string;
   public updatedBy: ICommonItem;
   public createdAt: string;
@@ -70,13 +74,14 @@ export class CompanyResponse {
   public alias?: any;
   public role: Role;
   public name: string;
-  public gstDetails: GstDetail[];
+  public addresses: Addresses[];
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
   public userEntityRoles?: UserEntityRole[];
   public nameAlias?: string;
   public balanceDisplayFormat?: string;
   public balanceDecimalPlaces?: string;
+  public baseCurrencySymbol?: string;
 }
 
 export interface UserEntityRole {
@@ -168,9 +173,26 @@ export class TaxResponse implements ITax {
   public isDisabled?: boolean;
 }
 
+export class StatesRequest {
+  country: string;
+}
+
 export class States {
-  public name: string;
-  public code: string;
+  public country: {
+    alpha2CountryCode: string;
+    alpha3CountryCode: string;
+    callingCode: string;
+    countryName: string;
+    currency: {
+      code: string;
+      symbol: string;
+    }
+  };
+  public stateList: [{
+    stateGstCode: string;
+    name: string;
+    code: string;
+  }]
 }
 
 export class GetCouponResp {
@@ -210,11 +232,6 @@ export interface AddressList {
   stateName: string;
 }
 
-// export interface GstDetail {
-//     gstNumber: string;
-//     addressList: AddressList[];
-// }
-
 export class BillingDetails {
   name: string;
   email: string;
@@ -233,9 +250,9 @@ export class CompanyCreateRequest {
   uniqueName: string;
   isBranch?: boolean;
   subscriptionRequest?: SubscriptionRequest;
-  gstDetails?: GstDetail[];
-  bussinessNature?: string;
-  bussinessType?: string;
+  addresses?: Addresses[];
+  businessNature?: string;
+  businessType?: string;
   address?: string;
   industry?: string;
   baseCurrency: string;
@@ -250,7 +267,6 @@ export class CompanyCreateRequest {
   amountPaid?: string;
   orderId?: string;
   razorpaySignature?: string;
-
 }
 
 export class CreateCompanyUsersPlan {
@@ -297,4 +313,15 @@ export class CompanyCountry {
   baseCurrency: string;
   country: string;
 
+}
+
+export class CountryResponse {
+  alpha2CountryCode: string;
+  alpha3CountryCode: string;
+  callingCode: string;
+  countryName: string;
+  currency: {
+    code: string;
+    symbol: string;
+  };
 }
