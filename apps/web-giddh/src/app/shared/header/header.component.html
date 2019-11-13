@@ -226,11 +226,10 @@
           </ul>
 
 
-          <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm"
-            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
-              class="icon-edit-ico"></span>Accounts
+          <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']"
+            (click)="showManageGroupsModal()"> <span class="icon-edit-ico"></span>Accounts
           </button>
-          <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
+          <div class="btn-group cp mrL1 d-inline-block" dropdown>
             <span class="icon-support dropdown-toggle" dropdownToggle></span>
 
             <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->

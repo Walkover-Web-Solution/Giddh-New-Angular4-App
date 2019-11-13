@@ -697,6 +697,17 @@ span.icon-support.dropdown-toggle{
 .paddingTopFixed-mobile {
     padding-top: 85px;
 }
+.upperLayerHeader .open .dropdown-menu{
+
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+
+}
 }
 @media(min-width:412px) and (max-width:840px){
   ul.sub-list{
