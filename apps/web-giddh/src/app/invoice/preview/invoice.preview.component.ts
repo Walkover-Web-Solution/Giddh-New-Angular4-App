@@ -1138,11 +1138,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private addToolTiptext(item: ReceiptItem): any {
         try {
             if (item.account && item.account.currency) {
-                const currencyCode = item.account.currency.code;
-                const balanceDueAmountForCompany = item.balanceDue.amountForCompany;
-                const grandTotalAmountForCompany = item.grandTotal.amountForCompany;
-                item['grandTotalTooltipText'] = `In ${currencyCode}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${(item.grandTotal.amountForAccount / Number(grandTotalAmountForCompany)).toFixed(2)})`;
-                item['balanceDueTooltipText'] = `In ${currencyCode}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${(item.balanceDue.amountForAccount / Number(balanceDueAmountForCompany)).toFixed(2)})`;
+                const balanceDueAmountForCompany = Number(item.balanceDue.amountForCompany);
+                const grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany);
+                const balanceDueAmountForAccount = Number(item.balanceDue.amountForAccount);
+                const grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount);
+                let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
+                if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                    grandTotalConversionRate = +((grandTotalAmountForAccount / grandTotalAmountForCompany) || 0).toFixed(2);
+                }
+                if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
+                    balanceDueAmountConversionRate = +((balanceDueAmountForAccount / balanceDueAmountForCompany) || 0).toFixed(2);
+                }
+                item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
             }
         } catch (error) { }
         return item;
