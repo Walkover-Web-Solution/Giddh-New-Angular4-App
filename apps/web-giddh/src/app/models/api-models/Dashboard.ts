@@ -73,3 +73,95 @@ export class RefreshBankAccountResponse {
   // tslint:disable-next-line:variable-name
   public token_URL: string;
 }
+
+export class GraphTypesResponse {
+  public uniqueName?: any;
+  public type: string;
+}
+
+export class RevenueGraphDataRequest {
+  public currentFrom?: string;
+  public currentTo: string;
+  public previousFrom: string;
+  public previousTo: string;
+  public interval: string;
+  public type: string;
+  public uniqueName: string;
+  public refresh: any;
+}
+
+export class RevenueGraphDataResponse {
+  public currentClosingBalance: {
+    amount: any;
+    type: any;
+  };
+
+  public currentHighestClosingBalance: {
+    amount: string;
+    type: string;
+  };
+
+  public currentLowestClosingBalance: {
+    amount: string;
+    type: string;
+  };
+
+  public previousClosingBalance: {
+    amount: string;
+    type: string;
+  };
+
+  public previousHighestClosingBalance: {
+    amount: string;
+    type: string;
+  };
+
+  public previousLowestClosingBalance: {
+    amount: string;
+    type: string;
+  };
+
+  public balances: [{
+    current: {
+      openingBalance: {
+        amount: string;
+        type: string;
+      };
+      creditTotal: any;
+      debitTotal: any;
+      closingBalance: {
+        amount: string;
+        type: string;
+      };
+      dateLabel: string;
+      balance: {
+        amount: string;
+        type: string;
+      };
+      from: string;
+      to: string;
+    };
+
+    previous: {
+      openingBalance: {
+        amount: string;
+        type: string;
+      };
+      creditTotal: any;
+      debitTotal: any;
+      closingBalance: {
+        amount: string;
+        type: string;
+      };
+      dateLabel: string;
+      balance: {
+        amount: string;
+        type: string;
+      };
+      from: string;
+      to: string;
+    };
+
+    percentageChange: any;
+  }];
+}

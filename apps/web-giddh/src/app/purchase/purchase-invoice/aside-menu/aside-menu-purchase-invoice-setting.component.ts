@@ -87,11 +87,11 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
     this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
 
     this.store.select(s => s.settings.profile).subscribe(pro => {
-      if (pro && pro.gstDetails) {
-        let gstNo = pro.gstDetails.filter(f => {
-          return f.addressList[0] && f.addressList[0].isDefault === true;
+      if (pro && pro.addresses) {
+        let gstNo = pro.addresses.filter(f => {
+          return f.isDefault === true;
         }).map(p => {
-          return p.gstNumber;
+          return p.taxNumber;
         });
         if (gstNo && gstNo[0]) {
           this.defaultGstNumber = gstNo[0];

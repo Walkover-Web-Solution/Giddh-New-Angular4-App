@@ -47,8 +47,8 @@ export class InvoiceUiDataService {
     if (currentCompany) {
       this.companyName = currentCompany.name;
       this.companyAddress = currentCompany.address;
-      if (currentCompany.gstDetails[0]) {
-        this.companyGSTIN.next(currentCompany.gstDetails[0].gstNumber);
+      if (currentCompany.addresses[0]) {
+        this.companyGSTIN.next(currentCompany.addresses[0].taxNumber);
       }
       if (currentCompany.panNumber) {
         this.companyPAN.next(currentCompany.panNumber);

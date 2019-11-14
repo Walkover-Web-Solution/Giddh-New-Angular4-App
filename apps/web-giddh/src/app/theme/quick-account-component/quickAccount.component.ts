@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService }  from 'apps/web-giddh/src/app/services/group.service';
 import { CompanyService }  from 'apps/web-giddh/src/app/services/companyService.service';
 import { AccountRequestV2 }  from 'apps/web-giddh/src/app/models/api-models/Account';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { AppState }  from 'apps/web-giddh/src/app/store';
 import { GroupsWithAccountsResponse }  from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { LedgerActions }  from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
@@ -36,6 +36,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit {
   public showGstBox: boolean = false;
   public newAccountForm: FormGroup;
   public comingFromDiscountList: boolean = false;
+  public states: any[] = [];
 
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -45,7 +46,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit {
     this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).pipe(takeUntil(this.destroyed$));
     this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).pipe(takeUntil(this.destroyed$));
     this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-    this.statesStream$ = this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$));
+
     this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').subscribe(result => {
       if (result.status === 'success') {
         let groupsListArray: IOption[] = [];
@@ -62,16 +63,15 @@ export class QuickAccountComponent implements OnInit, AfterViewInit {
         }
       }
     });
-    this.statesStream$.subscribe((data) => {
-      let states: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+
+    // bind state sources
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
+        this.statesSource$ = observableOf(this.states);
       }
-      this.statesSource$ = observableOf(states);
-    }, (err) => {
-      // console.log(err);
     });
   }
 
