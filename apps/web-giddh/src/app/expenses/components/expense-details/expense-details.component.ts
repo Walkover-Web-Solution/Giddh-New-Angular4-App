@@ -161,38 +161,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public preFillData(res: PettyCashResonse) {
-        if (res.pettyCashEntryStatus.entryType && res.particular.uniqueName) {
-            if (res.pettyCashEntryStatus.entryType === 'sales') {
-                let isCashOrBank = this.cashAndBankAccountsOptions.some(s => s.value === res.particular.uniqueName);
-                if (!isCashOrBank) {
-                    // if not cash then it must be debtor
-                }
-            } else if (res.pettyCashEntryStatus.entryType === 'purchase') {
-
-            } else {
-                // deposit
-            }
-        }
-        // prepare entryAgainstObject
-        switch (res.pettyCashEntryStatus.entryType) {
-            case 'sales':
-                this.entryAgainstObject.base = 'Receipt Mode';
-                this.entryAgainstObject.against = 'Entry against Creditors';
-                break;
-
-            case 'purchase':
-                this.entryAgainstObject.base = 'Payment Mode';
-                this.entryAgainstObject.against = 'Entry against Debtors';
-                break;
-
-            case 'deposit':
-                this.entryAgainstObject.base = 'Deposit To';
-                this.entryAgainstObject.against = null;
-                break;
-        }
-
-        this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
-        this.entryAgainstObject.model = res.particular.uniqueName;
+        this.prepareEntryAgainstObject(res);
 
         this.companyUniqueName = null;
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
@@ -210,27 +179,27 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     public toggleEntryAgainst() {
         switch (this.entryAgainstObject.against) {
-            case 'Entry against Creditors':
-                this.entryAgainstObject.base = 'Creditor Name';
+            case 'Entry against Debtor':
+                this.entryAgainstObject.base = 'Debtor Name';
                 this.entryAgainstObject.against = 'Cash Sales';
-                this.entryAgainstObject.dropDownOption = this.creditorsAccountsOptions;
+                this.entryAgainstObject.dropDownOption = this.debtorsAccountsOptions;
                 break;
 
-            case 'Entry against Debtors':
-                this.entryAgainstObject.base = 'Debtor Name';
+            case 'Entry against Creditor':
+                this.entryAgainstObject.base = 'Creditor Name';
                 this.entryAgainstObject.against = 'Cash Expenses';
-                this.entryAgainstObject.dropDownOption = this.debtorsAccountsOptions;
+                this.entryAgainstObject.dropDownOption = this.creditorsAccountsOptions;
                 break;
 
             case 'Cash Sales':
                 this.entryAgainstObject.base = 'Receipt Mode';
-                this.entryAgainstObject.against = 'Entry against Creditors';
+                this.entryAgainstObject.against = 'Entry against Debtor';
                 this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
                 break;
 
             case 'Cash Expenses':
                 this.entryAgainstObject.base = 'Payment Mode';
-                this.entryAgainstObject.against = 'Entry against Debtors';
+                this.entryAgainstObject.against = 'Entry against Creditor';
                 this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
                 break;
 
@@ -415,5 +384,31 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public toggleOtherTaxesAsidePane(modal) {
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    private prepareEntryAgainstObject(res: PettyCashResonse) {
+        let cashOrBankEntry = this.isCashBankAccount(res.particular.uniqueName);
+
+        if (res.pettyCashEntryStatus.entryType === 'sales') {
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+            this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.debtorsAccountsOptions;
+        } else if (res.pettyCashEntryStatus.entryType === 'purchase') {
+
+            this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expense';
+            this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.creditorsAccountsOptions;
+        } else {
+            // deposit
+            this.entryAgainstObject.base = 'Deposit To';
+            this.entryAgainstObject.against = null;
+            this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+        }
+
+        this.entryAgainstObject.model = res.particular.uniqueName;
+    }
+
+    private isCashBankAccount(uniqueName) {
+        return this.cashAndBankAccountsOptions.some(s => s.value === uniqueName);
     }
 }
