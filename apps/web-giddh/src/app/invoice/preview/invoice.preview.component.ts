@@ -1144,10 +1144,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 const grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
                 let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                    grandTotalConversionRate = +((grandTotalAmountForAccount / grandTotalAmountForCompany) || 0).toFixed(2);
+                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
                 }
                 if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
-                    balanceDueAmountConversionRate = +((balanceDueAmountForAccount / balanceDueAmountForCompany) || 0).toFixed(2);
+                    balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
                 }
                 item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
                 item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;

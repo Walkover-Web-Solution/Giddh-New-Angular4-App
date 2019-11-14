@@ -313,12 +313,13 @@ input {
 
 /* my css start */
 
-
-.vat-report .tab-content .tab-pane {
-  background: #fff;
-  padding: 20px;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+.white-box {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
+
 .vat-report .tab-content {
   padding: 0 15px;
 }
