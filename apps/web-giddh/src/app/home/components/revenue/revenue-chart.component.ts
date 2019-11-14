@@ -105,6 +105,13 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public getRevenueGraphData() {
+		this.currentData = [];
+		this.previousData = [];
+		this.summaryData.totalCurrent = 0;
+		this.summaryData.totalLast = 0;
+		this.summaryData.highest = 0;
+		this.summaryData.lowest = 0;
+
 		this.store.pipe(select(s => s.home.revenueGraphData), takeUntil(this.destroyed$)).subscribe(res => {
 			console.log(res);
 			if (res && res.balances) {
@@ -117,26 +124,18 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 				if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
 					this.summaryData.totalCurrent = res.currentClosingBalance.amount;
-				} else {
-					this.summaryData.totalCurrent = 0;
 				}
 
 				if (res.previousClosingBalance !== null && res.previousClosingBalance.amount !== null) {
 					this.summaryData.totalLast = res.previousClosingBalance.amount;
-				} else {
-					this.summaryData.totalLast = 0;
 				}
 
-				if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
-					this.summaryData.highest = res.currentClosingBalance.amount;
-				} else {
-					this.summaryData.highest = 0;
+				if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
+					this.summaryData.highest = res.previousHighestClosingBalance.amount;
 				}
 
-				if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
-					this.summaryData.lowest = res.currentClosingBalance.amount;
-				} else {
-					this.summaryData.lowest = 0;
+				if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
+					this.summaryData.lowest = res.currentLowestClosingBalance.amount;
 				}
 
 				this.generateChart();
