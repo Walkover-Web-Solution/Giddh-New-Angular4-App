@@ -1,0 +1,4 @@
+"Date*","Debit Account Name*","Debit Account Unique Name","Credit Account Name*","Credit Account Unique Name","Voucher Type*","Amount*","Converted Amount","Description","Tax Rate/TaxUniqueName","Other Tax","Discount","Item Name","Quantity","Unit","Invoice Number"
+"09/01/2019","Cash","cash","Bank","","Journal","50000","","","","","","","","",""
+"31-01-2019","ROLL AND SWIRL LLP","ROLL AND SWIRL LLP","Sales","","Sales","2000","","","5","","100","Product 1","12","nos","INV-205"
+"31-01-2019","Salary","","","Bank","Payment","13000","","Salary For Employee","","","","","","",""

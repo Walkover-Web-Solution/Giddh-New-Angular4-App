@@ -1,0 +1,16 @@
+.fullScreenMy {
+    height: 100%;
+    width: 100%;
+    min-height: 100%;
+    min-width: 100%;
+    margin: 0
+}
+
+.intro.login {
+    background: url('./../images/login_bg.jpg') no-repeat top center scroll !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    width: 100%;
+    display: table;
+}

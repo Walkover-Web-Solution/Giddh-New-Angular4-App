@@ -74,7 +74,7 @@
           "builder": "ngx-build-plus:build",
           "options": {
             "baseHref": "http://localapp.giddh.com:3000",
-            "outputPath": "dist/apps/web-giddh",
+            "outputPath": "www",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",
             "polyfills": "apps/web-giddh/src/polyfills.ts",
@@ -237,6 +237,38 @@
               "extractLicenses": true,
               "vendorChunk": true,
               "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "app": {
+              "outputPath": "www",
+              "extraWebpackConfig": "./webpack.test.partial.js",
+              "baseHref": "./",
+              "baseUrl": "test.giddh.com",
+              "fileReplacements": [
+                {
+                  "replace": "apps/web-giddh/src/index.html",
+                  "with": "apps/web-giddh/src/index.local.html"
+                },
+                {
+                  "replace": "apps/web-giddh/src/environments/environment.ts",
+                  "with": "apps/web-giddh/src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",

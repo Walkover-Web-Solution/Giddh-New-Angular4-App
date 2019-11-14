@@ -3,7 +3,7 @@ import { NgModuleRef } from '@angular/core';
 import { Environment } from './model';
 
 export const environment: Environment = {
-  production: true,
+  production: false,
   showDevModule: false,
   AppUrl: 'http://test.giddh.com/',
   ApiUrl: 'http://apitest.giddh.com/',
