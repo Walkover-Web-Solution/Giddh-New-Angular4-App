@@ -25,7 +25,6 @@ export interface ILedgerTransactionItem {
     convertedAmount?: number;
     convertedAmountCurrency?: string;
     convertedAmountSymbol?: string;
-    isOtherAccount?: boolean; // specially for petty cash app
 }
 
 export interface IInventory {

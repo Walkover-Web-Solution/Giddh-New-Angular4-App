@@ -206,6 +206,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
+                    // special check if we have petty cash mode and we receive an entry whose uniquename is null
+                    // so it means it's other account entry of petty cash
+                    // so for that we have to add a dummy account in flatten account array
+                    if (this.isPettyCash) {
+                        if (resp[1].othersCategory) {
+                            // check we already have others account in flatten account, then don't do anything
+                            const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
+                            if (!isThereOthersAcc) {
+                                // add new dummy account in flatten account array
+                                this.vm.flatternAccountList.push({name: 'Others', uniqueName: 'others', applicableTaxes: [], parentGroups: [], isFixed: false, isDummy: true});
+                            }
+                        }
+                    }
+
                     // set account details for multi currency account
                     this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
 
@@ -353,6 +367,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             f.isDiscount = false;
                             f.isTax = false;
                             f.type = f.type === 'cr' ? 'CREDIT' : 'DEBIT';
+
+                            // special case in petty cash mode
+                            // others account entry
+                            // need to assign dummy particular, when we found particular uniquename as null
+                            if (!f.particular.uniqueName) {
+                                f.particular.uniqueName = 'others';
+                                f.particular.name = 'others';
+                            }
+
                         });
                         this.vm.selectedLedger.taxes = [];
                         this.vm.selectedLedger.discounts = [];
@@ -796,10 +819,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (this.baseAccountChanged) {
-            this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
+        // if no petty cash mode then do normal update ledger request
+        if (!this.isPettyCash) {
+            if (this.baseAccountChanged) {
+                this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName + '?newAccountUniqueName=' + this.changedAccountUniq));
+            } else {
+                this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
+            }
         } else {
-            this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.firstBaseAccountSelected, this.entryUniqueName));
+            // for petty cash approve request, just return request object
+            return requestObj;
         }
     }
 

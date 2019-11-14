@@ -97,10 +97,10 @@
                                 </td>
 
                                 <td data-title="Particular" id="DbtTd"
-                                    [ngClass]="{ 'otherAccountEntry': txn.isOtherAccount}"
+                                    [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
                                     class="col-xs-6 pos-rel select2-parent select2-ledger">
 
-                                    <ng-template [ngIf]="!txn.isDiscount && !txn.isOtherAccount">
+                                    <ng-template [ngIf]="!txn.isDiscount">
                                         <sh-select id="dbtID" [notFoundLink]="true"
                                                    (noResultsClicked)="showQuickAccountModal()"
                                                    (keydown)="keydownPressed($event)"
@@ -268,9 +268,11 @@
                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                                 </td>
 
-                                <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger">
+                                <td data-title="Particular" id="crdIDTd"
+                                    class="pos-rel col-xs-6 select2-ledger"
+                                    [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
-                                    <ng-template [ngIf]="!txn?.isDiscount && !txn.isOtherAccount">
+                                    <ng-template [ngIf]="!txn?.isDiscount">
                                         <sh-select id="crdID" [notFoundLink]="true"
                                                    (noResultsClicked)="showQuickAccountModal()"
                                                    (keydown)="keydownPressed($event)"

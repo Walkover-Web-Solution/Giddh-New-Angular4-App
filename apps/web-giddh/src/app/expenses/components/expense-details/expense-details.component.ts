@@ -169,6 +169,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         let imgs = res.attachedFileUniqueNames;
         let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
+
         if (imgs) {
             imgs.forEach(imgUniqeName => {
                 let imgUrls = imgPrefix + imgUniqeName;
@@ -212,18 +213,21 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this.toggleDetailsMode.emit(true);
     }
 
-    public approvedActionClicked(item: ExpenseResults) {
-        if (!item.baseAccount.uniqueName) {
-            this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
-            return;
-        }
+    public approvedActionClicked() {
+        // if (!item.baseAccount.uniqueName) {
+        //     this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
+        //     return;
+        // }
+
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: item.uniqueName,
-            accountUniqueName: item.baseAccount.uniqueName
+            uniqueName: this.accountEntryPettyCash.uniqueName,
+            accountUniqueName: this.accountEntryPettyCash.particular.uniqueName
         };
-        this.pettyCashAction(actionType);
-        this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+
+        let ledgerRequest = this.updateLedgerComponentInstance.saveLedgerTransaction();
+
+        this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
             if (res.status === 'success') {
                 this.modalService.hide(0);
                 this._toasty.successToast('reverted successfully');
@@ -279,15 +283,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this.pettyCashAction(this.actionPettycashRequest);
     }
 
-    public onSelectPaymentMode(event) {
-        if (event && event.value) {
-            // if (this.isCashInvoice) {
-            //   this.invFormData.accountDetails.name = event.label;
-            //   this.invFormData.accountDetails.uniqueName = event.value;
-            // }
-            this.depositAccountUniqueName = event.value;
-        } else {
-            this.depositAccountUniqueName = '';
+    public onSelectEntryAgainstAccount(option: IOption) {
+        if (option && option.value) {
+            this.accountEntryPettyCash.particular.uniqueName = option.value;
+            this.accountEntryPettyCash.particular.name = option.label;
         }
     }
 
