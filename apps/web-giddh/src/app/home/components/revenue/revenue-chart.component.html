@@ -36,20 +36,20 @@
       <div class="col-sm-3">
         <div class="total-sale-detail">
           <div class="singleSaleDetail">
-            <p>Total Sales (this week)</p>
+            <p>Total {{activeGraphType['uniqueName']}} (this week)</p>
             <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
           </div>
           <div class="singleSaleDetail">
-            <p>Total Sales (last week)</p>
+            <p>Total {{activeGraphType['uniqueName']}} (last week)</p>
             <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
           </div>
           <div class="singleSaleDetail">
-            <p>Highest Sales</p>
+            <p>Highest {{activeGraphType['uniqueName']}}</p>
             <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
             <span>Sat (Last week)</span>
           </div>
           <div class="singleSaleDetail">
-            <p>Lowest Sales</p>
+            <p>Lowest {{activeGraphType['uniqueName']}}</p>
             <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
             <span>Tue (This week)</span>
           </div>
