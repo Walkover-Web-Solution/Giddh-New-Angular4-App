@@ -93,8 +93,8 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
     this._store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
       if (branches && branches.results.length > 0) {
         _.each(branches.results, (branch) => {
-          if (branch.gstDetails && branch.gstDetails.length) {
-            branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
+          if (branch.addresses && branch.addresses.length) {
+            branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
           }
         });
         this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
