@@ -245,7 +245,7 @@
               ]
             },
             "app": {
-              "outputPath": "dist/apps/web-giddh-app",
+              "outputPath": "www",
               "extraWebpackConfig": "./webpack.test.partial.js",
               "baseHref": "./",
               "baseUrl": "test.giddh.com",
