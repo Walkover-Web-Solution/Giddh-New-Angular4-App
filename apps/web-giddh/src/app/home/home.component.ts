@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (activeCmpUniqueName) {
             this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
-            this.revenue.fetchChartData();
+            this.revenue.refreshChart();
             this.cdRef.detectChanges();
           }
         }
@@ -177,7 +177,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       //this.expence.fetchChartData();
 
       this.revenue.refresh = true;
-      this.revenue.fetchChartData();
+      this.revenue.refreshChart();
       if (this.compare.showProfitLoss) {
         API.push(API_TO_CALL.PL);
       }

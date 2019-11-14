@@ -3,7 +3,12 @@ import { HOME } from '../../actions/home/home.const';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroupHistoryGroups, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
-import { BankAccountsResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
+import {
+  BankAccountsResponse,
+  RefreshBankAccountResponse,
+  GraphTypesResponse,
+  RevenueGraphDataResponse
+} from '../../models/api-models/Dashboard';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
@@ -37,6 +42,8 @@ export interface HomeState {
   ReConnectBankAccount?: RefreshBankAccountResponse;
   RatioAnalysis?: any;
   totalOverDues?: any;
+  revenueGraphTypes: any;
+  revenueGraphData: any;
 }
 
 export const initialState: HomeState = {
@@ -187,7 +194,9 @@ export const initialState: HomeState = {
     ProfitLossLastYearMonthly: [],
     ProfitLossLastYearYearly: [],
   },
-  totalOverDues: []
+  totalOverDues: [],
+  revenueGraphTypes: [],
+  revenueGraphData: []
 };
 
 export function homeReducer(state = initialState, action: CustomActions): HomeState {
@@ -572,13 +581,31 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
       if (rationAnalysisRes.status === 'success') {
         return Object.assign({}, state, {RatioAnalysis: rationAnalysisRes.body});
       }
+      return Object.assign({}, state, {RatioAnalysis: null});
     }
+
     case HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE: {
       let overduesRes: any[] = action.payload;
       if (overduesRes.length) {
         return Object.assign({}, state, {totalOverDues: overduesRes});
       }
       return state;
+    }
+
+    case HOME.GET_REVENUE_GRAPH_TYPES_RESPONSE: {
+      let revenueGraphTypes: BaseResponse<GraphTypesResponse, string> = action.payload;
+      if (revenueGraphTypes.status === 'success') {
+        return Object.assign({}, state, {revenueGraphTypes: revenueGraphTypes.body});
+      }
+      return Object.assign({}, state, {revenueGraphTypes: null});
+    }
+
+    case HOME.GET_REVENUE_GRAPH_DATA_RESPONSE: {
+      let revenueGraphData: BaseResponse<RevenueGraphDataResponse, string> = action.payload;
+      if (revenueGraphData.status === 'success') {
+        return Object.assign({}, state, {revenueGraphData: revenueGraphData.body});
+      }
+      return Object.assign({}, state, {revenueGraphData: null});
     }
 
     default: {
