@@ -530,6 +530,7 @@ export class SalesStockItemMulticurrency {
 export class StateCode {
   name: string;
   code: string;
+  stateGstCode?: string;
 }
 
 export class SalesEntryClassMulticurrency {

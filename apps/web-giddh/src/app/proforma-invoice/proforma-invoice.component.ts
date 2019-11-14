@@ -281,6 +281,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public originalReverseExchangeRate: number;
   public countryCode: string = '';
   private entriesListBeforeTax: SalesEntryClass[];
+  private statesSource$: Observable<any> = observableOf([]);
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1005,14 +1006,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
     this.customerCountryName = data.country.countryName;
-    this.getUpdatedStateCodes(data.country.countryCode);
+    this.getUpdatedStateCodes(data.country.countryCode, data);
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
 
     // auto fill all the details
-    this.invFormData.accountDetails = new AccountDetailsClass(data);
+    this.statesSource$.pipe(takeUntil(this.destroyed$)).subscribe((stateList: Array<any>) => {
+        if (stateList.length) {
+            this.invFormData.accountDetails = new AccountDetailsClass(data);
+        }
+    });
   }
 
   public getStateCode(type: string, statesEle: SalesShSelectComponent) {
@@ -2974,19 +2979,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  private getUpdatedStateCodes(currency: any) {
-    if (currency) {
-      this.salesService.getStateCode(currency).subscribe(resp => {
-        this.statesSource = this.modifyStateResp(resp.body.stateList);
-      });
+    private getUpdatedStateCodes(currency: any, data?: any) {
+        if (currency) {
+            this.salesService.getStateCode(currency).subscribe(resp => {
+                let isNewUser: boolean;
+                if (data && data.addresses && data.addresses.length) {
+                    isNewUser = isNaN(data.addresses[0].stateCode);
+                }
+                this.statesSource = this.modifyStateResp(resp.body.stateList, isNewUser);
+                this.statesSource$ = observableOf(this.statesSource);
+                this.invFormData.accountDetails = new AccountDetailsClass(data);
+            });
+        }
     }
-  }
 
-  private modifyStateResp(stateList: StateCode[]) {
+  private modifyStateResp(stateList: StateCode[], isNewUser?: boolean) {
     let stateListRet: IOption[] = [];
-    stateList.forEach(stateR => {
-      stateListRet.push({ label: stateR.name, value: stateR.code });
-    });
+    if (isNewUser) {
+        stateList.forEach(stateR => {
+            stateListRet.push({ label: stateR.name, value: stateR.code });
+        });
+    } else {
+        stateList.forEach(stateR => {
+            stateListRet.push({ label: stateR.name, value: stateR.stateGstCode });
+        });
+    }
     return stateListRet;
   }
 
