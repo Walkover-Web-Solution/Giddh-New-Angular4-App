@@ -16,9 +16,15 @@ p.bankBalnc {
         margin-bottom: 10px;
 }
 a.connectBnk {
-    position: absolute;
+
     bottom: 10px;
     color: #262626;
     font-size: 14px;
     text-decoration: underline;
+    padding-top: 20px;
+    display: block;
+}
+.wrap-single-bank-detail {
+    height: 265px;
+    overflow-y: auto;
 }

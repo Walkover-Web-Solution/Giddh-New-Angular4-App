@@ -49,6 +49,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
       if (o && !_.isEmpty(o)) {
         let companyInfo = _.cloneDeep(o);
+        this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
+          this.SubscriptionPlans = res.body;
+        });
         this.currentCompany = companyInfo.name;
       }
     });
@@ -57,10 +60,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-
-    this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-      this.SubscriptionPlans = res.body;
-    });
     if (this._generalService.user) {
       this.logedInUser = this._generalService.user;
     }

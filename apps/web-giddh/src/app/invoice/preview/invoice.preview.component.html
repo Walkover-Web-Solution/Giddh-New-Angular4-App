@@ -230,7 +230,8 @@
       </div>
     </div>
 
-    <perfect-scrollbar [scrollIndicators]="true" [config]="{suppressScrollX: false, suppressScrollY: false}">
+    <perfect-scrollbar class="invoice-preview" [scrollIndicators]="true"
+      [config]="{suppressScrollX: false, suppressScrollY: false}">
       <table class="table basic table-bordered mrT2 invoice-table desktopTable table-responsive">
 
         <!--sales-->
@@ -356,7 +357,7 @@
 
             <th>
               <div class="d-flex">
-                <div class="flex-fill">Date</div>
+                <div class="">Date</div>
 
                 <div class="icon-pointer">
                   <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}"></ng-container>
@@ -366,7 +367,7 @@
 
             <th>
               <div class="d-flex">
-                <div class="flex-fill text-right pr-1">Total amount</div>
+                <div class="flex-fill text-right ">Total amount</div>
 
                 <div class="icon-pointer">
                   <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}"></ng-container>
@@ -556,7 +557,7 @@
             </td>
             <td>{{item.account.name}}</td>
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.grandTotal | giddhCurrency}}</td>
+            <td class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
 
           </tr>
 
@@ -901,12 +902,15 @@ tooltip="Invoice sent" placement="left" />-->
       <div class="col-sm-6">
         <h3 class="font-xxlarge text-light-2">Total Sale</h3>
         <h1 class="" style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalSale | giddhCurrency }}
+          <span *ngIf="baseCurrency==='INR'">/-</span>
         </h1>
       </div>
 
       <div class="col-sm-6">
-        <h3 class="color-giddh font-xxlarge">Total Due</h3>
-        <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}</h1>
+        <h3 class="text-light-2 font-xxlarge">Total Due</h3>
+        <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}
+           <span *ngIf="baseCurrency==='INR'">/-</span>
+        </h1>
       </div>
     </div>
   </div>
