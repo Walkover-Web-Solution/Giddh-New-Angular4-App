@@ -1,5 +1,7 @@
 /*styles for home content only*/
+// @import url('../../assets/css/color.css');
 
+@import '../../assets/css/color.scss';
 .primaryDarkBg {
   background: #005b77;
 }
@@ -8,13 +10,7 @@
   background: #77a1b8;
 }
 
-.secondryDarkbg {
-  background: #c45022;
-}
 
-.secondrylightbg {
-  background: #d37c59;
-}
 
 .defaultDarkBg {
   background: #28283c;
@@ -34,12 +30,61 @@
 
 .dashboard-option li {
   list-style: none;
-  width: 100%;
-  text-align: center;
-  padding: 15px 7px;
-  color: #fff;
+
 }
 
 :host ::ng-deep perfect-scrollbar {
   height: auto
 }
+// new dashboard css
+.white-row {
+    background-color: #fff;
+    padding: 9px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    box-shadow: 1px 1px 3px #00000029;
+}
+.clickHere{
+  color: $lightTextBlue;
+}
+.dashboard-container {
+    max-width: 1170px;
+    width: 100%;
+}
+span.icon-traingle-info {
+    color: #FF6262;
+    font-size: 15px;
+    margin-right:10px;
+}
+span.icon-info-icon {
+    color: #999999;
+    font-size: 18px;
+    margin-right: 10px;
+}
+.dropdown-menu{
+      border: 1px solid #D9D9D9;
+}
+a.dropdown-item{
+  color:#484848;
+}
+
+a.dropdown-item:hover {
+    background-color: #EEEFF9;
+    color: #5B64C9;
+}
+.dashboard-notification {
+    margin-bottom: 20px;
+}
+.panel-heading {
+    padding: 15px 15px;
+}
+.basic>tbody>tr:hover td {
+    background: transparent;
+}
+.form-control:focus {
+    border-color: #5B64C9 !important;
+  }
+  .form-control{
+        height: 32px;
+  }
+.clickHere{cursor: pointer}

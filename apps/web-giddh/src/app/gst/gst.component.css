@@ -1,3 +1,4 @@
+@import '../../assets/css/color.scss';
 .return-body .main-wrapper {
     background-color: #f5f5f5;
     padding: 0;
@@ -9,7 +10,9 @@
     background-color: #fff;
 }
 
-.btn-primary,
+.btn-primary {
+    border-color:#5B64C9 !important;
+}
 .btn-primary.disabled,
 .btn-primary.disabled.active,
 .btn-primary.disabled:active,
@@ -33,9 +36,10 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: #fff;
-    background-color: #ea795b;
-    border-color: #ea795b;
+    border-color: #5B64C9 !important;
+    background: #e5e5e5;
+    color: #5B64C9;
+
 }
 
 .btn,
@@ -129,16 +133,14 @@ svg.icon.gstr-icon {
 }
 
 .return-content .count a {
-    color: #0f6bde;
+    color: var(--dark-blue01);
 }
 
 .font-xxxlarge {
     font-size: 24px;
 }
 
-.return-content .count a {
-    color: #0f6bde;
-}
+
 
 .bottom-action,
 .tax-engine a,
@@ -163,7 +165,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: #eb6100;
+    color: $border-blue;
 }
 
 svg.icon.icon-xxlg-md {

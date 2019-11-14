@@ -27,6 +27,7 @@ export interface InventoryState {
   createGroupSuccess: boolean;
   createStockSuccess: boolean;
   stockReport?: StockReportResponse;
+  groupStockReportInProcess: boolean;
   groupStockReport?: GroupStockReportResponse;
   isStockAddInProcess: boolean;
   isStockUpdateInProcess: boolean;
@@ -99,6 +100,7 @@ const initialState: InventoryState = {
   activeStock: null,
   activeStockUniqueName: '',
   stockReport: null,
+  groupStockReportInProcess: false,
   groupStockReport: null,
   createCustomStockSuccess: false,
   showNewGroupAsidePane: false,
@@ -128,7 +130,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
       return Object.assign({}, state, initialState);
     }
     case InventoryActionsConst.SetActiveStock:
-      return Object.assign({}, state, { activeStockUniqueName: action.payload });
+      return Object.assign({}, state, {activeStockUniqueName: action.payload});
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
       if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
         groupArray = prepare((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.results);
@@ -154,7 +156,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           }
         }
         groupArray = _.orderBy(groupArray, ['name']);
-        return Object.assign({}, state, { groupsWithStocks: groupArray });
+        return Object.assign({}, state, {groupsWithStocks: groupArray});
       }
       return state;
 
@@ -276,21 +278,21 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           showNewGroupAsidePane: false
         });
       }
-      return Object.assign({}, state, { isAddNewGroupInProcess: false, createGroupSuccess: false });
+      return Object.assign({}, state, {isAddNewGroupInProcess: false, createGroupSuccess: false});
     case InventoryActionsConst.GetGroupUniqueName:
-      return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
+      return Object.assign({}, state, {fetchingGrpUniqueName: true, isGroupNameAvailable: null});
     case InventoryActionsConst.GetGroupUniqueNameResponse:
       let resData: BaseResponse<StockGroupResponse, string> = action.payload;
       if (resData.status === 'success') {
-        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+        return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: false});
       } else {
         if (resData.code === 'STOCK_GROUP_NOT_FOUND') {
-          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
+          return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: true});
         }
         return state;
       }
     case InventoryActionsConst.UpdateGroup:
-      return Object.assign({}, state, { isUpdateGroupInProcess: true, UpdateGroupSuccess: false });
+      return Object.assign({}, state, {isUpdateGroupInProcess: true, UpdateGroupSuccess: false});
     case InventoryActionsConst.UpdateGroupResponse:
       let resp = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (resp.status === 'success') {
@@ -341,9 +343,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           UpdateGroupSuccess: true
         });
       }
-      return Object.assign({}, state, { isUpdateGroupInProcess: false });
+      return Object.assign({}, state, {isUpdateGroupInProcess: false});
     case InventoryActionsConst.RemoveGroup:
-      return Object.assign({}, state, { isDeleteGroupInProcess: true, deleteGroupSuccess: false });
+      return Object.assign({}, state, {isDeleteGroupInProcess: true, deleteGroupSuccess: false});
     case InventoryActionsConst.RemoveGroupResponse:
       let removeGrpResp = action.payload as BaseResponse<string, string>;
       if (removeGrpResp.status === 'success') {
@@ -367,42 +369,42 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           deleteGroupSuccess: true
         });
       }
-      return Object.assign({}, state, { isDeleteGroupInProcess: false });
+      return Object.assign({}, state, {isDeleteGroupInProcess: false});
     case InventoryActionsConst.ResetActiveGroup:
-      return Object.assign({}, state, { activeGroup: null, activeGroupUniqueName: '', activeStockUniqueName: null });
+      return Object.assign({}, state, {activeGroup: null, activeGroupUniqueName: '', activeStockUniqueName: null});
 
     case InventoryActionsConst.GetStockUniqueName:
-      return Object.assign({}, state, { fetchingStockUniqueName: true, isStockNameAvailable: null });
+      return Object.assign({}, state, {fetchingStockUniqueName: true, isStockNameAvailable: null});
     case InventoryActionsConst.GetStockUniqueNameResponse:
       let resStockData: BaseResponse<StockDetailResponse, string> = action.payload;
       if (resStockData.status === 'success') {
-        return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: false });
+        return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: false});
       } else {
         if (resStockData.code === 'STOCK_NOT_FOUND') {
-          return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: true });
+          return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: true});
         }
         return state;
       }
     case InventoryActionsConst.GetStockResponse:
       let stockResponse: BaseResponse<StocksResponse, string> = action.payload;
       if (stockResponse.status === 'success') {
-        return Object.assign({}, state, { stocksList: stockResponse.body });
+        return Object.assign({}, state, {stocksList: stockResponse.body});
       }
       return state;
     case InventoryActionsConst.GetManufacturingStockResponse:
       let res: BaseResponse<StocksResponse, string> = action.payload;
       if (res.status === 'success') {
-        return Object.assign({}, state, { manufacturingStockList: res.body });
+        return Object.assign({}, state, {manufacturingStockList: res.body});
       }
       return state;
     case InventoryActionsConst.GetManufacturingStockForCreateResponse:
       let mfResponse: BaseResponse<StocksResponse, string> = action.payload;
       if (mfResponse.status === 'success') {
-        return Object.assign({}, state, { manufacturingStockListForCreateMF: mfResponse.body });
+        return Object.assign({}, state, {manufacturingStockListForCreateMF: mfResponse.body});
       }
       return state;
     case InventoryActionsConst.CreateStock:
-      return Object.assign({}, state, { isStockAddInProcess: true, createStockSuccess: false });
+      return Object.assign({}, state, {isStockAddInProcess: true, createStockSuccess: false});
     case InventoryActionsConst.CreateStockResponse:
       let createStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (createStockResp.status === 'success') {
@@ -435,7 +437,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           isStockAddInProcess: false
         });
       }
-      return Object.assign({}, state, { isStockAddInProcess: false });
+      return Object.assign({}, state, {isStockAddInProcess: false});
     case InventoryActionsConst.ResetCreateStockFlags: {
       return {
         ...state,
@@ -443,10 +445,10 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         isStockAddInProcess: false,
         activeStockUniqueName: null,
         activeStock: null
-      }
+      };
     }
     case InventoryActionsConst.UpdateStock:
-      return Object.assign({}, state, { isStockUpdateInProcess: true, UpdateStockSuccess: false });
+      return Object.assign({}, state, {isStockUpdateInProcess: true, UpdateStockSuccess: false});
     case InventoryActionsConst.UpdateStockResponse:
       let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (updateStockResp.status === 'success') {
@@ -467,9 +469,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           UpdateStockSuccess: true
         });
       }
-      return Object.assign({}, state, { isStockUpdateInProcess: false });
+      return Object.assign({}, state, {isStockUpdateInProcess: false});
     case InventoryActionsConst.RemoveStock:
-      return Object.assign({}, state, { isStockDeleteInProcess: true, deleteStockSuccess: false });
+      return Object.assign({}, state, {isStockDeleteInProcess: true, deleteStockSuccess: false});
     case InventoryActionsConst.RemoveStockResponse:
       let remStockResp: BaseResponse<string, string> = action.payload;
       if (remStockResp.status === 'success') {
@@ -484,7 +486,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
           deleteStockSuccess: true
         });
       }
-      return Object.assign({}, state, { isStockDeleteInProcess: false });
+      return Object.assign({}, state, {isStockDeleteInProcess: false});
     case InventoryActionsConst.GetInventoryStockResponse:
       let stockDetailsResp: BaseResponse<StockDetailResponse, string> = action.payload;
       if (stockDetailsResp.status === 'success') {
@@ -511,29 +513,29 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         }
         // console.log(groupArray);
         groupArray = _.orderBy(groupArray, ['name']);
-        return Object.assign({}, state, { groupsWithStocks: groupArray });
+        return Object.assign({}, state, {groupsWithStocks: groupArray});
       }
       return state;
     case InventoryActionsConst.GetStockWithUniqueNameResponse:
       let data: BaseResponse<StockDetailResponse, string> = action.payload;
       if (data.status === 'success') {
-        return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: false });
+        return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: false});
       } else {
         if (data.code === 'STOCK_NOT_FOUND') {
-          return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: true });
+          return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: true});
         }
         return state;
       }
     case InventoryActionsConst.ShowLoadingForStockEditInProcess:
-      return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
+      return Object.assign({}, state, {showLoadingForStockEditInProcess: true});
     case InventoryActionsConst.HideLoadingForStockEditInProcess:
-      return Object.assign({}, state, { showLoadingForStockEditInProcess: false });
+      return Object.assign({}, state, {showLoadingForStockEditInProcess: false});
     case InventoryActionsConst.ResetActiveStock:
-      return Object.assign({}, state, { activeStock: null, activeStockUniqueName: null });
+      return Object.assign({}, state, {activeStock: null, activeStockUniqueName: null});
     case InventoryActionsConst.ResetInventoryState:
       return Object.assign({}, state, initialState);
     case InventoryActionsConst.MoveStock:
-      return Object.assign({}, state, { moveStockSuccess: false });
+      return Object.assign({}, state, {moveStockSuccess: false});
     case InventoryActionsConst.MoveStockResponse:
       let moveStockResp: BaseResponse<string, string> = action.payload;
       groupArray = _.cloneDeep(state.groupsWithStocks);
@@ -548,9 +550,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
      *Custom Stock Units...
      * */
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: action.payload });
+      return Object.assign({}, state, {stockUnits: action.payload});
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
-      return Object.assign({}, state, { createCustomStockInProcess: true });
+      return Object.assign({}, state, {createCustomStockInProcess: true});
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
       if (action.payload.status === 'success') {
         return Object.assign({}, state, {
@@ -566,14 +568,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         createCustomStockSuccess: false
       };
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
-      return Object.assign({}, state, { updateCustomStockInProcess: true });
+      return Object.assign({}, state, {updateCustomStockInProcess: true});
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
       return Object.assign({}, state, {
         stockUnits: state.stockUnits.map(p => p.code === action.payload.code ? action.payload.unit : p),
         updateCustomStockInProcess: false
       });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
-      return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
+      return Object.assign({}, state, {deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload]});
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
       if ((action.payload as BaseResponse<string, string>).status === 'success') {
         return Object.assign({}, state, {
@@ -585,14 +587,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
       });
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME:
-      return Object.assign({}, state, { isStockUnitCodeAvailable: false });
+      return Object.assign({}, state, {isStockUnitCodeAvailable: false});
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE:
       let resStockUnit: BaseResponse<StockDetailResponse, string> = action.payload;
       if (resStockUnit.status === 'success') {
-        return Object.assign({}, state, { isStockNameAvailable: false });
+        return Object.assign({}, state, {isStockNameAvailable: false});
       } else {
         if (resStockUnit.code === 'NOT_FOUND') {
-          return Object.assign({}, state, { isStockUnitCodeAvailable: true });
+          return Object.assign({}, state, {isStockUnitCodeAvailable: true});
         }
         return state;
       }
@@ -600,21 +602,27 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
      * Inventory Stock Report
      * */
     case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
-      return Object.assign({}, state, { stockReport: action.payload });
+      return Object.assign({}, state, {stockReport: action.payload});
+    case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT: {
+      return {
+        ...state,
+        groupStockReportInProcess: true
+      };
+    }
     case STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE:
-      return Object.assign({}, state, { groupStockReport: action.payload });
+      return Object.assign({}, state, {groupStockReport: action.payload, groupStockReportInProcess: false});
     case InventoryActionsConst.NewGroupAsidePane:
-      return Object.assign({}, state, { showNewGroupAsidePane: action.payload });
+      return Object.assign({}, state, {showNewGroupAsidePane: action.payload});
     case InventoryActionsConst.NewCustomUnitAsidePane:
-      return Object.assign({}, state, { showNewCustomUnitAsidePane: action.payload });
+      return Object.assign({}, state, {showNewCustomUnitAsidePane: action.payload});
     case InventoryActionsConst.ManageInventoryAside:
-      return Object.assign({}, state, { inventoryAsideState: action.payload });
+      return Object.assign({}, state, {inventoryAsideState: action.payload});
 
     //  region branch
     case InventoryActionsConst.ShowBranchScreen:
-      return Object.assign({}, state, { showBranchScreen: action.payload });
+      return Object.assign({}, state, {showBranchScreen: action.payload});
     case InventoryActionsConst.ShowBranchScreenSideBar:
-      return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
+      return Object.assign({}, state, {showBranchScreenSidebar: action.payload});
     //  endregion
     default:
       return state;

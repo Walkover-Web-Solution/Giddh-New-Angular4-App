@@ -11,7 +11,6 @@ import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
 import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
 import { ReceiptService } from '../../../../services/receipt.service';
-import { saveAs } from 'file-saver';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
@@ -21,6 +20,7 @@ import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/recei
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'invoice-preview-details-component',
@@ -33,6 +33,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @ViewChild('searchElement') public searchElement: ElementRef;
   @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
   @ViewChild('showEmailSendModal') public showEmailSendModal: ModalDirective;
+  @ViewChild('downloadVoucherModal') public downloadVoucherModal: ModalDirective;
   @ViewChild('invoiceDetailWrapper') invoiceDetailWrapperView: ElementRef;
   @ViewChild('invoicedetail') invoiceDetailView: ElementRef;
 
@@ -48,7 +49,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
   @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
-  @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[] }> = new EventEmitter<string | { email: string, invoiceType: string[] }>();
+  @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
   @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
   @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
 
@@ -63,7 +64,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   public voucherVersions: ProformaVersionItem[] = [];
   public filteredVoucherVersions: ProformaVersionItem[] = [];
   public ckeditorContent;
-  public invoiceDetailWrapperHeight: number
+  public invoiceDetailWrapperHeight: number;
   public invoiceDetailViewHeight: number;
   public invoiceImageSectionViewHeight: number;
   public isMobileView = false;
@@ -71,8 +72,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _cdr: ChangeDetectorRef, private _toasty: ToasterService, private _proformaService: ProformaService,
-    private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions, private _breakPointObservar: BreakpointObserver,
-    private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
+              private _receiptService: ReceiptService, private store: Store<AppState>, private _proformaActions: ProformaActions, private _breakPointObservar: BreakpointObserver,
+              private router: Router, private _invoiceReceiptActions: InvoiceReceiptActions, private _generalActions: GeneralActions, private _generalService: GeneralService) {
     this._breakPointObservar.observe([
       '(max-width: 1023px)'
     ]).subscribe(result => {
@@ -154,7 +155,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public onCancel() {
     this.performActionAfterClose();
-    // this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
     this.closeEvent.emit(true);
   }
 
@@ -265,10 +265,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     if (this.isVoucherDownloading || this.isVoucherDownloadError) {
       return;
     }
-    if (this.selectedItem && this.selectedItem.blob) {
-      return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
+
+    if (this.only4ProformaEstimates) {
+      if (this.selectedItem && this.selectedItem.blob) {
+        return saveAs(this.selectedItem.blob, `${this.selectedItem.account.name} - ${this.selectedItem.voucherNumber}.pdf`);
+      } else {
+        return;
+      }
     } else {
-      return;
+      this.downloadVoucherModal.show();
     }
   }
 

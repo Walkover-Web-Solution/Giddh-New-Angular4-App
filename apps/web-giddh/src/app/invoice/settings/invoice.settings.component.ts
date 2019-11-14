@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -16,8 +16,8 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 
 const PaymentGateway = [
-  {value: 'razorpay', label: 'razorpay'},
-  {value: 'cashfree', label: 'cashfree'}
+  { value: 'razorpay', label: 'razorpay' },
+  { value: 'cashfree', label: 'cashfree' }
 ];
 
 @Component({
@@ -63,6 +63,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   public lockDate: Date = new Date();
   public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
   public isGmailIntegrated: boolean;
+  public gmailAuthCodeUrl$: Observable<string> = null;
+  /** True, if Gmail integration is to be displayed (TODO: Should be removed once URIs become secured) */
+  shouldShowGmailIntegration: boolean;
   private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -74,6 +77,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
   ) {
     this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
+    this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
   }
 
   public ngOnInit() {
@@ -89,7 +93,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
       let linkAccount: IOption[] = [];
       if (data) {
         data.forEach(f => {
-          linkAccount.push({label: f.name, value: f.uniqueName});
+          linkAccount.push({ label: f.name, value: f.uniqueName });
         });
         this.linkAccountDropDown = linkAccount;
       }
@@ -166,6 +170,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
       }
     });
+  }
+
+  public onChangeSendInvoiceViaSms(isChecked) {
+    if (!isChecked) {
+      this.invoiceSetting.smsContent = '';
+    }
   }
 
   /**
@@ -432,6 +442,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else {
+      /* All the above URIs are not secured and Google has blocked
+        addition of unsecured URIs therefore show Gmail integration text only
+        for PROD. This flag need to be removed once all the above URIs become secure */
+      this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
       return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     }
   }

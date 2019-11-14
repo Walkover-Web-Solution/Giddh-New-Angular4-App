@@ -1,5 +1,5 @@
 <div class="clearfix">
-  <tabset class="tab-integraton">
+  <tabset class="tab-integraton" id="tab-integration">
     <tab>
       <ng-template tabHeading>
         <span class="icon-chat2"></span> SMS
@@ -374,7 +374,7 @@
                       formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                   </div>
                   <div class="pull-left">
-                    <div [ngClass]="{'mt-27': f}">
+                    <div [ngClass]="{'mrT3': f}">
                       <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
                           class="fa fa-check"></i></button>
                       <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)"
@@ -519,7 +519,7 @@
         </div>
       </div>
       <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)"
-        style=" margin-right: 5px" class="btn btn-blue mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
+        style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
     </tab>
 
   </tabset>

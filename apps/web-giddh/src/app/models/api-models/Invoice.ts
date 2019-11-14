@@ -743,6 +743,7 @@ export class InvoicePreviewDetailsVm {
   voucherDate: string;
   blob?: Blob;
   voucherStatus?: string;
+  accountCurrencySymbol?: string;
 }
 
 

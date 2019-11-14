@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild , Input} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -42,6 +42,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
   public isTotalFirts: boolean = false;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
+  @ViewChild('autoFocused') public autoFocus: ElementRef;
+
   public companyTaxDropDown: Observable<IOption[]>;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
@@ -188,6 +190,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit  {
         this.groupsList = flattenGroupsList;
       }
     });
+    setTimeout(() => {
+      this.autoFocus.nativeElement.focus();
+    }, 50);
   }
 
   public ngAfterViewInit() {

@@ -58,7 +58,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     private _toaster: ToasterService,
   ) {
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
       this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
     });
     // Country phone Code
@@ -185,8 +185,15 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.companies$.pipe(take(1)).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
+        let previousState;
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getFlattenAccount());
+        this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+          previousState = se;
+        });
+        if (previousState) {
+          this._route.navigate([`pages/${previousState}`]);
+        }
         this.closeCompanyModal.emit();
       } else {
         this.showLogoutModal();
@@ -246,6 +253,12 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         this._toaster.errorToast('Invalid Contact number');
         ele.classList.add('error-box');
       }
+    }
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.company.phoneCode = phoneCode;
     }
   }
 

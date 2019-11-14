@@ -4,7 +4,7 @@
     right: 0;
     max-width:480px;
       width: 100%;
-    z-index: 1045;
+    z-index: 99999;
     display: block;
     position: fixed;
     // transform: translate3d(0px, 0px, 0px);
@@ -78,15 +78,16 @@
 
 .btn-lg {
     min-width: 155px;
-    background: #fff3ec;
-    color: #ff5f00;
+    background: #fff;
+    color: #5B64C9;
     border-radius: 0px;
     box-shadow: none;
 }
 
 .btn-lg:hover {
-    background: #ff5f00;
-    color: #ffffff;
+    background: #e5e5e5;
+    color: #5B64C9;
     box-shadow: 0px 4px 4px -3px #afabab;
     border-radius: 0px;
+    border-color: #5B64C9;
 }

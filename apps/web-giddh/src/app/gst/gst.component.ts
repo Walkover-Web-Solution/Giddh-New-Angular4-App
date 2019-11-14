@@ -200,7 +200,7 @@ export class GstComponent implements OnInit {
         // get gstr1 and gstr2 summary
         this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
         this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-         this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+        this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
       } else {
         // only get gstr1 data
         this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
@@ -209,7 +209,7 @@ export class GstComponent implements OnInit {
       this._toasty.warningToast('Please add GSTIN in company');
     }
     this._cdRf.detectChanges();
-  
+
   }
 
   /**

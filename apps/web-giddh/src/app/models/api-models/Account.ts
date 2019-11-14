@@ -49,6 +49,7 @@ export class AccountResponse implements IAccountCreate {
   public name: string;
   public isComposite?: boolean;
   public currency?: string;
+  public currencySymbol?: string;
 }
 
 /**
@@ -225,7 +226,8 @@ export class AccountResponseV2 {
   public closingBalanceTriggerAmount: number;
   public closingBalanceTriggerAmountType: string;
   public discounts?: IDiscountList[];
-
+  public currencySymbol?:string;
+  public currency?:string;
 }
 
 /*

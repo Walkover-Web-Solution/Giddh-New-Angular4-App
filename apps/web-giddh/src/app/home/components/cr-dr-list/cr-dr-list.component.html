@@ -1,0 +1,66 @@
+<div id="live">
+  <div class="panel panel-default">
+
+    <div class="panel-heading clearfix">
+      <div class="btn-group gstDropdown pull-left" dropdown>
+        <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
+          <span class=""> <strong>Top {{showRecords}}</strong> </span> <span class="icon-arrow-down mrL1"></span>
+        </span>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem"><a class="dropdown-item" (click)="changeShowRecords(5);">Top 5</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="changeShowRecords(10);">Top 10 </a></li>
+        </ul>
+      </div>
+      <span class="thisWeek pull-right">
+        <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
+        <!--<span class="icon-collapse-icon mrL1"></span>-->
+      </span>
+    </div>
+    <div class="cr-dr-body pos-rel">
+      <div class="top-five-cr-dr-table">
+
+        <div class="table-responsive debtorsTable">
+          <table class="table basic ">
+            <thead>
+              <th width="30%">Debtors (Customers)</th>
+              <th width="10%">Invoiced on</th>
+              <th width="20%" class="text-right">Bill Amount</th>
+              <th width="40%" class="text-right">Due as on {{dueDate | date}}</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of drAccounts">
+                <td>{{ account.name }}</td>
+                <td> &nbsp; </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.creditTotal | giddhCurrency }}
+                </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                  {{ account.closingBalance.amount | giddhCurrency }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive credtorsTable">
+          <table class="table basic ">
+            <thead>
+              <th width="30%">Creditors (Vendors)</th>
+              <th width="10%">Invoiced on</th>
+              <th width="20%" class="text-right">Bill Amount</th>
+              <th width="40%" class="text-right">Due as on {{dueDate | date}}</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let account of crAccounts">
+                <td>{{ account.name }}</td>
+                <td> &nbsp; </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.debitTotal | giddhCurrency }}
+                </td>
+                <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                  {{ account.closingBalance.amount | giddhCurrency }} </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

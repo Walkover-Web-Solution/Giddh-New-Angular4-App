@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -17,6 +17,7 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {IForceClear} from "../../../../models/api-models/Sales";
 
 @Component({
   selector: 'account-add-new',
@@ -66,13 +67,15 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   @Input() public showVirtualAccount: boolean = false;
   @Input() public isDebtorCreditor: boolean = true;
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
+  @ViewChild('autoFocus') public autoFocus: ElementRef;
 
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
-    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
-    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
-    {value: 'SEZ', label: 'SEZ'}
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public stateStream$: Observable<States[]>;
@@ -91,7 +94,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
     this.stateStream$.subscribe((data) => {
@@ -99,7 +102,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
-          states.push({label: `${d.code} - ${d.name}`, value: d.code});
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
         });
       }
       this.statesSource$ = observableOf(states);
@@ -111,20 +114,28 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       let currencies: IOption[] = [];
       if (data) {
         data.map(d => {
-          currencies.push({label: d.code, value: d.code});
+          currencies.push({ label: d.code, value: d.code });
         });
       }
       this.currencySource$ = observableOf(currencies);
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({value: c.value, label: c.value});
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
+    _.uniqBy(this.countryPhoneCode, 'value');
+    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
+      return {
+        value: value,
+        label: this.countryPhoneCode.find(s => s.value === value).label
+      };
+    });
+    this.countryPhoneCode = ss;
 
     this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
@@ -132,8 +143,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnInit() {
-    if(this.activeGroupUniqueName == 'discount')
-    {
+    if (this.activeGroupUniqueName === 'discount') {
       this.isDiscount = true;
     }
     this.initializeNewForm();
@@ -161,17 +171,19 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         let lengthofFormArray = addressFormArray.controls.length;
         if (a !== 'IN') {
           this.isIndia = false;
-          for (let index = 0; index < lengthofFormArray; index++) {
-            addressFormArray.removeAt(index);
-          }
-          addresses.push(this.initialGstDetailsForm());
-          this.isIndia = false;
+          Object.keys(addressFormArray.controls).forEach((key) => {
+            if(parseInt(key) > 0) {
+              addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
+            }
+          });
         } else {
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
           }
           this.isIndia = true;
         }
+
+        this.resetGstStateForm();
       }
     });
     // get openingblance value changes
@@ -220,17 +232,23 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.isAccountNameAvailable$.subscribe(a => {
           if (a !== null && a !== undefined) {
             if (a) {
-              this.addAccountForm.patchValue({uniqueName: val});
+              this.addAccountForm.patchValue({ uniqueName: val });
             } else {
               let num = 1;
-              this.addAccountForm.patchValue({uniqueName: val + num});
+              this.addAccountForm.patchValue({ uniqueName: val + num });
             }
           }
         });
       } else {
-        this.addAccountForm.patchValue({uniqueName: ''});
+        this.addAccountForm.patchValue({ uniqueName: '' });
       }
     });
+
+    if(this.autoFocus !== undefined) {
+      setTimeout(() => {
+        this.autoFocus.nativeElement.focus();
+      }, 50);
+    }
   }
 
   public setCountryByCompany(company: CompanyResponse) {
@@ -252,7 +270,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       foreignOpeningBalance: [0],
       openingBalance: [0],
       mobileNo: [''],
-      mobileCode: ['91'],
+      mobileCode: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -263,8 +281,8 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{value: '', disabled: false}],
-      sacNumber: [{value: '', disabled: false}],
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }],
       accountBankDetails: this._fb.array([
         this._fb.group({
           bankName: [''],
@@ -281,12 +299,22 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{value: '', disabled: false}],
+      stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
     });
     return gstFields;
+  }
+
+  public resetGstStateForm() {
+    this.forceClear$ = observableOf({status: true});
+
+    let addresses = this.addAccountForm.get('addresses') as FormArray;
+    for (let control of addresses.controls) {
+      control.get('stateCode').patchValue(null);
+      control.get('gstNumber').setValue("");
+    }
   }
 
   // public generateUniqueName() {
@@ -443,8 +471,7 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
 
-    if(this.activeGroupUniqueName === 'discount')
-    {
+    if (this.activeGroupUniqueName === 'discount') {
       delete accountRequest['addresses'];
     }
     // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
@@ -478,6 +505,12 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.addAccountForm.get('mobileCode').setValue(phoneCode);
+    }
   }
 
 }

@@ -4,8 +4,9 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
-  z-index: 1200;
+  width: 100%;
+  max-width: 480px;
+  z-index: 99999;
 }
 
 :host.in #close {
@@ -23,9 +24,9 @@
   padding-right: 0;
 }
 
-:host .aside-pane {
-  width: 480px;
-}
+// :host .aside-pane {
+//   width: 480px;
+// }
 
 .aside-pane-other-tax label {
   margin-bottom: 10px;
@@ -34,4 +35,24 @@
 
 :host ::ng-deep .selectTaxDropdown .dropdown-menu {
   //position:  static !important;
+}
+@media(max-width:767px){
+  button.btn.btn-success {
+    margin-top: 20px;
+}
+}
+@media(max-width:575px){
+ :host {
+   max-width: 370px;
+ }
+}
+@media(max-width:375px){
+ :host {
+   max-width: 310px;
+ }
+}
+@media(max-width:320px){
+ :host {
+   max-width: 280px;
+ }
 }

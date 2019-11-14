@@ -7,7 +7,7 @@ import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permis
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import {CompanyResponse, TaxResponse} from '../../../../models/api-models/Company';
+import { CompanyResponse, TaxResponse } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -34,25 +34,27 @@ import { ApplyDiscountRequest } from '../../../../models/api-models/ApplyDiscoun
 import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import {DbService} from "../../../../services/db.service";
-import {Router} from "@angular/router";
-import {forEach} from "../../../../lodash-optimized";
+import { DbService } from "../../../../services/db.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'account-operations',
   templateUrl: './account-operations.component.html',
   styles: [`
-    .mrgeBtn {
-      padding: 8px 16px;
-    }
+      .mrgeBtn {
+          padding: 8px 16px;
+      }
 
-    .form_box .btn {
-      width: 72px;
-    }
+      .form_box .btn {
+          width: 72px;
+      }
 
-    .item_unq ul {
-      padding-left: 30px;
-      list-style: none;
+      .item_unq ul {
+          padding-left: 30px;
+          list-style: none;
+      }
+      .moveTOgroup {
+        padding: 0 15px;
     }
 
   `],
@@ -72,7 +74,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
@@ -122,7 +124,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public discountList$: Observable<IDiscountList[]>;
-  public optionsForDropDown: IOption[] = [{label: 'TDS', value: 'vishal'}, {label: 'tcs', value: 'shalini'}];
+  public optionsForDropDown: IOption[] = [{ label: 'TDS', value: 'vishal' }, { label: 'tcs', value: 'shalini' }];
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -146,7 +148,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public accountDetails: any = '';
   @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
   public selectedCompany: Observable<CompanyResponse>;
-  public activeCompany:any;
+  public activeCompany: any;
   private groupsListBackUp: IOption[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -157,10 +159,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   settings = {};
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-              private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
-              private _settingsDiscountAction: SettingsDiscountActions,
-              private _dbService: DbService, private router: Router) {
+    private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+    private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
+    private _settingsDiscountAction: SettingsDiscountActions,
+    private _dbService: DbService, private router: Router) {
     this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).pipe(takeUntil(this.destroyed$));
@@ -177,9 +179,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     // prepare drop down for taxes
     this.companyTaxDropDown = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeAccount,
-        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-        (state: AppState) => state.company.taxes],
+      (state: AppState) => state.groupwithaccounts.activeAccount,
+      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+      (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, taxes) => {
         let arr: IOption[] = [];
         if (taxes) {
@@ -199,22 +201,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let inheritedTaxes = _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
                 let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
                 // set value in tax group form
-                this.taxGroupForm.setValue({taxes: allTaxes});
+                this.taxGroupForm.setValue({ taxes: allTaxes });
               } else {
-                this.taxGroupForm.setValue({taxes: applicableTaxes});
+                this.taxGroupForm.setValue({ taxes: applicableTaxes });
               }
               return _.differenceBy(taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), 'value');
 
             } else {
               // set value in tax group form
-              this.taxGroupForm.setValue({taxes: applicableTaxes});
+              this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
               return taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               });
 
             }
@@ -273,12 +275,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public ngOnInit() {
 
     this.itemList = [
-      {"id": 1, "itemName": "India", "category": "asia"},
-      {"id": 2, "itemName": "Singapore", "category": "asia pacific"},
-      {"id": 3, "itemName": "Germany", "category": "Europe"},
-      {"id": 4, "itemName": "France", "category": "Europe"},
-      {"id": 5, "itemName": "South Korea", "category": "asia"},
-      {"id": 6, "itemName": "Sweden", "category": "Europe"}
+      { "id": 1, "itemName": "India", "category": "asia" },
+      { "id": 2, "itemName": "Singapore", "category": "asia pacific" },
+      { "id": 3, "itemName": "Germany", "category": "Europe" },
+      { "id": 4, "itemName": "France", "category": "Europe" },
+      { "id": 5, "itemName": "South Korea", "category": "asia" },
+      { "id": 6, "itemName": "Sweden", "category": "Europe" }
     ];
 
     this.selectedItems = [];
@@ -296,7 +298,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       enableFilterSelectAll: false
     };
 
-
     this.activeAccount$.subscribe(a => {
       if (a && a.parentGroups[0].uniqueName) {
         let col = a.parentGroups[0].uniqueName;
@@ -306,7 +307,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
       if (a && this.breadcrumbUniquePath[1]) {
         this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
-        this.discountAccountForm.patchValue({discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined});
+        this.discountAccountForm.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined });
       }
     });
     this.groupDetailForm = this._fb.group({
@@ -338,7 +339,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let flattenGroupsList: IOption[] = [];
 
         grpsList.forEach(grp => {
-          flattenGroupsList.push({label: grp.name, value: grp.uniqueName});
+          flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
         });
         this.groupsList = flattenGroupsList;
         this.groupsListBackUp = flattenGroupsList;
@@ -431,7 +432,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.discountList$.subscribe(discount => {
       if (discount) {
         this.companyDiscountDropDown = discount.map(dis => {
-          return {label: dis.name, value: dis.uniqueName};
+          return { label: dis.name, value: dis.uniqueName };
         });
       } else {
         this.companyDiscountDropDown = [];
@@ -442,10 +443,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       this.discountShSelect.clear();
     });
     this.accountsAction.mergeAccountResponse$.subscribe(res => {
-      if(this.selectedaccountForMerge.length>0) {
+      if (this.selectedaccountForMerge.length > 0) {
         this.selectedaccountForMerge.forEach((element) => {
           this.deleteFromLocalDB(element);
-        })
+        });
       }
       this.selectedaccountForMerge = '';
     });
@@ -454,8 +455,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public ngAfterViewInit() {
 
     this.isTaxableAccount$ = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-        (state: AppState) => state.groupwithaccounts.activeAccount],
+      (state: AppState) => state.groupwithaccounts.groupswithaccounts,
+      (state: AppState) => state.groupwithaccounts.activeAccount],
       (groupswithaccounts, activeAccount) => {
         let result: boolean = false;
         let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
@@ -472,10 +473,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.pipe(take(1)).subscribe(p => {
       activeAccount = p;
-      if(!this.showBankDetail){
-        if(p.parentGroups){
-          p.parentGroups.forEach(grp=>{
-            this.showBankDetail = grp.uniqueName === "sundrycreditors"? true: false;
+      if (!this.showBankDetail) {
+        if (p.parentGroups) {
+          p.parentGroups.forEach(grp => {
+            this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
             return;
           });
         }
@@ -486,7 +487,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let accounts: IOption[] = [];
       if (a.status === 'success') {
         a.body.results.map(acc => {
-          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+          accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
         });
         let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
         if (accountIndex > -1) {
@@ -509,7 +510,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
 
   public moveAccount() {
@@ -548,7 +549,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -598,10 +599,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this.showTaxes=false
+    this.showTaxes = false;
     if ('breadcrumbUniquePath' in changes && changes.breadcrumbUniquePath.currentValue !== changes.breadcrumbUniquePath.previousValue) {
       // debugger;
       this.isDebtorCreditor = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors') || changes.breadcrumbUniquePath.currentValue.includes('sundrydebtors');
+      this.showBankDetail = changes.breadcrumbUniquePath.currentValue.includes('sundrycreditors');
     }
   }
 
@@ -844,7 +846,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.deleteAccountModal.hide();
   }
 
-  public deleteFromLocalDB(activeAccUniqueName?:string){
+  public deleteFromLocalDB(activeAccUniqueName?: string) {
     this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
       if (res) {
         this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
@@ -853,6 +855,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
     });
   }
+
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);

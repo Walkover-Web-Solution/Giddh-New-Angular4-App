@@ -15,8 +15,26 @@ import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { AccountDetailsClass, ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, IForceClear, IStockUnit, SalesAddBulkStockItems, SalesEntryClass, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, SalesTransactionItemClass, VOUCHER_TYPE_LIST, VoucherClass, VoucherTypeEnum } from '../models/api-models/Sales';
-import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
+import {
+  AccountDetailsClass,
+  ActionTypeAfterVoucherGenerateOrUpdate,
+  GenericRequestForGenerateSCD,
+  IForceClear,
+  IStockUnit,
+  SalesAddBulkStockItems,
+  SalesEntryClass,
+  SalesOtherTaxesCalculationMethodEnum,
+  SalesOtherTaxesModal,
+  SalesTransactionItemClass,
+  VOUCHER_TYPE_LIST,
+  VoucherClass,
+  VoucherDetailsClass,
+  VoucherTypeEnum,
+  SalesEntryClassMulticurrency,
+  TransactionClassMulticurrency, DiscountMulticurrency,
+  GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency, StateCode
+} from '../models/api-models/Sales';
+import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -31,7 +49,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import { cloneDeep, isEqual } from '../lodash-optimized';
+import { cloneDeep, forEach, isEqual } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -48,6 +66,9 @@ import { InvoiceReceiptFilter, ReciptResponse } from '../models/api-models/recip
 import { LedgerService } from '../services/ledger.service';
 import { TaxControlComponent } from '../theme/tax-control/tax-control.component';
 import { GeneralService } from '../services/general.service';
+import { LoaderState } from "../loader/loader";
+import { LoaderService } from "../loader/loader.service";
+import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 
 const THEAD_ARR_READONLY = [
   {
@@ -122,12 +143,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
   @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
 
-  @ViewChild('invoiceForm', {read: NgForm}) public invoiceForm: NgForm;
+  @ViewChild('invoiceForm', { read: NgForm }) public invoiceForm: NgForm;
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
   @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
   @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public editCurrencyInputField: boolean = false;
+  public showCurrencyValue: boolean = false;
+  public autoSaveIcon: boolean = false;
+  public editPencilIcon: boolean = true;
 
   public isSalesInvoice: boolean = true;
   public isCashInvoice: boolean = false;
@@ -173,7 +198,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public giddhDateFormat: string = GIDDH_DATE_FORMAT;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
-  public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public forceClear$: Observable<IForceClear> = observableOf({ status: false });
   public calculatedRoundOff: number = 0;
 
 
@@ -238,6 +263,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   private updateVoucherSuccess$: Observable<boolean>;
   private lastGeneratedVoucherNo$: Observable<{ voucherNo: string, accountUniqueName: string }>;
 
+  //Multi-currency changes
+  public exchangeRate = 1;
+  public originalExchangeRate = 1;
+  public isMulticurrencyAccount = false;
+  public invoiceUniqueName: string;
+  public showLoader: boolean = false;
+  public inputMaskFormat: string = '';
+  public isPrefixAppliedForCurrency: boolean;
+  public selectedSuffixForCurrency: string = '';
+  public companyCurrencyName: string;
+  public baseCurrencySymbol: string = '';
+  public depositCurrSymbol: string = '';
+  public grandTotalMulDum;
+  public showSwitchedCurr = false;
+  public reverseExchangeRate: number;
+  public originalReverseExchangeRate: number;
+  public countryCode: string = '';
+  private entriesListBeforeTax: SalesEntryClass[];
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -260,7 +303,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private _cdr: ChangeDetectorRef,
     private proformaActions: ProformaActions,
     private _ledgerService: LedgerService,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private loaderService: LoaderService
   ) {
     this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -300,6 +344,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     );
 
     this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+    this.loaderService.loaderState.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+          if (stateLoader.show) {
+          this.showLoader = true;
+        } else {
+          this.showLoader = false;
+        }
+    });
   }
 
   public ngAfterViewInit() {
@@ -310,15 +362,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     setTimeout(function () {
       // tslint:disable-next-line:prefer-for-of
       let firstElementToFocus = $('.fristElementToFocus');
-      //for (let i = 0; i < firstElementToFocus.length; i++) {
-        //if (firstElementToFocus[i].tabIndex === 0) {
-          firstElementToFocus[0].focus();
-        //}
-     // }
-    }, 200);
+      if (firstElementToFocus[0]) {
+        firstElementToFocus[0].focus();
+      }
+      if (!this.isCashInvoice) {
+        let cashInvoiceInput = $('.focusClasses');
+        if (cashInvoiceInput[0]) {
+          cashInvoiceInput[0].focus();
+        }
+      }
+    }, 400);
     // this.fristElementToFocus.nativeElement.focus(); // not working
   }
-
   public ngOnInit() {
     // this.invoiceNo = '';
     this.isUpdateMode = false;
@@ -328,7 +383,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (profile) {
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
+        this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        this.depositCurrSymbol = this.baseCurrencySymbol;
+        this.companyCurrencyName = profile.baseCurrency;
+
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+        this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        this.countryCode = profile.countryCode;
+        if (!this.isUpdateMode) {
+          this.getUpdatedStateCodes(this.countryCode);
+        }
       } else {
         this.customerCountryName = '';
         this.companyCurrency = 'INR';
@@ -336,7 +400,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
+    this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
       if (parmas['invoiceType']) {
         if (this.invoiceType !== parmas['invoiceType']) {
           this.invoiceType = parmas['invoiceType'];
@@ -393,19 +457,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
       }
 
+      if (!this.isUpdateMode) {
+        this.resetInvoiceForm(this.invoiceForm);
+      }
+
       this.getAllLastInvoices();
     });
 
     // bind state sources
-    this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.forEach(d => {
-          arr.push({label: `${d.name}`, value: d.code});
-        });
-      }
-      this.statesSource = arr;
-    });
+    /* this.store.pipe(select(p => p.general.states), takeUntil(this.destroyed$)).subscribe((states) => {
+       let arr: IOption[] = [];
+       if (states) {
+         states.forEach(d => {
+           arr.push({ label: `${d.name}`, value: d.code });
+         });
+       }
+       this.statesSource = arr;
+     });*/
 
     // get account details and set it to local var
     this.selectedAccountDetails$.subscribe(o => {
@@ -415,18 +483,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     // get tax list and assign values to local vars
-    this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
-      if (o) {
-        this.companyTaxesList = o;
-        this.theadArrReadOnly.forEach((item: IContentCommon) => {
-          // show tax label
-          if (item.label === 'Tax') {
-            item.display = true;
+    this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+      if (isGetTaxes) {
+        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+          if (o) {
+            this.companyTaxesList = o;
+            this.theadArrReadOnly.forEach((item: IContentCommon) => {
+              // show tax label
+              if (item.label === 'Tax') {
+                item.display = true;
+              }
+              return item;
+            });
+          } else {
+            this.companyTaxesList = [];
           }
-          return item;
         });
-      } else {
-        this.companyTaxesList = [];
       }
     });
 
@@ -464,33 +536,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.addBlankRow(null);
     }
     this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-      if (setting && (setting.invoiceSettings || setting.proformaSettings || setting.estimateSettings)) {
-        if(this.isSalesInvoice) {
-          this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-            moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }else if(this.isProformaInvoice) {
-            this.invFormData.voucherDetails.dueDate = setting.proformaSettings.duePeriod ?
-              moment().add(setting.proformaSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }else{
-          this.invFormData.voucherDetails.dueDate = setting.estimateSettings.duePeriod ?
-            moment().add(setting.estimateSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }
+      if (setting && setting.invoiceSettings) {
+        this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
+          moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
       }
     });
 
     this.uploadInput = new EventEmitter<UploadInput>();
-    this.fileUploadOptions = {concurrency: 0};
+    this.fileUploadOptions = { concurrency: 0 };
 
     //region combine get voucher details && all flatten A/c's && create account and update account success from sidebar
     combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
       .pipe(takeUntil(this.destroyed$), auditTime(700))
       .subscribe(results => {
-        let bankaccounts: IOption[] = [];
-
+        //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         // create mode because voucher details are not available
         if (results[0]) {
           let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
           // assign flatten A/c's
+          let bankaccounts: IOption[] = [];
           this.sundryDebtorsAcList = [];
           this.sundryCreditorsAcList = [];
           this.prdSerAcListForDeb = [];
@@ -499,50 +563,50 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           flattenAccounts.forEach(item => {
 
             if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-              this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryDebtorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-              this.sundryCreditorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+              this.sundryCreditorsAcList.push({ label: item.name, value: item.uniqueName, additional: item });
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-              bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
+              bankaccounts.push({ label: item.name, value: item.uniqueName, additional: item });
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForDeb.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForDeb.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForDeb.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
 
             if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
               if (item.stocks) {
                 // normal entry
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
 
                 // stock entry
                 item.stocks.map(as => {
                   this.prdSerAcListForCred.push({
                     value: `${item.uniqueName}#${as.uniqueName}`,
                     label: `${item.name} (${as.name})`,
-                    additional: Object.assign({}, item, {stock: as})
+                    additional: Object.assign({}, item, { stock: as })
                   });
                 });
               } else {
-                this.prdSerAcListForCred.push({value: item.uniqueName, label: item.name, additional: item});
+                this.prdSerAcListForCred.push({ value: item.uniqueName, label: item.name, additional: item });
               }
             }
 
@@ -586,7 +650,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
           }
 
-          this.depositAccountUniqueName = 'cash';
+          this.depositAccountUniqueName = '';
         }
 
         // update mode because voucher details is available
@@ -597,8 +661,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // if last invoice is copied then create new Voucher and copy only needed things not all things
             obj = this.invFormData;
           } else {
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
-              obj = cloneDeep(results[1]) as VoucherClass;
+            if (this.invoiceType === VoucherTypeEnum.sales) {
+              let convertedRes1 = results[1];
+              convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+              if (results[1].account.currency) {
+                this.companyCurrencyName = results[1].account.currency.code;
+              }
+              obj = cloneDeep(convertedRes1) as VoucherClass;
+              this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
+                obj.accountDetails.currencySymbol = acc.currencySymbol || '';
+              });
+
             } else {
               obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
             }
@@ -607,17 +680,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           if (obj.voucherDetails) {
 
             // if last invoice is copied then don't copy customer/vendor name and it's details
-            if (!this.isLastInvoiceCopied) {
+            if (!this.isLastInvoiceCopied && !this.isUpdateMode) {
 
               // assign account details uniqueName because we are using accounts uniqueName not name
-              if (!obj.voucherDetails.cashInvoice) {
+              if (obj.accountDetails.uniqueName !== 'cash') {
                 obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
               } else {
-                this.isCashInvoice = true;
-                this.isSalesInvoice = false;
-                this.invoiceType = VoucherTypeEnum.cash;
                 obj.voucherDetails.customerUniquename = obj.voucherDetails.customerName;
-                this.depositAccountUniqueName = obj.accountDetails.uniqueName;
               }
             }
 
@@ -635,8 +704,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
               obj.templateDetails = result.templateDetails;
             }
-
-            if (obj.entries.length) {
+            //added update mode as causing trouble in multicurrency
+            if (obj.entries.length && !this.isUpdateMode) {
               obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
             }
 
@@ -670,9 +739,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               }
             }
 
+            if (!obj.accountDetails.billingDetails.state) {
+              obj.accountDetails.billingDetails.state = {};
+              obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
+              obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
+            }
+            if (!obj.accountDetails.shippingDetails.state) {
+              obj.accountDetails.shippingDetails.state = {};
+              obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
+              obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
+            }
+
+            if (!obj.voucherDetails.customerUniquename) {
+              obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
+            }
             this.isCustomerSelected = true;
             this.invoiceDataFound = true;
-
+            if (!obj.accountDetails.currencySymbol) {
+              obj.accountDetails.currencySymbol = '';
+            }
             this.invFormData = obj;
           } else {
             this.invoiceDataFound = false;
@@ -699,6 +784,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
             this.isCustomerSelected = true;
+            this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
+            this.customerCountryName = tempSelectedAcc.country.countryName;
+            if (this.isMulticurrencyAccount) {
+              this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
+              this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode);
+              this.companyCurrencyName = tempSelectedAcc.currency;
+            }
             // reset customer details so we don't have conflicts when we create voucher second time
             this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
           } else {
@@ -751,7 +843,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this._breakpointObserver
-      .observe(['(max-width: 768px)'])
+      .observe(['(max-width: 840px)'])
       .pipe(takeUntil(this.destroyed$))
       .subscribe((st: BreakpointState) => {
         this.isMobileView = st.matches;
@@ -763,7 +855,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.generateVoucherSuccess$.subscribe(result => {
       if (result) {
-        let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {voucherNo: '', accountUniqueName: ''};
+        let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = { voucherNo: '', accountUniqueName: '' };
         this.lastGeneratedVoucherNo$.pipe(take(1)).subscribe(s => lastGenVoucher = s);
         this.invoiceNo = lastGenVoucher.voucherNo;
         this.accountUniqueName = lastGenVoucher.accountUniqueName;
@@ -794,7 +886,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             result[0].items.forEach(item => {
               arr.push({
                 versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
-                account: {name: item.account.name, uniqueName: item.account.uniqueName}
+                account: { name: item.account.name, uniqueName: item.account.uniqueName }
               });
             });
           }
@@ -806,7 +898,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
                 date: this.isProformaInvoice ? item.proformaDate : item.estimateDate,
                 grandTotal: item.grandTotal,
-                account: {name: item.customerName, uniqueName: item.customerUniqueName}
+                account: { name: item.customerName, uniqueName: item.customerUniqueName }
               });
             });
           }
@@ -912,6 +1004,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
+    this.customerCountryName = data.country.countryName;
+    this.getUpdatedStateCodes(data.country.countryCode);
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
@@ -941,34 +1035,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public resetInvoiceForm(f: NgForm) {
-    f.form.reset();
+    if (f) {
+      f.form.reset();
+    }
+    this.showSwitchedCurr = false;
+    this.autoSaveIcon = false;
+    this.showCurrencyValue = false;
     this.invFormData = new VoucherClass();
-    this.depositAccountUniqueName = 'cash';
-
+    this.depositAccountUniqueName = '';
+    this.accountUniqueName = "";
+    this.invoiceNo = "";
     this.typeaheadNoResultsOfCustomer = false;
     // toggle all collapse
     this.isGenDtlCollapsed = true;
     this.isMlngAddrCollapsed = true;
     this.isOthrDtlCollapsed = false;
-    this.forceClear$ = observableOf({status: true});
+    this.forceClear$ = observableOf({ status: true });
     this.isCustomerSelected = false;
     this.selectedFileName = '';
 
     this.assignDates();
-    this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-      if (setting && (setting.invoiceSettings || setting.proformaSettings || setting.estimateSettings)) {
-        if(this.isSalesInvoice) {
-          this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-            moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }else if(this.isProformaInvoice) {
-          this.invFormData.voucherDetails.dueDate = setting.proformaSettings.duePeriod ?
-            moment().add(setting.proformaSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }else{
-          this.invFormData.voucherDetails.dueDate = setting.estimateSettings.duePeriod ?
-            moment().add(setting.estimateSettings.duePeriod, 'days').toDate() : moment().toDate();
-        }
-      }
-    });
+    let invoiceSettings: InvoiceSetting = null;
+    this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+    if (invoiceSettings && invoiceSettings.invoiceSettings) {
+      this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
+        moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
+    }
+    this.ngAfterViewInit();
   }
 
   public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
@@ -1135,39 +1228,60 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
       return entry;
     });
-
+    let exRate = this.originalExchangeRate;
     let obj: GenericRequestForGenerateSCD = {
+      account: data.accountDetails,
+      updateAccountDetails: this.updateAccount,
       voucher: data,
-      updateAccountDetails: this.updateAccount
+      entries: [],
+      date: data.voucherDetails.voucherDate,
+      type: this.invoiceType,
+      exchangeRate: exRate,
+      dueDate: data.voucherDetails.dueDate
     };
 
-    if (this.depositAmount && this.depositAmount > 0) {
-      obj.paymentAction = {
-        action: 'paid',
-        amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
-      };
-      if (this.isCustomerSelected) {
-        obj.depositAccountUniqueName = this.depositAccountUniqueName;
-      } else {
-        obj.depositAccountUniqueName = data.accountDetails.uniqueName;
-      }
-    } else {
-      obj.depositAccountUniqueName = '';
-    }
     // set voucher type
     obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
     if (this.isProformaInvoice || this.isEstimateInvoice) {
+
+      if (this.depositAmount && this.depositAmount > 0) {
+        obj.paymentAction = {
+          action: 'paid',
+          amount: Number(this.depositAmount) + this.depositAmountAfterUpdate
+        };
+        if (this.isCustomerSelected) {
+          obj.depositAccountUniqueName = this.depositAccountUniqueName;
+        } else {
+          obj.depositAccountUniqueName = data.accountDetails.uniqueName;
+        }
+      } else {
+        obj.depositAccountUniqueName = '';
+      }
       this.store.dispatch(this.proformaActions.generateProforma(obj));
     } else {
-      this.salesService.generateGenericItem(obj).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+      let updatedData = obj;
+      let isVoucherV4 = false;
+      if (this.isSalesInvoice || this.isCashInvoice) {
+        updatedData = this.updateData(obj, data);
+        isVoucherV4 = true;
+      }
+      this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
         if (response.status === 'success') {
           // reset form and other
           this.resetInvoiceForm(f);
 
-          this.voucherNumber = response.body.voucherDetails.voucherNumber;
-          this.invoiceNo = this.voucherNumber;
-          this.accountUniqueName = response.body.accountDetails.uniqueName;
+
+          if (response.body.account) {
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
+            this.accountUniqueName = response.body.account.uniqueName;
+          } else {
+            this.voucherNumber = response.body.voucherDetails.voucherNumber;
+            this.invoiceNo = this.voucherNumber;
+            this.accountUniqueName = response.body.accountDetails.uniqueName;
+          }
+
           if (this.isPurchaseInvoice) {
             this._toasty.successToast(`Entry created successfully`);
           } else {
@@ -1203,6 +1317,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+
     if (!modalBool) {
       let entry = this.invFormData.entries[this.activeIndx];
       if (entry) {
@@ -1212,6 +1327,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     } else {
       if (index !== null) {
+        this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
         // this.selectedEntry = cloneDeep(this.invFormData.entries[index]);
       }
     }
@@ -1329,13 +1445,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public calculateBalanceDue() {
     let count: number = 0;
+    let depositAmount = Number(this.depositAmount);
+    if (this.isMulticurrencyAccount) {
+      if (this.depositCurrSymbol === this.invFormData.accountDetails.currencySymbol) {
+        depositAmount = depositAmount * this.exchangeRate;
+      }
+      depositAmount = depositAmount / this.exchangeRate || 0;
+    }
     this.invFormData.entries.forEach(f => {
       count += f.transactions.reduce((pv, cv) => {
         return pv + cv.total;
       }, 0);
     });
     this.invFormData.voucherDetails.balanceDue =
-      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmount) - Number(this.depositAmountAfterUpdate);
+      ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
     this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
   }
 
@@ -1359,11 +1482,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     //Save the Grand Total for Edit
     if (calculatedGrandTotal > 0) {
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+      if (this.calculatedRoundOff === 0.5) {
+        this.calculatedRoundOff = -this.calculatedRoundOff;
+      }
       calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
     }
-
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-
+    this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
   }
 
   public generateTotalAmount(txns: SalesTransactionItemClass[]) {
@@ -1401,9 +1526,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       txn.sku_and_customfields = null;
 
       // description with sku and custom fields
-     // if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
-       // condition removed as SKU Code need to be displayed in all case.
-      if ((o.stock))  {
+      if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
         let description = [];
         let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
         if (o.stock.skuCode) {
@@ -1434,7 +1557,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
               case 'tcspay':
               case 'tdsrc':
               case 'tdspay':
-                entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                 entry.isOtherTaxApplicable = true;
                 break;
               default:
@@ -1544,24 +1667,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       this.getAccountDetails(item.value);
       this.isCustomerSelected = true;
       this.invFormData.accountDetails.name = '';
-
-      if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
-        this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
-          .pipe(
-            catchError(err => {
-              this.fetchedConvertedRate = 0;
-              return err;
-            })
-          )
-          .subscribe((res: any) => {
-            let rate = res.body;
-            if (rate) {
-              this.fetchedConvertedRate = rate;
-            }
-          }, (error1 => {
-            this.fetchedConvertedRate = 0;
-          }));
+      this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
+      if (this.isMulticurrencyAccount) {
+        this.companyCurrencyName = item.additional.currency;
       }
+      if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+        this.getCurrencyRate(this.companyCurrency, item.additional.currency);
+      }
+    }
+    if (this.isSalesInvoice && this.isMulticurrencyAccount) {
+      this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
     }
   }
 
@@ -1627,6 +1742,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.activeIndx = null;
       }
       this.invFormData.entries = this.invFormData.entries.filter((entry, index) => entryIdx !== index);
+      this.calculateAffectedThingsFromOtherTaxChanges();
     } else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
@@ -1666,9 +1782,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public customMoveGroupFilter(term: string, item: IOption): boolean {
-    let newItem = {...item};
+    let newItem = { ...item };
     if (!newItem.additional) {
-      newItem.additional = {email: '', mobileNo: ''};
+      newItem.additional = { email: '', mobileNo: '' };
     } else {
       newItem.additional.email = newItem.additional.email || '';
       newItem.additional.mobileNo = newItem.additional.mobileNo || '';
@@ -1693,12 +1809,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public setActiveIndx(indx: number) {
-    setTimeout(function () {
-      let focused = $('.focused');
-      if (focused && focused[indx]) {
-        $('.focused')[indx].focus();
-      }
-    }, 200);
+    // BELOW CODE WAS PUTTING FOCUS ON PAYMENT MODE DROPDOWN SO COMMENTED THE CODE
+    // setTimeout(function () {
+    //   let focused = $('.focused');
+    //   if (focused && focused[indx]) {
+    //     $('.focused')[indx].focus();
+    //   }
+    // }, 200);
 
     this.activeIndx = indx;
   }
@@ -1788,9 +1905,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invFormData.accountDetails.uniqueName = event.value;
       }
       this.depositAccountUniqueName = event.value;
+      if (this.isCashInvoice) {
+        this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+      }
+      if (this.isMulticurrencyAccount) {
+        if (this.isCashInvoice) {
+          //this.getAccountDetails(event.value);
+          this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+          this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
+        }
+        if (this.isSalesInvoice) {
+          this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+        }
+      } else {
+        this.invFormData.accountDetails.currencySymbol = '';
+      }
+      if (this.isCashInvoice) {
+        this.companyCurrencyName = event.additional.currency;
+      }
     } else {
       this.depositAccountUniqueName = '';
     }
+    if (this.isMulticurrencyAccount) {
+      this.getCurrencyRate(this.companyCurrency, event.additional.currency);
+    }
+
+    this.calculateBalanceDue();
   }
 
   public clickedInside($event: Event) {
@@ -1812,7 +1952,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public prepareUnitArr(unitArr) {
     let unitArray = [];
     _.forEach(unitArr, (item) => {
-      unitArray.push({id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate});
+      unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
     });
     return unitArray;
   }
@@ -1839,8 +1979,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
@@ -1883,7 +2023,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       if (salesItem) {
 
         // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-        salesItem.additional = {...salesItem.additional, quantity: item.quantity};
+        salesItem.additional = { ...salesItem.additional, quantity: item.quantity };
         let lastIndex = -1;
         let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
 
@@ -1940,14 +2080,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.isProformaInvoice || this.isEstimateInvoice) {
       this.store.dispatch(this.proformaActions.updateProforma(result));
     } else {
-      this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+      let data = result.voucher;
+      let exRate = this.originalExchangeRate;
+      let unqName = this.invoiceUniqueName || this.accountUniqueName;
+      result = {
+        account: data.accountDetails,
+        updateAccountDetails: this.updateAccount,
+        voucher: data,
+        entries: [],
+        date: data.voucherDetails.voucherDate,
+        type: this.invoiceType,
+        exchangeRate: exRate,
+        dueDate: data.voucherDetails.dueDate,
+        number: this.invoiceNo,
+        uniqueName: unqName
+      }
+      this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
         .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
           if (response.status === 'success') {
             // reset form and other
             this.resetInvoiceForm(f);
             this._toasty.successToast('Voucher updated Successfully');
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
 
@@ -2165,10 +2321,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (!entry) {
       return;
     }
-
-    if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+    if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
       let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-
+      if (!modal.appliedOtherTax.name) {
+        entry.otherTaxModal.appliedOtherTax.name = tax.name;
+      }
       if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
 
         if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
@@ -2193,6 +2350,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       entry.otherTaxModal = new SalesOtherTaxesModal();
       entry.tcsTaxList = [];
       entry.tdsTaxList = [];
+    }
+    if (this.activeIndx && !entryObj) {
+      this.invFormData.entries = cloneDeep(this.entriesListBeforeTax);
+      this.invFormData.entries[this.activeIndx] = entry;
     }
     // this.selectedEntry = null;
   }
@@ -2252,10 +2413,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-      this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
-        invoiceNumber: this.invoiceNo,
-        voucherType: this.parseVoucherType(this.invoiceType)
-      }));
+      if (this.isSalesInvoice || this.isCashInvoice) {
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
+          invoiceNumber: this.invoiceNo,
+          voucherType: this.parseVoucherType(this.invoiceType)
+        }));
+      } else {
+        this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetails(this.accountUniqueName, {
+          invoiceNumber: this.invoiceNo,
+          voucherType: this.parseVoucherType(this.invoiceType)
+        }));
+      }
     } else {
       let obj: ProformaGetRequest = new ProformaGetRequest();
       obj.accountUniqueName = this.accountUniqueName;
@@ -2298,7 +2466,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           // get account from flatten account
           let selectedAcc = flattenAccounts.find(d => {
             return (d.uniqueName === trx.accountUniqueName);
-          }); 
+          });
 
           if (selectedAcc) {
             // get stock from flatten account
@@ -2361,7 +2529,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tcsTaxList[0]);
         if (tax) {
-          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
           let taxableValue = 0;
           if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
             taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
@@ -2380,7 +2548,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tdsTaxList[0]);
         if (tax) {
-          entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+          entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
           let taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
           entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
         }
@@ -2407,14 +2575,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         isActive: true
       });
     } else {
-      discountArray.push({
-        discountType: 'FIX_AMOUNT',
-        amount: 0,
-        name: '',
-        particular: '',
-        isActive: true,
-        discountValue: 0
-      });
+      if (entry.discounts.length > 0) {
+        entry.discounts.forEach(ds => {
+          discountArray.push({
+            discountType: ds.discountType,
+            amount: ds.amount,
+            name: ds.name,
+            particular: ds.particular,
+            isActive: true,
+            discountValue: ds.discountValue
+          });
+        })
+      } else {
+        discountArray.push({
+          discountType: 'FIX_AMOUNT',
+          amount: 0,
+          name: '',
+          particular: '',
+          isActive: true,
+          discountValue: 0
+        });
+      }
     }
 
     entry.tradeDiscounts.forEach((f, ind) => {
@@ -2477,5 +2658,362 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public updateData(obj: GenericRequestForGenerateSCD, data: VoucherClass) {
+    delete obj.voucher;
+    delete obj.depositAccountUniqueName;
+
+    let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
+    let entries = data.entries;
+    let deposit = new AmountClassMulticurrency();
+
+    deposit.accountUniqueName = this.depositAccountUniqueName;
+    deposit.amountForAccount = this.depositAmount;
+
+    entries.forEach(e => {
+      let salesEntryClass = new SalesEntryClassMulticurrency();
+      salesEntryClass.voucherType = e.voucherType;
+      salesEntryClass.uniqueName = e.uniqueName;
+      salesEntryClass.description = e.description;
+      salesEntryClass.date = e.entryDate;
+      e.taxList.forEach(t => {
+        salesEntryClass.taxes.push({ uniqueName: t });
+      });
+      e.transactions.forEach(tr => {
+        let transactionClassMul = new TransactionClassMulticurrency();
+        transactionClassMul.account.uniqueName = tr.accountUniqueName;
+        transactionClassMul.account.name = tr.accountName;
+        transactionClassMul.amount.amountForAccount = tr.amount;
+        salesEntryClass.hsnNumber = tr.hsnNumber;
+        salesEntryClass.sacNumber = tr.sacNumber;
+        salesEntryClass.description = tr.description;
+        //transactionClassMul.description =  tr.description;
+        if (tr.isStockTxn) {
+          let saalesAddBulkStockItems = new SalesAddBulkStockItems();
+          saalesAddBulkStockItems.name = tr.stockDetails.name;
+          saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
+          saalesAddBulkStockItems.quantity = tr.quantity;
+          saalesAddBulkStockItems.rate = {};
+          saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
+          //saalesAddBulkStockItems.rate = tr.rate;
+          saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+          saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+          saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+
+          transactionClassMul.stock = saalesAddBulkStockItems;
+        }
+        salesEntryClass.transactions.push(transactionClassMul);
+      });
+      e.discounts.forEach(ds => {
+        salesEntryClass.discounts.push(new DiscountMulticurrency(ds));
+      });
+
+      salesEntryClassArray.push(salesEntryClass);
+    });
+
+    obj.templateDetails = data.templateDetails;
+    obj.entries = salesEntryClassArray;
+    obj.account.mobileNumber = obj.account.contactNumber;
+    obj.deposit = deposit;
+
+    obj.account.billingDetails.countryName = this.customerCountryName;
+    obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+    obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+    delete obj.account.billingDetails.state;
+
+    obj.account.shippingDetails.countryName = this.customerCountryName;
+    obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+    obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+    delete obj.account.shippingDetails.state;
+
+    if (this.isCashInvoice) {
+      obj.account.customerName = data.voucherDetails.customerName;
+      obj.account.name = data.voucherDetails.customerName;
+    } else {
+      delete obj.account.customerName;
+    }
+    return obj;
+  }
+
+  public modifyMulticurrencyRes(result: any) {
+    let voucherClassConversion = new VoucherClass();
+    let voucherDetails = new VoucherDetailsClass();
+    this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+    //voucherClassConversion.entries = result.entries;
+    voucherClassConversion.entries = [];
+    result.entries.forEach(entry => {
+      let salesEntryClass = new SalesEntryClass();
+      let salesTransactionItemClass = new SalesTransactionItemClass();
+      salesEntryClass.transactions = [];
+      entry.transactions.forEach(t => {
+        salesTransactionItemClass = new SalesTransactionItemClass();
+        salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
+        salesTransactionItemClass.accountName = t.account.name;
+        salesTransactionItemClass.amount = t.amount.amountForAccount;
+        salesTransactionItemClass.hsnNumber = t.hsnNumber;
+        salesTransactionItemClass.sacNumber = t.sacNumber;
+        salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
+        salesTransactionItemClass.description = entry.description;
+        salesTransactionItemClass.date = t.date;
+        salesEntryClass.transactions.push(salesTransactionItemClass);
+        entry.taxes.forEach(ta => {
+          let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+          if (taxTypeArr.indexOf(ta.taxType) > -1) {
+            salesEntryClass.isOtherTaxApplicable = true;
+            let otherTaxModal = new SalesOtherTaxesModal();
+            otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
+            otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
+            salesEntryClass.otherTaxModal = otherTaxModal;
+          } else {
+            salesEntryClass.taxes.push({
+              amount: ta.taxPercent,
+              uniqueName: ta.uniqueName,
+              isChecked: true,
+              isDisabled: false,
+              type: ta.taxType,
+              name: ta.name || ''
+            });
+          }
+        });
+        if (t.stock) {
+          salesTransactionItemClass.isStockTxn = true;
+          salesTransactionItemClass.stockDetails = {};
+          salesTransactionItemClass.stockDetails.name = t.stock.name;
+          salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
+          salesTransactionItemClass.quantity = t.stock.quantity;
+          salesTransactionItemClass.rate = t.stock.rate.amountForAccount;
+          salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
+          salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+          salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName
+        }
+      });
+
+
+      if (entry.discounts && entry.discounts.length) {
+        let discountArray = [];
+        let tradeDiscountArray = [];
+        entry.discounts.forEach(discount => {
+
+          let discountLedger = new LedgerDiscountClass();
+          discountLedger.amount = discount.discountValue;
+          discountLedger.discountType = discount.calculationMethod;
+          discountLedger.discountValue = discount.discountValue;
+          discountLedger.isActive = true;
+          discountLedger.discountUniqueName = discount.uniqueName;
+          discountLedger.name = discount.name;
+          discountLedger.particular = discount.particular;
+          if (discountLedger.discountUniqueName) {
+            discountLedger.uniqueName = discountLedger.discountUniqueName;
+            let tradeDiscount = new LedgerResponseDiscountClass();
+            tradeDiscount.discount = {
+              uniqueName: '',
+              name: '',
+              discountType: "PERCENTAGE",
+              discountValue: 10
+            };
+            tradeDiscount.account = {
+              accountType: '',
+              uniqueName: entry.uniqueName,
+              name: ''
+            };
+            tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+            tradeDiscount.discount.discountValue = discountLedger.discountValue;
+            tradeDiscount.discount.discountType = discountLedger.discountType;
+            tradeDiscount.discount.name = discountLedger.name;
+            tradeDiscountArray.push(tradeDiscount);
+          } else {
+            discountArray.push(discountLedger);
+          }
+        });
+        salesEntryClass.discounts = discountArray;
+        salesEntryClass.tradeDiscounts = tradeDiscountArray;
+      } else {
+        salesEntryClass.discounts = [new LedgerDiscountClass()];
+      }
+      salesEntryClass.discounts = this.parseDiscountFromResponse(salesEntryClass);
+      salesEntryClass.voucherType = entry.voucherType;
+      salesEntryClass.uniqueName = entry.uniqueName;
+      salesEntryClass.description = entry.description;
+      salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
+      this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
+      voucherClassConversion.entries.push(salesEntryClass);
+    });
+
+    this.entriesListBeforeTax = voucherClassConversion.entries;
+    voucherClassConversion.companyDetails = result.company;
+    voucherClassConversion.templateDetails = result.templateDetails;
+
+
+
+    //voucherClassConversion.accountDetails = result.account;
+    voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
+    voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
+    voucherClassConversion.accountDetails.billingDetails.address = result.account.billingDetails.address;
+    voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
+    voucherClassConversion.accountDetails.billingDetails.state.code = result.account.billingDetails.stateCode;
+    voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
+
+    voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
+    voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+    voucherClassConversion.accountDetails.shippingDetails.address = result.account.shippingDetails.address;
+    voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
+    voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
+    voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
+
+    voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
+    voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
+
+    voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
+    voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
+    voucherClassConversion.accountDetails.email = result.account.email;
+    voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
+    //code for voucher details
+    voucherDetails.voucherDate = result.date ? result.date : '';
+    voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+    //need to check usage
+    voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
+    voucherDetails.balanceStatus = result.balanceStatus;
+
+    voucherDetails.customerUniquename = result.account.uniqueName;
+    voucherDetails.grandTotal = result.grandTotal.amountForAccount;
+    voucherDetails.voucherNumber = result.number;
+    voucherDetails.subTotal = result.subTotal.amountForAccount;
+    voucherDetails.taxesTotal = result.taxTotal.cumulativeAmountForAccount;
+    voucherDetails.totalAsWords = result.totalAsWords.amountForAccount;
+
+    voucherClassConversion.voucherDetails = voucherDetails;
+    voucherClassConversion.templateDetails = result.templateDetails;
+
+    this.isMulticurrencyAccount = result.multiCurrency;
+    this.customerCountryName = result.account.billingDetails.countryName;
+
+    this.exchangeRate = result.exchangeRate;
+    this.originalExchangeRate = this.exchangeRate;
+
+    this.invoiceUniqueName = result.uniqueName;
+    this.invoiceType = result.type;
+    this.prepareInvoiceTypeFlags();
+    if (result.cashInvoice) {
+      this.isCashInvoice = true;
+      this.isSalesInvoice = false;
+    }
+    if (this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()) {
+      voucherDetails.customerName = result.account.customerName;
+      this.depositAccountUniqueName = result.account.uniqueName;
+    } else {
+      voucherDetails.customerName = result.account.name;
+    }
+
+    return voucherClassConversion;
+  }
+
+  public updateExchangeRate(val) {
+    val = val.replace(this.baseCurrencySymbol, '');
+    let total = parseFloat(val.replace(/,/g, "")) || 0;
+    if (this.isMulticurrencyAccount) {
+      this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+
+  public getCurrencyRate(to, from) {
+    let date = moment().format('DD-MM-YYYY');
+    this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+      let rate = response.body;
+      if (rate) {
+        this.originalExchangeRate = rate;
+        this.exchangeRate = rate;
+      }
+    }, (error => {
+
+    }));
+  }
+
+  public updateBankAccountObject(accCurr) {
+    let bankAccounts: IOption[] = [];
+    this.flattenAccountListStream$.pipe(take(1)).subscribe(a => {
+      a.forEach(acc => {
+        if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+          if (!acc.currency || acc.currency === accCurr || acc.currency === this.companyCurrency) {
+            bankAccounts.push({ label: acc.name, value: acc.uniqueName, additional: acc });
+          }
+        }
+      });
+    });
+    return _.orderBy(bankAccounts, 'label');
+  }
+
+  public switchCurrencyImg(switchCurr) {
+    this.showSwitchedCurr = switchCurr;
+    if (switchCurr) {
+      this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
+    } else {
+      this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+      this.originalExchangeRate = this.exchangeRate;
+    }
+  }
+
+  public saveCancelExcRate(toSave) {
+    if (toSave) {
+      if (this.showSwitchedCurr) {
+        this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+      } else {
+        this.originalExchangeRate = this.exchangeRate;
+      }
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.showCurrencyValue = !this.showCurrencyValue;
+      this.originalReverseExchangeRate = this.reverseExchangeRate;
+      this.calculateGrandTotal();
+    } else {
+      this.showCurrencyValue = !this.showCurrencyValue;
+      this.autoSaveIcon = !this.autoSaveIcon;
+      this.exchangeRate = this.originalExchangeRate;
+      this.reverseExchangeRate = this.originalReverseExchangeRate;
+    }
+  }
+
+  private getUpdatedStateCodes(currency: any) {
+    if (currency) {
+      this.salesService.getStateCode(currency).subscribe(resp => {
+        this.statesSource = this.modifyStateResp(resp.body.stateList);
+      });
+    }
+  }
+
+  private modifyStateResp(stateList: StateCode[]) {
+    let stateListRet: IOption[] = [];
+    stateList.forEach(stateR => {
+      stateListRet.push({ label: stateR.name, value: stateR.code });
+    });
+    return stateListRet;
+  }
+
+  public fillShippingBillingDetails($event: any, isBilling) {
+    let cityName = $event.label;
+    if (!isBilling && !this.autoFillShipping) {
+      this.invFormData.accountDetails.shippingDetails.stateName = cityName;
+      this.invFormData.accountDetails.shippingDetails.state.name = cityName;
+    }
+    this.invFormData.accountDetails.billingDetails.state.name = cityName;
+    this.invFormData.accountDetails.billingDetails.stateName = cityName;
+  }
+
+  private updateAddressShippingBilling(obj) {
+    if (obj) {
+      let shippigAddrss = '';
+      obj.address.forEach(res => {
+        shippigAddrss = shippigAddrss + res + '\n'
+      });
+      obj.address[0] = shippigAddrss;
+    }
+    return obj;
+  }
+
+  public selectDefaultbank() {
+    if (!this.depositAccountUniqueName) {
+      this.depositAccountUniqueName = 'cash';
+    }
   }
 }
