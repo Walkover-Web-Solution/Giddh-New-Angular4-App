@@ -11,7 +11,7 @@
                 </th>
 
                 <th #submittedBySearchContainer
-                    (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">Submitted By
+                    (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
           title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
 
@@ -20,7 +20,7 @@
 
                 <th #accountSearchContainer
                     (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')"
-                >Account
+                >
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                 </th>
@@ -32,7 +32,7 @@
 
                 <th #paymentReceiptSearchContainer
                     (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')"
-                >Payment/Receipt
+                >
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
                         title: 'Payment/Receipt', fieldName: 'payment/receive', formControl: paymentReceiveSearchInput}"></ng-container>
                 </th>
@@ -84,7 +84,8 @@
                         *ngIf="!expenses.description">-</span></td>
 
                     <td data-title="Action">
-                        <button type="button" (click)="showApproveConfirmPopup(ApproveConfirm,expenses);$event.stopPropagation()"
+                        <button type="button"
+                                (click)="showApproveConfirmPopup(ApproveConfirm,expenses);$event.stopPropagation()"
                                 class="btn btn-success-outline">Approve
                         </button>
                     </td>
