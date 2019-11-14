@@ -440,10 +440,12 @@
             </td>
 
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
+            <td class="text-right" [tooltip]="grandTotalPopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
             </td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+            <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span></ng-template>
+            <td class="text-right" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
             </td>
+            <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span></ng-template>
             <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
 
