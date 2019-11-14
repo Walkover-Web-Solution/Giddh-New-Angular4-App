@@ -82,8 +82,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    {name: 'ENGLISH', value: 'en'},
-    {name: 'DUTCH', value: 'nl'}
+    { name: 'ENGLISH', value: 'en' },
+    { name: 'DUTCH', value: 'nl' }
   ];
   public activeFinancialYear: ActiveFinancialYear;
   public datePickerOptions: any = {
@@ -136,8 +136,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     endDate: moment()
   };
 
-  public sideMenu: { isopen: boolean } = {isopen: false};
-  public companyMenu: { isopen: boolean } = {isopen: false};
+  public sideMenu: { isopen: boolean } = { isopen: false };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -261,6 +261,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
+
       // Sagar told to change the logic
       // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
       //   this.userIsSuperUser = true;
@@ -598,7 +599,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isDateRangeSelected) {
           this.datePickerOptions.startDate = moment(dateObj[0]);
           this.datePickerOptions.endDate = moment(dateObj[1]);
-          this.datePickerOptions = {...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
+          this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
           this.isDateRangeSelected = true;
           const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
           const to: any = moment().format(GIDDH_DATE_FORMAT);
@@ -671,7 +672,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
     if (o) {
-      menu = {...menu, ...o};
+      menu = { ...menu, ...o };
     } else {
       try {
         menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -692,7 +693,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.doEntryInDb('menus', menu);
 
     if (menu.additional) {
-      this.router.navigate([pageName], {queryParams: menu.additional});
+      this.router.navigate([pageName], { queryParams: menu.additional });
     } else {
       this.router.navigate([pageName]);
     }
@@ -982,7 +983,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     } else {
       this.isTodaysDateSelected = true;
       let today = _.cloneDeep([moment(), moment()]);
-      this.datePickerOptions = {...this.datePickerOptions, startDate: today[0], endDate: today[1]};
+      this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
       let dates = {
         fromDate: null,
         toDate: null,
@@ -1054,7 +1055,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (item.uniqueName.includes('?')) {
           item.uniqueName = item.uniqueName.split('?')[0];
         }
-        this.router.navigate([item.uniqueName], {queryParams: {tab: item.additional.tab, tabIndex: item.additional.tabIndex}});
+        this.router.navigate([item.uniqueName], { queryParams: { tab: item.additional.tab, tabIndex: item.additional.tabIndex } });
       } else {
         this.router.navigate([item.uniqueName]);
       }
@@ -1114,11 +1115,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.modelRefCrossLimit = this.modalService.show(template);
   }
 
-  public goToSelectPlan(template: TemplateRef<any>) {
+  public goToSelectPlan() {
     this.modalService.hide(1);
-    // this.router.navigate(['billing-detail']);
-    this.router.navigate(['pages', 'user-details'], {queryParams: {tab: 'subscriptions', tabIndex: 3, isPlanPage: true}});
-    this.modelRefExpirePlan = this.modalService.show(template);
+    this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 
   public onRight(nodes) {
@@ -1277,7 +1276,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     );
 
     this.subscriptions.push(_combine);
-    let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
+    let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
     this.modelRef = this.modalService.show(this.navigationModal, config);
   }
 
