@@ -14,6 +14,10 @@
   color: #707070;
   padding: 6px;
   margin-right: 0px !important;
+  width: 23px;
+}
+.btn:active{
+  box-shadow:none;
 }
 .dropdown-menu > li > a:hover {
   background: #e5e5e5;

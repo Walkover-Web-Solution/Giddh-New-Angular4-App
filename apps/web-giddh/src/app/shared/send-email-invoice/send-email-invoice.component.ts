@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import {InvoicePreviewDetailsVm} from "../../models/api-models/Invoice";
 
 @Component({
   selector: 'app-send-email-invoice-component',
@@ -9,12 +10,14 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
   @Input() voucherType: VoucherTypeEnum;
-  @Output() public successEvent: EventEmitter<string | { email: string, invoiceType: string[] }> = new EventEmitter<string | { email: string, invoiceType: string[] }>();
+  @Input() selectedItem: InvoicePreviewDetailsVm;
+  @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   public emailAddresses: string = '';
   public invoiceType: string[] = [];
   public isTransport: boolean = false;
   public isCustomer: boolean = false;
+  public activeTab: string = 'email';
 
   constructor() {
   }
@@ -35,7 +38,7 @@ export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
     if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
       this.successEvent.emit(this.emailAddresses);
     } else {
-      this.successEvent.emit({email: this.emailAddresses, invoiceType: this.invoiceType});
+      this.successEvent.emit({email: this.emailAddresses, invoiceType: this.invoiceType, invoiceNumber: this.selectedItem.voucherNumber});
     }
     this.cancel();
   }

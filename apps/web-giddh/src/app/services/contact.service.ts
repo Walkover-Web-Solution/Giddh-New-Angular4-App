@@ -44,7 +44,7 @@ constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService
       .replace(':sortBy', sortBy)
       .replace(':order', order)
       .replace(':fromDate', fromDate)
-      .replace(':toDate', toDate)
+      .replace(':toDate', toDate);
 
     if (postData && Object.keys(postData).length > 0) {
       return this._http.post(url, postData).pipe(map((res) => {

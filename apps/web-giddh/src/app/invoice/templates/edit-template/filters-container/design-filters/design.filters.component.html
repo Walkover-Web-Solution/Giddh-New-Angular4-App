@@ -79,7 +79,7 @@
                     <div class="logoTool">
                         <span class="logo-preview" [class.cursor-disable]="isFileUploaded" >
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
-                                <input type="file" accept="image/png, image/jpeg" id="logo-edit"
+                                <input type="file" #fileInput accept="image/png, image/jpeg" id="logo-edit"
                                        [options]="fileUploadOptions" ngFileSelect [disabled]="isFileUploaded"
                                        (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
@@ -88,11 +88,9 @@
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
                             </label>
                         </span>
-                        <button *ngIf="!isFileUploaded" type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server" [hidden]="!logoAttached || isFileUploadInProgress">Upload
-            </button>
+                        <button *ngIf="showUploadButton" type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server">Upload</button>
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
-                        <button *ngIf="isFileUploaded" type="button" class="start-upload-btn btn btn-danger" (click)="deleteLogo()" tooltip="Clicking on this, will delete image from server" [hidden]="!logoAttached">Delete
-            </button>
+                        <button *ngIf="showDeleteButton" type="button" class="start-upload-btn btn btn-danger" (click)="deleteLogo()" tooltip="Clicking on this, will delete image from server">Delete</button>
                         <div class="pull-left mrL1 mrT1 choose-size" >
                           <div class="d-block" [class.cursor-disable]="isFileUploaded">
                             <p>Size</p>

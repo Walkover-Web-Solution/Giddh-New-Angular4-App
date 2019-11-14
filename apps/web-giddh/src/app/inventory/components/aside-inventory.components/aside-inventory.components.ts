@@ -16,7 +16,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
       bottom: 0;
       width: 100%;
       max-width:580px;
-      z-index: 1045;
+      z-index: 99999;
     }
 
     #close {

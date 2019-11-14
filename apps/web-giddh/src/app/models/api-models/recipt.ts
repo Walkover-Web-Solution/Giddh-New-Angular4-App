@@ -1,4 +1,5 @@
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
+import {AmountClassMulticurrency} from "./Sales";
 
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
 
@@ -30,6 +31,7 @@ export interface ReceiptAccount {
   uniqueName: string;
   accountType?: any;
   name: string;
+  currency?: CurrencyClass;
 }
 
 export interface ReceiptItem {
@@ -39,11 +41,12 @@ export interface ReceiptItem {
   uniqueName: string;
   balanceStatus: string;
   voucherDate: string;
-  grandTotal: number;
-  balanceDue: number;
+  grandTotal: AmountClassMulticurrency;
+  balanceDue: AmountClassMulticurrency;
   dueDate: string;
   isSelected?: boolean;
   cashInvoice: boolean;
+  accountCurrencySymbol?: string;
 }
 
 export interface ReciptResponse {
@@ -173,4 +176,7 @@ export interface ReciptRequest {
 export interface DownloadVoucherRequest {
   voucherNumber: string[];
   voucherType: string;
+}
+class CurrencyClass {
+  public code: string;
 }

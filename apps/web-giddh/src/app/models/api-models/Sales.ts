@@ -6,6 +6,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
+import { typeofExpr } from "@angular/compiler/src/output/output_ast";
 
 
 export enum VoucherTypeEnum {
@@ -97,18 +98,35 @@ class CompanyDetailsClass {
   public name: string;
   public gstNumber: string;
   public address: string[];
-  public stateCode: string;
+  public state: StateCode;
   public panNumber: string;
 }
 
 export class GstDetailsClass {
   public gstNumber?: any;
   public address: string[];
-  public stateCode?: any;
+  public state?: StateCode;
   public panNumber?: any;
-
+  public countryName?: string;
+  /*Keeping both as API team is too confused to Map one variable type
+  *thus kept both whichever is needed on run time we can send that in request mapping.
+  * */
+  public stateCode?: string;
+  public stateName?: string;
   constructor() {
     this.address = [];
+    this.state = new StateCode();
+  }
+}
+
+class CurrencyClass {
+  public code: string;
+  constructor(attrs?: any) {
+    if (attrs) {
+      this.code = attrs.currency;
+    } else {
+      this.code = "IN";
+    }
   }
 }
 
@@ -117,38 +135,55 @@ export class AccountDetailsClass {
   public uniqueName: string;
   public data?: string[];
   public address?: string[];
-  public attentionTo: string;
+  public attentionTo?: string;
   public email: string;
-  public mobileNumber?: any;
+  public contactNumber?: any;
   public mobileNo?: any;
   public billingDetails: GstDetailsClass;
   public shippingDetails: GstDetailsClass;
   public country?: CountryClass;
-
+  public currency?: CurrencyClass;
+  public currencySymbol: string = '';
+  public customerName: string;
+  public mobileNumber?: string;
   constructor(attrs?: any) {
-    this.country = new CountryClass();
+    //this.country = new CountryClass();
+    this.currency = new CurrencyClass(attrs);
     this.billingDetails = new GstDetailsClass();
     this.shippingDetails = new GstDetailsClass();
     if (attrs) {
-      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'attentionTo', 'email', 'country']));
-      this.mobileNumber = attrs.mobileNo;
+      if (attrs.currencySymbol) {
+        this.currencySymbol = attrs.currencySymbol;
+      }
+      Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email', 'attentionTo']));
+      this.contactNumber = attrs.mobileNo || '';
+      //this.mobileNo = attrs.mobileNo || '';
+      this.email = attrs.email || '';
+      this.customerName = attrs.updatedBy.name || '';
+      if (attrs.country) {
+        this.country = new CountryClass(attrs.country);
+      }
       if (attrs.addresses.length > 0) {
         let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
         // set billing
         this.billingDetails.address = [];
         this.billingDetails.address.push(str);
-        this.billingDetails.stateCode = attrs.addresses[0].stateCode;
+        this.billingDetails.state.code = attrs.addresses[0].stateCode;
+        this.billingDetails.state.name = attrs.addresses[0].stateName;
         this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+        this.billingDetails.panNumber = '';
         // set shipping
         this.shippingDetails.address = [];
         this.shippingDetails.address.push(str);
-        this.shippingDetails.stateCode = attrs.addresses[0].stateCode;
+        this.shippingDetails.state.code = attrs.addresses[0].stateCode;
+        this.shippingDetails.state.name = attrs.addresses[0].stateName;
         this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+        this.shippingDetails.panNumber = '';
       }
     } else {
-      this.attentionTo = null;
-      this.email = null;
-      this.mobileNo = null;
+      //this.attentionTo = null;
+      this.email = '';
+      //this.mobileNo = '';
     }
   }
 }
@@ -260,7 +295,7 @@ export class SalesEntryClass {
   public uniqueName: string;
   public discounts: LedgerDiscountClass[];
   public tradeDiscounts?: LedgerResponseDiscountClass[];
-  public taxes: TaxControlData[];
+  public taxes: TaxControlData[] = [];
   public transactions: SalesTransactionItemClass[];
   public description: string;
   public taxableValue: number;
@@ -363,6 +398,7 @@ export interface GenericRequestForGenerateSCD {
   entryUniqueNames?: string[];
   taxes?: string[];
   voucher: VoucherClass;
+  account?: AccountDetailsClass;
   updateAccountDetails?: boolean;
   paymentAction?: IPaymentAction;
   depositAccountUniqueName?: string;
@@ -372,9 +408,17 @@ export interface GenericRequestForGenerateSCD {
   action?: string;
   dueDate?: string;
   oldVersions?: any[];
+  entries?: SalesEntryClassMulticurrency[],
+  date?: string,
+  exchangeRate?: number,
+  type?: string,
+  number?: string,
+  uniqueName?: string,
+  templateDetails?: TemplateDetailsClass
+  deposit?: AmountClassMulticurrency;
 }
 
-class VoucherDetailsClass {
+export class VoucherDetailsClass {
   public voucherNumber?: string;
   public proformaNumber?: string;
   public estimateNumber?: string;
@@ -440,6 +484,7 @@ export class VoucherClass {
   public depositEntryToBeUpdated?: SalesEntryClass;
   public depositAccountUniqueName: string;
   public templateUniqueName?: string;
+  public number?: string;
 
   constructor() {
     this.accountDetails = new AccountDetailsClass();
@@ -464,7 +509,96 @@ export class SalesAddBulkStockItems {
   name: string;
   uniqueName: string;
   quantity: number = 1;
-  rate: number = 0;
+  rate;
   sku?: string = '';
-  stockUnitCode?: string;
+  stockUnitCode?: CodeStockMulticurrency;
+  stockUnit?: CodeStockMulticurrency;
 }
+
+export class CodeStockMulticurrency {
+  code: string;
+}
+export class SalesStockItemMulticurrency {
+  name: string;
+  uniqueName: string;
+  quantity: number = 1;
+  rate: number = 0;
+  skuCode: string;
+  skuCodeHeading?: string;
+  stockUnit?: string;
+}
+export class StateCode {
+  name: string;
+  code: string;
+}
+
+export class SalesEntryClassMulticurrency {
+  public date: string;
+  public description: string;
+  public hsnNumber: string;
+  public sacNumber: string;
+  public taxes: TaxControlData[];
+  public transactions: TransactionClassMulticurrency[];
+  public uniqueName: string;
+  public voucherNumber: string;
+  public voucherType: string;
+  public discounts: DiscountMulticurrency[];
+
+  constructor() {
+    this.transactions = [];
+    this.date = '';
+    this.taxes = [];
+    this.hsnNumber = '';
+    this.sacNumber = '';
+    this.description = '';
+    this.uniqueName = '';
+    this.voucherNumber = '';
+    this.voucherType = '';
+    this.discounts = [];
+  }
+}
+
+export class TransactionClassMulticurrency {
+  public account: INameUniqueName;
+  public amount: AmountClassMulticurrency;
+  public stock?: SalesAddBulkStockItems;
+  public description?: string;
+  constructor() {
+    this.account = new class implements INameUniqueName {
+      name: 'sales';
+      uniqueName: 'sales';
+    };
+    this.amount = new AmountClassMulticurrency();
+  }
+}
+
+export class AmountClassMulticurrency {
+  public amountForAccount: number;
+  public amountForCompany: string;
+  public type?: string;
+  public accountUniqueName?: string;
+
+  constructor() {
+    this.type = 'DEBIT';
+  }
+}
+
+export class DiscountMulticurrency {
+  public calculationMethod: string;
+  public uniqueName: string;
+  public amount: AmountClassMulticurrency;
+  public discountValue: number;
+  public particular: string;
+  public name: string;
+
+  constructor(ledgerDiscountClass: LedgerDiscountClass) {
+    this.calculationMethod = ledgerDiscountClass.discountType;
+    this.uniqueName = ledgerDiscountClass.discountUniqueName;
+    this.amount = new AmountClassMulticurrency();
+    this.amount.amountForAccount = ledgerDiscountClass.amount;
+    this.discountValue = ledgerDiscountClass.discountValue;
+    this.name = ledgerDiscountClass.name;
+    this.particular = ledgerDiscountClass.particular;
+  }
+}
+

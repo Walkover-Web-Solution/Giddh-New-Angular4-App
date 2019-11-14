@@ -19,6 +19,8 @@ import { UserDetailsCompanyComponent } from './components/company/user-details-c
 ;import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -50,6 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ElementViewChildModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
+    TooltipModule.forRoot()
   ],
   providers: [
     {

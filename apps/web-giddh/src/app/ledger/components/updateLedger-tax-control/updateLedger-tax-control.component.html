@@ -1,24 +1,30 @@
-<span class="c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<span class="pr c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
+      (clickOutside)="toggleTaxPopup(false)">
   <label *ngIf="showHeading">Tax</label>
-  <div class="relative clearfix">
-    <a id="tax" class="clearfix">
-      <div class="multi-select adjust">
-        <input type="text" decimalDigitsDirective [DecimalPlaces]="3" readonly name="" class="form-control cursor-pointer text-right"
-          [(ngModel)]="formattedTotal" readOnly (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" />
-        <span class="caret"></span>
-      </div>
-    </a>
-    <ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}" (click)="$event.stopPropagation()" style="max-height: 102px;min-height: 40px">
-      <li *ngFor="let tax of taxRenderData;trackBy: trackByFn" class="relative">
-        <label class="checkbox oh width100 p0 m0 customItem bdrB" placement="bottom" [tooltip]="tax.name" style="padding: 5px;margin-bottom: 5px;" (click)="$event.stopPropagation()"
-          [ngClass]="{'fake-disabled-label': tax.isDisabled}">
-          <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled" (change)="change()" (click)="$event.stopPropagation()"
-          />
-          <span class="pull-left ellp">{{tax.name}}</span>
-          <!-- <span class="custom-tooltipe">{{tax.name}}</span> -->
-        </label>
+
+  <a id="tax" class="clearfix">
+    <div class="multi-select adjust">
+      <input type="text" readonly [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput" name=""
+             class="form-control cursor-pointer text-right"
+             [(ngModel)]="formattedTotal" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"/>
+      <span class="caret"></span>
+    </div>
+  </a>
+
+
+  <div class="pr">
+  <ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
+      (click)="$event.stopPropagation()"
+      style="max-height: 102px;min-height: 40px">
+      <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
+          <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
+                 (click)="$event.stopPropagation()" [ngClass]="{'fake-disabled-label': tax.isDisabled}">
+            <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
+                   (change)="change()" (click)="$event.stopPropagation()"/>
+            <span class="pull-left ellp">{{tax.name}}</span>
+          </label>
       </li>
-    </ul>
-    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+  </ul>
   </div>
+  <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </span>

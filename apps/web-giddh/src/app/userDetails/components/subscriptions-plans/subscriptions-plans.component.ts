@@ -12,6 +12,7 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'subscriptions-plans',
@@ -30,6 +31,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     userUniqueName: '',
     licenceKey: ''
   };
+  public licenceKey = new FormControl();
   public isUpdateCompanyInProgress$: Observable<boolean>;
   public isUpdateCompanySuccess$: Observable<boolean>;
   public isSwitchPlanInProcess: boolean = false;
@@ -68,7 +70,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     //   }
     // });
     this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
-      this.isSwitchPlanInProcess = inProcess;
+      if (inProcess) {
+        this.isSwitchPlanInProcess = inProcess;
+      } else {
+        this.isSwitchPlanInProcess = false;
+      }
     });
   }
   public ngOnDestroy() { }
@@ -99,6 +105,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     } else if (!plan.subscriptionId) { // free plan
       this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
       this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+    }
+  }
+  public createCompanyViaActivationKey() {
+    let activationKey = this.licenceKey.value;
+    this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+    if (activationKey) {
+      this.SubscriptionRequestObj.licenceKey = activationKey;
+      this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+      this.licenceKey.setValue('');
     }
   }
 

@@ -134,6 +134,23 @@ export class ReceiptService implements OnInit {
       catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
   }
 
+  public GetVoucherDetailsV4(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
+    console.log('voucher details');
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.post(this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)),
+      model
+    ).pipe(
+      map((res) => {
+        let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
+        data.queryString = accountUniqueName;
+        data.request = model;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
+  }
+
   /*
 * get detailed registered sales
 * */
@@ -177,5 +194,23 @@ export class ReceiptService implements OnInit {
       url = url + '&q=' + model.q;
     }
     return url;
+  }
+
+  public GetAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    let requestType = type;
+    let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
+      page: body.page, count: body.count, from: body.from, to: body.to, type: requestType, q: body.q, sort: body.sort, sortBy: body.sortBy
+    });
+
+    return this._http.post(url
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
+      map((res) => {
+        let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
+        data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
+        data.request = body;
+        return data;
+      }),
+      catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
   }
 }

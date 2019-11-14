@@ -36,7 +36,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public userIsSuperUser: boolean = true; // Protect permission module
@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
   @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
   @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
-
+  @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
 
   public title: Observable<string>;
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
@@ -172,6 +172,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isSubscribedPlanHaveAdditnlChrgs: any;
   public activeCompany: any;
   public createNewCompanyUser: CompanyCreateRequest;
+  public totalNumberOfcompanies$: Observable<number>;
+  public totalNumberOfcompanies: number;
   private loggedInUserEmail: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private subscriptions: Subscription[] = [];
@@ -186,7 +188,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public companyCountry: CompanyCountry = {
     baseCurrency: '',
     country: ''
-  }
+  };
 
   /**
    *
@@ -313,7 +315,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
     });
 
-
     this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
     this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
@@ -327,6 +328,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.isMobileSite = s;
       this.menuItemsFromIndexDB = DEFAULT_MENUS;
       this.accountItemsFromIndexDB = DEFAULT_AC;
+    });
+    this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'openschedulemodal') {
+        this.openScheduleModal();
+      }
     });
   }
 
@@ -355,9 +362,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-    if (this.selectedPlanStatus === 'expired') {// active expired
-      this.openExpiredPlanModel(this.expiredPlanModel);
-    }
+
     if (this.isSubscribedPlanHaveAdditnlChrgs) {
       this.openCrossedTxLimitModel(this.crossedTxLimitModel);
     }
@@ -549,9 +554,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+    this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+      this.totalNumberOfcompanies = res;
+    });
   }
 
   public ngAfterViewInit() {
+
+    if (this.selectedPlanStatus === 'expired') {// active expired
+      this.openExpiredPlanModel(this.expiredPlanModel);
+    }
     this.session$.subscribe((s) => {
       if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
@@ -633,6 +645,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       e.stopPropagation();
     }
     this.companyDropdown.isOpen = false;
+    if (this.companyDetailsDropDownWeb) {
+      this.companyDetailsDropDownWeb.hide();
+    }
 
     // entry in db with confirmation
     let menu: any = {};
@@ -909,10 +924,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public sideBarStateChange(event: boolean) {
     this.sideMenu.isopen = event;
     this.companyDropdown.isOpen = false;
+    if (this.companyDetailsDropDownWeb) {
+      this.companyDetailsDropDownWeb.hide();
+    }
     this.menuStateChange.emit(event);
   }
 
   public closeSidebarMobile(e) {
+
     if (e.target.className.toString() !== 'icon-bar' && this.isMobileSite) {
       this.sideMenu.isopen = false;
       this.menuStateChange.emit(false);
@@ -1078,18 +1097,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-    this.modelRefExpirePlan = this.modalService.show(template);
+    if (!this.modalService.getModalsCount()) {
+      this.modelRefExpirePlan = this.modalService.show(template);
+    }
   }
 
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
     this.modelRefCrossLimit = this.modalService.show(template);
   }
 
-  public goToSelectPlan(template: TemplateRef<any>) {
+  public goToSelectPlan() {
     this.modalService.hide(1);
-    // this.router.navigate(['billing-detail']);
     this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
-    this.modelRefExpirePlan = this.modalService.show(template);
   }
 
   public onRight(nodes) {
@@ -1156,7 +1175,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public menuScrollEnd(ev) {
     let offset = $('#other').position();
     if (offset) {
-      let exactPosition = offset.top - 60;
+      let exactPosition = offset.top - 120;
       $('#other_sub_menu').css('top', exactPosition);
     }
   }

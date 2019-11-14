@@ -18,25 +18,31 @@ import { GeneralService } from '../services/general.service';
 
       .invoce-controll ::ng-deep.nav > li > a {
           padding: 2px 0px !important;
-          margin-right: 25px !important;
+          margin-right: 35px !important;
+           padding-bottom: 7px !important;
+           font-size:16px;
+               color: #262626 !important;
       }
 
       .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-          border-bottom: 2px solid #ff5f00 !important;
+          border-bottom: 4px solid #01A9F4 !important;
+          color:#262626 !important;
       }
 
       /
       /
       .invoce-controll ::ng-deep.nav > li > a {
-      / / border-bottom: 2 px solid transparent !important;
+      / / border-bottom: 4px solid transparent !important;
       / /
       }
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
-          margin-bottom: 28px;
-          padding: 8px 0px 0 15px !important;
-          /* margin-right: -15px; */
-          /*margin-left: -15px; */
+          margin-bottom: 20px;
+          padding: 12px 0px 0 15px !important;
+          background-color: #F7F8FD;
+          z-index: 9;
+          position: relative;
+          top: -4px;
       }
 
       /*.invoice-nav.navbar-nav > li > a {*/
@@ -64,7 +70,7 @@ import { GeneralService } from '../services/general.service';
       @media (max-width: 768px) {
           .invoce-controll ::ng-deep.nav.nav-tabs {
               margin-bottom: 28px;
-              padding: 10px 0px 0 0px !important;
+              padding: 10px 0px 0 15px !important;
           }
       }
 
@@ -134,7 +140,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                  */
                 this.activeTab = null;
                 setTimeout(() => {
-                  this.tabChanged(queryParams.tab);
+                  this.tabChanged(queryParams.tab, null);
                 }, 500);
               }
             }
@@ -173,10 +179,12 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     this.selectedVoucherType = VoucherTypeEnum[tab];
   }
 
-  public tabChanged(tab: string) {
+  public tabChanged(tab: string, e) {
     this.activeTab = tab;
     this.router.navigate(['pages', 'invoice', 'preview', tab]);
-    this.saveLastState(tab);
+    if(e && !e.target){
+      this.saveLastState(tab);
+    }
   }
 
   public ngOnDestroy() {

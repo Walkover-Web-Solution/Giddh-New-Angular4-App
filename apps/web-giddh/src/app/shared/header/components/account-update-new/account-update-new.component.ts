@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
@@ -16,6 +16,7 @@ import * as _ from '../../../../lodash-optimized';
 import { CompanyResponse, States } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import {IForceClear} from "../../../../models/api-models/Sales";
 
 @Component({
   selector: 'account-update-new',
@@ -56,6 +57,9 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
       letter-spacing: 1px;
       background-color: #dcdde4;
     }
+   .horizontal-form .mobileCode .error-msg {
+    position: absolute;
+}
   `]
 })
 export class AccountUpdateNewComponent implements OnInit, OnDestroy {
@@ -74,6 +78,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isDebtorCreditor: boolean = false;
   @Input() public showDeleteButton: boolean = true;
   @Input() public accountDetails: any;
+  @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+
 
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
@@ -101,6 +107,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public isIndia: boolean = false;
   public companyCountry: string = '';
   public activeAccountName: string = '';
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -134,7 +141,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     // bind countries
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
     });
 
     // Country phone Code
@@ -162,7 +169,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileCode: ['91'],
+      mobileCode: [''],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -252,13 +259,17 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
         let lengthofFormArray = addressFormArray.controls.length;
+
+        this.resetGstStateForm();
+
         if (a !== 'IN') {
           this.isIndia = false;
-          for (let index = 0; index < lengthofFormArray; index++) {
-            addressFormArray.removeAt(index);
-          }
-          addresses.push(this.initialGstDetailsForm(null));
-          this.isIndia = false;
+
+          Object.keys(addressFormArray.controls).forEach((key) => {
+            if(parseInt(key) > 0) {
+              addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
+            }
+          });
         } else {
           if (addresses.controls.length === 0) {
             this.addBlankGstForm();
@@ -303,6 +314,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
       }
     });
+    setTimeout(() => {
+      this.autoFocusUpdate.nativeElement.focus();
+    }, 50);
   }
 
   public onViewReady(ev) {
@@ -359,7 +373,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public renderGstDetails(val: IAccountAddress = null, addressLength: any) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
-    if (addresses.length !== addressLength) {
+    if (addresses.length < addressLength) {
       addresses.push(this.initialGstDetailsForm(val));
     }
   }
@@ -503,5 +517,21 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.resetUpdateAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public selectCountry(event: IOption) {
+    if (event) {
+      let phoneCode = event.additional;
+      this.addAccountForm.get('mobileCode').patchValue(phoneCode);
+    }
+  }
+
+  public resetGstStateForm() {
+    this.forceClear$ = observableOf({status: true});
+
+    let addresses = this.addAccountForm.get('addresses') as FormArray;
+    for (let control of addresses.controls) {
+      control.get('stateCode').patchValue(null);
+      control.get('gstNumber').setValue("");
+    }
   }
 }

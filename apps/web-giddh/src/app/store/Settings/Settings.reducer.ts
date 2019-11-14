@@ -5,7 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
-import { EmailKeyClass, IntegrationPage, IntegrationPageClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
+import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PaymentClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
@@ -207,19 +207,32 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       });
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE: {
-      newState.updateProfileSuccess = false;
-      newState.updateProfileInProgress = true;
-      newState.profileRequest = false;
-      return Object.assign({}, state, newState);
+      return {
+        ...state,
+        updateProfileSuccess: false,
+        updateProfileInProgress: true,
+        profileRequest: false
+      };
+      // newState.updateProfileSuccess = false;
+      // newState.updateProfileInProgress = true;
+      // newState.profileRequest = false;
+      // return Object.assign({}, state, newState);
     }
     case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
       let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
-        newState.profile = _.cloneDeep(response.body);
-        newState.updateProfileSuccess = true;
-        newState.updateProfileInProgress = false;
-        newState.profileRequest = true;
-        return Object.assign({}, state, newState);
+        return {
+          ...state,
+          profile: _.cloneDeep(response.body),
+          updateProfileSuccess: true,
+          updateProfileInProgress: false,
+          profileRequest: true
+        };
+        // newState.profile = _.cloneDeep(response.body);
+        // newState.updateProfileSuccess = true;
+        // newState.updateProfileInProgress = false;
+        // newState.profileRequest = true;
+        // return Object.assign({}, state, newState);
       }
       return Object.assign({}, state, {
         updateProfileSuccess: false,
@@ -380,13 +393,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
     }
     case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
-      if (response.status === 'success') {
-        newState.tags = response.body;
-        return Object.assign({}, state, newState);
-      } else {
-        newState.tags = null;
-        return Object.assign({}, state, newState);
-      }
+      return {
+        ...state,
+        tags: response.status === 'success' ? response.body : null
+      };
     }
     case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
       let response: BaseResponse<any, any> = action.payload;
@@ -632,6 +642,11 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       } else {
         return Object.assign({}, state, { isGmailIntegrated: true });
       }
+    }
+    case SETTINGS_INTEGRATION_ACTIONS.RESET_PAYMENT_STATUS_RESPONSE: {
+      newState.isPaymentAdditionSuccess = false;
+      newState.isPaymentUpdationSuccess = false;
+      return Object.assign({}, state, newState);
     }
     //  endregion discount reducer
     default: {

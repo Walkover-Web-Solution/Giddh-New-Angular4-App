@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @NgModule({
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
   ],
   exports: [
     SendEmailInvoiceComponent

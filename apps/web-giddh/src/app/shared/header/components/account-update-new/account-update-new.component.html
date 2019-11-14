@@ -1,5 +1,4 @@
-<label for="">Opening Balance</label>
-<div class="container-fluid mrT1">
+<div class="mrT1">
   <!-- update account form -->
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
@@ -7,19 +6,19 @@
       <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
       <div class="form-group col-xs-12 col-sm-6">
         <label for="">Account Name</label>
-        <input type="text" class="form-control" formControlName="name" name="accountName" />
+        <input type="text" class="form-control" #autoFocusUpdate formControlName="name" name="accountName" />
       </div>
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-xs-12 col-sm-6" formGroupName="country">
         <label for="">Country</label>
         <sh-select [options]="countrySource" (viewInitEvent)="onViewReady($event)" [isFilterEnabled]="true"
-          formControlName="countryCode"></sh-select>
+          (selected)="selectCountry($event)" formControlName="countryCode"></sh-select>
       </div>
 
     </div>
     <!-- gst container -->
     <!--  &&
-    (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')" -->
+(addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')" -->
     <ng-container *ngIf="isGstEnabledAcc">
       <!-- gst details -->
       <div formArrayName="addresses">
@@ -40,10 +39,11 @@
                 </div>
               </div>
             </div>
-            <div class="form-group col-xs-12 col-sm-6">
+            <div class="form-group col-xs-12 col-sm-6"
+              *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
               <label class="d-block blank-label">&nbsp;</label>
               <div class="mrT1">
-                <label *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
+                <label>
                   <input class="" type="checkbox" name="isComposite" formControlName="isComposite"> Is
                   Composite?</label>
                 <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
@@ -75,7 +75,8 @@
                 </label>
                 <div class="custom-select pos-rel">
                   <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
-                    [disabled]="gst.get('gstNumber').value" formControlName="stateCode"></sh-select>
+                    [forceClearReactive]="forceClear$ | async" [disabled]="gst.get('gstNumber').value"
+                    formControlName="stateCode"></sh-select>
                 </div>
               </div>
               <div class="row">
@@ -107,7 +108,7 @@
     <ng-container *ngIf="isHsnSacEnabledAcc">
       <!-- hsn and sac -->
 
-      <div class="row">
+      <div class="">
         <div class="col-xs-12 col-sm-6 form-group">
           <label class="d-block">HSN</label>
           <div class="input-group">
@@ -212,7 +213,7 @@
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-          <label class="d-block" *ngIf="!isMultipleCurrency">
+          <label class="d-block multicurrencyTooltipInfo" *ngIf="!isMultipleCurrency">
             <i class="fa fa-info-circle" aria-hidden="true"
               tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"
               triggers="click"></i> Currency</label>
@@ -259,7 +260,7 @@
         <div class="form-group col-xs-12 col-sm-6">
           <label for="">Mobile Number</label>
           <!-- input-group -->
-          <div class="clearfix">
+          <div class="clearfix mobileCode">
             <sh-select class="pull-left" style="width: 65px;" [placeholder]="'+91'" [options]="countryPhoneCode"
               formControlName="mobileCode"></sh-select>
             <input style="width: calc(100% - 65px);" type="text" class="form-control" formControlName="mobileNo"
@@ -335,12 +336,12 @@
     </ng-container>
 
     <!-- submit and clear buttons -->
-    <div class="row mrT">
+    <div class=" row mrT">
       <div class="form-group col-xs-12 text-right">
         <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
           Delete
         </button>
-        <button type="submit" class="btn btn-primary" [ladda]="updateAccountInProcess$ | async"
+        <button type="submit" class="btn btn-primary mrL1" [ladda]="updateAccountInProcess$ | async"
           [disabled]="addAccountForm.invalid">Update
         </button>
       </div>

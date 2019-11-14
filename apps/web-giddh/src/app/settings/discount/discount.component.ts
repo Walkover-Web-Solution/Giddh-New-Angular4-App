@@ -14,6 +14,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
   selector: 'setting-discount',
   templateUrl: './discount.component.html',
+  styleUrls: ['./discount.component.scss'],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -31,8 +32,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class DiscountComponent implements OnInit, OnDestroy {
   @ViewChild('discountConfirmationModel') public discountConfirmationModel: ModalDirective;
   public discountTypeList: IOption[] = [
-    {label: 'as per value', value: 'FIX_AMOUNT'},
-    {label: 'as per percent', value: 'PERCENTAGE'}
+    { label: 'as per value', value: 'FIX_AMOUNT' },
+    { label: 'as per percent', value: 'PERCENTAGE' }
   ];
   public accounts$: IOption[];
   public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
@@ -51,7 +52,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _settingsDiscountAction: SettingsDiscountActions,
-              private _groupService: GroupService, private store: Store<AppState>) {
+    private _groupService: GroupService, private store: Store<AppState>) {
     this.getFlattenAccounts();
 
     this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
@@ -151,7 +152,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
         if (discount) {
           this.accounts$ = discount.accounts.map(dis => {
-            return {label: dis.name, value: dis.uniqueName};
+            return { label: dis.name, value: dis.uniqueName };
           });
         } else {
           this.accounts$ = [];

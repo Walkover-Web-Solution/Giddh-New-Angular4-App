@@ -310,7 +310,7 @@ var app = new Vue({
           apiBaseUrl = 'https://api.giddh.com/';
           break;
         default:
-          apiBaseUrl = 'http://apidev.giddh.com/';
+          apiBaseUrl = 'http://apitest.giddh.com/';
       }
       return apiBaseUrl;
     }

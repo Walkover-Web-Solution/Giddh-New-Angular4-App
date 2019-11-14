@@ -23,7 +23,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 102;
+  z-index: 9999;
   background: #000000;
   opacity: .5;
   -webkit-transition: opacity .15s linear;
@@ -33,4 +33,23 @@
 .aside-title{
   padding-bottom: 10px;
   border-bottom: 1px solid #c6c7c7;
+}
+
+@media(max-width:575px){
+  .aside-pane  {
+  max-width: 370px;
+  width: 100%;
+}
+}
+@media(max-width:375px){
+  .aside-pane  {
+  max-width: 310px;
+  width: 100%;
+}
+}
+@media(max-width:320px){
+  .aside-pane  {
+  max-width: 280px;
+  width: 100%;
+}
 }

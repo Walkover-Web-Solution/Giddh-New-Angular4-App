@@ -87,3 +87,18 @@ export interface BalanceSheetData {
   closingBalance?: number;
   dates?: BalanceSheetRequest;
 }
+
+export class GetRevenueResponse {
+  public amount: number = 0;
+  public type: string = '';
+}
+
+export class GetTotalExpenseResponse {
+  public amount: number = 0;
+  public type: string = '';
+}
+
+export class GetIncomeBeforeTaxes {
+  public amount: number = 0;
+  public type: string = '';
+}

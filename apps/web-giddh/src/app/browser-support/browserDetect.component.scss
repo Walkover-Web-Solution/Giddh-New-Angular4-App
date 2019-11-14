@@ -7,11 +7,11 @@
   outline:none;
 }
 
-body{font-family: 'Lato', sans-serif; font-size:15px;font-weight:400;margin:0px;padding:0px;line-height:24px;color:#fff;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+body{font-family: 'opensans-regular', sans-serif; font-size:15px;font-weight:400;margin:0px;padding:0px;line-height:24px;color:#fff;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
 body, html{
 height: 100%;
 }
-.fullheighrow{min-height: 100%;width: 100%;position: relative;background: #29293E; color: #fff} 
+.fullheighrow{min-height: 100%;width: 100%;position: relative;background: #29293E; color: #fff}
 .contentcenter{width: 100%;position: absolute;left: 0px;top: 50%;transform: translateY(-50%);-webkit-transform: translateY(-50%);
 -ms-transform: translateY(-50%);-moz-transform: translateY(-50%);-o-transform: translateY(-50%);}
 .centercol{margin: 0 auto;width: 300px;max-width: 100%;text-align: center;}

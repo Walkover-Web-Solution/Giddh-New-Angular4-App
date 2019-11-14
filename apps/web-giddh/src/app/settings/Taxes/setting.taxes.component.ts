@@ -47,6 +47,15 @@ const taxDuration = [
     ]),
   ],
   styles: [`
+//   table{
+//   position: relative;
+// }
+// .basic > thead > tr > th{
+//     position: sticky !important;
+//     top: 59px;
+//     z-index: 99;
+//     box-shadow: 1px 1px 0 #d9d9d9;
+// }
   @media(max-width:768px){
     .custom-select {
       width: 120px;
@@ -69,6 +78,7 @@ const taxDuration = [
 .col-xs-12.pdT2,.section_head{
   padding-top:0;
 }
+
   `]
 })
 export class SettingTaxesComponent implements OnInit {

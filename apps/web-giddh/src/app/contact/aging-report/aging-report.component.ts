@@ -35,8 +35,8 @@ export class AgingReportComponent implements OnInit {
   public agingDropDownoptions$: Observable<AgingDropDownoptions>;
   public agingDropDownoptions: AgingDropDownoptions;
   public dueAmountReportData$: Observable<DueAmountReportResponse>;
-  public totalDueAmounts: number[] = [];
-  public totalFutureDueAmounts: number[] = [];
+  public totalDueAmounts: number = 0;
+  public totalFutureDueAmounts: number = 0;
   public datePickerOptions: any;
   public universalDate$: Observable<any>;
   public toDate: string;
@@ -92,12 +92,8 @@ export class AgingReportComponent implements OnInit {
       if (data && data.results) {
         this.dueAmountReportRequest.page = data.page;
         setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
-        this.totalDueAmounts = [];
-        this.totalFutureDueAmounts = [];
-        for (let dueAmount of data.results) {
-          this.totalDueAmounts.push(dueAmount.totalDueAmount);
-          this.totalFutureDueAmounts.push(dueAmount.futureDueAmount);
-        }
+        this.totalDueAmounts = data.overAllDueAmount;
+        this.totalFutureDueAmounts = data.overAllFutureDueAmount;;
       }
       this.dueAmountReportData$ = of(data);
       if (data) {
@@ -205,15 +201,6 @@ export class AgingReportComponent implements OnInit {
       });
     }
   }
-
-  public getFutureTotalDue() {
-    return this.totalFutureDueAmounts.reduce((a, b) => a + b, 0);
-  }
-
-  public getTotalDue() {
-    return this.totalDueAmounts.reduce((a, b) => a + b, 0);
-  }
-
   public selectedDate(value: any) {
     this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');

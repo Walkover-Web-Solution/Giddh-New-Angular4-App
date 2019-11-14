@@ -186,7 +186,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       sectionName: 'table',
       content: [{
         field: 'sNo',
-        label: 'S. No.',
+        label: '#',
         display: true,
         width: '10'
       }, {
@@ -477,7 +477,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
       sectionName: 'table',
       content: [{
         field: 'sNo',
-        label: 'S. No.',
+        label: '#',
         display: true,
         width: '10'
       }, {
@@ -685,6 +685,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.templateType = 'invoice';
     }
+    this._invoiceUiDataService.setTemplateVoucherType(this.voucherType);
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
   }
 

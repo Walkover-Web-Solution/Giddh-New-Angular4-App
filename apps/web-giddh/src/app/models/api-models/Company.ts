@@ -77,6 +77,7 @@ export class CompanyResponse {
   public nameAlias?: string;
   public balanceDisplayFormat?: string;
   public balanceDecimalPlaces?: string;
+  public baseCurrencySymbol?: string;
 }
 
 export interface UserEntityRole {
@@ -140,9 +141,11 @@ export interface ActiveFinancialYear {
 export interface ValidateInvoice {
   invoiceNumber: string;
 }
+
 export interface ExportInvoice {
   accountUniqueName: string;
 }
+
 /*
 * Model for taxes api request
 * GET call
@@ -182,6 +185,7 @@ export class GetCouponResp {
 
 export interface ICurrencyResponse {
   code: string;
+  symbol: string;
 }
 
 export class BankTransferRequest {
@@ -192,6 +196,7 @@ export class BankTransferRequest {
   public payeeName: string;
   public remarks: string;
 }
+
 export class SubscriptionRequest {
   planUniqueName: string;
   subscriptionId: string;

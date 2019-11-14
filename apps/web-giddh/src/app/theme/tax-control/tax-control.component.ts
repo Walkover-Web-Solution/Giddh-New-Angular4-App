@@ -1,4 +1,15 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component, ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
@@ -15,12 +26,12 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
 };
 
 export class TaxControlData {
-  public name: string;
+  public name?: string;
   public uniqueName: string;
-  public amount: number;
-  public isChecked: boolean;
-  public isDisabled: boolean;
-  public type: string;
+  public amount?: number;
+  public isChecked?: boolean;
+  public isDisabled?: boolean;
+  public type?: string;
 }
 
 @Component({
@@ -57,9 +68,9 @@ export class TaxControlData {
       display: block !important;
     }
 
-    #tax-control-multi-select.multi-select input.form-control[readonly] {
-      background-image: unset !important;
-    }
+    // #tax-control-multi-select.multi-select input.form-control[readonly] {
+    //   background-image: unset !important;
+    // }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -77,11 +88,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public allowedSelection: number = 0;
   @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
 
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
   @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @ViewChild('taxInptEle') public taxInptEle: ElementRef;
 
   public taxSum: number = 0;
   public taxTotalAmount: number = 0;
@@ -160,7 +176,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
           taxObj.amount = tx.taxDetail[0].taxValue;
         }
 
-        taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
         taxObj.isDisabled = false;
         this.taxRenderData.push(taxObj);
       }
@@ -175,7 +191,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * hide menus on outside click of span
    */
   public toggleTaxPopup(action: any) {
-    console.log(action);
     this.showTaxPopup = action;
   }
 
@@ -301,4 +316,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   private generateSelectedTaxes(): string[] {
     return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
   }
+
+  public taxInputBlur(event) {
+    if (event && event.relatedTarget && this.taxInptEle && !this.taxInptEle.nativeElement.contains(event.relatedTarget)) {
+      this.toggleTaxPopup(false);
+    }
+  }
+
 }

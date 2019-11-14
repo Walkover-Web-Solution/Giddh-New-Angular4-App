@@ -8,6 +8,9 @@ import { IInventoryUnit } from '../../ledger/ledger.vm';
  */
 export interface ILedgerTransactionItem {
   amount: number;
+  amountSymbol?: string;
+  amountCurrency?: string;
+  amountForCompany?: any;
   date?: string;
   isStock?: boolean;
   inventory?: IInventory;
@@ -21,6 +24,7 @@ export interface ILedgerTransactionItem {
   isUpdated?: boolean;
   convertedAmount?: number;
   convertedAmountCurrency?: string;
+  convertedAmountSymbol?: string;
 }
 
 export interface IInventory {
@@ -89,6 +93,8 @@ export interface ITransactions extends IPagination {
 export interface IClosingBalance {
   amount: number;
   type: string;
+  code?: string;
+  symbol?: string;
 }
 
 export interface IForwardBalance extends IClosingBalance {
@@ -117,9 +123,15 @@ export interface ITransactionItem {
   type: string;
   unconfirmedEntry: boolean;
   selectedAccount?: IFlattenAccountsResultItem | any;
-  convertedAmount?: string;
+  convertedAmount?: number;
   isChecked?: boolean;
   voucherName?: string;
+  currencyCode?: string;
+  currencySymbol?: string;
+  convertedCurrencyCode?: string;
+  convertedCurrencySymbol: string;
+  companyCurrencyCode?: string;
+  companyCurrencySymbol: string;
 }
 
 /**

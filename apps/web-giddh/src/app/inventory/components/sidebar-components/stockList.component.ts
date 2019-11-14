@@ -22,7 +22,7 @@ import { InvViewService } from '../../inv.view.service';
          {{item.count}}</span>
           </a>
           <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
-            <i class="fa fa-pencil" style="color: #FF5F00 !important;"> </i>
+            <i class="fa fa-pencil"> </i>
           </button>
         </div>
       </li>
@@ -43,7 +43,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction,
-              private invViewService: InvViewService) {
+    private invViewService: InvViewService) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
@@ -83,7 +83,7 @@ export class StockListComponent implements OnInit, OnDestroy {
       // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
       // this.setInventoryAsideState(true, false, true);
       this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-      this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen: true, isGroup: false, isUpdate: true}));
+      this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
     }
   }
 
@@ -91,6 +91,6 @@ export class StockListComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
   }
 }

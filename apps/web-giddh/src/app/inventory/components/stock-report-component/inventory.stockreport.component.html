@@ -36,9 +36,19 @@
         <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
           <span *ngIf="stockReport && stockReport.stockUnit">
             {{stockReport.stockName}}</span> (Stock)</h2>
-        <button class="btn btn-link btn-link-2 ml-2" (click)="onOpenAdvanceSearch()">Advance Search</button>
-        <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i>
+
+        <div class="advance-icon" tooltip="Advance Search">
+          <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
+        </div>
+
+        <!-- <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i> -->
       </div>
+      <div class="clear-filter">
+        <button class="btn btn-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
+          <span class="icon-cross"></span> Clear Filter
+        </button>
+      </div>
+
       <div>
 
         <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
@@ -55,7 +65,7 @@
           </ul>
         </div>
 
-        <button class="btn btn-blue" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
+        <button class="btn btn-pink" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
           style="margin-right: 0 !important;">Create New</button>
       </div>
     </div>
@@ -90,17 +100,17 @@
                 </div> -->
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up text-right " *ngIf="stockReportRequest.sortBy !== 'entry_date'"
+                <div class="icon-sort-asc text-right " *ngIf="stockReportRequest.sortBy !== 'entry_date'"
                   (click)="sortButtonClicked('asc', 'entry_date')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down text-right"
+                <div class="icon-sort-dsc text-right"
                   *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'entry_date')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up text-right "
+                <div class="icon-sort-asc text-right "
                   *ngIf="stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'entry_date')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'entry_date' && stockReportRequest.sort === 'asc'}">
@@ -142,17 +152,17 @@
               <div class="flex-fill text-right">Inwards</div>
               <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
+                <div class="icon-sort-asc" *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down"
+                <div class="icon-sort-dsc"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up"
+                <div class="icon-sort-asc"
                   *ngIf="stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'inward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'inward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -167,17 +177,17 @@
               <div class="flex-fill text-right">Outwards</div>
               <div class="icon-pointer text-right">
                 <!-- default -->
-                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
+                <div class="icon-sort-asc" *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down"
+                <div class="ficon-sort-dsc"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up"
+                <div class="icon-sort-asc"
                   *ngIf="stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'outward_quantity')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'outward_quantity' && stockReportRequest.sort === 'asc'}">
@@ -192,17 +202,17 @@
               <div class="icon-pointer text-right">
 
                 <!-- default -->
-                <div class="fa fa-long-arrow-up" *ngIf="stockReportRequest.sortBy !== 'rate'"
+                <div class="icon-sort-asc" *ngIf="stockReportRequest.sortBy !== 'rate'"
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
                 </div>
                 <!-- after sort click -->
-                <div class="fa fa-long-arrow-down "
+                <div class="icon-sort-dsc "
                   *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'"
                   (click)="sortButtonClicked('asc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'}">
                 </div>
-                <div class="fa fa-long-arrow-up"
+                <div class="icon-sort-asc"
                   *ngIf="stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'"
                   (click)="sortButtonClicked('desc', 'rate')"
                   [ngClass]="{'activeTextColor': stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'}">
@@ -379,6 +389,16 @@
       <div class="innerContentFooter">
 
         <div class="row">
+          <div class="col-sm-3 pr-0">
+            <div class="col-xs-6 p0">
+              <h4 class="text-light">Profit/Loss</h4>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 p0">
+                <h4 class="text-orange text-left">&nbsp;{{stockReport.profit | giddhCurrency}} ({{dateRangePickerCmp.value | replaceHyphens}})</h4>
+              </div>
+            </div>
+          </div>
           <div class="col-sm-2 pr-0">
             <div class="row">
               <div class="col-xs-10 p0">
@@ -415,7 +435,7 @@
             </div>
           </div>
 
-          <div class="col-sm-9">
+          <div class="col-sm-6">
             <div class="flex-col">
               <div class="cont">
                 <h4 class="text-light">Opening</h4>
@@ -471,7 +491,7 @@
 <!-- aside menu section -->
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
+<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header themeBg clearfix">

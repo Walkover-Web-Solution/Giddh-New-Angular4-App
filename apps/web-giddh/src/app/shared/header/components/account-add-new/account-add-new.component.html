@@ -1,4 +1,4 @@
-<div class="container-fluid mrT1">
+<div class="mrT1">
 
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
@@ -6,12 +6,13 @@
       <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12">
         <label for="">Account Name</label>
-        <input type="text" class="form-control" formControlName="name" name="accountName" />
+        <input type="text" class="form-control" #autoFocus formControlName="name" name="accountName" />
       </div>
       <!-- *ngIf="isGstEnabledAcc" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12" formGroupName="country">
         <label for="">Country</label>
-        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode" style="width:100%">
+        <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"
+          (selected)="selectCountry($event)" style="width:100%">
         </sh-select>
       </div>
 
@@ -38,7 +39,8 @@
                 </div>
               </div>
             </div>
-            <div class="form-group col-sm-6 col-xs-12">
+            <div class="form-group col-sm-6 col-xs-12"
+              [ngStyle]="{display : gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15 ? 'block' : ' none' }">
               <label class="d-block">&nbsp;</label>
               <div class="mrT1">
                 <label *ngIf="gst.get('gstNumber').value && gst.get('gstNumber').value.length === 15">
@@ -73,7 +75,8 @@
                 </label>
                 <div class="custom-select pos-rel">
                   <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true"
-                    formControlName="stateCode" style="width:100%"></sh-select>
+                    [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
+                  </sh-select>
                 </div>
               </div>
               <div class="row"
@@ -207,7 +210,7 @@
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-          <label class="d-block currencyTooltip" *ngIf="!isMultipleCurrency">
+          <label class="d-block multicurrencyTooltipInfo" *ngIf="!isMultipleCurrency">
             <i class="fa fa-info-circle" aria-hidden="true"
               tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="top"></i>
             Currency</label>
@@ -217,7 +220,7 @@
       <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103  -->
       <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
         <div class="form-group col-xs-12 col-sm-6">
-          <label for="">Foreign Opening Balance</label>
+          <label for="">Opening Balance</label>
           <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
             <input type="text" min="0" class="form-control text-right" formControlName="foreignOpeningBalance"
               placeholder="00.00" decimalDigitsDirective />
@@ -250,7 +253,7 @@
         <div class="form-group col-sm-6 col-xs-12">
           <label for="">Mobile Number</label>
           <!-- input-group -->
-          <div class="clearfix">
+          <div class="clearfix mobileCode">
             <sh-select class="pull-left" style="width: 65px;" [placeholder]="'+91'" [options]="countryPhoneCode"
               formControlName="mobileCode"></sh-select>
             <input style="width: calc(100% - 65px);" type="text" class="form-control" formControlName="mobileNo"

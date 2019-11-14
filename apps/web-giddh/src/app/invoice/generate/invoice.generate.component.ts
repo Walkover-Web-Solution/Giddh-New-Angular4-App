@@ -42,7 +42,7 @@ const COMPARISON_FILTER = [
 
 @Component({
   selector: 'app-invoice-generate',
-  styleUrls: ['./invoice.generate.component.css'],
+  styleUrls: ['./invoice.generate.component.scss'],
   templateUrl: './invoice.generate.component.html'
 })
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
