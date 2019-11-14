@@ -1,34 +1,49 @@
 <div class="aside-pane">
-    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-
-    <div class="aside-header">
-        <h3 class="aside-title">Create Account</h3>
+    <!-- <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button> -->
+    <div class="form_header">
+        <div>
+            <h3 class=""><span>Account Details</span></h3>
+        </div>
     </div>
 
+    <button id="close" class="" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <!-- <div class="aside-header">
+        <h3 class="aside-title">Create Account</h3>
+    </div> -->
+
     <div class="aside-body">
-        <div class="form-group pdT2">
+        <div class="aside-pane-form">
+            <div class="form-group ">
+                <label class="mrB1">Select Group</label>
 
-            <label class="mrB1">Select Group</label>
-
-            <div class="ng-select-wrap liq">
-                <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName" [(ngModel)]="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="account-list-item">{{option?.label}}</div>
-                        <div class="account-list-item fs12">{{option?.value}}</div>
-                    </ng-template>
-                </ng-select>
+                <div class="ng-select-wrap liq selectGroup">
+                    <ng-select placeholder="Select Group" filterPlaceholder="Type to search..."
+                        name="activeGroupUniqueName" [(ngModel)]="activeGroupUniqueName" [options]="flatGroupsOptions"
+                        style="width:100%">
+                        <ng-template #optionTemplate let-option="option">
+                            <div class="account-list-item">{{option?.label}}</div>
+                            <div class="account-list-item fs12">{{option?.value}}</div>
+                        </ng-template>
+                    </ng-select>
+                </div>
             </div>
 
+
+            <account-add-new-details *ngIf="activeGroupUniqueName && !isUpdateAccount" class="mrT4"
+                [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
+                (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
+                [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
+            </account-add-new-details>
+
+            <account-update-new *ngIf="activeGroupUniqueName && isUpdateAccount"
+                [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc"
+                [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                [updateAccountInProcess$]="updateAccountInProcess$" [accountDetails]="accountDetails"
+                [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()"
+                (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail"
+                [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
         </div>
-
-        <account-add-new-details *ngIf="activeGroupUniqueName && !isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-            (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
-        </account-add-new-details>
-
-        <account-update-new *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-            [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-            [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
-
     </div>
 </div>
 
@@ -36,7 +51,8 @@
 <div bsModal #deleteAccountModal="bs-modal" class="modal fade aaa" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
+                (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
             </confirm-modal>
         </div>
     </div>

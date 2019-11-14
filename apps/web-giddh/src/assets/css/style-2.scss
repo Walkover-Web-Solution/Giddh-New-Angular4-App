@@ -8193,9 +8193,9 @@ button.btn.btn-filter {
  .aside-pane-form #asidePaneFormTabs .nav > li > a{
       padding-bottom: 10px !important;
 }
-.custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
-    padding-right: 0;
-}
+// .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
+//     padding-right: 0;
+// }
 .mangeAccountPopup .modal-dialog.modal-lg {
   margin: 0 auto;
 }
@@ -8218,6 +8218,24 @@ button.btn.btn-filter {
 }
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
+}
+.accountAsideMenuState2 #close{
+        display: block;
+   position: absolute;
+    right: 0;
+    top: 16px;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #fff;
+
+}
+   .ng-select-wrap.liq.selectGroup .below {
+    border: 1px solid #ddd;
+    height: 36px;
+    align-items: center;
+    display: flex;
 }
 /* responsive */
 
