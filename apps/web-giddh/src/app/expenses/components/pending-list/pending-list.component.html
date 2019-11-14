@@ -14,8 +14,6 @@
                     (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
           title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
-
-
                 </th>
 
                 <th #accountSearchContainer

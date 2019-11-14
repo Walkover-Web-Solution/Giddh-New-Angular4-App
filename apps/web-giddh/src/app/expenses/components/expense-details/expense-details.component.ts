@@ -161,6 +161,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public preFillData(res: PettyCashResonse) {
+        if (res.pettyCashEntryStatus.entryType && res.particular.uniqueName) {
+            if (res.pettyCashEntryStatus.entryType === 'sales') {
+                let isCashOrBank = this.cashAndBankAccountsOptions.some(s => s.value === res.particular.uniqueName);
+                if (!isCashOrBank) {
+                    // if not cash then it must be debtor
+                }
+            } else if (res.pettyCashEntryStatus.entryType === 'purchase') {
+
+            } else {
+                // deposit
+            }
+        }
         // prepare entryAgainstObject
         switch (res.pettyCashEntryStatus.entryType) {
             case 'sales':
@@ -283,18 +295,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['selectedRowItem']) {
+        if (changes['selectedRowItem'] && changes['selectedRowItem'].currentValue !== changes['selectedRowItem'].previousValue) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
             this.store.dispatch(this._expenceActions.getPettycashEntryRequest(this.selectedItem.uniqueName));
             this.store.dispatch(this._ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
-
-            this._expenseService.getPettycashEntry(this.selectedItem.uniqueName).subscribe(res => {
-                if (res.status === 'success') {
-                    this.accountEntryPettyCash = res.body;
-                    this.prepareApproveRequestObject(this.accountEntryPettyCash);
-                    this.comment = this.accountEntryPettyCash.description;
-                }
-            });
         }
     }
 

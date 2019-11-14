@@ -140,6 +140,10 @@
                     <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
                   </ng-template>
 
+                    <ng-template [ngIf]="!txn.particular.uniqueName && isPettyCash">
+                        <input [disabled]="true" [(ngModel)]="txn.particular.name" class="trxFakeInput"/>
+                    </ng-template>
+
                   <span class="download-invoice-ledger"
                         *ngIf="vm.selectedLedger.attachedFile && vm.selectedLedger.attachedFile.length > 0"
                         (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)" [placement]="'left'"
