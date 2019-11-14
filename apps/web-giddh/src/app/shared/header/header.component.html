@@ -885,13 +885,13 @@
     </div>
     <div class="modal-body pd-2 font-14">
         <div class="clearfix mb-3">
-            <p>Your {{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}}
+            <p>Your <strong>{{subscribedPlan.planDetails.duration}} {{subscribedPlan.planDetails.durationUnit}}</strong>
                 {{subscribedPlan.planDetails.name}} ended on {{subscribedPlan.expiry}}. We hope you enjoyed using Giddh
                 Accounting Software as much as we loved building
                 it for you. To continue your subscription buy any plan or contact us for more assistance.</p>
         </div>
         <div class="clearfix">
-            <ul class="list-inline">
+            <ul class="list-inline upgradePlan">
                 <!-- [routerLink]="['select-plan']" -->
                 <li>
                     <button class="btn btn-green" *ngIf="CurrentCmpPlanAmount" (click)="goToSelectPlan();">Renew
