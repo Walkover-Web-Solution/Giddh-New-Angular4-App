@@ -81,15 +81,19 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.selectedEntryForApprove = item;
     }
 
-    public hideApproveConfirmPopup() {
-        this.approveEntryModalRef.hide();
-        this.selectedEntryForApprove = null;
+    public hideApproveConfirmPopup(isApproved) {
+        if (!isApproved) {
+            this.approveEntryModalRef.hide();
+            this.selectedEntryForApprove = null;
+        } else {
+            this.approveEntry();
+        }
     }
 
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
             this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
-            this.hideApproveConfirmPopup();
+            this.hideApproveConfirmPopup(false);
             return;
         }
 
@@ -105,14 +109,14 @@ export class PendingListComponent implements OnInit, OnChanges {
         } catch (e) {
             this.approveEntryRequestInProcess = false;
             this._toasty.errorToast(e);
-            this.hideApproveConfirmPopup();
+            this.hideApproveConfirmPopup(false);
             return;
         }
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest: ledgerRequest.body}).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
             res.status === 'success' ? this._toasty.successToast(res.body) : this._toasty.errorToast(res.message);
-            this.hideApproveConfirmPopup();
+            this.hideApproveConfirmPopup(false);
         });
     }
 

@@ -5,7 +5,7 @@
                 <p class="bold mb-05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <button type="button" class="mb-05 btn btn-success" (click)="approvedActionClicked()">Approve</button>
+                <button type="button" class="mb-05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">Approve</button>
                 <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
                 <span class="close-modal cp" (click)="closeDetailsMode()">
           <img src="assets/images/multiply.svg">
@@ -171,59 +171,13 @@
 
 
 <!-- region approve entry confirm -->
-<!--<ng-template #ApproveConfirm>-->
-<!--    <div class="modal-header">-->
-<!--        <h3 class="modal-title pull-left">Approve</h3>-->
-<!--        <button type="button" class="close pull-right" aria-label="Close" (click)="approveEntryModalRef.hide()">-->
-<!--            <span aria-hidden="true">&times;</span>-->
-<!--        </button>-->
-<!--    </div>-->
-
-<!--    <div class="modal-body">-->
-<!--        &lt;!&ndash; <app-rejection-reason></app-rejection-reason> &ndash;&gt;-->
-<!--        <div class="clearfix modal-top">-->
-<!--            <p class="font-12 text-gray mb-1">-->
-<!--                <span>{{selectedEntryForApprove?.entryDate}} </span> |-->
-<!--                <span>by {{selectedEntryForApprove?.createdBy?.name}}</span>-->
-<!--            </p>-->
-<!--            <div class="row mb-1">-->
-<!--                <div class="col-xs-4">-->
-<!--                    <p class="font-14">Expenses:</p>-->
-<!--                </div>-->
-<!--                <div class="col-xs-8">-->
-<!--                    <p class="font-14">{{selectedEntryForApprove?.particularAccount?.name}}</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="row mb-1">-->
-<!--                <div class="col-xs-4">-->
-<!--                    <p class="font-14">Payment Mode:</p>-->
-<!--                </div>-->
-<!--                <div class="col-xs-8">-->
-<!--                    <p class="font-14">{{selectedEntryForApprove?.baseAccount?.name}}</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="row mb-1">-->
-<!--                <div class="col-xs-4">-->
-<!--                    <p class="font-14">Amount:</p>-->
-<!--                </div>-->
-<!--                <div class="col-xs-8">-->
-<!--                    <p class="font-14">-->
-<!--                        <i>{{selectedEntryForApprove?.currencySymbol}} {{ selectedEntryForApprove?.amount}}</i></p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="form-group">-->
-<!--            <p>Are you sure to approve above transaction and add into your books ?</p>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <button class="btn btn-warning" (click)="hideApproveConfirmPopup()">No</button>-->
-<!--            <button class="btn btn-success" (click)="approveEntry()" [ladda]="approveEntryRequestInProcess">Yes</button>-->
-<!--        </div>-->
-
-<!--    </div>-->
-<!--</ng-template>-->
+<ng-template #ApproveConfirm>
+   <petty-cash-approve-confirm-dialog
+       [selectedEntryForApprove]="selectedEntryForApprove"
+       [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+       (approveEntry)="hideApproveConfirmPopup($event)"
+   ></petty-cash-approve-confirm-dialog>
+</ng-template>
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->

@@ -594,7 +594,7 @@ export class UpdateLedgerVm {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
-        let isThereOthersDummyAcc = this.flatternAccountList.some(d => d.uniqueName === 'others' && d.isDummy);
+
 
         requestObj.voucherType = requestObj.voucher.shortCode;
         requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
@@ -604,15 +604,6 @@ export class UpdateLedgerVm {
             if (trx.inventory && trx.inventory.stock) {
                 trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
             }
-
-            // special case for is petty cash mode
-            // remove dummy others account from transaction.particular.uniqueName
-            // added because we want to handle others account case in petty cash entry
-            if (isThereOthersDummyAcc) {
-                trx.particular.uniqueName = null;
-                trx.particular.name = null;
-            }
-
         });
         requestObj.taxes = [...taxes.map(t => t.particular.uniqueName)];
 

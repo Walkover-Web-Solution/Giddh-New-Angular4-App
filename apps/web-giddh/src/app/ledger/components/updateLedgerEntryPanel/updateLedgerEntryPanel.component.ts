@@ -788,6 +788,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
+
+        // special case for is petty cash mode
+        // remove dummy others account from transaction.particular.uniqueName
+        // added because we want to handle others account case in petty cash entry
+        if (this.isPettyCash) {
+            let isThereOthersDummyAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others' && d.isDummy);
+            if (isThereOthersDummyAcc) {
+                let isThereDummyOtherTrx = requestObj.transactions.some(s => s.particular.uniqueName === 'others');
+                if (isThereDummyOtherTrx) {
+                    this._toasty.errorToast('Please select a valid account in transaction');
+                    return;
+                }
+            }
+        }
+
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
 

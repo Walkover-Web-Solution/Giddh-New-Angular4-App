@@ -43,6 +43,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     public modalRef: BsModalRef;
+    public approveEntryModalRef: BsModalRef;
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
 
@@ -92,6 +93,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         dropDownOption: [],
         model: ''
     };
+    public approveEntryRequestInProcess: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -213,11 +215,19 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this.toggleDetailsMode.emit(true);
     }
 
-    public approvedActionClicked() {
-        // if (!item.baseAccount.uniqueName) {
-        //     this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
-        //     return;
-        // }
+    public showApproveConfirmPopup(ref: TemplateRef<any>) {
+        this.approveEntryModalRef = this.modalService.show(ref, {class: 'modal-md'});
+    }
+
+    public hideApproveConfirmPopup(isApproved) {
+        if (!isApproved) {
+            this.approveEntryModalRef.hide();
+        } else {
+            this.approveEntry();
+        }
+    }
+
+    public approveEntry() {
 
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
@@ -226,13 +236,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         };
 
         let ledgerRequest = this.updateLedgerComponentInstance.saveLedgerTransaction();
+        // check if there any validation error occurs from ledger component then don't do any thing just return
+        if (!ledgerRequest) {
+            return;
+        }
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
             if (res.status === 'success') {
-                this.modalService.hide(0);
-                this._toasty.successToast('reverted successfully');
+                this._toasty.successToast(res.body);
+                this.refreshPendingItem.emit(true);
+                this.toggleDetailsMode.emit(true);
             } else {
-                this._toasty.successToast(res.message);
+                this._toasty.errorToast(res.message);
             }
         });
     }
