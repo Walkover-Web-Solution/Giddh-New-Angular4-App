@@ -34,3 +34,22 @@
   padding-bottom: 10px;
   border-bottom: 1px solid #c6c7c7;
 }
+
+@media(max-width:575px){
+  .aside-pane  {
+  max-width: 370px;
+  width: 100%;
+}
+}
+@media(max-width:375px){
+  .aside-pane  {
+  max-width: 310px;
+  width: 100%;
+}
+}
+@media(max-width:320px){
+  .aside-pane  {
+  max-width: 280px;
+  width: 100%;
+}
+}

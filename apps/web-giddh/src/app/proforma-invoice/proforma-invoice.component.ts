@@ -850,7 +850,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     });
 
     this._breakpointObserver
-      .observe(['(max-width: 768px)'])
+      .observe(['(max-width: 840px)'])
       .pipe(takeUntil(this.destroyed$))
       .subscribe((st: BreakpointState) => {
         this.isMobileView = st.matches;
@@ -1045,7 +1045,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (f) {
       f.form.reset();
     }
-
+    this.showSwitchedCurr = false;
+    this.autoSaveIcon = false;
+    this.showCurrencyValue = false;
     this.invFormData = new VoucherClass();
     this.depositAccountUniqueName = '';
     this.accountUniqueName = "";
@@ -1487,9 +1489,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     //Save the Grand Total for Edit
     if (calculatedGrandTotal > 0) {
       this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+      if (this.calculatedRoundOff === 0.5) {
+        this.calculatedRoundOff = -this.calculatedRoundOff;
+      }
       calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
     }
-
     this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
     this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
   }
@@ -1812,12 +1816,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   public setActiveIndx(indx: number) {
-    setTimeout(function () {
-      let focused = $('.focused');
-      if (focused && focused[indx]) {
-        $('.focused')[indx].focus();
-      }
-    }, 200);
+    // BELOW CODE WAS PUTTING FOCUS ON PAYMENT MODE DROPDOWN SO COMMENTED THE CODE
+    // setTimeout(function () {
+    //   let focused = $('.focused');
+    //   if (focused && focused[indx]) {
+    //     $('.focused')[indx].focus();
+    //   }
+    // }, 200);
 
     this.activeIndx = indx;
   }
@@ -2104,7 +2109,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.resetInvoiceForm(f);
             this._toasty.successToast('Voucher updated Successfully');
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
 
@@ -2731,6 +2737,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.isCashInvoice) {
       obj.account.customerName = data.voucherDetails.customerName;
       obj.account.name = data.voucherDetails.customerName;
+    } else {
+      delete obj.account.customerName;
     }
     return obj;
   }
@@ -2836,7 +2844,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       salesEntryClass.description = entry.description;
       salesEntryClass.entryDate = moment(entry.date, 'DD-MM-YYYY').toDate();
       this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
-      console.log(salesEntryClass);
       voucherClassConversion.entries.push(salesEntryClass);
     });
 

@@ -200,7 +200,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
   private isUniversalDateApplicable: boolean = false;
   private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public baseCurrencySymbol: string = '';
-
+  public baseCurrency: string = '';
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -1026,7 +1026,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     if (obj.email) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
         emailId: obj.email.split(','),
-        voucherNumber: [this.selectedInvoice.voucherNumber],
+        voucherNumber: [obj.invoiceNumber || this.selectedInvoice.voucherNumber],
         voucherType: this.selectedVoucher,
         typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
       }));
@@ -1118,6 +1118,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
       if (profile) {
         this.baseCurrencySymbol = profile.baseCurrencySymbol;
+        this.baseCurrency = profile.baseCurrency;
       }
     });
   }

@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -184,7 +184,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public selectedSuffixForCurrency: string;
   public inputMaskFormat: string;
   public giddhBalanceDecimalPlaces: number = 2;
-
+  public activeAccountParentGroupsUniqueName: string = '';
   // public accountBaseCurrency: string;
   // public showMultiCurrency: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1108,8 +1108,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._loaderService.hide();
             return;
           }
-        } else if (this.profileObj.country !== 'India') {
-          //
+        }  else if (this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode !== 'IN') {
+          // // we are not defining any code here because here we are skipping this step due to not mendatory GSTIN no to apply ta
         } else {
           this._toaster.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
           this._loaderService.hide();
@@ -1137,11 +1137,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public entryManipulated() {
     if (this.isAdvanceSearchImplemented) {
       this.getAdvanceSearchTxn();
+    } else if (this.activeAccountParentGroupsUniqueName === 'bankaccounts' && this.closingBalanceBeforeReconcile) {
+      this.getReconciliation();
     } else {
       this.getTransactionData();
     }
   }
-
   public resetAdvanceSearch() {
     this.advanceSearchComp.resetAdvanceSearchModal();
     this.getTransactionData();
@@ -1226,7 +1227,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (this.showUpdateLedgerForm) {
         this.hideUpdateLedgerModal();
       }
-      this.entryManipulated();
+      if(this.updateLedgerComponentInstance.activeAccount$) {
+        this.updateLedgerComponentInstance.activeAccount$.subscribe(res => {
+          this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
+        });
+      }this.entryManipulated();
       this.updateLedgerComponentInstance = null;
       componentRef.destroy();
     });
@@ -1576,11 +1581,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       });
       _.uniqBy(this.invoiceList, 'value');
     });
-  }
-
-  @HostListener('window:scroll')
-  public onScrollEvent() {
-    this.datepickers.hide();
   }
 
   public keydownPressed(e) {

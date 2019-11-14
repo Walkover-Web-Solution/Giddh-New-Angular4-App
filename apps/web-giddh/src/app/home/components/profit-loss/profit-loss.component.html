@@ -6,19 +6,11 @@
       <div class="pull-right dashboard-filter">
         <div class="btn-group" dropdown>
           <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
-            <span class="underline"> This Month</span> <span class="icon-arrow-down"></span>
+            <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
           </span>
-          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
-            <li class="divider dropdown-divider"></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-            </li>
-          </ul>
         </div>
 
-        <span class="icon-collapse-icon"></span>
+<!--        <span class="icon-collapse-icon"></span>-->
       </div>
     </div>
 
@@ -29,51 +21,28 @@
       </div>
       <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
         <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="totaloverDueChart" #currentRatio></chart>
+          <chart [options]="profitLossChart" #currentRatio></chart>
+          <div class="clearfix mrB2">
+            <div class="">
+              <span class="mrB1 dueAmount">Net Profit/Loss</span>
+              <span class="total_amt pull-right"> {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ netProfitLoss | giddhCurrency }}</span>
+            </div>
+          </div>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Total Income</span>
-              <span class="total_amt pull-right totalIncomeText"> <span class="icon-rupees"></span>
-                {{ totalRecievable | number:'1.2-2' }}</span>
+              <span class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
             </div>
-            <div class="clearfix">
-              <small>Total Receipts</small>
-              <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
-            </div>
-            <!-- <div class="">
-                <div class="btn-group" dropdown>
-                    <button type="button" class="btn btn-danger">Action</button>
-                    <button id="button-split" type="button" dropdownToggle class="btn btn-danger dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
-                    <span class="caret"></span>
-                    <span class="sr-only">Split button!</span>
-                </button>
-                    <ul id="dropdown-split" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
-                        <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Another action</a>
-                        </li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Something else
-                    here</a></li>
-                        <li class="divider dropdown-divider"></li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-                        </li>
-                    </ul>
-                </div>
-                <span class="pull-right">{{ totalRecievable | number:'1.2-2' }}</span>
-            </div> -->
           </div>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Total Expenses</span>
-              <span class="total_amt pull-right totalExpensesText"><span class="icon-rupees"></span>
-                {{ totalPayable | number:'1.2-2' }}</span>
-            </div>
-            <div class="clearfix">
-              <small>Total Payment</small>
-              <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
+              <span class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
             </div>
           </div>
-
-
         </perfect-scrollbar>
       </div>
     </div>

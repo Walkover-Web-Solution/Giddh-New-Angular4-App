@@ -1,12 +1,10 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
-  <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')"
-          id="defaultOpen">Design
+  <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')" id="defaultOpen">Design
   </button>
   <button type="button" class="btn btn-default" [ngClass]="{'active': ifContentSelected}" (click)="openTab('content')">
     Content
   </button>
   <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
-
 </div>
 
 
@@ -24,21 +22,23 @@
     <div class="clearfix mrT2">
       <div class="form-group">
         Subject
-        <input class="form-control" placeholder="Invoice AB4123 from Walkover "/>
+        <input class="form-control" placeholder="Invoice AB4123 from Walkover " />
       </div>
     </div>
 
     <div class="clearfix mrT2">
       <div class="form-group">
         <div class="">
-          <input type="checkbox"/> Use greeting
+          <input type="checkbox" /> Use greeting
         </div>
         <div class="col-xs-4 pdL0">
           <div class="custom-select pos-rel">
             <select class="form-control">
               <option value="dear">dear</option>
             </select>
-            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+            <span class="select_drop">
+              <i class="fa fa-caret-down"></i>
+            </span>
           </div>
         </div>
         <div class="col-xs-8">
@@ -47,7 +47,9 @@
               <select class="form-control">
                 <option value="dear">Customer name</option>
               </select>
-              <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+              <span class="select_drop">
+                <i class="fa fa-caret-down"></i>
+              </span>
             </div>
           </div>
         </div>
@@ -58,12 +60,11 @@
       <div class="form-group">
         Message to customer
         <div class="">
-                    <textarea class="form-control" rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private Limited
-        </textarea>
+          <textarea class="form-control" rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private
+            Limited
+          </textarea>
         </div>
       </div>
     </div>
-
   </div>
-
 </div>

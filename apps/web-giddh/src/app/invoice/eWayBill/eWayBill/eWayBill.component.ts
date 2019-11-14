@@ -3,7 +3,7 @@ import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
@@ -130,6 +130,7 @@ export class EWayBillComponent implements OnInit {
 
   @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
   public selectedEway: Result;
+  public states: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -160,14 +161,13 @@ export class EWayBillComponent implements OnInit {
     this.store.dispatch(this.invoiceActions.getALLEwaybillList());
 
     // bind state sources
-    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.map(d => {
-          arr.push({ label: `${d.name}`, value: d.code });
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
+        this.statesSource$ = observableOf(this.states);
       }
-      this.statesSource$ = observableOf(arr);
     });
   }
 

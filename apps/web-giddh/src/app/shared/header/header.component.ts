@@ -9,7 +9,13 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
+import {
+  ActiveFinancialYear,
+  CompanyCountry,
+  CompanyCreateRequest,
+  CompanyResponse,
+  StatesRequest
+} from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -255,7 +261,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-
       // Sagar told to change the logic
       // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
       //   this.userIsSuperUser = true;
@@ -296,8 +301,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
+
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
+        if(res.countryV2 !== null && res.countryV2 !== undefined) {
+          this.getStates(res.countryV2.alpha2CountryCode);
+        }
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
           if (res.baseCurrency) {
@@ -362,9 +371,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.renewSession());
       }
     });
-    if (this.selectedPlanStatus === 'expired') {// active expired
-      this.openExpiredPlanModel(this.expiredPlanModel);
-    }
+
     if (this.isSubscribedPlanHaveAdditnlChrgs) {
       this.openCrossedTxLimitModel(this.crossedTxLimitModel);
     }
@@ -562,6 +569,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngAfterViewInit() {
+
+    if (this.selectedPlanStatus === 'expired') {// active expired
+      this.openExpiredPlanModel(this.expiredPlanModel);
+    }
     this.session$.subscribe((s) => {
       if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
@@ -572,7 +583,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         // get groups with accounts for general use
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
-        this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._generalActions.getFlattenGroupsReq());
       }
@@ -1095,7 +1105,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-    this.modelRefExpirePlan = this.modalService.show(template);
+    if (!this.modalService.getModalsCount()) {
+      this.modelRefExpirePlan = this.modalService.show(template);
+    }
   }
 
   public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
@@ -1297,7 +1309,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return name;
   }
 
-  public headerClickedOutside(menu) {
-    debugger;
+  public getStates(countryCode) {
+    if(countryCode !== undefined && countryCode !== null && countryCode !== "") {
+      let statesRequest = new StatesRequest();
+      statesRequest.country = countryCode;
+      this.store.dispatch(this._generalActions.getAllState(statesRequest));
+    }
   }
 }

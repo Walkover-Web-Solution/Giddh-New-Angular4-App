@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -745,6 +745,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this._loaderService.hide();
           return;
         }
+      } else if (this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode !== 'IN') {
+        // // we are not defining any code here because here we are skipping this step due to not mendatory GSTIN no to apply ta
       } else {
         this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
         this._loaderService.hide();
@@ -942,11 +944,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public exchangeRateChanged() {
     this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
     this.vm.inventoryAmountChanged();
-  }
-
-  @HostListener('window:scroll')
-  public onScrollEvent() {
-    this.datepickers.hide();
   }
 
   private assignPrefixAndSuffixForCurrency() {

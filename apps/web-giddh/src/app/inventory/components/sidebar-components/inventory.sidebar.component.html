@@ -1,5 +1,5 @@
 <section id="inventory-sidebar" class="sidebar p0 pull-left" #sidebar
-  [ngClass]="{'invisible': (groupsWithStocks$ | async)?.length==0 && isSearching==false}">
+  [ngClass]="{'invisible': stockGroupData?.length==0 && isSearching==false}">
   <div class="h100 clearfix">
     <div class="padd15" style="position: relative">
       <input class="form-control" style="padding-left: 32px !important; width:205px; display: inline-block;"
@@ -61,7 +61,7 @@
     <!-- <div class="pd1">
       <button class="btn isActive btn-sm" id="warehouseBtn" type="button" (click)="showBranchScreen()">Branch Transfer</button>
     </div> -->
-    <stockgrp-list class="parent-Group" [Groups]='groupsWithStocks$ | async'>
+    <stockgrp-list class="parent-Group" [Groups]='stockGroupData'>
     </stockgrp-list>
   </div>
 </section>
