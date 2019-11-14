@@ -9,7 +9,7 @@ import { GENERAL_ACTIONS } from './general.const';
 import { Observable } from 'rxjs';
 import { FlattenAccountsResponse } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
-import { States } from '../../models/api-models/Company';
+import {States, StatesRequest} from '../../models/api-models/Company';
 import { CompanyService } from '../../services/companyService.service';
 import { CustomActions } from '../../store/customActions';
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
@@ -50,11 +50,10 @@ export class GeneralActions {
   @Effect()
   public getAllState$: Observable<Action> = this.action$
     .ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES).pipe(
-      switchMap(() => this._companyService.getAllStates()),
+      switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
       map(resp => this.getAllStateResponse(resp)));
 
-  constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService,
-              private _companyService: CompanyService) {
+  constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService) {
     //
   }
 
@@ -86,13 +85,14 @@ export class GeneralActions {
     };
   }
 
-  public getAllState(): CustomActions {
+  public getAllState(value: StatesRequest): CustomActions {
     return {
       type: GENERAL_ACTIONS.GENERAL_GET_ALL_STATES,
+      payload: value
     };
   }
 
-  public getAllStateResponse(value: BaseResponse<States[], string>): CustomActions {
+  public getAllStateResponse(value: BaseResponse<States, string>): CustomActions {
     return {
       type: GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE,
       payload: value
@@ -156,6 +156,12 @@ export class GeneralActions {
   public resetSmartList(): CustomActions {
     return {
       type: GENERAL_ACTIONS.RESET_SMART_LIST
+    };
+  }
+
+  public resetStatesList(): CustomActions {
+    return {
+      type: GENERAL_ACTIONS.RESET_STATES_LIST
     };
   }
 }

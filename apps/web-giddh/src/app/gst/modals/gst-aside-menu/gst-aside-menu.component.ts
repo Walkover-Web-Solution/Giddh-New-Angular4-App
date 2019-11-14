@@ -105,11 +105,11 @@ export class GstAsideMenuComponent implements OnInit, OnChanges, OnDestroy {
     this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
 
     this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(pro => {
-      if (pro && pro.gstDetails) {
-        const gstNo = pro.gstDetails.filter(f => {
-          return f.addressList[0] && f.addressList[0].isDefault === true;
+      if (pro && pro.addresses) {
+        const gstNo = pro.addresses.filter(f => {
+          return f.isDefault === true;
         }).map(p => {
-          return p.gstNumber;
+          return p.taxNumber;
         });
         if (gstNo && gstNo[0]) {
           this.defaultGstNumber = gstNo[0];

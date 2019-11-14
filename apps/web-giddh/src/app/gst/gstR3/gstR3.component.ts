@@ -35,9 +35,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
   public gstAuthenticated: boolean = false;
   public dateSelected: boolean = false;
   public userEmail: string = '';
-  public selectedMMYYYY: string = ''
-
-
+  public selectedMMYYYY: string = '';
   private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
   private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
   private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
@@ -63,12 +61,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
       }))
     ).subscribe(activeCompany => {
       if (activeCompany) {
-        if (activeCompany.gstDetails && activeCompany.gstDetails.length) {
-          let defaultGst = activeCompany.gstDetails.find(f => !!(f.addressList.find(a => a.isDefault)));
+        if (activeCompany.addresses && activeCompany.addresses.length) {
+          let defaultGst = activeCompany.addresses.find(a => a.isDefault);
           if (defaultGst) {
-            this.activeCompanyGstNumber = defaultGst.gstNumber;
+            this.activeCompanyGstNumber = defaultGst.taxNumber;
           } else {
-            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+            this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
           }
           this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
@@ -175,7 +173,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 (this.gstr3BData.sup_details.osup_zero ?
      (this.gstr3BData.sup_details.osup_zero.csamt?this.gstr3BData.sup_details.osup_zero.csamt:0): 0));
       }
- console.log(this.gstr3BData);
      }
      }
  });
