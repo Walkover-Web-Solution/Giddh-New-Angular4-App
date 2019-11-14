@@ -90,34 +90,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.getCountry();
     this.getCurrency();
 
-    // this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    // contriesWithCodes.map(c => {
-    //   this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-    // });
-    // this.stateStream$.subscribe((data) => {
-    //   if (data) {
-    //     this.stateResponse = _.cloneDeep(data);
-    //     data.map(d => {
-    //       this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
-    //       this.statesInBackground.push({label: `${d.name}`, value: d.code});
-    //       this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
-    //     });
-    //   }
-    //   this.statesSource$ = observableOf(this.states);
-    // }, (err) => {
-    //   // console.log(err);
-    // });
-
-    // this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-    //   let currencies: IOption[] = [];
-    //   if (data) {
-    //     data.map(d => {
-    //       currencies.push({label: d.code, value: d.code});
-    //     });
-    //   }
-    //   this.currencySource$ = observableOf(currencies);
-    // });
-
     currencyNumberSystems.map(c => {
       this.numberSystemSource.push({value: c.value , label: `${c.name}` , additional: c});
     });
@@ -199,23 +171,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
         }
-        if (profileObj.gstDetails && profileObj.gstDetails.length > 3) {
-          this.gstDetailsBackup = _.cloneDeep(profileObj.gstDetails);
+        if (profileObj.addresses && profileObj.addresses.length > 3) {
+          this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
           this.showAllGST = false;
-          profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
+          profileObj.addresses = profileObj.addresses.slice(0, 3);
         }
 
-        if (profileObj.gstDetails && !profileObj.gstDetails.length) {
+        if (profileObj.addresses && !profileObj.addresses.length) {
           let newGstObj = {
-            gstNumber: '',
-            addressList: [{
+              taxNumber: '',
               stateCode: '',
               stateName: '',
               address: '',
               isDefault: false
-            }]
           };
-          profileObj.gstDetails.push(newGstObj);
+          profileObj.addresses.push(newGstObj);
         }
         this.companyProfileObj = profileObj;
         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
@@ -231,7 +201,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           }
         }
         this.checkCountry(false);
-        // this.selectState(false);
       }
     });
     this.store.pipe(take(1)).subscribe(s => {
@@ -243,11 +212,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public addGst() {
-    let gstDetails = _.cloneDeep(this.companyProfileObj.gstDetails);
+    let gstDetails = _.cloneDeep(this.companyProfileObj.addresses);
     let gstNumber;
     let isValid;
     if (gstDetails && gstDetails.length) {
-      gstNumber = gstDetails[gstDetails.length - 1].gstNumber;
+      gstNumber = gstDetails[gstDetails.length - 1].taxNumber;
       isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
     } else {
       isValid = true;
@@ -257,16 +226,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (isValid) {
       let companyDetails = _.cloneDeep(this.companyProfileObj);
       let newGstObj = {
-        gstNumber: '',
-        addressList: [{
-          stateCode: '',
-          stateName: '',
-          address: '',
-          isDefault: false
-        }]
+        taxNumber: '',
+        stateCode: '',
+        stateName: '',
+        address: '',
+        isDefault: false
       };
 
-      companyDetails.gstDetails.push(newGstObj);
+      companyDetails.addresses.push(newGstObj);
       this.companyProfileObj = companyDetails;
     } else {
       this._toasty.errorToast('Please enter valid GST number to add more GST details.');
@@ -278,21 +245,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.value === selectedStateCode);
     if (selectedState && selectedState.value) {
-      profileObj.gstDetails[indx].addressList[0].stateName = '';
+      profileObj.addresses[indx].stateName = '';
       this.companyProfileObj = profileObj;
-
-      // this.checkGstDetails();
     }
   }
 
   public updateProfile(data) {
 
     let dataToSave = _.cloneDeep(data);
-    if (dataToSave.gstDetails.length > 0) {
-      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
-      for (let entry of dataToSave.gstDetails) {
-        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
-          dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
+    if (dataToSave.addresses.length > 0) {
+      for (let entry of dataToSave.addresses) {
+        if (!entry.taxNumber && !entry.stateCode && !entry.address) {
+          dataToSave.addresses = _.without(dataToSave.addresses, entry);
         }
       }
     }
@@ -301,7 +265,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
     this.companyProfileObj = _.cloneDeep(dataToSave);
     if (this.gstDetailsBackup) {
-      dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+      dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
     }
 
     // if (this.countryIsIndia) {
@@ -322,7 +286,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public removeGstEntry(indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1) {
-      profileObj.gstDetails.splice(indx, 1);
+      profileObj.addresses.splice(indx, 1);
       if (this.gstDetailsBackup) {
         this.gstDetailsBackup.splice(indx, 1);
       }
@@ -333,25 +297,24 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public setGstAsDefault(indx, ev) {
     if (indx > -1 && ev.target.checked) {
-      for (let entry of this.companyProfileObj.gstDetails) {
-        entry.addressList[0].isDefault = false;
+      for (let entry of this.companyProfileObj.addresses) {
+        entry.isDefault = false;
       }
-      if (this.companyProfileObj.gstDetails && this.companyProfileObj.gstDetails[indx] && this.companyProfileObj.gstDetails[indx].addressList && this.companyProfileObj.gstDetails[indx].addressList[0]) {
-        this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      if (this.companyProfileObj.addresses && this.companyProfileObj.addresses[indx] && this.companyProfileObj.addresses[indx] && this.companyProfileObj.addresses[indx]) {
+        this.companyProfileObj.addresses[indx].isDefault = true;
       }
     }
   }
 
   public getDefaultGstNumber() {
-    if (this.companyProfileObj && this.companyProfileObj.gstDetails) {
+    if (this.companyProfileObj && this.companyProfileObj.addresses) {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
-      profileObj.gstDetails.forEach((obj, indx) => {
-        if (profileObj.gstDetails[indx] && profileObj.gstDetails[indx].addressList[0] && profileObj.gstDetails[indx].addressList[0].isDefault) {
+      profileObj.addresses.forEach((obj, indx) => {
+        if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
           defaultGstObjIndx = indx;
         }
       });
-      // console.log('defaultGstObjIndx is :', defaultGstObjIndx);
       return '';
     }
     return '';
@@ -367,7 +330,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
-        // this.checkGstDetails();
       }
     } else {
       ele.classList.remove('error-box');
@@ -386,9 +348,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       } else if (stateCode === 0) {
         stateCode = '';
       }
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode.toString();
+      this.companyProfileObj.addresses[index].stateCode = stateCode.toString();
     } else {
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = '';
+      this.companyProfileObj.addresses[index].stateCode = '';
     }
   }
 
@@ -433,15 +395,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public onToggleAllGSTDetails() {
-    if ((this.companyProfileObj.gstDetails.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
+    if ((this.companyProfileObj.addresses.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
       this.gstDetailsBackup = null;
     } else {
       this.showAllGST = !this.showAllGST;
       if (this.gstDetailsBackup) {
         if (this.showAllGST) {
-          this.companyProfileObj.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+          this.companyProfileObj.addresses = _.cloneDeep(this.gstDetailsBackup);
         } else {
-          this.companyProfileObj.gstDetails = this.companyProfileObj.gstDetails.slice(0, 3);
+          this.companyProfileObj.addresses = this.companyProfileObj.addresses.slice(0, 3);
         }
       }
     }
@@ -477,7 +439,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public checkGstDetails() {
-    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+    this.patchProfile({addresses: this.companyProfileObj.addresses});
   }
 
   public patchProfile(obj) {
@@ -497,26 +459,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
         this.patchProfile({city: this.companyProfileObj.city});
-        // set country and state values
-        // try {
-        //   item.address_components.forEach(address => {
-        //     let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-        //     let countryIdx = _.indexOf(address.types, 'country');
-        //     if (stateIdx !== -1) {
-        //       if (this.stateResponse) {
-        //         let selectedState = this.stateResponse.find((state: States) => state.name === address.long_name);
-        //         if (selectedState) {
-        //           this.companyProfileObj.state = selectedState.code;
-        //         }
-        //       }
-        //     }
-        //     if (countryIdx !== -1) {
-        //       this.companyProfileObj.country = address.long_name;
-        //     }
-        //   });
-        // } catch (e) {
-        //   console.log(e);
-        // }
       }
     });
   }

@@ -173,7 +173,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 (this.gstr3BData.sup_details.osup_zero ?
      (this.gstr3BData.sup_details.osup_zero.csamt?this.gstr3BData.sup_details.osup_zero.csamt:0): 0));
       }
- console.log(this.gstr3BData);
      }
      }
  });
