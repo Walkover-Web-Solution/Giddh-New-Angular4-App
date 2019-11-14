@@ -34,7 +34,7 @@ import {
   TransactionClassMulticurrency, DiscountMulticurrency,
   GstDetailsClass, AmountClassMulticurrency, CodeStockMulticurrency, StateCode
 } from '../models/api-models/Sales';
-import { auditTime, catchError, take, takeUntil } from 'rxjs/operators';
+import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -345,12 +345,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
-    this.loaderService.loaderState.pipe(takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
-      if (stateLoader.show) {
-        this.showLoader = true;
-      } else {
-        this.showLoader = false;
-      }
+    this.loaderService.loaderState.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+          if (stateLoader.show) {
+          this.showLoader = true;
+        } else {
+          this.showLoader = false;
+        }
     });
   }
 
@@ -400,7 +400,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
       }
     });
 
-    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
+    this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
       if (parmas['invoiceType']) {
         if (this.invoiceType !== parmas['invoiceType']) {
           this.invoiceType = parmas['invoiceType'];

@@ -628,7 +628,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.itemsListForDetails = allItems;
 
         this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
-
+        this.selectedVoucher = this.selectedInvoiceForDetails.voucherType;
         this.toggleBodyClass();
     }
 
@@ -1138,11 +1138,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private addToolTiptext(item: ReceiptItem): any {
         try {
             if (item.account && item.account.currency) {
-                const currencyCode = item.account.currency.code;
-                const balanceDueAmountForCompany = item.balanceDue.amountForCompany;
-                const grandTotalAmountForCompany = item.grandTotal.amountForCompany;
-                item['grandTotalTooltipText'] = `In ${currencyCode}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${(item.grandTotal.amountForAccount / Number(grandTotalAmountForCompany)).toFixed(2)})`;
-                item['balanceDueTooltipText'] = `In ${currencyCode}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${(item.balanceDue.amountForAccount / Number(balanceDueAmountForCompany)).toFixed(2)})`;
+                const balanceDueAmountForCompany = Number(item.balanceDue.amountForCompany) || 0;
+                const grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
+                const balanceDueAmountForAccount = Number(item.balanceDue.amountForAccount) || 0;
+                const grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
+                let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
+                if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                }
+                if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
+                    balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                }
+                item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+                item['balanceDueTooltipText'] = `In ${this.baseCurrency}: ${balanceDueAmountForCompany}<br />(Conversion Rate: ${balanceDueAmountConversionRate})`;
             }
         } catch (error) { }
         return item;

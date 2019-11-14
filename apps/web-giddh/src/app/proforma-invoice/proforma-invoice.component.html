@@ -18,14 +18,15 @@
                     <span class="caret" *ngIf="!isUpdateMode"></span>
                 </button>
 
-                <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <ng-container *ngIf="!isUpdateMode">
+                <ng-container *ngIf="!isUpdateMode">
+                    <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                        aria-labelledby="button-basic">
                         <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
                             *ngFor="let item of pageList">
                             <a class="dropdown-item cp">{{ item.additional?.label }}</a>
                         </li>
-                    </ng-container>
-                </ul>
+                    </ul>
+                </ng-container>
             </div>
 
         </div>
