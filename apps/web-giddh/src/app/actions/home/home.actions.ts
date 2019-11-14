@@ -424,13 +424,13 @@ export class HomeActions {
   public getRevenueGraphTypes$: Observable<Action> = this.action$
       .ofType(HOME.GET_REVENUE_GRAPH_TYPES).pipe(
           switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphTypes()),
-          map(response => this.GetRevenueGraphTypesResponse(response)));
+          map(response => this.getRevenueGraphTypesResponse(response)));
 
   @Effect()
   public getRevenueGraphData$: Observable<Action> = this.action$
       .ofType(HOME.GET_REVENUE_GRAPH_DATA).pipe(
           switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphData(action.payload)),
-          map(response => this.GetRevenueGraphDataResponse(response)));
+          map(response => this.getRevenueGraphDataResponse(response)));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
@@ -549,31 +549,37 @@ export class HomeActions {
     return successAction;
   }
 
-  public GetRevenueGraphTypes(): CustomActions {
+  public getRevenueGraphTypes(): CustomActions {
     return {
       type: HOME.GET_REVENUE_GRAPH_TYPES,
       payload: null
     };
   }
 
-  public GetRevenueGraphTypesResponse(value: BaseResponse<GraphTypesResponse, any>): CustomActions {
+  public getRevenueGraphTypesResponse(value: BaseResponse<GraphTypesResponse, any>): CustomActions {
     return {
       type: HOME.GET_REVENUE_GRAPH_TYPES_RESPONSE,
       payload: value
     };
   }
 
-  public GetRevenueGraphData(request: RevenueGraphDataRequest): CustomActions {
+  public getRevenueGraphData(request: RevenueGraphDataRequest): CustomActions {
     return {
       type: HOME.GET_REVENUE_GRAPH_DATA,
       payload: request
     };
   }
 
-  public GetRevenueGraphDataResponse(value: BaseResponse<RevenueGraphDataResponse, any>): CustomActions {
+  public getRevenueGraphDataResponse(value: BaseResponse<RevenueGraphDataResponse, any>): CustomActions {
     return {
       type: HOME.GET_REVENUE_GRAPH_DATA_RESPONSE,
       payload: value
+    };
+  }
+
+  public resetRevenueGraphData(): CustomActions {
+    return {
+      type: HOME.RESET_REVENUE_GRAPH_DATA_RESPONSE
     };
   }
 }

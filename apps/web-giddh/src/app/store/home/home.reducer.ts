@@ -608,6 +608,10 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
       return Object.assign({}, state, {revenueGraphData: null});
     }
 
+    case HOME.RESET_REVENUE_GRAPH_DATA_RESPONSE: {
+      return Object.assign({}, state, {revenueGraphData: null});
+    }
+
     default: {
       return state;
     }

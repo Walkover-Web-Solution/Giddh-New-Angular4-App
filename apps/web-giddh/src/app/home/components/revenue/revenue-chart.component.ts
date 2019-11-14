@@ -10,6 +10,8 @@ import {AppState} from '../../../store/roots';
 import * as moment from 'moment/moment';
 import {RevenueGraphDataRequest} from "../../../models/api-models/Dashboard";
 import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
+import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import {DashboardService} from "../../../services/dashboard.service";
 
 @Component({
 	selector: 'revenue-chart',
@@ -45,7 +47,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	public activeCompany: any = {};
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
+	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe) {
 		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
@@ -61,7 +63,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-		// get activeFinancialYear and lastFinancialYear
 		this.companies$.subscribe(c => {
 			if (c) {
 				let activeCompany: CompanyResponse;
@@ -75,11 +76,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	public refreshChart() {
-		this.graphParams.refresh = true;
-		this.getRevenueGraphData();
-	}
-
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
@@ -87,6 +83,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 	public getRevenueGraphTypes() {
 		this.store.pipe(select(s => s.home.revenueGraphTypes), takeUntil(this.destroyed$)).subscribe(res => {
+			this.revenueGraphTypes = [];
+
 			if (res && res.length > 0) {
 				Object.keys(res).forEach(key => {
 					if (key === "0") {
@@ -99,26 +97,35 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 				this.getRevenueGraphData();
 			} else {
-				this.store.dispatch(this._homeActions.GetRevenueGraphTypes());
+				this.store.dispatch(this._homeActions.getRevenueGraphTypes());
 			}
 		});
 	}
 
 	public getRevenueGraphData() {
-		this.currentData = [];
-		this.previousData = [];
-		this.summaryData.totalCurrent = 0;
-		this.summaryData.totalLast = 0;
-		this.summaryData.highest = 0;
-		this.summaryData.lowest = 0;
-
 		this.store.pipe(select(s => s.home.revenueGraphData), takeUntil(this.destroyed$)).subscribe(res => {
-			console.log(res);
+			this.currentData = [];
+			this.previousData = [];
+			this.summaryData.totalCurrent = 0;
+			this.summaryData.totalLast = 0;
+			this.summaryData.highest = 0;
+			this.summaryData.lowest = 0;
+			
 			if (res && res.balances) {
 				if (res.balances !== null) {
+					let x = 0;
 					Object.keys(res.balances).forEach(key => {
-						this.currentData.push(res.balances[key].current.closingBalance.amount);
-						this.previousData.push(res.balances[key].current.closingBalance.amount);
+						this.currentData.push({
+							x: x,
+							y: res.balances[key].current.closingBalance.amount,
+							tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+						});
+						this.previousData.push({
+							x: x,
+							y: res.balances[key].previous.closingBalance.amount,
+							tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+						});
+						x++;
 					});
 				}
 
@@ -140,11 +147,19 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 				this.generateChart();
 			} else {
-				let revenueGraphDataRequest = new RevenueGraphDataRequest();
-				revenueGraphDataRequest = this.graphParams;
-				this.store.dispatch(this._homeActions.GetRevenueGraphData(revenueGraphDataRequest));
+				this.getChartData();
 			}
 		});
+	}
+
+	public getChartData() {
+		let revenueGraphDataRequest = new RevenueGraphDataRequest();
+		revenueGraphDataRequest = this.graphParams;
+		this.store.dispatch(this._homeActions.getRevenueGraphData(revenueGraphDataRequest));
+	}
+
+	public refreshChart() {
+		this.store.dispatch(this._homeActions.resetRevenueGraphData());
 	}
 
 	public getWeekStartEndDate(date) {
@@ -189,9 +204,23 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 			],
 			legend: {
 				enabled: false
+			},
+			tooltip: {
+				useHTML: true,
+				formatter: function () {
+					return this.point.tooltip;
+				}
 			}
 		};
 
 		this.requestInFlight = false;
+	}
+
+	public changeGraphType(gtype) {
+		this.activeGraphType = gtype;
+		this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
+		this.graphParams.type = this.activeGraphType['type'];
+
+		this.refreshChart();
 	}
 }

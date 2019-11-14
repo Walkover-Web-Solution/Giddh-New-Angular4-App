@@ -9,7 +9,7 @@
                 <span *ngIf="activeGraphType"> <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span class="icon-arrow-down mrL1"></span>
               </span>
               <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item">{{gtype.uniqueName}}</a></li>
+                <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item" (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
               </ul>
             </div>
             <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
