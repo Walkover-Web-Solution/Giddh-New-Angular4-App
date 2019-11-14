@@ -6,23 +6,16 @@
       <div class="pull-right dashboard-filter">
         <div class="btn-group" dropdown>
           <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
-            <span class="underline"> This Month</span> <span class="icon-arrow-down"></span>
+<!--            <span class="underline"> This Month</span> <span class="icon-arrow-down"></span>-->
+                <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
           </span>
-          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
-            <li class="divider dropdown-divider"></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-            </li>
-          </ul>
         </div>
 
-        <span class="icon-collapse-icon"></span>
+<!--        <span class="icon-collapse-icon"></span>-->
       </div>
     </div>
 
-    <div class="panel-body pos-rel">
+    <div class="panel-body pos-rel {{requestInFlight}}">
       <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
         <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
@@ -33,47 +26,25 @@
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Customer Due</span>
-              <span class="total_amt pull-right customerDueText"> <span class="icon-rupees"></span>
-                {{ totalRecievable | number:'1.2-2' }}</span>
+              <span class="total_amt pull-right vendorDueText"> <span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalRecievable | giddhCurrency }}</span>
             </div>
             <div class="clearfix">
               <small>Pending Invoices</small>
-              <small class="pull-right">{{ ReceivableDurationAmt | number:'1.2-2' }}</small>
+              <small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
             </div>
-            <!-- <div class="">
-                <div class="btn-group" dropdown>
-                    <button type="button" class="btn btn-danger">Action</button>
-                    <button id="button-split" type="button" dropdownToggle class="btn btn-danger dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
-                    <span class="caret"></span>
-                    <span class="sr-only">Split button!</span>
-                </button>
-                    <ul id="dropdown-split" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-split">
-                        <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Another action</a>
-                        </li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Something else
-                    here</a></li>
-                        <li class="divider dropdown-divider"></li>
-                        <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
-                        </li>
-                    </ul>
-                </div>
-                <span class="pull-right">{{ totalRecievable | number:'1.2-2' }}</span>
-            </div> -->
           </div>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Vendor Due</span>
-              <span class="total_amt pull-right vendorDueText"><span class="icon-rupees"></span>
-                {{ totalPayable | number:'1.2-2' }}</span>
+              <span class="total_amt pull-right customerDueText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                {{ totalPayable | giddhCurrency }}</span>
             </div>
             <div class="clearfix">
               <small>Pending Invoices</small>
-              <small class="pull-right">{{ PaybaleDurationAmt | number:'1.2-2' }}</small>
+              <small class="pull-right">{{ PaybaleDurationAmt | giddhCurrency }}</small>
             </div>
           </div>
-
-
         </perfect-scrollbar>
       </div>
     </div>

@@ -80,12 +80,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class VatReportComponent {
 
   vatReports = [
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', info: 'icon-info', amount: 213, vatAmount: 123, Adjustment: 1000 },
+    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', amount: 'AED 10,000', vatAmount: 123, Adjustment: 'AED 1,000' },
+    { No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-' },
+    { No: '1a', items: 'Standard rated supplies in Sharjah', amount: 'AED 10,00', vatAmount: 123, Adjustment: '-' },
+    { No: '1a', items: 'Standard rated supplies in Ajman', amount: 'AED 2,000', vatAmount: 123, Adjustment: 'NA' },
+    { No: '1a', items: 'Standard rated supplies in Umm Al Quwain', amount: 'NA', vatAmount: 123, Adjustment: 'NA' },
+    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: 'NA', vatAmount: 123, Adjustment: '-' },
+    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: '-', vatAmount: 123, Adjustment: 'NA' },
+    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', amount: 'AED 10,000', vatAmount: 123, Adjustment: 'AED 1,000' },
+    { No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-' },
+    { No: '1a', items: 'Standard rated supplies in Sharjah', amount: 'AED 10,00', vatAmount: 123, Adjustment: '-' },
+    { No: '1a', items: 'Standard rated supplies in Ajman', amount: 'AED 2,000', vatAmount: 123, Adjustment: 'NA' },
+    { No: '1a', items: 'Standard rated supplies in Umm Al Quwain', amount: 'NA', vatAmount: 123, Adjustment: 'NA' },
+    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: 'NA', vatAmount: 123, Adjustment: '-' }
   ]
 
 
