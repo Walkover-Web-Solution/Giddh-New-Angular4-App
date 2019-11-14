@@ -155,7 +155,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
   public onCancel() {
     this.performActionAfterClose();
-    // this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
     this.closeEvent.emit(true);
   }
 
