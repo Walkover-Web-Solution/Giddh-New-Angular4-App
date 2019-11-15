@@ -38,6 +38,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @ViewChild('companyForm') public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
+    public imgPath: string = '';
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public company: CompanyCreateRequest = new CompanyCreateRequest();
@@ -73,6 +74,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;

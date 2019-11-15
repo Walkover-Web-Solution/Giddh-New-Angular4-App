@@ -8205,7 +8205,9 @@ button.btn.btn-filter {
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
 }
-
+button.ladda-button, button.ladda-button .ladda-spinner, button.ladda-button .ladda-label{
+    transition: none !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
