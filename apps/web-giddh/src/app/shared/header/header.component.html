@@ -241,12 +241,11 @@
                     </ul>
 
 
-                    <button *ngIf="!isMobileSite" id="AddManage" type="button" class="btn btn-gray btn-sm"
-                        [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
-                            class="icon-edit-ico"></span>Accounts
-                    </button>
-                    <div class="btn-group cp mrL1 d-inline-block" dropdown *ngIf="!isMobileSite">
-                        <span class="icon-support dropdown-toggle" dropdownToggle></span>
+          <button id="AddManage" type="button" class="btn btn-gray btn-sm" [checkPermission]="['MENU', 'MANAGE']"
+            (click)="showManageGroupsModal()"> <span class="icon-edit-ico"></span>Accounts
+          </button>
+          <div class="btn-group cp mrL1 d-inline-block" dropdown>
+            <span class="icon-support dropdown-toggle" dropdownToggle></span>
 
                         <!-- <img src="{{imgPath}}support.svg" dropdownToggle class="dropdown-toggle" [style.max-width.px]="24" /> -->
                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu"
@@ -753,33 +752,31 @@
                     </ul>
                 </div>
 
-                <div class="lowerLayerHeader clearfix">
-                    <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
-                        </li>
-                        <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
-                                [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
-                                class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <label class="btn btn-link">&nbsp;</label>
-                            <span class="icon-calender calender-addone "></span>
-                            <label
-                                class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
-                    </ul>
-                    <button id="AddManage" *ngIf="!isMobileSite" type="button"
-                        class="btn btn-gray btn-xs btn-sm pull-right mrR0 " [checkPermission]="['MENU', 'MANAGE']"
-                        (click)="showManageGroupsModal()"><span class="icon-edit-ico"></span>
-                        Accounts
-                    </button>
-                </div>
-            </div>
-        </nav>
-    </header>
+        <div class="lowerLayerHeader clearfix">
+          <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
+            <li [hidden]="isTodaysDateSelected">
+              <button class="btn btn-link" (click)="jumpToToday();">Today</button>
+            </li>
+            <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
+              <span class="icon-calender calender-addone pos-abs"></span>
+              <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
+                [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
+                class="form-control date-range-picker" />
+            </li>
+            <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+              <label class="btn btn-link">&nbsp;</label>
+              <span class="icon-calender calender-addone "></span>
+              <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
+            </li>
+          </ul>
+          <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span class="icon-edit-ico"></span>
+            Accounts
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
 </div>
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"

@@ -5,8 +5,8 @@
     (onReset)="initNavigator(navigation,root.children[0])" (onRight)="onRightKey($event,navigation)"
     (onLeft)="onLeftKey($event,navigation)">
     <!-- level 1 -->
-    <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index" [style.height.px]="height" nav-hr-item
-      (ngInit)="onColAdd($event,navigation)">
+    <div class="col_wrapper left-account-opration" *ngFor="let col of mc.columns;let i=index" [style.height.px]="height"
+      nav-hr-item (ngInit)="onColAdd($event,navigation)">
       <!-- <div class="grp_list" style="height:700px"> -->
       <ul class="new_btn_ul" *ngIf="i !== 0">
         <li class="new_btn">
@@ -16,7 +16,8 @@
         </li>
       </ul>
       <ng-container *ngIf="col.Items">
-        <ul class="grp_list" *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list'; let _items = vsCollection">
+        <ul class="grp_list usesr-last-list"
+          *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list'; let _items = vsCollection">
           <ng-container *ngFor="let item of _items">
             <!-- {{item.name}} -->
             <li *ngIf="item.isGroup" class="list-item sidebarTooltip">
