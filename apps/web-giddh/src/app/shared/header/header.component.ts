@@ -195,7 +195,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     baseCurrency: '',
     country: ''
   };
-  public companyExists: boolean = false;
+  public companyExists: boolean = true;
 
   /**
    *
