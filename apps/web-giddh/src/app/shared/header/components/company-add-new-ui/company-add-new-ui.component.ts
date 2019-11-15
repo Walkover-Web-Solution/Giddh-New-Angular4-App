@@ -296,8 +296,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
           // Creating Country List
           this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
           // Creating Country Currency List
-          this.countryCurrency[res[key].alpha2CountryCode] = [];
-          this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+
+          if(res[key].currency !== undefined && res[key].currency !== null) {
+            this.countryCurrency[res[key].alpha2CountryCode] = [];
+            this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+          }
 
           if(this.company.country === res[key].alpha2CountryCode) {
             this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;

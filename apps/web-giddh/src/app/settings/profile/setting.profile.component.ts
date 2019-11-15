@@ -572,12 +572,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public getStates(countryCode) {
     this.store.dispatch(this._generalActions.resetStatesList());
 
-    this.states = [];
-    this.statesInBackground = [];
-    this.statesSourceCompany = [];
-
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
+        this.states = [];
+        this.statesInBackground = [];
+        this.statesSourceCompany = [];
+
         Object.keys(res.stateList).forEach(key => {
           this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
           this.statesInBackground.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
