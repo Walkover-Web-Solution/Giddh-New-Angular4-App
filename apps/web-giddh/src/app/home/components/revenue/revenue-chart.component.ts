@@ -1,236 +1,226 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Options } from 'highcharts';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { Observable, ReplaySubject } from 'rxjs';
-import { IChildGroups, IRevenueChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
-import { HomeActions } from '../../../actions/home/home.actions';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import {take, takeUntil} from 'rxjs/operators';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Options} from 'highcharts';
+import {ActiveFinancialYear, CompanyResponse} from '../../../models/api-models/Company';
+import {Observable, ReplaySubject} from 'rxjs';
+import {IChildGroups, IRevenueChartClosingBalanceResponse} from '../../../models/interfaces/dashboard.interface';
+import {HomeActions} from '../../../actions/home/home.actions';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../../store/roots';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
-import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
+import {RevenueGraphDataRequest} from "../../../models/api-models/Dashboard";
+import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
+import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import {DashboardService} from "../../../services/dashboard.service";
 
 @Component({
-  selector: 'revenue-chart',
-  templateUrl: 'revenue-chart.component.html',
-  styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
+	selector: 'revenue-chart',
+	templateUrl: 'revenue-chart.component.html',
+	styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
 })
 
 export class RevenueChartComponent implements OnInit, OnDestroy {
-  @Input() public refresh: boolean = false;
-  public requestInFlight: boolean = false;
-  public options: Options;
-  public activeFinancialYear: ActiveFinancialYear;
-  public lastFinancialYear: ActiveFinancialYear;
-  public companies$: Observable<CompanyResponse[]>;
-  public activeCompanyUniqueName$: Observable<string>;
-  @Input() public revenueChartData: Observable<IRevenueChartClosingBalanceResponse>;
-  public accountStrings: AccountChartDataLastCurrentYear[] = [];
-  public activeYearAccounts: IChildGroups[] = [];
-  public lastYearAccounts: IChildGroups[] = [];
-  public activeYearAccountsRanks: number[] = [];
-  public lastYearAccountsRanks: number[] = [];
-  public activeYearTotal: number = 0;
-  public lastYearTotal: number = 0;
+	@Input() public refresh: boolean = false;
+	public requestInFlight: boolean = false;
+	public options: Options;
+	public activeFinancialYear: ActiveFinancialYear;
+	public lastFinancialYear: ActiveFinancialYear;
+	public companies$: Observable<CompanyResponse[]>;
+	public activeCompanyUniqueName$: Observable<string>;
+	@Input() public revenueChartData: Observable<IRevenueChartClosingBalanceResponse>;
+	public revenueGraphTypes: any[] = [];
+	public activeGraphType: any;
+	public graphParams: any = {
+		currentFrom: '',
+		currentTo: '',
+		previousFrom: '',
+		previousTo: '',
+		interval: 'daily',
+		type: '',
+		uniqueName: '',
+		refresh: false
+	};
+	public moment = moment;
+	public currentData: any[] = [];
+	public previousData: any[] = [];
+	public summaryData: any = {totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0};
+	public activeCompany: any = {};
+	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe) {
+		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
-  constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-    this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-  }
+		let getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
+		let getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
-  public ngOnInit() {
-    this.companies$.subscribe(c => {
-      if (c) {
-        let activeCmpUniqueName = '';
-        let financialYears = [];
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-          activeCmpUniqueName = a;
-          let res = c.find(p => p.uniqueName === a);
-          if (res) {
-            this.activeFinancialYear = res.activeFinancialYear;
-          }
-        });
-        if (this.activeFinancialYear) {
-          for (let cmp of c) {
-            if (cmp.uniqueName === activeCmpUniqueName) {
-              if (cmp.financialYears.length > 1) {
-                financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
-                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+		this.graphParams.currentFrom = moment(getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.currentTo = moment(getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousFrom = moment(getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousTo = moment(getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
-                  return b.diff(a, 'days') < 0;
-                });
-                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
-                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
-                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
-                  return b.diff(a, 'days');
-                }, 'desc');
-                this.lastFinancialYear = financialYears[0];
-              }
-            }
-          }
-          // if (activeCmpUniqueName) { this.fetchChartData(); }
-        }
-      }
-    });
+		this.getRevenueGraphTypes();
+	}
 
-    this.revenueChartData.subscribe(rvn => {
-      if (rvn) {
-        if (rvn.revenuefromoperationsActiveyear && rvn.otherincomeActiveyear) {
-          let revenuefromoperationsAccounts = [].concat.apply([], rvn.revenuefromoperationsActiveyear.childGroups);
-          let otherincomeAccounts = [].concat.apply([], rvn.otherincomeActiveyear.childGroups);
-          let groups = _.unionBy(revenuefromoperationsAccounts as IChildGroups[], otherincomeAccounts as IChildGroups[]) as IChildGroups[];
-          this.activeYearAccounts = groups;
-        }
-        if (rvn.revenuefromoperationsLastyear && rvn.otherincomeLastyear) {
-          let revenuefromoperationsAccounts = [].concat.apply([], rvn.revenuefromoperationsLastyear.childGroups);
-          let otherincomeAccounts = [].concat.apply([], rvn.otherincomeLastyear.childGroups);
-          let lastAccounts = _.unionBy(revenuefromoperationsAccounts as IChildGroups[], otherincomeAccounts as IChildGroups[]) as IChildGroups[];
-          this.lastYearAccounts = lastAccounts;
-        }
-      }
-      this.generateCharts();
-      this.requestInFlight = false;
-    });
-  }
+	public ngOnInit() {
+		this.companies$.subscribe(c => {
+			if (c) {
+				let activeCompany: CompanyResponse;
+				this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
+					activeCompany = c.find(p => p.uniqueName === a);
+					if (activeCompany) {
+						this.activeCompany = activeCompany;
+					}
+				});
+			}
+		});
+	}
 
-  public flattenGroup(tree: IChildGroups[]) {
-    return _.flattenDeep(this.recurse(tree));
-  }
+	public ngOnDestroy() {
+		this.destroyed$.next(true);
+		this.destroyed$.complete();
+	}
 
-  public recurse(nodes: IChildGroups[]) {
-    return _.map(nodes, (node: IChildGroups) => {
-      return [
-        node,
-        this.recurse(node.childGroups)
-      ];
-    });
-  }
+	public getRevenueGraphTypes() {
+		this.store.pipe(select(s => s.home.revenueGraphTypes), takeUntil(this.destroyed$)).subscribe(res => {
+			this.revenueGraphTypes = [];
 
-  public refreshChart() {
-    this.refresh = true;
-    this.fetchChartData();
-  }
+			if (res && res.length > 0) {
+				Object.keys(res).forEach(key => {
+					if (key === "0") {
+						this.activeGraphType = res[key];
+						this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
+						this.graphParams.type = this.activeGraphType['type'];
+					}
+					this.revenueGraphTypes.push({uniqueName: res[key].uniqueName, type: res[key].type});
+				});
 
-  public fetchChartData() {
-    this.requestInFlight = true;
-    this.store.dispatch(this._homeActions.getRevenueChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, this.refresh));
+				this.getRevenueGraphData();
+			} else {
+				this.store.dispatch(this._homeActions.getRevenueGraphTypes());
+			}
+		});
+	}
 
-    if (this.lastFinancialYear) {
-      this.store.dispatch(this._homeActions.getRevenueChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, this.refresh));
-    }
-    this.refresh = false;
-  }
+	public getRevenueGraphData() {
+		this.store.pipe(select(s => s.home.revenueGraphData), takeUntil(this.destroyed$)).subscribe(res => {
+			this.currentData = [];
+			this.previousData = [];
+			this.summaryData.totalCurrent = 0;
+			this.summaryData.totalLast = 0;
+			this.summaryData.highest = 0;
+			this.summaryData.lowest = 0;
+			
+			if (res && res.balances) {
+				if (res.balances !== null) {
+					let x = 0;
+					Object.keys(res.balances).forEach(key => {
+						this.currentData.push({
+							x: x,
+							y: res.balances[key].current.closingBalance.amount,
+							tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+						});
+						this.previousData.push({
+							x: x,
+							y: res.balances[key].previous.closingBalance.amount,
+							tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+						});
+						x++;
+					});
+				}
 
-  public generateCharts() {
-    this.accountStrings = _.uniqBy(this.generateActiveYearString().concat(this.generateLastYearString()), 'uniqueName');
-    this.accountStrings.forEach((ac) => {
-      ac.activeYear = 0;
-      ac.lastYear = 0;
-      let index = -1;
-      index = _.findIndex(this.activeYearAccounts, (p) => p.uniqueName === ac.uniqueName);
-      if (index !== -1) {
-        ac.activeYear = this.activeYearAccounts[index].closingBalance.amount;
-      }
-      index = -1;
-      index = _.findIndex(this.lastYearAccounts, (p) => p.uniqueName === ac.uniqueName);
-      if (index !== -1) {
-        ac.lastYear = this.lastYearAccounts[index].closingBalance.amount;
-      }
-    });
+				if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
+					this.summaryData.totalCurrent = res.currentClosingBalance.amount;
+				}
 
-    this.accountStrings = _.filter(this.accountStrings, (a) => {
-      return !(a.activeYear === 0 && a.lastYear === 0);
-    });
-    this.activeYearAccountsRanks = this.accountStrings.map(p => p.activeYear);
-    this.lastYearAccountsRanks = this.accountStrings.map(p => p.lastYear);
-    this.activeYearTotal = _.sum(this.activeYearAccountsRanks);
-    this.lastYearTotal = _.sum(this.lastYearAccountsRanks);
+				if (res.previousClosingBalance !== null && res.previousClosingBalance.amount !== null) {
+					this.summaryData.totalLast = res.previousClosingBalance.amount;
+				}
 
-    this.options = {
-      colors: ['#0CB1AF', '#087E7D'],
-      chart: {
-        type: 'column',
-        height: '256px'
-      },
-      title: {
-        text: ''
-      },
-      subtitle: {
-        text: ''
-      },
-      xAxis: {
-        categories: this.accountStrings.map(p => p.name),
-        crosshair: true,
-      },
-      yAxis: {
-        // min: 0,
-        title: {
-          text: ''
-        },
-        gridLineWidth: 0,
-        minorGridLineWidth: 0,
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y:.1f} rs</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      plotOptions: {
-        bar: {
-          groupPadding: 0,
-          pointPadding: 0
-        },
-        column: {
-          pointPadding: 0,
-          borderWidth: 0
-        }
-      },
-      series: [{
-        name: `This Year`,
-        data: this.activeYearAccountsRanks
+				if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
+					this.summaryData.highest = res.previousHighestClosingBalance.amount;
+				}
 
-      }, {
-        name: `Last Year`,
-        data: this.lastYearAccountsRanks
+				if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
+					this.summaryData.lowest = res.currentLowestClosingBalance.amount;
+				}
 
-      }],
-      credits: {
-        enabled: false
-      },
-      legend: {
-        enabled: false
-      }
-    };
-  }
+				this.generateChart();
+			} else {
+				this.getChartData();
+			}
+		});
+	}
 
-  public generateActiveYearString(): INameUniqueName[] {
-    let activeStrings: INameUniqueName[] = [];
-    this.activeYearAccounts.map(acc => {
-      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
-    });
-    return activeStrings;
-  }
+	public getChartData() {
+		let revenueGraphDataRequest = new RevenueGraphDataRequest();
+		revenueGraphDataRequest = this.graphParams;
+		this.store.dispatch(this._homeActions.getRevenueGraphData(revenueGraphDataRequest));
+	}
 
-  public generateLastYearString(): INameUniqueName[] {
-    let lastStrings: INameUniqueName[] = [];
-    this.lastYearAccounts.map(acc => {
-      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
-    });
-    return lastStrings;
-  }
+	public refreshChart() {
+		this.store.dispatch(this._homeActions.resetRevenueGraphData());
+	}
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+	public getWeekStartEndDate(date) {
+		// If no date object supplied, use current date
+		let now = date ? new Date(date) : new Date();
+
+		// set time to some convenient value
+		now.setHours(0, 0, 0, 0);
+
+		// Get the previous Sunday
+		let sunday = new Date(now);
+		sunday.setDate(sunday.getDate() - sunday.getDay() + 0);
+
+		// Get next Saturday
+		let saturday = new Date(now);
+		saturday.setDate(saturday.getDate() - saturday.getDay() + 6);
+
+		// Return array of date objects
+		return [sunday, saturday];
+	}
+
+	public generateChart() {
+		this.options = {
+			chart: {
+				type: 'column',
+				height: '256px'
+			},
+			colors: ['#0CB1AF', '#087E7D'],
+			title: {
+				text: ''
+			},
+			credits: {
+				enabled: false
+			},
+			series: [{
+				name: '',
+				data: this.currentData
+			}, {
+				name: '',
+				data: this.previousData
+			}
+			],
+			legend: {
+				enabled: false
+			},
+			tooltip: {
+				useHTML: true,
+				formatter: function () {
+					return this.point.tooltip;
+				}
+			}
+		};
+
+		this.requestInFlight = false;
+	}
+
+	public changeGraphType(gtype) {
+		this.activeGraphType = gtype;
+		this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
+		this.graphParams.type = this.activeGraphType['type'];
+
+		this.refreshChart();
+	}
 }

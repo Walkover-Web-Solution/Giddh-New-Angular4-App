@@ -6,7 +6,8 @@ import { LocationService } from '../../../../services/location.service';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { LoginActions } from '../../../../actions/login.action';
-import { Store } from '@ngrx/store';
+import { CommonActions } from '../../../../actions/common.actions';
+import {select, Store} from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
@@ -15,12 +16,14 @@ import { AppState } from '../../../../store';
 import { CompanyRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest, CompanyCreateRequest } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
+import { CommonService } from '../../../../services/common.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import { NgForm } from '@angular/forms';
+import {CountryRequest} from "../../../../models/api-models/Common";
+import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
   selector: 'company-add-new-ui-component',
@@ -28,7 +31,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./company-add-new-ui.component.css']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   @ViewChild('logoutModal') public logoutModal: ModalDirective;
@@ -36,7 +39,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   @Input() public createBranch: boolean = false;
 
   public countrySource: IOption[] = [];
-  // public company: CompanyRequest2 = new CompanyRequest2();
+  public countrySource$: Observable<IOption[]> = observableOf([]);
   public company: CompanyCreateRequest = new CompanyCreateRequest();
   public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
   public companies$: Observable<CompanyResponse[]>;
@@ -44,44 +47,29 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
   public isCompanyCreated$: Observable<boolean>;
   public logedInuser: UserDetails;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
   public countryPhoneCode: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
   public isMobileNumberValid: boolean = false;
   public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public isNewUser: boolean = false;
+  public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
+  public selectedCountry: string = '';
 
   constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
     private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-    private _toaster: ToasterService,
+    private _toaster: ToasterService, private commonActions: CommonActions
   ) {
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
-      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
-    });
-    // Country phone Code
-    contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
-    });
-    _.uniqBy(this.countryPhoneCode, 'value');
-    const ss = Array.from(new Set(this.countryPhoneCode.map(s => s.value))).map(value => {
-      return {
-        value: value,
-        label: this.countryPhoneCode.find(s => s.value === value).label
-      };
-    });
-    this.countryPhoneCode = ss;
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      this.currencies = [];
-      if (data) {
-        data.map(d => {
-          this.currencies.push({ label: d.code, value: d.code });
-        });
-      }
-      this.currencySource$ = observableOf(this.currencies);
-    });
+    this.getCountry();
+    this.getCurrency();
+    this.getCallingCodes();
+
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
   }
 
   public ngOnInit() {
@@ -100,9 +88,8 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
     this.isCompanyCreated$.subscribe(s => {
       if (s && !this.createBranch) {
-        let isNewUSer = false;
         this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
-          isNewUSer = st === userLoginStateEnum.newUserLoggedIn;
+          this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
         });
         let prevTab = '';
         this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
@@ -110,7 +97,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         });
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = isNewUSer ? 'welcome' : 'onboarding';
+        stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
         this._generalService.companyUniqueName = this.company.uniqueName;
         if (prevTab !== 'user-details') {
           this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
@@ -119,7 +106,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         setTimeout(() => {
           if (prevTab !== 'user-details') {
             this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
-            this._route.navigate([isNewUSer ? 'welcome' : 'onboarding']);
+            this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
           }
           this.closeModal();
         }, 500);
@@ -136,9 +123,14 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         }
       }
     });
-  }
-  public ngAfterViewInit() {
-    _.uniqBy(this.countryPhoneCode, 'value');
+
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        if (!res.isBranch) {
+          this.company  = res;
+        }
+      }
+    });
   }
 
   /**
@@ -146,8 +138,9 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
    */
   public createCompany(mobileNoEl) {
 
+    this.checkMobileNo(mobileNoEl);
+
     if (!this.isMobileNumberValid) {
-      this._toaster.errorToast('Invalid Contact number', 'Error');
       if (mobileNoEl) {
         mobileNoEl.focus();
       }
@@ -161,8 +154,7 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
       this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
       this.closeCompanyModal.emit();
       this._route.navigate(['welcome']);
-      //this.store.dispatch(this.companyActions.CreateCompany(this.company));
-      //this.store.dispatch(this.companyActions.GetApplicableTaxes());
+
       if (companies) {
         if (companies.length === 0) {
           this.fireSocketCompanyCreateRequest();
@@ -216,7 +208,6 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
     if (isElectron) {
-      // this._aunthenticationServer.GoogleProvider.signOut();
       this.store.dispatch(this._loginAction.ClearSession());
     } else {
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -243,9 +234,17 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
       this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
     }
   }
+
   public isValidMobileNumber(ele: HTMLInputElement) {
     if (ele.value) {
-      if (ele.value.length > 9 && ele.value.length < 16) {
+      this.checkMobileNo(ele);
+    }
+  }
+
+  public checkMobileNo(ele) {
+    try {
+      let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
+      if (this.phoneUtility.isValidNumber(parsedNumber)) {
         ele.classList.remove('error-box');
         this.isMobileNumberValid = true;
       } else {
@@ -253,12 +252,18 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
         this._toaster.errorToast('Invalid Contact number');
         ele.classList.add('error-box');
       }
+    } catch(error) {
+      this.isMobileNumberValid = false;
+      this._toaster.errorToast('Invalid Contact number');
+      ele.classList.add('error-box');
     }
   }
+
   public selectCountry(event: IOption) {
     if (event) {
       let phoneCode = event.additional;
       this.company.phoneCode = phoneCode;
+      this.company.baseCurrency = this.countryCurrency[event.value];
     }
   }
 
@@ -282,5 +287,54 @@ export class CompanyAddNewUiComponent implements OnInit, AfterViewInit, OnDestro
 
   private getSixCharRandom() {
     return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          // Creating Country List
+          this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          this.countryCurrency[res[key].alpha2CountryCode] = [];
+          this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+
+          if(this.company.country === res[key].alpha2CountryCode) {
+            this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
+          }
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = 'onboarding';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getCallingCodes() {
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
   }
 }

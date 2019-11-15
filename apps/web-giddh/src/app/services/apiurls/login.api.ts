@@ -18,7 +18,7 @@ export const LOGIN_API = {
   GET_AUTH_KEY: 'users/:uniqueName/get-auth-key',
   REGENERATE_AUTH_KEY: 'users/:userEmail/generate-auth-key',
   GET_SESSION: 'users/:userEmail/sessions',
-  GET_USER_SUBSCRIPTION_PLAN_API: 'subscriptions/all',
+  GET_USER_SUBSCRIPTION_PLAN_API: 'subscriptions/all?countryCode=:countryCode',
   DELETE_SESSION: 'users/:userEmail/destroy-session',
   UPDATE_SESSION: 'users/:userEmail/increment-session',
   DELETE_ALL_SESSION: 'users/:userEmail/sessions',

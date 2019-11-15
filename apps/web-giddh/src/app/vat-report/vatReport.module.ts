@@ -5,6 +5,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { VatReportComponent } from './vatReport.component';
 import { VatReportListComponent } from './components/test/vat-report-list.component';
 import { CommonModule } from '@angular/common';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     VatReportRoutingModule,
     TabsModule,
-    CommonModule
+    CommonModule,
+    TooltipModule
   ],
   exports: [
     VatReportRoutingModule
