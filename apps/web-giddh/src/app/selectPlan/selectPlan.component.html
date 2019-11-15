@@ -32,21 +32,6 @@
                     <div class="select-plan-block">
                       {{item?.planDetails?.name}}
                       <div class="your-account">
-
-                        <!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
-
-                        <!--  -->
                         <div class="row">
                           <div class="col-xs-6">
                             <span>
@@ -62,7 +47,6 @@
                             </p>
                           </div>
                         </div>
-                        <!--  -->
 
                         <div class="row">
                           <div class="col-xs-6">
@@ -121,21 +105,6 @@
                     <div class="select-plan-block">
                       {{item?.planDetails?.name}}
                       <div class="your-account">
-
-                        <!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
-
-                        <!--  -->
                         <div class="row">
                           <div class="col-xs-6">
                             <span>
@@ -148,7 +117,6 @@
                             </p>
                           </div>
                         </div>
-                        <!--  -->
 
                         <div class="row">
                           <div class="col-xs-6">
@@ -299,12 +267,10 @@
           <div class="col-sm-12 col-md-3">
             <div class="activation-key">
               <label>Activation Key</label>
-              <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                class="form-control mrT1" placeholder="Enter activation key">
+              <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
             </div>
             <div class="activation-btn">
-              <button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
-                (click)="createCompanyViaActivationKey()"> Activate</button>
+              <button class="btn btn-green mrT1" [disabled]="!licenceKey.value" (click)="createCompanyViaActivationKey()"> Activate</button>
             </div>
           </div>
         </div>
@@ -315,12 +281,6 @@
           <div class="giddh-spinner vertical-center-spinner"></div>
         </div>
       </div>
-
-      <!-- <div class="note-wrap">
-                <p>Note:</p>
-                <p>* revenue more than 12 and less than 20 lacs</p>
-            </div> -->
-
     </div>
   </layout-main>
 </div>

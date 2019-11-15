@@ -2286,6 +2286,7 @@
 <app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"
   [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"
   (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
+
 <!-- region send email popup -->
 <div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
@@ -2363,6 +2364,7 @@
     </div>
   </div>
 </section>
+
 <!-- region print voucher popup -->
 <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
