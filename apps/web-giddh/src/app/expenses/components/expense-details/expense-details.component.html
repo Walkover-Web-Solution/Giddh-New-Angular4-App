@@ -5,7 +5,9 @@
                 <p class="bold mb-05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <button type="button" class="mb-05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">Approve</button>
+                <button type="button" class="mb-05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">
+                    Approve
+                </button>
                 <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
                 <span class="close-modal cp" (click)="closeDetailsMode()">
           <img src="assets/images/multiply.svg">
@@ -63,7 +65,8 @@
 
                         <sh-select class="pull-right text-left" name="depositAccountUniqueName"
                                    [options]="entryAgainstObject.dropDownOption"
-                                   [(ngModel)]="entryAgainstObject.model" (selected)="onSelectEntryAgainstAccount($event)"
+                                   [(ngModel)]="entryAgainstObject.model"
+                                   (selected)="onSelectEntryAgainstAccount($event)"
                                    [placeholder]="'Select Account'" [notFoundLink]="false"
                                    [forceClearReactive]="forceClear$ | async"
                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
@@ -104,6 +107,7 @@
     <div *ngIf="ispPettycashEntrySuccess$ | async">
         <update-ledger-entry-panel [isPettyCash]="true"
                                    [accountEntryPettyCash]="accountEntryPettyCash"
+                                   [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
         ></update-ledger-entry-panel>
     </div>
@@ -172,11 +176,11 @@
 
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
-   <petty-cash-approve-confirm-dialog
-       [selectedEntryForApprove]="selectedEntryForApprove"
-       [approveEntryRequestInProcess]="approveEntryRequestInProcess"
-       (approveEntry)="hideApproveConfirmPopup($event)"
-   ></petty-cash-approve-confirm-dialog>
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    ></petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
 

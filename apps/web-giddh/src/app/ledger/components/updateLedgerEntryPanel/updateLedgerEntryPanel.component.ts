@@ -61,6 +61,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     @Input() isPettyCash: boolean = false;
     @Input() accountEntryPettyCash: any;
+    @Input() pettyCashBaseAccountTypeString: string;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -920,9 +921,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiveListsData(e: any) {
         if (e.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
-                this._toasty.errorToast('Please Select Base Account for entry..');
+                this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
                 return;
             }
+
             this.invoiceList = [];
             this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
@@ -937,8 +939,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiveLists() {
         if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
-
+                this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
+                return;
             }
+
             this.invoiceList = [];
             this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
