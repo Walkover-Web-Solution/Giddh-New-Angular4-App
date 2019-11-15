@@ -183,7 +183,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
       this.paymentMode = paymentModeChanges;
       if(this.baseCurrencySymbol !== c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol){
         this.isMulticurrencyAccount = true;
-        this.accountCurrency = this.selectedInvoiceForPayment.account.currency.code;
+        this.accountCurrency = this.selectedInvoiceForPayment.account.currency ? this.selectedInvoiceForPayment.account.currency.code : null;
         this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
       }else{
         this.isMulticurrencyAccount = false;

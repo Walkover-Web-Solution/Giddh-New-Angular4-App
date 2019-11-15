@@ -741,8 +741,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
                             obj.templateDetails = result.templateDetails;
                         }
+
                         //added update mode as causing trouble in multicurrency
-                        if (obj.entries.length && !this.isUpdateMode) {
+                        if (obj.entries.length) {
                             obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
                         }
 
@@ -892,7 +893,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.generateVoucherSuccess$.subscribe(result => {
             if (result) {
-                this.resetInvoiceForm(this.invoiceForm);
                 let lastGenVoucher: { voucherNo: string, accountUniqueName: string } = {
                     voucherNo: '',
                     accountUniqueName: ''
@@ -901,7 +901,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invoiceNo = lastGenVoucher.voucherNo;
                 this.accountUniqueName = lastGenVoucher.accountUniqueName;
                 this.postResponseAction(this.invoiceNo);
-
+                this.resetInvoiceForm(this.invoiceForm);
                 if (!this.isUpdateMode) {
                     this.getAllLastInvoices();
                 }
@@ -1709,15 +1709,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
             this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
+
             if (this.isMulticurrencyAccount) {
                 this.companyCurrencyName = item.additional.currency;
             }
+
             if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
                 this.getCurrencyRate(this.companyCurrency, item.additional.currency);
             }
-        }
-        if (this.isSalesInvoice && this.isMulticurrencyAccount) {
-            this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
+
+            if (this.isSalesInvoice && this.isMulticurrencyAccount) {
+                this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
+            }
         }
     }
 
@@ -2054,38 +2057,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public addBulkStockItems(items: SalesAddBulkStockItems[]) {
-        this.isAddBulkItemInProcess = true;
-        let salesAccs: IOption[] = [];
-        this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
+  public addBulkStockItems(items: SalesAddBulkStockItems[]) {
+    this.isAddBulkItemInProcess = true;
+    let salesAccs: IOption[] = [];
+    this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
 
-        for (const item of items) {
-            let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
-            if (salesItem) {
+    for (const item of items) {
+      let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
+      if (salesItem) {
 
-                // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-                salesItem.additional = {...salesItem.additional, quantity: item.quantity};
-                let lastIndex = -1;
-                let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
+        // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+        salesItem.additional = { ...salesItem.additional, quantity: item.quantity };
+        let lastIndex = -1;
+        let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
 
-                if (blankItemIndex > -1) {
-                    lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
-                } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
-                    lastIndex = this.invFormData.entries.length - 1;
-                }
-
-                this.activeIndx = lastIndex;
-                this.invFormData.entries[lastIndex].entryDate = this.universalDate;
-                this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
-                this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-                this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
-                this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
-                this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
-            }
+        if (blankItemIndex > -1) {
+          lastIndex = blankItemIndex;
+          this.invFormData.entries[lastIndex] = new SalesEntryClass();
+        } else {
+          this.invFormData.entries.push(new SalesEntryClass());
+          lastIndex = this.invFormData.entries.length - 1;
         }
+
+        this.activeIndx = lastIndex;
+        this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+        this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+        this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+        this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
+        this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
+        this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
+      }
     }
+  }
 
     public addNewSidebarAccount(item: AddAccountRequest) {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
