@@ -141,7 +141,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         if (this.isGstValid) {
-        this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+        this.patchProfile({addresses: this.companyProfileObj.addresses});
         }
       });
   }
@@ -221,11 +221,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public addGst() {
-    let gstDetails = _.cloneDeep(this.companyProfileObj.addresses);
+    let addresses = _.cloneDeep(this.companyProfileObj.addresses);
     let gstNumber;
     let isValid;
-    if (gstDetails && gstDetails.length) {
-      gstNumber = gstDetails[gstDetails.length - 1].taxNumber;
+    if (addresses && addresses.length) {
+      gstNumber = addresses[addresses.length - 1].taxNumber;
       //isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
 
       if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
@@ -257,7 +257,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       companyDetails.addresses.push(newGstObj);
       this.companyProfileObj = companyDetails;
     } else {
-      this._toasty.errorToast('Please enter valid GST number to add more GST details.');
+      this._toasty.errorToast('Please enter valid '+this.formFields['taxName']+' to add more GST details.');
     }
   }
 
