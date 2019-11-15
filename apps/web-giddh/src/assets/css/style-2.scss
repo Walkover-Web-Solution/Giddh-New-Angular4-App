@@ -1229,15 +1229,17 @@ modal-container.modal.fade.show {
   border-radius: 2px !important;
   padding: 6px !important;
   outline: 0;
-  color: #1c1c1c;
+  color: #484848 !important;
   box-shadow: none;
 }
-
-.form-control::-webkit-input-placeholder,
-.form-control::-webkit-input-placeholder,
-.form-control::-moz-placeholder,
-.form-control:-ms-input-placeholder,
-.form-control:-moz-placeholder {
+input{
+   color: #484848 !important;
+}
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-moz-placeholder, input::-moz-placeholder,
+.form-control:-ms-input-placeholder, input:-ms-input-placeholder,
+.form-control:-moz-placeholder, input:-moz-placeholder {
   color: #999999;
 }
 
@@ -8196,6 +8198,7 @@ button.btn.btn-filter {
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
 }
+
 /* responsive */
 
 @media (max-width: 1440px) {
