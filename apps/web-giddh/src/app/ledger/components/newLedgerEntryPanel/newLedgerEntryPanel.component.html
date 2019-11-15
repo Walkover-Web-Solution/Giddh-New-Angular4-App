@@ -239,14 +239,17 @@
               <td class="pdR1" *ngIf="blankLedger.voucherType == 'rcpt'">
                 <div class="form-group">
                   <label class="default_clr">Invoice No.</label>
+
                   <div class="btn-group btn-block invoice-btn" container="body" dropdown>
-                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+
+                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                       Select Invoices
                       <span class="select_drop pull-right mrT1">
                         <i class="fa fa-caret-down"></i>
                       </span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
+
+                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
                       <li *ngIf="invoiceList.length==0">No results found</li>
                       <li *ngFor="let invoice of invoiceList">
 
@@ -254,7 +257,9 @@
                           [checked]="invoice.isSelected" /> {{invoice.label}}
                       </li>
                     </ul>
+
                   </div>
+
                 </div>
 
 
