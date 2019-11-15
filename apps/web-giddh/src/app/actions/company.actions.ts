@@ -57,6 +57,8 @@ export class CompanyActions {
 
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
+  public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
+
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY).pipe(
@@ -146,7 +148,6 @@ export class CompanyActions {
         });
         this._toasty.successToast('New company created successfully', 'Success');
 
-
         // is brahch set
         if (response.request.isBranch) {
           //
@@ -160,6 +161,7 @@ export class CompanyActions {
           });
         }
 
+        this.store.dispatch(this.removeCompanyCreateSession());
         // set newly created company as active company
 
         // check if new uer has created first company then set newUserLoggedIn false
@@ -583,5 +585,9 @@ export class CompanyActions {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
       payload: value
     };
+  }
+
+  public removeCompanyCreateSession(): CustomActions {
+    return { type: CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION };
   }
 }

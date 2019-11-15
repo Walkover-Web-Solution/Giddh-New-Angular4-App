@@ -222,7 +222,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _breakpointObserver: BreakpointObserver,
     private _generalService: GeneralService
   ) {
-
+    console.log(this.route);
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
