@@ -251,7 +251,6 @@
       <div class="box clearfix mrB2">
         <div class="mrB1 pdB bdrB clearfix pos-rel">
           <h1 class="fs18 txtCpc">{{branch.name}} <span *ngIf="branch.nameAlias">({{branch.nameAlias}} )</span> </h1>
-          <!-- <h1 *ngIf="branch.nameAlias" class="fs18 txtCpc">{{branch.name}} ({{branch.nameAlias}} ) </h1> -->
           <button class="pull-right btn btn-default btn-xs pos-abs"
             (click)="removeBranch(branch.uniqueName, branch.name)">
             <i class="fa fa-trash-o"></i> Remove
@@ -268,7 +267,7 @@
             <label class="control-label col-sm-2">GSTIN</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" placeholder="GSTIN" disabled
-                [value]="branch?.gstDetails[0]?.gstNumber" />
+                [value]="branch?.addresses[0]?.taxNumber" />
             </div>
           </div>
           <!-- This feature is not available right now -->

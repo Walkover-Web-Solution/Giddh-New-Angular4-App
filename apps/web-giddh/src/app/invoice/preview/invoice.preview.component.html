@@ -440,10 +440,12 @@
             </td>
 
             <td>{{item.voucherDate}}</td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
+            <td class="text-right" [tooltip]="grandTotalPopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
             </td>
-            <td class="text-right">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+            <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span></ng-template>
+            <td class="text-right" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">{{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
             </td>
+            <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span></ng-template>
             <td>{{item.dueDate ? item.dueDate : '-' }}</td>
 
 
@@ -900,13 +902,13 @@ tooltip="Invoice sent" placement="left" />-->
   <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
       <div class="col-sm-6">
-        <h3 class="font-xxlarge text-light-2">Total Sale</h3>
+        <h3 class="font-xxlarge text-light-2">{{ !(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? 'Total Sale' : 'Total' }}</h3>
         <h1 class="" style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalSale | giddhCurrency }}
           <span *ngIf="baseCurrency==='INR'">/-</span>
         </h1>
       </div>
 
-      <div class="col-sm-6">
+      <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="col-sm-6">
         <h3 class="text-light-2 font-xxlarge">Total Due</h3>
         <h1 style="font-size: 41px;margin-top: 6px;">{{baseCurrencySymbol}} {{ totalDue | giddhCurrency }}
            <span *ngIf="baseCurrency==='INR'">/-</span>

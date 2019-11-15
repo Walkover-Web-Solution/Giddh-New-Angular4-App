@@ -9,7 +9,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse, ITotalOverDuesResponse } from '../../models/interfaces/dashboard.interface';
-import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
+import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse, GraphTypesResponse, RevenueGraphDataRequest, RevenueGraphDataResponse } from '../../models/api-models/Dashboard';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../../store/customActions';
 
@@ -420,6 +420,18 @@ export class HomeActions {
         return {type: 'EmptyAction'};
       }));
 
+  @Effect()
+  public getRevenueGraphTypes$: Observable<Action> = this.action$
+      .ofType(HOME.GET_REVENUE_GRAPH_TYPES).pipe(
+          switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphTypes()),
+          map(response => this.getRevenueGraphTypesResponse(response)));
+
+  @Effect()
+  public getRevenueGraphData$: Observable<Action> = this.action$
+      .ofType(HOME.GET_REVENUE_GRAPH_DATA).pipe(
+          switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphData(action.payload)),
+          map(response => this.getRevenueGraphDataResponse(response)));
+
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
   }
@@ -535,5 +547,39 @@ export class HomeActions {
       return errorAction;
     }
     return successAction;
+  }
+
+  public getRevenueGraphTypes(): CustomActions {
+    return {
+      type: HOME.GET_REVENUE_GRAPH_TYPES,
+      payload: null
+    };
+  }
+
+  public getRevenueGraphTypesResponse(value: BaseResponse<GraphTypesResponse, any>): CustomActions {
+    return {
+      type: HOME.GET_REVENUE_GRAPH_TYPES_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getRevenueGraphData(request: RevenueGraphDataRequest): CustomActions {
+    return {
+      type: HOME.GET_REVENUE_GRAPH_DATA,
+      payload: request
+    };
+  }
+
+  public getRevenueGraphDataResponse(value: BaseResponse<RevenueGraphDataResponse, any>): CustomActions {
+    return {
+      type: HOME.GET_REVENUE_GRAPH_DATA_RESPONSE,
+      payload: value
+    };
+  }
+
+  public resetRevenueGraphData(): CustomActions {
+    return {
+      type: HOME.RESET_REVENUE_GRAPH_DATA_RESPONSE
+    };
   }
 }

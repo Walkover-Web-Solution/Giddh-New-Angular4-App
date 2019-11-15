@@ -38,7 +38,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'app-header',
@@ -196,6 +195,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         baseCurrency: '',
         country: ''
     };
+    public pageUrl: string = "";
 
     /**
      *
@@ -220,10 +220,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private changeDetection: ChangeDetectorRef,
         private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
-        private _generalService: GeneralService,
-        private commonActions: CommonActions
+        private _generalService: GeneralService
     ) {
-
+        this.pageUrl = this.router.url;
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
         // Reset old stored application date
@@ -245,7 +244,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
         this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
+            if (!companies || companies.length === 0) {
                 return;
             }
 
@@ -263,6 +262,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (!selectedCmp) {
                 return;
             }
+
             // Sagar told to change the logic
             // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
             //   this.userIsSuperUser = true;
@@ -568,7 +568,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
-        this.getPartyTypeForCreateAccount();
     }
 
     public ngAfterViewInit() {
@@ -1117,11 +1116,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.modelRefCrossLimit = this.modalService.show(template);
     }
 
-    public goToSelectPlan(template: TemplateRef<any>) {
+    public goToSelectPlan() {
         this.modalService.hide(1);
-        // this.router.navigate(['billing-detail']);
         this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
-        this.modelRefExpirePlan = this.modalService.show(template);
     }
 
     public onRight(nodes) {
@@ -1318,8 +1315,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             statesRequest.country = countryCode;
             this.store.dispatch(this._generalActions.getAllState(statesRequest));
         }
-    }
-    public getPartyTypeForCreateAccount() {
-        this.store.dispatch(this.commonActions.GetPartyType());
     }
 }

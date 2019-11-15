@@ -123,8 +123,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
       if (branches) {
         if (branches.results.length) {
           _.each(branches.results, (branch) => {
-            if (branch.gstDetails && branch.gstDetails.length) {
-              branch.gstDetails = [_.find(branch.gstDetails, (gst) => gst.addressList && gst.addressList[0] && gst.addressList[0].isDefault)];
+            if (branch.addresses && branch.addresses.length) {
+              branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
             }
           });
           this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
@@ -164,7 +164,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('branch component');
     this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         if (res.isBranch) {
@@ -212,7 +211,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onHide() {
-    console.log('creat company modal is closed.');
     // let companyUniqueName = null;
     // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     // let stateDetailsRequest = new StateDetailsRequest();

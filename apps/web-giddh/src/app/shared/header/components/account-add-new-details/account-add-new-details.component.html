@@ -102,7 +102,7 @@
                                     <label>GSTIN</label>
                                     <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
                                 </div> -->
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                                     <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
                                     <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                     />

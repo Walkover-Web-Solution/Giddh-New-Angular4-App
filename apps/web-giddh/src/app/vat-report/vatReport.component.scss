@@ -1,0 +1,35 @@
+.invoce-controll {
+    .nav.nav-tabs {
+    margin-bottom: 20px;
+    padding: 12px 0px 0 15px !important;
+    background-color: #F7F8FD;
+    z-index: 9;
+    position: relative;
+    top: -4px;
+    }
+}
+.table-border-bottom {
+    margin-bottom: 0px;
+}
+.table-border-bottom tbody tr td, .table-border-bottom thead tr th {
+  border-right: 0px !important;
+  border-left: 0px !important;
+  border-bottom: 0px !important;
+  border-top: 1px solid #ddd;
+}
+.table-border-bottom tfoot tr th {
+    background: #F2F2F2;
+    padding: 14px 10px;
+}
+.table-border-bottom thead tr th {
+  font-family: 'opensans-regular';
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar_header.mb-2 {
+    margin-top: 60px;
+  }
+  .onMobileView.table-hide-title tr td {
+    padding-left: 15px !important;
+  }
+}
