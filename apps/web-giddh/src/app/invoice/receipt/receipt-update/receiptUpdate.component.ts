@@ -88,6 +88,7 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
   public autoFillShipping: boolean = false;
   @Input() public activatedInvoice: string;
   @Input() public selectedReceipt: ReceiptItem;
+  public states: any[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _cdRef: ChangeDetectorRef,
@@ -111,14 +112,13 @@ export class ReceiptUpdateComponent implements OnInit, OnDestroy {
     });
 
     // bind state sources
-    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.map(d => {
-          arr.push({label: `${d.name}`, value: d.code});
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
+        this.statesSource$ = observableOf(this.states);
       }
-      this.statesSource$ = observableOf(arr);
     });
   }
 

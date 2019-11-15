@@ -316,8 +316,12 @@ export class AuthenticationService {
     const companyUniqueName = this._generalService.companyUniqueName;
     return this._http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data);
   }
-  public getAllUserSubsciptionPlans(): Observable<BaseResponse<any, any>> {
-    return this._http.get(this.config.apiUrl + LOGIN_API.GET_USER_SUBSCRIPTION_PLAN_API).pipe(map(res => {
+
+  public getAllUserSubsciptionPlans(countryCode): Observable<BaseResponse<any, any>> {
+    let url = this.config.apiUrl + LOGIN_API.GET_USER_SUBSCRIPTION_PLAN_API;
+    url = url.replace(":countryCode", countryCode);
+
+    return this._http.get(url).pipe(map(res => {
       let data = res;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
