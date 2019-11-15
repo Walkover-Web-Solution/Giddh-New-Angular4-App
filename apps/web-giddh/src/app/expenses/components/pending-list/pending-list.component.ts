@@ -50,6 +50,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     public paymentReceiveSearchInput: FormControl = new FormControl();
 
     public approveEntryModalRef: BsModalRef;
+    public filterModalRef: BsModalRef;
     public approveEntryRequestInProcess: boolean = false;
 
     constructor(private store: Store<AppState>,
@@ -88,6 +89,14 @@ export class PendingListComponent implements OnInit, OnChanges {
         } else {
             this.approveEntry();
         }
+    }
+
+    public showFilterModal(ref: TemplateRef<any>) {
+        this.filterModalRef = this._modalService.show(ref, {class: 'modal-md'});
+    }
+
+    public hideFilterModal() {
+        this.filterModalRef.hide();
     }
 
     public async approveEntry() {
