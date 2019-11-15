@@ -14,7 +14,7 @@
 
           <div class="form-group col-sm-6 col-xs-12">
             <label>Select Tax <span class="text-danger">*</span> </label><br>
-            <sh-select [options]="taxListSource$ | async" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
+            <sh-select [options]="taxListSource$ | async" name="taxType" [(ngModel)]="newTaxObj.taxType" [defaultValue]="selectedTax" [placeholder]="'Select Tax'"
               required [ItemHeight]="33"></sh-select>
           </div>
 
