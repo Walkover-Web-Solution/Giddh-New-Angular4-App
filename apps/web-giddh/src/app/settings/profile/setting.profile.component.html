@@ -193,11 +193,11 @@
       </div>
 
       <div class="row mrB1" *ngIf="companyProfileObj.countryV2 && companyProfileObj.countryV2.alpha2CountryCode === 'IN'">
-        <div class="col-xs-12">
+        <div class="col-xs-12" *ngIf="formFields['taxName'] !== undefined">
           <hr>
           <br />
           <h3 class="mrB1"> Add <span
-              *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span> GST Number
+              *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span> {{formFields['taxName'].label}}
             (Note: Check to set to default)</h3>
           <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i>
             Add
@@ -210,7 +210,7 @@
                   <div class="row">
                     <div class="col-xs-12">
                       <div class="form-group">
-                        <label for="" class="d-block">GSTIN</label>
+                        <label for="" class="d-block">{{formFields['taxName'].label}}</label>
                         <div class="input-group">
                           <div class="input-group-addon">
                             <input type="checkbox" (click)="setGstAsDefault(i, $event)"
