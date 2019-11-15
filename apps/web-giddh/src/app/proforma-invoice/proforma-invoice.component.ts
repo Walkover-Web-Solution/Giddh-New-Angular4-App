@@ -380,7 +380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     this.isUpdateMode = false;
 
     // get user country from his profile
-    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+    this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
       if (profile) {
         this.customerCountryName = profile.country;
         this.companyCurrency = profile.baseCurrency || 'INR';
@@ -396,7 +396,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.countryCode = profile.countryV2.alpha2CountryCode;
         }
         if (!this.isUpdateMode) {
-            this.getUpdatedStateCodes(this.countryCode);
+            await this.getUpdatedStateCodes(this.countryCode);
         }
       } else {
         this.customerCountryName = '';
@@ -746,12 +746,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (!obj.accountDetails.billingDetails.state) {
               obj.accountDetails.billingDetails.state = {};
-              obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
+              if (this.isEstimateInvoice || this.isProformaInvoice) {
+                obj.accountDetails.billingDetails.state.code = this.getNewStateCode(obj.accountDetails.billingDetails.stateCode);
+              } else {
+                obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
+              }
               obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
             }
             if (!obj.accountDetails.shippingDetails.state) {
               obj.accountDetails.shippingDetails.state = {};
-              obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
+              if (this.isEstimateInvoice || this.isProformaInvoice) {
+                obj.accountDetails.shippingDetails.state.code = this.getNewStateCode(obj.accountDetails.shippingDetails.stateCode);
+              } else {
+                obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
+              }
               obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
             }
 
@@ -915,6 +923,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.lastInvoices = [...arr];
       });
   }
+
+    /**
+     * Returns new state codes from old state codes
+     *
+     * @private
+     * @param {string} oldStatusCode Old state code
+     * @returns {string} Returns new state code
+     * @memberof ProformaInvoiceComponent
+     */
+    private getNewStateCode(oldStatusCode: string): string {
+        const currentState = this.statesSource.find((state: any) => oldStatusCode === state.stateGstCode);
+        return (currentState) ? currentState.value : '';
+    }
 
   public assignDates() {
     let date = _.cloneDeep(this.universalDate);
@@ -3010,7 +3031,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private modifyStateResp(stateList: StateCode[]) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
-            stateListRet.push({ label: stateR.name, value: stateR.code });
+            stateListRet.push({ label: stateR.name, value: stateR.code, stateGstCode: stateR.stateGstCode });
         });
         return stateListRet;
     }
