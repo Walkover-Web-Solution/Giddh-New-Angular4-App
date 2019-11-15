@@ -4,10 +4,31 @@
   }
   .searchBar .form-control{
     position: relative;
-    top:10px;
+    top:0;
+
   }
 }
+
 .hieghtInVH{
   height: calc(100vh - 70px);
 
+}
+@media(max-width:575px){
+  .manageGroupAcc .col-xs-6{
+    width: 100%;
+    margin-bottom: 5px;
+}
+.manageGroupAcc .searchBarWrapper{
+  float: none !important;
+}
+.form-group.searchBar {
+    margin-bottom: 0;
+}
+.manageGroupAcc .modal-header {
+    padding: 0 15px 10px;
+
+}
+.manageGroupAcc  .modal-title {
+    font-size: 16px !important;
+}
 }
