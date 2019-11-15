@@ -2,7 +2,7 @@
 
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
-    <div class="row">
+    <div class="">
       <!-- [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}" card 1104 -->
       <div class="form-group col-sm-6 col-xs-12">
         <label for="">Account Name</label>
@@ -26,7 +26,7 @@
           *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
           [formGroupName]="i">
 
-          <div class="row" [hidden]="!isIndia">
+          <div class="" [hidden]="!isIndia">
             <div class="form-group col-sm-6 col-xs-12">
               <label for="" class="d-block">GSTIN</label>
               <div class="input-group">
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="">
             <div class="form-group col-sm-6 col-xs-12">
               <label for="">Address</label>
               <textarea name="gstAddr_{{i}}" formControlName="address" rows="5" maxlength="120"
@@ -104,7 +104,7 @@
     <ng-container *ngIf="isHsnSacEnabledAcc">
       <!-- hsn and sac -->
 
-      <div class="row">
+      <div class="">
         <div class="col-sm-6 col-xs-12 form-group">
           <label class="d-block">HSN</label>
           <div class="input-group">
@@ -129,7 +129,7 @@
     </ng-container>
 
     <!--  design change by meghna -->
-    <div class="row">
+    <div class="">
       <div class="form-group col-sm-6 col-xs-12">
         <label for="">Balance for Trigger</label>
         <div class="input-group"
@@ -156,7 +156,7 @@
     </div>
 
     <!-- other details -->
-    <div class="row">
+    <div class="">
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
           <label class="cp">
@@ -171,7 +171,7 @@
     <!-- other details container -->
     <ng-container *ngIf="showOtherDetails">
       <!-- attention to -->
-      <div class="row" *ngIf="isGstEnabledAcc">
+      <div class="" *ngIf="isGstEnabledAcc">
         <div class="form-group col-xs-12">
           <label for="">Attention to (will be used in Invoice)</label>
           <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
@@ -179,7 +179,7 @@
       </div>
 
       <!-- opening Balance -->
-      <div class="row">
+      <div class="">
         <div class="form-group" [ngClass]="{'col-xs-4':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
           <label for="">Unique Name</label>
           <input type="text" class="form-control" [control]="addAccountForm.get('uniqueName')" textCaseChangeDirective
@@ -218,7 +218,7 @@
         </div>
       </div>
       <!-- addAccountForm.get('country').value.countryCode !== 'IN'  #1103  -->
-      <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
+      <div class="" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
         <div class="form-group col-xs-12 col-sm-6">
           <label for="">Opening Balance</label>
           <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
@@ -249,7 +249,7 @@
       </div>
 
       <!-- mobile no and email -->
-      <div class="row" *ngIf="isGstEnabledAcc">
+      <div class="" *ngIf="isGstEnabledAcc">
         <div class="form-group col-sm-6 col-xs-12">
           <label for="">Mobile Number</label>
           <!-- input-group -->
@@ -299,7 +299,7 @@
       </div>
 
       <!-- description -->
-      <div class="row">
+      <div class="">
         <div class="form-group col-xs-12">
           <label for="">Description</label>
           <textarea rows="3" cols="" name="description" formControlName="description" class="form-control"></textarea>
@@ -309,7 +309,7 @@
 
 
     <!-- submit and clear buttons -->
-    <div class="row mrT1">
+    <div class=" mrT1">
       <div class="form-group col-xs-12 text-right">
         <!-- <button class="btn btn-default" type="button" (click)="addAccountForm.reset()">Cancel</button> -->
         <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async"

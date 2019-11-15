@@ -1,7 +1,12 @@
 import { empty as observableEmpty, Observable } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
-import { ICurrencyResponse, SocketNewCompanyRequest, CompanyCreateRequest } from './../models/api-models/Company';
+import {
+  ICurrencyResponse,
+  SocketNewCompanyRequest,
+  CompanyCreateRequest,
+  StatesRequest
+} from './../models/api-models/Company';
 import { AccountSharedWithResponse } from '../models/api-models/Account';
 import {
   BankTransferRequest,
@@ -279,11 +284,14 @@ export class CompanyService {
   /**
    * get all states
    */
-  public getAllStates(): Observable<BaseResponse<States[], string>> {
-    return this._http.get(this.config.apiUrl + COMPANY_API.GET_ALL_STATES).pipe(map((res) => {
-      let data: BaseResponse<States[], string> = res;
+  public getAllStates(request: StatesRequest): Observable<BaseResponse<States, string>> {
+    let url = this.config.apiUrl + COMPANY_API.GET_ALL_STATES;
+    url = url.replace(":country", request.country);
+
+    return this._http.get(url).pipe(map((res) => {
+      let data: BaseResponse<States, string> = res;
       return data;
-    }), catchError((e) => this.errorHandler.HandleCatch<States[], string>(e)));
+    }), catchError((e) => this.errorHandler.HandleCatch<States, string>(e)));
   }
 
   /**

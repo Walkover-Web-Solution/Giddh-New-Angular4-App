@@ -22,7 +22,7 @@ import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
-  states: States[];
+  states: States;
   addAndManageClosed: boolean;
   flattenGroups: IFlattenGroupsAccountsDetail[];
   smartCombinedList: IUlist[];
@@ -79,7 +79,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       return state;
     }
     case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
-      let result: BaseResponse<States[], string> = action.payload;
+      let result: BaseResponse<States, string> = action.payload;
       if (result.status === 'success') {
         return {
           ...state,
@@ -87,6 +87,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         };
       }
       return state;
+    }
+    case GENERAL_ACTIONS.RESET_STATES_LIST: {
+      return {...state, states: null};
     }
     // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
     case GENERAL_ACTIONS.RESET_SMART_LIST: {

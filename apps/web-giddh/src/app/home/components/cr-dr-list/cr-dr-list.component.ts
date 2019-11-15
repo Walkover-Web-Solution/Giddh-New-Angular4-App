@@ -7,6 +7,7 @@ import {take, takeUntil} from "rxjs/operators";
 import {createSelector} from "reselect";
 import * as moment from 'moment/moment';
 import {CompanyResponse} from "../../../models/api-models/Company";
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
   selector: 'cr-dr-list',
@@ -40,11 +41,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
       if (dateObj) {
         let universalDate = _.cloneDeep(dateObj);
         this.datePickerOptions = {
-          ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-          endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
+          ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+          endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()
         };
-        this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
-        this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.dueDate = new Date(moment(universalDate[1]).format('YYYY-MM-DD'));
         this.getAccountsReport();

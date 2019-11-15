@@ -28,7 +28,7 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input class="form-control focused" (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" style="padding-right: 13px !important;" />
+                <input class="form-control focused" (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled" [value]="filter" style="padding-right: 13px !important;" />
             </ng-container>
         </div>
         <!--endregion-->

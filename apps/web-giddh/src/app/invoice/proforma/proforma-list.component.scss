@@ -182,12 +182,16 @@ ul.selectActionDropdown {
 
 }
 .dropdown-toggle.spcl_dropdown:hover{
-  background-color: #EAEAEA;
+  background: $border-blue;
+  color: #fff !important;
+  border-color: $border-blue;
 }
 .dropdown-toggle.spcl_dropdown .caret{
   color: #999999;
 }
-
+.dropdown-toggle.spcl_dropdown:hover  .caret{
+    color: #fff !important;
+}
 
 
 .proforma-container {

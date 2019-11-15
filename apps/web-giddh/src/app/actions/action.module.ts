@@ -50,6 +50,7 @@ import { GstReconcileActions } from './gst-reconcile/GstReconcile.actions';
 import { SubscriptionsActions } from './userSubscriptions/subscriptions.action';
 import { ProformaActions } from './proforma/proforma.actions';
 import { ExpencesAction } from './expences/expence.action';
+import { CommonActions } from './common.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -104,7 +105,8 @@ import { ExpencesAction } from './expences/expence.action';
       CompanyImportExportActions,
       GstReconcileActions,
       SubscriptionsActions,
-      ProformaActions
+      ProformaActions,
+      CommonActions
     ])
   ],
   exports: [EffectsModule]
