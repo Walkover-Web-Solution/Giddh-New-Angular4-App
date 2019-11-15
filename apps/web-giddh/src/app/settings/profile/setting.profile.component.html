@@ -102,17 +102,17 @@
             <div class="form-group">
               <label>Country</label><br>
               <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"
-                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)"></sh-select>
+                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)" [defaultValue]="companyProfileObj.countryV2.countryName"></sh-select>
               <!-- <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" /> -->
             </div>
 
             <div class="form-group select2-parent">
               <label>State</label><br>
               <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state"
-                [options]="statesSourceCompany" [ItemHeight]="33" (selected)="selectState($event)"
-                [hidden]="!countryIsIndia"></sh-select>
+                [options]="statesSource$ | async" [ItemHeight]="33" (selected)="selectState($event)"
+                [hidden]="!states"></sh-select>
               <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state"
-                [hidden]="countryIsIndia" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                [hidden]="states" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
             </div>
           </div>
           <!-- Removed city label G0-1822 -->

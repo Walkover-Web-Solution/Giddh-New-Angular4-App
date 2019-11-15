@@ -187,6 +187,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           };
           profileObj.addresses.push(newGstObj);
         }
+
+        if(profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
+          profileObj.country = profileObj.countryV2.alpha2CountryCode;
+        }
+
         this.companyProfileObj = profileObj;
         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
