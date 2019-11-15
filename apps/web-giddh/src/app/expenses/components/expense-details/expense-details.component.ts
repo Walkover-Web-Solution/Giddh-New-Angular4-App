@@ -21,6 +21,7 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'app-expense-details',
@@ -52,6 +53,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     @Input() public selectedRowItem: string;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
     @ViewChild(UpdateLedgerEntryPanelComponent) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown') public entryAgainstAccountDropDown: ShSelectComponent;
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
@@ -63,7 +65,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
-    public isFileUploaded: boolean = false;
     public isImageZoomView: boolean = false;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
@@ -76,7 +77,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public zoomViewImageSrc: string = '';
     public asideMenuStateForOtherTaxes: string = 'out';
 
-    public depositAccountUniqueName: string;
     public accountType: string;
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public DownloadAttachedImgResponse: DownloadLedgerAttachmentResponse[] = [];
@@ -207,8 +207,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 break;
 
         }
+        if (this.entryAgainstAccountDropDown) {
+            this.entryAgainstAccountDropDown.clear();
+        }
         this.entryAgainstObject.model = null;
-
     }
 
     public closeDetailsMode() {

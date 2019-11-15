@@ -60,8 +60,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
 
     @Input() isPettyCash: boolean = false;
-    @Input() accountEntryPettyCash: any;
+    @Input() pettyCashEntry: any;
     @Input() pettyCashBaseAccountTypeString: string;
+    @Input() pettyCashBaseAccountUniqueName: string;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -69,6 +70,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -169,7 +171,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // this.accountPettyCashStream = res;
                     // this.editAccUniqueName$ = observableOf(this.accountPettyCashStream.baseAccount.uniqueName);
                     this.entryUniqueName = res.uniqueName;
-                    this.accountUniqueName = null;
+                    this.accountUniqueName = res.particular.uniqueName;
                     this.selectedLedgerStream$ = observableOf(res as LedgerResponse);
                 }
             });
@@ -216,33 +218,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
                             if (!isThereOthersAcc) {
                                 // add new dummy account in flatten account array
-                                this.vm.flatternAccountList.push({name: 'Others', uniqueName: 'others', applicableTaxes: [], parentGroups: [], isFixed: false, isDummy: true});
+                                this.vm.flatternAccountList.push({
+                                    name: 'Others', uniqueName: 'others', applicableTaxes: [],
+                                    parentGroups: [], isFixed: false, isDummy: true, mergedAccounts: ''
+                                });
                             }
                         }
                     }
 
                     // set account details for multi currency account
-                    this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === resp[1].particular.uniqueName));
-
-                    this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
-                        !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
-                        : false;
-
-                    this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-
-                    if (this.vm.isMultiCurrencyAvailable) {
-                        let currencies: ICurrencyResponse[] = [];
-                        let multiCurrencyAccCurrency: ICurrencyResponse;
-
-                        this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
-                        multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
-                        this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
-                    } else {
-                        this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
-                    }
-                    this.vm.selectedCurrency = this.profileObj.baseCurrency !== resp[1].total.code ? 0 : 1;
-                    this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
-                    this.assignPrefixAndSuffixForCurrency();
+                    this.prepareMultiCurrencyObject(resp[1].particular.uniqueName);
                     // end multi currency assign
 
                     let stockListFormFlattenAccount: IFlattenAccountsResultItem;
@@ -382,6 +367,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.selectedLedger.discounts = [];
                         this.vm.selectedLedger.attachedFile = '';
                         this.vm.selectedLedger.voucher = {name: '', shortCode: ''};
+                        this.vm.selectedLedger.invoicesToBePaid = [];
                     }
 
                     this.vm.selectedLedger.exchangeRateForDisplay = giddhRoundOff(this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
@@ -462,7 +448,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     // check if entry allows to show discount and taxes box
                     // first check with opened lager
-                    if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(resp[2].body)) {
+                    if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                         this.vm.showNewEntryPanel = true;
                     } else {
                         // now check if we transactions array have any income/expense/fixed assets entry
@@ -509,6 +495,30 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    private prepareMultiCurrencyObject(accountUniqueName) {
+        this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountUniqueName));
+
+        this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
+            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
+            : false;
+
+        this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+
+        if (this.vm.isMultiCurrencyAvailable) {
+            let currencies: ICurrencyResponse[] = [];
+            let multiCurrencyAccCurrency: ICurrencyResponse;
+
+            this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
+            multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
+            this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+        } else {
+            this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
+        }
+        this.vm.selectedCurrency = 0;
+        this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
+        this.assignPrefixAndSuffixForCurrency();
+    }
+
     public ngAfterViewInit() {
         this.vm.discountComponent = this.discountComponent;
     }
@@ -517,8 +527,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (changes['isPettyCash']) {
             this.isPettyCash = changes['isPettyCash'].currentValue;
         }
-        if (changes['accountEntryPettyCash'] && changes['accountEntryPettyCash'].currentValue) {
-            this.accountPettyCashStream = changes['accountEntryPettyCash'].currentValue.body;
+        if (changes['pettyCashEntry'] && changes['pettyCashEntry'].currentValue !== changes['pettyCashEntry'].previousValue) {
+            this.accountPettyCashStream = changes['pettyCashEntry'].currentValue.body;
+        }
+
+        // skip pettyCashBaseAccountUniqueName changes if its first time
+        // because we have already done this in get transaction response observable
+        // so no need to do this
+        // we will just check for account change in petty cash entry details screen
+        if (changes['pettyCashBaseAccountUniqueName']
+            && !changes['pettyCashBaseAccountUniqueName'].firstChange
+            && changes['pettyCashBaseAccountUniqueName'].currentValue
+            !== changes['pettyCashBaseAccountUniqueName'].previousValue) {
+            if (this.isPettyCash) {
+                this.accountUniqueName = changes['pettyCashBaseAccountUniqueName'].currentValue;
+
+                if (this.accountUniqueName) {
+                    this.pettyCashAccountChanged();
+                }
+            }
         }
     }
 
@@ -1039,6 +1066,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.datepickers) {
             this.datepickers.hide();
         }
+    }
+
+    // petty cash account changes, change all things related to account uniquename
+    // like multi currency account, base account etc...
+    private pettyCashAccountChanged() {
+        // set account details for multi currency account
+        this.prepareMultiCurrencyObject(this.accountUniqueName);
+        // end multi currency assign
     }
 
     private assignPrefixAndSuffixForCurrency() {

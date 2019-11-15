@@ -64,6 +64,7 @@
                     <div class="select-style">
 
                         <sh-select class="pull-right text-left" name="depositAccountUniqueName"
+                                   #entryAgainstAccountDropDown
                                    [options]="entryAgainstObject.dropDownOption"
                                    [(ngModel)]="entryAgainstObject.model"
                                    (selected)="onSelectEntryAgainstAccount($event)"
@@ -106,8 +107,9 @@
 
     <div *ngIf="ispPettycashEntrySuccess$ | async">
         <update-ledger-entry-panel [isPettyCash]="true"
-                                   [accountEntryPettyCash]="accountEntryPettyCash"
+                                   [pettyCashEntry]="accountEntryPettyCash"
                                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                   [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
         ></update-ledger-entry-panel>
     </div>
@@ -177,7 +179,7 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog
-        [selectedEntryForApprove]="selectedEntryForApprove"
+        [selectedEntryForApprove]="selectedItem"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
         (approveEntry)="hideApproveConfirmPopup($event)"
     ></petty-cash-approve-confirm-dialog>
