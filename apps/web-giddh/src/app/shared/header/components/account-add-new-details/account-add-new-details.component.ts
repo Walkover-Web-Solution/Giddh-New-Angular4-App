@@ -18,7 +18,7 @@ import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from "../../../../models/api-models/Sales";
-import { CountryRequest } from "../../../../models/api-models/Common";
+import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -78,6 +78,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public flatGroupsOptions: IOption[];
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
+    public formFields: any[] = [];
+    public isGstValid: boolean;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
@@ -213,6 +215,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 this.autoFocus.nativeElement.focus();
             }, 50);
         }
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res.fields).forEach(key => {
+                    this.formFields[res.fields[key].name] = [];
+                    this.formFields[res.fields[key].name] = res.fields[key];
+                });
+
+                // Object.keys(res.applicableTaxes).forEach(key => {
+                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
+                // });
+            }
+        });
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -222,13 +236,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             this.addAccountForm.get('mobileCode').patchValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').patchValue(company.baseCurrency);
-
+            this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
         } else {
             this.addAccountForm.get('country').get('countryCode').patchValue('IN');
             this.addAccountForm.get('mobileCode').patchValue('91');
             this.addAccountForm.get('currency').patchValue('IN');
             this.companyCountry = 'IN';
+            this.getOnboardingForm('IN');
         }
     }
 
@@ -416,6 +431,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
+        if (!accountRequest.mobileNo) {
+            accountRequest.mobileCode = '';
+        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['country'];
             delete accountRequest['addresses'];
@@ -483,11 +501,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
+
         }
     }
 
@@ -524,6 +544,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             }
         });
     }
+    public getOnboardingForm(countryCode: string) {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = '';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    }
 
     public getCurrency() {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
@@ -551,7 +577,34 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             }
         });
     }
+    public checkGstNumValidation(ele: HTMLInputElement) {
+        let isValid: boolean = false;
 
+        if (ele.value) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(ele.value)) {
+                        isValid = true;
+                        break;
+                    }
+                }
+            } else {
+                isValid = true;
+            }
+
+            if (!isValid) {
+                this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
+                ele.classList.add('error-box');
+                this.isGstValid = false;
+            } else {
+                ele.classList.remove('error-box');
+                this.isGstValid = true;
+            }
+        } else {
+            ele.classList.remove('error-box');
+        }
+    }
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {

@@ -98,9 +98,14 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label>GSTIN</label>
                                     <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
+                                </div> -->
+                                <div class="form-group">
+                                    <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
+                                    <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                    />
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -193,14 +198,14 @@
 
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-12 mrT3">
                     <div class="button-group">
                         <button class="btn btn-cancel">Cancel</button>
                         <button class="btn btn-success">Save</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </tab>
 
 
