@@ -188,7 +188,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
   public generateCharts() {
     let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-    let balanceDecimalPlaces = this.amountSettings.balanceDecimalPlaces;
     let cPipe = this.currencyPipe;
 
     this.totaloverDueChart = {

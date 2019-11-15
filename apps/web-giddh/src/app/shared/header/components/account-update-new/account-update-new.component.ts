@@ -4,7 +4,7 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -13,10 +13,14 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
-import { CompanyResponse, States } from '../../../../models/api-models/Company';
+import {CompanyResponse, States, StatesRequest} from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import {IForceClear} from "../../../../models/api-models/Sales";
+import { CommonActions } from '../../../../actions/common.actions';
+import {GeneralActions} from "../../../../actions/general/general.actions";
+import {CompanyActions} from "../../../../actions/company.actions";
+import {CountryRequest} from "../../../../models/api-models/Common";
 
 @Component({
   selector: 'account-update-new',
@@ -95,67 +99,44 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
     { value: 'SEZ', label: 'SEZ' }
   ];
-  public countrySource: IOption[] = [];
-  public stateStream$: Observable<States[]>;
+
+  public states: any[] = [];
   public statesSource$: Observable<IOption[]> = observableOf([]);
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
-  public countryPhoneCode: IOption[] = [];
   public isIndia: boolean = false;
   public companyCountry: string = '';
   public activeAccountName: string = '';
   public forceClear$: Observable<IForceClear> = observableOf({status: false});
+  public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
+  public countryPhoneCode: IOption[] = [];
+  public callingCodesSource$: Observable<IOption[]> = observableOf([]);
+  public stateGstCode: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
 
-    // bind state sources
-    this.stateStream$.subscribe((data) => {
-      let states: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource$ = observableOf(states);
-    });
+    this.getCountry();
+    this.getCurrency();
+    this.getCallingCodes();
 
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      let currencies: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          currencies.push({ label: d.code, value: d.code });
-        });
-      }
-      this.currencySource$ = observableOf(currencies);
-    });
-
-    // bind countries
-    contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`, additional: c.value });
-    });
-
-    // Country phone Code
-    contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
-    });
-
-    this.store.select(s => s.settings.profile).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((profile) => {
-      // this.store.dispatch(this.companyActions.RefreshCompanies());
-    });
     this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
       if (a) {
         this.companiesList$.pipe(take(1)).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
+          if(this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+            this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
+          }
         });
       }
     });
@@ -203,14 +184,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        // && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India'
         if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a, accountDetails.addresses.length);
           });
-        } else {
-          // this.addBlankGstForm();
         }
+
         // hsn/sac enable disable
         if (acc.hsnNumber) {
           this.addAccountForm.get('sacNumber').disable();
@@ -241,12 +220,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
       if (a === 'hsn') {
-        // hsn.reset();
         sac.reset();
         hsn.enable();
         sac.disable();
       } else {
-        // sac.reset();
         hsn.reset();
         sac.enable();
         hsn.disable();
@@ -279,12 +256,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get active company
-    // this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
-    //   if (a) {
-    //     this.addAccountForm.get('companyName').patchValue(a);
-    //   }
-    // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
@@ -310,7 +281,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
           } else {
             this.addAccountForm.get('currency').disable();
           }
-          this.companyCountry = currentCompany.country;
+          this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
         }
       }
     });
@@ -397,7 +368,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     if (gstVal.length >= 2) {
       this.statesSource$.pipe(take(1)).subscribe(state => {
-        let s = state.find(st => st.value === gstVal.substr(0, 2));
+        let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
+        let s = state.find(st => st.value === stateCode);
         statesEle.setDisabledState(false);
         // statesEle.disabled = true;
         if (s) {
@@ -486,17 +459,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (!this.showVirtualAccount) {
       delete accountRequest['cashFreeVirtualAccountData'];
     }
-    // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-    //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
-    //   return;
-    // }
-    // if (this.showBankDetail) {
-    //   if (accountRequest.accountBankDetails && accountRequest.accountBankDetails.length > 0) {
-    //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-    //       accountRequest['accountBankDetails'] = [];
-    //     }
-    //   }
-    // } else {
+
     if (!this.showBankDetail) {
       delete accountRequest['accountBankDetails'];
     }
@@ -522,6 +485,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (event) {
       let phoneCode = event.additional;
       this.addAccountForm.get('mobileCode').patchValue(phoneCode);
+      this.getStates(event.value);
     }
   }
 
@@ -533,5 +497,73 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       control.get('stateCode').patchValue(null);
       control.get('gstNumber').setValue("");
     }
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          if(res[key].currency !== undefined && res[key].currency !== null) {
+            this.countryCurrency[res[key].countryName] = [];
+            this.countryCurrency[res[key].countryName] = res[key].currency.code;
+          }
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getCallingCodes() {
+    this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.callingCodes).forEach(key => {
+          this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+        });
+        this.callingCodesSource$ = observableOf(this.countryPhoneCode);
+      } else {
+        this.store.dispatch(this.commonActions.GetCallingCodes());
+      }
+    });
+  }
+
+  public getStates(countryCode) {
+    this.store.dispatch(this._generalActions.resetStatesList());
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
+
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+        });
+        this.statesSource$ = observableOf(this.states);
+      } else {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = countryCode;
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
   }
 }

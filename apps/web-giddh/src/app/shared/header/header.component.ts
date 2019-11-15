@@ -9,7 +9,13 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
+import {
+  ActiveFinancialYear,
+  CompanyCountry,
+  CompanyCreateRequest,
+  CompanyResponse,
+  StatesRequest
+} from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -189,6 +195,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     baseCurrency: '',
     country: ''
   };
+  public companyExists: boolean = true;
 
   /**
    *
@@ -215,7 +222,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _breakpointObserver: BreakpointObserver,
     private _generalService: GeneralService
   ) {
-
+    console.log(this.route);
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
@@ -237,8 +244,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
     this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-      if (!companies) {
+      if (!companies || companies.length === 0) {
+        this.companyExists = false;
         return;
+      } else {
+        this.companyExists = true;
       }
 
       let orderedCompanies = _.orderBy(companies, 'name');
@@ -296,8 +306,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
     })).pipe(takeUntil(this.destroyed$));
+
     this.selectedCompany.subscribe((res: any) => {
       if (res) {
+        if(res.countryV2 !== null && res.countryV2 !== undefined) {
+          this.getStates(res.countryV2.alpha2CountryCode);
+        }
         if (res.subscription) {
           this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
           if (res.baseCurrency) {
@@ -574,7 +588,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         // get groups with accounts for general use
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
-        this.store.dispatch(this._generalActions.getAllState());
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._generalActions.getFlattenGroupsReq());
       }
@@ -1106,11 +1119,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.modelRefCrossLimit = this.modalService.show(template);
   }
 
-  public goToSelectPlan(template: TemplateRef<any>) {
+  public goToSelectPlan() {
     this.modalService.hide(1);
-    // this.router.navigate(['billing-detail']);
     this.router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
-    this.modelRefExpirePlan = this.modalService.show(template);
   }
 
   public onRight(nodes) {
@@ -1301,4 +1312,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return name;
   }
 
+  public getStates(countryCode) {
+    if(countryCode !== undefined && countryCode !== null && countryCode !== "") {
+      let statesRequest = new StatesRequest();
+      statesRequest.country = countryCode;
+      this.store.dispatch(this._generalActions.getAllState(statesRequest));
+    }
+  }
 }

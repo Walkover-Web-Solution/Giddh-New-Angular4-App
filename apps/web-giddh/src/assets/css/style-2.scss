@@ -313,9 +313,16 @@ input {
 
 /* my css start */
 
-// .basic, .table {
-//   border-collapse: collapse;
-// }
+.white-box {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.vat-report .tab-content {
+  padding: 0 15px;
+}
 .custom-tooltipe {
   position: absolute;
   top: -22px;
@@ -347,7 +354,9 @@ input {
 .mt-5 {
   margin-top: 50px;
 }
-
+.mrB0{
+    margin-bottom: 0;
+}
 .mb-1 {
   margin-bottom: 10px;
 }
@@ -1227,15 +1236,17 @@ modal-container.modal.fade.show {
   border-radius: 2px !important;
   padding: 6px !important;
   outline: 0;
-  color: #1c1c1c;
+  color: #484848 !important;
   box-shadow: none;
 }
-
-.form-control::-webkit-input-placeholder,
-.form-control::-webkit-input-placeholder,
-.form-control::-moz-placeholder,
-.form-control:-ms-input-placeholder,
-.form-control:-moz-placeholder {
+input{
+   color: #484848 !important;
+}
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-moz-placeholder, input::-moz-placeholder,
+.form-control:-ms-input-placeholder, input:-ms-input-placeholder,
+.form-control:-moz-placeholder, input:-moz-placeholder {
   color: #999999;
 }
 
@@ -1421,9 +1432,9 @@ header .navbar {
 .btn-default.active.focus .btn-default:disabled,
 .btn-default[disabled]:hover,
 .open>.dropdown-toggle.btn-default:focus,
-.open>.dropdown-toggle.btn-default:hover {
-  background: #EAEAEA;
-  color: $dark-blue00;
+.open>.dropdown-toggle.btn-default:hover, .btn-default:active, .btn-default:active:focus {
+  background: $border-blue;
+  color: #fff;
   border-color: $border-blue;
 }
 
@@ -1845,10 +1856,10 @@ p.table-email {
   border-left: 1px solid #ddd !important;
 }
 
-.top-five-cr-dr-table .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child{
+.top-five-cr-dr-table .basic > tbody > tr td:last-child, .top-five-cr-dr-table .basic > thead > tr th:last-child{
   border-right: none !important;
 }
-.top-five-cr-dr-table .basic > tbody > tr td:first-child, .basic > thead > tr th:first-child{
+.top-five-cr-dr-table .basic > tbody > tr td:first-child, .top-five-cr-dr-table .basic > thead > tr th:first-child{
    border-left:none !important;
 }
 /*
@@ -2312,8 +2323,8 @@ input[type=checkbox]:checked:after {
 }
 
 .campanien-list ul>li>a:hover {
-  color: #FF5F00;
-  background: #f4f5f8;
+  color: $lightTextBlue;
+  background: #eeeff9;
 }
 
 .campanien-list ul>li>a>span {
@@ -2373,7 +2384,7 @@ input[type=checkbox]:checked:after {
   background: #ebecee;
   padding: 20px;
   margin-bottom: 30px;
-  min-height: 180px;
+  min-height: 220px;
 }
 
 .company-box .inner-company-box>ul {
@@ -7894,8 +7905,10 @@ span.red-text {
   word-break: normal;
 }
 
-.multicurrencyTooltipInfo .tooltip-inner , .sidebarTooltip .tooltip-inner {
-   white-space: normal;
+.multicurrencyTooltipInfo, .invoice-preview, .sidebarTooltip {
+    .tooltip-inner {
+        white-space: normal;
+    }
 }
 .ratio-chart-block:first-child span.pie-text_center {
   color: #2681EF;
@@ -8020,7 +8033,7 @@ ul.dropdown-menu p.lead.pd {
 
 .settingPage ul.nav.nav-tabs {
   margin-bottom: 15px;
-  padding: 14px 0px 0 15px !important;
+  padding: 0 0px 0 15px !important;
   background-color: #F7F8FA;
   z-index: 9;
   position: relative;
@@ -8192,6 +8205,7 @@ button.btn.btn-filter {
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
 }
+
 /* responsive */
 
 @media (max-width: 1440px) {

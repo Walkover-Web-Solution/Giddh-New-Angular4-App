@@ -18,6 +18,9 @@ import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/Se
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import {CommonActions} from "../../actions/common.actions";
+import {OnboardingFormResponse} from "../../models/api-models/Common";
+import {SETTINGS_TAXES_ACTIONS} from "../../actions/settings/taxes/settings.taxes.const";
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -59,6 +62,30 @@ const AmazonInititalState: AmazonState = {
   isSellerUpdated: false
 };
 
+export interface Taxes {
+  taxes: [{
+    label: string;
+    value: string;
+    types: [{
+      label: string;
+      value: string;
+    }]
+    countries: [];
+  }]
+}
+
+const taxesInitialState: Taxes = {
+  taxes: [{
+    label: '',
+    value: '',
+    types: [{
+      label: '',
+      value: ''
+    }],
+    countries: []
+  }]
+};
+
 export interface SettingsState {
   integration: IntegrationPage;
   profile: any;
@@ -79,6 +106,7 @@ export interface SettingsState {
   profileRequest: boolean;
   isPaymentAdditionSuccess: boolean;
   isPaymentUpdationSuccess: boolean;
+  taxes: Taxes;
 }
 
 export const initialState: SettingsState = {
@@ -100,7 +128,8 @@ export const initialState: SettingsState = {
   amazonState: AmazonInititalState,
   isGmailIntegrated: false,
   isPaymentAdditionSuccess: false,
-  isPaymentUpdationSuccess: false
+  isPaymentUpdationSuccess: false,
+  taxes: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -648,6 +677,21 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       newState.isPaymentUpdationSuccess = false;
       return Object.assign({}, state, newState);
     }
+
+    case SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE:
+      let taxes: BaseResponse<any, string> = action.payload;
+      if (taxes.status === 'success') {
+        return Object.assign({}, state, {
+          taxes: taxes.body
+        });
+      }
+      return Object.assign({}, state, {});
+
+    case SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE: {
+      return {...state, taxes: null};
+    }
+
+
     //  endregion discount reducer
     default: {
       return state;

@@ -1,5 +1,5 @@
 /**new modal design**/
-
+@import '../../../../../assets/css/color.scss';
 .modal-body label {
     color: #707070;
     margin-bottom: 5px;
@@ -24,13 +24,13 @@ label .required {
 }
 
 .giddh_logo_welcome img {
-    max-width: 140px;
+    max-width: 200px;
     margin: 10px auto;
     display: block;
 }
 
 .welcome_wrapper {
-    padding: 40px 0;
+    padding: 58px 0;
 }
 
 .welcome_header:after {
@@ -45,7 +45,7 @@ label .required {
 .welcome_header h1 {
     font-size: 40px;
     font-family: 'opensans-regular';
-    color: #2F2F2F;
+    color: $pageTitleColor;
 }
 
 .add-companyDetail p {
