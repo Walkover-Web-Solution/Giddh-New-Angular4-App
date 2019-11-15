@@ -49,7 +49,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import * as moment from 'moment/moment';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import * as _ from '../lodash-optimized';
-import { cloneDeep, forEach, isEqual } from '../lodash-optimized';
+import { cloneDeep, isEqual } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
@@ -281,7 +281,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public originalReverseExchangeRate: number;
   public countryCode: string = '';
   private entriesListBeforeTax: SalesEntryClass[];
-  private statesSource$: Observable<any> = observableOf([]);
+
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
@@ -390,9 +390,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
         this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-        this.countryCode = profile.countryCode;
+        if (profile.countryCode) {
+            this.countryCode = profile.countryCode;
+        } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+            this.countryCode = profile.countryV2.alpha2CountryCode;
+        }
         if (!this.isUpdateMode) {
-          this.getUpdatedStateCodes(this.countryCode);
+            this.getUpdatedStateCodes(this.countryCode);
         }
       } else {
         this.customerCountryName = '';
@@ -783,14 +787,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
           if (tempSelectedAcc) {
             this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
             this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
-            this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
+
             this.isCustomerSelected = true;
             this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
             this.customerCountryName = tempSelectedAcc.country.countryName;
             if (this.isMulticurrencyAccount) {
               this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
-              this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode);
+              this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
+                this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
+              });
               this.companyCurrencyName = tempSelectedAcc.currency;
+            } else {
+                this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
             }
             // reset customer details so we don't have conflicts when we create voucher second time
             this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -1006,18 +1014,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
   public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
     this.customerCountryName = data.country.countryName;
-    this.getUpdatedStateCodes(data.country.countryCode, data);
+
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
 
-    // auto fill all the details
-    this.statesSource$.pipe(takeUntil(this.destroyed$)).subscribe((stateList: Array<any>) => {
-        if (stateList.length) {
-            this.invFormData.accountDetails = new AccountDetailsClass(data);
-        }
-    });
+      this.getUpdatedStateCodes(data.country.countryCode).then(() => {
+          // auto fill all the details
+          this.invFormData.accountDetails = new AccountDetailsClass(data);
+      });
   }
 
   public getStateCode(type: string, statesEle: SalesShSelectComponent) {
@@ -2744,7 +2750,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public modifyMulticurrencyRes(result: any) {
     let voucherClassConversion = new VoucherClass();
     let voucherDetails = new VoucherDetailsClass();
-    this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+      this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
     //voucherClassConversion.entries = result.entries;
     voucherClassConversion.entries = [];
     result.entries.forEach(entry => {
@@ -2979,33 +2985,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-    private getUpdatedStateCodes(currency: any, data?: any) {
-        if (currency) {
-            this.salesService.getStateCode(currency).subscribe(resp => {
-                let isNewUser: boolean;
-                if (data && data.addresses && data.addresses.length) {
-                    isNewUser = isNaN(data.addresses[0].stateCode);
-                }
-                this.statesSource = this.modifyStateResp(resp.body.stateList, isNewUser);
-                this.statesSource$ = observableOf(this.statesSource);
-                this.invFormData.accountDetails = new AccountDetailsClass(data);
-            });
-        }
+    /**
+     * Returns the promise once the state list is successfully
+	 * fetched to carry outn further operations
+     *
+     * @private
+     * @param {*} currency Currency code for the user
+     * @returns Promise to carry out further operations
+     * @memberof ProformaInvoiceComponent
+     */
+    private getUpdatedStateCodes(currency: any): Promise<any> {
+        return new Promise((resolve: Function) => {
+            if (currency) {
+                this.salesService.getStateCode(currency).subscribe(resp => {
+                    this.statesSource = this.modifyStateResp(resp.body.stateList);
+                    resolve();
+                }, () => { resolve(); });
+            } else {
+                resolve();
+            }
+        });
     }
 
-  private modifyStateResp(stateList: StateCode[], isNewUser?: boolean) {
-    let stateListRet: IOption[] = [];
-    if (isNewUser) {
+    private modifyStateResp(stateList: StateCode[]) {
+        let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
             stateListRet.push({ label: stateR.name, value: stateR.code });
         });
-    } else {
-        stateList.forEach(stateR => {
-            stateListRet.push({ label: stateR.name, value: stateR.stateGstCode });
-        });
+        return stateListRet;
     }
-    return stateListRet;
-  }
 
   public fillShippingBillingDetails($event: any, isBilling) {
     let cityName = $event.label;

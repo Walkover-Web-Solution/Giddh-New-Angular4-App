@@ -168,14 +168,14 @@ export class AccountDetailsClass {
         // set billing
         this.billingDetails.address = [];
         this.billingDetails.address.push(str);
-        this.billingDetails.state.code = attrs.addresses[0].stateCode;
+        this.billingDetails.state.code = (attrs.addresses[0].stateDTO) ? attrs.addresses[0].stateDTO.code : '';
         this.billingDetails.state.name = attrs.addresses[0].stateName;
         this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
         this.billingDetails.panNumber = '';
         // set shipping
         this.shippingDetails.address = [];
         this.shippingDetails.address.push(str);
-        this.shippingDetails.state.code = attrs.addresses[0].stateCode;
+        this.shippingDetails.state.code = (attrs.addresses[0].stateDTO) ? attrs.addresses[0].stateDTO.code : '';
         this.shippingDetails.state.name = attrs.addresses[0].stateName;
         this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
         this.shippingDetails.panNumber = '';
