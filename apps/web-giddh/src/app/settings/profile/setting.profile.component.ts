@@ -16,7 +16,7 @@ import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes }  from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal }  from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
-import {CountryRequest} from "../../models/api-models/Common";
+import {CountryRequest, OnboardingFormRequest} from "../../models/api-models/Common";
 import { GeneralActions } from '../../actions/general/general.actions';
 import { CommonActions } from '../../actions/common.actions';
 
@@ -71,6 +71,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public CompanySettingsObj: any = {};
   public numberSystemSource: IOption[] = [];
   public decimalDigitSource: IOption[] = [];
+  public selectedState : any = '';
+  public stateGstCode: any[] = [];
+  public formFields: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -187,12 +190,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           };
           profileObj.addresses.push(newGstObj);
         }
+
+        if(profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
+          profileObj.country = profileObj.countryV2.alpha2CountryCode;
+        }
+
         this.companyProfileObj = profileObj;
         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
         if (profileObj && profileObj.country) {
           if(profileObj.countryV2 !== undefined) {
-            this.getStates(profileObj.countryV2.alpha2CountryCode)
+            this.getStates(profileObj.countryV2.alpha2CountryCode);
+            this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
           }
 
           let countryName = profileObj.country.toLocaleLowerCase();
@@ -217,7 +226,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let isValid;
     if (gstDetails && gstDetails.length) {
       gstNumber = gstDetails[gstDetails.length - 1].taxNumber;
-      isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+      //isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(gstNumber)) {
+            isValid = true;
+          }
+        }
+      } else {
+        isValid = true;
+      }
     } else {
       isValid = true;
     }
@@ -268,9 +288,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
     }
 
-    // if (this.countryIsIndia) {
-    //   dataToSave.state = null;
-    // }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
   }
@@ -320,11 +337,39 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  // public checkGstNumValidation(ele: HTMLInputElement) {
+  //   let isInvalid: boolean = false;
+  //   if (ele.value) {
+  //     if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
+  //       this._toasty.errorToast('Invalid GST number');
+  //       ele.classList.add('error-box');
+  //       this.isGstValid = false;
+  //     } else {
+  //       ele.classList.remove('error-box');
+  //       this.isGstValid = true;
+  //     }
+  //   } else {
+  //     ele.classList.remove('error-box');
+  //   }
+  // }
+
   public checkGstNumValidation(ele: HTMLInputElement) {
-    let isInvalid: boolean = false;
+    let isValid: boolean = false;
+
     if (ele.value) {
-      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-        this._toasty.errorToast('Invalid GST number');
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(ele.value)) {
+            isValid = true;
+          }
+        }
+      } else {
+        isValid = true;
+      }
+
+      if (!isValid) {
+        this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;
       } else {
@@ -341,14 +386,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public setChildState(ele: HTMLInputElement, index: number) {
-    let stateCode: any = Number(ele.value.substring(0, 2));
-    if (stateCode <= 37) {
-      if (stateCode < 10 && stateCode !== 0) {
-        stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
-      } else if (stateCode === 0) {
-        stateCode = '';
-      }
-      this.companyProfileObj.addresses[index].stateCode = stateCode.toString();
+    let gstVal: string = ele.value;
+    if (gstVal.length >= 2) {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
+        let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
+        let s = state.find(st => st.value === stateCode);
+        _.uniqBy(s, 'value');
+        if(s) {
+          this.companyProfileObj.addresses[index].stateCode = s.value;
+        } else {
+          this.companyProfileObj.addresses[index].stateCode = '';
+        }
+      });
     } else {
       this.companyProfileObj.addresses[index].stateCode = '';
     }
@@ -424,6 +474,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.companyProfileObj.state = '';
       }
       this.getStates(event.value);
+      this.getOnboardingForm(event.value);
       this.patchProfile({country: this.companyProfileObj.country});
     }
   }
@@ -510,7 +561,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countrySource$ = observableOf(this.countrySource);
       } else {
         let countryRequest = new CountryRequest();
-        countryRequest.formName = '';
+        countryRequest.formName = 'onboarding';
         this.store.dispatch(this.commonActions.GetCountry(countryRequest));
       }
     });
@@ -529,6 +580,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
           this.statesInBackground.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
           this.statesSourceCompany.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
+
+          if(this.companyProfileObj.state === res.stateList[key].code) {
+              this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
+          }
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
         });
         this.statesSource$ = observableOf(this.states);
       } else {
@@ -548,6 +608,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currencySource$ = observableOf(this.currencies);
       } else {
         this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getOnboardingForm(countryCode) {
+    this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.fields).forEach(key => {
+          this.formFields[res.fields[key].name] = [];
+          this.formFields[res.fields[key].name] = res.fields[key];
+        });
+      } else {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
   }
