@@ -217,7 +217,7 @@
                               [(ngModel)]="gst.isDefault" name="isDefault+{{i}}" tooltip="Default GST"
                               placement="bottom" (change)="checkGstDetails()" />
                           </div>
-                          <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)" [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
+                          <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)" [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
                           <div class="input-group-addon">
                             <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true"
                               style="font-size:18px;" tooltip="Delete GST" placement="right"></i>
