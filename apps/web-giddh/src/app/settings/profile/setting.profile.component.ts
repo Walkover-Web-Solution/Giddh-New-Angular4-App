@@ -199,7 +199,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
         if (profileObj && profileObj.country) {
-          if(profileObj.countryV2 !== undefined) {
+          if(profileObj.countryV2 !== undefined && this.states.length === 0) {
             this.getStates(profileObj.countryV2.alpha2CountryCode);
             this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
           }
@@ -233,6 +233,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           let regex = new RegExp(this.formFields['taxName']['regex'][key]);
           if(regex.test(gstNumber)) {
             isValid = true;
+            break;
           }
         }
       } else {
@@ -362,6 +363,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           let regex = new RegExp(this.formFields['taxName']['regex'][key]);
           if(regex.test(ele.value)) {
             isValid = true;
+            break;
           }
         }
       } else {

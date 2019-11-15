@@ -195,7 +195,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     baseCurrency: '',
     country: ''
   };
-  public companyExists: boolean = true;
+  public pageUrl: string = "";
 
   /**
    *
@@ -222,7 +222,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _breakpointObserver: BreakpointObserver,
     private _generalService: GeneralService
   ) {
-    console.log(this.route);
+    this.pageUrl = this.router.url;
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
     // Reset old stored application date
@@ -245,10 +245,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       if (!companies || companies.length === 0) {
-        this.companyExists = false;
         return;
-      } else {
-        this.companyExists = true;
       }
 
       let orderedCompanies = _.orderBy(companies, 'name');
