@@ -8,8 +8,8 @@ import { VatReportListComponent } from './components/test/vat-report-list.compon
     RouterModule.forChild([
       {
         path: '', component: VatReportComponent, children: [
-          {path: '', redirectTo: 'select'},
-          {path: 'vat-list', component: VatReportListComponent},
+        //   {path: '', redirectTo: 'select'},
+        //   {path: 'vat-list', component: VatReportListComponent},
         ]
       }
     ])
