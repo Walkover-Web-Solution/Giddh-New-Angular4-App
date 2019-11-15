@@ -55,7 +55,7 @@
     </div>
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-        <tab heading="GSTIN/Address" class="gstinAddress">
+        <tab heading="Address" class="gstinAddress">
             <ng-container>
                 <div class="gstinForm" formArrayName="addresses">
                     <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -98,11 +98,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <!-- <div class="form-group">
-                                    <label>GSTIN</label>
-                                    <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
-                                </div> -->
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                                     <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup class="text-danger">*</sup></label>
                                     <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                     />
@@ -117,10 +113,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-4" [ngStyle]="{display : gst.get('gstNumber').value && isGstValid ? 'block' : ' none' }">
                                 <div class="form-group">
                                     <label class="d-block">&nbsp;</label>
-                                    <input type="checkbox"><label>&nbsp; Is Composite? </label>
+                                    <label *ngIf="gst.get('gstNumber').value && isGstValid">
+                                    <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is Composite? </label></label>
+                                    <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                        <i class="fa fa-times"> </i> Remove
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -144,8 +144,6 @@
                     </div>
                 </div>
             </div>
-
-
         </tab>
         <tab heading="Contact" class="ContactFromWrap">
             <div class="contactForm">
@@ -231,42 +229,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="bankDetailForm" formArrayName="accountBankDetails">
-                        <div class=" row " *ngFor="let bank of addAccountForm.get( 'accountBankDetails')[ 'controls'];let i=i ndex;let f=f irst; let l=l ast " [formGroupName]="i ">
-                            <div class="col-sm-5 ">
-                                <div class="form-group ">
-                                    <label>Bank Name</label>
-                                    <input type="text " class="form-control " name="bankName_{{i}} " formControlName="bankName " />
-                                </div>
-                            </div>
-                            <div class="col-sm-4 ">
-                                <div class="form-group ">
-                                    <label>Account No.</label>
-                                    <div class="d-flex ">
-                                        <input type="text " class="form-control " name="accountNum_{{i}} " formControlName="bankAccountNo " />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 ">
-                                <div class="form-group ">
-                                    <label>IFSC Code</label>
-                                    <div class="d-flex ">
-                                        <input type="text " class="form-control " name="ifsc_{{i}} " formControlName="ifsc " />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-            <!-- <div class="row ">
-                        <div class="col-sm-12 ">
-                            <div class="button-group mrT3 ">
-                                <button class="btn btn-cancel ">Cancel</button>
-                                <button class="btn btn-success ">Save</button>
-                            </div>
-                        </div>
-                    </div> -->
-
 
         </tab>
 
