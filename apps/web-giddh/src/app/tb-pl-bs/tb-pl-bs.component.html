@@ -1,13 +1,18 @@
-<div class="container-fluid">
-  <tabset id="settingTab" #staticTabsTBPL>
+<tabset class="settingPage" id="settingTab" #staticTabsTBPL>
     <tab heading="Trial Balance" (select)="CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
-      <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
+        <div class="container-fluid">
+            <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
+        </div>
     </tab>
     <tab heading="Profit &amp; Loss" (select)="CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
-      <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
+        <div class="container-fluid">
+            <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
+        </div>
     </tab>
     <tab heading="Balance Sheet" (select)="CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
-      <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
+        <div class="container-fluid">
+            <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
+        </div>
     </tab>
 
     <!--hide this tab for now-->
@@ -18,5 +23,4 @@
     <!-- <tab heading="Synram Design">
         <tb-synram></tb-synram>
     </tab> -->
-  </tabset>
-</div>
+</tabset>

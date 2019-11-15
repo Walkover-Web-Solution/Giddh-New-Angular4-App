@@ -1236,15 +1236,17 @@ modal-container.modal.fade.show {
   border-radius: 2px !important;
   padding: 6px !important;
   outline: 0;
-  color: #1c1c1c;
+  color: #484848 !important;
   box-shadow: none;
 }
-
-.form-control::-webkit-input-placeholder,
-.form-control::-webkit-input-placeholder,
-.form-control::-moz-placeholder,
-.form-control:-ms-input-placeholder,
-.form-control:-moz-placeholder {
+input{
+   color: #484848 !important;
+}
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder, input::-webkit-input-placeholder,
+.form-control::-moz-placeholder, input::-moz-placeholder,
+.form-control:-ms-input-placeholder, input:-ms-input-placeholder,
+.form-control:-moz-placeholder, input:-moz-placeholder {
   color: #999999;
 }
 
@@ -8203,6 +8205,9 @@ button.btn.btn-filter {
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
 }
+button.ladda-button, button.ladda-button .ladda-spinner, button.ladda-button .ladda-label{
+    transition: none !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8252,6 +8257,85 @@ button.btn.btn-filter {
     width: 90px;
     height: 90px;
     font-size: 14px;
+  }
+}
+
+@media(max-width:991px){
+    .form-bg {
+    width: 100%;
+  }
+  // .col_wrapper:nth-child(1) {
+  //   position: relative !important;
+  //   height: auto !important;
+  //   width: 100% !important;
+  // }
+  .grp_col {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .grp_list .list-item {
+    display: inline-block;
+  }
+  .col_wrapper {
+    white-space: initial;
+  }
+  .col_wrapper:nth-child(2) {
+    margin-left: 0px;
+    width: 100%;
+  }
+  .grp_list {
+    padding: 0px;
+    background: #f4f5f8;
+    width: 100%;
+    display: block;
+  }
+  .usesr-last-list > li:last-child {
+    height: inherit !important;
+  }
+  .xs-left {
+    text-align: left !important;
+  }
+  .form_box.form-bg {
+    height: auto !important;
+    min-height: auto;
+  }
+  .left-account-opration {
+    height: initial !important;
+    width: 100%;
+    background: #fff;
+  }
+  .usesr-last-list > li {
+    display: inline-block;
+  }
+  #inventory-sidebar {
+    min-height: initial;
+    width: 100% !important;
+  }
+  .stock-grp-list:first-child {
+    max-height: initial !important;
+    min-height: initial !important;
+  }
+  .rightBar {
+    width: 100% !important;
+  }
+  .sticky-footer {
+    position: relative;
+  }
+  .stock-lists {
+    position: absolute;
+    box-shadow: 0 3px 6px #ccc;
+    background: #fff;
+    min-width: 200px;
+    display: inline-block;
+    z-index: 9;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .stock-grp-list > li {
+    display: inline-block;
+    border: 0px;
+    position: relative;
   }
 }
 
@@ -8722,14 +8806,16 @@ button.btn.btn-filter {
   .form-bg {
     width: 100%;
   }
-  .col_wrapper:nth-child(1) {
-    position: relative;
-    height: auto;
-    width: 100%;
-  }
+  // .col_wrapper:nth-child(1) {
+  //   position: relative;
+  //   height: auto;
+  //   width: 100%;
+  // }
   .grp_col {
-    float: none;
-    width: 100%;
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
   }
   .grp_list .list-item {
     display: inline-block;
@@ -8742,7 +8828,7 @@ button.btn.btn-filter {
     width: 100%;
   }
   .grp_list {
-    padding: 0px;
+    padding: 10px 0px !important;
     background: #f4f5f8;
     width: 100%;
     display: block;
@@ -8762,7 +8848,7 @@ button.btn.btn-filter {
   }
   .left-account-opration {
     height: initial !important;
-    width: 100%;
+    width: 100% !important;
   }
   .usesr-last-list>li {
     display: inline-block;
@@ -8791,12 +8877,13 @@ button.btn.btn-filter {
   }
   .col_wrapper:nth-child(1) {
     background: transparent;
+    position: relative;
   }
   .grp_list:nth-child(2) {
     background-color: #fff;
   }
   .col_wrapper.left-account-opration:nth-child(3),
-  .col_wrapper.left-account-opration:nth-child(2) {
+  .col_wrapper.left-account-opration:nth-child(2), .col_wrapper.left-account-opration:nth-child(4) {
     border-top: 1px solid #ddd;
   }
   .mangeAccountPopup.modal {
@@ -8807,13 +8894,32 @@ button.btn.btn-filter {
     box-shadow: none;
     border: none;
   }
+  .wrapAccountSidebar ,  .wrapAccountSidebar .grp_wrapper {
+    width: 100% !important;
+
+}
+.addManageGroupAcc {
+    overflow-y: auto !important;
+}
+ .grp_list li a, .new_btn_ul li a{
+       display: initial;
+ }
+ ul.grp_list.usesr-last-list:first-child{
+       min-height: 150px;
+ }
 }
 
 @media only screen and (max-width: 480px) {
   td.pItem.price .my-dropdown-menu {
     width: 180px !important;
   }
-
+// manage group account
+.addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-8 , .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
+    width: 100%;
+}
+.addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
+    margin-top: 5px;
+}
 
 
 }

@@ -54,6 +54,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   public taxListSource$: Observable<IOption[]> = observableOf([]);
   public taxNameTypesMapping: any[] = [];
   public selectedCompany: Observable<CompanyResponse>;
+  public selectedTax: string = '';
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -235,6 +236,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
           if(res.taxes[key].types.length > 0) {
             this.taxNameTypesMapping[res.taxes[key].value] = [];
             this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
+          }
+
+          if(res.taxes[key].value === this.newTaxObj.taxType) {
+            this.selectedTax = res.taxes[key].label;
           }
 
           this.taxList.push({ label: res.taxes[key].label, value: res.taxes[key].value });
