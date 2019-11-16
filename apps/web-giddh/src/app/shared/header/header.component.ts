@@ -869,9 +869,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public logout() {
     if (isElectron) {
-      // this._aunthenticationServer.GoogleProvider.signOut();
+      this._generalService.createNewCompany = null;
+      this.store.dispatch(this.companyActions.removeCompanyCreateSession());
       this.store.dispatch(this.loginAction.ClearSession());
     } else {
+      this._generalService.createNewCompany = null;
+      this.store.dispatch(this.companyActions.removeCompanyCreateSession());
       // check if logged in via social accounts
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
         if (val) {
@@ -882,12 +885,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.loginAction.ClearSession());
             this.store.dispatch(this.loginAction.socialLogoutAttempt());
           });
-
         } else {
           this.store.dispatch(this.loginAction.ClearSession());
         }
       });
-
     }
   }
 
@@ -1315,5 +1316,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       statesRequest.country = countryCode;
       this.store.dispatch(this._generalActions.getAllState(statesRequest));
     }
+  }
+
+  public removeCompanySessionData() {
+    this._generalService.createNewCompany = null;
+    this.store.dispatch(this.companyActions.removeCompanyCreateSession());
   }
 }
