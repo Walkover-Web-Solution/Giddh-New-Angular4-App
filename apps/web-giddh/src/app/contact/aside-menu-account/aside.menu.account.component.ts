@@ -25,7 +25,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
           top: 0;
           right: 0;
           bottom: 0;
-          max-width: 600px;
+          max-width: 760px;
           width: 100%;
           z-index: 99999;
       }
@@ -49,7 +49,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
       }
 
       :host .aside-pane {
-          max-width: 600px;
+          max-width: 760px;
           width: 100%;
       }
 .aside-body{

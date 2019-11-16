@@ -5452,7 +5452,8 @@ input[type='checkbox'][disabled]:after {
 
 .active-toggle-btn {
   color: white;
-  background-color: #ff5f00;
+  background-color:$border-blue;
+  border-color: $border-blue;
 }
 
 .input-group-addon input[type="radio"] {
@@ -5460,28 +5461,31 @@ input[type='checkbox'][disabled]:after {
 }
 
 .input-group-addon input[type="radio"]:before {
-  content: ' ';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  top: -3px;
-  right: -2px;
-  border: 2px solid #969696;
-  border-radius: 50%;
-}
 
+content: ' ';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    top: -1px;
+    right: -2px;
+    border: 1px solid #999;
+    border-radius: 50%;
+}
+.input-group-addon input[type="radio"]:checked:before{
+    border-color: #5b64c9;
+}
 .input-group-addon input[type="radio"]:checked:after {
-  content: ' ';
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #ff5f00;
-  left: 2px;
-  top: 3px;
-  border-radius: 50%;
-  right: 0;
-  text-align: center;
+    content: ' ';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #5b64c9;
+    left: 1px;
+    top: 3px;
+    border-radius: 50%;
+    right: 0;
+    text-align: center;
 }
 
 .searchBar a {
@@ -8219,7 +8223,7 @@ button.btn.btn-filter {
 .select2-ledger .menu .item:hover a {
     color: #5B64C9;
 }
-.accountAsideMenuState2 #close{
+.accountAsideMenuState2 #close {
         display: block;
    position: absolute;
     right: 0;

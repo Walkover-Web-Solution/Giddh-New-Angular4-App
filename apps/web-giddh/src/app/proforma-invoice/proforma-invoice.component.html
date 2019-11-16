@@ -2273,7 +2273,7 @@
      asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-  (closeAsideEvent)="toggleAccountAsidePane($event)"
+  (closeAsideEvent)="toggleAccountAsidePane($event)" class="accountAsideMenuState2"
   [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
   [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
   [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()"
