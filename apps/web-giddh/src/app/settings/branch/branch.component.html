@@ -14,16 +14,10 @@
         </div>
         <div class="contentView mrL2">
           <div class="">
-            <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                type="radio" [value]="'Table View'">Table View
-            </span>
-
-            <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                type="radio" [value]="'Card View'" (click)="branchCardView = !branchCardView">Card View </span>
+            <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'table') ? true : false" (click)="changeBranchViewType('table');">Table View</span>
+            <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'card') ? true : false" (click)="changeBranchViewType('card');">Card View </span>
           </div>
-
         </div>
-
       </div>
     </form>
     <div class="col-sm-4">
@@ -31,62 +25,50 @@
     </div>
   </div>
 </div>
-
-
-
-<div class="" *ngIf="(branches$ | async)?.length > 0">
-
-  <table class="table basic table-bordered mrT2" *ngIf="branchTableView">
+<div *ngIf="(branches$ | async)?.length > 0">
+  <table class="table basic table-bordered mrT2" *ngIf="branchViewType === 'table'">
     <thead>
       <tr>
-        <th>
-          Branch Name
-        </th>
+        <th>Branch Name</th>
         <th>GSTIN</th>
         <th>Contact No.</th>
         <th class="text-right">Total Sales</th>
         <th class="text-right">Total Expenses</th>
-        <th class="text-right">Total taxes</th>
-        <th class="text-right">Total Stock</th>
+        <th class="text-right">Total Taxes</th>
+<!--        <th class="text-right">Total Stock</th>-->
       </tr>
-
     </thead>
     <tbody>
-      <tr *ngFor="let branchTableData of branchTable">
-        <td>{{branchTableData.BranchName}}</td>
-        <td>{{branchTableData.GSTIN}}</td>
-        <td>{{branchTableData.ContactNumber}}</td>
-        <td class="text-right">{{branchTableData.TotalSales}}</td>
-        <td class="text-right">{{branchTableData.TotalExpenses}}</td>
-        <td class="text-right">{{branchTableData.TotalTaxes}}</td>
-        <td class="text-right">{{branchTableData.TotalStock}}</td>
+      <tr *ngFor="let branch of branches$ | async">
+        <td>{{branch.name}}</td>
+        <td>{{branch?.addresses[0]?.taxNumber}}</td>
+        <td>{{branch.contactNo}}</td>
+        <td class="text-right"><span *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span></td>
+        <td class="text-right"><span *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span></td>
+        <td class="text-right"><span *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span></td>
+<!--        <td class="text-right">&nbsp;</td>-->
       </tr>
     </tbody>
   </table>
 
-  <div class="branchCardView" *ngIf="branchCardView">
+  <div class="branchCardView" *ngIf="branchViewType === 'card'">
     <div class="row">
-      <div class="col-md-4 pdR1">
+      <div class="col-md-4 pdR1" *ngFor="let branch of branches$ | async">
 
         <div class="branchCard">
           <div class="cardBasicDetails">
-            <h2>Walkover Web Solutions Banglore</h2>
+            <h2>{{branch.name}}</h2>
             <div class="clearfix">
               <span class="mrR1 pull-left">Contact:</span>
-              <span class="pull-left"> +91 9876543210</span>
+              <span class="pull-left">{{branch.contactNo}}</span>
             </div>
             <div class="clearfix">
               <span class="mrR1 pull-left">GSTIN:</span>
-              <span class="pull-left"> not
-                available</span>
+              <span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
             </div>
             <div class="clearfix">
               <span class="mrR1 pull-left">Address:</span>
-              <span class="pull-left">
-
-                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
-                Hospital, Indore-452080, MP
-              </span>
+              <span class="pull-left">{{branch?.addresses[0]?.address}}</span>
             </div>
           </div>
           <div class="branchSalesDetails">
@@ -94,152 +76,29 @@
               <span class="pull-left">
                 <label>Total Sales</label>
               </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
+              <span class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span>
+              <span class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
             </div>
             <div class="clearfix">
               <span class="pull-left">
                 <label>Total Expenses</label>
               </span>
-              <span class="pull-right">
-                1,21,900
-              </span>
+              <span class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span>
+              <span class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
             </div>
             <div class="clearfix">
               <span class="pull-left">
                 <label>Total Taxes</label>
               </span>
-              <span class="pull-right">
-                58,000
-              </span>
+              <span class="pull-right" *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span>
+              <span class="pull-right" *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
             </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Stock</label>
-              </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 pdL1 pdR1">
-
-        <div class="branchCard">
-          <div class="cardBasicDetails">
-            <h2>Walkover Web Solutions Banglore</h2>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">Contact:</span>
-              <span class="pull-left"> +91 9876543210</span>
-            </div>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">GSTIN:</span>
-              <span class="pull-left"> not
-                available</span>
-            </div>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">Address:</span>
-              <span class="pull-left">
-
-                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
-                Hospital, Indore-452080, MP
-              </span>
-            </div>
-          </div>
-          <div class="branchSalesDetails">
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Sales</label>
-              </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Expenses</label>
-              </span>
-              <span class="pull-right">
-                1,21,900
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Taxes</label>
-              </span>
-              <span class="pull-right">
-                58,000
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Stock</label>
-              </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 pdL1">
-
-        <div class="branchCard">
-          <div class="cardBasicDetails">
-            <h2>Walkover Web Solutions Banglore</h2>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">Contact:</span>
-              <span class="pull-left"> +91 9876543210</span>
-            </div>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">GSTIN:</span>
-              <span class="pull-left"> not
-                available</span>
-            </div>
-            <div class="clearfix">
-              <span class="mrR1 pull-left">Address:</span>
-              <span class="pull-left">
-
-                WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash
-                Hospital, Indore-452080, MP
-              </span>
-            </div>
-          </div>
-          <div class="branchSalesDetails">
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Sales</label>
-              </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Expenses</label>
-              </span>
-              <span class="pull-right">
-                1,21,900
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Taxes</label>
-              </span>
-              <span class="pull-right">
-                58,000
-              </span>
-            </div>
-            <div class="clearfix">
-              <span class="pull-left">
-                <label>Total Stock</label>
-              </span>
-              <span class="pull-right">
-                25,00,000
-              </span>
-            </div>
+<!--            <div class="clearfix">-->
+<!--              <span class="pull-left">-->
+<!--                <label>Total Stock</label>-->
+<!--              </span>-->
+<!--              <span class="pull-right">&nbsp;</span>-->
+<!--            </div>-->
           </div>
         </div>
       </div>

@@ -49,6 +49,21 @@ export class Addresses {
   public taxNumber: string;
 }
 
+export class CompanyTotals {
+  public sales: {
+    amount: any;
+    type: any;
+  };
+  public expenses: {
+    amount: any;
+    type: any;
+  };
+  public taxes: {
+    amount: any;
+    type: any;
+  };
+}
+
 export class CompanyResponse {
   public canUserSwitch: boolean;
   public companyIdentity: any[];
@@ -82,6 +97,7 @@ export class CompanyResponse {
   public balanceDisplayFormat?: string;
   public balanceDecimalPlaces?: string;
   public baseCurrencySymbol?: string;
+  public companyTotals: CompanyTotals;
 }
 
 export interface UserEntityRole {

@@ -22,6 +22,7 @@ export class CommonActions {
   public static GET_ONBOARDING_FORM = 'GetOnboardingForm';
   public static GET_ONBOARDING_FORM_RESPONSE = "GetOnboardingFormResponse";
   public static RESET_ONBOARDING_FORM_RESPONSE = "ResetOnboardingFormResponse";
+  public static RESET_COUNTRY = 'ResetCountry';
 
   @Effect()
   public getCountry$: Observable<Action> = this.action$
@@ -110,6 +111,12 @@ export class CommonActions {
   public resetOnboardingForm(): CustomActions {
     return {
       type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
+    };
+  }
+
+  public resetCountry(): CustomActions {
+    return {
+      type: CommonActions.RESET_COUNTRY
     };
   }
 }

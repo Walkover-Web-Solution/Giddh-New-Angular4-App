@@ -136,22 +136,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public ngOnInit() {
 		this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+			console.log(res);
 			if (res) {
-				if (!res.isBranch && !res.city) {
-					this.isbranch = res.isBranch;
-					this.createNewCompany = res;
-					this.company = this.createNewCompany;
-					if (this.company.contactNo.toString().includes('-')) {
-						let contact = this.company.contactNo.split('-');
-						this.company.contactNo = contact[1];
-					}
-					this.prepareWelcomeForm();
+				this.isbranch = res.isBranch;
+				this.createNewCompany = res;
+				this.company = this.createNewCompany;
+				if (this.company.contactNo.toString().includes('-')) {
+					let contact = this.company.contactNo.split('-');
+					this.company.contactNo = contact[1];
 				}
+				this.prepareWelcomeForm();
 			}
 		});
 		this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
 			if (res) {
-				if (res.isBranch && res.city) {
+				if (res.isBranch) {
 					this.isbranch = res.isBranch;
 					this.createNewCompany = res;
 					this.company = this.createNewCompany;

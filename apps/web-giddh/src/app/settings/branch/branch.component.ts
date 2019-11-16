@@ -8,10 +8,11 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
-import { CompanyAddComponent } from '../../shared/header/components';
+import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
@@ -54,57 +55,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   public selectedBranch: string = null;
   public isBranch: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public branchCardView = false;
-  public branchTableView = true;
+  public branchViewType: string = 'table';
   public hideOldData = false;
-  branchTable = [
-    {
-      BranchName: "{{branch.name}}",
-      GSTIN: '-',
-      ContactNumber: '1234567890',
-      TotalSales: '25,00,000',
-      TotalExpenses: '1,21,900',
-      TotalTaxes: '58,000',
-      TotalStock: '30,00,000',
-    },
-    {
-      BranchName: "{{branch.name}}",
-      GSTIN: '-',
-      ContactNumber: '1234567890',
-      TotalSales: '25,00,000',
-      TotalExpenses: '1,21,900',
-      TotalTaxes: '58,000',
-      TotalStock: '30,00,000',
-    },
-    {
-      BranchName: "{{branch.name}}",
-      GSTIN: '-',
-      ContactNumber: '1234567890',
-      TotalSales: '25,00,000',
-      TotalExpenses: '1,21,900',
-      TotalTaxes: '58,000',
-      TotalStock: '30,00,000',
-    },
-    {
-      BranchName: "{{branch.name}}",
-      GSTIN: '-',
-      ContactNumber: '1234567890',
-      TotalSales: '25,00,000',
-      TotalExpenses: '1,21,900',
-      TotalTaxes: '58,000',
-      TotalStock: '30,00,000',
-    }
-  ]
-
-
-
 
   constructor(
     private store: Store<AppState>,
     private settingsBranchActions: SettingsBranchActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private companyActions: CompanyActions,
-    private settingsProfileActions: SettingsProfileActions
+    private settingsProfileActions: SettingsProfileActions,
+    private commonActions: CommonActions
   ) {
 
     this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
@@ -160,11 +120,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 10);
       }
     })).pipe(takeUntil(this.destroyed$)).subscribe();
-
   }
 
   public ngOnInit() {
-    this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+    this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         if (res.isBranch) {
           this.isBranch = res.isBranch;
@@ -193,15 +152,17 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public loadAddCompanyComponent() {
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
+    this.store.dispatch(this.commonActions.resetCountry());
+
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
     let viewContainerRef = this.companyadd.viewContainerRef;
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as CompanyAddComponent).createBranch = true;
-    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
+    (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
       this.hideAddCompanyModal();
     });
-    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+    (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
       this.hideCompanyModalAndShowAddAndManage();
     });
   }
@@ -295,5 +256,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isAllSelected$ = observableOf(false);
       }
     });
+  }
+
+  public changeBranchViewType(viewType) {
+    this.branchViewType = viewType;
   }
 }

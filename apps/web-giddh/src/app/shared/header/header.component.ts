@@ -9,6 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
 import {
   ActiveFinancialYear,
   CompanyCountry,
@@ -220,7 +221,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private changeDetection: ChangeDetectorRef,
     private _windowRef: WindowRef,
     private _breakpointObserver: BreakpointObserver,
-    private _generalService: GeneralService
+    private _generalService: GeneralService,
+    private commonActions: CommonActions
   ) {
     this.pageUrl = this.router.url;
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -1320,6 +1322,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public removeCompanySessionData() {
     this._generalService.createNewCompany = null;
+    this.store.dispatch(this.commonActions.resetCountry());
     this.store.dispatch(this.companyActions.removeCompanyCreateSession());
   }
 }
