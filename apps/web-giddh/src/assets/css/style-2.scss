@@ -1390,9 +1390,9 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-  background: #fff;
-  color: $border-blue;
+ background: #fff;
   border-color: $border-blue;
+  color: $dark-blue00;
 }
 
 .btn-primary:hover,
@@ -1402,8 +1402,8 @@ header .navbar {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary,
 .btn-primary:active:focus {
-  background: #eee;
-  color: $border-blue;
+  background: $border-blue;
+  color: #fff;
   border-color: $border-blue;
 }
 
