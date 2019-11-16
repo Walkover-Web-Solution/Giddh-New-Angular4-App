@@ -194,6 +194,7 @@ ul.selectActionDropdown {
 }
 
 
+
 .proforma-container {
     padding: 0 15px;
 }
@@ -318,6 +319,11 @@ display: none;
 }
 .input-grp-dateRangePicker .form-group {
   margin-bottom: 10px;
+}
+}
+@media(max-width:767px){
+    .proforma-container {
+    padding-top: 60px;
 }
 }
 @media(max-width:500px){

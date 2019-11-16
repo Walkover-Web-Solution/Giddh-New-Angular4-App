@@ -11,6 +11,7 @@ import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxe
 import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import {createSelector} from "reselect";
+import {IForceClear} from "../../models/api-models/Sales";
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -22,17 +23,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
   @Input() public tax: TaxResponse;
   @Input() public asidePaneState: string;
-
-  // public taxList: IOption[] = [
-  //   {label: 'GST', value: 'gst'},
-  //   {label: 'COMMONGST', value: 'commongst'},
-  //   {label: 'InputGST', value: 'inputgst'},
-  //   {label: 'TDS', value: 'tds'},
-  //   {label: 'TCS', value: 'tcs'},
-  //   {label: 'CESS', value: 'gstcess'},
-  //   {label: 'Others', value: 'others'},
-  //
-  // ];
   public taxList: IOption[] = [];
   public duration: IOption[] = [
     {label: 'Monthly', value: 'MONTHLY'},
@@ -55,7 +45,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   public taxNameTypesMapping: any[] = [];
   public selectedCompany: Observable<CompanyResponse>;
   public selectedTax: string = '';
-
+  public forceClear$: Observable<IForceClear> = observableOf({status: false});
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions, private _toaster: ToasterService) {
@@ -103,29 +93,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
       }
       this.flattenAccountsOptions = arr;
     });
-    // this.store
-    //   .pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$))
-    //   .subscribe(data => {
-    //     if (data) {
-    //       let arr: IOption[] = [];
-    //       data.forEach(acc => {
-    //         if (acc.uniqueName === "currentliabilities") {
-    //           if (acc.groups) {
-    //             acc.groups.forEach(grp => {
-    //               if (grp.uniqueName === "dutiestaxes") {
-    //                 if (grp.groups) {
-    //                   grp.groups.forEach(subgrp => {
-    //                     arr.push({label: `${subgrp.name} - (${subgrp.uniqueName})`, value: subgrp.uniqueName});
-    //                   });
-    //                 }
-    //               }
-    //             });
-    //           }
-    //         }
-    //       });
-    //       this.flattenAccountsOptions = arr;
-    //     }
-    //   });
 
     this.store
       .pipe(select(p => p.company.taxes), takeUntil(this.destroyed$))
@@ -192,11 +159,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     let dataToSave = _.cloneDeep(this.newTaxObj);
 
     if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-      if (dataToSave.tdsTcsTaxSubTypes === 'rc') {
-        dataToSave.taxType = `${dataToSave.taxType}rc`;
-      } else {
-        dataToSave.taxType = `${dataToSave.taxType}pay`;
-      }
+        dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
     }
 
     dataToSave.taxDetail = [{
@@ -249,5 +212,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         this.store.dispatch(this._settingsTaxesActions.GetTaxList(countryCode));
       }
     });
+  }
+
+  public selectTax(event) {
+    this.newTaxObj.tdsTcsTaxSubTypes = "";
+    this.forceClear$ = observableOf({status: true});
   }
 }
