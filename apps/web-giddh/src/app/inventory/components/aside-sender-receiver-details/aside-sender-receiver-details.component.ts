@@ -1,63 +1,82 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { digitsOnly } from '../../../helpers';
-import { AccountsAction } from '../../../../actions/accounts.actions';
-import { AppState } from '../../../../store';
-import { select, Store } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
-import { CompanyService } from '../../../../services/companyService.service';
-import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
-import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States, StatesRequest } from '../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../actions/company.actions';
-import * as _ from '../../../../lodash-optimized';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { IForceClear } from "../../../../models/api-models/Sales";
-import { CountryRequest } from "../../../../models/api-models/Common";
-import { CommonActions } from '../../../../actions/common.actions';
-import { GeneralActions } from "../../../../actions/general/general.actions";
-
+import { Component, Output, EventEmitter, ViewChild, Input, ElementRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
+import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { AccountsAction } from '../../../actions/accounts.actions';
+import { CompanyActions } from '../../../actions/company.actions';
+import { CommonActions } from '../../../actions/common.actions';
+import { ToasterService } from '../../../services/toaster.service';
+import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
+import { CompanyService } from '../../../services/companyService.service';
+import { GeneralActions } from '../../../actions/general/general.actions';
+import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
+import { IOption } from '../../../theme/ng-select/ng-select';
+import { CompanyResponse, StatesRequest } from '../../../models/api-models/Company';
+import { IForceClear } from '../../../models/api-models/Sales';
+import { AccountRequestV2 } from '../../../models/api-models/Account';
+import { IContriesWithCodes } from '../../../models/interfaces/common.interface';
+import { contriesWithCodes } from '../../../shared/helpers/countryWithCodes';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { CountryRequest } from '../../../models/api-models/Common';
+import { digitsOnly } from '../../../shared/helpers';
 @Component({
-    selector: 'account-add-new',
-    templateUrl: 'account-add-new.component.html',
+    selector: 'aside-sender-receiver-details-pane',
     styles: [`
-    .hsn-sac {
-      left: 51px;
-      position: relative;
+    :host {
+      position: fixed;
+      left: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 600px;
+      max-width: 100%;
+      z-index: 99999;
     }
 
-    .hsn-sac-radio {
-      top: 34px;
-      position: relative;
-      left: -10px;
+    #close {
+      display: none;
     }
 
-    .hsn-sac-w-m-input {
-      width: 144px;
-      margin-left: 50px;
+    :host.in #close {
+      display: block;
+    position: absolute;
+    left: auto;
+    top: 14px;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    right: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 20px;
     }
 
-    .hsn-sac-group {
-      position: relative;
-      top: -75px;
-      left: 197px;
+    :host .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
     }
 
-    .save-btn {
-      font-weight: 600;
-      color: #0aa50a;
-      letter-spacing: 1px;
-      background-color: #dcdde4;
+    :host .aside-pane {
+      width: 600px;
+      max-width: 600px;
     }
-  `]
+
+    .aside-body {
+      margin-bottom: 80px;
+    }
+.aside-pane{
+  padding:0;
+}
+  `],
+    templateUrl: './aside-sender-receiver-details.component.html',
+    styleUrls: ['./aside-sender-reciver-details.component.scss'],
 })
+export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
 
-export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
+    public addAddress = false;
+    public bankDetails = false;
+
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
@@ -102,6 +121,42 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
 
+    // public selectAccount = [{
+    //     label: 'Sundry Debtors', value: 'Sundry Debtors'
+    // }, {
+    //     label: 'Sundry Creditors', value: 'Sundry Creditors'
+    // }];
+
+    // // public selectCountry: IOption[] = [{
+    // //     label: 'IN - India', value: 'IN - India'
+    // // }, {
+    // //     label: 'US - USA', value: 'US - USA'
+    // // }];
+
+    // public partyType = [{
+    //     label: 'Register', value: 'Register'
+    // }, {
+    //     label: 'Unregister', value: 'Unregister'
+    // }];
+    // public selectNoCode = [{
+    //     label: '91', value: '91'
+    // }, {
+    //     label: '933', value: '933'
+    // }];
+
+
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+
+    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+
+    selectTab(tabId: number) {
+        this.staticTabs.tabs[tabId].active = true;
+    }
+
+    closeAsidePane(event) {
+        this.closeAsideEvent.emit(event);
+    }
+
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
@@ -110,7 +165,6 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         this.getCurrency();
         this.getCallingCodes();
     }
-
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
@@ -226,11 +280,9 @@ export class AccountAddNewComponent implements OnInit, OnChanges, OnDestroy {
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
-            this.addAccountForm.get('mobileCode').patchValue(result.value);
             this.companyCountry = result.countryflag;
         } else {
             this.addAccountForm.get('country').get('countryCode').patchValue('IN');
-            this.addAccountForm.get('mobileCode').patchValue('91');
             this.companyCountry = 'IN';
         }
     }
