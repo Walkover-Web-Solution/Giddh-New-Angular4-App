@@ -984,7 +984,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
 	private getNewStateCode(oldStatusCode: string): string {
-		const currentState = this.statesSource.find((state: any) => oldStatusCode === state.stateGstCode);
+		const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.stateGstCode || oldStatusCode === state.value));
 		return (currentState) ? currentState.value : '';
 	}
 
