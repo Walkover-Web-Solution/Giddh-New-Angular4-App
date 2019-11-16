@@ -205,7 +205,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
   public newlyCreatedStockAc$: Observable<INameUniqueName>;
   public countrySource: IOption[] = [];
   public statesSource: IOption[] = [];
-  public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
   public toggleFieldForSales: boolean = true;
   public depositAmount: number = 0;
@@ -332,7 +331,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     this.invFormData = new VoucherClass();
     this.companyUniqueName$ = this.store.pipe(select(s => s.session.companyUniqueName), takeUntil(this.destroyed$));
-    this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
     this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
     this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
     this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -569,7 +567,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         //region combine get voucher details && all flatten A/c's && create account and update account success from sidebar
         combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
             .pipe(takeUntil(this.destroyed$), auditTime(700))
-            .subscribe(results => {
+            .subscribe(async results => {
                 //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
                 // create mode because voucher details are not available
                 if (results[0]) {
@@ -704,7 +702,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     } else {
                         if (this.invoiceType === VoucherTypeEnum.sales) {
                             let convertedRes1 = results[1];
-                            convertedRes1 = this.modifyMulticurrencyRes(results[1]);
+                            convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
                             if (results[1].account.currency) {
                                 this.companyCurrencyName = results[1].account.currency.code;
                             }
@@ -783,7 +781,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         if (!obj.accountDetails.billingDetails.state) {
                             obj.accountDetails.billingDetails.state = {};
-                            if (this.isEstimateInvoice || this.isProformaInvoice || this.isSalesInvoice) {
+                            if (this.isEstimateInvoice || this.isProformaInvoice) {
                               obj.accountDetails.billingDetails.state.code = this.getNewStateCode(obj.accountDetails.billingDetails.stateCode);
                             } else {
                               obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
@@ -792,7 +790,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                           }
                           if (!obj.accountDetails.shippingDetails.state) {
                             obj.accountDetails.shippingDetails.state = {};
-                            if (this.isEstimateInvoice || this.isProformaInvoice || this.isSalesInvoice) {
+                            if (this.isEstimateInvoice || this.isProformaInvoice) {
                               obj.accountDetails.shippingDetails.state.code = this.getNewStateCode(obj.accountDetails.shippingDetails.stateCode);
                             } else {
                               obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
@@ -2811,10 +2809,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return obj;
     }
 
-    public modifyMulticurrencyRes(result: any) {
+    public async modifyMulticurrencyRes(result: any) {
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
-        this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+        await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
         //voucherClassConversion.entries = result.entries;
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
@@ -2925,14 +2923,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
         voucherClassConversion.accountDetails.billingDetails.address = result.account.billingDetails.address;
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
-        voucherClassConversion.accountDetails.billingDetails.state.code = result.account.billingDetails.stateCode;
+        voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
         voucherClassConversion.accountDetails.shippingDetails.address = result.account.shippingDetails.address;
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
-        voucherClassConversion.accountDetails.shippingDetails.state.code = result.account.shippingDetails.stateCode;
+        voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode);
         voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
 
         voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
