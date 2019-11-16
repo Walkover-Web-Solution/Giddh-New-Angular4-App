@@ -8,7 +8,7 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -26,30 +26,36 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 
 
 @Component({
-    selector: 'account-add-new-details',
+    selector: 'account-update-new-details',
     styles: [`
 
   `],
-    templateUrl: './account-add-new-details.component.html',
-    styleUrls: ['./account-add-new-details.component.scss'],
+    templateUrl: './account-update-new-details.component.html',
+    styleUrls: ['./account-update-new-details.component.scss'],
 })
 
-export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestroy {
+export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
-    @Input() public isAccountNameAvailable$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
     @Input() public isGstEnabledAcc: boolean = false;
+    @Input() public activeAccount$: Observable<AccountResponseV2>;
     @Input() public isHsnSacEnabledAcc: boolean = false;
+    @Input() public updateAccountInProcess$: Observable<boolean>;
+    @Input() public updateAccountIsSuccess$: Observable<boolean>;
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
-    @Input() public isDebtorCreditor: boolean = true;
-    @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
-    @ViewChild('autoFocus') public autoFocus: ElementRef;
+    @Input() public isDebtorCreditor: boolean = false;
+    @Input() public showDeleteButton: boolean = true;
+    @Input() public accountDetails: any;
+    @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
 
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public activeCompany: CompanyResponse;
+    @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
+        = new EventEmitter();
+    @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -58,13 +64,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public companiesList$: Observable<CompanyResponse[]>;
-    public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
     public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
+    public activeAccountName: string = '';
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public isDiscount: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public countrySource: IOption[] = [];
@@ -87,6 +94,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCurrency();
@@ -99,7 +107,44 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             this.isDiscount = true;
         }
         this.initializeNewForm();
+        // fill form with active account
+        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
+            if (acc) {
+                let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                this.addAccountForm.patchValue(accountDetails);
 
+                // render gst details if there's no details add one automatically
+                if (accountDetails.addresses.length > 0) {
+                    accountDetails.addresses.map(a => {
+                        this.renderGstDetails(a, accountDetails.addresses.length);
+                    });
+                }
+
+                // hsn/sac enable disable
+                if (acc.hsnNumber) {
+                    this.addAccountForm.get('sacNumber').disable();
+                    this.addAccountForm.get('hsnNumber').enable();
+                    this.addAccountForm.get('hsnOrSac').patchValue('hsn');
+                } else if (acc.sacNumber) {
+                    this.addAccountForm.get('hsnNumber').disable();
+                    this.addAccountForm.get('sacNumber').enable();
+                    this.addAccountForm.get('hsnOrSac').patchValue('sac');
+                }
+                this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
+                this.addAccountForm.patchValue(accountDetails);
+                if (accountDetails.mobileNo) {
+                    if (accountDetails.mobileNo.length > 10 && accountDetails.mobileNo.indexOf('-') > -1) {
+                        let mobileArray = accountDetails.mobileNo.split('-');
+                        this.addAccountForm.get('mobileCode').patchValue(mobileArray[0]);
+                        this.addAccountForm.get('mobileNo').patchValue(mobileArray[1]);
+                    } else {
+                        this.addAccountForm.get('mobileNo').patchValue(accountDetails.mobileNo);
+                    }
+                } else {
+                    this.addAccountForm.get('mobileNo').patchValue('');
+                }
+            }
+        });
         this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -211,9 +256,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         //   }
         // });
 
-        if (this.autoFocus !== undefined) {
+        if (this.autoFocusUpdate !== undefined) {
             setTimeout(() => {
-                this.autoFocus.nativeElement.focus();
+                this.autoFocusUpdate.nativeElement.focus();
             }, 50);
         }
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
@@ -228,6 +273,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 // });
             }
         });
+    }
+    public onViewReady(ev) {
+        let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+        if (accountCountry) {
+            if (accountCountry !== 'IN') {
+                // this.addAccountForm.controls['addresses'] = this._fb.array([]);
+                this.isIndia = false;
+            } else {
+                const addresses = this.addAccountForm.get('addresses') as FormArray;
+                if (addresses.controls.length === 0) {
+                    this.addBlankGstForm();
+                }
+                this.isIndia = true;
+            }
+        }
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -250,7 +310,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
-            activeGroupUniqueName: [''],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -277,12 +336,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                     ifsc: ['']
                 })
             ]),
+            cashFreeVirtualAccountData: this._fb.group({
+                ifscCode: [''],
+                name: [''],
+                virtualAccountNumber: ['']
+            }),
             closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
     }
 
-    public initialGstDetailsForm(): FormGroup {
+    public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: ['', Validators.maxLength(120)],
@@ -296,6 +360,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
         });
+        if (val) {
+            gstFields.patchValue(val);
+        }
         return gstFields;
     }
 
@@ -313,7 +380,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public addGstDetailsForm(value: string) {
         if (value && !value.startsWith(' ', 0)) {
             const addresses = this.addAccountForm.get('addresses') as FormArray;
-            addresses.push(this.initialGstDetailsForm());
+            addresses.push(this.initialGstDetailsForm(null));
         } else {
             this._toaster.clearAllToaster();
             this._toaster.errorToast('Please fill GSTIN field first');
@@ -329,10 +396,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public addBlankGstForm() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.value.length === 0) {
-            addresses.push(this.initialGstDetailsForm());
+            addresses.push(this.initialGstDetailsForm(null));
         }
     }
-
+    public renderGstDetails(addressObj: IAccountAddress = null, addressLength: any) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        if (addresses.length < addressLength) {
+            addresses.push(this.initialGstDetailsForm(addressObj));
+        }
+    }
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -399,9 +471,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         this.moreGstDetailsVisible = false;
     }
 
-    public resetAddAccountForm() {
+    public resetUpdateAccountForm() {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const countries = this.addAccountForm.get('country') as FormGroup;
+        addresses.reset();
+        countries.reset();
         this.addAccountForm.reset();
+        this.addBlankGstForm();
     }
+
     public isValidMobileNumber(ele: HTMLInputElement) {
         if (ele.value) {
             this.checkMobileNo(ele);
@@ -427,6 +505,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
 
     public submit() {
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+
+        if (this.accountDetails) {
+            this.activeAccountName = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+        }
         if (this.stateList && accountRequest.addresses[0].stateCode) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj.stateGstCode) {
@@ -435,8 +519,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
-        delete accountRequest['addAccountForm'];
-
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
         }
@@ -452,19 +534,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             delete accountRequest['hsnNumber'];
             delete accountRequest['sacNumber'];
 
+            accountRequest.addresses = accountRequest.addresses.map(f => {
+                if (!f.partyType || f.partyType === '') {
+                    f.partyType = 'NOT APPLICABLE';
+                }
+                return f;
+            });
+
             if (accountRequest.mobileCode && accountRequest.mobileNo) {
                 accountRequest.mobileNo = accountRequest.mobileNo;
                 // delete accountRequest['mobileCode'];
             }
         }
 
-        if (this.showBankDetail) {
-            if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
-                accountRequest['accountBankDetails'] = [];
-            }
-        } else {
-            delete accountRequest['accountBankDetails'];
-        }
+        // if (this.showBankDetail) {
+        //     if (!accountRequest['accountBankDetails'][0].bankAccountNo || !accountRequest['accountBankDetails'][0].ifsc) {
+        //         accountRequest['accountBankDetails'] = [];
+        //     }
+        // } else {
+        //     delete accountRequest['accountBankDetails'];
+        // }
+
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
@@ -472,13 +562,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
-        //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
-        //   return;
-        // }
 
+        if (!this.showVirtualAccount) {
+            delete accountRequest['cashFreeVirtualAccountData'];
+        }
+
+        if (!this.showBankDetail) {
+            delete accountRequest['accountBankDetails'];
+        }
         this.submitClicked.emit({
-            activeGroupUniqueName: this.activeGroupUniqueName,
+            value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest: this.addAccountForm.value
         });
     }
@@ -489,18 +582,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    /**
-     * ngOnChanges
-     */
-    public ngOnChanges(s) {
-        if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
-            // console.log(s['showVirtualAccount'].currentValue);
-            this.showOtherDetails = true;
-        }
-    }
+    // /**
+    //  * ngOnChanges
+    //  */
+    // public ngOnChanges(s) {
+    //     if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
+    //         // console.log(s['showVirtualAccount'].currentValue);
+    //         this.showOtherDetails = true;
+    //     }
+    // }
 
     public ngOnDestroy() {
-        this.resetAddAccountForm();
+        this.resetUpdateAccountForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -33,9 +33,9 @@
                 (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
             </account-add-new-details>
 
-            <account-update-new *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
+            <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
                 [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-                [isDebtorCreditor]="isDebtorCreditor"></account-update-new>
+                [isDebtorCreditor]="isDebtorCreditor"></account-update-new-details>
         </div>
     </div>
 </div>
