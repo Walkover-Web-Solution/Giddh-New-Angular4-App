@@ -2429,7 +2429,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid #ff5e01 !important;
+    border: 1px solid #5B64C9 !important;
     border-radius: 0 !important;
 }
 
@@ -2439,7 +2439,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: #ff5e01 !important;
+    background: #5B64C9 !important;
     color: #fff;
     border-radius: 2px;
 }

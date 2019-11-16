@@ -10,13 +10,13 @@
                                   *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
                 </th>
 
-                <th #submittedBySearchContainer
+                <th class="td_in_searchBox" #submittedBySearchContainer
                     (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
           title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
                 </th>
 
-                <th #accountSearchContainer
+                <th class="td_in_searchBox" #accountSearchContainer
                     (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')"
                 >
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
@@ -28,9 +28,8 @@
                                   *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                 </th>
 
-                <th #paymentReceiptSearchContainer
-                    (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')"
-                >
+                <th class="td_in_searchBox" #paymentReceiptSearchContainer
+                    (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')">
                     <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
                         title: 'Payment/Receipt', fieldName: 'payment/receive', formControl: paymentReceiveSearchInput}"></ng-container>
                 </th>

@@ -61,7 +61,7 @@
                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                     </label>
 
-                    <div class="select-style">
+                    <div class="clearfix">
 
                         <sh-select class="pull-right text-left" name="depositAccountUniqueName"
                                    #entryAgainstAccountDropDown
@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <div *ngIf="ispPettycashEntrySuccess$ | async">
+    <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
         <update-ledger-entry-panel [isPettyCash]="true"
                                    [pettyCashEntry]="accountEntryPettyCash"
                                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
