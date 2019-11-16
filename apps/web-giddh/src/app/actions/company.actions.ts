@@ -161,7 +161,6 @@ export class CompanyActions {
           });
         }
 
-        this.store.dispatch(this.removeCompanyCreateSession());
         // set newly created company as active company
 
         // check if new uer has created first company then set newUserLoggedIn false
@@ -195,6 +194,7 @@ export class CompanyActions {
             this.store.dispatch(this.SetStateDetails(stateDetailsObj));
           }
         }
+        this.store.dispatch(this.removeCompanyCreateSession());
         return this.RefreshCompanies();
       }));
 
