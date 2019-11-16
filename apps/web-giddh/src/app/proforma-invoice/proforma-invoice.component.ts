@@ -184,36 +184,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 	public invoiceDateLabel: string = 'Invoice Date';
 	public invoiceDueDateLabel: string = 'Invoice Due Date';
 
-	public isGenDtlCollapsed: boolean = true;
-	public isMlngAddrCollapsed: boolean = true;
-	public isOthrDtlCollapsed: boolean = false;
-	public typeaheadNoResultsOfCustomer: boolean = false;
-	public invFormData: VoucherClass;
-	public customerAcList$: Observable<IOption[]>;
-	public bankAccounts$: Observable<IOption[]>;
-	public salesAccounts$: Observable<IOption[]> = observableOf(null);
-	public accountAsideMenuState: string = 'out';
-	public asideMenuStateForProductService: string = 'out';
-	public asideMenuStateForRecurringEntry: string = 'out';
-	public asideMenuStateForOtherTaxes: string = 'out';
-	public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
-	public companyTaxesList: TaxResponse[] = [];
-	public showCreateAcModal: boolean = false;
-	public showCreateGroupModal: boolean = false;
-	public createAcCategory: string = null;
-	public newlyCreatedAc$: Observable<INameUniqueName>;
-	public newlyCreatedStockAc$: Observable<INameUniqueName>;
-	public countrySource: IOption[] = [];
-	public statesSource: IOption[] = [];
-	public autoFillShipping: boolean = true;
-	public toggleFieldForSales: boolean = true;
-	public depositAmount: number = 0;
-	public depositAmountAfterUpdate: number = 0;
-	public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-	public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-	public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
-	public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-	public calculatedRoundOff: number = 0;
+    public isGenDtlCollapsed: boolean = true;
+    public isMlngAddrCollapsed: boolean = true;
+    public isOthrDtlCollapsed: boolean = false;
+    public typeaheadNoResultsOfCustomer: boolean = false;
+    public invFormData: VoucherClass;
+    public customerAcList$: Observable<IOption[]>;
+    public bankAccounts$: Observable<IOption[]>;
+    public salesAccounts$: Observable<IOption[]> = observableOf(null);
+    public accountAsideMenuState: string = 'out';
+    public asideMenuStateForProductService: string = 'out';
+    public asideMenuStateForRecurringEntry: string = 'out';
+    public asideMenuStateForOtherTaxes: string = 'out';
+    public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+    public companyTaxesList: TaxResponse[] = [];
+    public showCreateAcModal: boolean = false;
+    public showCreateGroupModal: boolean = false;
+    public createAcCategory: string = null;
+    public newlyCreatedAc$: Observable<INameUniqueName>;
+    public newlyCreatedStockAc$: Observable<INameUniqueName>;
+    public countrySource: IOption[] = [];
+    public statesSource: IOption[] = [];
+    public activeAccount$: Observable<AccountResponseV2>;
+    public autoFillShipping: boolean = true;
+    public toggleFieldForSales: boolean = true;
+    public depositAmount: number = 0;
+    public depositAmountAfterUpdate: number = 0;
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+    public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public calculatedRoundOff: number = 0;
 
 
 	// modals related
@@ -329,33 +330,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 		this.store.dispatch(this._settingsDiscountAction.GetDiscount());
 		this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
 
-		this.invFormData = new VoucherClass();
-		this.companyUniqueName$ = this.store.pipe(select(s => s.session.companyUniqueName), takeUntil(this.destroyed$));
-		this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
-		this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
-		this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
-		this.selectedAccountDetails$ = this.store.pipe(select(p => p.sales.acDtl), takeUntil(this.destroyed$));
-		this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
-		this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-		this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
-		this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
-		this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
-		this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
-		this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
-		this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
-		this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
-		this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
-		this.lastProformaInvoices$ = this.store.pipe(select(p => p.proforma.lastVouchers), takeUntil(this.destroyed$));
-		this.voucherDetails$ = this.store.pipe(
-			select(s => {
-				if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-					return s.receipt.voucher as VoucherClass
-				} else {
-					return s.proforma.activeVoucher as GenericRequestForGenerateSCD
-				}
-			}),
-			takeUntil(this.destroyed$)
-		);
+        this.invFormData = new VoucherClass();
+        this.companyUniqueName$ = this.store.pipe(select(s => s.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
+        this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.selectedAccountDetails$ = this.store.pipe(select(p => p.sales.acDtl), takeUntil(this.destroyed$));
+        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(p => p.sales.createAccountSuccess), takeUntil(this.destroyed$));
+        this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
+        this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
+        this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+        this.generateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isGenerateSuccess), takeUntil(this.destroyed$));
+        this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
+        this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
+        this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
+        this.lastProformaInvoices$ = this.store.pipe(select(p => p.proforma.lastVouchers), takeUntil(this.destroyed$));
+        this.voucherDetails$ = this.store.pipe(
+            select(s => {
+                if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+                    return s.receipt.voucher as VoucherClass
+                } else {
+                    return s.proforma.activeVoucher as GenericRequestForGenerateSCD
+                }
+            }),
+            takeUntil(this.destroyed$)
+        );
 
 		this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
@@ -551,15 +553,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 			}
 		});
 
-		if (!this.isUpdateMode) {
-			this.addBlankRow(null);
-		}
-		this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-			if (setting && setting.invoiceSettings) {
-				this.invFormData.voucherDetails.dueDate = setting.invoiceSettings.duePeriod ?
-					moment().add(setting.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
-			}
-		});
+        if (!this.isUpdateMode) {
+            this.addBlankRow(null);
+        }
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
+            if (setting) {
+                let duePeriod: number;
+                if (this.isEstimateInvoice) {
+                    duePeriod = setting.estimateSettings ? setting.estimateSettings.duePeriod : 0;
+                } else if (this.isProformaInvoice) {
+                    duePeriod = setting.proformaSettings ? setting.proformaSettings.duePeriod : 0;
+                } else {
+                    duePeriod = setting.invoiceSettings ? setting.invoiceSettings.duePeriod : 0;
+                }
+                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
+                    moment().add(duePeriod, 'days').toDate() : moment().toDate();
+            }
+        });
 
 		this.uploadInput = new EventEmitter<UploadInput>();
 		this.fileUploadOptions = { concurrency: 0 };
@@ -1124,15 +1134,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 		this.isCustomerSelected = false;
 		this.selectedFileName = '';
 
-		this.assignDates();
-		let invoiceSettings: InvoiceSetting = null;
-		this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-		if (invoiceSettings && invoiceSettings.invoiceSettings) {
-			this.invFormData.voucherDetails.dueDate = invoiceSettings.invoiceSettings.duePeriod ?
-				moment().add(invoiceSettings.invoiceSettings.duePeriod, 'days').toDate() : moment().toDate();
-		}
-		this.ngAfterViewInit();
-	}
+        this.assignDates();
+        let invoiceSettings: InvoiceSetting = null;
+        this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+        if (invoiceSettings) {
+            let duePeriod: number;
+            if (this.isEstimateInvoice) {
+                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.isProformaInvoice) {
+                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+            } else {
+                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+            }
+            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
+                moment().add(duePeriod, 'days').toDate() : moment().toDate();
+
+            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
+                moment().add(duePeriod, 'days').toDate() : moment().toDate();
+        }
+        this.ngAfterViewInit();
+    }
 
 	public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
 		this.updateAccount = isUpdate;
@@ -3048,7 +3069,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     /**
      * Returns the promise once the state list is successfully
-	 * fetched to carry outn further operations
+     * fetched to carry outn further operations
      *
      * @private
      * @param {*} currency Currency code for the user
