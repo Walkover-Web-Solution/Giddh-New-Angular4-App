@@ -57,6 +57,7 @@ import { VersionCheckService } from 'apps/web-giddh/src/app/version-check.servic
 import { SubscriptionsService } from './subscriptions.service';
 import { ProformaService } from './proforma.service';
 import { ExpenseService } from './expences.service';
+import { CommonService } from './common.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -121,7 +122,8 @@ export class ServiceModule {
         VersionCheckService,
         SubscriptionsService,
         ProformaService,
-        ExpenseService
+        ExpenseService,
+        CommonService
       ]
     };
   }

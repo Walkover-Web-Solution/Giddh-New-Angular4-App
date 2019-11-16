@@ -7951,7 +7951,7 @@ span.red-text {
     }
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
-        z-index: 3001;
+        z-index: 9999;
         text-align: left;
         float: left;
     }
@@ -8052,7 +8052,7 @@ span.red-text {
     }
     .daterangepicker.dropdown-menu {
         max-width: 100% !important;
-        z-index: 3001;
+        z-index: 9999;
     }
 }
 

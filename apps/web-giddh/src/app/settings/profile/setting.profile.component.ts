@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -10,12 +10,15 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { CompanyService } from '../../services/companyService.service';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
-import { States } from '../../models/api-models/Company';
+import {States, StatesRequest} from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes }  from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal }  from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
+import {CountryRequest} from "../../models/api-models/Common";
+import { GeneralActions } from '../../actions/general/general.actions';
+import { CommonActions } from '../../actions/common.actions';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -40,10 +43,14 @@ export interface IGstObj {
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
+  public countrySource: IOption[] = [];
+  public countrySource$: Observable<IOption[]> = observableOf([]);
+  public currencies: IOption[] = [];
+  public currencySource$: Observable<IOption[]> = observableOf([]);
+  public countryCurrency: any[] = [];
   public companyProfileObj: any = {};
   public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = observableOf([]);
-  public currencySource$: Observable<IOption[]> = observableOf([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: IOption[] = [];
@@ -57,7 +64,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public countryIsIndia: boolean = false;
   public dataSource: any;
   public dataSourceBackup: any;
-  public countrySource: IOption[] = [];
   public statesSourceCompany: IOption[] = [];
   public keyDownSubject$: Subject<any> = new Subject<any>();
   public gstKeyDownSubject$: Subject<any> = new Subject<any>();
@@ -76,35 +82,41 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private settingsProfileActions: SettingsProfileActions,
     private _companyService: CompanyService,
     private _toasty: ToasterService,
-    private _location: LocationService
+    private _location: LocationService,
+    private _generalActions: GeneralActions,
+    private commonActions: CommonActions
   ) {
-    this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    contriesWithCodes.map(c => {
-      this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-    });
-    this.stateStream$.subscribe((data) => {
-      if (data) {
-        this.stateResponse = _.cloneDeep(data);
-        data.map(d => {
-          this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
-          this.statesInBackground.push({label: `${d.name}`, value: d.code});
-          this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
-        });
-      }
-      this.statesSource$ = observableOf(this.states);
-    }, (err) => {
-      // console.log(err);
-    });
 
-    this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      let currencies: IOption[] = [];
-      if (data) {
-        data.map(d => {
-          currencies.push({label: d.code, value: d.code});
-        });
-      }
-      this.currencySource$ = observableOf(currencies);
-    });
+    this.getCountry();
+    this.getCurrency();
+
+    // this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
+    // contriesWithCodes.map(c => {
+    //   this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
+    // });
+    // this.stateStream$.subscribe((data) => {
+    //   if (data) {
+    //     this.stateResponse = _.cloneDeep(data);
+    //     data.map(d => {
+    //       this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
+    //       this.statesInBackground.push({label: `${d.name}`, value: d.code});
+    //       this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
+    //     });
+    //   }
+    //   this.statesSource$ = observableOf(this.states);
+    // }, (err) => {
+    //   // console.log(err);
+    // });
+
+    // this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+    //   let currencies: IOption[] = [];
+    //   if (data) {
+    //     data.map(d => {
+    //       currencies.push({label: d.code, value: d.code});
+    //     });
+    //   }
+    //   this.currencySource$ = observableOf(currencies);
+    // });
 
     currencyNumberSystems.map(c => {
       this.numberSystemSource.push({value: c.value , label: `${c.name}` , additional: c});
@@ -206,9 +218,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails.push(newGstObj);
         }
         this.companyProfileObj = profileObj;
-         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
+        this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
         if (profileObj && profileObj.country) {
+          if(profileObj.countryV2 !== undefined) {
+            this.getStates(profileObj.countryV2.alpha2CountryCode)
+          }
+
           let countryName = profileObj.country.toLocaleLowerCase();
           if (countryName === 'india') {
             this.countryIsIndia = true;
@@ -438,13 +454,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (event) {
       let country: any = _.cloneDeep(this.companyProfileObj.country || '');
       country = country.toLocaleLowerCase();
-      if (event.value === 'India') {
+      if (event.value === 'IN') {
         this.countryIsIndia = true;
         this.companyProfileObj.state = '';
       } else {
         this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
+      this.getStates(event.value);
       this.patchProfile({country: this.companyProfileObj.country});
     }
   }
@@ -524,7 +541,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      }
     this.patchProfile({balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces});
   }
-    public nameAlisPush(event) {
+
+  public nameAlisPush(event) {
      if (!event) {
       return;
      }
@@ -533,6 +551,62 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public savePincode(event) {
-this.patchProfile({pincode: this.companyProfileObj.pincode});
+    this.patchProfile({pincode: this.companyProfileObj.pincode});
+  }
+
+  public getCountry() {
+    this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+          // Creating Country Currency List
+          if(res[key].currency !== undefined && res[key].currency !== null) {
+            this.countryCurrency[res[key].alpha2CountryCode] = [];
+            this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
+          }
+        });
+        this.countrySource$ = observableOf(this.countrySource);
+      } else {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+      }
+    });
+  }
+
+  public getStates(countryCode) {
+    this.store.dispatch(this._generalActions.resetStatesList());
+
+    this.states = [];
+    this.statesInBackground = [];
+    this.statesSourceCompany = [];
+
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+          this.statesInBackground.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
+          this.statesSourceCompany.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
+        });
+        this.statesSource$ = observableOf(this.states);
+      } else {
+        let statesRequest = new StatesRequest();
+        statesRequest.country = countryCode;
+        this.store.dispatch(this._generalActions.getAllState(statesRequest));
+      }
+    });
+  }
+
+  public getCurrency() {
+    this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res).forEach(key => {
+          this.currencies.push({ label: res[key].code, value: res[key].code });
+        });
+        this.currencySource$ = observableOf(this.currencies);
+      } else {
+        this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
   }
 }

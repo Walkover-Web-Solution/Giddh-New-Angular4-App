@@ -1,33 +1,15 @@
 import { ToasterService } from '../../../services/toaster.service';
-import { base64ToBlob } from './../../../shared/helpers/helperFunctions';
 import { InventoryService } from '../../../services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
-import { take, takeUntil, debounceTime, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
-import {
-  GroupStockReportRequest,
-  GroupStockReportResponse,
-  StockGroupResponse,
-  AdvanceFilterOptions, InventoryDownloadRequest
-} from '../../../models/api-models/Inventory';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { GroupStockReportRequest, GroupStockReportResponse, InventoryDownloadRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
-import { saveAs } from 'file-saver';
 
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
-import {
-  AfterViewInit,
-  HostListener,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  Pipe,
-  ViewChildren,
-  QueryList, ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -37,13 +19,13 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { createSelector } from 'reselect';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
+import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 
 @Component({
@@ -64,7 +46,7 @@ import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
   ]
 })
 
-export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
   @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild("productName") productName: ElementRef;
@@ -214,6 +196,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     endDate: moment()
   };
   public groupStockReport: GroupStockReportResponse;
+  public groupStockReportInProcess: boolean = false;
   public universalDate$: Observable<any>;
   public showAdvanceSearchModal: boolean = false;
 
@@ -235,7 +218,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     private invViewService: InvViewService,
     private cdr: ChangeDetectorRef
   ) {
-
     this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
 
     this.GroupStockReportRequest = new GroupStockReportRequest();
@@ -256,7 +238,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       }
     });
 
-
     // tslint:disable-next-line:no-shadowed-variable
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
       if (branches && branches.results.length > 0) {
@@ -271,7 +252,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
   public ngOnInit() {
     // get view from sidebar while clicking on group/stock
     let len = document.location.pathname.split('/').length;
-    this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2]
+    this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2];
     if (this.groupUniqueNameFromURL && len === 6) {
       this.groupUniqueName = this.groupUniqueNameFromURL;
       this.initReport();
@@ -292,11 +273,15 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
       }
     });
 
-
     this.groupStockReport$.subscribe(res => {
       this.groupStockReport = res;
       this.cdr.detectChanges();
     });
+
+    this.store.pipe(select(s => s.inventory.groupStockReportInProcess), takeUntil(this.destroyed$)).subscribe(res => {
+      this.groupStockReportInProcess = res;
+    });
+
     this.universalDate$.subscribe(a => {
       if (a) {
         this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
@@ -436,13 +421,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy, Af
     this.destroyed$.complete();
   }
 
-  public ngAfterViewInit() {
-    this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
-      if (!a) {
-        // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-      }
-    });
-  }
 
   public goToManageGroup() {
     if (this.groupUniqueName) {

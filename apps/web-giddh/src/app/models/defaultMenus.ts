@@ -176,7 +176,15 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
   },
   {
     type: 'MENU', name: 'Settings', uniqueName: '/pages/settings'
-  }
+  },
+
+  { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales' },
+  { type: 'MENU', name: 'Purchase Invoice ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
+  { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash' },
+  { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas' },
+  { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates' },
+  { type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note' },
+  { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note' }
 ]
 
 export let DEFAULT_AC = []

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TaxResponse } from '../../models/api-models/Company';
-import { ReplaySubject } from 'rxjs';
+import {CompanyResponse, StatesRequest, TaxResponse} from '../../models/api-models/Company';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
+import {createSelector} from "reselect";
 
 @Component({
   selector: 'aside-menu-create-tax-component',
@@ -22,16 +23,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   @Input() public tax: TaxResponse;
   @Input() public asidePaneState: string;
 
-  public taxList: IOption[] = [
-    {label: 'GST', value: 'gst'},
-    {label: 'COMMONGST', value: 'commongst'},
-    {label: 'InputGST', value: 'inputgst'},
-    {label: 'TDS', value: 'tds'},
-    {label: 'TCS', value: 'tcs'},
-    {label: 'CESS', value: 'gstcess'},
-    {label: 'Others', value: 'others'},
-
-  ];
+  // public taxList: IOption[] = [
+  //   {label: 'GST', value: 'gst'},
+  //   {label: 'COMMONGST', value: 'commongst'},
+  //   {label: 'InputGST', value: 'inputgst'},
+  //   {label: 'TDS', value: 'tds'},
+  //   {label: 'TCS', value: 'tcs'},
+  //   {label: 'CESS', value: 'gstcess'},
+  //   {label: 'Others', value: 'others'},
+  //
+  // ];
+  public taxList: IOption[] = [];
   public duration: IOption[] = [
     {label: 'Monthly', value: 'MONTHLY'},
     {label: 'Quarterly', value: 'QUARTERLY'},
@@ -49,6 +51,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   public flattenAccountsOptions: IOption[] = [];
   public isTaxCreateInProcess: boolean = false;
   public isUpdateTaxInProcess: boolean = false;
+  public taxListSource$: Observable<IOption[]> = observableOf([]);
+  public taxNameTypesMapping: any[] = [];
+  public selectedCompany: Observable<CompanyResponse>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -60,6 +65,30 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    // tslint:disable-next-line:no-shadowed-variable
+    this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+      if (!selectedCmp) {
+        return;
+      }
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$));
+
+    this.selectedCompany.subscribe((res: any) => {
+      if (res) {
+        this.getTaxList(res.countryV2.alpha2CountryCode);
+      }
+    });
+
     this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
       let arr: IOption[] = [];
       if (res) {
@@ -195,5 +224,25 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     } else {
       this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
     }
+  }
+
+  public getTaxList(countryCode) {
+    this.store.dispatch(this._settingsTaxesActions.resetTaxList());
+    this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.taxes).forEach(key => {
+          // CREATED TAX VALUE AND TAX TYPES LIST MAPPING TO SHOW SELECT TYPE DROPDOWN VALUES BASED ON SELECTED TAX
+          if(res.taxes[key].types.length > 0) {
+            this.taxNameTypesMapping[res.taxes[key].value] = [];
+            this.taxNameTypesMapping[res.taxes[key].value] = res.taxes[key].types;
+          }
+
+          this.taxList.push({ label: res.taxes[key].label, value: res.taxes[key].value });
+        });
+        this.taxListSource$ = observableOf(this.taxList);
+      } else {
+        this.store.dispatch(this._settingsTaxesActions.GetTaxList(countryCode));
+      }
+    });
   }
 }
