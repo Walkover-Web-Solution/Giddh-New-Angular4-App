@@ -8,6 +8,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Observable } from 'rxjs';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { ExpenseService } from '../../services/expences.service';
+import { PettyCashResonse } from '../../models/api-models/Expences';
 
 @Injectable()
 export class ExpencesAction {
@@ -77,7 +78,7 @@ export class ExpencesAction {
   private GetPettycashEntryResponse$: Observable<Action> = this.action$
     .ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE).pipe(
       map((response: CustomActions) => {
-        let data: BaseResponse<any, any> = response.payload;
+        let data: BaseResponse<PettyCashResonse, any> = response.payload;
         if (data.status === 'error') {
           this._toasty.errorToast(data.message, data.code);
         } else {
@@ -142,7 +143,7 @@ export class ExpencesAction {
       payload: request
     };
   }
-  public getPettycashEntryResponse(value: BaseResponse<any, string>): CustomActions {
+  public getPettycashEntryResponse(value: BaseResponse<PettyCashResonse, string>): CustomActions {
     return {
       type: ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE,
       payload: value
