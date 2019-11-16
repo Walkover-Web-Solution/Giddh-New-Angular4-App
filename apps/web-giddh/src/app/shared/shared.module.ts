@@ -52,6 +52,8 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { PaginationModule, DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
+import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 
 const getGoogleCredentials = (baseHref: string) => {
     if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -108,7 +110,9 @@ export function provideConfig() {
         VsForDirective,
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
-        AsideMenuOtherTaxes
+        AsideMenuOtherTaxes,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -176,7 +180,9 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         CKEditorModule,
         AsideMenuOtherTaxes,
-        MfReportComponent
+        MfReportComponent,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -185,7 +191,9 @@ export function provideConfig() {
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
         AccountAddNewComponent,
-        AccountUpdateNewComponent
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewComponent,
+        AccountUpdateNewDetailsComponent
     ],
     providers: [
         {

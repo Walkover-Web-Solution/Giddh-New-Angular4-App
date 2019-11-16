@@ -84,6 +84,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
       this.activeView = "group";
     } else if (this.currentUrl.indexOf('stock') > 0) {
       this.activeView = "stock";
+    }else if(this.currentUrl.indexOf('receipt-note') > 0){
+      this.activeView = "receipt";
     } else {
       this.activeView = null;
     }
