@@ -55,28 +55,24 @@
 
           <div class="col-xs-12 mrB2 selectBox">
             <div class="pos-rel">
-              <label for="bussinessType">Select Business Type</label>
+              <label for="businessType">Select Business Type</label>
               <div class="custom-select pos-rel">
                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType" (onClear)="onClearBusinessType()"
                   autocomplete="false" (selected)="selectedbusinessType($event)"
                   [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList" [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
                 </sh-select>
               </div>
-              <!-- Need to add functionality by developer end -->
-              <span class="clearBTn">Clear</span>
             </div>
           </div>
           <div class="col-xs-12 mrB2 selectBox">
             <div class="pos-rel">
-              <label for="bussinessNature">Select Business Nature</label>
+              <label for="businessNature">Select Business Nature</label>
               <div class="custom-select  pos-rel">
                 <sh-select placeholder="Select Business Nature" name="businessNature" (onClear)="onClearBusinessNature()" autocomplete="false"
                   id="businessNature" [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
                   [isFilterEnabled]="true" [ItemHeight]="33" [defaultValue]="companyProfileObj.businessNature">
                 </sh-select>
               </div>
-              <!-- Need to add functionality by developer end -->
-              <span class="clearBTn">Clear</span>
             </div>
           </div>
           <ng-container *ngIf="selectedBusinesstype === 'Registered'">
@@ -134,16 +130,16 @@
           </ng-container>
           <div class="col-xs-12 mrB2 selectBox " *ngIf="selectedBusinesstype === 'Registered'">
             <div class="clearfix ">
-              <label for="address " class="d-block ">Company Address <sup class="text-danger">*</sup></label>
+              <label for="address" class="d-block ">Company Address <sup class="text-danger">*</sup></label>
               <textarea placeholder="Address " class="form-control mrT1 " name="address" required id="address"
                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
             </div>
           </div>
           <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
             <div class="clearfix ">
-              <label for="address " class="d-block ">Company Address</label>
-              <!-- Need to show when creat branch  -->
-              <label for="address " class="d-block " *ngIf="BranchField">Branch Address</label>
+              <label for="address" class="d-block ">Company Address</label>
+              <!-- Need to show when create branch  -->
+              <label for="address" class="d-block " *ngIf="BranchField">Branch Address</label>
               <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address"
                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
             </div>
