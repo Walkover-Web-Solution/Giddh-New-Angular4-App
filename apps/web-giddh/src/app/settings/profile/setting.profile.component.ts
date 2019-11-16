@@ -141,7 +141,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         if (this.isGstValid) {
-        this.patchProfile({addresses: this.companyProfileObj.addresses});
+
+          // let addresses = [];
+          //
+          // for(let addressLoop = 0; addressLoop < this.companyProfileObj.addresses.length; addressLoop++) {
+          //   if(this.companyProfileObj.addresses[addressLoop].taxNumber && this.companyProfileObj.addresses[addressLoop].stateCode) {
+          //     addresses.push(this.companyProfileObj.addresses[addressLoop]);
+          //   }
+          // }
+
+          //this.patchProfile({addresses: addresses});
+          this.patchProfile({addresses: this.companyProfileObj.addresses});
         }
       });
   }
@@ -243,7 +253,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       isValid = true;
     }
 
-    // this.isGstValid
     if (isValid) {
       let companyDetails = _.cloneDeep(this.companyProfileObj);
       let newGstObj = {
@@ -257,7 +266,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       companyDetails.addresses.push(newGstObj);
       this.companyProfileObj = companyDetails;
     } else {
-      this._toasty.errorToast('Please enter valid '+this.formFields['taxName']+' to add more GST details.');
+      this._toasty.errorToast('Please enter valid '+this.formFields['taxName'].label+' to add more '+this.formFields['taxName'].label+' details.');
     }
   }
 
