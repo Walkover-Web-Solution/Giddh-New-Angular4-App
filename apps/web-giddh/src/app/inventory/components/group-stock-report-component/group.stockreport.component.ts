@@ -25,6 +25,9 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
+import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
+
+
 @Component({
   selector: 'invetory-group-stock-report',  // <home></home>
   templateUrl: './group.stockreport.component.html',
@@ -93,11 +96,11 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
   public pickerSelectedFromDate: string;
   public pickerSelectedToDate: string;
   public transactionTypes: any[] = [
-    {id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales'},
-    {id: 2, uniqueName: 'transfer', name: 'Transfer'},
-    {id: 3, uniqueName: 'all', name: 'All Transactions'},
+    { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
+    { id: 2, uniqueName: 'transfer', name: 'Transfer' },
+    { id: 3, uniqueName: 'all', name: 'All Transactions' },
   ];
-  public CategoryOptions: any[] = [ 
+  public CategoryOptions: any[] = [
     {
       value: "inwards",
       label: "Inwards",
@@ -200,6 +203,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
   public branchAvailable: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
@@ -225,7 +229,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         const stockList = [];
         this.activeGroupName = stockGroup.name;
         stockGroup.stocks.forEach((stock) => {
-          stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
+          stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
         });
         this.stockList$ = observableOf(stockList);
         if (this.GroupStockReportRequest && !this.GroupStockReportRequest.stockGroupUniqueName) {
@@ -280,7 +284,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
 
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
         this.getGroupReport(true);
@@ -467,7 +471,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
    * setInventoryAsideState
    */
   public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-    this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+    this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
   }
 
   public pageChanged(event: any): void {
@@ -613,7 +617,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     //Reset Date with universal date
     this.universalDate$.subscribe(a => {
       if (a) {
-        this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
+        this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
         this.fromDate = moment(a[0]).format(this._DDMMYYYY);
         this.toDate = moment(a[1]).format(this._DDMMYYYY);
       }

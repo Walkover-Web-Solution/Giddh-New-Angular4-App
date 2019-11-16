@@ -21,7 +21,7 @@ import { AppState } from '../store';
 import { AccountService } from '../services/account.service';
 import { SalesActions } from '../actions/sales/sales.action';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';

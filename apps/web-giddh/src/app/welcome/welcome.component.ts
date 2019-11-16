@@ -31,7 +31,8 @@ import {IForceClear} from "../models/api-models/Sales";
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-  public stateGstCode: any[] = [];
+    public BranchField: boolean = false;
+    public stateGstCode: any[] = [];
   public countrySource: IOption[] = [];
   public countrySource$: Observable<IOption[]> = observableOf([]);
   public currencies: IOption[] = [];
