@@ -668,12 +668,12 @@
 
                             </div>
                             <div class="col-xs-6 p-0">
-                                <div style="position:relative;">
-                                    <a class="invoiceNumberA" style="cursor: pointer" (click)="onSelectInvoice(item)">
+                                <div class="invoiceNameDownload">
+                                    <a class="invoiceNumberA" style="cursor: pointer">
                                         {{item.voucherNumber }}</a>
                                     <!--<img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"
 tooltip="Invoice sent" placement="left" />-->
-
+                                    <span class="icon-download"></span>
                                 </div>
                                 <span *ngIf="item.dueDate" class="overDueDate">
                                     <small class="text-danger" *ngIf="item.dueDays > 0">
