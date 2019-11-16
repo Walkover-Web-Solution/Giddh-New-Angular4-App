@@ -361,7 +361,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
 		this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
-		this.loaderService.loaderState.pipe(delay(0), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+		this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
 			if (stateLoader.show) {
 				this.showLoader = true;
 			} else {
