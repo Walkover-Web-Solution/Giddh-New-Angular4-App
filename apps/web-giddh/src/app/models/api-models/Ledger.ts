@@ -2,6 +2,7 @@ import { ILedgerAdvanceSearchRequest } from './Ledger';
 import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
+import { PettyCashEntryStatus } from './Expences';
 
 /*
  * Model for ledger create api request
@@ -114,6 +115,10 @@ export class LedgerResponse {
   public exchangeRateForDisplay?: number = 1;
   public valuesInAccountCurrency?: boolean = false;
   public discountResources?: any[];
+
+  public pettyCashEntryStatus?: PettyCashEntryStatus;
+  public attachedFileUniqueNames?: string[];
+
 }
 
 /*

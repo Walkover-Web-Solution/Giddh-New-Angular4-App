@@ -102,7 +102,7 @@ export const ROUTES: Routes = [
       { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
       { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
-      { path: 'expenses', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
+      { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
 
       { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VarReportModule', canActivate: [NeedsAuthorization] },
 
