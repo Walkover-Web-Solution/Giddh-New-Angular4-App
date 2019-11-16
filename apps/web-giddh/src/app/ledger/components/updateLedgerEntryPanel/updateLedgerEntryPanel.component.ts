@@ -834,25 +834,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
 
-        let isThereAnyTaxEntry = requestObj.taxes.length > 0;
-
-        if (isThereAnyTaxEntry) {
-            if (this.profileObj && this.profileObj.gstDetails && this.profileObj.gstDetails.length) {
-                let isThereAnyGstDetails = this.profileObj.gstDetails.some(gst => gst.gstNumber);
-                if (!isThereAnyGstDetails) {
-                    this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
-                    this._loaderService.hide();
-                    return;
-                }
-            } else if (this.profileObj.countryV2 && this.profileObj.countryV2.alpha2CountryCode !== 'IN') {
-                // // we are not defining any code here because here we are skipping this step due to not mendatory GSTIN no to apply ta
-            } else {
-                this._toasty.errorToast('Please add GSTIN details in Settings before applying taxes', 'Error');
-                this._loaderService.hide();
-                return;
-            }
-        }
-
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
 
@@ -1059,13 +1040,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public exchangeRateChanged() {
         this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
         this.vm.inventoryAmountChanged();
-    }
-
-    @HostListener('window:scroll')
-    public onScrollEvent() {
-        if (this.datepickers) {
-            this.datepickers.hide();
-        }
     }
 
     // petty cash account changes, change all things related to account uniquename
