@@ -231,10 +231,14 @@ td.card-header.clearfix {
 }
 
 .card .invoiceNumberA {
-  text-align: right;
-  display: block;
+  display: inline-block;
   padding-right: 20px;
 }
+.invoiceNameDownload{
+   position:relative;
+  text-align: right;
+}
+
 
 .card #inovice_td img {
 
@@ -610,7 +614,9 @@ button.btn.btn-filter span.icon-cross {
   .invoiceFooter h1 {
     font-size: 18px !important;
   }
-
+.invoice-container{
+    padding-top: 60px;
+}
 }
 
 
