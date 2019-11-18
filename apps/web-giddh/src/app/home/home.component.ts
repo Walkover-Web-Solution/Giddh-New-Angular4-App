@@ -25,6 +25,7 @@ import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import {SubscriptionsUser} from "../models/api-models/Subscriptions";
 import {createSelector} from "reselect";
+import {GeneralService} from "../services/general.service";
 
 @Component({
   selector: 'home',
@@ -57,6 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public hideallcharts: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -64,7 +66,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdRef: ChangeDetectorRef,
     private _homeActions: HomeActions,
     private _router: Router,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _generalService: GeneralService
   ) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
@@ -111,6 +114,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'home';
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'hideallcharts') {
+          this.hideallcharts = true;
+      }
+      if (value === 'showallcharts') {
+        this.hideallcharts = false;
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
