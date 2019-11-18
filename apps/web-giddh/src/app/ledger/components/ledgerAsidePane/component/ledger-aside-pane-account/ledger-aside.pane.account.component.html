@@ -1,30 +1,40 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-  <div class="aside-header">
-    <h3 class="aside-title">Create Account</h3>
-  </div>
-  <div class="aside-body">
-    <div class="form-group pdT2">
-      <label class="mrB1">Select Group</label>
-      <div class="ng-select-wrap liq">
-        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName"
-                   [(ngModel)]="activeGroupUniqueName" [options]="flattenGroupsArray" style="width:100%"
-                   (selected)="checkSelectedGroup($event)">
-          <ng-template #optionTemplate let-option="option">
-            <div class="account-list-item">{{option?.label}}</div>
-            <div class="account-list-item fs12">{{option?.value}}</div>
-          </ng-template>
-        </ng-select>
-      </div>
+
+
+    <div class="form_header">
+        <div>
+            <h3 class="aside-title">Create Account</h3>
+        </div>
     </div>
 
-    <div class="row">
-      <account-add-new *ngIf="activeGroupUniqueName" [activeGroupUniqueName]="activeGroupUniqueName"
-                       [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-                       [isAccountNameAvailable$]="isAccountNameAvailable$"
-                       [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
-                       [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
-      </account-add-new>
+    <button id="close" class="" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <div class="aside-body">
+
+        <div class="aside-pane-form">
+
+            <div class="form-group pdT2">
+                <label class="mrB1">Select Group</label>
+                <div class="ng-select-wrap liq">
+                    <ng-select placeholder="Select Group" filterPlaceholder="Type to search..."
+                        name="activeGroupUniqueName" [(ngModel)]="activeGroupUniqueName" [options]="flattenGroupsArray"
+                        style="width:100%" (selected)="checkSelectedGroup($event)">
+                        <ng-template #optionTemplate let-option="option">
+                            <div class="account-list-item">{{option?.label}}</div>
+                            <div class="account-list-item fs12">{{option?.value}}</div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+
+            <div class="">
+                <account-add-new-details *ngIf="activeGroupUniqueName" [activeGroupUniqueName]="activeGroupUniqueName"
+                    [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                    [isAccountNameAvailable$]="isAccountNameAvailable$"
+                    [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                </account-add-new-details>
+            </div>
+        </div>
+
     </div>
-  </div>
 </div>

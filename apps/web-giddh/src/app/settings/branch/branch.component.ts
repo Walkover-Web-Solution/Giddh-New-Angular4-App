@@ -13,6 +13,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 export const IsyncData = [
   { label: 'Debtors', value: 'debtors' },
@@ -34,7 +35,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
-
+  public bsConfig: Partial<BsDatepickerConfig> = {
+    showWeekNumbers: false,
+    dateInputFormat: 'DD-MM-YYYY',
+    rangeInputFormat: 'DD-MM-YYYY',
+    containerClass: 'theme-green myDpClass'
+  };
   public dataSyncOption = IsyncData;
   public currentBranch: string = null;
   public currentBranchNameAlias: string = null;
@@ -48,6 +54,50 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   public selectedBranch: string = null;
   public isBranch: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public branchCardView = false;
+  public branchTableView = true;
+  public hideOldData = false;
+  branchTable = [
+    {
+      BranchName: "{{branch.name}}",
+      GSTIN: '-',
+      ContactNumber: '1234567890',
+      TotalSales: '25,00,000',
+      TotalExpenses: '1,21,900',
+      TotalTaxes: '58,000',
+      TotalStock: '30,00,000',
+    },
+    {
+      BranchName: "{{branch.name}}",
+      GSTIN: '-',
+      ContactNumber: '1234567890',
+      TotalSales: '25,00,000',
+      TotalExpenses: '1,21,900',
+      TotalTaxes: '58,000',
+      TotalStock: '30,00,000',
+    },
+    {
+      BranchName: "{{branch.name}}",
+      GSTIN: '-',
+      ContactNumber: '1234567890',
+      TotalSales: '25,00,000',
+      TotalExpenses: '1,21,900',
+      TotalTaxes: '58,000',
+      TotalStock: '30,00,000',
+    },
+    {
+      BranchName: "{{branch.name}}",
+      GSTIN: '-',
+      ContactNumber: '1234567890',
+      TotalSales: '25,00,000',
+      TotalExpenses: '1,21,900',
+      TotalTaxes: '58,000',
+      TotalStock: '30,00,000',
+    }
+  ]
+
+
+
 
   constructor(
     private store: Store<AppState>,

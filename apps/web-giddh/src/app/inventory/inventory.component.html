@@ -1,11 +1,10 @@
 <div style="min-height:100%;">
   <div class="inventory-controll">
-
     <tabset #inventoryStaticTabs>
 
       <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)" [active]="activeTabIndex === 0">
         <!--sidebar-->
-        <ng-container *ngIf="activeTabIndex === 0">
+        <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
           <inventory-sidebar></inventory-sidebar>
           <!--/sidebar-->
 
@@ -26,6 +25,9 @@
               </inventory-header>
             </section>
           </section>
+        </ng-container>
+        <ng-container *ngIf="activeTabIndex === 0 && activeView === 'receipt'">
+          <receipt-note></receipt-note>
         </ng-container>
 
       </tab>
