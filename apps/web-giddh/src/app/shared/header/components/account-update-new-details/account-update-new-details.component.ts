@@ -107,6 +107,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                accountDetails.addresses.forEach(address => {
+                    // todo FIX THIS LATER
+                    address.state = address.state ? address.state : {code: '', stateGstCode: '', name: ''};
+                });
                 this.addAccountForm.patchValue(accountDetails);
 
                 // render gst details if there's no details add one automatically
