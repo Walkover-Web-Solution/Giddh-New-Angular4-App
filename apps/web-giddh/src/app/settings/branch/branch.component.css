@@ -91,3 +91,6 @@ font-size: 14px;
     margin-top: 5px;
 }
 }
+.branch-views{
+    cursor: pointer;
+}

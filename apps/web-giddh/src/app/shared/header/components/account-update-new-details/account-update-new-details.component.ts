@@ -1,17 +1,18 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
+import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -27,7 +28,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
     selector: 'account-update-new-details',
     styles: [`
 
-    `],
+  `],
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
 })
@@ -35,6 +36,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    @Input() public flatGroupsOptions: IOption[];
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -54,6 +56,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -68,7 +71,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public isIndia: boolean = false;
     public companyCountry: string = '';
     public activeAccountName: string = '';
-    public forceClear$: Observable<IForceClear> = observableOf({status: false});
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public isDiscount: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public countrySource: IOption[] = [];
@@ -79,17 +82,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public flatGroupsOptions: IOption[];
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
+    // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
                 private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.getCountry();
@@ -158,18 +160,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 hsn.disable();
             }
         });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName
-                    };
-                });
-                this.flatGroupsOptions = items;
-            }
-        });
+        // this.flattenGroups$.subscribe(flattenGroups => {
+        //     if (flattenGroups) {
+        //         let items: IOption[] = flattenGroups.filter(grps => {
+        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+        //         }).map(m => {
+        //             return {
+        //                 value: m.groupUniqueName, label: m.groupName
+        //             }
+        //         });
+        //         this.flatGroupsOptions = items;
+        //     }
+        // });
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
 
@@ -311,6 +313,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
+            activeGroupUniqueName: [''],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -618,7 +621,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value);
+            let obj = this.getStateGSTCode(this.stateList, event.value)
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
         }
@@ -628,6 +631,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
+            this.isGroupSelected.emit(event.value);
         }
     }
 
@@ -635,7 +639,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
+                    this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
                     // Creating Country Currency List
                     if (res[key].currency !== undefined && res[key].currency !== null) {
                         this.countryCurrency[res[key].alpha2CountryCode] = [];
