@@ -1,18 +1,17 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -21,7 +20,6 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
