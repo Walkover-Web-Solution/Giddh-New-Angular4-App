@@ -101,6 +101,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
     public flatAccountWGroupsList$: Observable<IOption[]>;
+    public flatAccountWGroupsList: IOption[];
     public activeGroupUniqueName: string;
     public isGstEnabledAcc: boolean = true;
     public isHsnSacEnabledAcc: boolean = false;
@@ -155,6 +156,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         });
 
         this.flatAccountWGroupsList$ = of(flatGrps);
+        this.flatAccountWGroupsList = flatGrps;
         this.activeGroupUniqueName = grpUniqueName;
     }
 

@@ -29,13 +29,13 @@
             </div> -->
 
 
-            <account-add-new-details *ngIf="activeGroupUniqueName && !isUpdateAccount" class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-                (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
+            <account-add-new-details *ngIf="activeGroupUniqueName && !isUpdateAccount" class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
+                [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
             </account-add-new-details>
 
             <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-                [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-                [isDebtorCreditor]="isDebtorCreditor"></account-update-new-details>
+                [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)" (isGroupSelected)="isGroupSelected($event)" [showBankDetail]="showBankDetail"
+                [flatGroupsOptions]="flatGroupsOptions" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor"></account-update-new-details>
         </div>
     </div>
 </div>

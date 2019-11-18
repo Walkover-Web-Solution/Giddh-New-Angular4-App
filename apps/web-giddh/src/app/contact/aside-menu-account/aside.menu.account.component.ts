@@ -176,6 +176,11 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
         this.getUpdateList.emit(this.activeGroupUniqueName);
     }
+    public isGroupSelected(event) {
+        if (event) {
+            this.activeGroupUniqueName = event;
+        }
+    }
 
     public closeAsidePane(event) {
         this.ngOnDestroy();

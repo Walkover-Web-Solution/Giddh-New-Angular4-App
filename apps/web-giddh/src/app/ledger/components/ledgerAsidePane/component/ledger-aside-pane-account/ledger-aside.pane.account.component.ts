@@ -181,6 +181,18 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
             }
         });
     }
+    public isGroupSelected(event) {
+        if (event) {
+            this.activeGroupUniqueName = event;
+            this.groupsArrayStream$.subscribe(data => {
+                if (data.length) {
+                    let accountCategory = this.flattenGroup(data, event, null);
+                    this.isGstEnabledAcc = accountCategory === 'assets' || accountCategory === 'liabilities';
+                    this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
+                }
+            });
+        }
+    }
 
     public removeFixedGroupsFromArr(data: IFlattenGroupsAccountsDetail[]) {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
