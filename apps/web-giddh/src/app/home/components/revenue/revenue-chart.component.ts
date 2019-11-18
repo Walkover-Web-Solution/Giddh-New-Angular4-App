@@ -10,6 +10,7 @@ import * as moment from 'moment/moment';
 import {RevenueGraphDataRequest} from "../../../models/api-models/Dashboard";
 import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import {GeneralService} from "../../../services/general.service";
 
 @Component({
 	selector: 'revenue-chart',
@@ -48,7 +49,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	public currentDateRangePickerValue: Date[] = [];
 	public previousDateRangePickerValue: Date[] = [];
 
-	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe) {
+	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService) {
 		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
@@ -237,6 +238,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public showLineChart() {
+		this._generalService.invokeEvent.next("hideallcharts");
 		this.currentData = [];
 		this.previousData = [];
 		this.summaryData.totalCurrent = 0;
@@ -272,6 +274,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public showColumnChart() {
+		this._generalService.invokeEvent.next("showallcharts");
 		this.chartType = "column";
 		this.graphExpanded = false;
 
