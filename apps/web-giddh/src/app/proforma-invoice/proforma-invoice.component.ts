@@ -1747,7 +1747,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getAccountDetails(item.value);
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
-            this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
+            if (item.additional) {
+                // If currency of item is null or undefined then treat it to be equivalent of company currency
+                item.additional['currency'] = item.additional.currency || this.companyCurrency;
+                this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
+            }
 
             if (this.isMulticurrencyAccount) {
                 this.companyCurrencyName = item.additional.currency;
@@ -1988,8 +1992,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
             this.depositAccountUniqueName = event.value;
-            if (this.isCashInvoice) {
-                this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+            if (event.additional) {
+                // If currency of item is null or undefined then treat it to be equivalent of company currency
+                event.additional['currency'] = event.additional.currency || this.companyCurrency;
+                this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
             }
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
@@ -1998,7 +2004,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
                 }
                 if (this.isSalesInvoice) {
-                    this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
                 }
             } else {
                 this.invFormData.accountDetails.currencySymbol = '';
