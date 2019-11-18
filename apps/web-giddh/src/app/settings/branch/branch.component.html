@@ -1,20 +1,16 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
-	<!-- <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
-		  *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
-
-	</h3> -->
 	<div class="d-flex date-advanceSearch row">
 		<form class="form-inline input-grp-dateRangePicker pr col-sm-8">
 			<div class=" mrR1 d-flex">
 				<div class="input-group">
 					<div class="form-group">
-						<span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date" class="form-control" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
+						<span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date" class="form-control" [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
 					</div>
 				</div>
 				<div class="contentView mrL2">
-					<div class="">
-						<span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'table') ? true : false" (click)="changeBranchViewType('table');">Table View</span>
-						<span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'card') ? true : false" (click)="changeBranchViewType('card');">Card View </span>
+					<div class="branch-views">
+						<span class="mrR1" (click)="changeBranchViewType('table');"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'table') ? true : false">Table View</span>
+						<span (click)="changeBranchViewType('card');"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'card') ? true : false">Card View </span>
 					</div>
 				</div>
 			</div>
