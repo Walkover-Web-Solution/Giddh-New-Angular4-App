@@ -1,5 +1,4 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
 import {take, takeUntil} from 'rxjs/operators';
 import {createSelector} from 'reselect';
 import {Store, select} from '@ngrx/store';
@@ -58,9 +57,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 	public isBranch: boolean = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public branchViewType: string = 'table';
-	public hideOldData = false;
 	public moment = moment;
 	public filters: any[] = [];
+	public formFields: any[] = [];
 
 	constructor(
 		private store: Store<AppState>,
@@ -70,6 +69,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 		private settingsProfileActions: SettingsProfileActions,
 		private commonActions: CommonActions
 	) {
+		this.getOnboardingForm();
 
 		this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
 			if (o && !_.isEmpty(o)) {
@@ -286,5 +286,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
 			this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
 		}
+	}
+
+	public getOnboardingForm() {
+		this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+			if (res) {
+				Object.keys(res.fields).forEach(key => {
+					this.formFields[res.fields[key].name] = [];
+					this.formFields[res.fields[key].name] = res.fields[key];
+				});
+			}
+		});
 	}
 }
