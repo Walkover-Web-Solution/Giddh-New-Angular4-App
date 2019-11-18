@@ -2993,7 +2993,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.originalExchangeRate = this.exchangeRate;
 
         this.invoiceUniqueName = result.uniqueName;
-        this.invoiceType = result.type;
+        // this.invoiceType = result.type;
         this.prepareInvoiceTypeFlags();
         if (result.cashInvoice) {
             this.isCashInvoice = true;
