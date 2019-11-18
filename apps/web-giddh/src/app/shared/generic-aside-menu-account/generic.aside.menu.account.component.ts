@@ -110,6 +110,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public createAccountInProcess$: Observable<boolean>;
     public updateAccountInProcess$: Observable<boolean>;
     public showBankDetail: boolean = false;
+    public isDebtorCreditor: boolean = false;
+
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -158,6 +160,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.flatAccountWGroupsList$ = of(flatGrps);
         this.flatAccountWGroupsList = flatGrps;
         this.activeGroupUniqueName = grpUniqueName;
+    }
+    public isGroupSelected(event) {
+        if (event) {
+            this.activeGroupUniqueName = event;
+        }
     }
 
     public ngOnChanges(s: SimpleChanges) {

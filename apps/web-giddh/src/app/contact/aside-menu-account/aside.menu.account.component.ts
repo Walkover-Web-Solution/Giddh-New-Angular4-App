@@ -179,6 +179,12 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;
+            // in case of sundrycreditors or sundrydebtors no need to show address tab
+            if (event === 'sundrycreditors' || event === 'sundrydebtors') {
+                this.isDebtorCreditor = true;
+            } else {
+                this.isDebtorCreditor = false;
+            }
         }
     }
 
