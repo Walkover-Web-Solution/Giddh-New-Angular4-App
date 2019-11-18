@@ -1,18 +1,17 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -24,12 +23,11 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
 
-
 @Component({
     selector: 'account-update-new-details',
     styles: [`
 
-  `],
+    `],
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
 })
@@ -60,7 +58,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
 
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public companiesList$: Observable<CompanyResponse[]>;
@@ -71,7 +68,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public isIndia: boolean = false;
     public companyCountry: string = '';
     public activeAccountName: string = '';
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public isDiscount: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public countrySource: IOption[] = [];
@@ -89,9 +86,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public isGstValid: boolean;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+                private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
@@ -165,7 +161,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 }).map(m => {
                     return {
                         value: m.groupUniqueName, label: m.groupName
-                    }
+                    };
                 });
                 this.flatGroupsOptions = items;
             }
@@ -274,6 +270,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public onViewReady(ev) {
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
         if (accountCountry) {
@@ -295,7 +292,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
             this.addAccountForm.get('mobileCode').patchValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag);
             this.addAccountForm.get('currency').patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
@@ -327,8 +324,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }),
             hsnOrSac: [''],
             currency: [''],
-            hsnNumber: [{ value: '', disabled: false }],
-            sacNumber: [{ value: '', disabled: false }],
+            hsnNumber: [{value: '', disabled: false}],
+            sacNumber: [{value: '', disabled: false}],
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
@@ -355,19 +352,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{value: '', disabled: false}],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
         });
         if (val) {
+            // todo FIX THIS LATER
+            val.state = val.state ? val.state : {code: '', stateGstCode: '', name: ''};
             gstFields.patchValue(val);
         }
         return gstFields;
     }
 
     public resetGstStateForm() {
-        this.forceClear$ = observableOf({ status: true });
+        this.forceClear$ = observableOf({status: true});
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
@@ -399,12 +398,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             addresses.push(this.initialGstDetailsForm(null));
         }
     }
+
     public renderGstDetails(addressObj: IAccountAddress = null, addressLength: any) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.length < addressLength) {
             addresses.push(this.initialGstDetailsForm(addressObj));
         }
     }
+
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -485,6 +486,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             this.checkMobileNo(ele);
         }
     }
+
     public checkMobileNo(ele) {
         try {
             let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
@@ -571,7 +573,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             delete accountRequest['accountBankDetails'];
         }
         this.submitClicked.emit({
-            value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
+            value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName},
             accountRequest: this.addAccountForm.value
         });
     }
@@ -612,12 +614,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value)
+            let obj = this.getStateGSTCode(this.stateList, event.value);
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
         }
 
     }
+
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
@@ -628,7 +631,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
+                    this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
                     // Creating Country Currency List
                     if (res[key].currency !== undefined && res[key].currency !== null) {
                         this.countryCurrency[res[key].alpha2CountryCode] = [];
@@ -643,6 +646,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public getOnboardingForm(countryCode: string) {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = '';
@@ -654,7 +658,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
@@ -668,7 +672,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -676,6 +680,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
@@ -704,6 +709,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             ele.classList.remove('error-box');
         }
     }
+
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
@@ -719,7 +725,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                         this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                     }
 
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    this.states.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
                 });
                 this.statesSource$ = observableOf(this.states);
             } else {
@@ -729,6 +735,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -738,6 +745,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }

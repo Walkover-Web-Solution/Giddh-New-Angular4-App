@@ -6,7 +6,7 @@ import { AppState } from '../store';
 import { AccountService } from '../services/account.service';
 import { SalesActions } from '../actions/sales/sales.action';
 import { CompanyActions } from '../actions/company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SalesService } from '../services/sales.service';
 import { ToasterService } from '../services/toaster.service';
@@ -346,8 +346,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }),
             takeUntil(this.destroyed$)
         );
-
-        this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
@@ -700,7 +698,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         // if last invoice is copied then create new Voucher and copy only needed things not all things
                         obj = this.invFormData;
                     } else {
-                        if (this.invoiceType === VoucherTypeEnum.sales) {
+                        if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
                             let convertedRes1 = results[1];
                             convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
                             if (results[1].account.currency) {
@@ -2526,6 +2524,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
+            entry.taxList = entry.taxes.map(m => m.uniqueName);
 
             entry.transactions = entry.transactions.map(trx => {
                 entry.otherTaxModal.itemLabel = trx.stockDetails && trx.stockDetails.name ? trx.accountName + '(' + trx.stockDetails.name + ')' : trx.accountName;
@@ -2636,7 +2635,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
-
             entry.taxes = [];
             entry.cessSum = 0;
             return entry;
@@ -2801,14 +2799,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
-        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
-        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
-        delete obj.account.billingDetails.state;
+        if (this.isMultiCurrencyAllowed) {
+            obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+            obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+        }
+        // delete obj.account.billingDetails.state;
 
         obj.account.shippingDetails.countryName = this.customerCountryName;
-        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
-        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
-        delete obj.account.shippingDetails.state;
+        if (this.isMultiCurrencyAllowed) {
+            obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+            obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+        }
+        // delete obj.account.shippingDetails.state;
 
         if (this.isCashInvoice) {
             obj.account.customerName = data.voucherDetails.customerName;
@@ -2885,14 +2887,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     discountLedger.discountUniqueName = discount.uniqueName;
                     discountLedger.name = discount.name;
                     discountLedger.particular = discount.particular;
-                    if (discountLedger.discountUniqueName) {
+                    // if (discountLedger.discountUniqueName) {
                         discountLedger.uniqueName = discountLedger.discountUniqueName;
                         let tradeDiscount = new LedgerResponseDiscountClass();
                         tradeDiscount.discount = {
                             uniqueName: '',
                             name: '',
                             discountType: "PERCENTAGE",
-                            discountValue: 10
+                            discountValue: 0
                         };
                         tradeDiscount.account = {
                             accountType: '',
@@ -2904,9 +2906,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         tradeDiscount.discount.discountType = discountLedger.discountType;
                         tradeDiscount.discount.name = discountLedger.name;
                         tradeDiscountArray.push(tradeDiscount);
-                    } else {
-                        discountArray.push(discountLedger);
-                    }
+                    // } else {
+                    //     discountArray.push(discountLedger);
+                    // }
                 });
                 salesEntryClass.discounts = discountArray;
                 salesEntryClass.tradeDiscounts = tradeDiscountArray;
@@ -3081,7 +3083,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private modifyStateResp(stateList: StateCode[]) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
-            stateListRet.push({label: stateR.name, value: stateR.code, stateGstCode: stateR.stateGstCode});
+            stateListRet.push({label: stateR.name, value: stateR.stateGstCode ? stateR.stateGstCode : stateR.code, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code});
         });
         return stateListRet;
     }
