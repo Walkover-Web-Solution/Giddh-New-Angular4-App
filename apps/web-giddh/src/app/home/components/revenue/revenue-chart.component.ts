@@ -223,6 +223,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 				formatter: function () {
 					return this.point.tooltip;
 				}
+			},
+			xAxis: {
+				labels: {
+					enabled: false
+				}
 			}
 		};
 
