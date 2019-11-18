@@ -10,7 +10,7 @@ import {InvoicePreviewDetailsVm} from "../../models/api-models/Invoice";
 
 export class SendEmailInvoiceComponent implements OnInit, OnDestroy {
   @Input() voucherType: VoucherTypeEnum;
-  @Input() selectedItem: InvoicePreviewDetailsVm;
+  @Input() selectedItem: { voucherNumber: string, uniqueName: string};
   @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   public emailAddresses: string = '';

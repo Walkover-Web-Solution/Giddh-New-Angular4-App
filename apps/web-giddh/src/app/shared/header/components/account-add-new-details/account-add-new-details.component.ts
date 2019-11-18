@@ -1,82 +1,40 @@
-import { Component, Output, EventEmitter, ViewChild, Input, ElementRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
-import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { AccountsAction } from '../../../actions/accounts.actions';
-import { CompanyActions } from '../../../actions/company.actions';
-import { CommonActions } from '../../../actions/common.actions';
-import { ToasterService } from '../../../services/toaster.service';
-import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
-import { CompanyService } from '../../../services/companyService.service';
-import { GeneralActions } from '../../../actions/general/general.actions';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
-import { IOption } from '../../../theme/ng-select/ng-select';
-import { CompanyResponse, StatesRequest } from '../../../models/api-models/Company';
-import { IForceClear } from '../../../models/api-models/Sales';
-import { AccountRequestV2 } from '../../../models/api-models/Account';
-import { IContriesWithCodes } from '../../../models/interfaces/common.interface';
-import { contriesWithCodes } from '../../../shared/helpers/countryWithCodes';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { CountryRequest } from '../../../models/api-models/Common';
-import { digitsOnly } from '../../../shared/helpers';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { digitsOnly } from '../../../helpers';
+import { AccountsAction } from '../../../../actions/accounts.actions';
+import { AppState } from '../../../../store';
+import { select, Store } from '@ngrx/store';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
+import { AccountRequestV2 } from '../../../../models/api-models/Account';
+import { CompanyService } from '../../../../services/companyService.service';
+import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
+import { ToasterService } from '../../../../services/toaster.service';
+import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
+import { CompanyActions } from '../../../../actions/company.actions';
+import * as _ from '../../../../lodash-optimized';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
+import { IForceClear } from "../../../../models/api-models/Sales";
+import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
+import { CommonActions } from '../../../../actions/common.actions';
+import { GeneralActions } from "../../../../actions/general/general.actions";
+import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import * as googleLibphonenumber from 'google-libphonenumber';
+
+
 @Component({
-    selector: 'aside-sender-receiver-details-pane',
+    selector: 'account-add-new-details',
     styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 600px;
-      max-width: 100%;
-      z-index: 99999;
-    }
 
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-    position: absolute;
-    left: auto;
-    top: 14px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    right: 0;
-    background: transparent;
-    color: #fff;
-    font-size: 20px;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 600px;
-      max-width: 600px;
-    }
-
-    .aside-body {
-      margin-bottom: 80px;
-    }
-.aside-pane{
-  padding:0;
-}
   `],
-    templateUrl: './aside-sender-receiver-details.component.html',
-    styleUrls: ['./aside-sender-reciver-details.component.scss'],
+    templateUrl: './account-add-new-details.component.html',
+    styleUrls: ['./account-add-new-details.component.scss'],
 })
-export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
 
-    public addAddress = false;
-    public bankDetails = false;
-
+export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
@@ -93,12 +51,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
-    public partyTypeSource: IOption[] = [
-        { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
-        { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
-        { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
-        { value: 'SEZ', label: 'SEZ' }
-    ];
+    public partyTypeSource: IOption[] = [];
+    public stateList: StateList[] = [];
+
 
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -120,56 +75,31 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
+    public flatGroupsOptions: IOption[];
+    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
+    public isMobileNumberValid: boolean = false;
+    public formFields: any[] = [];
+    public isGstValid: boolean;
+    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-    // public selectAccount = [{
-    //     label: 'Sundry Debtors', value: 'Sundry Debtors'
-    // }, {
-    //     label: 'Sundry Creditors', value: 'Sundry Creditors'
-    // }];
-
-    // // public selectCountry: IOption[] = [{
-    // //     label: 'IN - India', value: 'IN - India'
-    // // }, {
-    // //     label: 'US - USA', value: 'US - USA'
-    // // }];
-
-    // public partyType = [{
-    //     label: 'Register', value: 'Register'
-    // }, {
-    //     label: 'Unregister', value: 'Unregister'
-    // }];
-    // public selectNoCode = [{
-    //     label: '91', value: '91'
-    // }, {
-    //     label: '933', value: '933'
-    // }];
-
-
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-
-    selectTab(tabId: number) {
-        this.staticTabs.tabs[tabId].active = true;
-    }
-
-    closeAsidePane(event) {
-        this.closeAsideEvent.emit(event);
-    }
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
+        this.getPartyTypes();
     }
+
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
         this.initializeNewForm();
+
         this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -181,6 +111,18 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 hsn.reset();
                 sac.enable();
                 hsn.disable();
+            }
+        });
+        this.flattenGroups$.subscribe(flattenGroups => {
+            if (flattenGroups) {
+                let items: IOption[] = flattenGroups.filter(grps => {
+                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                }).map(m => {
+                    return {
+                        value: m.groupUniqueName, label: m.groupName
+                    }
+                });
+                this.flatGroupsOptions = items;
             }
         });
         // get country code value change
@@ -239,11 +181,11 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                     this.setCountryByCompany(currentCompany);
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
                     this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                    if (this.isMultipleCurrency) {
-                        this.addAccountForm.get('currency').enable();
-                    } else {
-                        this.addAccountForm.get('currency').disable();
-                    }
+                    // if (this.isMultipleCurrency) {
+                    //     this.addAccountForm.get('currency').enable();
+                    // } else {
+                    //     this.addAccountForm.get('currency').disable();
+                    // }
                 }
             }
         });
@@ -274,21 +216,41 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 this.autoFocus.nativeElement.focus();
             }, 50);
         }
+        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res.fields).forEach(key => {
+                    this.formFields[res.fields[key].name] = [];
+                    this.formFields[res.fields[key].name] = res.fields[key];
+                });
+
+                // Object.keys(res.applicableTaxes).forEach(key => {
+                //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
+                // });
+            }
+        });
     }
 
     public setCountryByCompany(company: CompanyResponse) {
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
+            this.addAccountForm.get('mobileCode').patchValue(result.value);
+            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+            this.addAccountForm.get('currency').patchValue(company.baseCurrency);
+            this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
         } else {
             this.addAccountForm.get('country').get('countryCode').patchValue('IN');
+            this.addAccountForm.get('mobileCode').patchValue('91');
+            this.addAccountForm.get('currency').patchValue('IN');
             this.companyCountry = 'IN';
+            this.getOnboardingForm('IN');
         }
     }
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
+            activeGroupUniqueName: [''],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -324,6 +286,11 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: ['', Validators.maxLength(120)],
+            state: this._fb.group({
+                code: [''],
+                name: [''],
+                stateGstCode: ['']
+            }),
             stateCode: [{ value: '', disabled: false }],
             isDefault: [false],
             isComposite: [false],
@@ -338,6 +305,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
             control.get('stateCode').patchValue(null);
+            control.get('state').get('code').patchValue(null);
             control.get('gstNumber').setValue("");
         }
     }
@@ -390,9 +358,11 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 statesEle.setDisabledState(false);
                 if (s) {
                     gstForm.get('stateCode').patchValue(s.value);
+                    gstForm.get('state').get('code').patchValue(s.value);
                     statesEle.setDisabledState(true);
                 } else {
                     gstForm.get('stateCode').patchValue(null);
+                    gstForm.get('state').get('code').patchValue(null);
                     statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     this._toaster.warningToast('Invalid GSTIN.');
@@ -401,6 +371,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         } else {
             statesEle.setDisabledState(false);
             gstForm.get('stateCode').patchValue(null);
+            gstForm.get('state').get('code').patchValue(null);
+
         }
     }
 
@@ -430,9 +402,44 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public resetAddAccountForm() {
         this.addAccountForm.reset();
     }
+    public isValidMobileNumber(ele: HTMLInputElement) {
+        if (ele.value) {
+            this.checkMobileNo(ele);
+        }
+    }
+    public checkMobileNo(ele) {
+        try {
+            let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
+            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+                ele.classList.remove('error-box');
+                this.isMobileNumberValid = true;
+            } else {
+                this.isMobileNumberValid = false;
+                this._toaster.errorToast('Invalid Contact number');
+                ele.classList.add('error-box');
+            }
+        } catch (error) {
+            this.isMobileNumberValid = false;
+            this._toaster.errorToast('Invalid Contact number');
+            ele.classList.add('error-box');
+        }
+    }
 
     public submit() {
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+        if (this.stateList && accountRequest.addresses[0].stateCode) {
+            let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
+            if (selectedStateObj.stateGstCode) {
+                accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
+            } else {
+                accountRequest.addresses[0].stateCode = selectedStateObj.code;
+            }
+        }
+        delete accountRequest['addAccountForm'];
+
+        if (!accountRequest.mobileNo) {
+            accountRequest.mobileCode = '';
+        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['country'];
             delete accountRequest['addresses'];
@@ -446,8 +453,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             delete accountRequest['sacNumber'];
 
             if (accountRequest.mobileCode && accountRequest.mobileNo) {
-                accountRequest.mobileNo = accountRequest.mobileCode + '-' + accountRequest.mobileNo;
-                delete accountRequest['mobileCode'];
+                accountRequest.mobileNo = accountRequest.mobileNo;
+                // delete accountRequest['mobileCode'];
             }
         }
 
@@ -497,11 +504,30 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
     public selectCountry(event: IOption) {
         if (event) {
+            this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
+            let currencyCode = this.countryCurrency[event.value];
+            this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
+
+        }
+    }
+
+    public selectedState(gstForm: FormGroup, event) {
+        if (gstForm && event.label) {
+            let obj = this.getStateGSTCode(this.stateList, event.value)
+            gstForm.get('stateCode').patchValue(event.value);
+            gstForm.get('state').get('code').patchValue(event.value);
+        }
+
+    }
+    public selectGroup(event: IOption) {
+        if (event) {
+            this.activeGroupUniqueName = event.value;
         }
     }
 
@@ -512,8 +538,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                     this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
                     // Creating Country Currency List
                     if (res[key].currency !== undefined && res[key].currency !== null) {
-                        this.countryCurrency[res[key].countryName] = [];
-                        this.countryCurrency[res[key].countryName] = res[key].currency.code;
+                        this.countryCurrency[res[key].alpha2CountryCode] = [];
+                        this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
                     }
                 });
                 this.countrySource$ = observableOf(this.countrySource);
@@ -524,12 +550,19 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+    public getOnboardingForm(countryCode: string) {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = '';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    }
 
     public getCurrency() {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
+
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -550,11 +583,42 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+    public checkGstNumValidation(ele: HTMLInputElement) {
+        let isValid: boolean = false;
 
+        if (ele.value) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(ele.value)) {
+                        isValid = true;
+                        break;
+                    }
+                }
+            } else {
+                isValid = true;
+            }
+
+            if (!isValid) {
+                this._toaster.errorToast('Invalid ' + this.formFields['taxName'].label);
+                ele.classList.add('error-box');
+                this.isGstValid = false;
+            } else {
+                ele.classList.remove('error-box');
+                this.isGstValid = true;
+            }
+        } else {
+            ele.classList.remove('error-box');
+        }
+    }
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                this.states = [];
+                if (res.stateList) {
+                    this.stateList = res.stateList;
+                }
                 Object.keys(res.stateList).forEach(key => {
 
                     if (res.stateList[key].stateGstCode !== null) {
@@ -572,4 +636,17 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+    public getPartyTypes() {
+        this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.partyTypeSource = res;
+            } else {
+                this.store.dispatch(this.commonActions.GetPartyType());
+            }
+        });
+    }
+    private getStateGSTCode(stateList, code: string) {
+        return stateList.find(res => code === res.code);
+    }
+
 }

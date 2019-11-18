@@ -1,33 +1,33 @@
-import {Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
-import {takeUntil, debounceTime, distinctUntilChanged, take} from 'rxjs/operators';
-import {AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild} from '@angular/core';
-import {IOption} from '../theme/ng-select/option.interface';
-import {StatesRequest, States, CompanyRequest, CompanyCreateRequest, Addresses} from '../models/api-models/Company';
+import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
+import { IOption } from '../theme/ng-select/option.interface';
+import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
-import {Store, select} from '@ngrx/store';
-import {AppState} from '../store';
-import {contriesWithCodes} from '../shared/helpers/countryWithCodes';
-import {SettingsProfileActions} from '../actions/settings/profile/settings.profile.action';
-import {Router} from '@angular/router';
-import {GeneralService} from '../services/general.service';
-import {ToasterService} from '../services/toaster.service';
-import {FormGroup} from '@angular/forms';
-import {ShSelectComponent} from '../theme/ng-virtual-select/sh-select.component';
-import {CompanyActions} from '../actions/company.actions';
-import {CompanyService} from '../services/companyService.service';
-import {ModalDirective, ModalOptions} from 'ngx-bootstrap';
-import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {CompanyAddNewUiComponent, CompanyAddComponent} from '../shared/header/components';
-import {GeneralActions} from '../actions/general/general.actions';
-import {CommonActions} from '../actions/common.actions';
-import {CountryRequest, OnboardingFormRequest} from "../models/api-models/Common";
-import {IForceClear} from "../models/api-models/Sales";
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../store';
+import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { Router } from '@angular/router';
+import { GeneralService } from '../services/general.service';
+import { ToasterService } from '../services/toaster.service';
+import { FormGroup } from '@angular/forms';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { CompanyActions } from '../actions/company.actions';
+import { CompanyService } from '../services/companyService.service';
+import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
+import { GeneralActions } from '../actions/general/general.actions';
+import { CommonActions } from '../actions/common.actions';
+import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
+import { IForceClear } from "../models/api-models/Sales";
 
 @Component({
-	selector: 'welcome-component',
-	templateUrl: './welcome.component.html',
-	styleUrls: ['./welcome.component.scss']
+    selector: 'welcome-component',
+    templateUrl: './welcome.component.html',
+    styleUrls: ['./welcome.component.scss']
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -136,7 +136,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public ngOnInit() {
 		this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-			console.log(res);
 			if (res) {
 				this.isbranch = res.isBranch;
 				this.createNewCompany = res;

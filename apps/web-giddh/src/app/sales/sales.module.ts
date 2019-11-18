@@ -69,10 +69,10 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     NgxUploaderModule
   ],
   exports: [
-    TooltipModule,
+    // TooltipModule,
     DiscountListComponent,
-    SalesTaxListComponent,
-    SalesAsideMenuAccountComponent,
+    // SalesTaxListComponent,
+    // SalesAsideMenuAccountComponent,
     AsideMenuSalesOtherTaxes
   ],
   entryComponents: [],
