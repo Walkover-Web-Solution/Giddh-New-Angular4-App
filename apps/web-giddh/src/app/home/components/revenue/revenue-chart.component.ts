@@ -258,6 +258,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 		this.summaryData.totalLast = 0;
 		this.summaryData.highest = 0;
 		this.summaryData.lowest = 0;
+		this.graphParams.interval = "daily";
 		this.chartType = "line";
 		this.graphExpanded = true;
 		this.generateChart();
@@ -288,6 +289,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 	public showColumnChart() {
 		this._generalService.invokeEvent.next("showallcharts");
+		this.graphParams.interval = "daily";
 		this.chartType = "column";
 		this.graphExpanded = false;
 
