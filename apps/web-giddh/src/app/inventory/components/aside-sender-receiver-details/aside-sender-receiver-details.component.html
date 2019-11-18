@@ -10,14 +10,18 @@
 
     <div class="aside-pane-conatainer">
         <form name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
-            <div class="aside-pane-form">
+            <div class="">
                 <div class="upper-form">
                     <div class="row ">
                         <div class="col-sm-4">
-                            <div class="form-group">
+                            <div class="ng-select-wrap liq selectGroup">
                                 <label>Select Group<span class="red-text">*</span> </label>
-                                <sh-select [options]="selectAccount">
-                                </sh-select>
+                                <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <div class="account-list-item">{{option?.label}}</div>
+                                        <div class="account-list-item fs12">{{option?.value}}</div>
+                                    </ng-template>
+                                </ng-select>
                             </div>
                         </div>
                         <div class="col-sm-8">
@@ -37,7 +41,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>Currency (account) </label>
-                                <input type="text" value="INR" disabled class="form-control">
+                                <sh-select [options]="currencySource$ | async" formControlName="currency" [isFilterEnabled]="true"></sh-select>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -46,23 +50,50 @@
                                 <!-- <input type="text" value="INR" class="form-control">
                             <span class="dr-label active">DR</span>
                             <span class="cr-label">CR</span> -->
-                                <input type="text" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
-                                <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                                <div class="input-group" [ngClass]="{'input-group': addAccountForm.get('openingBalance').value > 0}">
+                                    <input type="text" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
+                                    <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
-                                </div>
-                                <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                                    </div>
+                                    <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">CR.
+                                    </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngIf="isHsnSacEnabledAcc">
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="d-block">HSN</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                            <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+                        </span>
+                                    <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
+                                </div>
+                            </div>
+                            <div class="col-xs-6 form-group">
+                                <label class="d-block">SAC</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                            <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+                        </span>
+                                    <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
                 </div>
             </div>
 
             <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-                <tab heading="GSTIN/Address" class="gstinAddress">
+                <tab heading="Address" class="gstinAddress">
                     <ng-container>
                         <div class="gstinForm" formArrayName="addresses">
                             <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -71,7 +102,7 @@
                                         <div class="add-address-default">
                                             <h3>Address {{i+1}}</h3>
                                             <div class="inputRadio">
-                                                <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="bottom">
+                                                <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="left">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -85,9 +116,9 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label>State</label>
+                                            <label>State <sup *ngIf="isDebtorCreditor">*</sup></label>
                                             <div class="custom-select">
-                                                <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
+                                                <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
                                                 </sh-select>
                                             </div>
                                         </div>
@@ -105,9 +136,11 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label>GSTIN</label>
-                                            <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst_{{i}}" placeholder="" />
+                                        <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
+                                            <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
+                                            class="text-danger">*</sup></label>
+                                            <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
@@ -118,28 +151,32 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-4" [ngStyle]="{display : gst.get('gstNumber').value && isGstValid ? 'block' : ' none' }">
+                                        <div class="form-group">
+                                            <label class="d-block">&nbsp;</label>
+                                            <label *ngIf="gst.get('gstNumber').value && isGstValid">
+                                        <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is Composite?
+                                        </label></label>
+                                            <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                                <i class="fa fa-times"> </i> Remove
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="l">
+                                    <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                                        <i class="fa fa-plus"></i> + Add Address
+                                    </a>
                                 </div>
                             </ng-container>
                         </div>
                     </ng-container>
-                    <div class="row" *ngIf="l">
-                        <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
-                            <i class="fa fa-plus"></i> + Add Address
-                        </a>
-                    </div>
+
                     <!-- <div class="row">
                         <div class="col-sm-12"> <button class="btn btn-primary mrT2" (click)="addAddress = !addAddress">+ Add
                 Address</button></div>
                     </div> -->
-                    <div class="row">
-                        <div class="col-sm-12 mrT3">
-                            <div class="button-group">
-                                <button class="btn btn-cancel">Cancel</button>
-                                <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
-                            </div>
-                        </div>
-                    </div>
-
 
                 </tab>
                 <tab heading="Contact" class="ContactFromWrap">
@@ -156,10 +193,11 @@
                                     <label>Mobile Number</label>
                                     <div class="d-flex">
                                         <sh-select [placeholder]="'+91'" [options]="countryPhoneCode" formControlName="mobileCode" style="width: 60px; margin-right: 10px;"></sh-select>
-                                        <input type="text" type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno." placeholder="98XXXXXXXX">
-                                        <small class="clearfix error-msg" *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">Phone code
-                                      required
-                                     </small>
+                                        <input type="text" pattern="[0-9]*" class="form-control pull-right" placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo" autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl />
+                                        <small class="clearfix error-msg" *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">Phone
+                                    code
+                                    required
+                                </small>
                                     </div>
                                 </div>
                             </div>
@@ -170,8 +208,9 @@
                                 <div class="form-group">
                                     <label>Email Id</label>
                                     <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                    <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid Email
-                               address</span>
+                                    <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid
+                                Email
+                                address</span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -191,19 +230,19 @@
 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 mrT3">
-                            <div class="button-group">
-                                <button class="btn btn-cancel">Cancel</button>
-                                <button class="btn btn-success">Save</button>
-                            </div>
-                        </div>
+                    <!-- <div class="row">
+                <div class="col-sm-12 mrT3">
+                    <div class="button-group">
+                        <button class="btn btn-cancel">Cancel</button>
+                        <button class="btn btn-success">Save</button>
                     </div>
+                </div>
+            </div> -->
                 </tab>
 
 
                 <!-- bank details visible when sundry credtiors selected , right now is hide -->
-                <tab heading="Bank Details" class="bankDetialsForm" *ngIf="bankDetails">
+                <tab heading="Bank Details" class="bankDetialsForm">
                     <div *ngIf="showBankDetail">
                         <div formArrayName="accountBankDetails">
                             <div class="" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -224,42 +263,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="bankDetailForm" formArrayName="accountBankDetails">
-                        <div class=" row " *ngFor="let bank of addAccountForm.get( 'accountBankDetails')[ 'controls'];let i=i ndex;let f=f irst; let l=l ast " [formGroupName]="i ">
-                            <div class="col-sm-5 ">
-                                <div class="form-group ">
-                                    <label>Bank Name</label>
-                                    <input type="text " class="form-control " name="bankName_{{i}} " formControlName="bankName " />
-                                </div>
-                            </div>
-                            <div class="col-sm-4 ">
-                                <div class="form-group ">
-                                    <label>Account No.</label>
-                                    <div class="d-flex ">
-                                        <input type="text " class="form-control " name="accountNum_{{i}} " formControlName="bankAccountNo " />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3 ">
-                                <div class="form-group ">
-                                    <label>IFSC Code</label>
-                                    <div class="d-flex ">
-                                        <input type="text " class="form-control " name="ifsc_{{i}} " formControlName="ifsc " />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="row ">
-                        <div class="col-sm-12 ">
-                            <div class="button-group mrT3 ">
-                                <button class="btn btn-cancel ">Cancel</button>
-                                <button class="btn btn-success ">Save</button>
-                            </div>
-                        </div>
-                    </div> -->
-
 
                 </tab>
 
@@ -309,39 +312,46 @@
                             <div class="col-sm-12 ">
                                 <div class="form-group ">
                                     <label>Description</label>
-                                    <textarea rows="3 " cols=" " name="description " formControlName="description " class="form-control "></textarea>
+                                    <textarea rows="3 " cols="4" name="description" formControlName="description" class="form-control "></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row ">
-                            <div class="col-sm-10 ">
-                                <div class="form-group ">
-                                    <label>Move to Group</label>
-                                    <input type="text " class="form-control " placeholder="Group Name ">
-                                </div>
-                            </div>
-                            <div class="col-sm-2 pdL0 ">
-                                <label>&nbsp;</label>
-                                <button class="btn btn-pink ">Move</button>
-                            </div>
+                        <!-- <div class="row ">
+                    <div class="col-sm-10 ">
+                        <div class="form-group ">
+                            <label>Move to Group</label>
+                            <input type="text " class="form-control " placeholder="Group Name ">
                         </div>
-                        <div class="row ">
-                            <div class="col-sm-10 ">
-                                <div class="form-group ">
-                                    <label>Select account to merge with</label>
-                                    <input type="text " class="form-control " placeholder="Select account ">
-                                </div>
-                            </div>
-                            <div class="col-sm-2 pdL0 ">
-                                <label>&nbsp;</label>
-                                <button class="btn btn-pink ">Merge</button>
-                            </div>
+                    </div>
+                    <div class="col-sm-2 pdL0 ">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-pink ">Move</button>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-sm-10 ">
+                        <div class="form-group ">
+                            <label>Select account to merge with</label>
+                            <input type="text " class="form-control " placeholder="Select account ">
                         </div>
+                    </div>
+                    <div class="col-sm-2 pdL0 ">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-pink ">Merge</button>
+                    </div>
+                </div> -->
                     </div>
 
                 </tab>
-
+                <div class="row">
+                    <div class="col-sm-12 mrT3">
+                        <div class="button-group">
+                            <button class="btn btn-cancel">Cancel</button>
+                            <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
+                        </div>
+                    </div>
+                </div>
             </tabset>
         </form>
     </div>

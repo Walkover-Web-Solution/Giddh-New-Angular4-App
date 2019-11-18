@@ -5,7 +5,7 @@
                 <div class="col-sm-4">
                     <div class="ng-select-wrap liq selectGroup">
                         <label>Select Group<span class="red-text">*</span> </label>
-                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" [options]="flatGroupsOptions" style="width:100%">
+                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item fs12">{{option?.value}}</div>
@@ -124,14 +124,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" *ngIf="l">
+                            <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                                <i class="fa fa-plus"></i> + Add Address
+                            </a>
+                        </div>
                     </ng-container>
                 </div>
             </ng-container>
-            <div class="row" *ngIf="l">
-                <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
-                    <i class="fa fa-plus"></i> + Add Address
-                </a>
-            </div>
+
             <!-- <div class="row">
                         <div class="col-sm-12"> <button class="btn btn-primary mrT2" (click)="addAddress = !addAddress">+ Add
                 Address</button></div>
@@ -213,7 +214,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="bankDetails">
+        <tab heading="Bank Details" class="bankDetialsForm">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">

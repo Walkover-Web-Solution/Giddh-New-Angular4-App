@@ -37,6 +37,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    @Input() public flatGroupsOptions: IOption[];
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -56,6 +57,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -82,18 +84,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public flatGroupsOptions: IOption[];
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
+    // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.getCountry();
@@ -158,18 +159,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 hsn.disable();
             }
         });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName
-                    }
-                });
-                this.flatGroupsOptions = items;
-            }
-        });
+        // this.flattenGroups$.subscribe(flattenGroups => {
+        //     if (flattenGroups) {
+        //         let items: IOption[] = flattenGroups.filter(grps => {
+        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+        //         }).map(m => {
+        //             return {
+        //                 value: m.groupUniqueName, label: m.groupName
+        //             }
+        //         });
+        //         this.flatGroupsOptions = items;
+        //     }
+        // });
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
 
@@ -310,6 +311,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
+            activeGroupUniqueName: [''],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -621,6 +623,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
+            this.isGroupSelected.emit(event.value);
         }
     }
 
