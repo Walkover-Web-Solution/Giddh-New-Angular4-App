@@ -236,3 +236,10 @@ span.dateWiseSale {
 .single-sale-data:last-child{
   border-right:none;
 }
+.total-salesTabs a {
+    color: #484848;
+    cursor: pointer;
+}
+.total-salesTabs a.active-graph {
+    font-family: 'opensans-semibold';
+}
