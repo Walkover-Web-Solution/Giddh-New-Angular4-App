@@ -701,12 +701,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         // if last invoice is copied then create new Voucher and copy only needed things not all things
                         obj = this.invFormData;
                     } else {
-                        if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
+                        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
                             let convertedRes1 = results[1];
-                            convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            if (results[1].account.currency) {
-                                this.companyCurrencyName = results[1].account.currency.code;
+
+                            // parse normal response to multi currency response
+                            // only in sales and cash invoice
+                            if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
+                                convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+
+                                if (results[1].account.currency) {
+                                    this.companyCurrencyName = results[1].account.currency.code;
+                                }
                             }
+
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 obj.accountDetails.currencySymbol = acc.currencySymbol || '';
@@ -2900,24 +2907,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     discountLedger.name = discount.name;
                     discountLedger.particular = discount.particular;
                     // if (discountLedger.discountUniqueName) {
-                        discountLedger.uniqueName = discountLedger.discountUniqueName;
-                        let tradeDiscount = new LedgerResponseDiscountClass();
-                        tradeDiscount.discount = {
-                            uniqueName: '',
-                            name: '',
-                            discountType: "PERCENTAGE",
-                            discountValue: 0
-                        };
-                        tradeDiscount.account = {
-                            accountType: '',
-                            uniqueName: entry.uniqueName,
-                            name: ''
-                        };
-                        tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
-                        tradeDiscount.discount.discountValue = discountLedger.discountValue;
-                        tradeDiscount.discount.discountType = discountLedger.discountType;
-                        tradeDiscount.discount.name = discountLedger.name;
-                        tradeDiscountArray.push(tradeDiscount);
+                    discountLedger.uniqueName = discountLedger.discountUniqueName;
+                    let tradeDiscount = new LedgerResponseDiscountClass();
+                    tradeDiscount.discount = {
+                        uniqueName: '',
+                        name: '',
+                        discountType: "PERCENTAGE",
+                        discountValue: 0
+                    };
+                    tradeDiscount.account = {
+                        accountType: '',
+                        uniqueName: entry.uniqueName,
+                        name: ''
+                    };
+                    tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+                    tradeDiscount.discount.discountValue = discountLedger.discountValue;
+                    tradeDiscount.discount.discountType = discountLedger.discountType;
+                    tradeDiscount.discount.name = discountLedger.name;
+                    tradeDiscountArray.push(tradeDiscount);
                     // } else {
                     //     discountArray.push(discountLedger);
                     // }
