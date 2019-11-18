@@ -1,4 +1,4 @@
-<div id="pie-chart">
+<div id="pie-chart" *ngIf="!graphExpanded">
   <div class="panel panel-default">
     <div class="row">
       <div class="col-sm-9">
@@ -13,7 +13,7 @@
               </ul>
             </div>
             <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
-            <span class="thisWeek pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand" [routerLink]="['total-sales']"></span> </span>
+            <span class="thisWeek pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand" (click)="showLineChart()"></span> </span>
             <ul class="dashboard-option pull-right">
               <li class="secondryDarkbg"> <span></span> Last Week</li>
               <li class="secondrylightbg"> <span></span> This Week</li>
@@ -52,6 +52,90 @@
             <p>Lowest {{activeGraphType['uniqueName']}}</p>
             <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
             <span>Tue (This week)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dashboard-container" *ngIf="graphExpanded">
+  <div class="totalSalesHeader">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="daterang-block">
+              <label>Date Range</label>
+              <div class="dateRangeInput">
+                <span class="icon-calender"></span>
+                <input type="text" placeholder="Select Dates" class="form-control" [bsValue]="previousDateRangePickerValue" (bsValueChange)="setPreviousDate($event)" bsDaterangepicker>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="daterang-block">
+              <label>Compare to</label>
+              <div class="dateRangeInput">
+                <span class="icon-calender"></span>
+                <input type="text" placeholder="Select Dates" class="form-control" [bsValue]="currentDateRangePickerValue" (bsValueChange)="setCurrentDate($event)" bsDaterangepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="page-title">
+          <div class="collapse-close" (click)="showColumnChart()">
+            <span class="icon-collapse-icon" tooltip="Collapse"></span>
+          </div>
+          <h1>Total {{activeGraphType['uniqueName']}}</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default mrT1">
+    <div class=" clearfix topdates">
+      <div class="pull-left aboutDate">
+        <div class="active-date">
+          <span></span>{{this.getPreviousWeekStartEndDate[0] | date}} - {{this.getPreviousWeekStartEndDate[1] | date}}
+        </div>
+        <div class="inActive-date">
+          <span></span>{{this.getCurrentWeekStartEndDate[0] | date}} - {{this.getCurrentWeekStartEndDate[1] | date}}
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="total-salesTabs">
+        <a [ngClass]="{'active-graph': graphParams.interval == 'daily'}" (click)="updateChartFrequency('daily')">Daily</a> | <a [ngClass]="{'active-graph': graphParams.interval == 'weekly'}" (click)="updateChartFrequency('weekly')">Weekly</a> | <a [ngClass]="{'active-graph': graphParams.interval == 'monthly'}" (click)="updateChartFrequency('monthly')">Monthly</a>
+        <chart [options]="options"></chart>
+      </div>
+    </div>
+    <div class="total-sale-data">
+      <div class="row">
+        <div class="col-sm-3 single-sale-data">
+          <div>
+            <p>Total {{activeGraphType['uniqueName']}} (Sep 19)</p>
+            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+          </div>
+        </div>
+        <div class="col-sm-3 single-sale-data">
+          <div>
+            <p>Total {{activeGraphType['uniqueName']}} (Aug 19)</p>
+            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+          </div>
+        </div>
+        <div class="col-sm-3 single-sale-data">
+          <div>
+            <p>Highest {{activeGraphType['uniqueName']}}</p>
+            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+            <span class="dateWiseSale">(12 Sep 19)</span>
+          </div>
+        </div>
+        <div class="col-sm-3 single-sale-data">
+          <div>
+            <p>Lowest {{activeGraphType['uniqueName']}}</p>
+            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+            <span class="dateWiseSale">(12 Sep 19)</span>
           </div>
         </div>
       </div>
