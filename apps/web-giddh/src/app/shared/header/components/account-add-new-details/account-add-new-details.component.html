@@ -153,14 +153,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" *ngIf="l">
+                            <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                                <i class="fa fa-plus"></i> + Add Address
+                            </a>
+                        </div>
                     </ng-container>
                 </div>
             </ng-container>
-            <div class="row" *ngIf="l">
-                <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
-                    <i class="fa fa-plus"></i> + Add Address
-                </a>
-            </div>
             <!-- <div class="row">
                         <div class="col-sm-12"> <button class="btn btn-primary mrT2" (click)="addAddress = !addAddress">+ Add
                 Address</button></div>
@@ -230,7 +230,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="bankDetails">
+        <tab heading="Bank Details" class="bankDetialsForm">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
