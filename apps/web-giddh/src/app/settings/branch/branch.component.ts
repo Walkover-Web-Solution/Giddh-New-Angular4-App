@@ -60,6 +60,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 	public moment = moment;
 	public filters: any[] = [];
 	public formFields: any[] = [];
+	public universalDate$: Observable<any>;
+	public isDefault: boolean = true;
+	public dateRangePickerValue: Date[] = [];
 
 	constructor(
 		private store: Store<AppState>,
@@ -71,6 +74,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 	) {
 		this.getOnboardingForm();
 
+		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+
 		this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
 			if (o && !_.isEmpty(o)) {
 				let companyInfo = _.cloneDeep(o);
@@ -79,11 +84,17 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 			}
 		});
 
-		let branchFilterRequest = new BranchFilterRequest();
+		// listen for universal date
+		this.universalDate$.subscribe(dateObj => {
+			if (this.isDefault && dateObj) {
+				this.filters['from'] = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+				this.filters['to'] = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
-		this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-		this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-		this.store.dispatch(this.settingsBranchActions.GetParentCompany());
+				this.dateRangePickerValue = [dateObj[0], dateObj[1]];
+				this.getAllBranches();
+				this.isDefault = false;
+			}
+		});
 
 		this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
 			if (branches) {
