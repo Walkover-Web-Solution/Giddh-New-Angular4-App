@@ -10,11 +10,13 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import * as moment from 'moment/moment';
+import {GIDDH_DATE_FORMAT} from "../../shared/helpers/defaultDateFormat";
 
 export const IsyncData = [
   { label: 'Debtors', value: 'debtors' },
@@ -57,6 +59,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public branchViewType: string = 'table';
   public hideOldData = false;
+  public moment = moment;
+  public filters: any[] = [];
 
   constructor(
     private store: Store<AppState>,
@@ -75,8 +79,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
+    let branchFilterRequest = new BranchFilterRequest();
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
@@ -242,9 +248,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public getAllBranches() {
+    let branchFilterRequest = new BranchFilterRequest();
+    branchFilterRequest.from = this.filters['from'];
+    branchFilterRequest.to = this.filters['to'];
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
   }
 
@@ -260,5 +271,18 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public changeBranchViewType(viewType) {
     this.branchViewType = viewType;
+  }
+
+  public setFilterDate(data) {
+    if (data) {
+      let branchFilterRequest = new BranchFilterRequest();
+      branchFilterRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
+      branchFilterRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
+
+      this.filters['from'] = branchFilterRequest.from;
+      this.filters['to'] = branchFilterRequest.to;
+
+      this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+    }
   }
 }

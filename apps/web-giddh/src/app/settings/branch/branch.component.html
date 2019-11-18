@@ -8,8 +8,7 @@
       <div class=" mrR1 d-flex">
         <div class="input-group">
           <div class="form-group">
-            <span class="icon-calender"></span> <input type="text" placeholder="Select Date" class="form-control"
-              bsDaterangepicker>
+            <span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date" class="form-control" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
           </div>
         </div>
         <div class="contentView mrL2">

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { SETTINGS_BRANCH_ACTIONS } from './settings.branch.const';
 import { CustomActions } from '../../../store/customActions';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
+import { BranchFilterRequest } from '../../../models/api-models/Company';
 
 @Injectable()
 export class SettingsBranchActions {
@@ -17,7 +18,7 @@ export class SettingsBranchActions {
   @Effect()
   public GetAllBranches$: Observable<Action> = this.action$
     .ofType(SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES).pipe(
-      switchMap((action: CustomActions) => this.settingsBranchService.GetAllBranches()),
+      switchMap((action: CustomActions) => this.settingsBranchService.GetAllBranches(action.payload)),
       map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE,
         payload: res
@@ -44,7 +45,8 @@ export class SettingsBranchActions {
         } else {
           this.toasty.successToast(data.body);
         }
-        return this.GetALLBranches();
+        let branchFilterRequest = new BranchFilterRequest();
+        return this.GetALLBranches(branchFilterRequest);
       }));
 
   @Effect()
@@ -63,7 +65,8 @@ export class SettingsBranchActions {
         } else {
           this.toasty.successToast(data.body);
         }
-        return this.GetALLBranches();
+        let branchFilterRequest = new BranchFilterRequest();
+        return this.GetALLBranches(branchFilterRequest);
       }));
 
   @Effect()
@@ -79,9 +82,10 @@ export class SettingsBranchActions {
               private settingsBranchService: SettingsBranchService) {
   }
 
-  public GetALLBranches(): CustomActions {
+  public GetALLBranches(request: BranchFilterRequest): CustomActions {
     return {
-      type: SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES
+      type: SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES,
+      payload: request
     };
   }
 

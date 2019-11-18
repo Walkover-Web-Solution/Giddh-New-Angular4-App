@@ -17,7 +17,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CompanyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse, BranchFilterRequest } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -410,7 +410,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    * getAllBranch
    */
   public getAllBranch() {
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    let branchFilterRequest = new BranchFilterRequest();
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+    // tslint:disable-next-line:no-shadowed-variable
     this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
       if (entities) {
         if (entities.results.length) {

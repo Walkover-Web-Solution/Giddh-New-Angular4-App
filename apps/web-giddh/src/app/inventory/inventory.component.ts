@@ -1,5 +1,5 @@
 import { InventoryAction } from '../actions/inventory/inventory.actions';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest, BranchFilterRequest } from '../models/api-models/Company';
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { BsDropdownConfig, ModalDirective, TabDirective, TabsetComponent } from 'ngx-bootstrap';
@@ -102,8 +102,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+    let branchFilterRequest = new BranchFilterRequest();
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
@@ -360,8 +362,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getAllBranches() {
+    let branchFilterRequest = new BranchFilterRequest();
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
   }
 

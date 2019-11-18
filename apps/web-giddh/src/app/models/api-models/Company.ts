@@ -341,3 +341,8 @@ export class CountryResponse {
     symbol: string;
   };
 }
+
+export class BranchFilterRequest {
+  from: string;
+  to: string;
+}

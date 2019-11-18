@@ -9,7 +9,7 @@ import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsBunchService } from '../../services/settings.bunch.service';
@@ -72,8 +72,10 @@ export class BunchComponent implements OnInit, OnDestroy {
 
     this.getAllBunch();
 
+    let branchFilterRequest = new BranchFilterRequest();
+
     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-    this.store.dispatch(this.settingsBranchActions.GetALLBranches());
+    this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {

@@ -8,6 +8,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BRANCH_API } from './apiurls/settings.branch.api';
+import { BranchFilterRequest } from '../models/api-models/Company';
 
 @Injectable()
 export class SettingsBranchService {
@@ -22,10 +23,19 @@ export class SettingsBranchService {
   /*
   * Get all branches
   */
-  public GetAllBranches(): Observable<BaseResponse<any, any>> {
+  public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + SETTINGS_BRANCH_API.GET_ALL_BRANCHES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+
+    let from = (request.from) ? request.from : "";
+    let to = (request.to) ? request.to : "";
+
+    let url = this.config.apiUrl + SETTINGS_BRANCH_API.GET_ALL_BRANCHES;
+    url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+    url = url.replace(':from', from);
+    url = url.replace(':to', to);
+
+    return this._http.get(url).pipe(map((res) => {
       let data: BaseResponse<any, any> = res;
       data.queryString = {};
       return data;
