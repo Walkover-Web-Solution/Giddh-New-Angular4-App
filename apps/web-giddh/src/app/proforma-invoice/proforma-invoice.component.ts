@@ -701,7 +701,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         // if last invoice is copied then create new Voucher and copy only needed things not all things
                         obj = this.invFormData;
                     } else {
-                        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType)) {
+                        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType)) {
                             let convertedRes1 = results[1];
 
                             // parse normal response to multi currency response
