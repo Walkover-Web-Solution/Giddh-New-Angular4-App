@@ -38,32 +38,36 @@
                     </div> -->
                     <div class="form-group mrR1" *ngIf="!(showLoader)">
 
-                        <!-- Filter by Tag -->
-                        <div class="form-group pull-left" style="margin-right: 10px;">
-
-                            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip"
-                                data-placement="top" title="Expand All" *ngIf="!expand">
-                                <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;">
-                            </a>
-
-                            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip"
-                                data-placement="top" title="Collapse All" *ngIf="expand">
-                                <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;">
-                            </a>
-
-                        </div>
-
                         <div class="form-group pull-left mrR1 " style="margin-left: 0px;margin-top: -18px;"
                             *ngIf="(tags$ | async)?.length">
 
                             <i class="glyphicon glyphicon-triangle-bottom"
                                 style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
-                            <sh-select [options]="tags$ | async" name="selectedTag" [(ngModel)]="selectedTag"
+                            <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
                                 [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
                                 [ItemHeight]="35" [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
                                 [showNotFoundLinkAsDefault]="false" [width]="'200px'">
                             </sh-select>
                         </div>
+                        <!-- Filter by Tag -->
+
+                        <div class="form-group pull-left" style="margin-right: 10px;">
+
+                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
+                                *ngIf="!expand">
+
+                                <span class="icon-expandIcon"></span>
+                            </a>
+
+                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
+                                *ngIf="expand">
+
+                                <span class="icon-collapse"></span>
+                            </a>
+
+                        </div>
+
+
 
                         <div class="mrT1 pull-right" *ngIf="showLabels">
 

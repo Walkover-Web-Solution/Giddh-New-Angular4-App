@@ -26,6 +26,7 @@
   --light-gray:#e6e7e8;
 } */
 
+
                 @import '../css/color.scss';
                 [class^="icon-"],
                 [class*=" icon-"] {
@@ -5658,7 +5659,7 @@ input[type=radio]:checked:after {
                 }
 
                 .welcome_header h1 {
-                    font-size: 40px;
+                    font-size: 30px;
                     font-family: 'opensans-regular';
                     color: #1A237E;
                 }
@@ -8260,6 +8261,9 @@ GST filing
                     display: flex;
                     align-items: center;
                 }
+                .custom-tabs .nav>li>a {
+                        padding-top: 0;
+                    }
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -8740,7 +8744,7 @@ GST filing
                     }
                     .invoce-controll .nav.nav-tabs {
                         margin-bottom: 28px;
-                        padding: 10px 0px 0 0 !important;
+                        padding: 0 0px 0 0 !important;
                         border-bottom: 1px solid #ddd;
                         overflow-x: auto;
                         white-space: nowrap;
