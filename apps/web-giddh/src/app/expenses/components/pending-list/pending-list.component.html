@@ -5,9 +5,12 @@
             <tr>
                 <th data-title="#">#</th>
 
-                <th>Date
+                <th>
+                    <div class="d-flex align-items-center">
+                    <span class="pull-left">Date</span>
                     <ng-container class="d-inline-block"
-                                  *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+                </div>
                 </th>
 
                 <th class="td_in_searchBox" #submittedBySearchContainer
@@ -23,9 +26,10 @@
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                 </th>
 
-                <th class="text-right pr-2">Amount
+                <th class="text-right pr-2 amount-arrow"><div class="d-flex align-items-center"><span>Amount</span>
                     <ng-container class="d-inline-block "
-                                  *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                </div>
                 </th>
 
                 <th class="td_in_searchBox" #paymentReceiptSearchContainer
