@@ -9,6 +9,7 @@ import { BsDropdownDirective, BsModalRef, BsModalService, ModalDirective, ModalO
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
 import {
     ActiveFinancialYear,
     CompanyCountry,
@@ -38,7 +39,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'app-header',
@@ -1319,7 +1319,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this._generalActions.getAllState(statesRequest));
         }
     }
+
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
     }
+
+	public removeCompanySessionData() {
+		this._generalService.createNewCompany = null;
+		this.store.dispatch(this.commonActions.resetCountry());
+		this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+	}
 }
