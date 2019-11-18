@@ -1,3 +1,5 @@
+@import '../../assets/css/color.scss';
+
 .welcome-header {
     display: flex;
     justify-content: center;
@@ -102,6 +104,17 @@
   top: 0;
 }
 
+.clearBTn{
+  position: absolute;
+    right: -50px;
+    top: 38px;
+    z-index: 9;
+    cursor: pointer;
+    color: $btnLink;
+}
+.pos-rel{
+  position: relative;
+}
 .custom-multi-select li {
   background: #f1f1f1;
   color: white;

@@ -31,8 +31,8 @@
   transition: opacity .15s linear;
 }
 .aside-title{
-  padding-bottom: 10px;
-  border-bottom: 1px solid #c6c7c7;
+  /* padding-bottom: 10px;
+  border-bottom: 1px solid #c6c7c7; */
 }
 
 @media(max-width:575px){

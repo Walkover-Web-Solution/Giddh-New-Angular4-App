@@ -1,4 +1,5 @@
 /**new modal design**/
+
 @import '../../../../../assets/css/color.scss';
 .modal-body label {
     color: #707070;
@@ -25,12 +26,12 @@ label .required {
 
 .giddh_logo_welcome img {
     max-width: 200px;
-    margin: 10px auto;
+    margin: 50px auto;
     display: block;
 }
 
 .welcome_wrapper {
-    padding: 58px 0;
+    padding: 50px 0;
 }
 
 .welcome_header:after {
@@ -43,7 +44,7 @@ label .required {
 }
 
 .welcome_header h1 {
-    font-size: 40px;
+    font-size: 30px;
     font-family: 'opensans-regular';
     color: $pageTitleColor;
 }
@@ -60,14 +61,23 @@ label .required {
     width: 100%;
 }
 
-@media (max-width: 414px) {
+.add-companyDetail {
+    background-color: #F7F8FA;
+}
 
-.welcome_header h1 {
-    font-size: 30px !important;
+@media (min-width: 768px) {
+    /* .form-inline .input-group>.form-control {
+  width: 86%;
+} */
 }
-.welcome_wrapper {
-    padding: 20px 0;
-}
+
+@media (max-width: 414px) {
+    .welcome_header h1 {
+        font-size: 30px !important;
+    }
+    .welcome_wrapper {
+        padding: 20px 0;
+    }
 }
 
 

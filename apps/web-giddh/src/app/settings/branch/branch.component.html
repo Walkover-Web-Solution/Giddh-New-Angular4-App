@@ -1,157 +1,242 @@
-<div class="" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
-  <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
-        *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
-    <button class="btn btn-default mrL1" (click)="openAddBranchModal()">Add Branch</button>
-  </h3>
-</div>
+<div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
+	<!-- <h3 class="section_head mrT1 grey_clr">Add branch under <strong class="primary_clr">{{ currentBranch }} <span
+		  *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
 
-<div class="" *ngIf="(branches$ | async)?.length > 0">
-  <div class="row">
-    <div class="col-sm-6 col-xs-12 branch" *ngFor="let branch of branches$ | async">
-      <div class="box clearfix mrB2">
-        <div class="mrB1 pdB bdrB clearfix pos-rel">
-          <h1 class="fs18 txtCpc">{{branch.name}} <span *ngIf="branch.nameAlias">({{branch.nameAlias}} )</span> </h1>
-          <button class="pull-right btn btn-default btn-xs pos-abs"
-            (click)="removeBranch(branch.uniqueName, branch.name)">
-            <i class="fa fa-trash-o"></i> Remove
-          </button>
-        </div>
-        <section class="form-horizontal">
-          <div class="form-group">
-            <label class="control-label col-sm-2">Address</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" placeholder="Address" disabled [value]="branch.address" />
-            </div>
-          </div>
-          <div class="form-group mrB">
-            <label class="control-label col-sm-2">GSTIN</label>
-            <div class="col-sm-4">
-              <input type="text" class="form-control" placeholder="GSTIN" disabled
-                [value]="branch?.addresses[0]?.taxNumber" />
-            </div>
-          </div>
-          <!-- This feature is not available right now -->
-          <!-- <div class="form-group">
-          <label class="control-label col-sm-2">Sync data to Branches</label>
-          <div class="col-sm-10">
-              <sh-select [placeholder]="'Select data to sync'" [options]="dataSyncOption" [multiple]="true"></sh-select>
-          </div>
-      </div> -->
-        </section>
-      </div>
-    </div>
-  </div>
+	</h3> -->
+	<div class="d-flex date-advanceSearch row">
+		<form class="form-inline input-grp-dateRangePicker pr col-sm-8">
+			<div class=" mrR1 d-flex">
+				<div class="input-group">
+					<div class="form-group">
+						<span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date" class="form-control" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
+					</div>
+				</div>
+				<div class="contentView mrL2">
+					<div class="">
+						<span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'table') ? true : false" (click)="changeBranchViewType('table');">Table View</span>
+						<span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'card') ? true : false" (click)="changeBranchViewType('card');">Card View </span>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="col-sm-4">
+			<button class="btn btn-pink mrB2 pull-right " (click)="openAddBranchModal()"> +New Branch</button>
+		</div>
+	</div>
+</div>
+<div *ngIf="(branches$ | async)?.length > 0">
+	<table class="table basic table-bordered mrT2" *ngIf="branchViewType === 'table'">
+		<thead>
+		<tr>
+			<th>Branch Name</th>
+			<th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
+			<th>Contact No.</th>
+			<th class="text-right">Total Sales</th>
+			<th class="text-right">Total Expenses</th>
+			<th class="text-right">Total Taxes</th>
+			<!--        <th class="text-right">Total Stock</th>-->
+		</tr>
+		</thead>
+		<tbody>
+		<tr *ngFor="let branch of branches$ | async">
+			<td>{{branch.name}}</td>
+			<td *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
+			<td>{{branch.contactNo}}</td>
+			<td class="text-right"><span
+					*ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
+					*ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
+			</td>
+			<td class="text-right"><span
+					*ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span><span
+					*ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
+			</td>
+			<td class="text-right"><span
+					*ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span><span
+					*ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
+			</td>
+			<!--        <td class="text-right">&nbsp;</td>-->
+		</tr>
+		</tbody>
+	</table>
+
+	<div class="branchCardView" *ngIf="branchViewType === 'card'">
+		<div class="row">
+			<div class="col-md-4 pdR1" *ngFor="let branch of branches$ | async">
+
+				<div class="branchCard">
+					<div class="cardBasicDetails">
+						<h2>{{branch.name}}</h2>
+						<div class="clearfix">
+							<span class="mrR1 pull-left">Contact:</span>
+							<span class="pull-left">{{branch.contactNo}}</span>
+						</div>
+						<div class="clearfix" *ngIf="formFields['taxName']">
+							<span class="mrR1 pull-left">{{formFields['taxName'].label}}:</span>
+							<span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
+						</div>
+						<div class="clearfix">
+							<span class="mrR1 pull-left">Address:</span>
+							<span class="pull-left">{{branch?.addresses[0]?.address}}</span>
+						</div>
+					</div>
+					<div class="branchSalesDetails">
+						<div class="clearfix">
+              <span class="pull-left">
+                <label>Total Sales</label>
+              </span>
+							<span class="pull-right"
+							      *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span>
+							<span class="pull-right"
+							      *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
+						</div>
+						<div class="clearfix">
+              <span class="pull-left">
+                <label>Total Expenses</label>
+              </span>
+							<span class="pull-right"
+							      *ngIf="branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount">{{branch.companyTotals.expenses.amount | giddhCurrency}}</span>
+							<span class="pull-right"
+							      *ngIf="!(branch && branch.companyTotals && branch.companyTotals.expenses && branch.companyTotals.expenses.amount)">0</span>
+						</div>
+						<div class="clearfix">
+              <span class="pull-left">
+                <label>Total Taxes</label>
+              </span>
+							<span class="pull-right"
+							      *ngIf="branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount">{{branch.companyTotals.taxes.amount | giddhCurrency}}</span>
+							<span class="pull-right"
+							      *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
+						</div>
+						<!--            <div class="clearfix">-->
+						<!--              <span class="pull-left">-->
+						<!--                <label>Total Stock</label>-->
+						<!--              </span>-->
+						<!--              <span class="pull-right">&nbsp;</span>-->
+						<!--            </div>-->
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
 </div>
 
 <div class="" *ngIf="(branches$ | async)?.length < 1">
-  <div class="col-xs-12  text-center">
-    <div class="illustration_box">
-      <img src="assets/images/new/branch-Illus.png" />
-      <div class="" *ngIf="!parentCompanyName">
-        <h3 class="lead mrT2 fs18">Add branch under <strong class="primary_clr txtCpc">{{ currentBranch }} <span
-              *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
-        </h3>
-        <button class="btn btn-default mrL1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
-      </div>
-      <div class="" *ngIf="parentCompanyName">
-        <h3 class="lead mrT2 fs18">This is a branch of <strong class="primary_clr txtCpc">{{ parentCompanyName
-          }}</strong> headquarter.</h3>
-      </div>
-    </div>
-  </div>
+	<div class="col-xs-12  text-center">
+		<div class="illustration_box">
+			<img src="assets/images/new/branch-Illus.png"/>
+			<div class="" *ngIf="!parentCompanyName">
+				<h3 class="lead mrT2 fs18">Add branch under <strong class="primary_clr txtCpc">{{ currentBranch }} <span
+						*ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
+				</h3>
+				<button class="btn btn-default mrL1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
+			</div>
+			<div class="" *ngIf="parentCompanyName">
+				<h3 class="lead mrT2 fs18">This is a branch of <strong class="primary_clr txtCpc">{{ parentCompanyName
+					}}</strong> headquarter.</h3>
+			</div>
+		</div>
+	</div>
 </div>
-
 
 <!-- add branch modal -->
 <div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1" class="modal fade"
-  role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header clearfix">
-        <h3>Add Branch</h3>
-        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
-      </div>
-      <div style="height: 228px;" class="modal-body">
-        <div>
-          <label>Select companies who are your branch</label>
-          <div class="btn-group btn-block" dropdown>
-            <button dropdownToggle (click)="getAllBranches()" type="button"
-              class="form-control text-left btn-block dropdown-toggle">
-              <span *ngIf="!selectedCompaniesUniquename.length"> Select Branch </span><span
-                *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}} selected</span><span
-                class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-            </button>
-            <ul *dropdownMenu class="dropdown-menu width100" role="menu">
-              <li>
-                <input type="checkbox" (click)="selectAllCompanies($event)" [checked]="isAllSelected$ | async" /> Select
-                all
-              </li>
-              <li *ngFor="let cmp of companies$ | async">
-                <input type="checkbox" [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
-                  (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias">
+     role="dialog">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header clearfix">
+				<h3>Create New Branch</h3>
+				<span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
+			</div>
+			<div class="modal-body">
+				<div>
+					<label class="selectCompanies">Select companies who are your branch</label>
+					<div class="btn-group btn-block" dropdown>
+						<button dropdownToggle (click)="getAllBranches()" type="button"
+						        class="form-control text-left btn-block dropdown-toggle">
+							<span *ngIf="!selectedCompaniesUniquename.length"> Select Branch </span><span
+								*ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}}
+							selected</span><span
+								class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+						</button>
+						<ul *dropdownMenu class="dropdown-menu width100" role="menu">
+							<li>
+								<input type="checkbox" (click)="selectAllCompanies($event)"
+								       [checked]="isAllSelected$ | async"/> Select
+								all
+							</li>
+							<li *ngFor="let cmp of companies$ | async">
+								<input type="checkbox"
+								       [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
+								       (click)="checkUncheckMe(cmp, $event)"/> {{cmp.name}} <span *ngIf="cmp.nameAlias">
                   ({{cmp.nameAlias}})</span>
-              </li>
-            </ul>
+							</li>
+						</ul>
 
 
-          </div>
-        </div>
-        <div style="margin-top: 5px;">
-          <ul class="list-inline custom-multi-select">
-            <li *ngFor="let cmp of selectedCompaniesName">
-              <a style="color: gray">
-                {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pdL"
-                  (click)="checkUncheckMe(cmp,$event)">×</span>
-              </a>
-            </li>
+					</div>
+				</div>
+				<div style="margin-top: 5px;">
+					<ul class="list-inline custom-multi-select">
+						<li *ngFor="let cmp of selectedCompaniesName">
+							<a style="color: gray">
+								{{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pdL"
+								                                                                          (click)="checkUncheckMe(cmp,$event)">×</span>
+							</a>
+						</li>
 
-          </ul>
+					</ul>
 
-        </div>
-        <div>
-          <span>Or</span>
-          <button class="btn-link" (click)="openCreateCompanyModal()">Create Branch</button>
-        </div>
-      </div>
-      <div class="modal-footer clearfix">
-        <button (click)="createBranches()" class="btn btn-sm btn-success">Save</button>
-        <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
-      </div>
-      <!-- modal footer -->
-    </div>
-  </div>
+				</div>
+				<div>
+					<br>
+					<span>Or</span>
+					<button class="btn-link" (click)="openCreateCompanyModal()">Create New Branch</button>
+				</div>
+
+
+				<div class="buttonYesCancel">
+					<button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">Cancel</button>
+					<button (click)="createBranches()" class="btn btn-sm btn-success">Yes</button>
+				</div>
+
+			</div>
+
+			<!-- modal footer -->
+		</div>
+	</div>
 </div>
 
 <!--add company modal  -->
 
 
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-  class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-      </ng-template>
-    </div>
-  </div>
+     class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+			</ng-template>
+		</div>
+	</div>
 </div>
 
 
 <!-- add branch modal -->
 <div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-  class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header clearfix">
-        <h3>Confirmation</h3>
-        <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">×</span>
-      </div>
-      <div class="modal-body" [innerHTML]="confirmationMessage">
-      </div>
-      <div class="modal-footer clearfix">
-        <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">Yes</button>
-        <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">No</button>
-      </div>
-      <!-- modal footer -->
-    </div>
-  </div>
+     class="modal fade" role="dialog">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header clearfix">
+				<h3>Confirmation</h3>
+				<span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">×</span>
+			</div>
+			<div class="modal-body" [innerHTML]="confirmationMessage">
+			</div>
+			<div class="modal-footer clearfix">
+				<button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">Yes</button>
+				<button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">No</button>
+			</div>
+			<!-- modal footer -->
+		</div>
+	</div>
 </div>
