@@ -284,6 +284,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalReverseExchangeRate: number;
     public countryCode: string = '';
     private entriesListBeforeTax: SalesEntryClass[];
+    /** True, if user has selected custom invoice in Invoice Setting */
+    private useCustomInvoiceNumber: boolean;
 
     constructor(
         private modalService: BsModalService,
@@ -553,6 +555,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     duePeriod = setting.proformaSettings ? setting.proformaSettings.duePeriod : 0;
                 } else {
                     duePeriod = setting.invoiceSettings ? setting.invoiceSettings.duePeriod : 0;
+                    this.useCustomInvoiceNumber = setting.invoiceSettings ? setting.invoiceSettings.useCustomInvoiceNumber : false;
                 }
                 this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
                     moment().add(duePeriod, 'days').toDate() : moment().toDate();
@@ -1344,6 +1347,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice || this.isCashInvoice) {
                 updatedData = this.updateData(obj, data);
                 isVoucherV4 = true;
+                if (this.useCustomInvoiceNumber) {
+                    updatedData['number'] = this.invFormData.voucherDetails.voucherNumber;
+                }
             }
             this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                 if (response.status === 'success') {
@@ -1559,7 +1565,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
-            this.calculatedRoundOff = Math.round(calculatedGrandTotal) - calculatedGrandTotal;
+            this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
             if (this.calculatedRoundOff === 0.5) {
                 this.calculatedRoundOff = -this.calculatedRoundOff;
             }
@@ -1745,7 +1751,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getAccountDetails(item.value);
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
-            this.isMulticurrencyAccount = item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency;
+            if (item.additional) {
+                // If currency of item is null or undefined then treat it to be equivalent of company currency
+                item.additional['currency'] = item.additional.currency || this.companyCurrency;
+                this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
+            }
 
             if (this.isMulticurrencyAccount) {
                 this.companyCurrencyName = item.additional.currency;
@@ -1986,8 +1996,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
             this.depositAccountUniqueName = event.value;
-            if (this.isCashInvoice) {
-                this.isMulticurrencyAccount = event.additional && event.additional.currency && event.additional.currency !== this.companyCurrency;
+            if (event.additional) {
+                // If currency of item is null or undefined then treat it to be equivalent of company currency
+                event.additional['currency'] = event.additional.currency || this.companyCurrency;
+                this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
             }
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
@@ -1996,7 +2008,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
                 }
                 if (this.isSalesInvoice) {
-                    this.depositCurrSymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
                 }
             } else {
                 this.invFormData.accountDetails.currencySymbol = '';
@@ -3069,7 +3081,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return new Promise((resolve: Function) => {
             if (currency) {
                 this.salesService.getStateCode(currency).subscribe(resp => {
-                    this.statesSource = this.modifyStateResp(resp.body.stateList);
+                    this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
                     resolve();
                 }, () => {
                     resolve();
