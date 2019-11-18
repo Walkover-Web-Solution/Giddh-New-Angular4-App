@@ -429,8 +429,13 @@ export class HomeActions {
   @Effect()
   public getRevenueGraphData$: Observable<Action> = this.action$
       .ofType(HOME.GET_REVENUE_GRAPH_DATA).pipe(
-          switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphData(action.payload)),
-          map(response => this.getRevenueGraphDataResponse(response)));
+          switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphData(action.payload)), map((res) => this.validateResponse<RevenueGraphDataResponse, string>(res, {
+            type: HOME.GET_REVENUE_GRAPH_DATA_RESPONSE,
+            payload: res
+          }, true, {
+            type: HOME.GET_REVENUE_GRAPH_DATA_RESPONSE,
+            payload: res
+          })));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
