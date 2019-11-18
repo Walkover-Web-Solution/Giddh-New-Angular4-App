@@ -8,22 +8,13 @@
 			<div class=" mrR1 d-flex">
 				<div class="input-group">
 					<div class="form-group">
-						<span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date"
-						                                           class="form-control"
-						                                           (bsValueChange)="setFilterDate($event)"
-						                                           bsDaterangepicker>
+						<span class="icon-calender"></span> <input type="text" readonly placeholder="Select Date" class="form-control" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
 					</div>
 				</div>
 				<div class="contentView mrL2">
 					<div class="">
-						<span class="mrR1"> <input class="radio_theme" name="signatureType"
-						                           style="margin-left: 0px !important;" type="radio"
-						                           [checked]="(branchViewType === 'table') ? true : false"
-						                           (click)="changeBranchViewType('table');">Table View</span>
-						<span class=""> <input class="radio_theme" name="signatureType"
-						                       style="margin-left: 0px !important;" type="radio"
-						                       [checked]="(branchViewType === 'card') ? true : false"
-						                       (click)="changeBranchViewType('card');">Card View </span>
+						<span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'table') ? true : false" (click)="changeBranchViewType('table');">Table View</span>
+						<span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [checked]="(branchViewType === 'card') ? true : false" (click)="changeBranchViewType('card');">Card View </span>
 					</div>
 				</div>
 			</div>
@@ -38,7 +29,7 @@
 		<thead>
 		<tr>
 			<th>Branch Name</th>
-			<th>GSTIN</th>
+			<th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
 			<th>Contact No.</th>
 			<th class="text-right">Total Sales</th>
 			<th class="text-right">Total Expenses</th>
@@ -49,7 +40,7 @@
 		<tbody>
 		<tr *ngFor="let branch of branches$ | async">
 			<td>{{branch.name}}</td>
-			<td>{{branch?.addresses[0]?.taxNumber}}</td>
+			<td *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
 			<td>{{branch.contactNo}}</td>
 			<td class="text-right"><span
 					*ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
@@ -79,8 +70,8 @@
 							<span class="mrR1 pull-left">Contact:</span>
 							<span class="pull-left">{{branch.contactNo}}</span>
 						</div>
-						<div class="clearfix">
-							<span class="mrR1 pull-left">GSTIN:</span>
+						<div class="clearfix" *ngIf="formFields['taxName']">
+							<span class="mrR1 pull-left">{{formFields['taxName'].label}}:</span>
 							<span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
 						</div>
 						<div class="clearfix">
@@ -128,43 +119,6 @@
 
 		</div>
 	</div>
-	<div class="row" *ngIf="hideOldData">
-		<div class="col-sm-6 col-xs-12 branch" *ngFor="let branch of branches$ | async">
-			<div class="box clearfix mrB2">
-				<div class="mrB1 pdB bdrB clearfix pos-rel">
-					<h1 class="fs18 txtCpc">{{branch.name}} <span *ngIf="branch.nameAlias">({{branch.nameAlias}}
-						)</span></h1>
-					<button class="pull-right btn btn-default btn-xs pos-abs"
-					        (click)="removeBranch(branch.uniqueName, branch.name)">
-						<i class="fa fa-trash-o"></i> Remove
-					</button>
-				</div>
-				<section class="form-horizontal">
-					<div class="form-group">
-						<label class="control-label col-sm-2">Address</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" placeholder="Address" disabled
-							       [value]="branch.address"/>
-						</div>
-					</div>
-					<div class="form-group mrB">
-						<label class="control-label col-sm-2">GSTIN</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" placeholder="GSTIN" disabled
-							       [value]="branch?.addresses[0]?.taxNumber"/>
-						</div>
-					</div>
-					<!-- This feature is not available right now -->
-					<!-- <div class="form-group">
-					<label class="control-label col-sm-2">Sync data to Branches</label>
-					<div class="col-sm-10">
-						<sh-select [placeholder]="'Select data to sync'" [options]="dataSyncOption" [multiple]="true"></sh-select>
-					</div>
-				</div> -->
-				</section>
-			</div>
-		</div>
-	</div>
 </div>
 
 <div class="" *ngIf="(branches$ | async)?.length < 1">
@@ -184,7 +138,6 @@
 		</div>
 	</div>
 </div>
-
 
 <!-- add branch modal -->
 <div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1" class="modal fade"
