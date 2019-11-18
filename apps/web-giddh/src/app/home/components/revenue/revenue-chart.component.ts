@@ -227,6 +227,14 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 			xAxis: {
 				labels: {
 					enabled: false
+				},
+				title: {
+					text: ''
+				}
+			},
+			yAxis: {
+				title: {
+					text: ''
 				}
 			}
 		};
