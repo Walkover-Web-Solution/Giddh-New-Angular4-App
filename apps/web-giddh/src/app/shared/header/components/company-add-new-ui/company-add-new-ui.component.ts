@@ -110,7 +110,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 				if (prevTab !== 'user-details') {
 					this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 				}
-				// this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
 				setTimeout(() => {
 					if (prevTab !== 'user-details') {
 						this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
@@ -145,7 +144,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 	 * createCompany
 	 */
 	public createCompany(mobileNoEl) {
-
 		this.checkMobileNo(mobileNoEl);
 
 		if (!this.isMobileNumberValid) {

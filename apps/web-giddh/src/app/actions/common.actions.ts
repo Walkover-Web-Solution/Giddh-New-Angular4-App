@@ -24,6 +24,7 @@ export class CommonActions {
     public static RESET_ONBOARDING_FORM_RESPONSE = "ResetOnboardingFormResponse";
     public static GET_PARTY_TYPE = 'GetGET_PARTY_TYPE_REQUEST';
     public static GET_PARTY_TYPE_RESPONSE = "GET_PARTY_TYPEResponse";
+    public static RESET_COUNTRY = 'ResetCountry';
 
     @Effect()
     public getCountry$: Observable<Action> = this.action$
@@ -130,4 +131,10 @@ export class CommonActions {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
         };
     }
+
+	public resetCountry(): CustomActions {
+		return {
+			type: CommonActions.RESET_COUNTRY
+		};
+	}
 }

@@ -75,7 +75,11 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return { ...state, onboardingform: null };
         }
 
-        default:
-            return state;
-    }
+	    case CommonActions.RESET_COUNTRY: {
+	      return Object.assign({}, state, {countries: null});
+	    }
+
+	    default:
+	      return state;
+  }
 }
