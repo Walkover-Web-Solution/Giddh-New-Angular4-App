@@ -20,7 +20,7 @@
       </div>
       <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
         <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="profitLossChart" #currentRatio></chart>
+          <chart [options]="profitLossChart" *ngIf="!noDataFound" #currentRatio></chart>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Net Profit/Loss</span>

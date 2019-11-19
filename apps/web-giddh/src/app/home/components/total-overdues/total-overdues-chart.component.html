@@ -21,7 +21,7 @@
       </div>
       <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
         <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="totaloverDueChart" #currentRatio></chart>
+          <chart [options]="totaloverDueChart" *ngIf="!noDataFound" #currentRatio></chart>
           <div class="clearfix mrB2">
             <div class="">
               <span class="mrB1 dueAmount">Customer Due</span>

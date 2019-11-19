@@ -108,7 +108,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 	public amountSettings: any = {baseCurrencySymbol: ''};
 	public isDefault: boolean = true;
 	public universalDate$: Observable<any>;
-
+	public noDataFound: boolean = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
@@ -142,6 +142,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
 		this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
 			if (p) {
+				this.noDataFound = false;
 				let data = _.cloneDeep(p) as ProfitLossData;
 				let revenue;
 				let expense;
@@ -151,21 +152,40 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 					revenue = _.cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
 					this.totalIncome = revenue.amount;
 					this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
+				} else {
+					this.totalIncome = 0;
+					this.totalIncomeType = '';
 				}
 
 				if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
 					expense = _.cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
 					this.totalExpense = expense.amount;
 					this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
+				} else {
+					this.totalExpense = 0;
+					this.totalExpenseType = '';
 				}
 
 				if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
 					npl = _.cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
 					this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
 					this.netProfitLoss = npl.amount;
+				} else {
+					this.netProfitLossType = '';
+					this.netProfitLoss = 0;
 				}
 
 				this.generateCharts();
+			} else {
+				this.noDataFound = true;
+				this.totalIncome = 0;
+				this.totalIncomeType = '';
+				this.totalExpense = 0;
+				this.totalExpenseType = '';
+				this.netProfitLossType = '';
+				this.netProfitLoss = 0;
+				this.requestInFlight = false;
+				this.cdRef.detectChanges();
 			}
 		});
 	}
