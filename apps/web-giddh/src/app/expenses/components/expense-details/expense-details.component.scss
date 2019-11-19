@@ -37,9 +37,10 @@
 }
 
 .img-zoom {
+    max-height: 300px;
+    min-width: 300px;
+    max-width: 300px;
     position: relative;
-    width: 300px;
-    height: 300px;
 }
 
 .img-zoom img {
@@ -60,6 +61,7 @@
     line-height: 30px;
     color: #666666;
     border-radius: 3px;
+    cursor: pointer;
 }
 
 .textarea.form-control {
