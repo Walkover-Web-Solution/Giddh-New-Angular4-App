@@ -168,6 +168,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
+                    address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.country) {
@@ -272,9 +273,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
                 });
             }
         });
@@ -289,7 +287,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
                 let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
                 if (currentCompany) {
                     // set country
-                    this.setCountryByCompany(currentCompany);
+                    //this.setCountryByCompany(currentCompany);
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
                     this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
                     // if (this.isMultipleCurrency) {
