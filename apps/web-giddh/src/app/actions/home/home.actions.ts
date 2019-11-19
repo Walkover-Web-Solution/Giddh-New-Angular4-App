@@ -417,7 +417,11 @@ export class HomeActions {
             payload: obj
           };
         }
-        return {type: 'EmptyAction'};
+
+        return {
+          type: HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES_RESPONSE,
+          payload: null
+        };
       }));
 
   @Effect()

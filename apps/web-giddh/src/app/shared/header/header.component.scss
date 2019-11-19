@@ -623,11 +623,36 @@ ul.sub-list{
 .upgradePlan.list-inline > li{
         padding-left: 0 !important;
 }
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width: 80%;
+}
+
 /* responsive */
+@media(max-width:1366px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:55%;
+}
+}
+@media(max-width:1280px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:50%;
+}
+}
+@media(max-width:1024px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:40%;
+}
+}
 @media(max-width:991px) {
+    .primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:30%;
+}
     .modal-liq90 {
         width: 100% !important;
     }
+    .primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:50%;
+}
 }
 
 @media(max-width:768px){
