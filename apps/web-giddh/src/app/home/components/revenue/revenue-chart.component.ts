@@ -10,6 +10,7 @@ import * as moment from 'moment/moment';
 import {RevenueGraphDataRequest} from "../../../models/api-models/Dashboard";
 import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import {GeneralService} from "../../../services/general.service";
 
 @Component({
 	selector: 'revenue-chart',
@@ -48,7 +49,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	public currentDateRangePickerValue: Date[] = [];
 	public previousDateRangePickerValue: Date[] = [];
 
-	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe) {
+	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService) {
 		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
@@ -222,6 +223,19 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 				formatter: function () {
 					return this.point.tooltip;
 				}
+			},
+			xAxis: {
+				labels: {
+					enabled: false
+				},
+				title: {
+					text: ''
+				}
+			},
+			yAxis: {
+				title: {
+					text: ''
+				}
 			}
 		};
 
@@ -237,12 +251,14 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public showLineChart() {
+		this._generalService.invokeEvent.next("hideallcharts");
 		this.currentData = [];
 		this.previousData = [];
 		this.summaryData.totalCurrent = 0;
 		this.summaryData.totalLast = 0;
 		this.summaryData.highest = 0;
 		this.summaryData.lowest = 0;
+		this.graphParams.interval = "daily";
 		this.chartType = "line";
 		this.graphExpanded = true;
 		this.generateChart();
@@ -272,6 +288,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public showColumnChart() {
+		this._generalService.invokeEvent.next("showallcharts");
+		this.graphParams.interval = "daily";
 		this.chartType = "column";
 		this.graphExpanded = false;
 
@@ -286,6 +304,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 		this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
 		this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
+		this.getChartData();
 		this.generateChart();
 	}
 }

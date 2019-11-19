@@ -75,8 +75,8 @@
                         <div class="daterang-block">
                             <label>Date Range</label>
                             <div class="dateRangeInput">
-                                <span class="icon-calender"></span>
-                                <input type="text" placeholder="Select Dates" class="form-control"
+                                <span class="icon-calender" (click)="dp1.toggle()"></span>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp1="bsDaterangepicker"
                                     [bsValue]="previousDateRangePickerValue" (bsValueChange)="setPreviousDate($event)"
                                     bsDaterangepicker>
                             </div>
@@ -86,8 +86,8 @@
                         <div class="daterang-block">
                             <label>Compare to</label>
                             <div class="dateRangeInput">
-                                <span class="icon-calender"></span>
-                                <input type="text" placeholder="Select Dates" class="form-control"
+                                <span class="icon-calender" (click)="dp2.toggle()"></span>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp2="bsDaterangepicker"
                                     [bsValue]="currentDateRangePickerValue" (bsValueChange)="setCurrentDate($event)"
                                     bsDaterangepicker>
                             </div>
