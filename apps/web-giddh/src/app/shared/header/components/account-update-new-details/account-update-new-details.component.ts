@@ -173,6 +173,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
                 if (accountDetails.country) {
                     if (accountDetails.country.countryCode) {
                         this.getStates(accountDetails.country.countryCode);
+                        this.getOnboardingForm(accountDetails.country.countryCode);
                     }
                 }
                 // render gst details if there's no details add one automatically
@@ -459,7 +460,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
         } else {
             this.addAccountForm.get('country').get('countryCode').patchValue('');
             this.addAccountForm.get('mobileCode').patchValue('91');
-            this.addAccountForm.get('currency').patchValue('IN');
+            this.addAccountForm.get('currency').patchValue('INR');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
         }
@@ -767,12 +768,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.store.dispatch(this._generalActions.resetStatesList());
+            this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
+            this.getOnboardingForm(event.value);
 
         }
     }
