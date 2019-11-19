@@ -102,7 +102,7 @@ a.connectBnk {
 }
 .totalSalesHeader {
   background-color: #fff;
-  box-shadow: 0px 3px 6px #0000001A;
+  border:1px solid #D9D9D9;
   border-radius: 2px;
   padding: 15px 15px 20px;
 }
@@ -204,8 +204,8 @@ a.connectBnk {
 .panel{
   padding: 15px;
   border-radius: 2px;
-  border: none;
-  box-shadow: 0px 3px 6px #0000001A;
+  border: 1px solid #D9D9D9;
+
   position: relative;
 }
 .topdates{
