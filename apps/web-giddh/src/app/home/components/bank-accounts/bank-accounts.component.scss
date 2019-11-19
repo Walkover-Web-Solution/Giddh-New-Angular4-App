@@ -28,3 +28,16 @@ a.connectBnk {
     height: 265px;
     overflow-y: auto;
 }
+.addBankDetails {
+    display: flex;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+p {
+    color: #666666;
+}
+.addBankDetails a.connectBnk{
+    padding-top: 5px;
+}
