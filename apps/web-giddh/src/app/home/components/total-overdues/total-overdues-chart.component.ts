@@ -106,7 +106,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public amountSettings: any = { baseCurrencySymbol: '', balanceDecimalPlaces: '' };
     public isDefault: boolean = true;
     public universalDate$: Observable<any>;
-    public noDataFound: boolean = false;
+    public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
@@ -149,7 +149,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             skipWhile(p => (isNullOrUndefined(p))))
             .subscribe(p => {
                 if (p && p.length) {
-                    this.noDataFound = false;
+                    this.dataFound = true;
 
                     this.overDueObj = p;
                     this.overDueObj.forEach((grp) => {
@@ -166,7 +166,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 
                     this.generateCharts();
                 } else {
-                    this.noDataFound = true;
+                    this.dataFound = false;
                     this.overDueObj = {};
                     this.totalRecievable = 0;
                     this.ReceivableDurationAmt = 0;

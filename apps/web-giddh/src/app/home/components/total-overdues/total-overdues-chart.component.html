@@ -22,8 +22,8 @@
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <perfect-scrollbar [scrollIndicators]="true">
-                    <chart [options]="totaloverDueChart" *ngIf="noDataFound" #currentRatio></chart>
-                    <div class="noDataAvailable" *ngIf="!noDataFound">
+                    <chart [options]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart>
+                    <div class="noDataAvailable" *ngIf="!dataFound">
                         <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                     </div>
                     <div class="clearfix mrB2">

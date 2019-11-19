@@ -108,7 +108,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public amountSettings: any = { baseCurrencySymbol: '' };
     public isDefault: boolean = true;
     public universalDate$: Observable<any>;
-    public noDataFound: boolean = false;
+    public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
@@ -144,7 +144,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
-                this.noDataFound = false;
+                this.dataFound = true;
                 let data = _.cloneDeep(p) as ProfitLossData;
                 let revenue;
                 let expense;
@@ -179,7 +179,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
                 this.generateCharts();
             } else {
-                this.noDataFound = true;
+                this.dataFound = false;
                 this.totalIncome = 0;
                 this.totalIncomeType = '';
                 this.totalExpense = 0;
