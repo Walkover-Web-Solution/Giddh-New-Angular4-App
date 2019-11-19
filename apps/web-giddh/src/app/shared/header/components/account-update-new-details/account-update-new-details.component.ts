@@ -8,7 +8,7 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store, createSelector } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2, AccountResponseV2, IAccountAddress, AccountMoveRequest, AccountUnMergeRequest, AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, IAccountAddress, AccountMoveRequest, AccountUnMergeRequest, AccountsTaxHierarchyResponse, AccountMergeRequest } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -28,6 +28,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
+import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { DbService } from 'apps/web-giddh/src/app/services/db.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -109,6 +111,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
     public moveMergedAccountModalBody: string;
     public selectedAccountForDelete: string;
     public selectedAccountForMove: string;
+    public selectedAccountCurrency: string;
+    public isOtherSelectedTab: boolean = false;
+    public selectedaccountForMerge: any = [];
+
+    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
 
@@ -118,17 +125,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
 
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
+        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
         this.getPartyTypes();
+        if (this.flatGroupsOptions === undefined) {
+            this.getAccount();
+        }
     }
 
     public ngOnInit() {
@@ -338,9 +349,30 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
             }
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+        this.accountsAction.mergeAccountResponse$.subscribe(res => {
+            if (this.selectedaccountForMerge.length > 0) {
+                this.selectedaccountForMerge.forEach((element) => {
+                    this.deleteFromLocalDB(element);
+                });
+            }
+            this.selectedaccountForMerge = '';
+        });
+    }
+    public deleteFromLocalDB(activeAccUniqueName?: string) {
+        this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
+            if (res) {
+                this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
+            }
+        }, (err: any) => {
+            console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+        });
     }
 
+
     public ngAfterViewInit() {
+        if (this.flatGroupsOptions === undefined) {
+            this.getAccount();
+        }
         this.prepareTaxDropdown();
         this.isTaxableAccount$ = this.store.select(createSelector([
             (state: AppState) => state.groupwithaccounts.groupswithaccounts,
@@ -444,6 +476,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
     }
     public tabChanged(activeTab: string) {
         this.selectedTab = activeTab;
+        if (activeTab === 'others') {
+            this.isOtherSelectedTab = true;
+        } else {
+            this.isOtherSelectedTab = false;
+        }
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -888,6 +925,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                if (res.country) {
+                    if (res.country.currency) {
+                        this.selectedAccountCurrency = res.country.currency.code;
+                        this.addAccountForm.get('currency').patchValue(this.selectedAccountCurrency);
+                    }
+                }
                 this.states = [];
                 if (res.stateList) {
                     this.stateList = res.stateList;
@@ -927,6 +970,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
+    }
+    public mergeAccounts() {
+        let activeAccount: AccountResponseV2 = null;
+        this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
+        let finalData: AccountMergeRequest[] = [];
+        if (this.selectedaccountForMerge.length) {
+            this.selectedaccountForMerge.map((acc) => {
+                let obj = new AccountMergeRequest();
+                obj.uniqueName = acc;
+                finalData.push(obj);
+            });
+            this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+            this.showDeleteMove = false;
+        } else {
+            this._toaster.errorToast('Please Select at least one account');
+            return;
+        }
     }
     public customMoveGroupFilter(term: string, item: IOption): boolean {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
@@ -1070,6 +1130,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
         this.hideDeleteMergedAccountModal();
         // this.accountForMoveSelect2.setElementValue('');
         this.hideMoveMergedAccountModal();
+    }
+    public getAccount() {
+        this.flattenGroups$.subscribe(flattenGroups => {
+            if (flattenGroups) {
+                let items: IOption[] = flattenGroups.filter(grps => {
+                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                }).map(m => {
+                    return {
+                        value: m.groupUniqueName, label: m.groupName
+                    }
+                });
+                this.flatGroupsOptions = items;
+            }
+        });
     }
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
