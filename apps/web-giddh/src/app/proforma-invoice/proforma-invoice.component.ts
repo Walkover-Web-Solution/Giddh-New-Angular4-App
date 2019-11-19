@@ -2625,7 +2625,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // tcs tax calculation
             if (entry.tcsTaxList && entry.tcsTaxList.length) {
                 entry.isOtherTaxApplicable = true;
-                entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
+                // entry.otherTaxModal.tcsCalculationMethod = entry.tcsCalculationMethod;
                 entry.otherTaxType = 'tcs';
 
                 let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tcsTaxList[0]);
@@ -2849,7 +2849,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         result.entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
             let salesTransactionItemClass = new SalesTransactionItemClass();
+            salesEntryClass.tcsTaxList = [];
+            salesEntryClass.tdsTaxList = [];
+
             salesEntryClass.transactions = [];
+
             entry.transactions.forEach(t => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
                 salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
@@ -2861,6 +2865,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
                 salesEntryClass.transactions.push(salesTransactionItemClass);
+
                 entry.taxes.forEach(ta => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
                     if (taxTypeArr.indexOf(ta.taxType) > -1) {
@@ -2869,6 +2874,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         otherTaxModal.appliedOtherTax = {name: ta.name, uniqueName: ta.uniqueName};
                         otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
                         salesEntryClass.otherTaxModal = otherTaxModal;
+
+                        if (ta.taxType === 'tdsrc' || ta.taxType === 'tdspay') {
+                            salesEntryClass.tdsTaxList.push(ta.uniqueName);
+                        } else {
+                            salesEntryClass.tcsTaxList.push(ta.uniqueName);
+                        }
+
                     } else {
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
