@@ -124,7 +124,7 @@ a.connectBnk {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid #5B64C9;
+  border-right: 1px solid #d1d1d1;
   color: #262626;
 }
 .dateRangeInput input{
@@ -242,4 +242,13 @@ span.dateWiseSale {
 }
 .total-salesTabs a.active-graph {
     font-family: 'opensans-semibold';
+}
+input:read-only {
+    border-color: #d1d1d1 !important;
+}
+input:read-only:focus{
+      border-color: #d1d1d1 !important;
+}
+.totalSalesHeader label {
+    margin-bottom: 5px;
 }
