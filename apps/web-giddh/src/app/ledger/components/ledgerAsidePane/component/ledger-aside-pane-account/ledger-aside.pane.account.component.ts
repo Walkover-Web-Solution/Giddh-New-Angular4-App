@@ -133,6 +133,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
     public createAccountInProcess$: Observable<boolean>;
     public flattenGroupsArray: IOption[] = [];
     public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
+    public isDebtorCreditor: boolean = false;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
