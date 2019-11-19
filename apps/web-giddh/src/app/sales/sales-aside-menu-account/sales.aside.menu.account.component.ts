@@ -70,6 +70,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
     public isAccountNameAvailable$: Observable<boolean>;
     public createAccountInProcess$: Observable<boolean>;
     public updateAccountInProcess$: Observable<boolean>;
+    public isDebtorCreditor: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -7,18 +7,18 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
-  declarations: [
-    VatReportComponent,
-  ],
-  imports: [
-    VatReportRoutingModule,
-    TabsModule,
-    CommonModule,
-    TooltipModule
-  ],
-  exports: [
-    VatReportRoutingModule
-  ]
+    declarations: [
+        VatReportComponent,
+    ],
+    imports: [
+        VatReportRoutingModule,
+        TabsModule,
+        CommonModule,
+        TooltipModule
+    ],
+    exports: [
+        VatReportRoutingModule
+    ]
 })
 export class VarReportModule {
 }

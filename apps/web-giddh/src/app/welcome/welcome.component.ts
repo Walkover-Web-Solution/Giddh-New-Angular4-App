@@ -1,9 +1,8 @@
-import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
-import { takeUntil, debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, ViewChild } from '@angular/core';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
-import { StatesRequest, States, CompanyRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
+import { StatesRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -12,13 +11,10 @@ import { SettingsProfileActions } from '../actions/settings/profile/settings.pro
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
-import { FormGroup } from '@angular/forms';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { CompanyActions } from '../actions/company.actions';
 import { CompanyService } from '../services/companyService.service';
-import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyAddNewUiComponent, CompanyAddComponent } from '../shared/header/components';
+import { ModalOptions } from 'ngx-bootstrap';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CommonActions } from '../actions/common.actions';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
@@ -31,7 +27,6 @@ import { IForceClear } from "../models/api-models/Sales";
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-	public BranchField: boolean = false;
 	public stateGstCode: any[] = [];
 	public countrySource: IOption[] = [];
 	public countrySource$: Observable<IOption[]> = observableOf([]);
@@ -109,12 +104,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	};
 
 	public businessType: IOption[] = [];
-	public BusinessOptions: IOption[] = [];
-	public hideTextarea = true;
-	public collapseTextarea = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public formFields: any[] = [];
 	public forceClear$: Observable<IForceClear> = observableOf({status: false});
+	public isTaxNumberSameAsHeadQuarter: number = 0;
+	public activeCompany: any;
 
 	constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
 		this.companyProfileObj = {};
@@ -128,6 +122,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 			state.session.companies.forEach(cmp => {
 				if (cmp.uniqueName === state.session.companyUniqueName) {
+					this.activeCompany = cmp;
 					this.countryIsIndia = cmp.country.toLocaleLowerCase() === 'in';
 				}
 			});
@@ -145,20 +140,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.company.contactNo = contact[1];
 				}
 				this.prepareWelcomeForm();
-			}
-		});
-		this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-			if (res) {
-				if (res.isBranch) {
-					this.isbranch = res.isBranch;
-					this.createNewCompany = res;
-					this.company = this.createNewCompany;
-					if (this.company.contactNo.toString().includes('-')) {
-						let contact = this.company.contactNo.split('-');
-						this.company.contactNo = contact[1];
-					}
-					this.prepareWelcomeForm();
-				}
 			}
 		});
 
@@ -349,6 +330,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.companyProfileObj.selectedState = '';
 			this.companyProfileObj.state = '';
 			this.forceClear$ = observableOf({status: true});
+			this.isTaxNumberSameAsHeadQuarter = 0;
 
 			if (this.selectedBusinesstype === 'Unregistered') {
 				this.isGstValid = true;
@@ -376,7 +358,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	public back(isbranch: boolean) {
-		//this._router.navigate(['']);
 		if (isbranch) {
 			this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
 		} else {
@@ -525,5 +506,46 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public onClearBusinessNature() {
 		this.companyProfileObj.businessNature = '';
+	}
+
+	public sameAsHeadQuarter(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
+		if(this.isTaxNumberSameAsHeadQuarter) {
+			if(this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+				this.activeCompany.addresses.forEach(key => {
+					if(key.isDefault === true) {
+						this.companyProfileObj.taxNumber = key.taxNumber;
+						gstNo.value = key.taxNumber;
+						this.checkGstNumValidation(gstNo);
+						this.getStateCode(gstNo, statesEle);
+					}
+				});
+			} else {
+				this.companyProfileObj.taxNumber = '';
+				gstNo.value = '';
+				this.companyProfileObj.selectedState = '';
+				this.companyProfileObj.state = '';
+				this.forceClear$ = observableOf({status: true});
+
+				if (this.selectedBusinesstype === 'Unregistered') {
+					this.isGstValid = true;
+				} else {
+					this.isGstValid = false;
+				}
+				this.getStateCode(gstNo, statesEle);
+			}
+		} else {
+			this.companyProfileObj.taxNumber = '';
+			gstNo.value = '';
+			this.companyProfileObj.selectedState = '';
+			this.companyProfileObj.state = '';
+			this.forceClear$ = observableOf({status: true});
+
+			if (this.selectedBusinesstype === 'Unregistered') {
+				this.isGstValid = true;
+			} else {
+				this.isGstValid = false;
+			}
+			this.getStateCode(gstNo, statesEle);
+		}
 	}
 }

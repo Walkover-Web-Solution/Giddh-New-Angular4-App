@@ -1,6 +1,6 @@
 /* ADD BULK ITEM */
 
-
+@import '../../../../assets/css/color.scss';
 .addBulkItemmodal.modal-dialog {
   width: 870px !important;
   margin: 30px auto;
@@ -21,12 +21,12 @@
   padding: 4px;
 
   &:hover {
-    background-color: #e5e5e5;
-    color: #FF5F00;
+    background-color: #eeeff9;
+    color: $border-blue;
   }
 
   &:hover h5 {
-    color: #FF5F00;
+    color: $border-blue;
   }
 }
 
