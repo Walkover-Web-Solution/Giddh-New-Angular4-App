@@ -147,6 +147,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
+
+        this.store.pipe(select(s => s.settings.branchRemoved), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.getAllBranches();
+            }
+        });
     }
 
     public ngAfterViewInit() {
