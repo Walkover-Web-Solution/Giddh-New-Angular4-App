@@ -101,7 +101,7 @@
                                     name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
-                                <span class="sameAsHead"> <input type="checkbox"> Same as Headquarter</span>
+                                <span class="sameAsHead" *ngIf="isbranch"> <input type="checkbox" name="isTaxNumberSameAsHeadQuarter" [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1" (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as Headquarter</span>
 
                             </div>
                         </div>
