@@ -1,24 +1,24 @@
-import {skipWhile, take, takeUntil} from 'rxjs/operators';
-import {Component, Input, OnDestroy, OnInit, ChangeDetectorRef} from '@angular/core';
+import { skipWhile, take, takeUntil } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import {Options} from 'highcharts';
-import {CompanyResponse} from '../../../models/api-models/Company';
-import {Observable, ReplaySubject} from 'rxjs';
-import {HomeActions} from '../../../actions/home/home.actions';
-import {Store} from '@ngrx/store';
-import {AppState} from '../../../store/roots';
+import { Options } from 'highcharts';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import { Observable, ReplaySubject } from 'rxjs';
+import { HomeActions } from '../../../actions/home/home.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import {isNullOrUndefined} from 'util';
-import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
-import {DashboardService} from '../../../services/dashboard.service';
-import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { isNullOrUndefined } from 'util';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { DashboardService } from '../../../services/dashboard.service';
+import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 
 @Component({
-	selector: 'toal-overdues-chart',
-	templateUrl: 'total-overdues-chart.component.html',
-	styleUrls: ['../../home.component.scss'],
-	styles: [
-			`
+    selector: 'toal-overdues-chart',
+    templateUrl: 'total-overdues-chart.component.html',
+    styleUrls: ['../../home.component.scss'],
+    styles: [
+        `
             .total_amt {
                 font-size: 18px;
             }
@@ -83,164 +83,177 @@ import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/curr
             }
 
 		`
-	]
+    ]
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-	@Input() public refresh: boolean = false;
+    @Input() public refresh: boolean = false;
+    public imgPath: string = '';
+    public options: Options;
+    public companies$: Observable<CompanyResponse[]>;
+    public activeCompanyUniqueName$: Observable<string>;
+    public requestInFlight = true;
+    public totaloverDueChart: Options;
+    public totalOverDuesResponse$: Observable<any>;
+    public sundryDebtorResponse: any = {};
+    public sundryCreditorResponse: any = {};
+    public totalRecievable: number = 0;
+    public totalPayable: number = 0;
+    public overDueObj: any = {};
+    public ReceivableDurationAmt: number = 0;
+    public PaybaleDurationAmt: number = 0;
+    public moment = moment;
+    public amountSettings: any = { baseCurrencySymbol: '', balanceDecimalPlaces: '' };
+    public isDefault: boolean = true;
+    public universalDate$: Observable<any>;
+    public dataFound: boolean = false;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	public options: Options;
-	public companies$: Observable<CompanyResponse[]>;
-	public activeCompanyUniqueName$: Observable<string>;
-	public requestInFlight = true;
-	public totaloverDueChart: Options;
-	public totalOverDuesResponse$: Observable<any>;
-	public sundryDebtorResponse: any = {};
-	public sundryCreditorResponse: any = {};
-	public totalRecievable: number = 0;
-	public totalPayable: number = 0;
-	public overDueObj: any = {};
-	public ReceivableDurationAmt: number = 0;
-	public PaybaleDurationAmt: number = 0;
-	public moment = moment;
-	public amountSettings: any = {baseCurrencySymbol: '', balanceDecimalPlaces: ''};
-	public isDefault: boolean = true;
-	public universalDate$: Observable<any>;
+    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
+        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    }
 
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public ngOnInit() {
+        this.companies$.subscribe(c => {
+            if (c) {
+                let activeCompany: CompanyResponse;
+                let activeCmpUniqueName = '';
+                let financialYears = [];
+                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
+                    activeCmpUniqueName = a;
+                    activeCompany = c.find(p => p.uniqueName === a);
+                    if (activeCompany) {
+                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                        this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
+                    }
+                });
+            }
+        });
+        // img path
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-	constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
-		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-		this.totalOverDuesResponse$ = this.store.select(p => p.home.totalOverDues).pipe(takeUntil(this.destroyed$));
-		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-	}
+        // listen for universal date
+        this.universalDate$.subscribe(dateObj => {
+            if (this.isDefault && dateObj) {
+                let dates = [];
+                dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+                this.getFilterDate(dates);
+                this.isDefault = false;
+            }
+        });
 
-	public ngOnInit() {
-		this.companies$.subscribe(c => {
-			if (c) {
-				let activeCompany: CompanyResponse;
-				let activeCmpUniqueName = '';
-				let financialYears = [];
-				this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-					activeCmpUniqueName = a;
-					activeCompany = c.find(p => p.uniqueName === a);
-					if (activeCompany) {
-						this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-						this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
-					}
-				});
-			}
-		});
+        this.totalOverDuesResponse$.pipe(
+            skipWhile(p => (isNullOrUndefined(p))))
+            .subscribe(p => {
+                if (p && p.length) {
+                    this.dataFound = true;
 
-		// listen for universal date
-		this.universalDate$.subscribe(dateObj => {
-			if (this.isDefault && dateObj) {
-				let dates = [];
-				dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
-				this.getFilterDate(dates);
-				this.isDefault = false;
-			}
-		});
+                    this.overDueObj = p;
+                    this.overDueObj.forEach((grp) => {
+                        if (grp.uniqueName === 'sundrydebtors') {
+                            this.sundryDebtorResponse = grp;
+                            this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
+                            this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
+                        } else {
+                            this.sundryCreditorResponse = grp;
+                            this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
+                            this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
+                        }
+                    });
 
-		this.totalOverDuesResponse$.pipe(
-			skipWhile(p => (isNullOrUndefined(p))))
-			.subscribe(p => {
-				if (p.length) {
-					this.overDueObj = p;
-					this.overDueObj.forEach((grp) => {
-						if (grp.uniqueName === 'sundrydebtors') {
-							this.sundryDebtorResponse = grp;
-							this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-							this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
-						} else {
-							this.sundryCreditorResponse = grp;
-							this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-							this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-						}
-					});
+                    this.generateCharts();
+                } else {
+                    this.dataFound = false;
+                    this.overDueObj = {};
+                    this.totalRecievable = 0;
+                    this.ReceivableDurationAmt = 0;
+                    this.totalPayable = 0;
+                    this.PaybaleDurationAmt = 0;
+                    this.requestInFlight = false;
+                    this.cdRef.detectChanges();
+                }
+            });
+    }
 
-					this.generateCharts();
-				}
+    public generateCharts() {
+        let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
+        let cPipe = this.currencyPipe;
 
-			});
-	}
+        this.totaloverDueChart = {
+            colors: ['#F85C88', '#0CB1AF'],
+            chart: {
+                type: 'pie',
+                polar: false,
+                className: 'overdue_chart',
+                width: 300,
+                height: '180px'
+            },
+            title: {
+                text: '',
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                gridLineWidth: 0,
+                minorGridLineWidth: 0,
+            },
+            xAxis: {
+                categories: []
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    showInLegend: true,
+                    innerSize: '70%',
+                    allowPointSelect: true,
+                    dataLabels: {
+                        enabled: false,
+                        crop: true,
+                        defer: true
+                    },
+                    shadow: false
+                },
+                series: {
+                    animation: false,
+                    dataLabels: {}
+                }
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                formatter: function () {
+                    return baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-';
+                }
+            },
+            series: [{
+                name: 'Total Overdues',
+                data: [['Customer Due', this.totalRecievable], ['Vendor Due', this.totalPayable]],
+            }],
+        };
 
-	public generateCharts() {
-		let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-		let cPipe = this.currencyPipe;
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
 
-		this.totaloverDueChart = {
-			colors: ['#F85C88', '#0CB1AF'],
-			chart: {
-				type: 'pie',
-				polar: false,
-				className: 'overdue_chart',
-				width: 300,
-				height: '180px'
-			},
-			title: {
-				text: '',
-			},
-			yAxis: {
-				title: {
-					text: ''
-				},
-				gridLineWidth: 0,
-				minorGridLineWidth: 0,
-			},
-			xAxis: {
-				categories: []
-			},
-			legend: {
-				enabled: false
-			},
-			credits: {
-				enabled: false
-			},
-			plotOptions: {
-				pie: {
-					showInLegend: true,
-					innerSize: '70%',
-					allowPointSelect: true,
-					dataLabels: {
-						enabled: false,
-						crop: true,
-						defer: true
-					},
-					shadow: false
-				},
-				series: {
-					animation: false,
-					dataLabels: {}
-				}
-			},
-			tooltip: {
-				shared: true,
-				useHTML: true,
-				formatter: function () {
-					return baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-';
-				}
-			},
-			series: [{
-				name: 'Total Overdues',
-				data: [['Customer Due', this.totalRecievable], ['Vendor Due', this.totalPayable]],
-			}],
-		};
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
-		this.requestInFlight = false;
-		this.cdRef.detectChanges();
-	}
+    public getFilterDate(dates: any) {
+        if (dates !== null) {
+            this.requestInFlight = true;
+            this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
+        }
+    }
 
-	public ngOnDestroy() {
-		this.destroyed$.next(true);
-		this.destroyed$.complete();
-	}
-
-	public getFilterDate(dates: any) {
-		if (dates !== null) {
-			this.requestInFlight = true;
-			this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
-		}
-	}
 }
