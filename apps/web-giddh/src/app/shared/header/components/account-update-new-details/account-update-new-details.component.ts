@@ -458,11 +458,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, Afte
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
         } else {
-            this.addAccountForm.get('country').get('countryCode').patchValue('');
+            this.addAccountForm.get('country').get('countryCode').patchValue('IN');
             this.addAccountForm.get('mobileCode').patchValue('91');
             this.addAccountForm.get('currency').patchValue('INR');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
+            this.getStates('IN');
         }
     }
 
