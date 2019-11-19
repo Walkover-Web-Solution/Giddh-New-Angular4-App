@@ -8347,7 +8347,21 @@ GST filing
                     .panel{
                         border-radius: 2px;
                     }
+                    .invoice-modal-content .app-aside-menu-other-taxes:host{
+                     top:60px !important;
+                    }
 
+                    #top0{
+                        top:0 !important;
+
+                    }
+
+                    #top0 app-aside-menu-other-taxes {
+                            top: 0 !important;
+                        }
+                        .invoice-modal-content #top0 app-aside-menu-other-taxes{
+                             top: 60px !important;
+                        }
 
                 /* responsive */
 
@@ -9060,3 +9074,10 @@ GST filing
                         margin-top: 5px;
                     }
                 }
+@media(min-width:768px){
+     .invoice-modal-content .modal-dialog{
+                                margin: 70px auto;
+                        }
+}
+
+

@@ -232,44 +232,36 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getNameByCode(code: string) {
-    let result: string;
-    switch (code) {
-      case 'VW':
-        result = 'view';
-        break;
-      case 'UPDT':
-        result = 'edit';
-        break;
-      case 'DLT':
-        result = 'delete';
-        break;
-      case 'ADD':
-        result = 'create';
-        break;
-      case 'SHR':
-        result = 'share';
-        break;
-      case 'VWDLT':
-        result = 'view delete';
-        break;
-      case 'SHRLWR':
-        result = 'Share Lower';
-        break;
-      case 'SHRALL':
-        result = 'Share All';
-        break;
-      case 'SHRSM':
-        result = 'Share Same';
-        break;
-      case 'CMT':
-        result = 'Comment';
-        break;
-      default:
-        result = '';
+    public getNameByCode(code: string) {
+        switch (code) {
+            case 'VW':
+                return 'view';
+            case 'UPDT':
+                return 'edit';
+            case 'DLT':
+                return 'delete';
+            case 'ADD':
+                return 'create';
+            case 'SHR':
+                return 'share';
+            case 'VWDLT':
+                return 'view delete';
+            case 'SHRLWR':
+                return 'Share Lower';
+            case 'SHRALL':
+                return 'Share All';
+            case 'SHRSM':
+                return 'Share Same';
+            case 'CMT':
+                return 'Comment';
+            case 'GSTVW':
+                return 'GST View';
+            case 'GSTFL':
+                return 'GST Filing';
+            default:
+                return '';
+        }
     }
-    return result;
-  }
 
   public isHavePermission(pageName: string, item: Permission, type: string): boolean {
     let page;
