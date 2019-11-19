@@ -42,7 +42,7 @@
     <!--add/edit group form-->
 
     <!--account operation  -->
-    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
+    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)" class="pd-2">
         <!--account add component-->
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"

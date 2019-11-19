@@ -123,15 +123,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
-                let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
-                let lengthofFormArray = addressFormArray.controls.length;
+                if (addresses.controls.length === 0) {
+                    this.addBlankGstForm();
+                }
+                // let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
                 if (a !== 'IN') {
                     this.isIndia = false;
-                    Object.keys(addressFormArray.controls).forEach((key) => {
-                        if (parseInt(key) > 0) {
-                            addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
-                        }
-                    });
+                    // Object.keys(addressFormArray.controls).forEach((key) => {
+                    //     if (parseInt(key) > 0) {
+                    //         addressFormArray.removeAt(1); // removing index 1 only because as soon as we remove any index, it automatically updates index
+                    //     }
+                    // });
                 } else {
                     if (addresses.controls.length === 0) {
                         this.addBlankGstForm();
@@ -139,7 +141,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                     this.isIndia = true;
                 }
 
-                this.resetGstStateForm();
+                // this.resetGstStateForm();
             }
         });
 
