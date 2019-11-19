@@ -133,10 +133,6 @@ export class SettingIntegrationComponent implements OnInit {
       if (o.emailForm) {
         this.emailFormObj = o.emailForm;
       }
-      //set payment form data
-      if (o.paymentForm) {
-        this.paymentFormObj = o.paymentForm;
-      }
       // set razor pay form data
       if (o.razorPayForm) {
         this.razorPayObj = _.cloneDeep(o.razorPayForm);
