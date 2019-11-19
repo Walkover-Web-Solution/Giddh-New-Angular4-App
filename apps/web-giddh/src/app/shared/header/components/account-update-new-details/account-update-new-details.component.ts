@@ -1,18 +1,17 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -21,9 +20,7 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
-
 
 @Component({
     selector: 'account-update-new-details',
@@ -37,6 +34,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    @Input() public flatGroupsOptions: IOption[];
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
     @Input() public createAccountIsSuccess$: Observable<boolean>;
@@ -56,10 +54,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
 
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -82,18 +80,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public flatGroupsOptions: IOption[];
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
+    // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+                private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
 
         this.getCountry();
@@ -111,6 +107,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                accountDetails.addresses.forEach(address => {
+                    // todo FIX THIS LATER
+                    address.state = address.state ? address.state : {code: '', stateGstCode: '', name: ''};
+                });
                 this.addAccountForm.patchValue(accountDetails);
 
                 // render gst details if there's no details add one automatically
@@ -158,18 +158,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 hsn.disable();
             }
         });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName
-                    }
-                });
-                this.flatGroupsOptions = items;
-            }
-        });
+        // this.flattenGroups$.subscribe(flattenGroups => {
+        //     if (flattenGroups) {
+        //         let items: IOption[] = flattenGroups.filter(grps => {
+        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+        //         }).map(m => {
+        //             return {
+        //                 value: m.groupUniqueName, label: m.groupName
+        //             }
+        //         });
+        //         this.flatGroupsOptions = items;
+        //     }
+        // });
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
 
@@ -274,6 +274,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public onViewReady(ev) {
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
         if (accountCountry) {
@@ -295,7 +296,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
             this.addAccountForm.get('mobileCode').patchValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag);
             this.addAccountForm.get('currency').patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
@@ -310,6 +311,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
+            activeGroupUniqueName: [''],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -327,8 +329,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }),
             hsnOrSac: [''],
             currency: [''],
-            hsnNumber: [{ value: '', disabled: false }],
-            sacNumber: [{ value: '', disabled: false }],
+            hsnNumber: [{value: '', disabled: false}],
+            sacNumber: [{value: '', disabled: false}],
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
@@ -355,19 +357,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{value: '', disabled: false}],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
         });
         if (val) {
+            // todo FIX THIS LATER
+            val.state = val.state ? val.state : {code: '', stateGstCode: '', name: ''};
             gstFields.patchValue(val);
         }
         return gstFields;
     }
 
     public resetGstStateForm() {
-        this.forceClear$ = observableOf({ status: true });
+        this.forceClear$ = observableOf({status: true});
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
@@ -399,12 +403,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             addresses.push(this.initialGstDetailsForm(null));
         }
     }
+
     public renderGstDetails(addressObj: IAccountAddress = null, addressLength: any) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         if (addresses.length < addressLength) {
             addresses.push(this.initialGstDetailsForm(addressObj));
         }
     }
+
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -485,6 +491,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             this.checkMobileNo(ele);
         }
     }
+
     public checkMobileNo(ele) {
         try {
             let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
@@ -571,7 +578,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             delete accountRequest['accountBankDetails'];
         }
         this.submitClicked.emit({
-            value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
+            value: {groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName},
             accountRequest: this.addAccountForm.value
         });
     }
@@ -618,9 +625,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         }
 
     }
+
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
+            this.isGroupSelected.emit(event.value);
         }
     }
 
@@ -643,6 +652,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public getOnboardingForm(countryCode: string) {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = '';
@@ -654,7 +664,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
@@ -668,7 +678,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -676,6 +686,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
@@ -704,6 +715,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             ele.classList.remove('error-box');
         }
     }
+
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
@@ -719,7 +731,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
                         this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                     }
 
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    this.states.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
                 });
                 this.statesSource$ = observableOf(this.states);
             } else {
@@ -729,6 +741,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -738,6 +751,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }

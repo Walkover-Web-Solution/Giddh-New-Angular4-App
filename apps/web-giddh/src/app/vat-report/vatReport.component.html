@@ -24,12 +24,12 @@
                                     <table class="table basic table-border-bottom mrT2 onMobileView">
                                         <thead>
                                             <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th class="text-right">Amount (AED)</th>
-                                                <th class="text-right">VAT Amount (AED)</th>
-                                                <th class="text-right">Adjustment (AED)</th>
+                                                <th width="5%"></th>
+                                                <th width="40%"></th>
+                                                <th width="10%"></th>
+                                                <th width="15%" class="text-right">Amount (AED)</th>
+                                                <th  width="15%" class="text-right">VAT Amount (AED)</th>
+                                                <th width="15%" class="text-right">Adjustment (AED)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -37,15 +37,13 @@
                                                 <td>{{i+1}}</td>
                                                 <td>{{vatReport.items}}</td>
                                                 <td>
-                                                    <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info-icon text-light"></span></a>
+                                                    <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info text-light"></span></a>
                                                 </td>
                                                 <td data-title="Amount (AED)" class="text-right">{{vatReport.amount}}</td>
                                                 <td data-title="VAT Amount (AED)" class="text-right">{{vatReport.vatAmount}}</td>
                                                 <td data-title="Adjustment (AED)" class="text-right">{{vatReport.Adjustment}}</td>
                                             </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
+                                            <tr class="last-row">
                                                 <th title="15">15</th>
                                                 <th>Total</th>
                                                 <th></th>
@@ -53,7 +51,7 @@
                                                 <th class="text-right">A = AED 15,000</th>
                                                 <th class="text-right">B = AED 1,000</th>
                                             </tr>
-                                        </tfoot>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -66,13 +64,12 @@
                                     <table class="table basic table-border-bottom mrT2 onMobileView">
                                         <thead>
                                             <tr>
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th class="text-right">Amount (AED)</th>
-                                                <th class="text-right">Recoverable
-                                                    <br> VAT Amount (AED)</th>
-                                                <th class="text-right">Adjustment (AED)</th>
+                                                <th width="5%"></th>
+                                                <th width="40%"></th>
+                                                <th width="10%"></th>
+                                                <th width="15%" class="text-right">Amount (AED)</th>
+                                                <th  width="15%" class="text-right">Recoverable <br> VAT Amount (AED)</th>
+                                                <th width="15%" class="text-right">Adjustment (AED)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -80,15 +77,13 @@
                                                 <td>{{i+1}}</td>
                                                 <td>{{vatReportTwo.items}}</td>
                                                 <td>
-                                                        <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info-icon text-light"></span></a>
+                                                        <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info text-light"></span></a>
                                                 </td>
                                                 <td data-title="Amount (AED)" class="text-right">{{vatReportTwo.vatAmount}}</td>
                                                 <td data-title="VAT Amount (AED)" class="text-right">{{vatReportTwo.vatAmount}}</td>
                                                 <td class="text-right" data-title="Adjustment (AED)">{{vatReportTwo.Adjustment}}</td>
                                             </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
+                                            <tr class="last-row">
                                                 <th>15</th>
                                                 <th>Total</th>
                                                 <th></th>
@@ -96,7 +91,7 @@
                                                 <th class="text-right">C = AED 12,500</th>
                                                 <th class="text-right">D = AED 1,500</th>
                                             </tr>
-                                        </tfoot>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -140,7 +135,7 @@
 
                         </tab>
 
-                        <tab heading="Report 1">
+                        <!-- <tab heading="Report 1">
                             Report 1
                         </tab>
 
@@ -150,7 +145,7 @@
 
                         <tab heading="Report 3">
                             Report 1
-                        </tab>
+                        </tab> -->
                     </tabset>
                 </div>
 

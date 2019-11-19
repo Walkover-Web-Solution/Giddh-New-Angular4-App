@@ -168,16 +168,18 @@ export class SalesRegisterExpandComponent implements OnInit {
 
     }
     public getCurrentMonthYear() {
-        let currentYearFrom = this.from.split('-')[2];
-        let currentYearTo = this.to.split('-')[2];
-        let idx = this.from.split('-');
-        this.monthYear = [];
-        if (currentYearFrom === currentYearTo) {
-            this.monthNames.forEach(element => {
-                this.monthYear.push(element + ' ' + currentYearFrom);
-            });
+        if (this.from && this.to) {
+            let currentYearFrom = this.from.split('-')[2];
+            let currentYearTo = this.to.split('-')[2];
+            let idx = this.from.split('-');
+            this.monthYear = [];
+            if (currentYearFrom === currentYearTo) {
+                this.monthNames.forEach(element => {
+                    this.monthYear.push(element + ' ' + currentYearFrom);
+                });
+            }
+            this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
         }
-        this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
 
     }
     public selectedFilterMonth(monthYridx: string, i) {

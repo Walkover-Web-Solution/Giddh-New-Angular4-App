@@ -17,7 +17,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 
-import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateNewComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -100,8 +100,7 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
-        AccountAddNewComponent,
-        AccountUpdateNewComponent,
+
         GroupsAccountSidebarComponent,
         GroupAddComponent,
         GroupUpdateComponent,
@@ -169,8 +168,7 @@ export function provideConfig() {
         PaginationModule,
         ClickOutsideModule,
         PerfectScrollbarModule,
-        AccountAddNewComponent,
-        AccountUpdateNewComponent,
+
         ConfirmModalModule,
         NgbTypeaheadModule,
         VsForDirective,
@@ -190,9 +188,8 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
-        AccountAddNewComponent,
         AccountAddNewDetailsComponent,
-        AccountUpdateNewComponent,
+
         AccountUpdateNewDetailsComponent
     ],
     providers: [

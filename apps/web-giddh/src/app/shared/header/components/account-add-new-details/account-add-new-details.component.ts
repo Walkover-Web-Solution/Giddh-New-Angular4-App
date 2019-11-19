@@ -37,6 +37,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
+    @Input() public flatGroupsOptions: IOption[];
     @Input() public fetchingAccUniqueName$: Observable<boolean>;
     @Input() public isAccountNameAvailable$: Observable<boolean>;
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -47,6 +48,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('autoFocus') public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -75,7 +77,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public flatGroupsOptions: IOption[];
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
@@ -87,11 +88,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-
+        console.log(this.flatGroupsOptions);
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
         this.getPartyTypes();
+        if (this.flatGroupsOptions === undefined) {
+            this.getAccount();
+        }
     }
 
     public ngOnInit() {
@@ -113,18 +117,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 hsn.disable();
             }
         });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map(m => {
-                    return {
-                        value: m.groupUniqueName, label: m.groupName
-                    }
-                });
-                this.flatGroupsOptions = items;
-            }
-        });
+
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
 
@@ -226,6 +219,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 // Object.keys(res.applicableTaxes).forEach(key => {
                 //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
                 // });
+            }
+        });
+        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+    }
+    public getAccount() {
+        this.flattenGroups$.subscribe(flattenGroups => {
+            if (flattenGroups) {
+                let items: IOption[] = flattenGroups.filter(grps => {
+                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                }).map(m => {
+                    return {
+                        value: m.groupUniqueName, label: m.groupName
+                    }
+                });
+                this.flatGroupsOptions = items;
             }
         });
     }
@@ -528,6 +536,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
+            this.isGroupSelected.emit(event.value);
         }
     }
 

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { VatReportComponent } from './vatReport.component';
-import { VatReportListComponent } from './components/test/vat-report-list.component';
 
 @NgModule({
   imports: [

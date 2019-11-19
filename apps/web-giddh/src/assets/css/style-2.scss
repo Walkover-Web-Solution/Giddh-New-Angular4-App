@@ -6,6 +6,7 @@
     font-weight: normal;
     font-style: normal;
 } */
+
                 /* @font-face {
   font-family: 'icomoon';
   src:  url('../fonts/main-icomoon/icomoon.eot?3n1cct');
@@ -16,8 +17,11 @@
   font-weight: normal;
   font-style: normal;
 } */
+
                 /* @import "../fonts/main-icomoon/style.css"; */
+
                 /* css start */
+
                 /* :root {
   --light-blue:#5b63b9;
   --light-blue01:#868ee0;
@@ -25,7 +29,6 @@
   --dark-blue01: #313a96;
   --light-gray:#e6e7e8;
 } */
-
 
                 @import '../css/color.scss';
                 [class^="icon-"],
@@ -46,6 +49,7 @@
                 .middle {
                     vertical-align: middle;
                 }
+
                 /* start MDB tweaks */
 
                 .pd-1 {
@@ -183,6 +187,7 @@
                 .bl-1 {
                     border-left: 1px solid #ccc;
                 }
+
                 /* end MDB tweaks */
 
                 .bg-none {
@@ -196,6 +201,7 @@
                 .d-sm-block {
                     display: block !important;
                 }
+
                 /* css end */
 
                 input[type=number] {
@@ -226,6 +232,7 @@
                     position: relative;
                     z-index: 99999;
                 }
+
                 /* switch on off end */
 
                 .toggle {
@@ -301,7 +308,9 @@
                 .toggle-checkbox:checked+.toggle-label .toggle-switch {
                     right: 0px;
                 }
+
                 /* switch on off end */
+
                 /* my css start */
 
                 .otherAccountEntry .header {
@@ -529,6 +538,7 @@
                 .modal-open {
                     overflow: auto !important;
                 }
+
                 /* file upload css start */
 
                 .input-upload .input-group-btn {
@@ -550,6 +560,7 @@
                     line-height: 28px;
                     text-transform: capitalize;
                 }
+
                 /* file upload css end */
 
                 .tab-integraton .nav-tabs {
@@ -898,6 +909,7 @@
                     color: #FF5F00;
                     background: none;
                 }
+
                 /* .pagination-main {
     background: #fff;
 } */
@@ -1002,6 +1014,7 @@
                     color: #fff;
                     background: $primaryBtnHovercolror;
                 }
+
                 /* .Advance-Search .header:after {
     content: '';
     width: 0px;
@@ -1250,7 +1263,9 @@
                 .dot-success {
                     background: #2DAA4A;
                 }
+
                 /* my css end */
+
                 /*input*/
 
                 .form-control {
@@ -1344,6 +1359,7 @@
                     background-color: #F7F8FA;
                     border-bottom: 2px solid #e6e7e8;
                 }
+
                 /* .fyear {
     font-size: 14px;
 } */
@@ -1411,111 +1427,115 @@
                 .ledgHead {
                     width: 100%;
                 }
+
                 /* .ledgHead input[type=search] {
     min-width: 220px;
 } */
 
-/*btn*/
+                /*btn*/
 
-.btn-primary {
- background: #fff;
-  border-color: $border-blue;
-  color: $dark-blue00;
-}
+                .btn-primary {
+                    background: #fff;
+                    border-color: $border-blue;
+                    color: $dark-blue00;
+                }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:disabled,
-.btn-primary.active,
-.btn-primary:active,
-.open>.dropdown-toggle.btn-primary,
-.btn-primary:active:focus {
-  background: $border-blue;
-  color: #fff;
-  border-color: $border-blue;
-}
+                .btn-primary:hover,
+                .btn-primary:focus,
+                .btn-primary:disabled,
+                .btn-primary.active,
+                .btn-primary:active,
+                .open>.dropdown-toggle.btn-primary,
+                .btn-primary:active:focus {
+                    background: $border-blue;
+                    color: #fff;
+                    border-color: $border-blue;
+                }
 
-.btn {
-  padding: 7px 16px;
-  border-radius: 2px;
-  font-size: 14px;
-  margin-right: 8px;
-}
+                .btn {
+                    padding: 7px 16px;
+                    border-radius: 2px;
+                    font-size: 14px;
+                    margin-right: 8px;
+                }
 
-.btn-group-lg>.btn,
-.btn.btn-lg {
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
-}
+                .btn-group-lg>.btn,
+                .btn.btn-lg {
+                    padding: 10px 16px;
+                    font-size: 18px;
+                    line-height: 1.3333333;
+                }
 
-.btn-default {
-  background: #fff;
-  border-color: $border-blue;
-  color: $dark-blue00;
-}
+                .btn-default {
+                    background: #fff;
+                    border-color: $border-blue;
+                    color: $dark-blue00;
+                }
 
-.btn-default:hover,
-.btn-default:focus,
-.btn-default.active.focus .btn-default:disabled,
-.btn-default[disabled]:hover,
-.open>.dropdown-toggle.btn-default:focus,
-.open>.dropdown-toggle.btn-default:hover, .btn-default:active, .btn-default:active:focus {
-  background: $border-blue;
-  color: #fff;
-  border-color: $border-blue;
-}
+                .btn-default:hover,
+                .btn-default:focus,
+                .btn-default.active.focus .btn-default:disabled,
+                .btn-default[disabled]:hover,
+                .open>.dropdown-toggle.btn-default:focus,
+                .open>.dropdown-toggle.btn-default:hover,
+                .btn-default:active,
+                .btn-default:active:focus {
+                    background: $border-blue;
+                    color: #fff;
+                    border-color: $border-blue;
+                }
 
-#actionPane .btn-default {
-  background: #E6E6E6;
-  color: #333;
-  border-color: #E6E6E6;
-}
+                #actionPane .btn-default {
+                    background: #E6E6E6;
+                    color: #333;
+                    border-color: #E6E6E6;
+                }
 
-/*btn end*/
+                /*btn end*/
 
-.ledger-main .form-control {
-  background: #fff !important;
-  height: 45px;
-}
+                .ledger-main .form-control {
+                    background: #fff !important;
+                    height: 45px;
+                }
 
-.ledger-header thead th {
-  background: #fff;
-  border-right: 1px solid #c4c6c7;
-}
+                .ledger-header thead th {
+                    background: #fff;
+                    border-right: 1px solid #c4c6c7;
+                }
 
-.t-h-bg2 th {
-  padding: 7px !important;
-}
+                .t-h-bg2 th {
+                    padding: 7px !important;
+                }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
-  /* background: #fff0bc !important; */
-  border: 0;
-}
+                .compoundEntry td,
+                .compoundEntry td .form-control {
+                    /* background: #fff0bc !important; */
+                    border: 0;
+                }
 
-.ledger-table-body table tbody.ledger-main tr td {
-  padding: 0;
-}
+                .ledger-table-body table tbody.ledger-main tr td {
+                    padding: 0;
+                }
 
-.ledger-container table tr.bg3 th {
-  border: 1px solid #c4c6c7;
-  border-left: 0;
-}
+                .ledger-container table tr.bg3 th {
+                    border: 1px solid #c4c6c7;
+                    border-left: 0;
+                }
 
-.highlight_info {
-  color: #ff782d;
-  /* 95756E*/
-}
+                .highlight_info {
+                    color: #ff782d;
+                    /* 95756E*/
+                }
 
-.midlight_info {
-  color: #95756E;
-}
+                .midlight_info {
+                    color: #95756E;
+                }
 
-/* .ledger-panel .form-control {
+                /* .ledger-panel .form-control {
     border: 1px solid #949494;
     cursor: text;
 } */
+
                 /*.ledger-panel .btn {
   background: #eee;
   border: 1px solid #949494;
@@ -1719,6 +1739,7 @@
                     background: none;
                     border-bottom: 2px solid #ff5e01;
                 }
+
                 /*.childTab >.nav.nav-tabs {
     text-align: center;
     width: 100%;
@@ -1778,6 +1799,7 @@
                     display: inline-block;
                     width: 100%;
                 }
+
                 /* #cmpWrp .cText {
     margin: 5px 0 5px 0px;
     font-size: 9px;
@@ -1890,6 +1912,7 @@
                 .top-five-cr-dr-table .basic>thead>tr th:first-child {
                     border-left: none !important;
                 }
+
                 /*
 .basic>tbody>tr>td a {
     color: #ff5e01;
@@ -1985,7 +2008,14 @@
                 .lh33 {
                     line-height: 33px;
                 }
-
+                .btn-success-outline {
+                    border: 1px solid #0CB1AF;
+                    color: #0CB1AF;
+                }
+                .btn-success-outline:hover {
+                    color: #fff;
+                    background: #0CB1AF;
+                }
                 .btn-success {
                     background: #0CB1AF;
                     color: #fff;
@@ -2249,6 +2279,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
+
                 /* my css start */
 
                 // .modal.fade .modal-dialog {
@@ -2521,6 +2552,7 @@
                     padding: 10px 0;
                     border: 0 !important;
                 }
+
                 /* #companyList .glyphicon-trash {
     color: #ff5e01;
 } */
@@ -2702,6 +2734,7 @@
                     padding-right: 25px !important;
                     text-align: right;
                 }
+
                 /*placeholder webkit css*/
 
                 #accountSearch::-webkit-input-placeholder {
@@ -2883,6 +2916,7 @@
                 .daterangepicker .daterangepicker_input {
                     display: none !important;
                 }
+
                 /*stock page*/
 
                 .rightBar {
@@ -3123,6 +3157,7 @@
                 .ReportInfo {
                     text-transform: capitalize;
                 }
+
                 /*.stock-grp-list >li:hover {
     background: #ff5e01;
     border-radius: 3px;
@@ -3300,6 +3335,7 @@
                 .multi-select {
                     position: relative;
                 }
+
                 /* .form-control[readonly] {
   background: #fff !important;
 } */
@@ -3376,7 +3412,9 @@
                     background: none;
                     cursor: pointer;
                 }
+
                 /* by dude */
+
                 /*.modal-backdrop {
     background-color: #808080;
 }
@@ -3389,6 +3427,7 @@
                 #shareModal .modal-header {
                     border-bottom: 0;
                 }
+
                 /* #shareModalh3 {
     font-size: 18px;
     color: #fff;
@@ -3533,7 +3572,9 @@
                 .radio {
                     position: relative;
                 }
+
                 /*====================== mustafa =====================*/
+
                 /*input[type=radio]:before {
     content: ' ';
     position: absolute;
@@ -3558,6 +3599,7 @@ input[type=radio]:checked:after {
     text-align: center;
 }
 */
+
                 /*====================== mustafa =====================*/
 
                 .select_drop {
@@ -3592,6 +3634,7 @@ input[type=radio]:checked:after {
                 .no-btn .rotate180 {
                     top: 0;
                 }
+
                 /* .entrypanel .upload_div {
     padding: 6px 8px;
     float: left;
@@ -3825,6 +3868,7 @@ input[type=radio]:checked:after {
                 .searchBar {
                     position: relative;
                 }
+
                 /* .searchBar .form-control {
     background: #6b6a6a !important;
     color: #fff;
@@ -4219,6 +4263,7 @@ input[type=radio]:checked:after {
                 #getGroupModal hr {
                     border-color: #c7c7c7;
                 }
+
                 /*#getGroupModal small {
     color: #ccc;
 }*/
@@ -4299,6 +4344,7 @@ input[type=radio]:checked:after {
                     background: none;
                     border: 0;
                 }
+
                 /******** commented due to old manage modal ******/
 
                 #getGroupModal .select-locked {
@@ -4525,6 +4571,7 @@ input[type=radio]:checked:after {
                 .no-result h1 {
                     font-size: 1.3em;
                 }
+
                 /**************** Create company modal **********************/
 
                 #setupWizardModal .nav-item,
@@ -4620,6 +4667,7 @@ input[type=radio]:checked:after {
                     height: 97%;
                     min-height: 97%;
                 }
+
                 /* .tooltip.bottom .tooltip-arrow {
     position: relative;
 } */
@@ -4793,6 +4841,7 @@ input[type=radio]:checked:after {
                 #single_role table {
                     margin-bottom: 0;
                 }
+
                 /*************************************************** Dashboard CSS  ****************************************************/
 
                 #dashboard .panel-default {
@@ -4814,6 +4863,7 @@ input[type=radio]:checked:after {
                     position: relative;
                     top: 4px;
                 }
+
                 /*************************************************** input CSS  ****************************************************/
 
                 .radio_theme {
@@ -4868,6 +4918,7 @@ input[type=radio]:checked:after {
                     padding: 6px;
                     text-transform: capitalize;
                 }
+
                 /* #w-398px{
   width: 398px;
 } */
@@ -4893,6 +4944,7 @@ input[type=radio]:checked:after {
                 .ledger-row td .select2-container .select2-search__field {
                     background: #f3f0e6 !important
                 }
+
                 /* .ledger-panel .dropdown-container .dropdown-menu li {
     clear: both;
     float: left;
@@ -4908,6 +4960,7 @@ input[type=radio]:checked:after {
                     border-radius: 0;
                     margin: 0;
                 }
+
                 /*************************************************** Custom Invoice CSS  ****************************************************/
 
                 #customInvoice .templateEditor input[type="checkbox"] {
@@ -5172,6 +5225,7 @@ input[type=radio]:checked:after {
                 [hidden] {
                     display: none !important;
                 }
+
                 /* disabled css */
 
                 .form-control[disabled],
@@ -5186,9 +5240,7 @@ input[type=radio]:checked:after {
 
                 .basic {
                     background: #fff;
-                }
-
-                // table.basic{
+                } // table.basic{
                 //   position: relative;
                 // }
                 .basic>thead>tr>th {
@@ -5294,6 +5346,7 @@ input[type=radio]:checked:after {
                     position: relative;
                     left: 5px;
                 }
+
                 /* .ledger-row .select2-ledger .select2-container--open .select2-search--dropdown {
     top: -34px;
     position: fixed;
@@ -5555,9 +5608,7 @@ input[type=radio]:checked:after {
                 .input-group .input-group-btn .btn {
                     /*background: #fff;*/
                     border-left: 0px;
-                }
-
-                // .input-group .input-group-btn .btn:hover {
+                } // .input-group .input-group-btn .btn:hover {
                 //     color: #28ab00 !important;
                 //     background: #fff;
                 // }
@@ -5649,6 +5700,7 @@ input[type=radio]:checked:after {
                     text-shadow: none;
                     font-size: 30px;
                 }
+
                 /**new modal design**/
 
                 .welcome_header {
@@ -5751,6 +5803,7 @@ input[type=radio]:checked:after {
                 .right_section {
                     background: url("../images/Schedule.png") right 100px no-repeat;
                 }
+
                 /**end new modal design**/
 
                 .col_wrapper .btn-link {
@@ -5773,6 +5826,7 @@ input[type=radio]:checked:after {
                 .entry-modal {
                     width: 100%;
                 }
+
                 /* small {
     color: #b2b2b2;
 } */
@@ -5854,6 +5908,7 @@ input[type=radio]:checked:after {
                 .dashboard-filter .radio_theme:after {
                     left: 4px;
                 }
+
                 /* =========================== LEDGER CSS ============================ */
 
                 .ledgHead table td[class*=col-],
@@ -5898,6 +5953,7 @@ input[type=radio]:checked:after {
                 .ledgHead .ledger-main td[class*=col-] {
                     padding: 0px !important;
                 }
+
                 /* table th[class*=col-]:last-child,
 .ledger-main tr td:last-child,
 table td[class*=col-]:last-child {
@@ -6033,9 +6089,7 @@ table td[class*=col-]:last-child {
 
                 .dropdown-left .dropdown-menu {
                     left: auto !important;
-                }
-
-                // .entrypanel:before {
+                } // .entrypanel:before {
                 //     content: ' ';
                 //     position: absolute;
                 //     top: 0;
@@ -6058,6 +6112,7 @@ table td[class*=col-]:last-child {
                 .ledgHead.entry-popup table td.select2-ledger>sh-select {
                     top: 1px;
                 }
+
                 /* =========================== LEDGER CSS ============================ */
 
                 .input-group sh-select .menu {
@@ -6072,6 +6127,7 @@ table td[class*=col-]:last-child {
                 .dropdown-container .dropdown-menu li:last-child label {
                     border-bottom: 0;
                 }
+
                 /* ======================================= INVENTORY CSS ===================================== */
 
                 .form_header {
@@ -6093,6 +6149,7 @@ table td[class*=col-]:last-child {
                 .noHover:hover td {
                     background: #fff !important;
                 }
+
                 /* .universal_date label {
     color: #fff;
 } */
@@ -6137,6 +6194,7 @@ table td[class*=col-]:last-child {
                     border-bottom: 1px solid #ddd;
                     clear: both;
                 }
+
                 /* left bar menu */
 
                 .form_body .toggle-btn label {
@@ -6279,6 +6337,7 @@ table td[class*=col-]:last-child {
                 .dropdown-menu>li>a {
                     padding: 2px 10px;
                 }
+
                 /* ==================================================
     Branch
 ================================================== */
@@ -6361,6 +6420,7 @@ table td[class*=col-]:last-child {
                 .overdue_chart {
                     margin: 0 auto;
                 }
+
                 /* .overdue_chart {
     width: 100% !important;
     height: 174px !important;
@@ -6489,6 +6549,7 @@ table td[class*=col-]:last-child {
                     opacity: 1;
                     background-color: #fff !important;
                 }
+
                 /* ===============================================================
 GST filing
 ===============================================================  */
@@ -6932,6 +6993,7 @@ GST filing
                     margin-bottom: 10px;
                     font-size: 14px;
                 }
+
                 /* .tax-engine .half {
     width: 50%!important;
 } */
@@ -7397,6 +7459,7 @@ GST filing
                 .heightVH-100 {
                     height: 100vh;
                 }
+
                 /* my css */
 
                 #form-place .dropdown-menu {
@@ -7419,6 +7482,7 @@ GST filing
                     background-color: rgb(244, 245, 248);
                     color: #ff5f00;
                 }
+
                 /* sticky footer css merged */
 
                 .sticky-footer.stickyFooterSaleAmount {
@@ -7453,6 +7517,7 @@ GST filing
                     font-size: 32px;
                     margin-top: 3px;
                 }
+
                 /* my css */
 
                 .ledger_book .right-col-new .entry-modal {
@@ -7741,6 +7806,7 @@ GST filing
                     padding-bottom: 0 !important;
                     padding-left: 0 !important;
                 }
+
                 /* .custom-select input.form-control.selectedVal.cp {
   padding-right: 0 !important;
 } */
@@ -8174,6 +8240,11 @@ GST filing
                     color: $activeIconTh !important;
                 }
 
+                .amount-arrow .icon-sort-asc {
+                    float: right !important;
+                    margin-left: 10px !important;
+                }
+
                 .td_in_searchBox div i.icon-search:hover {
                     color: $activeIconTh !important;
                 }
@@ -8195,9 +8266,7 @@ GST filing
 
                 .aside-pane-form #asidePaneFormTabs .nav>li>a {
                     padding-bottom: 10px !important;
-                }
-
-                // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
+                } // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
                 //     padding-right: 0;
                 // }
                 .mangeAccountPopup .modal-dialog.modal-lg {
@@ -8261,9 +8330,25 @@ GST filing
                     display: flex;
                     align-items: center;
                 }
+
                 .custom-tabs .nav>li>a {
                         padding-top: 0;
                     }
+                    #incomeChart chart , #leftIncomeChart chart{
+                        width: 100%;
+                        display: flex;
+                        flex: 1 1 0!important;
+                        flex-shrink: 1!important;
+                    }
+                   #incomeChart  #highcharts-ufrwew1-29{
+                        display: block;
+                        width: 100%;
+                    }
+                    .panel{
+                        border-radius: 2px;
+                    }
+
+
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -8319,8 +8404,7 @@ GST filing
                 @media(max-width:991px) {
                     .form-bg {
                         width: 100%;
-                    }
-                    // .col_wrapper:nth-child(1) {
+                    } // .col_wrapper:nth-child(1) {
                     //   position: relative !important;
                     //   height: auto !important;
                     //   width: 100% !important;
@@ -8859,8 +8943,7 @@ GST filing
                 @media(max-width:1024px) {
                     .form-bg {
                         width: 100%;
-                    }
-                    // .col_wrapper:nth-child(1) {
+                    } // .col_wrapper:nth-child(1) {
                     //   position: relative;
                     //   height: auto;
                     //   width: 100%;
@@ -8968,8 +9051,7 @@ GST filing
                 @media only screen and (max-width: 480px) {
                     td.pItem.price .my-dropdown-menu {
                         width: 180px !important;
-                    }
-                    // manage group account
+                    } // manage group account
                     .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-8,
                     .addManageGroupAcc .getGroupModal .breadcrumbs .col-xs-4 {
                         width: 100%;
