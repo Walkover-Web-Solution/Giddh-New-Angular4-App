@@ -38,7 +38,7 @@
         <!-- img zoom pls uncomment this code -->
         <div class="clearfix img-zoom" *ngIf="isImageZoomView">
             <img [src]="zoomViewImageSrc" alt="">
-            <a class="img-close" (click)="hideZoomImageView()">
+            <a class="img-close pointer" (click)="hideZoomImageView()">
                 <i class="icon-cross"></i>
             </a>
         </div>
@@ -49,7 +49,7 @@
         <div class="form-group mb-2">
             <label>Description</label>
             <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
-                      placeholder='Description'></textarea>
+                      placeholder='Add Description'></textarea>
         </div>
 
         <div class="row">
