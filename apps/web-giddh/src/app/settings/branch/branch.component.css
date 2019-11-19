@@ -53,7 +53,7 @@ font-size: 14px;
 }
 .branchCard {
     background-color: #EEEFF1;
-
+    min-height: 310px;
     margin-bottom: 15px;
     font-size: 14px;
 
@@ -71,8 +71,12 @@ font-size: 14px;
 .cardBasicDetails h2 {
     font-size: 16px;
     color: #1A237E;
-    font-family: opensans-bold;
+    font-family: 'opensans-bold';
     margin-bottom: 12px;
+        white-space: normal;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 .cardBasicDetails {
     padding: 20px;
@@ -82,7 +86,7 @@ font-size: 14px;
     padding: 20px;
 }
 .branchSalesDetails label {
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold';
     margin-bottom: 10px;
 }
 @media(max-width:375px){
