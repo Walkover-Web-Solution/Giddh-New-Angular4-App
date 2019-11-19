@@ -47,7 +47,44 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 	public imgPath: string = '';
 	public countrySource: IOption[] = [];
 	public countrySource$: Observable<IOption[]> = observableOf([]);
-	public company: CompanyCreateRequest = new CompanyCreateRequest();
+	public company: CompanyCreateRequest = {
+		name: '',
+		country: '',
+		phoneCode: '',
+		contactNo: '',
+		uniqueName: '',
+		isBranch: false,
+		subscriptionRequest: {
+			planUniqueName: '',
+			subscriptionId: '',
+			userUniqueName: '',
+			licenceKey: ''
+		},
+		addresses: [],
+		businessNature: '',
+		businessType: '',
+		address: '',
+		industry: '',
+		baseCurrency: '',
+		isMultipleCurrency: false,
+		city: '',
+		pincode: '',
+		email: '',
+		taxes: [],
+		userBillingDetails: {
+			name: '',
+			email: '',
+			mobile: '',
+			gstin: '',
+			state: '',
+			address: '',
+			autorenew: ''
+		},
+		nameAlias: '',
+		paymentId: '',
+		amountPaid: '',
+		razorpaySignature: ''
+	};
 	public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
 	public companies$: Observable<CompanyResponse[]>;
 	public isCompanyCreationInProcess$: Observable<boolean>;
@@ -60,7 +97,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 	public callingCodesSource$: Observable<IOption[]> = observableOf([]);
 	public countryCurrency: any[] = [];
 	public isMobileNumberValid: boolean = false;
-	public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public isNewUser: boolean = false;
 	public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();

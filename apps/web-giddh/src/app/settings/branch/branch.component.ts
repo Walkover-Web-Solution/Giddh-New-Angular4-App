@@ -16,6 +16,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import {GeneralService} from "../../services/general.service";
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -70,7 +71,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private _generalService: GeneralService
     ) {
         this.getOnboardingForm();
 
@@ -192,6 +194,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
+        this.removeCompanySessionData();
         this.branchModal.show();
     }
 
@@ -314,5 +317,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             }
         });
+    }
+
+    public removeCompanySessionData() {
+        this._generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 }
