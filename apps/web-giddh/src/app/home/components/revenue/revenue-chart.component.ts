@@ -266,7 +266,19 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
 	public updateChartFrequency(interval) {
 		this.graphParams.interval = interval;
-		this.getChartData();
+
+		this.currentData = [];
+		this.previousData = [];
+		this.summaryData.totalCurrent = 0;
+		this.summaryData.totalLast = 0;
+		this.summaryData.highest = 0;
+		this.summaryData.lowest = 0;
+
+		this.generateChart();
+
+		setTimeout(() => {
+			this.getChartData();
+		}, 200);
 	}
 
 	public setPreviousDate(data) {
