@@ -33,7 +33,9 @@
 
                         <div class="chart-div" google-chart chart="myChartObject">
                             <perfect-scrollbar [scrollIndicators]="true">
-                                <chart [options]="options"></chart>
+                                <div id="leftIncomeChart">
+                                    <chart [options]="options"></chart>
+                                </div>
                             </perfect-scrollbar>
                         </div>
                     </div>
@@ -127,7 +129,9 @@
                 </div>
             </div>
         </div>
-        <chart [options]="options"></chart>
+        <div id="incomeChart">
+            <chart [options]="options"></chart>
+        </div>
         <div class="total-sale-data clearfix">
             <div class="row">
                 <div class="col-sm-3 single-sale-data">
