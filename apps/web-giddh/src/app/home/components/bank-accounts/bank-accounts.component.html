@@ -7,7 +7,7 @@
             <div class="banke-detailsBlock">
 
 
-                <perfect-scrollbar [scrollIndicators]="true">
+                <perfect-scrollbar [scrollIndicators]="true" *ngIf="bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
                             <p class="bankName "> {{bankaccount.name}} </p>
@@ -20,7 +20,12 @@
                             </p>
                         </div>
                     </div>
+
+
                 </perfect-scrollbar>
+                <div class="addBankDetails" *ngIf="bankAccounts.length === 0">
+                    <p>Yet to add Bank and Credit Card details</p>
+                </div>
 
 
             </div>

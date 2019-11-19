@@ -1,49 +1,56 @@
 <div id="live">
-  <div class="panel panel-default">
+    <div class="panel panel-default">
 
-    <div class="panel-heading">
-      <strong>Profit & Loss</strong>
-      <div class="pull-right dashboard-filter">
-        <div class="btn-group" dropdown>
-          <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown" aria-controls="dropdown-basic">
-            <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
-          </span>
+        <div class="panel-heading">
+            <strong>Profit & Loss</strong>
+            <div class="pull-right dashboard-filter">
+                <div class="btn-group" dropdown>
+                    <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
+                        aria-controls="dropdown-basic">
+                        <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
+                    </span>
+                </div>
+
+                <!--        <span class="icon-collapse-icon"></span>-->
+            </div>
         </div>
 
-<!--        <span class="icon-collapse-icon"></span>-->
-      </div>
+        <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                <div class="giddh-spinner vertical-center-spinner"></div>
+            </div>
+            <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
+                <perfect-scrollbar [scrollIndicators]="true">
+                    <chart [options]="profitLossChart" *ngIf="noDataFound" #currentRatio></chart>
+                    <div class="noDataAvailable" *ngIf="!noDataFound">
+                        <img src="{{imgPath}}noDataChart.svg" alt="no data found">
+                    </div>
+                    <div class="clearfix mrB2">
+                        <div class="">
+                            <span class="mrB1 dueAmount">Net Profit/Loss</span>
+                            <span class="total_amt pull-right">
+                                {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
+                                {{ netProfitLoss | giddhCurrency }}</span>
+                        </div>
+                    </div>
+                    <div class="clearfix mrB2">
+                        <div class="">
+                            <span class="mrB1 dueAmount">Total Income</span>
+                            <span
+                                class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                                {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
+                        </div>
+                    </div>
+                    <div class="clearfix mrB2">
+                        <div class="">
+                            <span class="mrB1 dueAmount">Total Expenses</span>
+                            <span
+                                class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
+                                {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
     </div>
-
-    <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div class="giddh-spinner vertical-center-spinner"></div>
-      </div>
-      <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-        <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="profitLossChart" *ngIf="!noDataFound" #currentRatio></chart>
-          <div class="clearfix mrB2">
-            <div class="">
-              <span class="mrB1 dueAmount">Net Profit/Loss</span>
-              <span class="total_amt pull-right"> {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span>
-                {{ netProfitLoss | giddhCurrency }}</span>
-            </div>
-          </div>
-          <div class="clearfix mrB2">
-            <div class="">
-              <span class="mrB1 dueAmount">Total Income</span>
-              <span class="total_amt pull-right totalExpensesText"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
-            </div>
-          </div>
-          <div class="clearfix mrB2">
-            <div class="">
-              <span class="mrB1 dueAmount">Total Expenses</span>
-              <span class="total_amt pull-right totalIncomeText"><span>{{amountSettings.baseCurrencySymbol}}</span>
-                {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
-            </div>
-          </div>
-        </perfect-scrollbar>
-      </div>
-    </div>
-  </div>
 </div>
