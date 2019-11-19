@@ -190,7 +190,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 			this.companies$.pipe(take(1)).subscribe(c => companies = c);
 			this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
 			this.company.isBranch = this.createBranch;
-			console.log(this.company);
 			this._generalService.createNewCompany = this.company;
 			this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
 			this.closeCompanyModal.emit();
