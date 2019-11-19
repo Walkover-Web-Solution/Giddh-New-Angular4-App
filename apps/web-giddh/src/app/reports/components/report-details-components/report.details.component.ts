@@ -201,7 +201,6 @@ export class ReportsDetailsComponent implements OnInit {
     });
   }
   public selectFinancialYearOption(v: IOption) {
-      console.log('Reached');
     if (v.value) {
       let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
       this.activeFinacialYr = financialYear;
