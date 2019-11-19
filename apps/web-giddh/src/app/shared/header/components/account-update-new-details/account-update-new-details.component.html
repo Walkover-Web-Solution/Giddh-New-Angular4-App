@@ -23,7 +23,7 @@
             <div class="row ">
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
-                        <label>Country </label>
+                        <label>Country <sup class="text-danger">*</sup> </label>
                         <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)"></sh-select>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
     </div>
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-        <tab heading="Address" class="gstinAddress" (select)="tabChanged('address')" *ngIf="(activeGroupUniqueName ==='sundrycreditors') && (activeGroupUniqueName=== 'sundrydebtors') ">
+        <tab heading="Address" class="gstinAddress" (select)="tabChanged('address')">
             <ng-container>
                 <div class="gstinForm" formArrayName="addresses">
                     <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -151,7 +151,7 @@
                 </div>
             </div>
         </tab>
-        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (select)="tabChanged('contacts')">
+        <tab heading="Contact" class="ContactFromWrap" (select)="tabChanged('contacts')">
             <div class="contactForm">
                 <div class="row">
                     <div class="col-sm-6">
@@ -185,14 +185,14 @@
                                 address</span>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <!-- <div class="col-sm-6">
                         <div class="form-group">
                             <label>PAN</label>
                             <input type="text" disabled class="form-control" placeholder="PAN Number">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Other Details</label>
@@ -200,7 +200,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div> -->
             </div>
             <!-- <div class="row">
                 <div class="col-sm-12 mrT3">
