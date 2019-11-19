@@ -88,7 +88,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        console.log(this.flatGroupsOptions);
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -328,7 +327,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             addresses.push(this.initialGstDetailsForm());
         } else {
             this._toaster.clearAllToaster();
-            this._toaster.errorToast('Please fill GSTIN field first');
+            if (this.isIndia) {
+                this._toaster.errorToast('Please fill GSTIN field first');
+            } else {
+                this._toaster.errorToast('Please fill TRN field first');
+            }
         }
         return;
     }
@@ -377,7 +380,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                     gstForm.get('state').get('code').patchValue(null);
                     statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
-                    this._toaster.warningToast('Invalid GSTIN.');
+                    if (this.isIndia) {
+                        this._toaster.warningToast('Invalid GSTIN');
+                    } else {
+                        this._toaster.warningToast('Invalid TRN');
+                    }
                 }
             });
         } else {

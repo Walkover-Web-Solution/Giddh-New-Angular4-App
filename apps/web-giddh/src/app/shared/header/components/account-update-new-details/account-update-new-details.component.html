@@ -324,7 +324,7 @@
             </div>
         </div>
     </div> -->
-    <div *ngIf="(activeAccount$ | async)">
+    <div *ngIf="(activeAccount$ | async)" class="form-group">
         <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
             <div class="row">
                 <div class=" col-sm-10 ">
@@ -382,8 +382,8 @@
 </div>
 
 <!-- taxes container -->
-<ng-container *ngIf="(isTaxableAccount$ | async) && (selectedTab === 'others')">
-    <div class="row">
+<ng-container *ngIf="(isTaxableAccount$ | async)">
+    <div class="row" *ngIf="selectedTab === 'others'">
         <div class="col-sm-10">
             <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">
