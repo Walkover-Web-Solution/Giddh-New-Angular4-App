@@ -25,11 +25,13 @@
                 </perfect-scrollbar>
                 <div class="addBankDetails" *ngIf="bankAccounts.length === 0">
                     <p>Yet to add Bank and Credit Card details</p>
+                    <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
                 </div>
 
 
             </div>
-            <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
+            <a class="connectBnk" *ngIf="bankAccounts.length > 0"
+                [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
         </div>
     </div>
 </div>
