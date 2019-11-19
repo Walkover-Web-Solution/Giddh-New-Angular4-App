@@ -327,10 +327,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             addresses.push(this.initialGstDetailsForm());
         } else {
             this._toaster.clearAllToaster();
-            if (this.isIndia) {
-                this._toaster.errorToast('Please fill GSTIN field first');
-            } else {
-                this._toaster.errorToast('Please fill TRN field first');
+
+            if (this.formFields['taxName']) {
+                this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label}`);
             }
         }
         return;
@@ -380,10 +379,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                     gstForm.get('state').get('code').patchValue(null);
                     statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
-                    if (this.isIndia) {
-                        this._toaster.warningToast('Invalid GSTIN');
-                    } else {
-                        this._toaster.warningToast('Invalid TRN');
+                    if (this.formFields['taxName']) {
+                        this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
                     }
                 }
             });
