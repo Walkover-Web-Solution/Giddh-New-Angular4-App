@@ -1031,8 +1031,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             this.datePickerOptions = {
                 ...this.datePickerOptions,
-                startDate: universalDate[0],
-                endDate: universalDate[1]
+                startDate: moment(new Date(universalDate[0]), 'DD-MM-YYYY').toDate(),
+                endDate: moment(new Date(universalDate[1]), 'DD-MM-YYYY').toDate(),
             };
         }
         this.getVoucher(this.isUniversalDateApplicable);
