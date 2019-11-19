@@ -286,6 +286,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private entriesListBeforeTax: SalesEntryClass[];
     /** True, if user has selected custom invoice in Invoice Setting */
     private useCustomInvoiceNumber: boolean;
+    /** True, if the invoice generation request is received from previous page's modal */
+    private isInvoiceRequestedFromPreviousPage: boolean;
 
     constructor(
         private modalService: BsModalService,
@@ -431,7 +433,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isUpdateMode = false;
                 this.invoiceType = parmas['invoiceType'];
                 this.prepareInvoiceTypeFlags();
-
+                this.isInvoiceRequestedFromPreviousPage = true;
                 this.getAccountDetails(parmas['accUniqueName']);
             }
 
@@ -993,7 +995,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.stateGstCode || oldStatusCode === state.value));
+        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.value || oldStatusCode === state.stateGstCode));
         return (currentState) ? currentState.value : '';
     }
 
@@ -1082,7 +1084,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.customerCountryName = data.country.countryName;
-
+        if (this.isInvoiceRequestedFromPreviousPage) {
+            this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
+            this.invFormData.voucherDetails.customerName = data.name;
+        }
         // toggle all collapse
         this.isGenDtlCollapsed = false;
         this.isMlngAddrCollapsed = false;
@@ -1092,6 +1097,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
         });
+    }
+
+    setState(event) {
+        console.log(event);
     }
 
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
@@ -3115,7 +3124,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private modifyStateResp(stateList: StateCode[]) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
-            stateListRet.push({label: stateR.name, value: stateR.stateGstCode ? stateR.stateGstCode : stateR.code, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code});
+            stateListRet.push({label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code});
         });
         return stateListRet;
     }
