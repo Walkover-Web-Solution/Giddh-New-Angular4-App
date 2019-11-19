@@ -304,6 +304,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 		this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
 		this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
+		this.getChartData();
 		this.generateChart();
 	}
 }

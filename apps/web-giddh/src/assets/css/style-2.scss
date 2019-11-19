@@ -8332,8 +8332,22 @@ GST filing
                 }
 
                 .custom-tabs .nav>li>a {
-                    padding-top: 0;
-                }
+                        padding-top: 0;
+                    }
+                    #incomeChart chart , #leftIncomeChart chart{
+                        width: 100%;
+                        display: flex;
+                        flex: 1 1 0!important;
+                        flex-shrink: 1!important;
+                    }
+                   #incomeChart  #highcharts-ufrwew1-29{
+                        display: block;
+                        width: 100%;
+                    }
+                    .panel{
+                        border-radius: 2px;
+                    }
+
 
                 /* responsive */
 
