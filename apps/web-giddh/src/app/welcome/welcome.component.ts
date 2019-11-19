@@ -31,7 +31,6 @@ import { IForceClear } from "../models/api-models/Sales";
 })
 
 export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
-	public BranchField: boolean = false;
 	public stateGstCode: any[] = [];
 	public countrySource: IOption[] = [];
 	public countrySource$: Observable<IOption[]> = observableOf([]);
@@ -145,20 +144,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 					this.company.contactNo = contact[1];
 				}
 				this.prepareWelcomeForm();
-			}
-		});
-		this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-			if (res) {
-				if (res.isBranch) {
-					this.isbranch = res.isBranch;
-					this.createNewCompany = res;
-					this.company = this.createNewCompany;
-					if (this.company.contactNo.toString().includes('-')) {
-						let contact = this.company.contactNo.split('-');
-						this.company.contactNo = contact[1];
-					}
-					this.prepareWelcomeForm();
-				}
 			}
 		});
 
@@ -376,7 +361,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	public back(isbranch: boolean) {
-		//this._router.navigate(['']);
 		if (isbranch) {
 			this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
 		} else {

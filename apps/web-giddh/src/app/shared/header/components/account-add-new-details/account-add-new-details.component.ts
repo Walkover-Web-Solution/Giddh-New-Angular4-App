@@ -142,6 +142,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 this.resetGstStateForm();
             }
         });
+
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
@@ -182,6 +183,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 }
             }
         });
+        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+
 
         // COMMENTED BELOW CODE TO REMOVE AUTOCOMPLETE ON ACCOUNT NAME SINCE API TEAM IS HANDING THE ACCOUNT UNIQUE NAME
         // this.addAccountForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
@@ -221,7 +224,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 // });
             }
         });
-        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
     }
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {
@@ -272,7 +274,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             description: [''],
             addresses: this._fb.array([]),
             country: this._fb.group({
-                countryCode: ['']
+                countryCode: ['', Validators.required]
             }),
             hsnOrSac: [''],
             currency: [''],
@@ -505,6 +507,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             // console.log(s['showVirtualAccount'].currentValue);
             this.showOtherDetails = true;
         }
+        if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
+            // console.log(s['showVirtualAccount'].currentValue);
+            this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
+        }
     }
 
     public ngOnDestroy() {
@@ -536,6 +542,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
+            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                this.isDebtorCreditor = true;
+            } else {
+                this.isDebtorCreditor = false;
+            }
             this.isGroupSelected.emit(event.value);
         }
     }
