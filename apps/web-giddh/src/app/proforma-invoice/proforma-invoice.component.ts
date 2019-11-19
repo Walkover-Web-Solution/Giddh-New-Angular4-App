@@ -382,7 +382,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-        // this.invoiceNo = '';
+        this.autoFillShipping = true;
         this.isUpdateMode = false;
 
         // get user country from his profile
@@ -1119,6 +1119,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.showSwitchedCurr = false;
         this.autoSaveIcon = false;
+        this.autoFillShipping = true;
         this.showCurrencyValue = false;
         this.invFormData = new VoucherClass();
         this.depositAccountUniqueName = '';
