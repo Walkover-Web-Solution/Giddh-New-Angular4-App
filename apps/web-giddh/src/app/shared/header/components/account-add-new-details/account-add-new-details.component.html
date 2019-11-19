@@ -82,7 +82,7 @@
     </div>
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-        <ng-container [ngClass]="{'hidden': !isDebtorCreditor}">
+        <ng-container *ngIf="isDebtorCreditor">
             <tab heading="Address" [active]="isDebtorCreditor" class="gstinAddress">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
