@@ -8362,7 +8362,10 @@ GST filing
                         .invoice-modal-content #top0 app-aside-menu-other-taxes{
                              top: 60px !important;
                         }
-
+                        p.remvBrnchName {
+                            word-break: break-all;
+                            white-space: normal;
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
