@@ -231,10 +231,14 @@ td.card-header.clearfix {
 }
 
 .card .invoiceNumberA {
-  text-align: right;
-  display: block;
+  display: inline-block;
   padding-right: 20px;
 }
+.invoiceNameDownload{
+   position:relative;
+  text-align: right;
+}
+
 
 .card #inovice_td img {
 
@@ -388,12 +392,17 @@ ul.selectActionDropdown {
 
 }
 .dropdown-toggle.spcl_dropdown:hover{
-  background-color: #EAEAEA;
-  color:$dark-blue00;
+   background: $border-blue;
+  color: #fff !important;
+  border-color: $border-blue;
+}
+.dropdown-toggle.spcl_dropdown:hover  .caret{
+    color: #fff !important;
 }
 .dropdown-toggle.spcl_dropdown .caret{
   color: #999999;
 }
+
 button.btn.btn-default.ladda-button {
     margin-right: 15px;
     width: 36px;
@@ -452,6 +461,17 @@ button.btn.btn-filter span.icon-cross {
 .paginationWrapper {
   position: relative;
   top: -150px;
+}
+.invoiceFooter h3 {
+    font-size: 16px;
+    color: #999999;
+    display: inline-block;
+    margin-right: 10px;
+}
+.invoiceFooter h1 {
+    font-size: 28px;
+    color: #333;
+    display: inline-block;
 }
 
 
@@ -594,7 +614,9 @@ button.btn.btn-filter span.icon-cross {
   .invoiceFooter h1 {
     font-size: 18px !important;
   }
-
+.invoice-container{
+    padding-top: 60px;
+}
 }
 
 

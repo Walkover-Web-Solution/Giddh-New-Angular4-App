@@ -1,917 +1,1033 @@
 <tabset #staticTabs class="custom-tabs " [ngClass]="{'hide-header': activeTab === 'vendor'}">
 
-  <!-- region Customer/Vendor -->
-  <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
-    <div class="container-fluid">
+    <!-- region Customer/Vendor -->
+    <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')"
+        [active]="activeTab !== 'aging-report'">
+        <div class="container-fluid">
 
-      <div class="top_bar clearfix">
-        <div class="form-inline">
-          <div class="dis pull-left mrR1">
+            <div class="top_bar clearfix">
+                <div class="form-inline">
+                    <div class="dis pull-left mrR1">
 
-            <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()"
-              [tooltip]="'Enable / Disable Column'" [placement]="'right'">
-              <i dropdownToggle class="icon-options pd cp fs20"></i>
+                        <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown
+                            [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'"
+                            [placement]="'right'">
+                            <i dropdownToggle class="icon-options pd cp fs20"></i>
 
-              <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
+                                [style.width.px]="'200'">
 
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.parentGroup" (ngModelChange)="columnFilter($event, 'parentGroup')" [(ngModel)]="showFieldFilter.parentGroup"
-                    /> Parent Group
-                  </a>
-                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.parentGroup"
+                                            (ngModelChange)="columnFilter($event, 'parentGroup')"
+                                            [(ngModel)]="showFieldFilter.parentGroup" /> Parent Group
+                                    </a>
+                                </li>
 
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.openingBalance" (ngModelChange)="columnFilter($event, 'openingBalance')" [(ngModel)]="showFieldFilter.openingBalance"
-                    /> Opening
-                  </a>
-                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.openingBalance"
+                                            (ngModelChange)="columnFilter($event, 'openingBalance')"
+                                            [(ngModel)]="showFieldFilter.openingBalance" /> Opening
+                                    </a>
+                                </li>
 
-                <!--                <li role="menuitem" *ngIf="activeTab === 'customer'">-->
-                <!--                  <a class="dropdown-item">-->
-                <!--                    <input type="checkbox" name="field_filter.debitTotal"-->
-                <!--                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />-->
-                <!--                    Sales-->
-                <!--                  </a>-->
-                <!--                </li>-->
+                                <!--                <li role="menuitem" *ngIf="activeTab === 'customer'">-->
+                                <!--                  <a class="dropdown-item">-->
+                                <!--                    <input type="checkbox" name="field_filter.debitTotal"-->
+                                <!--                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />-->
+                                <!--                    Sales-->
+                                <!--                  </a>-->
+                                <!--                </li>-->
 
-                <!--                <li role="menuitem" *ngIf="activeTab === 'customer'">-->
-                <!--                  <a class="dropdown-item">-->
-                <!--                    <input type="checkbox" name="field_filter.creditTotal"-->
-                <!--                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />-->
-                <!--                    Receipt-->
-                <!--                  </a>-->
-                <!--                </li>-->
+                                <!--                <li role="menuitem" *ngIf="activeTab === 'customer'">-->
+                                <!--                  <a class="dropdown-item">-->
+                                <!--                    <input type="checkbox" name="field_filter.creditTotal"-->
+                                <!--                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />-->
+                                <!--                    Receipt-->
+                                <!--                  </a>-->
+                                <!--                </li>-->
 
-                <!--                <li role="menuitem" *ngIf="activeTab === 'vendor'">-->
-                <!--                  <a class="dropdown-item">-->
-                <!--                    <input type="checkbox" name="field_filter.debitTotal"-->
-                <!--                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />-->
-                <!--                    Purchase-->
-                <!--                  </a>-->
-                <!--                </li>-->
+                                <!--                <li role="menuitem" *ngIf="activeTab === 'vendor'">-->
+                                <!--                  <a class="dropdown-item">-->
+                                <!--                    <input type="checkbox" name="field_filter.debitTotal"-->
+                                <!--                      (ngModelChange)="columnFilter($event, 'debitTotal')" [(ngModel)]="showFieldFilter.debitTotal" />-->
+                                <!--                    Purchase-->
+                                <!--                  </a>-->
+                                <!--                </li>-->
 
-                <!--                <li role="menuitem" *ngIf="activeTab === 'vendor'">-->
-                <!--                  <a class="dropdown-item">-->
-                <!--                    <input type="checkbox" name="field_filter.creditTotal"-->
-                <!--                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />-->
-                <!--                    Payment-->
-                <!--                  </a>-->
-                <!--                </li>-->
+                                <!--                <li role="menuitem" *ngIf="activeTab === 'vendor'">-->
+                                <!--                  <a class="dropdown-item">-->
+                                <!--                    <input type="checkbox" name="field_filter.creditTotal"-->
+                                <!--                      (ngModelChange)="columnFilter($event, 'creditTotal')" [(ngModel)]="showFieldFilter.creditTotal" />-->
+                                <!--                    Payment-->
+                                <!--                  </a>-->
+                                <!--                </li>-->
 
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')" [(ngModel)]="showFieldFilter.mobile"
-                    /> Mobile No.</a>
-                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.mobile"
+                                            (ngModelChange)="columnFilter($event, 'mobile')"
+                                            [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+                                </li>
 
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')" [(ngModel)]="showFieldFilter.email"
-                    /> Email Id</a>
-                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.email"
+                                            (ngModelChange)="columnFilter($event, 'email')"
+                                            [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+                                </li>
 
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state"
-                    /> State</a>
-                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.state"
+                                            (ngModelChange)="columnFilter($event, 'state')"
+                                            [(ngModel)]="showFieldFilter.state" /> State</a>
+                                </li>
 
-                <!-- <li role="menuitem">
+                                <!-- <li role="menuitem">
   <a class="dropdown-item">
     <input type="checkbox" name="field_filter.closingBalance"
            [(ngModel)]="showFieldFilter.closingBalance"/>Amt. Due
   </a>
 </li> -->
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin"
-                    /> GSTIN</a>
-                </li>
-                <li role="menuitem">
-                  <a class="dropdown-item">
-                    <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment"
-                    /> Comment
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="pull-left header-left">
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.gstin"
+                                            (ngModelChange)="columnFilter($event, 'gstin')"
+                                            [(ngModel)]="showFieldFilter.gstin" /> GSTIN</a>
+                                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.comment"
+                                            (ngModelChange)="columnFilter($event, 'comment')"
+                                            [(ngModel)]="showFieldFilter.comment" /> Comment
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pull-left header-left">
 
 
-            <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
-              <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)"
-              />
-              <span class="inputAddon">
-                <i class="icon-search"></i>
-              </span>
-            </div>
+                        <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
+                            <input type="text" placeholder="Name/Email/Mobile" class="form-control"
+                                [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
+                            <span class="inputAddon">
+                                <i class="icon-search"></i>
+                            </span>
+                        </div>
 
-          </div>
+                    </div>
 
-          <div class="btn-group  pull-right onDesktopView">
-            <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
-              + New Customer
-            </button>
-            <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
-              + New Vendor
-            </button>
-          </div>
-          <div class="customer-footer-box pull-right ">
+                    <div class="btn-group  pull-right onDesktopView">
+                        <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px"
+                            (click)="openAddAndManage('customer')">
+                            + New Customer
+                        </button>
+                        <button *ngIf="activeTab == 'vendor'" class="btn btn-pink "
+                            (click)="openAddAndManage('vendor')">
+                            + New Vendor
+                        </button>
+                    </div>
+                    <div class="customer-footer-box pull-right ">
 
-            <div class="clearfix">
-              <span class="pull-left mrR1 totalContacts">
-                <h5>
-                  <span *ngIf="!selectedCheckedContacts.length" class="numbertotal">{{Totalcontacts}}</span>
-                  <span *ngIf="selectedCheckedContacts.length>0" class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
-                </h5>
-              </span>
-              <div class="btn-group moreBtn" dropdown>
-                <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
-                  More
-                  <span class="caret"></span>
-                </button>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                  <li role="menuitem" (click)="openEmailDialog();">Email</li>
-                  <li role="menuitem" (click)="openSmsDialog();">SMS</li>
-                  <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
-                </ul>
-              </div>
-            </div>
+                        <div class="clearfix">
+                            <span class="pull-left mrR1 totalContacts">
+                                <h5>
+                                    <span *ngIf="!selectedCheckedContacts.length"
+                                        class="numbertotal">{{Totalcontacts}}</span>
+                                    <span *ngIf="selectedCheckedContacts.length>0"
+                                        class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                                </h5>
+                            </span>
+                            <div class="btn-group moreBtn" dropdown>
+                                <button id="button-basic" dropdownToggle type="button"
+                                    class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
+                                    More
+                                    <span class="caret"></span>
+                                </button>
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                    aria-labelledby="button-basic">
+                                    <li role="menuitem" (click)="openEmailDialog();">Email</li>
+                                    <li role="menuitem" (click)="openSmsDialog();">SMS</li>
+                                    <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
+                                </ul>
+                            </div>
+                        </div>
 
-          </div>
+                    </div>
 
-          <div class="btn-group  pull-right onMobileView">
-            <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
-              + New Customer
-            </button>
-            <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
-              + New Vendor
-            </button>
-          </div>
-
-
-        </div>
-      </div>
+                    <div class="btn-group  pull-right onMobileView">
+                        <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px"
+                            (click)="openAddAndManage('customer')">
+                            + New Customer
+                        </button>
+                        <button *ngIf="activeTab == 'vendor'" class="btn btn-pink "
+                            (click)="openAddAndManage('vendor')">
+                            + New Vendor
+                        </button>
+                    </div>
 
 
-      <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
-        <p>
-          <strong>Due as on </strong>
-          <span class="italic underline">
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-              (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
-          </span>
-        </p>
-      </div>
-
-      <div class="contact-main customerPage onMobileView">
-
-        <div class=" pdB2 mrB1">
-
-          <div class="">
-
-            <div *ngIf="!isMobileScreen">
-              <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
-              <ng-container *ngTemplateOutlet='mainTable'></ng-container>
-              <!-- </perfect-scrollbar> -->
+                </div>
             </div>
 
-            <div *ngIf="isMobileScreen">
 
-              <!-- <div class="text-center top-aging-table-top pd1">
+            <div class="text-center top-aging-table-top seprta-top-aging pd1" *ngIf="isMobileScreen">
+                <p>
+                    <strong>Due as on </strong>
+                    <span class="italic underline">
+                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                            class="form-control date-range-picker" />
+                    </span>
+                </p>
+            </div>
+
+            <div class="contact-main customerPage onMobileView">
+
+                <div class=" pdB2 mrB1">
+
+                    <div class="">
+
+                        <div *ngIf="!isMobileScreen">
+                            <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"> -->
+                            <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+                            <!-- </perfect-scrollbar> -->
+                        </div>
+
+                        <div *ngIf="isMobileScreen">
+
+                            <!-- <div class="text-center top-aging-table-top pd1">
                 <p><strong>Due as on </strong> <span class="italic underline">
                     <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                            (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
                            class="form-control date-range-picker"/>
                   </span></p>
               </div> -->
-              <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+                            <ng-container *ngTemplateOutlet='mainTable'></ng-container>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="clearfix pagination-main">
-      <div class=" mt-5 mb-100px">
-        <div class="">
-          <div class="custumerRightWrap clearfix">
-            <div class="text-right">
-              <h4 class="mb-1 pdR2">Result Total</h4>
+        <div class="clearfix pagination-main">
+            <div class=" mt-5 mb-100px">
+                <div class="">
+                    <div class="custumerRightWrap clearfix">
+                        <div class="text-right">
+                            <h4 class="mb-1 pdR2">Result Total</h4>
+                        </div>
+
+                        <div class="bg-white clearfix">
+                            <div class="customer-right clearfix" style="width: 100%;">
+                                <table class="text-right">
+                                    <tr>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                                            <p *ngIf="activeTab === 'customer'">Sales</p>
+                                            <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Payment</p>
+                                            <p *ngIf="activeTab === 'customer'">Receipt</p>
+                                            <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p>Due</p>
+                                            <h3>{{totalDue | giddhCurrency}}/-</h3>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
-
-            <div class="bg-white clearfix">
-              <div class="customer-right clearfix" style="width: 100%;">
-                <table class="text-right">
-                  <tr>
-                    <td>
-                      <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                      <p *ngIf="activeTab === 'customer'">Sales</p>
-                      <h3>{{totalSales |giddhCurrency }}/-</h3>
-                    </td>
-                    <td>
-                      <p *ngIf="activeTab === 'vendor'">Payment</p>
-                      <p *ngIf="activeTab === 'customer'">Receipt</p>
-                      <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                    </td>
-                    <td>
-                      <p>Due</p>
-                      <h3>{{totalDue | giddhCurrency}}/-</h3>
-                    </td>
-
-                  </tr>
-
-                </table>
-              </div>
-
-            </div>
-          </div>
-
         </div>
+    </tab>
+    <!-- endregion -->
 
-
-      </div>
-    </div>
-  </tab>
-  <!-- endregion -->
-
-  <!-- region Aging Report -->
-  <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
-    <!--    <div *ngIf="activeTab === 'aging'">-->
-    <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
-    <!--    </div>-->
-  </tab>
-  <!-- endregion -->
+    <!-- region Aging Report -->
+    <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+        <!--    <div *ngIf="activeTab === 'aging'">-->
+        <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
+        <!--    </div>-->
+    </tab>
+    <!-- endregion -->
 </tabset>
 
 <!-- region Pay now modal -->
 <div bsModal #payNowModal="bs-modal" class="modal fade" role="dialog">
 
-  <div class="modal-dialog modal-md" *ngIf="cashFreeAvailableBalance">
-    <div class="modal-content">
-      <div *ngIf="selectedAccForPayment">
-        <div class="modal-header themeBg pdL2 pdR2 clearfix">
-          <h3 class="modal-title bg" id="modal-title-pay-now">Pay to {{selectedAccForPayment.name}} </h3>
-          <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onPaymentModalCancel()"></i>
-        </div>
-        <div class="modal-body pdL2 pdR2 clearfix" id="export-body-pay-now">
-          <form name="newRole" novalidate class="" autocomplete="off">
-            <div class="modal_wrap mrB2">
-              <h3 class="text-right mr2">Amount Due Rs: {{selectedAccForPayment.closingBalance?.amount}}</h3>
-              <h3 class="mrB2">
-                <b>Pay through Cash Free</b>
-              </h3>
-              <h4 *ngIf="cashFreeAvailableBalance">
-                <small>Balance in account Rs. {{cashFreeAvailableBalance}}</small>
-              </h4>
-              <input #amountBox type="number" class="form-control">
+    <div class="modal-dialog modal-md" *ngIf="cashFreeAvailableBalance">
+        <div class="modal-content">
+            <div *ngIf="selectedAccForPayment">
+                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title-pay-now">Pay to {{selectedAccForPayment.name}} </h3>
+                    <i class="fa fa-times text-right close_modal" aria-hidden="true"
+                        (click)="onPaymentModalCancel()"></i>
+                </div>
+                <div class="modal-body pdL2 pdR2 clearfix" id="export-body-pay-now">
+                    <form name="newRole" novalidate class="" autocomplete="off">
+                        <div class="modal_wrap mrB2">
+                            <h3 class="text-right mr2">Amount Due Rs: {{selectedAccForPayment.closingBalance?.amount}}
+                            </h3>
+                            <h3 class="mrB2">
+                                <b>Pay through Cash Free</b>
+                            </h3>
+                            <h4 *ngIf="cashFreeAvailableBalance">
+                                <small>Balance in account Rs. {{cashFreeAvailableBalance}}</small>
+                            </h4>
+                            <input #amountBox type="number" class="form-control">
+                        </div>
+                        <div>
+                            <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block"
+                                (click)="onConfirmation(amountBox.value)">Pay
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div>
-              <button [disabled]="!amountBox.value" type="submit" class="btn btn-md btn-success btn-block" (click)="onConfirmation(amountBox.value)">Pay
-              </button>
-            </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="modal-dialog modal-small" *ngIf="!cashFreeAvailableBalance">
-    <div class="modal-content">
-      <div *ngIf="selectedAccForPayment">
-        <div class="modal-header themeBg pdL2 pdR2 clearfix">
-          <h3 class="modal-title bg" id="modal-title">Add Cashfree details</h3>
-          <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onPaymentModalCancel()"></i>
+    <div class="modal-dialog modal-small" *ngIf="!cashFreeAvailableBalance">
+        <div class="modal-content">
+            <div *ngIf="selectedAccForPayment">
+                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title">Add Cashfree details</h3>
+                    <i class="fa fa-times text-right close_modal" aria-hidden="true"
+                        (click)="onPaymentModalCancel()"></i>
+                </div>
+                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                    <form name="newRole" novalidate class="" autocomplete="off"
+                        (submit)="submitCashfreeDetail(payoutObj)">
+                        <div class="form-group col-xs-12">
+                            <div class="row">
+                                <label>Client Id
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" type="text" placeholder="Client Id"
+                                    name="payoutForm.userName" [(ngModel)]="payoutObj.userName" required
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <div class="row">
+                                <label>Client Secret Key
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control" type="password" placeholder="Client Secret key"
+                                    name="payoutForm.password" [(ngModel)]="payoutObj.password" required
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <div class="row">
+                                <label>Link Account</label>
+                                <sh-select placeholder="Link Account" name="payoutObj.account"
+                                    [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async"
+                                    (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <div class="row">
+                                <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment"
+                                    name="payoutObj.autoCapturePayment" /> Automatic capture on payment
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Save">
+                        <input type="button" class="btn btn-cancel" value="Cancel" (click)="onPaymentModalCancel()">
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
-          <form name="newRole" novalidate class="" autocomplete="off" (submit)="submitCashfreeDetail(payoutObj)">
-            <div class="form-group col-xs-12">
-              <div class="row">
-                <label>Client Id
-                  <span class="required">*</span>
-                </label>
-                <input class="form-control" type="text" placeholder="Client Id" name="payoutForm.userName" [(ngModel)]="payoutObj.userName"
-                  required autocomplete="off">
-              </div>
-            </div>
-            <div class="form-group col-xs-12">
-              <div class="row">
-                <label>Client Secret Key
-                  <span class="required">*</span>
-                </label>
-                <input class="form-control" type="password" placeholder="Client Secret key" name="payoutForm.password" [(ngModel)]="payoutObj.password"
-                  required autocomplete="off">
-              </div>
-            </div>
-            <div class="form-group col-xs-12">
-              <div class="row">
-                <label>Link Account</label>
-                <sh-select placeholder="Link Account" name="payoutObj.account" [(ngModel)]="payoutObj.fakeAccObj" [options]="bankAccounts$ | async"
-                  (selected)="selectCashfreeAccount($event, payoutObj)"></sh-select>
-              </div>
-            </div>
-            <div class="form-group col-xs-12">
-              <div class="row">
-                <input type="checkbox" [(ngModel)]="payoutObj.autoCapturePayment" name="payoutObj.autoCapturePayment" /> Automatic capture on payment
-              </div>
-            </div>
-            <input type="submit" class="btn btn-success" value="Save">
-            <input type="button" class="btn btn-cancel" value="Cancel" (click)="onPaymentModalCancel()">
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
 
 </div>
 <!--endregion-->
 
 <!-- region Modal for Mail/SMS for vendore-->
-<div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog"
-  aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="noBrdRdsModal">
-        <div class="modal-header themeBg pdL2 pdR2 clearfix">
-          <h3 class="modal-title bg" id="modal-title-mail-vendor">{{messageBody.header.set}}</h3>
-          <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-          <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
-        </div>
-        <div class="modal-body pdL2 pdR2 clearfix">
-          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
-          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text"
-            placeholder="Enter subject here" />
-          <h1 class="mrB1">Type message body:</h1>
-          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-          <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position
-            where actual data will be placed.
-          </small>
+<div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal"
+    role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="noBrdRdsModal">
+                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title-mail-vendor">{{messageBody.header.set}}</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
+                        (click)="mailModal.hide()">×</span>
+                    <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+                </div>
+                <div class="modal-body pdL2 pdR2 clearfix">
+                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
+                        [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+                    <h1 class="mrB1">Type message body:</h1>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
+                        style="resize:none;" placeholder="start typing your message here"></textarea>
+                    <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body.
+                        Anything followed by '%s_' represents the position
+                        where actual data will be placed.
+                    </small>
 
-          <div class="row mrT2">
-            <ul class="list-inline pills">
-              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
-            </ul>
-          </div>
-          <div class="mrT4">
-            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
-          </div>
+                    <div class="row mrT2">
+                        <ul class="list-inline pills">
+                            <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
+                        </ul>
+                    </div>
+                    <div class="mrT4">
+                        <button class="btn btn-sm btn-success pull-right mrL1"
+                            (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!--endregion-->
 
 <!--region Modal for Mail/SMS for customer-->
-<div *ngIf="activeTab === 'customer'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog"
-  aria-hidden="true">
+<div *ngIf="activeTab === 'customer'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal"
+    role="dialog" aria-hidden="true">
 
-  <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md">
 
-    <div class="modal-content">
+        <div class="modal-content">
 
-      <div class="noBrdRdsModal">
+            <div class="noBrdRdsModal">
 
-        <div class="modal-header themeBg pdL2 pdR2 clearfix">
-          <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
-          <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-          <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
+                        (click)="mailModal.hide()">×</span>
+                    <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+                </div>
+
+                <div class="modal-body pdL2 pdR2 clearfix">
+
+                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
+                        [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+
+                    <h1 class="mrB1">Type message body:</h1>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
+                        style="resize:none;" placeholder="start typing your message here"></textarea>
+                    <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body.
+                        Anything followed by '%s_' represents the position
+                        where actual data will be placed.
+                    </small>
+
+                    <div class="row mrT2">
+                        <ul class="list-inline pills">
+                            <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
+                        </ul>
+                    </div>
+
+                    <div class="mrT4">
+                        <button class="btn btn-sm btn-success pull-right mrL1"
+                            (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-
-        <div class="modal-body pdL2 pdR2 clearfix">
-
-          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
-          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text"
-            placeholder="Enter subject here" />
-
-          <h1 class="mrB1">Type message body:</h1>
-          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-          <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position
-            where actual data will be placed.
-          </small>
-
-          <div class="row mrT2">
-            <ul class="list-inline pills">
-              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
-            </ul>
-          </div>
-
-          <div class="mrT4">
-            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
-          </div>
-
-        </div>
-
-      </div>
 
     </div>
-
-  </div>
 </div>
 <!--endregion-->
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-  <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount"
-    class="accountAsideMenuState2 transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
-    (getUpdateList)="getUpdatedList($event)"></aside-menu-account>
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc"
+        [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount"
+        class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
+        (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
+    </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-  <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment" (closeAsideEvent)="togglePaymentPane($event)">
-  </payment-aside>
+    <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment"
+        (closeAsideEvent)="togglePaymentPane($event)">
+    </payment-aside>
 </div>
 
 <ng-template #mainTable>
 
-  <div class="onMobileView mobilecardwrapper table-responsive vendorPage">
-    <table class="table  basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
-      <thead>
-        <tr class="aging-table-top">
-          <td></td>
-          <td *ngIf="showFieldFilter.parentGroup"></td>
-          <td [attr.colspan]="tableColsPan" class="text-center top-aging-table-top">
-            <p>
-              <strong>Due as on </strong>
-              <span class="italic underline">
-                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-                  (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
-              </span>
-            </p>
-          </td>
-          <td *ngIf="activeTab === 'vendor' && isICICIIntegrated"></td>
-          <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
-          <td *ngIf="showFieldFilter.mobile"></td>
-          <td *ngIf="showFieldFilter.gstin"></td>
-          <td *ngIf="showFieldFilter.state"></td>
-          <td *ngIf="showFieldFilter.comment"></td>
-        </tr>
+    <div class="onMobileView mobilecardwrapper table-responsive vendorPage">
+        <table class="table  basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
+            <thead>
+                <tr class="aging-table-top">
+                    <td></td>
+                    <td *ngIf="showFieldFilter.parentGroup"></td>
+                    <td [attr.colspan]="tableColsPan" class="text-center top-aging-table-top">
+                        <p>
+                            <strong>Due as on </strong>
+                            <span class="italic underline">
+                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                                    (hideDaterangepicker)="selectedDate($event)"
+                                    (applyDaterangepicker)="selectedDate($event)"
+                                    class="form-control date-range-picker" />
+                            </span>
+                        </p>
+                    </td>
+                    <td *ngIf="activeTab === 'vendor' && isICICIIntegrated"></td>
+                    <td class="text-lovercase" *ngIf="showFieldFilter.email"></td>
+                    <td *ngIf="showFieldFilter.mobile"></td>
+                    <td *ngIf="showFieldFilter.gstin"></td>
+                    <td *ngIf="showFieldFilter.state"></td>
+                    <td *ngIf="showFieldFilter.comment"></td>
+                </tr>
 
-        <tr>
-          <th>
-            <span class="inline table-checkbox">
-              <label></label>
-              <input type="checkbox" *ngIf="selectedCheckedContacts.length" [(ngModel)]="allSelectionModel" (ngModelChange)="toggleAllSelection(allSelectionModel)"
-              />
-            </span>
-            <div class="d-flex align-items-center">
-              <span>Name</span>
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
-              </ng-container>
-            </div>
-          </th>
+                <tr>
+                    <th>
+                        <span class="inline table-checkbox">
+                            <label></label>
+                            <input type="checkbox" *ngIf="selectedCheckedContacts.length"
+                                [(ngModel)]="allSelectionModel"
+                                (ngModelChange)="toggleAllSelection(allSelectionModel)" />
+                        </span>
+                        <div class="d-flex align-items-center">
+                            <span>Name</span>
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'name'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th *ngIf="showFieldFilter.parentGroup">
-            <div class="d-flex align-items-center">Parent group
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th *ngIf="showFieldFilter.parentGroup">
+                        <div class="d-flex align-items-center">Parent group
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'group'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th class="text-right  pr-3" *ngIf="showFieldFilter.openingBalance">
-            <div class="d-flex justify-content-end align-items-center">Opening
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th class="text-right  pr-3" *ngIf="showFieldFilter.openingBalance">
+                        <div class="d-flex justify-content-end align-items-center">Opening
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th class="text-right  pr-3">
-            <div class="d-flex justify-content-end align-items-center">
-              {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: (activeTab === 'customer') ? 'debitTotal' : 'creditTotal'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th class="text-right  pr-3">
+                        <div class="d-flex justify-content-end align-items-center">
+                            {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
+                            <ng-container
+                                *ngTemplateOutlet="sortingTemplate;context: { $implicit: (activeTab === 'customer') ? 'debitTotal' : 'creditTotal'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th class="text-right  pr-3">
-            <div class="d-flex justify-content-end align-items-center">
-              {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: activeTab === 'customer' ? 'creditTotal' : 'debitTotal'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th class="text-right  pr-3">
+                        <div class="d-flex justify-content-end align-items-center">
+                            {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
+                            <ng-container
+                                *ngTemplateOutlet="sortingTemplate;context: { $implicit: activeTab === 'customer' ? 'creditTotal' : 'debitTotal'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th class="text-right  pr-3">
-            <div class="d-flex justify-content-end align-items-center">Closing
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th class="text-right  pr-3">
+                        <div class="d-flex justify-content-end align-items-center">Closing
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th *ngIf="showFieldFilter.email">
-            <div class="d-flex">
-              <div class="flex-fill">
-                Email
-              </div>
-              <div class="icon-pointer cursor-pointer iconSearch">
-                <!--                        <i class="icon-search"></i>-->
-              </div>
-            </div>
+                    <th *ngIf="showFieldFilter.email">
+                        <div class="d-flex">
+                            <div class="flex-fill">
+                                Email
+                            </div>
+                            <div class="icon-pointer cursor-pointer iconSearch">
+                                <!--                        <i class="icon-search"></i>-->
+                            </div>
+                        </div>
 
-          </th>
+                    </th>
 
-          <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
+                    <th *ngIf="showFieldFilter.mobile">Mobile No.</th>
 
-          <th *ngIf="showFieldFilter.gstin">
-            <div class="d-flex align-items-center">GSTIN
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstin'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th *ngIf="showFieldFilter.gstin">
+                        <div class="d-flex align-items-center">GSTIN
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'gstin'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th *ngIf="showFieldFilter.state">
-            <div class="d-flex align-items-center ">State
-              <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
-              </ng-container>
-            </div>
-          </th>
+                    <th *ngIf="showFieldFilter.state">
+                        <div class="d-flex align-items-center ">State
+                            <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'state'}">
+                            </ng-container>
+                        </div>
+                    </th>
 
-          <th *ngIf="showFieldFilter.comment">Comment</th>
+                    <th *ngIf="showFieldFilter.comment">Comment</th>
 
-          <th *ngIf="activeTab === 'vendor' && isICICIIntegrated">Action</th>
+                    <th *ngIf="activeTab === 'vendor' && isICICIIntegrated">Action</th>
 
-        </tr>
+                </tr>
 
-      </thead>
+            </thead>
 
-      <tbody>
-        <ng-container *ngIf="activeTab === 'customer'">
+            <tbody>
+                <ng-container *ngIf="activeTab === 'customer'">
 
-          <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
-            <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()" data-title="Customer">
-              <span class="inline table-checkbox">
-                <label></label>
-                <input type="checkbox" (click)="selectAccount($event, account.uniqueName)" [(ngModel)]="account.isSelected" [ngClass]="{'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}"
-                />
-              </span>
-              <span class="accountNameCustomer"> {{account.name}} </span>
-              <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
-                <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"
-                  (click)="dropdown.show()"></a>
+                    <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
+                        <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
+                            (dblclick)="dropdown.show()" data-title="Customer">
+                            <span class="inline table-checkbox">
+                                <label></label>
+                                <input type="checkbox" (click)="selectAccount($event, account.uniqueName)"
+                                    [(ngModel)]="account.isSelected"
+                                    [ngClass]="{'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
+                            </span>
+                            <span class="accountNameCustomer"> {{account.name}} </span>
+                            <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
+                                class="icon-ellipse">
+                                <a id="edit-model-basic" dropdownToggle
+                                    class="dropdown-toggle icon-dots-three-vertical pull-right"
+                                    aria-controls="dropdown-basic" (click)="dropdown.show()"></a>
 
-                <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
-                  <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+                                <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00"
+                                    role="menu" aria-labelledby="edit-model-basic">
+                                    <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
 
-                    <div class="account-detail-modal-header-div selection-none">
+                                        <div class="account-detail-modal-header-div selection-none">
 
-                      <div class="account-detail-modal-div">
+                                            <div class="account-detail-modal-div">
 
-                        <div class="account-detail-custom-header selection-none-header">
+                                                <div class="account-detail-custom-header selection-none-header">
 
-                          <div class="d-flex" style="padding: 0px; border-right:0px;">
+                                                    <div class="d-flex" style="padding: 0px; border-right:0px;">
 
-                            <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                              <h3 class="account-detail-custom-title word-break">
-                                <span (click)="performActions(0, account)">{{account?.name}}</span>
-                              </h3>
+                                                        <div class="account-detail-padding"
+                                                            style="flex: 1;border-right: 0px;">
+                                                            <h3 class="account-detail-custom-title word-break">
+                                                                <span
+                                                                    (click)="performActions(0, account)">{{account?.name}}</span>
+                                                            </h3>
+                                                        </div>
+
+                                                        <div class="account-detail-padding"
+                                                            (click)="updateCustomerAcc('customer', account);">
+                                                            <img src="./assets/images/path.svg">
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="custom-detail account-detail-padding">
+                                                        <h4>{{account?.mobileNo}}</h4>
+                                                        <h4>{{account?.email}}</h4>
+                                                        <h4>{{account?.gstIn}}</h4>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="height-82px">
+
+                                                    <ul class="list-unstyled">
+
+                                                        <li class="li-link" *ngIf="!isMobileScreen">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(1, account)">Go to Ledger
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(2, account)">Generate Invoice
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(3, account, $event )">Send SMS
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(4, account, $event)">Send Email
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <!--Modal for Mail/SMS-->
+                                <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal"
+                                    role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
+                                    <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
+
+                                        <div class="modal-content" style="padding: 8px 8px 8px 8px;">
+
+                                            <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+
+                                                <div class="modal-header themeBg pdL2 pdR2 clearfix"
+                                                    style="padding: 8px 8px 8px 8px;">
+                                                    <h3 class="modal-title bg" id="modal-title">
+                                                        {{messageBody.header.set}}</h3>
+                                                    <span aria-hidden="true" class="close" data-dismiss="modal"
+                                                        aria-label="Close" (click)="mailModal.hide()">×</span>
+                                                </div>
+
+                                                <div class="modal-body pdL2 pdR2 clearfix"
+                                                    style="padding: 0px !important;">
+                                                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'"
+                                                        style="margin-top:15px;">Enter Subject:
+                                                    </h1>
+                                                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1"
+                                                        #subject [(ngModel)]="messageBody.subject" type="text"
+                                                        placeholder="Enter subject here" />
+                                                    <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
+                                                    <textarea #messageBox [(ngModel)]="messageBody.msg"
+                                                        class="form-control" rows="4" style="resize:none;"
+                                                        placeholder="start typing your message here"></textarea>
+                                                    <small class="mrT mrB grey"
+                                                        style="margin-top:15px;display: block">Tip: Click on the tabs
+                                                        below to insert data in your message body. Anything followed by
+                                                        '%s_' represents
+                                                        the position where actual data will be placed.
+                                                    </small>
+
+                                                    <div class="row mrT2" style="border: unset;margin-top: 20px;">
+                                                        <ul class="list-inline pills">
+                                                            <li *ngFor="let val of dataVariables"
+                                                                (click)="addValueToMsg(val)"
+                                                                style="padding: 5px 10px !important;">{{val.name}}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="mrT4">
+                                                        <button class="btn btn-sm btn-success pull-right mrL1"
+                                                            (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- </ul> -->
+
                             </div>
 
-                            <div class="account-detail-padding" (click)="updateCustomerAcc('customer', account);">
-                              <img src="./assets/images/path.svg">
+                        </td>
+                        <td class="WordWrap " data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+                            {{account.groupUniqueName}}</td>
+                        <td class="WordWrap text-right  " data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            {{account.openingBalance?.amount |giddhCurrency}}
+                        </td>
+                        <td class="WordWrap text-right " data-title=" Receipts">
+                            {{account.debitTotal |giddhCurrency}}</td>
+                        <td class="WordWrap text-right " data-title=" Sales">
+                            {{account.creditTotal |giddhCurrency}}</td>
+                        <td class="WordWrap text-right " data-title="Closing">
+                            {{account.closingBalance?.amount |giddhCurrency}}
+                        </td>
+                        <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">
+                            {{account.email || '-' }}</td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No">
+                            {{account.mobileNo || '-'}}
+                        </td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">
+                            {{account.gstIn || '-' }}</td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">
+                            {{account?.state?.name || '-'}}</td>
+                        <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment"
+                            class="commentField">
+                            <ng-container *ngIf='updateCommentIdx != idx'>
+                                {{account.comment || '-' }}
+                            </ng-container>
+                            <ng-container *ngIf='updateCommentIdx === idx'>
+                                <textarea class='form-control' maxlength='100' autofocus="true "
+                                    placeholder="Enter comment here " [(ngModel)]='account.comment'
+                                    (blur)='updateComment(account)'></textarea>
+                            </ng-container>
+
+                        </td>
+
+                    </tr>
+                    <!---->
+                    <tr *ngIf="!(sundryDebtorsAccounts).length ">
+                        <td colspan="11" class="text-center empty_table ">
+                            <h1>No Record Found !!</h1>
+                        </td>
+                    </tr>
+
+                </ng-container>
+
+                <ng-container *ngIf="activeTab==='vendor' ">
+
+                    <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
+                        <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer" data-title="Vendor"
+                            (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
+                            <span class="inline table-checkbox ">
+                                <label></label>
+                                <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
+                                    [(ngModel)]="account.isSelected "
+                                    [ngClass]="{ 'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
+                            </span>{{account.name}}
+                            <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
+                                class="icon-ellipse">
+                                <a id="edit-model-basic2" dropdownToggle
+                                    class="dropdown-toggle icon-dots-three-vertical pull-right"
+                                    aria-controls="dropdown-basic2" (click)="dropdown.show()">
+
+                                </a>
+
+                                <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00"
+                                    role="menu" aria-labelledby="edit-model-basic2">
+                                    <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+
+                                        <div class="account-detail-modal-header-div selection-none">
+
+                                            <div class="account-detail-modal-div">
+
+                                                <div class="account-detail-custom-header selection-none-header">
+
+                                                    <div class="d-flex" style="padding: 0px; border-right:0px;">
+
+                                                        <div class="account-detail-padding"
+                                                            style="flex: 1;border-right: 0px;">
+                                                            <h3 class="account-detail-custom-title word-break">
+                                                                <span
+                                                                    (click)="performActions(0, account)">{{account?.name}}</span>
+                                                            </h3>
+                                                        </div>
+
+                                                        <div class="account-detail-padding"
+                                                            (click)="updateCustomerAcc('vendor', account);">
+                                                            <img src="./assets/images/path.svg">
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="custom-detail account-detail-padding">
+                                                        <h4>{{account?.mobileNo}}</h4>
+                                                        <h4>{{account?.email}}</h4>
+                                                        <h4>{{account?.gstIn}}</h4>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="height-82px">
+
+                                                    <ul class="list-unstyled">
+
+                                                        <li class="li-link" *ngIf="!isMobileScreen">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(1, account)">Go to Ledger
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link" *ngIf="!isMobileScreen">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(2, account)">Generate Invoice
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(3, account, $event )">Send SMS
+                                                            </a>
+                                                        </li>
+
+                                                        <li class="li-link">
+                                                            <a href="javascript: void 0"
+                                                                (click)="performActions(4, account, $event)">Send Email
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <!--Modal for Mail/SMS-->
+                                <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal"
+                                    role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
+                                    <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
+
+                                        <div class="modal-content" style="padding: 8px 8px 8px 8px;">
+
+                                            <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+
+                                                <div class="modal-header themeBg pdL2 pdR2 clearfix"
+                                                    style="padding: 8px 8px 8px 8px;">
+                                                    <h3 class="modal-title bg" id="modal-title">
+                                                        {{messageBody.header.set}}</h3>
+                                                    <span aria-hidden="true" class="close" data-dismiss="modal"
+                                                        aria-label="Close" (click)="mailModal.hide()">×</span>
+                                                </div>
+
+                                                <div class="modal-body pdL2 pdR2 clearfix"
+                                                    style="padding: 0px !important;">
+                                                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'"
+                                                        style="margin-top:15px;">Enter Subject:
+                                                    </h1>
+                                                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1"
+                                                        #subject [(ngModel)]="messageBody.subject" type="text"
+                                                        placeholder="Enter subject here" />
+                                                    <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
+                                                    <textarea #messageBox [(ngModel)]="messageBody.msg"
+                                                        class="form-control" rows="4" style="resize:none;"
+                                                        placeholder="start typing your message here"></textarea>
+                                                    <small class="mrT mrB grey"
+                                                        style="margin-top:15px;display: block">Tip: Click on the tabs
+                                                        below to insert data in your message body. Anything followed by
+                                                        '%s_' represents
+                                                        the position where actual data will be placed.
+                                                    </small>
+
+                                                    <div class="row mrT2" style="border: unset;margin-top: 20px;">
+                                                        <ul class="list-inline pills">
+                                                            <li *ngFor="let val of dataVariables"
+                                                                (click)="addValueToMsg(val)"
+                                                                style="padding: 5px 10px !important;">{{val.name}}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="mrT4">
+                                                        <button class="btn btn-sm btn-success pull-right mrL1"
+                                                            (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- </ul> -->
+
                             </div>
-
-                          </div>
-
-                          <div class="custom-detail account-detail-padding">
-                            <h4>{{account?.mobileNo}}</h4>
-                            <h4>{{account?.email}}</h4>
-                            <h4>{{account?.gstIn}}</h4>
-                          </div>
-
-                        </div>
-
-                        <div class="height-82px">
-
-                          <ul class="list-unstyled">
-
-                            <li class="li-link" *ngIf="!isMobileScreen">
-                              <a href="javascript: void 0" (click)="performActions(1, account)">Go to Ledger
-                              </a>
-                            </li>
-
-                            <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
-                              </a>
-                            </li>
-
-                            <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(3, account, $event )">Send SMS
-                              </a>
-                            </li>
-
-                            <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send Email
-                              </a>
-                            </li>
-
-                          </ul>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-
-
-                <!--Modal for Mail/SMS-->
-                <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
-                  <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
-
-                    <div class="modal-content" style="padding: 8px 8px 8px 8px;">
-
-                      <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
-
-                        <div class="modal-header themeBg pdL2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
-                          <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
-                          <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                        </div>
-
-                        <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
-                          </h1>
-                          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text"
-                            placeholder="Enter subject here" />
-                          <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
-                          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                          <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents
-                            the position where actual data will be placed.
-                          </small>
-
-                          <div class="row mrT2" style="border: unset;margin-top: 20px;">
-                            <ul class="list-inline pills">
-                              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)" style="padding: 5px 10px !important;">{{val.name}}</li>
-                            </ul>
-                          </div>
-                          <div class="mrT4">
-                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-                <!-- </ul> -->
-
-              </div>
-
-            </td>
-            <td class="WordWrap " data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
-              {{account.groupUniqueName}}</td>
-            <td class="WordWrap text-right  " data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-              {{account.openingBalance?.amount |giddhCurrency}}
-            </td>
-            <td class="WordWrap text-right " data-title=" Receipts">
-              {{account.debitTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right " data-title=" Sales">
-              {{account.creditTotal |giddhCurrency}}</td>
-            <td class="WordWrap text-right " data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
-            </td>
-            <td class="text-lowercase WordWrap " *ngIf="showFieldFilter.email" data-title="Email">
-              {{account.email || '-' }}</td>
-            <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No">{{account.mobileNo || '-'}}
-            </td>
-            <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">{{account.gstIn || '-' }}</td>
-            <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name || '-'}}</td>
-            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment" class="commentField">
-              <ng-container *ngIf='updateCommentIdx != idx'>
-                {{account.comment || '-' }}
-              </ng-container>
-              <ng-container *ngIf='updateCommentIdx === idx'>
-                <textarea class='form-control' maxlength='100' autofocus="true " placeholder="Enter comment here " [(ngModel)]='account.comment'
-                  (blur)='updateComment(account)'></textarea>
-              </ng-container>
-
-            </td>
-
-          </tr>
-          <!---->
-          <tr *ngIf="!(sundryDebtorsAccounts).length ">
-            <td colspan="11" class="text-center empty_table ">
-              <h1>No Record Found !!</h1>
-            </td>
-          </tr>
-
-        </ng-container>
-
-        <ng-container *ngIf="activeTab==='vendor' ">
-
-          <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
-            <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer" data-title="Vendor" (clickOutside)="dropdown.hide()"
-              (dblclick)="dropdown.show()">
-              <span class="inline table-checkbox ">
-                <label></label>
-                <input type="checkbox" (click)="selectAccount($event, account.uniqueName) " [(ngModel)]="account.isSelected " [ngClass]="{ 'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} "
-                />
-              </span>{{account.name}}
-              <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
-                <a id="edit-model-basic2" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic2"
-                  (click)="dropdown.show()">
-
-                </a>
-
-                <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic2">
-                  <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
-
-                    <div class="account-detail-modal-header-div selection-none">
-
-                      <div class="account-detail-modal-div">
-
-                        <div class="account-detail-custom-header selection-none-header">
-
-                          <div class="d-flex" style="padding: 0px; border-right:0px;">
-
-                            <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                              <h3 class="account-detail-custom-title word-break">
-                                <span (click)="performActions(0, account)">{{account?.name}}</span>
-                              </h3>
-                            </div>
-
-                            <div class="account-detail-padding" (click)="updateCustomerAcc('vendor', account);">
-                              <img src="./assets/images/path.svg">
-                            </div>
-
-                          </div>
-
-                          <div class="custom-detail account-detail-padding">
-                            <h4>{{account?.mobileNo}}</h4>
-                            <h4>{{account?.email}}</h4>
-                            <h4>{{account?.gstIn}}</h4>
-                          </div>
-
-                        </div>
-
-                        <div class="height-82px">
-
-                          <ul class="list-unstyled">
-
-                            <li class="li-link" *ngIf="!isMobileScreen">
-                              <a href="javascript: void 0" (click)="performActions(1, account)">Go to Ledger
-                              </a>
-                            </li>
-
-                            <li class="li-link" *ngIf="!isMobileScreen">
-                              <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
-                              </a>
-                            </li>
-
-                            <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(3, account, $event )">Send SMS
-                              </a>
-                            </li>
-
-                            <li class="li-link">
-                              <a href="javascript: void 0" (click)="performActions(4, account, $event)">Send Email
-                              </a>
-                            </li>
-
-                          </ul>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-
-
-                <!--Modal for Mail/SMS-->
-                <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
-                  <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
-
-                    <div class="modal-content" style="padding: 8px 8px 8px 8px;">
-
-                      <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
-
-                        <div class="modal-header themeBg pdL2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
-                          <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
-                          <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                        </div>
-
-                        <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                          <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
-                          </h1>
-                          <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text"
-                            placeholder="Enter subject here" />
-                          <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
-                          <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                          <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents
-                            the position where actual data will be placed.
-                          </small>
-
-                          <div class="row mrT2" style="border: unset;margin-top: 20px;">
-                            <ul class="list-inline pills">
-                              <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)" style="padding: 5px 10px !important;">{{val.name}}</li>
-                            </ul>
-                          </div>
-                          <div class="mrT4">
-                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-                <!-- </ul> -->
-
-              </div>
-            </td>
-            <td class="WordWrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
-              <div class="table-email">{{account.groupUniqueName}}</div>
-            </td>
-            <td class="WordWrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-              {{account.openingBalance?.amount |giddhCurrency}}
-            </td>
-            <td class="WordWrap text-right " data-title="Purchase">
-              {{account.creditTotal |giddhCurrency}}</td>
-
-            <td class="WordWrap text-right " data-title="Payment">
-              {{account.debitTotal |giddhCurrency}}</td>
-
-
-            <td class="WordWrap text-right " data-title="Closing">{{account.closingBalance?.amount |giddhCurrency}}
-            </td>
-            <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
-              <div class="table-email ">{{account.email || '-' }}</div>
-            </td>
-            <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No.">{{account.mobileNo || '-' }}
-            </td>
-            <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">{{account.gstIn || '-' }}</td>
-            <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}</td>
-            <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
-              <ng-container *ngIf='updateCommentIdx != idx'>
-                {{account.comment || '-'}}
-              </ng-container>
-              <ng-container *ngIf='updateCommentIdx === idx'>
-                <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
-              </ng-container>
-
-            </td>
-
-            <td data-title="Action" *ngIf="isICICIIntegrated">
-              <button *ngIf="account.hasBankDetails " class="btn btn-small btn-success " (click)="openPaymentAside(account)">Pay Now
-              </button>
-              <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
-              </button>
-
-            </td>
-          </tr>
-
-          <tr *ngIf="!(sundryCreditorsAccounts).length ">
-            <td colspan="12 " class="text-center empty_table ">
-              <h1>No Record Found !!</h1>
-            </td>
-          </tr>
-
-        </ng-container>
-      </tbody>
-
-
-    </table>
-  </div>
-
-  <div colspan="100%" class="xs-pl-0 paginationWrapper">
-    <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
-      <div class="alC  ">
-        <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5"
-          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
-        </pagination>
-      </div>
+                        </td>
+                        <td class="WordWrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
+                            <div class="table-email">{{account.groupUniqueName}}</div>
+                        </td>
+                        <td class="WordWrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            {{account.openingBalance?.amount |giddhCurrency}}
+                        </td>
+                        <td class="WordWrap text-right " data-title="Purchase">
+                            {{account.creditTotal |giddhCurrency}}</td>
+
+                        <td class="WordWrap text-right " data-title="Payment">
+                            {{account.debitTotal |giddhCurrency}}</td>
+
+
+                        <td class="WordWrap text-right " data-title="Closing">
+                            {{account.closingBalance?.amount |giddhCurrency}}
+                        </td>
+                        <td class="WordWrap text-lowercase " *ngIf="showFieldFilter.email " data-title="Email">
+                            <div class="table-email ">{{account.email || '-' }}</div>
+                        </td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.mobile " data-title="Mobile No.">
+                            {{account.mobileNo || '-' }}
+                        </td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.gstin " data-title="GSTIN">
+                            {{account.gstIn || '-' }}</td>
+                        <td class="WordWrap " *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
+                        </td>
+                        <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
+                            <ng-container *ngIf='updateCommentIdx != idx'>
+                                {{account.comment || '-'}}
+                            </ng-container>
+                            <ng-container *ngIf='updateCommentIdx === idx'>
+                                <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment'
+                                    (blur)='updateComment(account)'></textarea>
+                            </ng-container>
+
+                        </td>
+
+                        <td data-title="Action" *ngIf="isICICIIntegrated">
+                            <button *ngIf="account.hasBankDetails " class="btn btn-small btn-success "
+                                (click)="openPaymentAside(account)">Pay Now
+                            </button>
+                            <button *ngIf="!account.hasBankDetails " class="btn btn-small btn-success "
+                                (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            </button>
+
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="!(sundryCreditorsAccounts).length ">
+                        <td colspan="12 " class="text-center empty_table ">
+                            <h1>No Record Found !!</h1>
+                        </td>
+                    </tr>
+
+                </ng-container>
+            </tbody>
+
+
+        </table>
     </div>
 
-    <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20">
-      <div class="alC ">
-        <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5"
-          class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
-        </pagination>
-      </div>
+    <div colspan="100%" class="xs-pl-0 paginationWrapper">
+        <div
+            *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=20">
+            <div class="alC  ">
+                <pagination [totalItems]="sundryDebtorsAccountsBackup.totalPages"
+                    [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
+                    [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
+                </pagination>
+            </div>
+        </div>
+
+        <div
+            *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=20">
+            <div class="alC ">
+                <pagination [totalItems]="sundryCreditorsAccountsBackup.totalPages"
+                    [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm"
+                    [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)">
+                </pagination>
+            </div>
+        </div>
     </div>
-  </div>
 
 </ng-template>
 
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-  <div class="icon-pointer cp">
-    <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col" [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+    <div class="icon-pointer cp">
+        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col"
+            [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
-    <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')" *ngIf="key === col && order === 'asc'"
-      [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
+            *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+        </div>
 
-    <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'" (click)="sort(col, 'asc')"
-      [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
-  </div>
+        <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
+            (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
+    </div>
 </ng-template>
 <!-- endregion -->

@@ -17,7 +17,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 
-import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateNewComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -52,6 +52,8 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { PaginationModule, DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
+import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 
 const getGoogleCredentials = (baseHref: string) => {
     if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -98,8 +100,7 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
-        AccountAddNewComponent,
-        AccountUpdateNewComponent,
+
         GroupsAccountSidebarComponent,
         GroupAddComponent,
         GroupUpdateComponent,
@@ -108,7 +109,9 @@ export function provideConfig() {
         VsForDirective,
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
-        AsideMenuOtherTaxes
+        AsideMenuOtherTaxes,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -165,8 +168,7 @@ export function provideConfig() {
         PaginationModule,
         ClickOutsideModule,
         PerfectScrollbarModule,
-        AccountAddNewComponent,
-        AccountUpdateNewComponent,
+
         ConfirmModalModule,
         NgbTypeaheadModule,
         VsForDirective,
@@ -176,7 +178,9 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         CKEditorModule,
         AsideMenuOtherTaxes,
-        MfReportComponent
+        MfReportComponent,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -184,8 +188,9 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
-        AccountAddNewComponent,
-        AccountUpdateNewComponent
+        AccountAddNewDetailsComponent,
+
+        AccountUpdateNewDetailsComponent
     ],
     providers: [
         {

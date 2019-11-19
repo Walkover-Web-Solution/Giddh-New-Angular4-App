@@ -149,7 +149,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
       // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
       if (index > -1) {
-        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : (this.applicableTaxes && this.applicableTaxes.length) ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
       } else {
 
         let taxObj = new TaxControlData();

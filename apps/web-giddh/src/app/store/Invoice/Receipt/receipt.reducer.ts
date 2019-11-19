@@ -122,9 +122,9 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
           ...vouchers,
           items: vouchers.items.map(m => {
             if(m.voucherNumber === result.body.number){
-              m.grandTotal = result.body.grandTotal.amountForAccount;
+              m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
             }else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
-              m.grandTotal = result.body.voucherDetails.grandTotal;
+              m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
             }
             return m;
           })

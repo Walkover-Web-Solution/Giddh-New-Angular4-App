@@ -8,6 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'tb-grid',
   templateUrl: './tb-grid.component.html',
+  styleUrls: [`./tb-grid.component.scss`],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {

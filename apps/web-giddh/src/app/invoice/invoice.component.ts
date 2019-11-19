@@ -38,7 +38,7 @@ import { GeneralService } from '../services/general.service';
 
       .invoce-controll ::ng-deep.nav.nav-tabs {
           margin-bottom: 20px;
-          padding: 12px 0px 0 15px !important;
+          padding: 0 0px 0 15px !important;
           background-color: #F7F8FD;
           z-index: 9;
           position: relative;

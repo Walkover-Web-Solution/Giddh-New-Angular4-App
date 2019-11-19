@@ -53,7 +53,7 @@
 }
 
 .account-search {
-    margin:10px 20px 10px 10px;
+    margin:10px 15px 10px 10px;
     position: relative;
     height: 36px;
 }
@@ -477,7 +477,7 @@ a[vr-item]:focus {
 .universal_date li input {
     background:$headerBtnColor !important;
     padding-left: 28px !important;
-    color: #fff;
+    color: #fff !important;
     padding-right: 5px !important;
     border:1px solid $headerBtnColor;
 }
@@ -620,11 +620,39 @@ ul.sub-list{
  min-height: 50px ;
     max-height: 400px;
 }
+.upgradePlan.list-inline > li{
+        padding-left: 0 !important;
+}
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width: 80%;
+}
+
 /* responsive */
+@media(max-width:1366px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:55%;
+}
+}
+@media(max-width:1280px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:50%;
+}
+}
+@media(max-width:1024px) {
+.primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:40%;
+}
+}
 @media(max-width:991px) {
+    .primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:30%;
+}
     .modal-liq90 {
         width: 100% !important;
     }
+    .primary-header .companyName-financeYear span.ellp.pdR1 {
+    width:50%;
+}
 }
 
 @media(max-width:768px){
@@ -697,6 +725,17 @@ span.icon-support.dropdown-toggle{
 .paddingTopFixed-mobile {
     padding-top: 85px;
 }
+.upperLayerHeader .open .dropdown-menu{
+
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+
+}
 }
 @media(min-width:412px) and (max-width:840px){
   ul.sub-list{
@@ -730,7 +769,7 @@ span.icon-support.dropdown-toggle{
 button#AddManage {
   position: absolute;
   right: 0;
-  bottom: -23px;
+  bottom: 0;
 }
 .universal_date li {
     display: block;

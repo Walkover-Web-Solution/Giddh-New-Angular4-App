@@ -130,7 +130,7 @@ public GetSMSKey$: Observable<Action> = this.action$
   public SaveRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.SaveRazorPayDetails(action.payload)),
-      map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
+      map(res => this.validatePayIntegrationResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
       }, true, {
@@ -154,7 +154,7 @@ public GetSMSKey$: Observable<Action> = this.action$
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS).pipe(
       switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload)),
-      map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
+      map(res => this.validatePayIntegrationResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
         type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
         payload: res
       }, true, {
@@ -827,11 +827,13 @@ public GetSMSKey$: Observable<Action> = this.action$
       payload: response
     };
   }
+
   public ResetICICIFlags() : CustomActions{
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.RESET_PAYMENT_STATUS_RESPONSE
     };
   }
+
   public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
@@ -845,4 +847,16 @@ public GetSMSKey$: Observable<Action> = this.action$
     }
     return successAction;
   }
+
+    public validatePayIntegrationResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
+        if (response.status === 'error') {
+            if (showToast) {
+                this.toasty.errorToast(response.message);
+            }
+            return errorAction;
+        } else {
+            this.toasty.successToast("Razorpay Details have been verified successfully.");
+        }
+        return successAction;
+    }
 }

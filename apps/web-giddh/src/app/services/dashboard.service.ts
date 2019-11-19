@@ -9,7 +9,17 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
-import { BankAccountsResponse, ClosingBalanceResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse } from '../models/api-models/Dashboard';
+import {
+  BankAccountsResponse,
+  ClosingBalanceResponse,
+  DashboardResponse,
+  GroupHistoryRequest,
+  GroupHistoryResponse,
+  RefreshBankAccountResponse,
+  GraphTypesResponse,
+  RevenueGraphDataRequest,
+  RevenueGraphDataResponse
+} from '../models/api-models/Dashboard';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -18,8 +28,7 @@ export class DashboardService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   public Dashboard(fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<DashboardResponse, string>> {
@@ -98,5 +107,37 @@ export class DashboardService {
       data.request = date;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '')));
+  }
+
+  public GetRevenueGraphTypes(): Observable<BaseResponse<GraphTypesResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+    return this._http.get(this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_TYPES).pipe(map((res) => {
+      let data: BaseResponse<GraphTypesResponse, string> = res;
+      data.request = '';
+      return data;
+    }), catchError((e) => this.errorHandler.HandleCatch<GraphTypesResponse, string>(e, '')));
+  }
+
+  public GetRevenueGraphData(request: RevenueGraphDataRequest): Observable<BaseResponse<RevenueGraphDataResponse, string>> {
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
+
+    let url = this.config.apiUrl + DASHBOARD_API.REVENUE_GRAPH_DATA;
+    url = url.replace(":companyUniqueName", this.companyUniqueName);
+    url = url.replace(":currentFrom", request.currentFrom);
+    url = url.replace(":currentTo", request.currentTo);
+    url = url.replace(":previousFrom", request.previousFrom);
+    url = url.replace(":previousTo", request.previousTo);
+    url = url.replace(":interval", request.interval);
+    url = url.replace(":type", request.type);
+    url = url.replace(":uniqueName", request.uniqueName);
+    url = url.replace(":refresh", request.refresh);
+
+    return this._http.get(url).pipe(map((res) => {
+    let data: BaseResponse<RevenueGraphDataResponse, string> = res;
+    data.request = '';
+    return data;
+  }), catchError((e) => this.errorHandler.HandleCatch<RevenueGraphDataResponse, string>(e, '')));
   }
 }

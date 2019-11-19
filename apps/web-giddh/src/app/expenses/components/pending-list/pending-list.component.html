@@ -2,76 +2,118 @@
     <div class="table-responsive">
         <table class="table basic table-bordered mt-2 onMobileView">
             <thead>
-                <tr>
-                    <th data-title="#">#</th>
-                    <th>Date{{pettycashRequestChange}}
-                        <ng-container class="d-inline-block" *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
-                    </th>
-                    <th>Submitted By
-                        <!-- <a class="search-icon" href="javascript:void(0)">
-                            <i class="icon-search"></i>
-                        </a> -->
-                    </th>
-                    <th>Account
-                        <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
-                    </th>
-                    <th class="text-right pr-2">Amount
-                        <ng-container class="d-inline-block " *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
-                    </th>
-                    <th>Payment/Receipt
-                        <!-- <i class="icon-arrow-down-2 arrow-filter"></i> -->
-                    </th>
-                    <th>File</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr (click)="rowClicked(expenses);" class="cursor-pointer" *ngFor="let expenses of expensesItems let i = index">
+            <tr>
+                <th data-title="#">#</th>
 
-                    <ng-container id="rowcomys" (click)="rowClicked(expenses);">
-                        <td data-title="#">{{i + 1}}</td>
-                        <td data-title="Date">{{expenses.entryDate}}</td>
-                        <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
-                        <td data-title="Account">
-                            <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
-                            <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
-                            <i class="dot-icon dot-primary" *ngIf="expenses.entryType==='expense'"></i> {{expenses.particularAccount.name}}
-                        </td>
-                        <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
-                        <td data-title="Payment/Receipt">
-                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
-                            <span *ngIf="expenses.baseAccountCategory==='BANK'" class="font-12 text-gray icon-atm-card"></span>
-                            <span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span> {{expenses.baseAccount.name}}
-                        </td>
-                        <td data-title="File">
-                            <a *ngIf="!expenses.fileNames" class="font-12">
-                                <i class="icon-file-path middle"></i> attach file</a>
-                            <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
-                        </td>
-                        <td data-title="Description"><span *ngIf="expenses.description">{{expenses.description}}</span><span *ngIf="!expenses.description">-</span></td>
-                        <td data-title="Action">
-                            <button type="button" (click)="rowClicked(expenses);" class="btn btn-success-outline">Approve</button>
-                        </td>
-                    </ng-container>
-                </tr>
+                <th>
+                    <div class="d-flex align-items-center">
+                    <span class="pull-left">Date</span>
+                    <ng-container class="d-inline-block"
+                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+                </div>
+                </th>
+
+                <th class="td_in_searchBox" #submittedBySearchContainer
+                    (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
+                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
+          title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
+                </th>
+
+                <th class="td_in_searchBox" #accountSearchContainer
+                    (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')"
+                >
+                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
+                        title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
+                </th>
+
+                <th class="text-right pr-2 amount-arrow"><div class="d-flex align-items-center"><span>Amount</span>
+                    <ng-container class="d-inline-block "
+                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                </div>
+                </th>
+
+                <th class="td_in_searchBox" #paymentReceiptSearchContainer
+                    (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')">
+                    <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
+                        title: 'Payment/Receipt', fieldName: 'payment/receive', formControl: paymentReceiveSearchInput}"></ng-container>
+                </th>
+
+                <th>File</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr (click)="rowClicked(expenses);" class="cursor-pointer"
+                *ngFor="let expenses of expensesItems let i = index">
+
+                <ng-container id="rowcomys" (click)="rowClicked(expenses);">
+
+                    <td data-title="#">{{i + 1}}</td>
+
+                    <td data-title="Date">{{expenses.entryDate}}</td>
+
+                    <td data-title="Submitted By">{{expenses.createdBy.name}} </td>
+
+                    <td data-title="Account">
+                        <i class="dot-icon dot-warning" *ngIf="expenses.entryType==='sales'"></i>
+                        <i class="dot-icon dot-success" *ngIf="expenses.entryType==='deposit'"></i>
+                        <i class="dot-icon dot-primary"
+                           *ngIf="expenses.entryType==='expense'"></i> {{expenses.particularAccount.name}}
+                    </td>
+
+                    <td data-title="Amount"
+                        class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+
+                    <td data-title="Payment/Receipt">
+                        <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
+                        <span *ngIf="expenses.baseAccountCategory==='BANK'"
+                              class="font-12 text-gray icon-atm-card"></span>
+                        <span *ngIf="expenses.baseAccountCategory==='CASH'"
+                              class="font-12 text-gray icon-cash"></span> {{expenses.baseAccount.name}}
+                    </td>
+
+                    <td data-title="File">
+                        <a *ngIf="!expenses.fileNames" class="font-12">
+                            <i class="icon-file-path middle"></i> attach file</a>
+                        <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
+                    </td>
+
+                    <td data-title="Description"><span *ngIf="expenses.description">{{expenses.description}}</span><span
+                        *ngIf="!expenses.description">-</span></td>
+
+                    <td data-title="Action">
+                        <button type="button"
+                                (click)="showApproveConfirmPopup(ApproveConfirm,expenses);$event.stopPropagation()"
+                                class="btn btn-success-outline">Approve
+                        </button>
+                    </td>
+
+                </ng-container>
+
+            </tr>
 
             </tbody>
 
         </table>
     </div>
 </div>
+
 <!-- <div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems>1" class="paginationWrapper">
     <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
 </div> -->
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">
-    <div class="no-data mrT2 d-flex " style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+    <div class="no-data mrT2 d-flex "
+         style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
         <div class="giddh-spinner vertical-center-spinner "></div>
     </div>
 
 </div>
-<div class="no-data" *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
+<div class="no-data"
+     *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
     <h1>No entries found within given criteria.</h1>
     <h1>Do search with some other dates</h1>
 </div>
@@ -80,12 +122,68 @@
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-    <div class="icon-pointer d-inline-block pull-right ml-1 pointer">
-        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'asc') " *ngIf="key !==col" [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
 
-        <div class="fa fa-long-arrow-up text-light-2 font-xxs " (click)="sort(col, 'desc') " *ngIf="key===col && order==='asc' " [ngClass]="{ 'activeTextColor': key===col && order==='asc' } "></div>
-
-        <div class="fa fa-long-arrow-down text-light-2 font-xxs " *ngIf="key===col && order==='desc' " (click)="sort(col, 'asc') " [ngClass]="{ 'activeTextColor': key===col && order==='desc' } "></div>
+    <div class="icon-sort-asc" *ngIf="key !== col" (click)="sort('asc', col)"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
     </div>
+
+    <div class="icon-sort-asc" *ngIf="key === col && order === 'asc'"
+         (click)="sort('desc', col)"
+         [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+    </div>
+
+    <div class="icon-sort-dsc" *ngIf="key === col && order === 'desc'"
+         (click)="sort('asc', col)"
+         [ngClass]="{'activeTextColor': key === col && order === 'desc'}">
+    </div>
+
 </ng-template>
 <!-- endregion -->
+
+<!-- region search template -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+
+    <div class="input-container" [hidden]="!show">
+        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl"/>
+    </div>
+
+</ng-template>
+<!-- endregion -->
+
+<!-- region approve entry confirm -->
+<ng-template #ApproveConfirm>
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    ></petty-cash-approve-confirm-dialog>
+</ng-template>
+<!-- endregion -->
+
+
+<ng-template #filterModal>
+
+    <div class="modal-header">
+
+        <h3 class="modal-title pull-left">Filter</h3>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideFilterModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+    </div>
+
+    <div class="modal-body"></div>
+
+    <div class="modal-footer">
+
+        <button class="btn btn-warning" (click)="hideFilterModal()">Yes</button>
+        <button class="btn btn-success" (click)="hideFilterModal()">Cancel</button>
+
+    </div>
+
+</ng-template>
