@@ -1,4 +1,4 @@
-<form name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+<form name="addAccountForm" [formGroup]="addAccountForm">
     <div class="">
         <div class="upper-form">
             <div class="row ">
@@ -295,19 +295,7 @@
         </tab>
 
     </tabset>
-    <div class="row">
-        <div class="col-sm-12 mrT3">
-            <div class="button-group">
-                <!-- <button class="btn btn-cancel">Cancel</button>
-                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
-                <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
-                        Delete
-                       </button>
-                <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
-                       </button>
-            </div>
-        </div>
-    </div>
+
 </form>
 <div class="form" *ngIf="selectedTab === 'others'">
     <!-- <div class="row ">
@@ -422,7 +410,19 @@
         </div>
     </div>
 </ng-container>
-
+<div class="row">
+    <div class="col-sm-12 mrT3">
+        <div class="button-group">
+            <!-- <button class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
+            <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
+                        Delete
+                       </button>
+            <button (click)="submit()" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                       </button>
+        </div>
+    </div>
+</div>
 <!--deleteMergedAccount account modal  -->
 <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
