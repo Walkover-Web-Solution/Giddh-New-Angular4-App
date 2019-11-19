@@ -1,9 +1,8 @@
 import {take, takeUntil} from 'rxjs/operators';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Options} from 'highcharts';
-import {ActiveFinancialYear, CompanyResponse} from '../../../models/api-models/Company';
+import {CompanyResponse} from '../../../models/api-models/Company';
 import {Observable, ReplaySubject} from 'rxjs';
-import {IChildGroups, IRevenueChartClosingBalanceResponse} from '../../../models/interfaces/dashboard.interface';
 import {HomeActions} from '../../../actions/home/home.actions';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../../store/roots';
@@ -11,7 +10,7 @@ import * as moment from 'moment/moment';
 import {RevenueGraphDataRequest} from "../../../models/api-models/Dashboard";
 import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import {DashboardService} from "../../../services/dashboard.service";
+import {GeneralService} from "../../../services/general.service";
 
 @Component({
 	selector: 'revenue-chart',
@@ -23,11 +22,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	@Input() public refresh: boolean = false;
 	public requestInFlight: boolean = false;
 	public options: Options;
-	public activeFinancialYear: ActiveFinancialYear;
-	public lastFinancialYear: ActiveFinancialYear;
 	public companies$: Observable<CompanyResponse[]>;
 	public activeCompanyUniqueName$: Observable<string>;
-	@Input() public revenueChartData: Observable<IRevenueChartClosingBalanceResponse>;
 	public revenueGraphTypes: any[] = [];
 	public activeGraphType: any;
 	public graphParams: any = {
@@ -46,18 +42,27 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	public summaryData: any = {totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0};
 	public activeCompany: any = {};
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+	public getCurrentWeekStartEndDate: any = '';
+	public getPreviousWeekStartEndDate: any = '';
+	public chartType: string = 'column';
+	public graphExpanded: boolean = false;
+	public currentDateRangePickerValue: Date[] = [];
+	public previousDateRangePickerValue: Date[] = [];
 
-	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe) {
+	constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService) {
 		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 		this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
 
-		let getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
-		let getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+		this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
+		this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
-		this.graphParams.currentFrom = moment(getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-		this.graphParams.currentTo = moment(getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
-		this.graphParams.previousFrom = moment(getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-		this.graphParams.previousTo = moment(getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+		this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
+		this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];
+
+		this.graphParams.currentFrom = moment(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.currentTo = moment(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
 		this.getRevenueGraphTypes();
 	}
@@ -110,21 +115,27 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 			this.summaryData.totalLast = 0;
 			this.summaryData.highest = 0;
 			this.summaryData.lowest = 0;
-			
+
 			if (res && res.balances) {
 				if (res.balances !== null) {
 					let x = 0;
 					Object.keys(res.balances).forEach(key => {
-						this.currentData.push({
-							x: x,
-							y: res.balances[key].current.closingBalance.amount,
-							tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
-						});
-						this.previousData.push({
-							x: x,
-							y: res.balances[key].previous.closingBalance.amount,
-							tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
-						});
+						if (res.balances[key].current) {
+							this.currentData.push({
+								x: x,
+								y: res.balances[key].current.closingBalance.amount,
+								tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+							});
+						}
+
+						if (res.balances[key].previous) {
+							this.previousData.push({
+								x: x,
+								y: res.balances[key].previous.closingBalance.amount,
+								tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+							});
+						}
+
 						x++;
 					});
 				}
@@ -182,10 +193,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	}
 
 	public generateChart() {
+		let chartType = this.chartType;
+
 		this.options = {
 			chart: {
-				type: 'column',
-				height: '256px'
+				type: chartType,
+				height: '300px'
 			},
 			colors: ['#0CB1AF', '#087E7D'],
 			title: {
@@ -210,6 +223,19 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 				formatter: function () {
 					return this.point.tooltip;
 				}
+			},
+			xAxis: {
+				labels: {
+					enabled: false
+				},
+				title: {
+					text: ''
+				}
+			},
+			yAxis: {
+				title: {
+					text: ''
+				}
 			}
 		};
 
@@ -222,5 +248,63 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 		this.graphParams.type = this.activeGraphType['type'];
 
 		this.refreshChart();
+	}
+
+	public showLineChart() {
+		this._generalService.invokeEvent.next("hideallcharts");
+		this.currentData = [];
+		this.previousData = [];
+		this.summaryData.totalCurrent = 0;
+		this.summaryData.totalLast = 0;
+		this.summaryData.highest = 0;
+		this.summaryData.lowest = 0;
+		this.graphParams.interval = "daily";
+		this.chartType = "line";
+		this.graphExpanded = true;
+		this.generateChart();
+	}
+
+	public updateChartFrequency(interval) {
+		this.graphParams.interval = interval;
+		this.getChartData();
+	}
+
+	public setPreviousDate(data) {
+		if (data) {
+			this.graphParams.previousFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
+			this.graphParams.previousTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
+			this.getPreviousWeekStartEndDate = [data[0], data[1]];
+			this.getChartData();
+		}
+	}
+
+	public setCurrentDate(data) {
+		if (data) {
+			this.graphParams.currentFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
+			this.graphParams.currentTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
+			this.getCurrentWeekStartEndDate = [data[0], data[1]];
+			this.getChartData();
+		}
+	}
+
+	public showColumnChart() {
+		this._generalService.invokeEvent.next("showallcharts");
+		this.graphParams.interval = "daily";
+		this.chartType = "column";
+		this.graphExpanded = false;
+
+		this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
+		this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+
+		this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
+		this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];
+
+		this.graphParams.currentFrom = moment(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.currentTo = moment(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+		this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+
+		this.getChartData();
+		this.generateChart();
 	}
 }

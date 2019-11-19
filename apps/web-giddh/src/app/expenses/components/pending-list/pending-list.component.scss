@@ -21,17 +21,17 @@
 
 .icon-pointer {
     .activeTextColor {
-        color: #FF5F00 !important;
+        color: #757BB9 !important;
     }
 }
 .icon-sort-asc, .icon-sort-dsc {
     display: inline-block;
-    float: right;
     cursor: pointer;
-    margin-left: 15px;
+    float: left;
+    margin-left: 6px;
 }
 .icon-sort-asc.activeTextColor {
-    color: #FF5F00 !important;
+    color: #757BB9 !important;
 }
 .td_in_searchBox {
     div {

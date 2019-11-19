@@ -1,60 +1,166 @@
-<div id="pie-chart">
-  <div class="panel panel-default">
-    <div class="row">
-      <div class="col-sm-9">
-        <div class="leftColumn">
-          <div class="panel-heading clearfix">
-            <div class="btn-group gstDropdown pull-left" dropdown>
-              <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
-                <span *ngIf="activeGraphType !== undefined"> <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span class="icon-arrow-down mrL1"></span>
-              </span>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item" (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
-              </ul>
-            </div>
-            <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
-            <span class="thisWeek pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand" [routerLink]="['total-sales']"></span> </span>
-            <ul class="dashboard-option pull-right">
-              <li class="secondryDarkbg"> <span></span> Last Week</li>
-              <li class="secondrylightbg"> <span></span> This Week</li>
-            </ul>
-          </div>
-          <div class="panel-body pos-rel">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-              <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
-              <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
-            </div>
+<div id="pie-chart" *ngIf="!graphExpanded">
+    <div class="panel panel-default">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="leftColumn">
+                    <div class="panel-heading clearfix">
+                        <div class="btn-group gstDropdown pull-left" dropdown>
+                            <span id="button-basic" dropdownToggle class="dropdown-toggle"
+                                aria-controls="dropdown-basic">
+                                <span *ngIf="activeGraphType !== undefined">
+                                    <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
+                                    class="icon-arrow-down mrL1"></span>
+                            </span>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item"
+                                        (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
+                            </ul>
+                        </div>
+                        <i class="glyphicon glyphicon-refresh pull-right mrL2" (click)="refreshChart()"></i>
+                        <span class="thisWeek pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand"
+                                (click)="showLineChart()"></span> </span>
+                        <ul class="dashboard-option pull-right">
+                            <li class="secondryDarkbg"> <span></span> Last Week</li>
+                            <li class="secondrylightbg"> <span></span> This Week</li>
+                        </ul>
+                    </div>
+                    <div class="panel-body pos-rel">
+                        <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                            <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+                            <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+                        </div>
 
-            <div class="chart-div" google-chart chart="myChartObject">
-              <perfect-scrollbar [scrollIndicators]="true">
-                <chart [options]="options"></chart>
-              </perfect-scrollbar>
+                        <div class="chart-div" google-chart chart="myChartObject">
+                            <perfect-scrollbar [scrollIndicators]="true">
+                                <div id="leftIncomeChart">
+                                    <chart [options]="options"></chart>
+                                </div>
+                            </perfect-scrollbar>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-sm-3">
+                <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
+                    <div class="singleSaleDetail">
+                        <p>Total {{activeGraphType['uniqueName']}} (this week)</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                    </div>
+                    <div class="singleSaleDetail">
+                        <p>Total {{activeGraphType['uniqueName']}} (last week)</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                    </div>
+                    <div class="singleSaleDetail">
+                        <p>Highest {{activeGraphType['uniqueName']}}</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                        <span>Sat (Last week)</span>
+                    </div>
+                    <div class="singleSaleDetail">
+                        <p>Lowest {{activeGraphType['uniqueName']}}</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                        <span>Tue (This week)</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-sm-3">
-        <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
-          <div class="singleSaleDetail">
-            <p>Total {{activeGraphType['uniqueName']}} (this week)</p>
-            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
-          </div>
-          <div class="singleSaleDetail">
-            <p>Total {{activeGraphType['uniqueName']}} (last week)</p>
-            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
-          </div>
-          <div class="singleSaleDetail">
-            <p>Highest {{activeGraphType['uniqueName']}}</p>
-            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
-            <span>Sat (Last week)</span>
-          </div>
-          <div class="singleSaleDetail">
-            <p>Lowest {{activeGraphType['uniqueName']}}</p>
-            <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
-            <span>Tue (This week)</span>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+<div class="" *ngIf="graphExpanded">
+    <div class="totalSalesHeader">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="daterang-block">
+                            <label>Date Range</label>
+                            <div class="dateRangeInput">
+                                <span class="icon-calender" (click)="dp1.toggle()"></span>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp1="bsDaterangepicker"
+                                    [bsValue]="previousDateRangePickerValue" (bsValueChange)="setPreviousDate($event)"
+                                    bsDaterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="daterang-block">
+                            <label>Compare to</label>
+                            <div class="dateRangeInput">
+                                <span class="icon-calender" (click)="dp2.toggle()"></span>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp2="bsDaterangepicker"
+                                    [bsValue]="currentDateRangePickerValue" (bsValueChange)="setCurrentDate($event)"
+                                    bsDaterangepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="page-title">
+                    <div class="collapse-close" (click)="showColumnChart()">
+                        <span class="icon-collapse-icon" tooltip="Collapse"></span>
+                    </div>
+                    <h1>Total {{activeGraphType['uniqueName']}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default mrT1">
+        <div class=" clearfix topdates">
+            <div class="pull-left aboutDate">
+                <div class="active-date">
+                    <span></span>{{this.getPreviousWeekStartEndDate[0] | date}} -
+                    {{this.getPreviousWeekStartEndDate[1] | date}}
+                </div>
+                <div class="inActive-date">
+                    <span></span>{{this.getCurrentWeekStartEndDate[0] | date}} -
+                    {{this.getCurrentWeekStartEndDate[1] | date}}
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="total-salesTabs">
+                    <a [ngClass]="{'active-graph': graphParams.interval == 'daily'}"
+                        (click)="updateChartFrequency('daily')">Daily</a>|<a
+                        [ngClass]="{'active-graph': graphParams.interval == 'weekly'}"
+                        (click)="updateChartFrequency('weekly')">Weekly</a>|<a
+                        [ngClass]="{'active-graph': graphParams.interval == 'monthly'}"
+                        (click)="updateChartFrequency('monthly')">Monthly</a>
+
+                </div>
+            </div>
+        </div>
+        <div id="incomeChart">
+            <chart [options]="options"></chart>
+        </div>
+        <div class="total-sale-data clearfix">
+            <div class="row">
+                <div class="col-sm-3 single-sale-data">
+                    <div>
+                        <p>Total {{activeGraphType['uniqueName']}} (Sep 19)</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div>
+                        <p>Total {{activeGraphType['uniqueName']}} (Aug 19)</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div>
+                        <p>Highest {{activeGraphType['uniqueName']}}</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                        <span class="dateWiseSale">(12 Sep 19)</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div>
+                        <p>Lowest {{activeGraphType['uniqueName']}}</p>
+                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalCurrent | giddhCurrency}}</h3>
+                        <span class="dateWiseSale">(12 Sep 19)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
