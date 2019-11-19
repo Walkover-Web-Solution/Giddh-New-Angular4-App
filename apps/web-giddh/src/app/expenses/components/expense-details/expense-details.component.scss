@@ -19,6 +19,7 @@
     overflow: hidden;
     justify-content: center;
     font-size: 32px;
+    cursor: pointer;
 }
 
 .upload-fil ul li .upload-img>a {
@@ -44,6 +45,7 @@
 .img-zoom img {
     max-height: 300px;
     min-width: 300px;
+    max-width: 300px;
 }
 
 .img-zoom .img-close {
@@ -85,6 +87,7 @@ span.close-modal.cp.pull-right {
     align-items: center;
     justify-content: center;
     min-width: 100%;
+    cursor: pointer;
 }
 
 .upload-img.add-img input {
