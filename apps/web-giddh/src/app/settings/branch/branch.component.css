@@ -101,6 +101,7 @@ font-size: 14px;
     padding-top: 5px;
     left: auto !important;
     right: 0 !important;
+    overflow: hidden;
 }
 .cardBasicDetails .dropdown-menu > li > a {
     padding: 5px 10px;
