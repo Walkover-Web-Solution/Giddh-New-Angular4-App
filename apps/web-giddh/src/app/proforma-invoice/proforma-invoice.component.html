@@ -247,6 +247,7 @@
                                                                                type="text"
                                                                                name="billingDetails.gstNumber"
                                                                                class="form-control input-custom"
+                                                                               *ngIf="showGSTINNo"
                                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                                                                (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                                placeholder="GSTIN"/>
@@ -316,6 +317,7 @@
                                                                                    autocomplete="None" maxLength="15"
                                                                                    type="text"
                                                                                    name="shippingDetails.gstNumber"
+                                                                                   *ngIf="showGSTINNo"
                                                                                    class="form-control input-custom"
                                                                                    [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                                                                    (keyup)="getStateCode('shippingDetails', statesShipping)"
