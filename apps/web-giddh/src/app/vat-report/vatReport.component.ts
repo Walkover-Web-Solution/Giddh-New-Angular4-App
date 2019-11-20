@@ -121,8 +121,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
 		vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
 
 		this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
-			let blob = this.base64ToBlob(res, 'application/xls', 512);
-			return saveAs(blob, `VatReport.xls`);
+			if (res.status === "success") {
+				let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+				return saveAs(blob, `VatReport.xls`);
+			} else {
+				this._toasty.clearAllToaster();
+				this._toasty.errorToast(res.message);
+			}
 		});
 	}
 
