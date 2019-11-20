@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -34,7 +34,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
     styleUrls: ['./account-add-new-details.component.scss'],
 })
 
-export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestroy {
+export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -225,6 +225,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 // });
             }
         });
+    }
+    public ngAfterViewInit() {
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+        }
+
     }
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {

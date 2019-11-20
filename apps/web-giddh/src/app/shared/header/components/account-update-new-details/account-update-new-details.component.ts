@@ -383,6 +383,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+        }
         this.prepareTaxDropdown();
     }
 
