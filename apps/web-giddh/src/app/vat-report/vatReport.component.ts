@@ -1,107 +1,110 @@
-
-import {Component, OnInit, } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {takeUntil, take} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit,} from '@angular/core';
+import {Router} from '@angular/router';
+import {VatReportRequest} from '../models/api-models/Vat';
+import * as _ from '../lodash-optimized';
+import {Store, select} from '@ngrx/store';
+import {AppState} from '../store';
+import {GeneralService} from '../services/general.service';
+import {ToasterService} from '../services/toaster.service';
+import {GeneralActions} from '../actions/general/general.actions';
+import {VatService} from "../services/vat.service";
+import * as moment from 'moment/moment';
+import {createSelector} from "reselect";
+import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
 
 @Component({
-  selector: 'app-vat-report',
-  styles: [`
-    .invoice-bg {
-        padding-top: 15px;
-    }
-
-    .invoce-controll ::ng-deep.nav > li > a {
-        padding: 2px 0px !important;
-        margin-right: 35px !important;
-          padding-bottom: 7px !important;
-          font-size:16px;
-              color: #262626 !important;
-    }
-
-    .invoce-controll ::ng-deep.nav-tabs > li.active > a {
-        border-bottom: 4px solid #01A9F4 !important;
-        color:#262626 !important;
-    }
-
-    .invoce-controll ::ng-deep.nav.nav-tabs {
-        margin-bottom: 20px;
-        padding: 12px 0px 0 15px !important;
-        background-color: #F7F8FD;
-        z-index: 9;
-        position: relative;
-        top: -4px;
-    }
-
-    .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-        background-color: #ff5f00;
-        color: #fff;
-    }
-
-    .invoce-controll .invoice-nav.navbar-nav > li > a.active {
-        background-color: #fff;
-        color: #ff5f00;
-    }
-
-    .navbar {
-        min-height: auto;
-        margin-bottom: 10px;
-    }
-
-    @media (max-width: 768px) {
-        .invoce-controll ::ng-deep.nav.nav-tabs {
-            margin-bottom: 28px;
-            padding: 10px 0px 0 15px !important;
-        }
-    }
-
-    @media (max-width: 500px) {
-        .invoce-controll ::ng-deep.nav.nav-tabs {
-            margin-bottom: 28px;
-            padding: 10px 0px 0 0 !important;
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-            white-space: nowrap;
-            display: inline-block;
-            width: 100%;
-            overflow-y: hidden;
-            cursor: pointer !important;
-        }
-
-        .invoce-controll ::ng-deep.nav-tabs > li {
-            display: inline-block;
-        }
-    }
-
-`],
-  styleUrls: ['./vatReport.component.scss'],
-  templateUrl: './vatReport.component.html'
+	selector: 'app-vat-report',
+	styleUrls: ['./vatReport.component.scss'],
+	templateUrl: './vatReport.component.html'
 })
-// VatReportComponent
-// InvoiceComponent
-export class VatReportComponent {
 
-  vatReports = [
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', amount: 'AED 10,000', vatAmount: 123, Adjustment: 'AED 1,000' },
-    { No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-' },
-    { No: '1a', items: 'Standard rated supplies in Sharjah', amount: 'AED 10,00', vatAmount: 123, Adjustment: '-' },
-    { No: '1a', items: 'Standard rated supplies in Ajman', amount: 'AED 2,000', vatAmount: 123, Adjustment: 'NA' },
-    { No: '1a', items: 'Standard rated supplies in Umm Al Quwain', amount: 'NA', vatAmount: 123, Adjustment: 'NA' },
-    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: 'NA', vatAmount: 123, Adjustment: '-' },
-    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: '-', vatAmount: 123, Adjustment: 'NA' },
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', amount: 'AED 10,000', vatAmount: 123, Adjustment: 'AED 1,000' },
-    { No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-' },
-    { No: '1a', items: 'Standard rated supplies in Sharjah', amount: 'AED 10,00', vatAmount: 123, Adjustment: '-' },
-    { No: '1a', items: 'Standard rated supplies in Ajman', amount: 'AED 2,000', vatAmount: 123, Adjustment: 'NA' },
-    { No: '1a', items: 'Standard rated supplies in Umm Al Quwain', amount: 'NA', vatAmount: 123, Adjustment: 'NA' },
-    { No: '1a', items: 'Standard rated supplies in Ras Al Khaimah', amount: 'NA', vatAmount: 123, Adjustment: '-' }
-  ]
+export class VatReportComponent implements OnInit, OnDestroy {
+	public vatReport: any[] = [];
+	public activeCompanyUniqueName$: Observable<string>;
+	public activeCompany: any;
+	public universalDate$: Observable<any>;
+	public datePickerOptions: any;
+	public moment = moment;
+	public currentDateRangePickerValue: Date[] = [];
+	public fromDate: string = '';
+	public toDate: string = '';
+	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+	vatReportsTwo = [
+		{
+			No: '1a',
+			items: 'Standard rated supplies in Abu Dhabi',
+			amount: 'AED 10,000',
+			vatAmount: 123,
+			Adjustment: 'AED 1,000'
+		},
+		{No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-'}
+	];
 
-  vatReportsTwo = [
-    { No: '1a', items: 'Standard rated supplies in Abu Dhabi', amount: 'AED 10,000', vatAmount: 123, Adjustment: 'AED 1,000' },
-    { No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-' }
-  ]
+	constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _generalActions: GeneralActions, private cdRef: ChangeDetectorRef) {
+		this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
+		this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
+	}
 
+	public ngOnInit() {
+		this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+			if (dateObj) {
+				let universalDate = _.cloneDeep(dateObj);
+				this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+				this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+				this.currentDateRangePickerValue = [universalDate[0], universalDate[1]];
+			}
+		})), (takeUntil(this.destroyed$))).subscribe();
 
-  constructor() { }
-   ngOnInit() { }
+		this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
+			this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
+				if (!res) {
+					return;
+				}
+				res.forEach(cmp => {
+					if (cmp.uniqueName === activeCompanyName) {
+						this.activeCompany = cmp;
+
+						if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+							this.activeCompany.addresses = [_.find(this.activeCompany.addresses, (tax) => tax.isDefault)];
+							this.getVatReport();
+						}
+					}
+				});
+			});
+		});
+	}
+
+	public ngOnDestroy() {
+		this.destroyed$.next(true);
+		this.destroyed$.complete();
+	}
+
+	public getVatReport() {
+		if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+			let vatReportRequest = new VatReportRequest();
+			vatReportRequest.from = this.fromDate;
+			vatReportRequest.to = this.toDate;
+			vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
+
+			this.vatReport = [];
+
+			this.vatService.GetVatReport(vatReportRequest).subscribe((res) => {
+				if (res.status === 'success') {
+					this.vatReport = res.body.sections;
+					this.cdRef.detectChanges();
+				}
+			});
+		}
+	}
+
+	public getFilterDate(dates: any) {
+		if (dates !== null) {
+			this.fromDate = moment(dates[0]).format(GIDDH_DATE_FORMAT);
+			this.toDate = moment(dates[1]).format(GIDDH_DATE_FORMAT);
+			this.getVatReport();
+		}
+	}
 }

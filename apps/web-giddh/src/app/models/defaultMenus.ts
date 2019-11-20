@@ -72,6 +72,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
   { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export' },
   { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices' },
   { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling' },
+  { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report' },
   { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync' },
   // { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/aging-report'},
   { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
@@ -96,6 +97,9 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
   },
   {
     type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5
+  },
+  {
+    type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', isRemoved: false, pIndex: 5
   },
   {
     type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10
@@ -164,7 +168,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 
 
-export let DEFAULT_MENUS: IUlist[] = []
+export let DEFAULT_MENUS: IUlist[] = [];
 export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
   {
     type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, isRemoved: false, pIndex: 3
@@ -188,14 +192,14 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
   { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note' }
 ]
 
-export let DEFAULT_AC = []
+export let DEFAULT_AC = [];
 export let DEFAULT_AC_RESPONSIVE = [
   { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash' },
   { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales' },
   { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases' },
   { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves' },
   { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge' }
-]
+];
 
 export let DEFAULT_GROUPS = [];
 export let DEFAULT_GROUPS_RESPONSIVE = [];

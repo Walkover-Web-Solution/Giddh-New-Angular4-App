@@ -1,16 +1,18 @@
 .invoce-controll {
-    .nav.nav-tabs {
+  .nav.nav-tabs {
     margin-bottom: 20px;
     padding: 12px 0px 0 15px !important;
     background-color: #F7F8FD;
     z-index: 9;
     position: relative;
     top: -4px;
-    }
+  }
 }
+
 .table-border-bottom {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
+
 .table-border-bottom tbody tr td, .table-border-bottom thead tr th {
   border-right: 0px !important;
   border-left: 0px !important;
@@ -18,10 +20,13 @@
   border-top: 1px solid #ddd;
   white-space: normal;
 }
-.table-border-bottom .last-row th {
-    background: #F2F2F2;
-    padding: 14px 10px;
+
+.table-border-bottom .last-row td {
+  background: #F2F2F2;
+  padding: 14px 10px;
+  font-weight: bold;
 }
+
 .table-border-bottom thead tr th {
   font-family: 'opensans-regular';
 }
