@@ -16,7 +16,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import {GeneralService} from "../../services/general.service";
+import { GeneralService } from "../../services/general.service";
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -253,7 +253,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
-        this.confirmationMessage = `Are you sure want to remove <p class="remvBrnchName"><b>${companyName}</b></p>?`;
+        this.confirmationMessage = `Are you sure want to remove <p class="remvBrnchName"><b>${companyName}?</b></p>`;
         this.confirmationModal.show();
     }
 
