@@ -84,7 +84,7 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
       url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
       ipcRenderer.send('open-url', url);
-    } else {
+    }else if(isCordova){} else {
       (window as any).open(url);
     }
   }

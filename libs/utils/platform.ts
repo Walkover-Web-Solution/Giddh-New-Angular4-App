@@ -31,3 +31,11 @@ export function isNativeScript() {
 export function isElectron() {
   return typeof window !== 'undefined' && window.process && window.process.type;
 }
+
+/**
+ * Cordova helpers
+ */
+export function isCordova() {
+    return typeof window !== 'undefined' && window.cordova && window.cordova;
+}
+

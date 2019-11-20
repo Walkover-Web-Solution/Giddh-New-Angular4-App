@@ -220,7 +220,7 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
       url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
       console.log(ipcRenderer.send('open-url', url));
-    } else {
+    } else if (isCordova){}else {
       (window as any).open(url);
     }
   }

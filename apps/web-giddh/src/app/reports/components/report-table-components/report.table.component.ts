@@ -90,6 +90,8 @@ export class ReportsTableComponent implements OnInit {
       let ipcRenderer = (window as any).require('electron').ipcRenderer;
       url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
       console.log(ipcRenderer.send('open-url', url));
+    }else if(isCordova){
+
     } else {
       (window as any).open(url);
     }
@@ -118,7 +120,7 @@ export class ReportsTableComponent implements OnInit {
     let aa = this.activeFinacialYr;
 
     if( from !=null && to !=null)
-    { 
+    {
     this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to } });
     }
   }

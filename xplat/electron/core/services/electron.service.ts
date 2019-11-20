@@ -16,6 +16,7 @@ export class ElectronService {
       this._childProcess = this._win.require('child_process');
       this._log.debug('ElectronService ready.');
     }
+
   }
 
   public on(channel: string, listener: Function): void {

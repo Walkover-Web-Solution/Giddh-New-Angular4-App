@@ -56,7 +56,7 @@ import { AccountAddNewDetailsComponent } from './header/components/account-add-n
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 
 const getGoogleCredentials = (baseHref: string) => {
-    if (baseHref === 'https://giddh.com/' || isElectron) {
+    if (baseHref === 'https://giddh.com/' || (isElectron|| isCordova)) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -70,7 +70,7 @@ const getGoogleCredentials = (baseHref: string) => {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')

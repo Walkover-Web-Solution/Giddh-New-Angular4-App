@@ -192,7 +192,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private getGoogleCredentials(baseHref: string) {
-    if (baseHref === 'https://giddh.com/' || isElectron) {
+    if (baseHref === 'https://giddh.com/' || isElectron ||isCordova) {
       return {
         GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
         GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'

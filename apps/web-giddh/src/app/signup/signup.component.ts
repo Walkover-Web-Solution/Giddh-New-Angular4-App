@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit, OnDestroy {
               @Inject(DOCUMENT) private document: Document,
               private _toaster: ToasterService
   ) {
-    this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
+    this.urlPath = (isElectron|| isCordova) ? "" : AppUrl + APP_FOLDER;
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).pipe(takeUntil(this.destroyed$));
@@ -150,7 +150,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.setCountryCode({ value: "India", label: "India" });
 
     // get user object when google auth is complete
-    if (!Configuration.isElectron) {
+    if (!Configuration.isElectron && !Configuration.isCordova) {
       this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
         this.isSocialLogoutAttempted$.subscribe((res) => {
           if (!res && user) {
@@ -298,6 +298,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         const t = ipcRenderer.sendSync("authenticate", provider);
         this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
       }
+
+    }else if (Configuration.isCordova){
 
     } else {
       //  web social authentication

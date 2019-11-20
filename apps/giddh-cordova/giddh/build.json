@@ -1,0 +1,20 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "./giddh-cordova.keystore",
+            "storePassword": "1234567890",
+            "alias": "giddh",
+            "password": "1234567890",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "./giddh-cordova.keystore",
+            "storePassword": "1234567890",
+            "alias": "giddh",
+            "password": "1234567890",
+            "keystoreType": ""
+        }
+    },
+    "ios": {
+    }
+}

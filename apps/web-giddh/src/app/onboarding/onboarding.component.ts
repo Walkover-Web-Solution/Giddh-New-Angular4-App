@@ -40,7 +40,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
-    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
     // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
     //   this.selectedPlans = res;
