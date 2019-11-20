@@ -457,21 +457,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             accountRequest.mobileCode = '';
         }
         if (this.isHsnSacEnabledAcc) {
-            delete accountRequest['country'];
-            delete accountRequest['addresses'];
-            delete accountRequest['hsnOrSac'];
-            delete accountRequest['mobileNo'];
-            delete accountRequest['email'];
-            delete accountRequest['attentionTo'];
+            // delete accountRequest['country'];
+            // delete accountRequest['addresses'];
+            // delete accountRequest['hsnOrSac'];
+            // delete accountRequest['mobileNo'];
+            // delete accountRequest['email'];
+            // delete accountRequest['attentionTo'];
         } else {
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
             delete accountRequest['sacNumber'];
 
-            if (accountRequest.mobileCode && accountRequest.mobileNo) {
-                accountRequest.mobileNo = accountRequest.mobileNo;
-                // delete accountRequest['mobileCode'];
-            }
         }
 
         if (this.showBankDetail) {
