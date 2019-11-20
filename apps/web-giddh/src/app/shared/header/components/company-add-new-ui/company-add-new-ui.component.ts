@@ -224,9 +224,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     previousState = se;
                 });
                 if (previousState) {
-                    if (this.createBranch) {
-                        this._route.navigate([`/${previousState}`]);
-                    } else {
+                    if (!this.createBranch) {
                         this._route.navigate([`pages/${previousState}`]);
                     }
                 }

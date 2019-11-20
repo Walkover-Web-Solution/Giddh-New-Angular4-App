@@ -1,159 +1,93 @@
 <section>
-    <nav class="navbar">
-        <div class="invoce-controll">
-            <div class="row" style="margin: 0 !important;">
+	<nav class="navbar">
+		<div class="invoce-controll">
+			<div class="row" style="margin: 0 !important;">
 
-                <div class="vat-report" id="settingTab">
-                    <tabset #staticTabs>
-                        <tab heading="VAT Report">
+				<div class="vat-report" id="settingTab">
+					<tabset #staticTabs>
+						<tab heading="VAT Report">
 
-                            <div class="navbar_header mb-2">
-                                <div class="clearfix">
-                                    <span>VAT Report for period</span>
-                                </div>
-                                <div class="clearfix">
-                                    <button type="button" class="btn btn-default"><i class=" icon-download1"></i> Download</button>
-                                </div>
-                            </div>
-
-                            <div class="white-box">
-                                <p class="font-14 text-black">
-                                    <strong>VAT on Sales and all other Outputs</strong>
-                                </p>
-                                <div class="table-responsive">
-                                    <table class="table basic table-border-bottom mrT2 onMobileView">
-                                        <thead>
+							<div class="navbar_header mb-2">
+								<div class="clearfix">
+									<span>VAT Report for period</span>
+									<span class="thisWeek pull-right">
+                                        <input type="text" readonly placeholder="Select Dates" class="form-control" #dp="bsDaterangepicker"
+                                               [bsValue]="currentDateRangePickerValue" (bsValueChange)="getFilterDate($event)"
+                                               bsDaterangepicker>
+                                    </span>
+								</div>
+								<div class="clearfix" *ngIf="allowVatReportAccess">
+									<button type="button" class="btn btn-default" (click)="downloadVatReport()"><i class=" icon-download1"></i>
+										Download
+									</button>
+								</div>
+							</div>
+                            <div *ngFor="let report of vatReport; let i = index">
+                                <div class="white-box" *ngIf="i < 2">
+                                    <p class="font-14 text-black">
+                                        <strong>{{report.section}}</strong>
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table basic table-border-bottom mrT2 onMobileView">
+                                            <thead>
                                             <tr>
                                                 <th width="5%"></th>
                                                 <th width="40%"></th>
                                                 <th width="10%"></th>
-                                                <th width="15%" class="text-right">Amount (AED)</th>
-                                                <th  width="15%" class="text-right">VAT Amount (AED)</th>
-                                                <th width="15%" class="text-right">Adjustment (AED)</th>
+                                                <th width="15%" class="text-right">Amount ({{activeCompany.baseCurrency}})</th>
+                                                <th width="15%" class="text-right">VAT Amount ({{activeCompany.baseCurrency}})</th>
+                                                <th width="15%" class="text-right">Adjustment ({{activeCompany.baseCurrency}})</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let vatReport of vatReports; let i = index">
-                                                <td>{{i+1}}</td>
-                                                <td>{{vatReport.items}}</td>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td>{{reportSections.section}}</td>
+                                                <td>{{reportSections.description}}</td>
                                                 <td>
-                                                    <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info text-light"></span></a>
+                                                    <a href="javascript:void(0)" class="text-light" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
                                                 </td>
-                                                <td data-title="Amount (AED)" class="text-right">{{vatReport.amount}}</td>
-                                                <td data-title="VAT Amount (AED)" class="text-right">{{vatReport.vatAmount}}</td>
-                                                <td data-title="Adjustment (AED)" class="text-right">{{vatReport.Adjustment}}</td>
+                                                <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</td>
+                                                <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.vatAmount | giddhCurrency}}</td>
+                                                <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.adjustmentAmount | giddhCurrency}}</td>
                                             </tr>
                                             <tr class="last-row">
-                                                <th title="15">15</th>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th class="text-right">AED 97,000</th>
-                                                <th class="text-right">A = AED 15,000</th>
-                                                <th class="text-right">B = AED 1,000</th>
+                                                <td>&nbsp;</td>
+                                                <td>Total</td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="text-light" *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span class="icon-info text-light"></span></a>
+                                                </td>
+                                                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</td>
+                                                <td class="text-right"><span *ngIf="i === 0">A =</span><span *ngIf="i === 1">C =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalVatAmount | giddhCurrency}}</td>
+                                                <td class="text-right"><span *ngIf="i === 0">B =</span><span *ngIf="i === 1">D =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalAdjustmentAmount | giddhCurrency}}</td>
                                             </tr>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="white-box" *ngIf="i == 2">
+                                    <p class="font-14 text-black">
+                                        <strong>{{report.section}}</strong>
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
+                                            <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td width="5%">{{reportSections.section}}</td>
+                                                <td width="50%">{{reportSections.description}}</td>
+                                                <td width="45%">
+                                                    <span class="pr-1">{{reportSections.toolTip}}</span>
+                                                    <strong>{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</strong>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="white-box">
-                                <p class="font-14 text-black">
-                                    <strong>VAT on Sales and all other Outputs</strong>
-                                </p>
-                                <div class="table-responsive">
-                                    <table class="table basic table-border-bottom mrT2 onMobileView">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%"></th>
-                                                <th width="40%"></th>
-                                                <th width="10%"></th>
-                                                <th width="15%" class="text-right">Amount (AED)</th>
-                                                <th  width="15%" class="text-right">Recoverable <br> VAT Amount (AED)</th>
-                                                <th width="15%" class="text-right">Adjustment (AED)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let vatReportTwo of vatReportsTwo; let i = index">
-                                                <td>{{i+1}}</td>
-                                                <td>{{vatReportTwo.items}}</td>
-                                                <td>
-                                                        <a href="javascript:void(0)" class="text-light" tooltip="This is dummy text"><span class="icon-info text-light"></span></a>
-                                                </td>
-                                                <td data-title="Amount (AED)" class="text-right">{{vatReportTwo.vatAmount}}</td>
-                                                <td data-title="VAT Amount (AED)" class="text-right">{{vatReportTwo.vatAmount}}</td>
-                                                <td class="text-right" data-title="Adjustment (AED)">{{vatReportTwo.Adjustment}}</td>
-                                            </tr>
-                                            <tr class="last-row">
-                                                <th>15</th>
-                                                <th>Total</th>
-                                                <th></th>
-                                                <th class="text-right">AED 12,500</th>
-                                                <th class="text-right">C = AED 12,500</th>
-                                                <th class="text-right">D = AED 1,500</th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-
-                            <div class="white-box">
-                                <p class="font-14 text-black">
-                                    <strong>Net VAT due</strong>
-                                </p>
-                                <div class="table-responsive">
-                                    <table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
-                                        <tbody>
-                                            <tr>
-                                                <td>12.</td>
-                                                <td>Total value of due tax for the period</td>
-                                                <td>
-                                                    <span class="pr-1">(E = A + B)</span>
-                                                    <strong>AED 16,000</strong>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>12.</td>
-                                                <td>Total value of due tax for the period</td>
-                                                <td>
-                                                    <span class="pr-1">(E = A + B)</span>
-                                                    <strong>AED 16,000</strong>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>12.</td>
-                                                <td>Total value of due tax for the period</td>
-                                                <td>
-                                                    <span class="pr-1">(E = A + B)</span>
-                                                    <strong>AED 16,000</strong>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </tab>
-
-                        <!-- <tab heading="Report 1">
-                            Report 1
-                        </tab>
-
-                        <tab heading="Report 2">
-                            Report 2
-                        </tab>
-
-                        <tab heading="Report 3">
-                            Report 1
-                        </tab> -->
-                    </tabset>
-                </div>
-
-            </div>
-        </div>
-    </nav>
-
-
-    <!--<router-outlet></router-outlet>-->
-
+						</tab>
+					</tabset>
+				</div>
+			</div>
+		</div>
+	</nav>
 </section>

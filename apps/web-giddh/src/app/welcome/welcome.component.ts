@@ -6,7 +6,6 @@ import { StatesRequest, CompanyCreateRequest, Addresses } from '../models/api-mo
 import * as _ from '../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
-import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
@@ -240,7 +239,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			}
 		}
 		let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-		if (gstDetails.taxNumber) {
+		if (gstDetails.taxNumber || gstDetails.address) {
 			this.createNewCompanyPreparedObj.addresses.push(gstDetails);
 		} else {
 			this.createNewCompanyPreparedObj.addresses = [];
@@ -258,6 +257,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.addressesObj.address = obj.address;
 			this.addressesObj.isDefault = false;
 			this.addressesObj.stateName = this.selectedstateName ? this.selectedstateName.split('-')[1] : '';
+		} else if(obj.address) {
+			this.addressesObj.taxNumber = "";
+			this.addressesObj.stateCode = "";
+			this.addressesObj.address = obj.address;
+			this.addressesObj.isDefault = false;
+			this.addressesObj.stateName = '';
 		}
 		return this.addressesObj;
 	}
