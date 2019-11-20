@@ -1,14 +1,15 @@
-import { map } from 'rxjs/operators';
-import { Inject, Injectable, Optional } from '@angular/core';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { VAT_API } from './apiurls/vat.api';
-import { GeneralService } from './general.service';
-import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { UserDetails } from "../models/api-models/loginModels";
-import { VatReportRequest, VatReportResponse } from '../models/api-models/Vat';
-import { ErrorHandler } from "./catchManager/catchmanger";
-import { HttpWrapperService } from "./httpWrapper.service";
-import { Observable } from "rxjs";
+import {catchError, map} from 'rxjs/operators';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {BaseResponse} from '../models/api-models/BaseResponse';
+import {VAT_API} from './apiurls/vat.api';
+import {GeneralService} from './general.service';
+import {IServiceConfigArgs, ServiceConfig} from './service.config';
+import {UserDetails} from "../models/api-models/loginModels";
+import {VatReportRequest, VatReportResponse} from '../models/api-models/Vat';
+import {ErrorHandler} from "./catchManager/catchmanger";
+import {HttpWrapperService} from "./httpWrapper.service";
+import {Observable} from "rxjs";
+import {GroupCreateRequest, GroupResponse} from "../models/api-models/Group";
 
 @Injectable()
 export class VatService {
@@ -32,7 +33,7 @@ export class VatService {
 			map((res) => {
 				let data: BaseResponse<VatReportResponse, any> = res;
 				return data;
-			}));
+			}), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
 	}
 
 	public DownloadVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
@@ -47,6 +48,6 @@ export class VatService {
 		return this._http.get(url).pipe(
 			map((res) => {
 				return res;
-			}));
+			}), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
 	}
 }

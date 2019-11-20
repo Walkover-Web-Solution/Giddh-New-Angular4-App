@@ -101,6 +101,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
 				if (res.status === 'success') {
 					this.vatReport = res.body.sections;
 					this.cdRef.detectChanges();
+				} else {
+					this._toasty.errorToast(res.message);
 				}
 			});
 		}
