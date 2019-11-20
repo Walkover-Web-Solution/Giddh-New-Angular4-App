@@ -747,8 +747,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
                         }
 
-                        this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
                         this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
+
+                        /**
+                         * depositAmountAfterUpdate :- amount that has been already paid, so we need to minus balance due from grand total
+                         * so we can get how much amount of money is paid
+                         * only applicable in sales invoice
+                         */
+                        if (this.isSalesInvoice) {
+                            this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balanceDue) || 0;
+                        } else {
+                            this.depositAmountAfterUpdate = 0;
+                        }
+
                         // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
                         // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
                         //   if (obj.depositEntry) {
