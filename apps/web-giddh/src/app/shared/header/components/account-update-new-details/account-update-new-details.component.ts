@@ -689,9 +689,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public submit() {
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-        if (this.stateList && accountRequest.addresses[0].stateCode) {
+        if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
-            if (selectedStateObj.stateGstCode) {
+            if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
             } else {
                 accountRequest.addresses[0].stateCode = selectedStateObj.code;
@@ -706,12 +706,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountRequest.mobileCode = '';
         }
         if (this.isHsnSacEnabledAcc) {
-            delete accountRequest['country'];
+            // delete accountRequest['country'];
             delete accountRequest['addresses'];
-            delete accountRequest['hsnOrSac'];
-            delete accountRequest['mobileNo'];
-            delete accountRequest['email'];
-            delete accountRequest['attentionTo'];
+            // delete accountRequest['hsnOrSac'];
+            // delete accountRequest['mobileNo'];
+            // delete accountRequest['email'];
+            // delete accountRequest['attentionTo'];
         } else {
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
