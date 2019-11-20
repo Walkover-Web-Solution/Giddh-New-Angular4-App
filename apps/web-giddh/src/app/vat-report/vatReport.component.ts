@@ -35,7 +35,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
 		endDate: moment()
 	};
 	public moment = moment;
-	public currentDateRangePickerValue: Date[] = [];
 	public fromDate: string = '';
 	public toDate: string = '';
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -55,9 +54,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
 		this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
 			if (dateObj) {
 				let universalDate = _.cloneDeep(dateObj);
+				this.currentPeriod = {
+					from: moment(universalDate[0]).format(GIDDH_DATE_FORMAT),
+					to: moment(universalDate[1]).format(GIDDH_DATE_FORMAT)
+				};
+				this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
 				this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
 				this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-				this.currentDateRangePickerValue = [universalDate[0], universalDate[1]];
 			}
 		})), (takeUntil(this.destroyed$))).subscribe();
 
@@ -164,10 +167,18 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
 	public periodChanged(ev) {
 		if (ev && ev.picker) {
+			this.currentPeriod = {
+				from: moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT),
+				to: moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT)
+			};
 			this.fromDate = moment(ev.picker.startDate._d).format(GIDDH_DATE_FORMAT);
 			this.toDate = moment(ev.picker.endDate._d).format(GIDDH_DATE_FORMAT);
 			this.isMonthSelected = false;
 		} else {
+			this.currentPeriod = {
+				from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+				to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+			};
 			this.fromDate = moment(ev).startOf('month').format(GIDDH_DATE_FORMAT);
 			this.toDate = moment(ev).endOf('month').format(GIDDH_DATE_FORMAT);
 			this.selectedMonth = ev;
