@@ -392,34 +392,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            if (profile) {
-                this.customerCountryName = profile.country;
-
-                this.showGstAndTrnUsingCountryName(profile.country);
-
-                this.companyCurrency = profile.baseCurrency || 'INR';
-                this.baseCurrencySymbol = profile.baseCurrencySymbol;
-                this.depositCurrSymbol = this.baseCurrencySymbol;
-                this.companyCurrencyName = profile.baseCurrency;
-
-                this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                if (profile.countryCode) {
-                    this.countryCode = profile.countryCode;
-                } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                    this.countryCode = profile.countryV2.alpha2CountryCode;
-                }
-                if (!this.isUpdateMode) {
-                    await this.getUpdatedStateCodes(this.countryCode);
-                }
-            } else {
-                this.customerCountryName = '';
-
-                this.showGstAndTrnUsingCountryName('');
-
-                this.companyCurrency = 'INR';
-                this.isMultiCurrencyAllowed = false;
-            }
+            await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
@@ -429,6 +402,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.prepareInvoiceTypeFlags();
                     this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
+
+                    // reset customer company when invoice type changes, re-check for company currency and country
+                    this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
+                        this.prepareCompanyCountryAndCurrencyFromProfile(profile);
+                    });
+
                     this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
@@ -982,6 +961,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 this.lastInvoices = [...arr];
             });
+    }
+
+    private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
+        if (profile) {
+            this.customerCountryName = profile.country;
+
+            this.showGstAndTrnUsingCountryName(profile.country);
+
+            this.companyCurrency = profile.baseCurrency || 'INR';
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.depositCurrSymbol = this.baseCurrencySymbol;
+            this.companyCurrencyName = profile.baseCurrency;
+
+            this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (profile.countryCode) {
+                this.countryCode = profile.countryCode;
+            } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.countryCode = profile.countryV2.alpha2CountryCode;
+            }
+            if (!this.isUpdateMode) {
+                await this.getUpdatedStateCodes(this.countryCode);
+            }
+        } else {
+            this.customerCountryName = '';
+
+            this.showGstAndTrnUsingCountryName('');
+
+            this.companyCurrency = 'INR';
+            this.isMultiCurrencyAllowed = false;
+        }
     }
 
     public assignDates() {
@@ -3178,7 +3188,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 case 'Bahrain':
                 case 'United Arab Emirates':
                     this.showGSTINNo = false;
-                    this.showTRNNo = false;
+                    this.showTRNNo = true;
                     break;
                 default:
                     this.showGSTINNo = false;
