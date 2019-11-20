@@ -31,6 +31,42 @@
   font-family: 'opensans-regular';
 }
 
+.daterange_picker_ledger {
+    border: 0;
+    background-color: #fff !important;
+    text-decoration-line: none;
+    text-decoration-style: none;
+    background-image: url(../../assets/images/calender.svg) !important;
+        background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 45px !important;
+    position: relative;
+    z-index: 99;
+    cursor: default;
+}
+
+.advanceSearchByDate {
+    display: inline-flex;
+    border: 1px solid #C4C4C4;
+    border-radius:2px;
+    position: relative;
+}
+.advanceSearchByDate:before {
+    position: absolute;
+    content: "";
+    height: 1px;
+    width: 40px;
+    background-color: #C4C4C4;
+    left: 17px;
+    top: 17px;
+    z-index: 9999;
+    transform: rotate(90deg);
+}
+.advanceSearchByDate .inputWrapper {
+    width: 220px;
+}
+
 @media only screen and (max-width: 767px) {
   .navbar_header.mb-2 {
     margin-top: 60px;
