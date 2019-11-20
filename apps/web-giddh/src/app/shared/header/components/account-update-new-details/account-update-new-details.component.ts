@@ -689,7 +689,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public submit() {
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-
+        if (this.stateList && accountRequest.addresses[0].stateCode) {
+            let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
+            if (selectedStateObj.stateGstCode) {
+                accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
+            } else {
+                accountRequest.addresses[0].stateCode = selectedStateObj.code;
+            }
+        }
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
