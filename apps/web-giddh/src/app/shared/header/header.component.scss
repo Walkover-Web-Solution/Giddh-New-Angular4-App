@@ -584,12 +584,13 @@ padding-right: 15px;
 }
 .primary-header  li.company-name {
     top: 0;
-
+    width: 100%;
 }
 
-.primary-header .companyName-financeYear{
-      display: inline-block;
+.primary-header .companyName-financeYear {
+    display: inline-block;
     padding-left: 10px;
+    width: 100%;
 }
 .primary-header  .companyName-financeYear span {
     display: block;
@@ -671,6 +672,7 @@ span.icon-support.dropdown-toggle{
 }
 .nav-left-bar .company-name .cText span {
     color: #1c1c1c !important;
+    display: block;
 }
 .nav-left-bar  .companyName-financeYear {
     display: inline;
