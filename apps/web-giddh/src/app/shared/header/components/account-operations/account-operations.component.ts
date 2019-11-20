@@ -516,7 +516,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
         accObject.user = this.shareAccountForm.controls['userEmail'].value;
-        console.log('need to add new shared entity');
         this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
         this.shareAccountForm.reset();
     }
@@ -864,7 +863,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
             }
         }, (err: any) => {
-            console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+            // console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
         });
     }
 
