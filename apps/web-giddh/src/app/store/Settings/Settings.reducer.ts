@@ -697,6 +697,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return Object.assign({}, state, {branchRemoved: true});
     }
 
+    case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
+      return Object.assign({}, state, {branchRemoved: false});
+    }
+
     //  endregion discount reducer
     default: {
       return state;

@@ -166,6 +166,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isLastInvoiceCopied: boolean = false;
 
     public customerCountryName: string = '';
+    public showGSTINNo: boolean;
+    public showTRNNo: boolean;
+
     public hsnDropdownShow: boolean = false;
     public customerPlaceHolder: string = 'Select Customer';
     public customerNotFoundText: string = 'Add Customer';
@@ -286,6 +289,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private entriesListBeforeTax: SalesEntryClass[];
     /** True, if user has selected custom invoice in Invoice Setting */
     private useCustomInvoiceNumber: boolean;
+    /** True, if the invoice generation request is received from previous page's modal */
+    private isInvoiceRequestedFromPreviousPage: boolean;
 
     constructor(
         private modalService: BsModalService,
@@ -382,33 +387,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-        // this.invoiceNo = '';
+        this.autoFillShipping = true;
         this.isUpdateMode = false;
 
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            if (profile) {
-                this.customerCountryName = profile.country;
-                this.companyCurrency = profile.baseCurrency || 'INR';
-                this.baseCurrencySymbol = profile.baseCurrencySymbol;
-                this.depositCurrSymbol = this.baseCurrencySymbol;
-                this.companyCurrencyName = profile.baseCurrency;
-
-                this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                if (profile.countryCode) {
-                    this.countryCode = profile.countryCode;
-                } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                    this.countryCode = profile.countryV2.alpha2CountryCode;
-                }
-                if (!this.isUpdateMode) {
-                    await this.getUpdatedStateCodes(this.countryCode);
-                }
-            } else {
-                this.customerCountryName = '';
-                this.companyCurrency = 'INR';
-                this.isMultiCurrencyAllowed = false;
-            }
+            await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
@@ -418,6 +402,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.prepareInvoiceTypeFlags();
                     this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
+
+                    // reset customer company when invoice type changes, re-check for company currency and country
+                    this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
+                        this.prepareCompanyCountryAndCurrencyFromProfile(profile);
+                    });
+
                     this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
@@ -431,7 +421,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isUpdateMode = false;
                 this.invoiceType = parmas['invoiceType'];
                 this.prepareInvoiceTypeFlags();
-
+                this.isInvoiceRequestedFromPreviousPage = true;
                 this.getAccountDetails(parmas['accUniqueName']);
             }
 
@@ -757,8 +747,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
                         }
 
-                        this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balance) || 0;
                         this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
+
+                        /**
+                         * depositAmountAfterUpdate :- amount that has been already paid, so we need to minus balance due from grand total
+                         * so we can get how much amount of money is paid
+                         * only applicable in sales invoice
+                         */
+                        if (this.isSalesInvoice) {
+                            this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balanceDue) || 0;
+                        } else {
+                            this.depositAmountAfterUpdate = 0;
+                        }
+
                         // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
                         // if (obj.depositEntry || obj.depositEntryToBeUpdated) {
                         //   if (obj.depositEntry) {
@@ -842,6 +843,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
+
+                        this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
                             this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
                             this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
@@ -971,6 +974,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
     }
 
+    private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
+        if (profile) {
+            this.customerCountryName = profile.country;
+
+            this.showGstAndTrnUsingCountryName(profile.country);
+
+            this.companyCurrency = profile.baseCurrency || 'INR';
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.depositCurrSymbol = this.baseCurrencySymbol;
+            this.companyCurrencyName = profile.baseCurrency;
+
+            this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (profile.countryCode) {
+                this.countryCode = profile.countryCode;
+            } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.countryCode = profile.countryV2.alpha2CountryCode;
+            }
+            if (!this.isUpdateMode) {
+                await this.getUpdatedStateCodes(this.countryCode);
+            }
+        } else {
+            this.customerCountryName = '';
+
+            this.showGstAndTrnUsingCountryName('');
+
+            this.companyCurrency = 'INR';
+            this.isMultiCurrencyAllowed = false;
+        }
+    }
+
     public assignDates() {
         let date = _.cloneDeep(this.universalDate);
         this.invFormData.voucherDetails.voucherDate = date;
@@ -993,7 +1027,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.stateGstCode || oldStatusCode === state.value));
+        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.value || oldStatusCode === state.stateGstCode));
         return (currentState) ? currentState.value : '';
     }
 
@@ -1082,7 +1116,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.customerCountryName = data.country.countryName;
-
+        this.showGstAndTrnUsingCountryName(this.customerCountryName);
+        if (this.isInvoiceRequestedFromPreviousPage) {
+            this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
+            this.invFormData.voucherDetails.customerName = data.name;
+        }
         // toggle all collapse
         this.isGenDtlCollapsed = false;
         this.isMlngAddrCollapsed = false;
@@ -1092,6 +1130,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
         });
+    }
+
+    setState(event) {
+        console.log(event);
     }
 
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
@@ -1119,6 +1161,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.showSwitchedCurr = false;
         this.autoSaveIcon = false;
+        this.autoFillShipping = true;
         this.showCurrencyValue = false;
         this.invFormData = new VoucherClass();
         this.depositAccountUniqueName = '';
@@ -1181,7 +1224,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onSubmitInvoiceForm(f?: NgForm) {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-        if (data.accountDetails.billingDetails.gstNumber) {
+        // special check if gst no filed is visible then and only then check for gst validation
+        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
                 this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
                 return;
@@ -2027,7 +2071,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
         }
         if (this.isMulticurrencyAccount) {
-            this.getCurrencyRate(this.companyCurrency, event.additional.currency);
+            this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
         }
 
         this.calculateBalanceDue();
@@ -2223,7 +2267,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public prepareDataForApi(): GenericRequestForGenerateSCD {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-        if (data.accountDetails.billingDetails.gstNumber) {
+        // special check if gst no filed is visible then and only then check for gst validation
+        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
                 this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
                 return;
@@ -3000,6 +3045,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.isMulticurrencyAccount = result.multiCurrency;
         this.customerCountryName = result.account.billingDetails.countryName;
+        this.showGstAndTrnUsingCountryName(this.customerCountryName);
 
         this.exchangeRate = result.exchangeRate;
         this.originalExchangeRate = this.exchangeRate;
@@ -3114,7 +3160,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private modifyStateResp(stateList: StateCode[]) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
-            stateListRet.push({label: stateR.name, value: stateR.stateGstCode ? stateR.stateGstCode : stateR.code, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code});
+            stateListRet.push({label: stateR.name, value: stateR.code ? stateR.code : stateR.stateGstCode, stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code});
         });
         return stateListRet;
     }
@@ -3138,6 +3184,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             obj.address[0] = shippigAddrss;
         }
         return obj;
+    }
+
+    private showGstAndTrnUsingCountryName(name: string) {
+        // this is only limited to sales and cash invoice
+        if (this.isSalesInvoice || this.isCashInvoice) {
+            switch (name) {
+                case 'India':
+                    this.showGSTINNo = true;
+                    this.showTRNNo = false;
+                    break;
+                case 'Kuwait':
+                case 'Oman':
+                case 'Qatar':
+                case 'Saudi Arabia':
+                case 'Bahrain':
+                case 'United Arab Emirates':
+                    this.showGSTINNo = false;
+                    this.showTRNNo = true;
+                    break;
+                default:
+                    this.showGSTINNo = false;
+                    this.showTRNNo = false;
+                    break;
+
+            }
+        } else {
+            this.showGSTINNo = true;
+            this.showTRNNo = false;
+        }
     }
 
     public selectDefaultbank() {

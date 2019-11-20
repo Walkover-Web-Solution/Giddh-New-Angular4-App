@@ -536,9 +536,15 @@
               class="fa fa-plus cp"></i>  -->
                     </h6>
                     <li *ngFor="let menu of menuItemsFromIndexDB">
-                        <a routerLink="{{menu.uniqueName}}"
-                            [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
-                            (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                        <a *ngIf="menu.uniqueName == '/pages/gstfiling' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                        <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
+                            <span class="icon-dashboard"></span>
+                            <span class="label">{{menu.name}}</span>
+                        </a>
+                        <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report'" routerLink="{{menu.uniqueName}}" [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}" (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
@@ -624,7 +630,8 @@
                         <li><a href="#"><strong>Others</strong></a></li>
                         <li><a (click)="analyzeOtherMenus('audit-logs')">Audit Log</a></li>
                         <li><a (click)="analyzeOtherMenus('search')">Search</a></li>
-                        <li><a (click)="analyzeOtherMenus('gstfiling')">GSTR</a></li>
+                        <li><a (click)="analyzeOtherMenus('gstfiling')" *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'">GSTR</a></li>
+                        <li><a (click)="analyzeOtherMenus('vat-report')" *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'">Vat Report</a></li>
                         <li><a (click)="analyzeOtherMenus('home')">Dashboard</a></li>
                     </ul>
 

@@ -16,6 +16,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { GeneralService } from "../../services/general.service";
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -70,7 +71,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private _generalService: GeneralService
     ) {
         this.getOnboardingForm();
 
@@ -149,7 +151,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.store.pipe(select(s => s.settings.branchRemoved), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+            if (res !== null) {
                 this.getAllBranches();
             }
         });
@@ -192,6 +194,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
+        this.removeCompanySessionData();
         this.branchModal.show();
     }
 
@@ -250,7 +253,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
-        this.confirmationMessage = `Are you sure want to remove <p class="remvBrnchName"><b>${companyName}</b></p>?`;
+        this.confirmationMessage = `Are you sure want to remove <p class="remvBrnchName"><b>${companyName}?</b></p>`;
         this.confirmationModal.show();
     }
 
@@ -276,6 +279,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         this.store.dispatch(this.settingsBranchActions.GetParentCompany());
+        this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
     }
 
     private isAllCompaniesSelected() {
@@ -314,5 +318,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             }
         });
+    }
+
+    public removeCompanySessionData() {
+        this._generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 }

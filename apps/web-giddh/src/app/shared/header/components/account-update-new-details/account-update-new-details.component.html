@@ -1,4 +1,4 @@
-<form name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+<form name="addAccountForm" [formGroup]="addAccountForm">
     <div class="">
         <div class="upper-form">
             <div class="row ">
@@ -51,12 +51,34 @@
                     </div>
                 </div>
             </div>
+            <ng-container *ngIf="isHsnSacEnabledAcc">
+                <div class="row">
+                    <div class="col-xs-6 form-group">
+                        <label class="d-block">HSN</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                            <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+                        </span>
+                            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
+                        </div>
+                    </div>
+                    <div class="col-xs-6 form-group">
+                        <label class="d-block">SAC</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                            <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+                        </span>
+                            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
-        <ng-container *ngIf="isDebtorCreditor">
-            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" (select)="tabChanged('address')">
+        <ng-container>
+            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (select)="tabChanged('address')">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -65,7 +87,7 @@
                                     <div class="add-address-default">
                                         <h3>Address {{i+1}}</h3>
                                         <div class="inputRadio">
-                                            <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="left">
+                                            <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="Mark as default" placement="left">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -81,7 +103,8 @@
                                     <div class="form-group">
                                         <label>State</label>
                                         <div class="custom-select">
-                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
+                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" defaultValue="{{gst.value.state.code}} - {{gst.value.state.name}}" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
+                                                style="width:100%">
                                             </sh-select>
                                         </div>
                                     </div>
@@ -142,7 +165,7 @@
             </tab>
         </ng-container>
 
-        <tab heading="Contact" class="ContactFromWrap" (select)="tabChanged('contacts')">
+        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (select)="tabChanged('contacts')">
             <div class="contactForm">
                 <div class="row">
                     <div class="col-sm-6">
@@ -295,21 +318,9 @@
         </tab>
 
     </tabset>
-    <div class="row">
-        <div class="col-sm-12 mrT3">
-            <div class="button-group">
-                <!-- <button class="btn btn-cancel">Cancel</button>
-                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
-                <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
-                        Delete
-                       </button>
-                <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
-                       </button>
-            </div>
-        </div>
-    </div>
+
 </form>
-<div class="form" *ngIf="selectedTab === 'others'">
+<div class="form" *ngIf="isOtherSelectedTab">
     <!-- <div class="row ">
         <div class="col-sm-6 ">
             <div class="form-group ">
@@ -422,7 +433,19 @@
         </div>
     </div>
 </ng-container>
-
+<div class="row">
+    <div class="col-sm-12 mrT3">
+        <div class="button-group">
+            <!-- <button class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
+            <button type="button" *ngIf="showDeleteButton" class="btn btn-danger" (click)="deleteClicked.emit(true)">
+                        Delete
+                       </button>
+            <button (click)="submit()" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                       </button>
+        </div>
+    </div>
+</div>
 <!--deleteMergedAccount account modal  -->
 <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
