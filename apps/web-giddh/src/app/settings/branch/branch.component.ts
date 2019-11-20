@@ -151,7 +151,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.store.pipe(select(s => s.settings.branchRemoved), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+            if (res !== null) {
                 this.getAllBranches();
             }
         });
@@ -279,6 +279,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         this.store.dispatch(this.settingsBranchActions.GetParentCompany());
+        this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
     }
 
     private isAllCompaniesSelected() {
