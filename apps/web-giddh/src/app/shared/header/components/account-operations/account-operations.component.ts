@@ -516,7 +516,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
         accObject.user = this.shareAccountForm.controls['userEmail'].value;
-        console.log('need to add new shared entity');
         this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
         this.shareAccountForm.reset();
     }

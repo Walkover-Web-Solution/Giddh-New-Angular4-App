@@ -374,7 +374,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
             }
         }, (err: any) => {
-            console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+            // console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
         });
     }
 
@@ -1060,8 +1060,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     });
                 }
             });
-            let a = [];
-            // console.log(data);
+
             data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
