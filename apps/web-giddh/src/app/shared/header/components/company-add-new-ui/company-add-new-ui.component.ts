@@ -385,4 +385,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    public removeCompanySessionData() {
+        this._generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
 }
