@@ -41,7 +41,7 @@
                                             </thead>
                                             <tbody>
                                             <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                <td>{{reportSections.order}}</td>
+                                                <td>{{reportSections.section}}</td>
                                                 <td>{{reportSections.description}}</td>
                                                 <td>
                                                     <a href="javascript:void(0)" class="text-light" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
@@ -51,7 +51,7 @@
                                                 <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.adjustmentAmount | giddhCurrency}}</td>
                                             </tr>
                                             <tr class="last-row">
-                                                <td>{{report.sections.length + 1}}</td>
+                                                <td>&nbsp;</td>
                                                 <td>Total</td>
                                                 <td>
                                                     <a href="javascript:void(0)" class="text-light" *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span class="icon-info text-light"></span></a>
@@ -72,7 +72,7 @@
                                         <table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
                                             <tbody>
                                             <tr *ngFor="let reportSections of report.sections; let i = index">
-                                                <td width="5%">{{reportSections.order}}</td>
+                                                <td width="5%">{{reportSections.section}}</td>
                                                 <td width="50%">{{reportSections.description}}</td>
                                                 <td width="45%">
                                                     <span class="pr-1">{{reportSections.toolTip}}</span>
