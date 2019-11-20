@@ -8083,20 +8083,22 @@ GST filing
 
                 .btn-lg.btn-primary {
                     min-width: 155px;
-                    background: #e5e5e5;
+                    background: #fff;
                     color: #5B64C9;
                     border-radius: 0px;
                     box-shadow: none;
                 }
 
                 .btn-lg.btn-primary:hover {
-                    background: #5B64C9;
+                    background: #5b64c9;
                     color: #ffffff;
                     box-shadow: 0px 4px 4px -3px #afabab;
                     border-radius: 0px;
-                    border-color: #5B64C9;
+                    border-color:#5b64c9;
                 }
-
+                .asidePanelLedger button.btn.btn-lg.btn-primary {
+                    min-width: 150px;
+                }
                 .settingPage ul.nav.nav-tabs {
                     margin-bottom: 15px;
                     padding: 0 0px 0 15px !important;
@@ -8365,6 +8367,15 @@ GST filing
                         p.remvBrnchName {
                             word-break: break-all;
                             white-space: normal;
+                        }
+                        .asidePanelLedger {
+                            display: flex !important;
+                            vertical-align: middle;
+                            justify-content: center;
+                            align-items: center;
+                            height: 500px;
+                            position: relative !important;
+
                         }
                 /* responsive */
 
