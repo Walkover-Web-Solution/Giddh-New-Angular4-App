@@ -1224,7 +1224,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onSubmitInvoiceForm(f?: NgForm) {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-        if (data.accountDetails.billingDetails.gstNumber) {
+        // special check if gst no filed is visible then and only then check for gst validation
+        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
                 this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
                 return;
@@ -2266,7 +2267,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public prepareDataForApi(): GenericRequestForGenerateSCD {
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
-        if (data.accountDetails.billingDetails.gstNumber) {
+        // special check if gst no filed is visible then and only then check for gst validation
+        if (data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             if (!this.isValidGstIn(data.accountDetails.billingDetails.gstNumber)) {
                 this._toasty.errorToast('Invalid gst no in Billing Address! Please fix and try again');
                 return;
