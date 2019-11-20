@@ -166,6 +166,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isLastInvoiceCopied: boolean = false;
 
     public customerCountryName: string = '';
+    public showGSTINNo: boolean;
+    public showTRNNo: boolean;
+
     public hsnDropdownShow: boolean = false;
     public customerPlaceHolder: string = 'Select Customer';
     public customerNotFoundText: string = 'Add Customer';
@@ -389,28 +392,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            if (profile) {
-                this.customerCountryName = profile.country;
-                this.companyCurrency = profile.baseCurrency || 'INR';
-                this.baseCurrencySymbol = profile.baseCurrencySymbol;
-                this.depositCurrSymbol = this.baseCurrencySymbol;
-                this.companyCurrencyName = profile.baseCurrency;
-
-                this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                if (profile.countryCode) {
-                    this.countryCode = profile.countryCode;
-                } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                    this.countryCode = profile.countryV2.alpha2CountryCode;
-                }
-                if (!this.isUpdateMode) {
-                    await this.getUpdatedStateCodes(this.countryCode);
-                }
-            } else {
-                this.customerCountryName = '';
-                this.companyCurrency = 'INR';
-                this.isMultiCurrencyAllowed = false;
-            }
+            await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
@@ -420,6 +402,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.prepareInvoiceTypeFlags();
                     this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
+
+                    // reset customer company when invoice type changes, re-check for company currency and country
+                    this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
+                        this.prepareCompanyCountryAndCurrencyFromProfile(profile);
+                    });
+
                     this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
@@ -844,6 +832,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
+
+                        this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
                             this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency);
                             this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
@@ -973,6 +963,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
     }
 
+    private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
+        if (profile) {
+            this.customerCountryName = profile.country;
+
+            this.showGstAndTrnUsingCountryName(profile.country);
+
+            this.companyCurrency = profile.baseCurrency || 'INR';
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.depositCurrSymbol = this.baseCurrencySymbol;
+            this.companyCurrencyName = profile.baseCurrency;
+
+            this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (profile.countryCode) {
+                this.countryCode = profile.countryCode;
+            } else if (profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.countryCode = profile.countryV2.alpha2CountryCode;
+            }
+            if (!this.isUpdateMode) {
+                await this.getUpdatedStateCodes(this.countryCode);
+            }
+        } else {
+            this.customerCountryName = '';
+
+            this.showGstAndTrnUsingCountryName('');
+
+            this.companyCurrency = 'INR';
+            this.isMultiCurrencyAllowed = false;
+        }
+    }
+
     public assignDates() {
         let date = _.cloneDeep(this.universalDate);
         this.invFormData.voucherDetails.voucherDate = date;
@@ -1084,6 +1105,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.customerCountryName = data.country.countryName;
+        this.showGstAndTrnUsingCountryName(this.customerCountryName);
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
             this.invFormData.voucherDetails.customerName = data.name;
@@ -2037,7 +2059,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
         }
         if (this.isMulticurrencyAccount) {
-            this.getCurrencyRate(this.companyCurrency, event.additional.currency);
+            this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
         }
 
         this.calculateBalanceDue();
@@ -3010,6 +3032,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.isMulticurrencyAccount = result.multiCurrency;
         this.customerCountryName = result.account.billingDetails.countryName;
+        this.showGstAndTrnUsingCountryName(this.customerCountryName);
 
         this.exchangeRate = result.exchangeRate;
         this.originalExchangeRate = this.exchangeRate;
@@ -3148,6 +3171,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             obj.address[0] = shippigAddrss;
         }
         return obj;
+    }
+
+    private showGstAndTrnUsingCountryName(name: string) {
+        // this is only limited to sales and cash invoice
+        if (this.isSalesInvoice || this.isCashInvoice) {
+            switch (name) {
+                case 'India':
+                    this.showGSTINNo = true;
+                    this.showTRNNo = false;
+                    break;
+                case 'Kuwait':
+                case 'Oman':
+                case 'Qatar':
+                case 'Saudi Arabia':
+                case 'Bahrain':
+                case 'United Arab Emirates':
+                    this.showGSTINNo = false;
+                    this.showTRNNo = true;
+                    break;
+                default:
+                    this.showGSTINNo = false;
+                    this.showTRNNo = false;
+                    break;
+
+            }
+        } else {
+            this.showGSTINNo = true;
+            this.showTRNNo = false;
+        }
     }
 
     public selectDefaultbank() {
