@@ -13,6 +13,9 @@ import {VatService} from "../services/vat.service";
 import * as moment from 'moment/moment';
 import {createSelector} from "reselect";
 import {GIDDH_DATE_FORMAT} from "../shared/helpers/defaultDateFormat";
+import {saveAs} from "file-saver";
+import {StateDetailsRequest} from "../models/api-models/Company";
+import {CompanyActions} from "../actions/company.actions";
 
 @Component({
 	selector: 'app-vat-report',
@@ -31,6 +34,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 	public fromDate: string = '';
 	public toDate: string = '';
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+	public allowVatReportAccess: boolean = false;
 
 	vatReportsTwo = [
 		{
@@ -43,7 +47,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 		{No: '1a', items: 'Standard rated supplies in Dubai', amount: 'AED 10,000', vatAmount: 123, Adjustment: '-'}
 	];
 
-	constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _generalActions: GeneralActions, private cdRef: ChangeDetectorRef) {
+	constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _generalActions: GeneralActions, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
 		this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
 		this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
 	}
@@ -69,6 +73,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
 						if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
 							this.activeCompany.addresses = [_.find(this.activeCompany.addresses, (tax) => tax.isDefault)];
+							this.saveLastState(activeCompanyName);
+							this.allowVatReportAccess = true;
 							this.getVatReport();
 						}
 					}
@@ -106,5 +112,45 @@ export class VatReportComponent implements OnInit, OnDestroy {
 			this.toDate = moment(dates[1]).format(GIDDH_DATE_FORMAT);
 			this.getVatReport();
 		}
+	}
+
+	public downloadVatReport() {
+		let vatReportRequest = new VatReportRequest();
+		vatReportRequest.from = this.fromDate;
+		vatReportRequest.to = this.toDate;
+		vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
+
+		this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
+			let blob = this.base64ToBlob(res, 'application/xls', 512);
+			return saveAs(blob, `VatReport.xls`);
+		});
+	}
+
+	public base64ToBlob(b64Data, contentType, sliceSize) {
+		contentType = contentType || '';
+		sliceSize = sliceSize || 512;
+		let byteCharacters = atob(b64Data);
+		let byteArrays = [];
+		let offset = 0;
+		while (offset < byteCharacters.length) {
+			let slice = byteCharacters.slice(offset, offset + sliceSize);
+			let byteNumbers = new Array(slice.length);
+			let i = 0;
+			while (i < slice.length) {
+				byteNumbers[i] = slice.charCodeAt(i);
+				i++;
+			}
+			let byteArray = new Uint8Array(byteNumbers);
+			byteArrays.push(byteArray);
+			offset += sliceSize;
+		}
+		return new Blob(byteArrays, {type: contentType});
+	}
+
+	public saveLastState(companyUniqueName) {
+		let stateDetailsRequest = new StateDetailsRequest();
+		stateDetailsRequest.companyUniqueName = companyUniqueName;
+		stateDetailsRequest.lastState = 'pages/vat-report';
+		this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 	}
 }

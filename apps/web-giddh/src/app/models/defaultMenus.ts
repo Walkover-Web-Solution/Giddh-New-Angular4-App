@@ -190,7 +190,7 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
   { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates' },
   { type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note' },
   { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note' }
-]
+];
 
 export let DEFAULT_AC = [];
 export let DEFAULT_AC_RESPONSIVE = [

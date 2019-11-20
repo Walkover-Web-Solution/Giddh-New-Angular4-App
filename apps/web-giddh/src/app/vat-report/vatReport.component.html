@@ -16,112 +16,78 @@
                                                bsDaterangepicker>
                                     </span>
 								</div>
-								<div class="clearfix">
-									<button type="button" class="btn btn-default"><i class=" icon-download1"></i>
+								<div class="clearfix" *ngIf="allowVatReportAccess">
+									<button type="button" class="btn btn-default" (click)="downloadVatReport()"><i class=" icon-download1"></i>
 										Download
 									</button>
 								</div>
 							</div>
-
-							<div class="white-box" *ngFor="let report of vatReport;">
-								<p class="font-14 text-black">
-									<strong>{{report.section}}</strong>
-								</p>
-								<div class="table-responsive">
-									<table class="table basic table-border-bottom mrT2 onMobileView">
-										<thead>
-										<tr>
-											<th width="5%"></th>
-											<th width="40%"></th>
-											<th width="10%"></th>
-											<th width="15%" class="text-right">Amount ({{activeCompany.baseCurrency}})</th>
-											<th width="15%" class="text-right">VAT Amount ({{activeCompany.baseCurrency}})</th>
-											<th width="15%" class="text-right">Adjustment ({{activeCompany.baseCurrency}})</th>
-										</tr>
-										</thead>
-										<tbody>
-										<tr *ngFor="let reportSections of report.sections; let i = index">
-											<td>{{reportSections.order}}</td>
-											<td>{{reportSections.description}}</td>
-											<td>
-												<a href="javascript:void(0)" class="text-light" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
-											</td>
-											<td data-title="Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</td>
-											<td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.vatAmount | giddhCurrency}}</td>
-											<td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.adjustmentAmount | giddhCurrency}}</td>
-										</tr>
-                                        <tr class="last-row">
-                                            <td>{{report.order}}</td>
-                                            <td>{{report.description}}</td>
-                                            <td>
-                                                <a href="javascript:void(0)" class="text-light" *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span class="icon-info text-light"></span></a>
-                                            </td>
-                                            <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</td>
-                                            <td class="text-right">A = {{activeCompany.baseCurrencySymbol}} {{report.totalVatAmount | giddhCurrency}}</td>
-                                            <td class="text-right">B = {{activeCompany.baseCurrencySymbol}} {{report.totalAdjustmentAmount | giddhCurrency}}</td>
-                                        </tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-
-							<div class="white-box">
-								<p class="font-14 text-black">
-									<strong>Net VAT due</strong>
-								</p>
-								<div class="table-responsive">
-									<table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
-										<tbody>
-										<tr>
-											<td>12.</td>
-											<td>Total value of due tax for the period</td>
-											<td>
-												<span class="pr-1">(E = A + B)</span>
-												<strong>AED 16,000</strong>
-											</td>
-										</tr>
-										<tr>
-											<td>12.</td>
-											<td>Total value of due tax for the period</td>
-											<td>
-												<span class="pr-1">(E = A + B)</span>
-												<strong>AED 16,000</strong>
-											</td>
-										</tr>
-										<tr>
-											<td>12.</td>
-											<td>Total value of due tax for the period</td>
-											<td>
-												<span class="pr-1">(E = A + B)</span>
-												<strong>AED 16,000</strong>
-											</td>
-										</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-
+                            <div *ngFor="let report of vatReport; let i = index">
+                                <div class="white-box" *ngIf="i < 2">
+                                    <p class="font-14 text-black">
+                                        <strong>{{report.section}}</strong>
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table basic table-border-bottom mrT2 onMobileView">
+                                            <thead>
+                                            <tr>
+                                                <th width="5%"></th>
+                                                <th width="40%"></th>
+                                                <th width="10%"></th>
+                                                <th width="15%" class="text-right">Amount ({{activeCompany.baseCurrency}})</th>
+                                                <th width="15%" class="text-right">VAT Amount ({{activeCompany.baseCurrency}})</th>
+                                                <th width="15%" class="text-right">Adjustment ({{activeCompany.baseCurrency}})</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td>{{reportSections.order}}</td>
+                                                <td>{{reportSections.description}}</td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="text-light" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
+                                                </td>
+                                                <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</td>
+                                                <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.vatAmount | giddhCurrency}}</td>
+                                                <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.adjustmentAmount | giddhCurrency}}</td>
+                                            </tr>
+                                            <tr class="last-row">
+                                                <td>{{report.sections.length + 1}}</td>
+                                                <td>Total</td>
+                                                <td>
+                                                    <a href="javascript:void(0)" class="text-light" *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span class="icon-info text-light"></span></a>
+                                                </td>
+                                                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</td>
+                                                <td class="text-right"><span *ngIf="i === 0">A =</span><span *ngIf="i === 1">C =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalVatAmount | giddhCurrency}}</td>
+                                                <td class="text-right"><span *ngIf="i === 0">B =</span><span *ngIf="i === 1">D =</span> {{activeCompany.baseCurrencySymbol}} {{report.totalAdjustmentAmount | giddhCurrency}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="white-box" *ngIf="i == 2">
+                                    <p class="font-14 text-black">
+                                        <strong>{{report.section}}</strong>
+                                    </p>
+                                    <div class="table-responsive">
+                                        <table class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
+                                            <tbody>
+                                            <tr *ngFor="let reportSections of report.sections; let i = index">
+                                                <td width="5%">{{reportSections.order}}</td>
+                                                <td width="50%">{{reportSections.description}}</td>
+                                                <td width="45%">
+                                                    <span class="pr-1">{{reportSections.toolTip}}</span>
+                                                    <strong>{{activeCompany.baseCurrencySymbol}} {{report.totalAmount | giddhCurrency}}</strong>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
 						</tab>
-
-						<!-- <tab heading="Report 1">
-							Report 1
-						</tab>
-
-						<tab heading="Report 2">
-							Report 2
-						</tab>
-
-						<tab heading="Report 3">
-							Report 1
-						</tab> -->
 					</tabset>
 				</div>
-
 			</div>
 		</div>
 	</nav>
-
-
-	<!--<router-outlet></router-outlet>-->
-
 </section>

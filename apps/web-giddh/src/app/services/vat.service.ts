@@ -23,7 +23,7 @@ export class VatService {
 		this.user = this._generalService.user;
 		this.companyUniqueName = this._generalService.companyUniqueName;
 
-		let url = this.config.apiUrl + VAT_API.REPORT;
+		let url = this.config.apiUrl + VAT_API.VIEWREPORT;
 		url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
 		url = url.replace(':from', request.from);
 		url = url.replace(':to', request.to);
@@ -32,6 +32,21 @@ export class VatService {
 			map((res) => {
 				let data: BaseResponse<VatReportResponse, any> = res;
 				return data;
+			}));
+	}
+
+	public DownloadVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+		this.user = this._generalService.user;
+		this.companyUniqueName = this._generalService.companyUniqueName;
+
+		let url = this.config.apiUrl + VAT_API.DOWNLOADREPORT;
+		url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+		url = url.replace(':from', request.from);
+		url = url.replace(':to', request.to);
+		url = url.replace(':taxNumber', request.taxNumber);
+		return this._http.get(url).pipe(
+			map((res) => {
+				return res;
 			}));
 	}
 }
