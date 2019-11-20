@@ -443,7 +443,7 @@
         <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
             [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting"
             [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction"
-            (closeEvent)="selectedVoucher = null;toggleBodyClass()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+            (closeEvent)="invoicePreviewClosed()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
             (deleteVoucher)="deleteVoucher()" (sendEmail)="sendEmail($event)" (refreshDataAfterVoucherUpdate)="getAll()"
             (updateVoucherAction)="updateVoucherAction($event)"></invoice-preview-details-component>
     </div>
