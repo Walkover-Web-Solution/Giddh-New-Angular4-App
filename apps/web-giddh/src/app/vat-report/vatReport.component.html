@@ -7,15 +7,20 @@
 					<tabset #staticTabs>
 						<tab heading="VAT Report">
 
-							<div class="navbar_header mb-2">
+							<div class="navbar_header mb-2 mt-2">
 								<div class="clearfix">
-									<span>VAT Report for period</span>
-									<span class="thisWeek pull-right">
-                                        <input type="text" readonly placeholder="Select Dates" class="form-control" #dp="bsDaterangepicker"
-                                               [bsValue]="currentDateRangePickerValue" (bsValueChange)="getFilterDate($event)"
-                                               bsDaterangepicker>
-                                    </span>
-								</div>
+									<span class="d-inline-block mr-2">VAT Report for period</span>
+
+                                    <div class="advanceSearchByDate date-advanceSearch">
+                                        <span class="inputWrapper">
+                                            <input type="text" readonly placeholder="Select Dates"  class="form-control daterange_picker_ledger" #dp="bsDaterangepicker"
+                                            [bsValue]="currentDateRangePickerValue" (bsValueChange)="getFilterDate($event)"
+                                            bsDaterangepicker/>
+                                        </span>
+                                    </div>
+
+                                </div>
+
 								<div class="clearfix" *ngIf="allowVatReportAccess">
 									<button type="button" class="btn btn-default" (click)="downloadVatReport()"><i class=" icon-download1"></i>
 										Download
