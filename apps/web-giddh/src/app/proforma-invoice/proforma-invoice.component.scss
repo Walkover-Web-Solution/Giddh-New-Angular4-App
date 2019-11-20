@@ -1530,11 +1530,17 @@ label.salesCountryLabel {
 .td_Wrapper{
   display: flex; flex-direction: column; height: 100%;
 }
+.defaultActive .td_Wrapper{
+    height: 100%;
+}
 .setActive .td_Wrapper{
-   height:77%;
+   height:80%;
 }
 .setActive td:last-child .td_Wrapper {
     height: 105% !important;
+}
+.setActive.isOtherTax td:last-child .td_Wrapper .differ-currency {
+    margin-bottom: 14px;
 }
 .dlt-abs {
     position: relative;
