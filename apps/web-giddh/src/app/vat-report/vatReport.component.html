@@ -8,7 +8,7 @@
 						<tab heading="VAT Report">
 
 							<div class="navbar_header mb-2 mt-2">
-								<div class="clearfix">
+                                    <div class="d-flex align-items-center tax-engine">
 									<span class="d-inline-block mr-2">VAT Report for period</span>
 
                                     <div class="advanceSearchByDate date-advanceSearch">
@@ -98,8 +98,8 @@
                                             <tr *ngFor="let reportSections of report.sections; let i = index">
                                                 <td>{{reportSections.section}}</td>
                                                 <td>{{reportSections.description}}</td>
-                                                <td>
-                                                    <a href="javascript:void(0)" class="text-light" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
+                                                <td class="invoice-preview">
+                                                    <a href="javascript:void(0)" class="text-light invoice-preview" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
                                                 </td>
                                                 <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.amount | giddhCurrency}}</td>
                                                 <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})" class="text-right">{{activeCompany.baseCurrencySymbol}} {{reportSections.vatAmount | giddhCurrency}}</td>
