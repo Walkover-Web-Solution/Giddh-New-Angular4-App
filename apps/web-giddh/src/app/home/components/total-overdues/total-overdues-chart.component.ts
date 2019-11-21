@@ -12,6 +12,8 @@ import {isNullOrUndefined} from 'util';
 import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
 import {DashboardService} from '../../../services/dashboard.service';
 import {GiddhCurrencyPipe} from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import {ProfitLossRequest} from "../../../models/api-models/tb-pl-bs";
+import * as _ from "../../../lodash-optimized";
 
 @Component({
 	selector: 'toal-overdues-chart',
@@ -92,7 +94,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 	public options: Options;
 	public companies$: Observable<CompanyResponse[]>;
 	public activeCompanyUniqueName$: Observable<string>;
-	public requestInFlight = true;
+	public requestInFlight: boolean = true;
 	public totaloverDueChart: Options;
 	public totalOverDuesResponse$: Observable<any>;
 	public sundryDebtorResponse: any = {};
@@ -108,6 +110,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 	public universalDate$: Observable<any>;
 	public dataFound: boolean = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+	public toRequest: any = {from: '', to: '', refresh: false};
 
 	constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef) {
 		this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
@@ -145,8 +148,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		this.totalOverDuesResponse$.pipe(
-			skipWhile(p => (isNullOrUndefined(p))))
+		this.totalOverDuesResponse$.pipe(skipWhile(p => (isNullOrUndefined(p))))
 			.subscribe(p => {
 				if (p && p.length) {
 					this.dataFound = true;
@@ -196,7 +198,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 				type: 'pie',
 				polar: false,
 				className: 'overdue_chart',
-				width: 300,
+				width: 348,
 				height: '180px'
 			},
 			title: {
@@ -260,8 +262,17 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
 	public getFilterDate(dates: any) {
 		if (dates !== null) {
 			this.requestInFlight = true;
-			this.store.dispatch(this._homeActions.getTotalOverdues(dates[0], dates[1], true));
+			this.toRequest.from = dates[0];
+			this.toRequest.to = dates[1];
+			this.toRequest.refresh = false;
+			this.store.dispatch(this._homeActions.getTotalOverdues(this.toRequest.from, this.toRequest.to, this.toRequest.refresh));
 		}
+	}
+
+	public refreshChart() {
+		this.requestInFlight = true;
+		this.toRequest.refresh = true;
+		this.store.dispatch(this._homeActions.getTotalOverdues(this.toRequest.from, this.toRequest.to, this.toRequest.refresh));
 	}
 
 }

@@ -27,10 +27,8 @@
                     </div>
                     <div class="panel-body pos-rel">
                         <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                            <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
-                            <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+                            <div class="giddh-spinner vertical-center-spinner"></div>
                         </div>
-
                         <div class="chart-div" google-chart chart="myChartObject">
                             <perfect-scrollbar [scrollIndicators]="true">
                                 <div id="leftIncomeChart">
