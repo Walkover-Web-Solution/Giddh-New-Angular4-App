@@ -337,6 +337,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         // if (value && !value.startsWith(' ', 0)) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
+        if (addresses.length > 4) {
+            this.moreGstDetailsVisible = false;
+        }
         // } else {
         //     this._toaster.clearAllToaster();
 
