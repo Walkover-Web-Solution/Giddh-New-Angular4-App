@@ -172,6 +172,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                    this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
                 }
 
                 // if (acc && this.breadcrumbUniquePath[1]) {
@@ -211,7 +212,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.mobileNo) {
-                    if (accountDetails.mobileNo.length > 10 && accountDetails.mobileNo.indexOf('-') > -1) {
+                    if (accountDetails.mobileNo.indexOf('-') > -1) {
                         let mobileArray = accountDetails.mobileNo.split('-');
                         this.addAccountForm.get('mobileCode').patchValue(mobileArray[0]);
                         this.addAccountForm.get('mobileNo').patchValue(mobileArray[1]);
@@ -221,7 +222,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 } else {
                     this.addAccountForm.get('mobileNo').patchValue('');
-                    this.addAccountForm.get('mobileCode').patchValue('');
+                    this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
                 }
             }
 
@@ -382,6 +383,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngAfterViewInit() {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
+        }
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
         }
         this.prepareTaxDropdown();
     }
@@ -693,8 +700,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
-            } else {
-                accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
         if (this.accountDetails) {

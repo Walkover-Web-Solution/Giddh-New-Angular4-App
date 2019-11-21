@@ -755,7 +755,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                          * only applicable in sales invoice
                          */
                         if (this.isSalesInvoice) {
-                            this.depositAmountAfterUpdate = (obj.voucherDetails.grandTotal - obj.voucherDetails.balanceDue) || 0;
+                            this.depositAmountAfterUpdate = obj.voucherDetails.deposit;
                         } else {
                             this.depositAmountAfterUpdate = 0;
                         }
@@ -1127,6 +1127,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isOthrDtlCollapsed = false;
 
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
+            if (data.addresses && data.addresses.length) {
+                data.addresses = [_.find(data.addresses, (tax) => tax.isDefault)];
+            }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
         });
@@ -3026,9 +3029,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
         voucherClassConversion.accountDetails.email = result.account.email;
         voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
+
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
         voucherDetails.balanceDue = result.balanceTotal.amountForAccount;
+        voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
+
         //need to check usage
         voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, 'DD-MM-YYYY').toDate() : '';
         voucherDetails.balanceStatus = result.balanceStatus;

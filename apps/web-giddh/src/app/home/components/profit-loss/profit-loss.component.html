@@ -3,6 +3,7 @@
 
         <div class="panel-heading">
             <strong>Profit & Loss</strong>
+            <i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
             <div class="pull-right dashboard-filter">
                 <div class="btn-group" dropdown>
                     <span id="button-basic" dropdownToggle class="dropdown-toggle monthDropdown"
@@ -10,8 +11,6 @@
                         <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
                     </span>
                 </div>
-
-                <!--        <span class="icon-collapse-icon"></span>-->
             </div>
         </div>
 
