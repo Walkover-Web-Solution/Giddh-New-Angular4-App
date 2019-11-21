@@ -250,6 +250,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         let ledgerRequest = this.updateLedgerComponentInstance.saveLedgerTransaction();
         // check if there any validation error occurs from ledger component then don't do any thing just return
         if (!ledgerRequest) {
+            this.approveEntryRequestInProcess = false;
             return;
         }
 
