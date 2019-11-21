@@ -1,40 +1,59 @@
-import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { AppState } from '../../../store';
-import { select, Store } from '@ngrx/store';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { CompanyActions } from '../../../actions/company.actions';
-import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
-import { ToasterService } from '../../../services/toaster.service';
-import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
-import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
-import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { LedgerService } from '../../../services/ledger.service';
-import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { forEach, sumBy } from '../../../lodash-optimized';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { LoaderService } from '../../../loader/loader.service';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { createSelector } from 'reselect';
-import { TagRequest } from '../../../models/api-models/settingsTags';
-import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
-import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
-import { ResizedEvent } from 'angular-resize-event';
-import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import {BehaviorSubject, Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {FileTransfer} from '@ionic-native/file-transfer/ngx';
+import {take, takeUntil} from 'rxjs/operators';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {AppState} from '../../../store';
+import {select, Store} from '@ngrx/store';
+import {LedgerActions} from '../../../actions/ledger/ledger.actions';
+import {BlankLedgerVM, TransactionVM} from '../../ledger.vm';
+import {CompanyActions} from '../../../actions/company.actions';
+import {ICurrencyResponse, TaxResponse} from '../../../models/api-models/Company';
+import {UploaderOptions, UploadInput, UploadOutput} from 'ngx-uploader';
+import {LEDGER_API} from '../../../services/apiurls/ledger.api';
+import {ToasterService} from '../../../services/toaster.service';
+import {BsDatepickerDirective, ModalDirective} from 'ngx-bootstrap';
+import {LedgerDiscountComponent} from '../ledgerDiscount/ledgerDiscount.component';
+import {TaxControlComponent} from '../../../theme/tax-control/tax-control.component';
+import {LedgerService} from '../../../services/ledger.service';
+import {ReconcileRequest, ReconcileResponse} from '../../../models/api-models/Ledger';
+import {BaseResponse} from '../../../models/api-models/BaseResponse';
+import {forEach, sumBy} from '../../../lodash-optimized';
+import {ILedgerTransactionItem} from '../../../models/interfaces/ledger.interface';
+import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
+import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
+import {LoaderService} from '../../../loader/loader.service';
+import {AccountResponse} from 'apps/web-giddh/src/app/models/api-models/Account';
+import {Configuration} from 'apps/web-giddh/src/app/app.constant';
+import {SettingsTagActions} from '../../../actions/settings/tag/settings.tag.actions';
+import {createSelector} from 'reselect';
+import {TagRequest} from '../../../models/api-models/settingsTags';
+import {AdvanceSearchRequest} from '../../../models/interfaces/AdvanceSearchRequest';
+import {SettingsProfileActions} from '../../../actions/settings/profile/settings.profile.action';
+import {IDiscountList} from '../../../models/api-models/SettingsDiscount';
+import {GIDDH_DATE_FORMAT} from '../../../shared/helpers/defaultDateFormat';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal} from '../../../models/api-models/Sales';
+import {ResizedEvent} from 'angular-resize-event';
+import {giddhRoundOff} from '../../../shared/helpers/helperFunctions';
+import {isAndroidCordova, isIOSCordova} from "@giddh-workspaces/utils";
+import {IOSFilePicker} from "@ionic-native/file-picker/ngx";
+import {FileChooser} from "@ionic-native/file-chooser/ngx";
 
 @Component({
     selector: 'new-ledger-entry-panel',
@@ -72,7 +91,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
-
+    @ViewChild('webFileInput') public webFileInput: ElementRef;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -133,14 +152,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private fetchedConvertedRate: number = null;
 
     constructor(private store: Store<AppState>,
-        private _ledgerService: LedgerService,
-        private _ledgerActions: LedgerActions,
-        private _companyActions: CompanyActions,
-        private cdRef: ChangeDetectorRef,
-        private _toasty: ToasterService,
-        private _loaderService: LoaderService,
-        private _settingsTagActions: SettingsTagActions,
-        private _settingsProfileActions: SettingsProfileActions) {
+                private _ledgerService: LedgerService,
+                private _ledgerActions: LedgerActions,
+                private _companyActions: CompanyActions,
+                private cdRef: ChangeDetectorRef,
+                private _toasty: ToasterService,
+                private _loaderService: LoaderService,
+                private _settingsTagActions: SettingsTagActions,
+                private _settingsProfileActions: SettingsProfileActions) {
         this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -177,7 +196,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
         this.activeAccount$.subscribe(acc => {
             //   console.log('activeAccount...');
             if (acc) {
@@ -263,7 +282,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            this.blankLedger.otherTaxModal.appliedOtherTax = {
+                                name: tax.name,
+                                uniqueName: tax.uniqueName
+                            };
                             break;
                         default:
                             appliedTaxes.push(tax.uniqueName);
@@ -492,7 +514,69 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn = null;
     }
 
-    public onUploadOutput(output: UploadOutput): void {
+    public onUploadOutput(): void {
+        if (isAndroidCordova()) {
+            const fc = new FileChooser();
+            fc.open()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(e => {
+                    if (e !== 'User canceled.') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else if (isIOSCordova()) {
+            const filePicker = new IOSFilePicker();
+            filePicker.pickFile()
+                .then(uri => {
+                    this.uploadFile(uri);
+                })
+                .catch(err => {
+                    if (err !== 'canceled') {
+                        this._toasty.errorToast('Something Went Wrong');
+                    }
+                    this.isFileUploading = false;
+                });
+        } else {
+            // web
+            this.webFileInput.nativeElement.click();
+        }
+    }
+
+    private uploadFile(uri) {
+        let sessionKey = null;
+        let companyUniqueName = null;
+        this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
+        const transfer = new FileTransfer();
+        const fileTransfer = transfer.create();
+        const options = {
+            fileKey: 'file',
+            headers: {
+                'Session-Id': sessionKey
+            }
+        };
+        const httpUrl = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
+        fileTransfer.upload(uri, httpUrl, options)
+            .then((data) => {
+                if (data && data.response) {
+                    const result = JSON.parse(data.response);
+                    this.isFileUploading = false;
+                    this.blankLedger.attachedFile = result.body.uniqueName;
+                    this.blankLedger.attachedFileName = result.body.uniqueName;
+                    this._toasty.successToast('file uploaded successfully');
+                }
+            }, (err) => {
+                // show toaster
+                this.isFileUploading = false;
+                this.blankLedger.attachedFile = '';
+                this.blankLedger.attachedFileName = '';
+                this._toasty.errorToast(err.body.message);
+            });
+    }
+
+    public onWebUpload(output: UploadOutput) {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
             let companyUniqueName = null;
@@ -503,8 +587,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
+                data: {company: companyUniqueName},
+                headers: {'Session-Id': sessionKey},
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -536,7 +620,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+        this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate.toString());
         }

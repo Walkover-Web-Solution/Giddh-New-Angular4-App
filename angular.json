@@ -591,22 +591,22 @@
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
-                                    "with": "apps/web-giddh/src/index.stage.html"
+                                    "with": "apps/web-giddh/src/index.cordova.stage.html"
                                 },
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.stage.cordova.ts"
                                 }
                             ],
-                            "optimization": true,
+                            "optimization": false,
                             "outputHashing": "all",
-                            "sourceMap": false,
+                            "sourceMap": true,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": true,
+                            "aot": false,
                             "extractLicenses": true,
                             "vendorChunk": true,
-                            "buildOptimizer": true
+                            "buildOptimizer": false
                         },
                         "prod": {
                             "outputPath": "apps/giddh-cordova/giddh/www",

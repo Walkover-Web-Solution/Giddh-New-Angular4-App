@@ -1,4 +1,5 @@
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {isCordova} from '@giddh-workspaces/utils';
 /**
  * Angular 2 decorators and services
  */
@@ -72,7 +73,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = AppUrl === 'https://giddh.com/';
         this.isElectron = isElectron;
-        this.isCordova = isCordova;
+        this.isCordova = isCordova();
         this.store.select(s => s.session).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
