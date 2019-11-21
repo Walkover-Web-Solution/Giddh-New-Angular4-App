@@ -2648,7 +2648,7 @@
 
                 .daterangepicker td.active,
                 .daterangepicker td.active:hover {
-                    background-color: #ff5e01 !important;
+                    background-color: #5864C9 !important;
                     border-color: transparent;
                     color: #fff;
                 }
@@ -8377,6 +8377,21 @@ GST filing
                             height: 500px;
                             position: relative !important;
 
+                        }
+                        .daterangepicker td.active, .daterangepicker td.active:hover {
+                            background-color: #5864C9!important;
+                        }
+                         .theme-green .bs-datepicker-head {
+                            background-color: #5864C9;
+                        }
+                        .theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*="select-"]:after, .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
+                            background-color: #5864C9;
+                        }
+                        .bs-datepicker-body table.days td.active:not(.select-start):before, .bs-datepicker-body table.days td.in-range:not(.select-start):before, .bs-datepicker-body table.days span.active:not(.select-start):before, .bs-datepicker-body table.days span.in-range:not(.select-start):before {
+                            background: #ebedff;
+                        }
+                        .theme-green .bs-datepicker-body table td.week span {
+                            color: #5864C9;
                         }
                 /* responsive */
 
