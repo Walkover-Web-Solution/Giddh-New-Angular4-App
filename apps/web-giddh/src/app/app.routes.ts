@@ -17,12 +17,20 @@ import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
+<<<<<<< HEAD
 import { VatReportComponent } from './vat-module/vat-report.component';
 
+=======
+import { TokenVerifyComponent } from './login/token-verify.component';
+>>>>>>> 912da597e... feat: verify token route added
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '404', component: NotFoundComponent },
+  {
+    path: 'token-verify',
+    component: TokenVerifyComponent
+  },
   { path: 'create-invoice', loadChildren: './create/create.module#CreateModule' },
   { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated] },
   { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
