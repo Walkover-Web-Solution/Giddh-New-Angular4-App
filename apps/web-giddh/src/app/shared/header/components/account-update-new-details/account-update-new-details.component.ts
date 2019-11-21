@@ -281,6 +281,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType').patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            } else if (!a) {
+                this.addAccountForm.get('openingBalance').setValue('0');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            }
+        });
+        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+            if (!a) {
+                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {

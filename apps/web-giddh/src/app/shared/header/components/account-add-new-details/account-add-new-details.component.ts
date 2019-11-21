@@ -151,6 +151,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm.get('openingBalanceType').patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            } else if (!a) {
+                this.addAccountForm.get('openingBalance').patchValue('0');
+            }
+        });
+        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+            if (!a) {
+                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
             }
         });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
@@ -420,7 +427,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public openingBalanceClick() {
         if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
-            this.addAccountForm.get('openingBalance').setValue(undefined);
+            this.addAccountForm.get('openingBalance').setValue('0');
         }
     }
 
