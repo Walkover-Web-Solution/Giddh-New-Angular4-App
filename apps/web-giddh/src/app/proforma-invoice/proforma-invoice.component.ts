@@ -1027,7 +1027,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.value || oldStatusCode === state.stateGstCode));
+        const currentState = this.statesSource.find((st: any) => (oldStatusCode === st.value || oldStatusCode === st.stateGstCode));
         return (currentState) ? currentState.value : '';
     }
 
@@ -2710,55 +2710,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = entry.tradeDiscounts.findIndex(f => !f.discount.uniqueName);
+        let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
 
-        if (defaultDiscountIndex > -1) {
+        // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
+        if (!isDefaultDiscountThere) {
             discountArray.push({
-                discountType: entry.tradeDiscounts[defaultDiscountIndex].discount.discountType,
-                amount: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
-                discountValue: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
-                discountUniqueName: entry.tradeDiscounts[defaultDiscountIndex].discount.uniqueName,
-                name: entry.tradeDiscounts[defaultDiscountIndex].discount.name,
-                particular: entry.tradeDiscounts[defaultDiscountIndex].account.uniqueName,
-                isActive: true
-            });
-        } else {
-            if (entry.discounts.length > 0) {
-                entry.discounts.forEach(ds => {
-                    discountArray.push({
-                        discountType: ds.discountType,
-                        amount: ds.amount,
-                        name: ds.name,
-                        particular: ds.particular,
-                        isActive: true,
-                        discountValue: ds.discountValue
-                    });
-                });
-            } else {
-                discountArray.push({
                     discountType: 'FIX_AMOUNT',
                     amount: 0,
                     name: '',
                     particular: '',
                     isActive: true,
                     discountValue: 0
-                });
-            }
+                }
+            );
         }
 
-        entry.tradeDiscounts.forEach((f, ind) => {
-            if (ind !== defaultDiscountIndex) {
-                discountArray.push({
-                    discountType: f.discount.discountType,
-                    amount: f.discount.discountValue,
-                    name: f.discount.name,
-                    particular: f.account.uniqueName,
-                    isActive: true,
-                    discountValue: f.discount.discountValue,
-                    discountUniqueName: f.discount.uniqueName
-                });
-            }
+        entry.tradeDiscounts.forEach((f) => {
+            discountArray.push({
+                discountType: f.discount.discountType,
+                amount: f.discount.discountValue,
+                name: f.discount.name,
+                particular: f.account.uniqueName,
+                isActive: true,
+                discountValue: f.discount.discountValue,
+                discountUniqueName: f.discount.uniqueName
+            });
+
         });
+
         return discountArray;
     }
 
