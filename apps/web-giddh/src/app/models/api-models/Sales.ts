@@ -431,6 +431,7 @@ export class VoucherDetailsClass {
     public estimateDate?: any;
     public dueDate?: any;
     public balance?: any;
+    public deposit?: any;
     public balanceDue?: number;
     public balanceStatus?: string;
     public totalAsWords: string;
@@ -464,6 +465,7 @@ export class VoucherDetailsClass {
         this.tdsTotal = 0;
         this.tcsTotal = 0;
         this.balanceDue = 0;
+        this.deposit = 0;
         this.totalDepositAmount = 0;
     }
 }

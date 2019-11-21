@@ -200,6 +200,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
+    public lastListingFilters: any;
 
     constructor(
         private modalService: BsModalService,
@@ -489,6 +490,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
                 }
+
+                this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+                this._receiptServices.GetAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+                    this.parseBalRes(res);
+                });
             });
     }
 
@@ -709,6 +715,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (this.invoiceSearchRequest.page) {
                 this.advanceSearchFilter.page = this.invoiceSearchRequest.page;
             }
+            this.lastListingFilters = this.advanceSearchFilter;
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
             this._receiptServices.GetAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res => {
                 this.parseBalRes(res);
@@ -726,6 +733,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public getVoucher(isUniversalDateSelected: boolean) {
+        this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
         this._receiptServices.GetAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
@@ -994,6 +1002,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.from = this.invoiceSearchRequest.from;
             request.to = this.invoiceSearchRequest.to;
         }
+        this.lastListingFilters = request;
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.GetAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
