@@ -9,9 +9,9 @@ import { take, takeUntil } from 'rxjs/operators';
   selector: 'discount-control-component',
   templateUrl: './discount-control-component.html',
   styles: [`
-    // .multi-select input.form-control {
-    //   background-image: unset !important;
-    // }
+    /*.multi-select input.form-control {
+       background-image: unset !important;
+    }*/
 
     .multi-select .caret {
       display: block !important;
@@ -159,7 +159,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public hideDiscountMenu() {
-    console.log("HIDE DISCOUNT");
     this.discountMenu = false;
   }
 

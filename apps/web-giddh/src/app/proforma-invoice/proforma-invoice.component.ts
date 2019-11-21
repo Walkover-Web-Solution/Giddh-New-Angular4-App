@@ -871,6 +871,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     let tempSelectedAcc: AccountResponseV2;
                     this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
                     if (tempSelectedAcc) {
+                        console.log(tempSelectedAcc);
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
