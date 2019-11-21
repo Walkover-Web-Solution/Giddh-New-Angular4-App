@@ -22,6 +22,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-expense-details',
@@ -50,7 +51,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
-    @Input() public selectedRowItem: string;
+    @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
     @ViewChild(UpdateLedgerEntryPanelComponent) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @ViewChild('entryAgainstAccountDropDown') public entryAgainstAccountDropDown: ShSelectComponent;
@@ -94,6 +95,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         model: ''
     };
     public approveEntryRequestInProcess: boolean = false;
+    public selectedEntryForApprove: ExpenseResults;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -219,18 +221,26 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     public showApproveConfirmPopup(ref: TemplateRef<any>) {
         this.approveEntryModalRef = this.modalService.show(ref, {class: 'modal-md'});
+        this.selectedEntryForApprove = cloneDeep(this.selectedItem);
+        this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }
 
     public hideApproveConfirmPopup(isApproved) {
         if (!isApproved) {
             this.approveEntryModalRef.hide();
+            this.selectedEntryForApprove = null;
         } else {
             this.approveEntry();
         }
     }
 
     public approveEntry() {
-
+        if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
+            this._toasty.errorToast('Please Select ' + this.entryAgainstObject.base + '  for entry..');
+            this.hideApproveConfirmPopup(false);
+            return;
+        }
+        this.approveEntryRequestInProcess = true;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
             uniqueName: this.accountEntryPettyCash.uniqueName,
@@ -244,14 +254,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         }
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
+            this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
+                this.hideApproveConfirmPopup(false);
                 this._toasty.successToast(res.body);
                 this.refreshPendingItem.emit(true);
                 this.toggleDetailsMode.emit(true);
             } else {
                 this._toasty.errorToast(res.message);
             }
-        });
+        }, (error => {
+            this.approveEntryRequestInProcess = false;
+        }));
     }
 
     public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse) {
