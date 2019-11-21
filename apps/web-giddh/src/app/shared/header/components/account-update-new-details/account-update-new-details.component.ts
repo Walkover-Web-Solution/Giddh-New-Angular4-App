@@ -561,16 +561,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public addGstDetailsForm(value: string) {
-        if (value && !value.startsWith(' ', 0)) {
-            const addresses = this.addAccountForm.get('addresses') as FormArray;
-            addresses.push(this.initialGstDetailsForm(null));
-        } else {
-            this._toaster.clearAllToaster();
-            if (this.formFields['taxName']) {
-                this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label} field first`);
-            }
+    public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
+        // if (value && !value.startsWith(' ', 0)) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        addresses.push(this.initialGstDetailsForm(null));
+        if (addresses.length > 4) {
+            this.moreGstDetailsVisible = false;
         }
+        // } else {
+        //     this._toaster.clearAllToaster();
+        //     if (this.formFields['taxName']) {
+        //         this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label} field first`);
+        //     }
+        // }
         return;
     }
 
