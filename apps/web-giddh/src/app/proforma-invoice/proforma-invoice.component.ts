@@ -1128,7 +1128,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
-                data.addresses = [_.find(data.addresses, (gst) => gst.isDefault)];
+                data.addresses = [_.find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
