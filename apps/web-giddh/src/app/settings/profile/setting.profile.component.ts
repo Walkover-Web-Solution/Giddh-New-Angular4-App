@@ -278,6 +278,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       profileObj.addresses[indx].stateName = '';
       this.companyProfileObj = profileObj;
     }
+    this.checkGstDetails();
   }
 
   public updateProfile(data) {
