@@ -179,7 +179,7 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog
-        [selectedEntryForApprove]="selectedItem"
+        [selectedEntryForApprove]="selectedEntryForApprove"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
         (approveEntry)="hideApproveConfirmPopup($event)"
     ></petty-cash-approve-confirm-dialog>
