@@ -4,9 +4,9 @@
             <div class=" mrR1 d-flex">
                 <div class="input-group">
                     <div class="form-group">
-                        <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly placeholder="Select Date"
-                            class="form-control" #dp="bsDaterangepicker" [bsValue]="dateRangePickerValue"
-                            (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
+                        <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
+                            placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
+                            [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
                 </div>
                 <div class="contentView mrL2">
@@ -71,7 +71,7 @@
                         <div class="clearfix">
                             <h2 class="pull-left">{{branch.name}}</h2>
                             <div class="pull-right">
-                                <div class="btn-group" dropdown>
+                                <div class="btn-group" dropdown [autoClose]="true">
                                     <a id="button-basic" dropdownToggle type="button"
                                         class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
 
@@ -83,7 +83,9 @@
 
                                     </ul>
                                 </div>
+
                             </div>
+
                         </div>
 
                         <div class="clearfix">

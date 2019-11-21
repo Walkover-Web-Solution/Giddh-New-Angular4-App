@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div class="form-group">
-                        <label>Account Name  <sup class="text-danger">*</sup> </label>
+                        <label>Account Name <sup class="text-danger">*</sup> </label>
                         <input type="text" class="form-control" #autoFocus formControlName="name" name="accountName" placeholder="Account Name">
                     </div>
                 </div>
@@ -23,7 +23,7 @@
             <div class="row ">
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
-                        <label>Country  <sup class="text-danger">*</sup> </label>
+                        <label>Country <sup class="text-danger">*</sup> </label>
                         <sh-select [options]="countrySource" required [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)"></sh-select>
                     </div>
                 </div>
@@ -55,14 +55,30 @@
                     </div>
                 </div>
             </div>
+            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
+                <div class="form-group col-xs-12 col-sm-4">
+                    <label for="">Foreign Opening Balance</label>
+                    <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
+                        <input type="text" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" placeholder="00.00" decimalDigitsDirective />
+                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">DR.
+                        </div>
+                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
+                  'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0">CR.
+                        </div>
+                    </div>
+                </div>
+            </div>
             <ng-container *ngIf="isHsnSacEnabledAcc">
                 <div class="row">
                     <div class="col-xs-6 form-group">
                         <label class="d-block">HSN</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                            <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
-                        </span>
+                                <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+                            </span>
                             <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
                         </div>
                     </div>
@@ -70,8 +86,8 @@
                         <label class="d-block">SAC</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                            <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
-                        </span>
+                                <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+                            </span>
                             <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
                         </div>
                     </div>
@@ -128,7 +144,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}
-                                       </label>
+                                        </label>
                                         <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states); checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
@@ -146,16 +162,22 @@
                                     <div class="form-group">
                                         <label class="d-block">&nbsp;</label>
                                         <label *ngIf="gst.get('gstNumber').value && isGstValid">
-                                        <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is Composite?
-                                        </label></label>
+                                            <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is
+                                                Composite?
+                                            </label></label>
                                         <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
                                             <i class="fa fa-times"> </i> Remove
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" *ngIf="l">
-                                <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                            <div class="row" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
+                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all
+                           ({{addAccountForm.get('addresses')['controls'].length}})</a>
+                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show Less </a>
+                            </div>
+                            <div class="text-right" *ngIf="l">
+                                <a class="text-right  btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                                     <i class="fa fa-plus"></i> Add Address
                                 </a>
                             </div>

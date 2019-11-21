@@ -135,7 +135,7 @@
                                     <ul class="list-inline custom-multi-select">
                                         <li *ngFor="let tax of selectedTaxes">
                                             <a style="color: gray">
-                                                {{tax}} <span class="pdL" (click)="removeTax(tax)">×</span>
+                                                {{currentTaxList[tax].name}} <span class="pdL" (click)="removeTax(tax)">×</span>
                                             </a>
                                         </li>
                                     </ul>

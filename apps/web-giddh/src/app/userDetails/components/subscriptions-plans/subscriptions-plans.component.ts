@@ -89,6 +89,12 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     this.isSubscriptionPlanShow.emit(true);
   }
   public buyPlanClicked(plan: any) {
+    let activationKey = this.licenceKey.value;
+    if (activationKey) {
+      this.SubscriptionRequestObj.licenceKey = activationKey;
+    } else {
+      this.SubscriptionRequestObj.licenceKey = "";
+    }
     this._route.navigate(['billing-detail', 'buy-plan']);
     this.store.dispatch(this.companyActions.selectedPlan(plan));
   }
@@ -97,6 +103,12 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
   }
 
   public choosePlan(plan: CreateCompanyUsersPlan) {
+    let activationKey = this.licenceKey.value;
+    if (activationKey) {
+      this.SubscriptionRequestObj.licenceKey = activationKey;
+    } else {
+      this.SubscriptionRequestObj.licenceKey = "";
+    }
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
     if (plan.subscriptionId) { // bought plan
       this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
@@ -111,6 +123,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
     if (activationKey) {
       this.SubscriptionRequestObj.licenceKey = activationKey;
+      this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
+      this.licenceKey.setValue('');
+    } else {
+      this.SubscriptionRequestObj.licenceKey = '';
       this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj });
       this.licenceKey.setValue('');
     }

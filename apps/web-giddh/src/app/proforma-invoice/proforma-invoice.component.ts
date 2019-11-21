@@ -871,6 +871,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     let tempSelectedAcc: AccountResponseV2;
                     this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
                     if (tempSelectedAcc) {
+                        if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
+                            tempSelectedAcc.addresses = [_.find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
+                        }
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1027,7 +1030,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((state: any) => (oldStatusCode === state.value || oldStatusCode === state.stateGstCode));
+        const currentState = this.statesSource.find((st: any) => (oldStatusCode === st.value || oldStatusCode === st.stateGstCode));
         return (currentState) ? currentState.value : '';
     }
 
@@ -1378,6 +1381,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // set voucher type
         obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
+
+        // set state details as new request
+        obj.account.billingDetails.countryName = this.customerCountryName;
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+
+        // set state details as new request
+        obj.account.shippingDetails.countryName = this.customerCountryName;
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
 
@@ -2710,55 +2723,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = entry.tradeDiscounts.findIndex(f => !f.discount.uniqueName);
+        let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
 
-        if (defaultDiscountIndex > -1) {
+        // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
+        if (!isDefaultDiscountThere) {
             discountArray.push({
-                discountType: entry.tradeDiscounts[defaultDiscountIndex].discount.discountType,
-                amount: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
-                discountValue: entry.tradeDiscounts[defaultDiscountIndex].discount.discountValue,
-                discountUniqueName: entry.tradeDiscounts[defaultDiscountIndex].discount.uniqueName,
-                name: entry.tradeDiscounts[defaultDiscountIndex].discount.name,
-                particular: entry.tradeDiscounts[defaultDiscountIndex].account.uniqueName,
-                isActive: true
-            });
-        } else {
-            if (entry.discounts.length > 0) {
-                entry.discounts.forEach(ds => {
-                    discountArray.push({
-                        discountType: ds.discountType,
-                        amount: ds.amount,
-                        name: ds.name,
-                        particular: ds.particular,
-                        isActive: true,
-                        discountValue: ds.discountValue
-                    });
-                });
-            } else {
-                discountArray.push({
                     discountType: 'FIX_AMOUNT',
                     amount: 0,
                     name: '',
                     particular: '',
                     isActive: true,
                     discountValue: 0
-                });
-            }
+                }
+            );
         }
 
-        entry.tradeDiscounts.forEach((f, ind) => {
-            if (ind !== defaultDiscountIndex) {
-                discountArray.push({
-                    discountType: f.discount.discountType,
-                    amount: f.discount.discountValue,
-                    name: f.discount.name,
-                    particular: f.account.uniqueName,
-                    isActive: true,
-                    discountValue: f.discount.discountValue,
-                    discountUniqueName: f.discount.uniqueName
-                });
-            }
+        entry.tradeDiscounts.forEach((f) => {
+            discountArray.push({
+                discountType: f.discount.discountType,
+                amount: f.discount.discountValue,
+                name: f.discount.name,
+                particular: f.account.uniqueName,
+                isActive: true,
+                discountValue: f.discount.discountValue,
+                discountUniqueName: f.discount.uniqueName
+            });
+
         });
+
         return discountArray;
     }
 
@@ -2866,17 +2858,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
-        if (this.isMultiCurrencyAllowed) {
-            obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
-            obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
-        }
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+
         // delete obj.account.billingDetails.state;
 
         obj.account.shippingDetails.countryName = this.customerCountryName;
-        if (this.isMultiCurrencyAllowed) {
-            obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
-            obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
-        }
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+
         // delete obj.account.shippingDetails.state;
 
         if (this.isCashInvoice) {
@@ -3172,13 +3162,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public fillShippingBillingDetails($event: any, isBilling) {
-        let cityName = $event.label;
+        let stateName = $event.label;
+        let stateCode = $event.value;
+
         if (!isBilling && !this.autoFillShipping) {
-            this.invFormData.accountDetails.shippingDetails.stateName = cityName;
-            this.invFormData.accountDetails.shippingDetails.state.name = cityName;
+            this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+            this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+            this.invFormData.accountDetails.shippingDetails.state.name = stateName;
         }
-        this.invFormData.accountDetails.billingDetails.state.name = cityName;
-        this.invFormData.accountDetails.billingDetails.stateName = cityName;
+        this.invFormData.accountDetails.billingDetails.state.name = stateName;
+        this.invFormData.accountDetails.billingDetails.stateName = stateName;
+        this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
     }
 
     private updateAddressShippingBilling(obj) {
