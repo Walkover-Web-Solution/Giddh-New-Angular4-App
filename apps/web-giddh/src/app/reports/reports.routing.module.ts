@@ -13,7 +13,6 @@ import { SalesRegisterDetailsComponent } from './components/sales-register-detai
 
 
 
-
 @NgModule({
   imports: [
     RouterModule.forChild([

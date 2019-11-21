@@ -108,6 +108,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 	public forceClear$: Observable<IForceClear> = observableOf({status: false});
 	public isTaxNumberSameAsHeadQuarter: number = 0;
 	public activeCompany: any;
+	public currentTaxList: any[] = [];
 
 	constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private companyActions: CompanyActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private commonActions: CommonActions) {
 		this.companyProfileObj = {};
@@ -193,18 +194,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public reFillTax() {
 		if (this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
-			let currentTaxList = [];
-
-			for (let i = 0; i < this.taxesList.length; i++) {
-				currentTaxList[this.taxesList[i].value] = [];
-				currentTaxList[this.taxesList[i].value] = i;
-			}
-
 			this.createNewCompany.taxes.forEach(tax => {
-				if (currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
+				if (this.currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
 					this.selectedTaxes.push(tax);
 
-					let matchedIndex = currentTaxList[tax];
+					let matchedIndex = this.currentTaxList[tax];
 					if (matchedIndex > -1) {
 						this.taxesList[matchedIndex].isSelected = true;
 					}
@@ -448,6 +442,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 						value: res.applicableTaxes[key].uniqueName,
 						isSelected: false
 					});
+
+					this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
+					this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
 				});
 				this.reFillTax();
 			} else {
