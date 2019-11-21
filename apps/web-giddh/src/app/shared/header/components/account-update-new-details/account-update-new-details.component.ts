@@ -383,6 +383,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+        }
         this.prepareTaxDropdown();
     }
 
@@ -693,8 +699,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
-            } else {
-                accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
         if (this.accountDetails) {

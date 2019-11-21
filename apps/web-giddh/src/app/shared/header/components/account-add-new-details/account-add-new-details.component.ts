@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../actions/accounts.actions';
@@ -34,7 +34,7 @@ import * as googleLibphonenumber from 'google-libphonenumber';
     styleUrls: ['./account-add-new-details.component.scss'],
 })
 
-export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestroy {
+export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -226,6 +226,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             }
         });
     }
+    public ngAfterViewInit() {
+        this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+        }
+
+    }
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {
             if (flattenGroups) {
@@ -244,18 +254,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
     public setCountryByCompany(company: CompanyResponse) {
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
-            this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
-            this.addAccountForm.get('mobileCode').patchValue(result.value);
+            this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
+            this.addAccountForm.get('mobileCode').setValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
-            this.addAccountForm.get('currency').patchValue(company.baseCurrency);
+            this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
+
         } else {
-            this.addAccountForm.get('country').get('countryCode').patchValue('IN');
-            this.addAccountForm.get('mobileCode').patchValue('91');
-            this.addAccountForm.get('currency').patchValue('IN');
+            this.addAccountForm.get('country').get('countryCode').setValue('IN');
+            this.addAccountForm.get('mobileCode').setValue('91');
+            this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
+
         }
     }
 
@@ -321,17 +333,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    public addGstDetailsForm(value: string) {
-        if (value && !value.startsWith(' ', 0)) {
-            const addresses = this.addAccountForm.get('addresses') as FormArray;
-            addresses.push(this.initialGstDetailsForm());
-        } else {
-            this._toaster.clearAllToaster();
+    public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
+        // if (value && !value.startsWith(' ', 0)) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        addresses.push(this.initialGstDetailsForm());
+        // } else {
+        //     this._toaster.clearAllToaster();
 
-            if (this.formFields['taxName']) {
-                this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label}`);
-            }
-        }
+        //     if (this.formFields['taxName']) {
+        //         this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label}`);
+        //     }
+        // }
         return;
     }
 
@@ -369,15 +381,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
                 let s = state.find(st => st.value === stateCode);
-                statesEle.setDisabledState(false);
+                // statesEle.setDisabledState(false);
                 if (s) {
                     gstForm.get('stateCode').patchValue(s.value);
                     gstForm.get('state').get('code').patchValue(s.value);
-                    statesEle.setDisabledState(true);
+                    // statesEle.setDisabledState(true);
                 } else {
                     gstForm.get('stateCode').patchValue(null);
                     gstForm.get('state').get('code').patchValue(null);
-                    statesEle.setDisabledState(false);
+                    // statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     if (this.formFields['taxName']) {
                         this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
@@ -385,7 +397,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            statesEle.setDisabledState(false);
+            // statesEle.setDisabledState(false);
             gstForm.get('stateCode').patchValue(null);
             gstForm.get('state').get('code').patchValue(null);
 
@@ -447,8 +459,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, OnDestr
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
-            } else {
-                accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
         delete accountRequest['addAccountForm'];
