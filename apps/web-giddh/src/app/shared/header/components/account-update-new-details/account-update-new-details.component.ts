@@ -617,15 +617,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
                 let s = state.find(st => st.value === stateCode);
-                statesEle.setDisabledState(false);
                 if (s) {
                     gstForm.get('stateCode').patchValue(s.value);
                     gstForm.get('state').get('code').patchValue(s.value);
-                    statesEle.setDisabledState(true);
+
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
-                    statesEle.setDisabledState(false);
+                    if (this.isIndia) {
+                        gstForm.get('stateCode').patchValue(null);
+                        gstForm.get('state').get('code').patchValue(null);
+                    }
                     this._toaster.clearAllToaster();
                     if (this.formFields['taxName']) {
                         this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
@@ -633,9 +633,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         } else {
-            statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            // statesEle.setDisabledState(false);
+            if (this.isIndia) {
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
+            }
+
 
         }
     }
