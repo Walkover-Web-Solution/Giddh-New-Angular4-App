@@ -1382,6 +1382,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // set voucher type
         obj.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
 
+        // set state details as new request
+        obj.account.billingDetails.countryName = this.customerCountryName;
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+
+        // set state details as new request
+        obj.account.shippingDetails.countryName = this.customerCountryName;
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+
         if (this.isProformaInvoice || this.isEstimateInvoice) {
 
             if (this.depositAmount && this.depositAmount > 0) {
@@ -2848,17 +2858,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
-        if (this.isMultiCurrencyAllowed) {
-            obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
-            obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
-        }
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+
         // delete obj.account.billingDetails.state;
 
         obj.account.shippingDetails.countryName = this.customerCountryName;
-        if (this.isMultiCurrencyAllowed) {
-            obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
-            obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
-        }
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+
         // delete obj.account.shippingDetails.state;
 
         if (this.isCashInvoice) {
@@ -3154,13 +3162,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public fillShippingBillingDetails($event: any, isBilling) {
-        let cityName = $event.label;
+        let stateName = $event.label;
+        let stateCode = $event.value;
+
         if (!isBilling && !this.autoFillShipping) {
-            this.invFormData.accountDetails.shippingDetails.stateName = cityName;
-            this.invFormData.accountDetails.shippingDetails.state.name = cityName;
+            this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+            this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+            this.invFormData.accountDetails.shippingDetails.state.name = stateName;
         }
-        this.invFormData.accountDetails.billingDetails.state.name = cityName;
-        this.invFormData.accountDetails.billingDetails.stateName = cityName;
+        this.invFormData.accountDetails.billingDetails.state.name = stateName;
+        this.invFormData.accountDetails.billingDetails.stateName = stateName;
+        this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
     }
 
     private updateAddressShippingBilling(obj) {
