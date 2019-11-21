@@ -392,8 +392,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     gstForm.get('state').get('code').patchValue(s.value);
                     // statesEle.setDisabledState(true);
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
+                    if (this.isIndia) {
+                        gstForm.get('stateCode').patchValue(null);
+                        gstForm.get('state').get('code').patchValue(null);
+                    }
                     // statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     if (this.formFields['taxName']) {
@@ -403,9 +405,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         } else {
             // statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
-
+            if (this.isIndia) {
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
+            }
         }
     }
 
