@@ -172,8 +172,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                } if (acc.parentGroups[1].uniqueName) {
-                    this.activeGroupUniqueName = acc.parentGroups[1].uniqueName;
+                    this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
                 }
 
                 // if (acc && this.breadcrumbUniquePath[1]) {
