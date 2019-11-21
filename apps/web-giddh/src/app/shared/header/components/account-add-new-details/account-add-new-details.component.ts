@@ -81,6 +81,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
+    public GSTIN_OR_TRN: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
@@ -219,6 +220,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.formFields[res.fields[key].name] = [];
                     this.formFields[res.fields[key].name] = res.fields[key];
                 });
+                this.GSTIN_OR_TRN = res.fields[0].label;
 
                 // Object.keys(res.applicableTaxes).forEach(key => {
                 //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
@@ -536,6 +538,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.store.dispatch(this._generalActions.resetStatesList());
+            this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
