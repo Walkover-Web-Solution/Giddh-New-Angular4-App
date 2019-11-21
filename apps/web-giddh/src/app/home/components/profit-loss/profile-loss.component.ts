@@ -96,7 +96,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 	public options: Options;
 	public companies$: Observable<CompanyResponse[]>;
 	public activeCompanyUniqueName$: Observable<string>;
-	public requestInFlight = true;
+	public requestInFlight: boolean = true;
 	public profitLossChart: Options;
 	public totalIncome: number = 0;
 	public totalIncomeType: string = '';
@@ -210,7 +210,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 				type: 'pie',
 				polar: false,
 				className: 'profit_loss_chart',
-				width: 300,
+				width: 348,
 				height: '180px'
 			},
 			title: {
@@ -281,5 +281,11 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
 			this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
 		}
+	}
+
+	public refreshChart() {
+		this.requestInFlight = true;
+		this.plRequest.refresh = true;
+		this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(this.plRequest)));
 	}
 }
