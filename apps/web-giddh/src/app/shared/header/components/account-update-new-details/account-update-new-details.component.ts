@@ -699,8 +699,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
-            } else {
-                accountRequest.addresses[0].stateCode = selectedStateObj.code;
             }
         }
         if (this.accountDetails) {
