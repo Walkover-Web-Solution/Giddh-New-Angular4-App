@@ -247,12 +247,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             accountUniqueName: this.accountEntryPettyCash.particular.uniqueName
         };
 
-        let ledgerRequest = this.updateLedgerComponentInstance.saveLedgerTransaction();
+        let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
         // check if there any validation error occurs from ledger component then don't do any thing just return
         if (!ledgerRequest) {
             this.approveEntryRequestInProcess = false;
             return;
         }
+
+        // delete extra keys from request
+        delete ledgerRequest['ledgerUniqueNames'];
+        delete ledgerRequest['pettyCashEntryStatus'];
+        delete ledgerRequest['pettyCashEntryStatus'];
+        delete ledgerRequest['othersCategory'];
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
             this.approveEntryRequestInProcess = false;
