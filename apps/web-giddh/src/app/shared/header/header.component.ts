@@ -165,6 +165,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public selectedPage: any = '';
     public selectedLedgerName: string;
     public companyList: CompanyResponse[] = [];
+    public companyListForFilter: CompanyResponse[] = [];
     public searchCmp: string = '';
     public loadAPI: Promise<any>;
     public hoveredIndx: number;
@@ -252,6 +253,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let orderedCompanies = _.orderBy(companies, 'name');
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
+            this.companyListForFilter = orderedCompanies;
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
@@ -1079,7 +1081,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let companies: CompanyResponse[] = [];
         this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
 
-        this.companyList = companies.filter((cmp) => {
+        this.companyListForFilter = companies.filter((cmp) => {
             if (!cmp.nameAlias) {
                 return cmp.name.toLowerCase().includes(ev.toLowerCase());
             } else {
