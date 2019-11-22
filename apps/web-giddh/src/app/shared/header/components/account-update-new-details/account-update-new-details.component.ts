@@ -115,6 +115,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
+    public GSTIN_OR_TRN: string;
 
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
@@ -185,7 +186,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (accountDetails.country.countryCode) {
                         this.getStates(accountDetails.country.countryCode);
                         this.getOnboardingForm(accountDetails.country.countryCode);
-                        let ss = this.getStateGSTCode(this.stateList, accountDetails.country.countryCode);
+                        // let ss = this.getStateGSTCode(this.stateList, accountDetails.country.countryCode);
                     }
                 }
                 // render gst details if there's no details add one automatically
@@ -280,6 +281,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType').patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            } else if (!a) {
+                this.addAccountForm.get('openingBalance').setValue('0');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            }
+        });
+        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+            if (!a) {
+                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
@@ -337,6 +347,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.formFields[res.fields[key].name] = [];
                     this.formFields[res.fields[key].name] = res.fields[key];
                 });
+                this.GSTIN_OR_TRN = res.fields[0].label;
+
 
                 // Object.keys(res.applicableTaxes).forEach(key => {
                 //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
@@ -614,15 +626,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
                 let s = state.find(st => st.value === stateCode);
-                statesEle.setDisabledState(false);
                 if (s) {
                     gstForm.get('stateCode').patchValue(s.value);
                     gstForm.get('state').get('code').patchValue(s.value);
-                    statesEle.setDisabledState(true);
+
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
-                    statesEle.setDisabledState(false);
+                    if (this.isIndia) {
+                        gstForm.get('stateCode').patchValue(null);
+                        gstForm.get('state').get('code').patchValue(null);
+                    }
                     this._toaster.clearAllToaster();
                     if (this.formFields['taxName']) {
                         this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
@@ -630,9 +642,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         } else {
-            statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
+            // statesEle.setDisabledState(false);
+            if (this.isIndia) {
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
+            }
+
 
         }
     }
@@ -788,7 +803,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
-            this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
@@ -910,9 +924,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedAccountCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        this.addAccountForm.get('currency').patchValue(this.selectedAccountCurrency);
-                        this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
-
+                        if (!this.addAccountForm.get('currency').value) {
+                            this.addAccountForm.get('currency').patchValue(this.selectedAccountCurrency);
+                        }
+                        if (!this.addAccountForm.get('mobileCode').value) {
+                            this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
+                        }
                     }
                 }
                 this.states = [];

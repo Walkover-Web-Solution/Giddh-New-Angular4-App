@@ -81,6 +81,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
+    public GSTIN_OR_TRN: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
@@ -150,6 +151,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm.get('openingBalanceType').patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+            } else if (!a) {
+                this.addAccountForm.get('openingBalance').patchValue('0');
+            }
+        });
+        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+            if (!a) {
+                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
             }
         });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
@@ -219,6 +227,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.formFields[res.fields[key].name] = [];
                     this.formFields[res.fields[key].name] = res.fields[key];
                 });
+                this.GSTIN_OR_TRN = res.fields[0].label;
 
                 // Object.keys(res.applicableTaxes).forEach(key => {
                 //     this.taxesList.push({ label: res.applicableTaxes[key].name, value: res.applicableTaxes[key].uniqueName, isSelected: false });
@@ -390,8 +399,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     gstForm.get('state').get('code').patchValue(s.value);
                     // statesEle.setDisabledState(true);
                 } else {
-                    gstForm.get('stateCode').patchValue(null);
-                    gstForm.get('state').get('code').patchValue(null);
+                    if (this.isIndia) {
+                        gstForm.get('stateCode').patchValue(null);
+                        gstForm.get('state').get('code').patchValue(null);
+                    }
                     // statesEle.setDisabledState(false);
                     this._toaster.clearAllToaster();
                     if (this.formFields['taxName']) {
@@ -401,9 +412,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         } else {
             // statesEle.setDisabledState(false);
-            gstForm.get('stateCode').patchValue(null);
-            gstForm.get('state').get('code').patchValue(null);
-
+            if (this.isIndia) {
+                gstForm.get('stateCode').patchValue(null);
+                gstForm.get('state').get('code').patchValue(null);
+            }
         }
     }
 
@@ -415,7 +427,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public openingBalanceClick() {
         if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
-            this.addAccountForm.get('openingBalance').setValue(undefined);
+            this.addAccountForm.get('openingBalance').setValue('0');
         }
     }
 
@@ -536,6 +548,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public selectCountry(event: IOption) {
         if (event) {
+            this.store.dispatch(this._generalActions.resetStatesList());
+            this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
