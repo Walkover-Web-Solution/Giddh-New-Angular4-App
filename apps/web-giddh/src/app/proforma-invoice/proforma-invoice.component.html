@@ -2544,7 +2544,7 @@
 
 <!-- region models section -->
 <!-- open account aside -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
+<div class="aside-overlay" (click)="saveTaxes()" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
      asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
@@ -2613,7 +2613,7 @@
 </ng-template>
 <!-- endregion -->
 
-<ng-template let-entry #otherTaxesModal>
+<ng-template let-entry #otherTaxesModal >
     <div id="top0">
         <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
                                     [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal"
