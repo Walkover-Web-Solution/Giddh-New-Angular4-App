@@ -598,15 +598,15 @@
                                     "with": "apps/web-giddh/src/environments/environment.stage.cordova.ts"
                                 }
                             ],
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
-                            "sourceMap": true,
+                            "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": false,
+                            "aot": true,
                             "extractLicenses": true,
                             "vendorChunk": true,
-                            "buildOptimizer": false
+                            "buildOptimizer": true
                         },
                         "prod": {
                             "outputPath": "apps/giddh-cordova/giddh/www",
