@@ -101,8 +101,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    // this.resetData();
-
     this._generalServices.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
       this.mc.handleEvents(s.name, s.payload);
 
