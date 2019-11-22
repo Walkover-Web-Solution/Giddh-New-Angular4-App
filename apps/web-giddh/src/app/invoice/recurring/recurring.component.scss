@@ -129,6 +129,11 @@
   margin-right: 0 !important;
 }
 }
+@media(max-width:767px){
+    .recurring-container{
+     margin-top: 60px;
+}
+}
 @media(max-width:530px){
   .input-grp-dateRangePicker.form-inline .form-group {
     display: inline-block;
