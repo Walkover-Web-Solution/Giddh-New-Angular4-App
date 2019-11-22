@@ -92,10 +92,10 @@
 
 
                                         <perfect-scrollbar class="" [scrollIndicators]="true">
-                                            <ul class="sub-list" *ngIf="companyList && companyList.length">
+                                            <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
                                                 <li class="cmp posrelative headerTooltip"
-                                                    *ngFor="let cmp of companyList; let i = index"
+                                                    *ngFor="let cmp of companyListForFilter; let i = index"
                                                     [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                                     (keydown.enter)="changeCompany(cmp.uniqueName)"
                                                     (click)="changeCompany(cmp.uniqueName)">
@@ -374,10 +374,10 @@
 
                                 <perfect-scrollbar class="" [scrollIndicators]="true">
 
-                                    <ul class="sub-list" *ngIf="companyList && companyList.length">
+                                    <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
                                         <li class="cmp posrelative headerTooltip"
-                                            *ngFor="let cmp of companyList; let i = index"
+                                            *ngFor="let cmp of companyListForFilter; let i = index"
                                             [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                             (keydown.enter)="changeCompany(cmp.uniqueName)"
                                             (click)="changeCompany(cmp.uniqueName)">
