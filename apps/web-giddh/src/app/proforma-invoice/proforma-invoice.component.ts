@@ -45,7 +45,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon } from '../models/api-models/Invoice';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import {CompanyResponse, StateDetailsRequest, TaxResponse} from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -73,6 +73,7 @@ import { GeneralService } from '../services/general.service';
 import { LoaderState } from "../loader/loader";
 import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
+import {createSelector} from "reselect";
 
 const THEAD_ARR_READONLY = [
     {
@@ -291,6 +292,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private useCustomInvoiceNumber: boolean;
     /** True, if the invoice generation request is received from previous page's modal */
     private isInvoiceRequestedFromPreviousPage: boolean;
+    public selectedCompany: any;
 
     constructor(
         private modalService: BsModalService,
@@ -389,6 +391,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ngOnInit() {
         this.autoFillShipping = true;
         this.isUpdateMode = false;
+
+        this.store.select(s => {
+            if (!s.session.companies) {
+                return;
+            }
+            s.session.companies.forEach(cmp => {
+                if (cmp.uniqueName === s.session.companyUniqueName) {
+                    this.selectedCompany = cmp;
+                }
+            });
+        }).pipe(takeUntil(this.destroyed$)).subscribe();
 
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
@@ -3188,7 +3201,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private showGstAndTrnUsingCountryName(name: string) {
         // this is only limited to sales and cash invoice
-        if (this.isSalesInvoice || this.isCashInvoice) {
+        /*if (this.isSalesInvoice || this.isCashInvoice) {
             switch (name) {
                 case 'India':
                     this.showGSTINNo = true;
@@ -3211,6 +3224,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             this.showGSTINNo = true;
+            this.showTRNNo = false;
+        }*/
+
+        if(this.selectedCompany.country === name) {
+            if(name === 'India') {
+                this.showGSTINNo = true;
+                this.showTRNNo = false;
+            } else if(name === 'United Arab Emirates') {
+                this.showGSTINNo = false;
+                this.showTRNNo = true;
+            }
+        } else {
+            this.showGSTINNo = false;
             this.showTRNNo = false;
         }
     }
