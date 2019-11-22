@@ -48,6 +48,7 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import {download} from "@giddh-workspaces/utils";
 
 @Component({
     selector: 'ledger',
@@ -893,7 +894,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                return saveAs(blob, d.body.name);
+                download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -910,8 +911,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
+                debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+                download(`${activeAccount.name} - ${invoiceName}.pdf`,blob, 'application/pdf');
             } else {
                 this._toaster.errorToast(d.message);
             }

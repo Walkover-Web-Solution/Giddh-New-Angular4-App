@@ -2,34 +2,34 @@
  * NativeScript helpers
  */
 
-declare var NSObject, NSString, android, java, window,device;
+declare var NSObject, NSString, android, java, window, device, cordova;
 
 /**
  * Determine if running on native iOS mobile app
  */
 export function isIOS() {
-  return typeof NSObject !== 'undefined' && typeof NSString !== 'undefined';
+    return typeof NSObject !== 'undefined' && typeof NSString !== 'undefined';
 }
 
 /**
  * Determine if running on native Android mobile app
  */
 export function isAndroid() {
-  return typeof android !== 'undefined' && typeof java !== 'undefined';
+    return typeof android !== 'undefined' && typeof java !== 'undefined';
 }
 
 /**
  * Determine if running on native iOS or Android mobile app
  */
 export function isNativeScript() {
-  return isIOS() || isAndroid();
+    return isIOS() || isAndroid();
 }
 
 /**
  * Electron helpers
  */
 export function isElectron() {
-  return typeof window !== 'undefined' && window.process && window.process.type;
+    return typeof window !== 'undefined' && window.process && window.process.type;
 }
 
 /**
@@ -37,6 +37,85 @@ export function isElectron() {
  */
 export function isCordova() {
     return typeof window !== 'undefined' && !!window.cordova;
+}
+
+export function download(filename, data, mimeType) {
+    const blob = data;
+    if (window.cordova && cordova.platformId !== "browser") {
+        document.addEventListener("deviceready", () => {
+            debugger;
+            let storageLocation = "";
+
+            switch (device.platform) {
+                case "Android":
+                    storageLocation = cordova.file.externalDataDirectory;
+                    break;
+
+                case "iOS":
+                    storageLocation = cordova.file.documentsDirectory;
+                    break;
+            }
+
+            const folderPath = storageLocation;
+
+            window.resolveLocalFileSystemURL(
+                folderPath,
+                (dir) => {
+                    dir.getFile(
+                        filename,
+                        {
+                            create: true
+                        },
+                        (file) => {
+                            debugger;
+                            file.createWriter(
+                                (fileWriter) => {
+                                    debugger;
+                                    fileWriter.write(blob);
+
+                                    fileWriter.onwriteend = () => {
+                                        debugger;
+                                        const url = file.toURL();
+                                        cordova.plugins.fileOpener2.open(url, mimeType, {
+                                            error: (err) => {
+                                                debugger;
+                                                console.error(err);
+                                                alert("Unable to download");
+                                            },
+                                            success: () => {
+                                                debugger;
+                                                console.log("success with opening the file");
+                                            }
+                                        });
+                                    };
+
+                                    fileWriter.onerror = (err) => {
+                                        alert("Unable to download");
+                                        console.error(err);
+                                    };
+                                },
+                                (err) => {
+                                    // failed
+                                    alert("Unable to download");
+                                    console.error(err);
+                                }
+                            );
+                        },
+                        (err) => {
+                            alert("Unable to download");
+                            console.error(err);
+                        }
+                    );
+                },
+                (err) => {
+                    alert("Unable to download");
+                    console.error(err);
+                }
+            );
+        });
+    } else {
+        saveAs(blob, filename);
+    }
 }
 
 
@@ -50,8 +129,8 @@ export function isIOSCordova() {
 //   - "Tizen"
 //   - "Mac OS X"
     debugger;
-    var devicePlatform = device.platform;
-    return isCordova() && device.platform==="iOS";
+    const devicePlatform = device.platform;
+    return isCordova() && device.platform === "iOS";
 }
 
 /**
@@ -67,7 +146,7 @@ export function isAndroidCordova() {
 //   - "Tizen"
 //   - "Mac OS X"
     debugger;
-    var devicePlatform = device.platform;
-    return isCordova() && device.platform==="Android";
+    const devicePlatform = device.platform;
+    return isCordova() && device.platform === "Android";
 }
 
