@@ -215,8 +215,10 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-  background: #ff5f00;
-  color: #fff;
+    background-color: #36396d;
+    margin-bottom: 15px;
+    border-radius: 0;
+    color: #fff;
 }
 
 :host ::ng-deep .btn-success:hover {
@@ -262,10 +264,6 @@ h1 {
   justify-content: space-evenly;
 }
 
-.login_box {
-  background: #FFF8EA url('/assets/images/banner-grid-design.png') repeat;
-  padding: 20px 70px;
-}
 
 .login_box h1 {
   color: #0f0f27;
@@ -289,14 +287,14 @@ small {
 /* social_login */
 
 .social_login {
-  overflow: hidden;
+  margin-bottom: 20px;
   display: flex;
 }
 
 .social_login li {
-  list-style: none;
-  display: inline-block;
-  margin-right: 15px;
+    list-style: none;
+    display: inline-block;
+    margin-right: 15px;
 }
 
 .social_login li a {
@@ -310,12 +308,18 @@ small {
 }
 
 .google_ico a {
-  color: #fff;
-  padding-left: 40px !important;
+    color: #fff;
+    padding-left: 40px !important;
+    background-color: #5192F1 !important;
+    width: 240px !important;
+    border-radius: 1px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+    border: 0px !important;
 }
 
 .google_ico span {
-  padding: 0 15px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* social icon */
@@ -332,13 +336,13 @@ small {
 }
 
 .ico-google {
-  height: 38px;
-  position: absolute;
-  width: 40px;
-  left: 0;
-  background: #fff8eb;
-  line-height: 38px;
-  vertical-align: middle;
+    height: 40px;
+    position: absolute;
+    width: 40px;
+    left: 0;
+    line-height: 38px;
+    vertical-align: middle;
+    background: #fff;
 }
 
 .ico-google img {
@@ -348,9 +352,10 @@ small {
 
 .login_option,
 .login_option a {
-  color: #0c5fc1;
-  margin-top: 55px;
-  font-weight: 500;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #36396e;
+    font-size: .9em;
 }
 
 .login_option a {
@@ -472,6 +477,68 @@ small {
   transform: rotate(-90deg);
   right: inherit;
 }
+
+.login {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login_left {
+    height: 100vh;
+    width: 100%;
+    background: #36396f;
+}
+.login_right {
+    width: 100%;
+    background-image: url(http://staginglabs.in/v2giddh/wp-content/uploads/2019/11/Login-Page-Image.png);
+    height: 100vh;
+    justify-content: flex-start;
+    background-position: top right;
+    display: flex;
+    align-items: center;
+}
+.giddh_login {
+    margin-left: -245px;
+    width: 495px;
+}
+.giddh_login_inner {
+    max-width: 476px;
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.logo_login {
+    background-color: #36396e;
+    height: 98px;
+    display: flex;
+    align-items: center;
+    padding: 35px;
+    position: relative;
+}
+.accounting_space {
+    padding: 30px;
+    border-radius: 10px 10px 0 0;
+    background: #fff;
+}
+.accounting_space h1 {
+    color: #36396e;
+    font-weight: 500;
+    font-size: 20px;
+    font-weight: bold;
+}
+.account {
+    background-color: #e6e7e9;
+    font-family: opensans-semibold;
+    border-radius: 0;
+    font-size: 14px;
+    width: 108px;
+    margin-left: 15px;
+    color: #000;
+    font-weight: 500;
+}
+
 
 @media only screen and (max-width: 1200px) {
   .slide_content {
