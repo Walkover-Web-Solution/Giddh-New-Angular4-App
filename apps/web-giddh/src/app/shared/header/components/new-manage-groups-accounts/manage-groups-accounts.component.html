@@ -12,7 +12,7 @@
     <div class="pull-right mrR3 searchBarWrapper">
       <div class="form-inline">
         <div class="form-group searchBar">
-          <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString" (keyup)="searchGroups(grpSrch.value)"
+          <input type="text" name="grpSrch" #grpSrch id="grpSrch"  [(ngModel)]="searchString" (keyup)="searchGroups(grpSrch.value)"
             class="form-control" placeholder="Search accounts" trial-accordion="search" [style.width.px]="260" />
           <a href="javascript:void(0);" class="pos-abs btn-link" (click)="resetGroupSearchString()"
             *ngIf="grpSrch.value">Clear</a>
