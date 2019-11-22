@@ -32,7 +32,7 @@
 
           <label>Payment Mode <sup>*</sup></label>
 
-          <sh-select name="accountUniqueName" [options]="paymentMode"
+          <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
                      [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
                      [placeholder]="'Select Account'" [notFoundLink]="false"
                      [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true"

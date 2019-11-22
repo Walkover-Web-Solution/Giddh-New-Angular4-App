@@ -14,6 +14,9 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
+import {AccountService} from "../../../../services/account.service";
+import {INameUniqueName} from "../../../../models/api-models/Inventory";
+import {GeneralService} from "../../../../services/general.service";
 
 @Component({
     selector: 'invoice-payment-model',
@@ -54,12 +57,16 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public showCurrencyValue: boolean;
     public accountCurrency: any;
     public autoSaveIcon: boolean;
+    public paymentModes$: Observable<IOption[]> = observableOf([]);
 
     constructor(
         private store: Store<AppState>,
         private _settingsTagActions: SettingsTagActions,
-        private _ledgerService: LedgerService
+        private _ledgerService: LedgerService,
+        private _accountService: AccountService,
+        private _generalService: GeneralService
     ) {
+        this.loadPaymentModes();
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
 
         this.paymentActionFormObj = new InvoicePaymentRequest();
@@ -84,9 +91,28 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 });
                 this.paymentMode = paymentMode;
                 this.originalPaymentMode = paymentMode;
+            } else {
+                this.paymentMode = [];
+                this.originalPaymentMode = [];
             }
         });
     }
+
+    public provideStrings = (arr: any[]) => {
+        let o = {nameStr: [], uNameStr: []};
+        let b = {nameStr: '', uNameStr: ''};
+        try {
+            arr.forEach((item: INameUniqueName) => {
+                o.nameStr.push(item.name);
+                o.uNameStr.push(item.uniqueName);
+            });
+            b.nameStr = o.nameStr.join(', ');
+            b.uNameStr = o.uNameStr.join(', ');
+        } catch (error) {
+            //
+        }
+        return b;
+    };
 
     public ngOnInit() {
         this.store.pipe(select(s => s.settings.tags), takeUntil(this.destroyed$)).subscribe((tags => {
@@ -102,6 +128,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
+            }
+        });
+
+        this._generalService.invokeEvent.subscribe(value => {
+            if (value === 'loadPaymentModes') {
+                this.loadPaymentModes();
             }
         });
     }
@@ -175,6 +207,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(c: SimpleChanges) {
         if (c.selectedInvoiceForPayment.currentValue) {
+            this.loadPaymentModes();
             let paymentModeChanges: IOption[] = [];
             this.originalPaymentMode.forEach(payMode => {
                 if (!payMode.additional.currencySymbol || payMode.additional.currencySymbol === this.baseCurrencySymbol || payMode.additional.currencySymbol === c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol) {
@@ -237,5 +270,29 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public focusAmountField() {
         this.amountField.nativeElement.focus();
+    }
+
+    public loadPaymentModes() {
+        this._accountService.GetFlattenAccounts().subscribe((res) => {
+            if (res.status === 'success') {
+                let arr = res.body.results;
+                arr.map((item: any) => {
+                    let o: any = this.provideStrings(item.parentGroups);
+                    item.nameStr = o.nameStr;
+                    item.uNameStr = o.uNameStr;
+                    return item;
+                });
+
+                let paymentMode: IOption[] = [];
+                arr.forEach((item) => {
+                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
+                    if (findBankIndx !== -1) {
+                        paymentMode.push({label: item.name, value: item.uniqueName, additional: {parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol}});
+                    }
+                });
+
+                this.paymentModes$ = observableOf(paymentMode);
+            }
+        });
     }
 }

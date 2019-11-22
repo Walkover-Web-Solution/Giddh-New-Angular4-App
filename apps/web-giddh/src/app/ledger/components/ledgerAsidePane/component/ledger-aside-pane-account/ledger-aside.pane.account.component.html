@@ -26,7 +26,7 @@
 
             <div class="">
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flattenGroupsArray" [fetchingAccUniqueName$]="fetchingAccUniqueName$" (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                    [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                    [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
                 </account-add-new-details>
             </div>
         </div>

@@ -30,7 +30,8 @@
 
 
             <account-add-new-details *ngIf="activeGroupUniqueName && !isUpdateAccount" class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
+                [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                [showBankDetail]="showBankDetail">
             </account-add-new-details>
 
             <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount" [activeGroupUniqueName]="activeGroupUniqueName" [isGstEnabledAcc]="isGstEnabledAcc" [activeAccount$]="activeAccount$" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"

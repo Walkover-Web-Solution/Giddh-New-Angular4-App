@@ -85,10 +85,18 @@
    .ContactFromWrap .button-group {}
 
    .contactForm,
-   .otherFormWrap {
+   .otherFormWrap,
+   .bankDetialsForm {
        padding-top: 15px;
    }
 
    .otherForm .btn-pink {
        display: block;
+   }
+
+   #asidePaneFormTabs ul.nav.nav-tabs {
+       display: flex;
+       align-items: flex-start;
+       flex-direction: row-reverse;
+       justify-content: flex-end;
    }

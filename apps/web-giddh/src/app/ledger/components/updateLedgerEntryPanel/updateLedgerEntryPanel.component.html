@@ -35,7 +35,7 @@
     <!-- endregion -->
 
     <!-- region main body -->
-    <div class="modal-body" [hidden]="isChangeAcc">
+    <div class="modal-body" [hidden]="isChangeAcc" *ngIf="!(isTxnUpdateInProcess$ | async)">
 
         <!-- region transactions -->
         <div class="ledgHead entry-popup">
@@ -875,3 +875,9 @@
 
 </ng-template>
 <!-- endregion -->
+
+<!--loading-->
+<div class="no-data mrT2 d-flex" *ngIf="(isTxnUpdateInProcess$ | async)"
+     style="justify-content: center;align-items: center">
+    <div class="giddh-spinner vertical-center-spinner"></div>
+</div>

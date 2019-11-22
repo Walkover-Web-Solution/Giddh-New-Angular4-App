@@ -53,7 +53,7 @@ font-size: 14px;
 }
 .branchCard {
     background-color: #EEEFF1;
-
+    min-height: 340px;
     margin-bottom: 15px;
     font-size: 14px;
 
@@ -71,8 +71,12 @@ font-size: 14px;
 .cardBasicDetails h2 {
     font-size: 16px;
     color: #1A237E;
-    font-family: opensans-bold;
+    font-family: 'opensans-bold';
     margin-bottom: 12px;
+        white-space: normal;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    width: 90%;
 }
 .cardBasicDetails {
     padding: 20px;
@@ -82,8 +86,37 @@ font-size: 14px;
     padding: 20px;
 }
 .branchSalesDetails label {
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold';
     margin-bottom: 10px;
+}
+.unlink a{
+    color: #5B64C9 !important;
+    cursor: pointer;
+}
+
+.cardBasicDetails ul.dropdown-menu{
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 5px;
+    left: auto !important;
+    right: 0 !important;
+    overflow: hidden;
+}
+.cardBasicDetails .dropdown-menu > li > a {
+    padding: 5px 10px;
+    cursor: default;
+}
+.cardBasicDetails a#button-basic {
+    color: #333;
+    font-size: 16px;
+        width: 32px;
+    height: 32px;
+    display: inline-block;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 2;
 }
 @media(max-width:375px){
   .grey_clr button.btn.btn-default {

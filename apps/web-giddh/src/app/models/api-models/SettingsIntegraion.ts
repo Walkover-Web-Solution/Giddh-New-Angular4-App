@@ -81,4 +81,10 @@ export class PaymentClass {
   public userId :string;
   public accountNo : string;
   public accountUniqueName : string;
+  constructor() {
+      this.corpId = '';
+      this.userId = '';
+      this.accountNo = '';
+      this.accountUniqueName = '';
+  }
 }

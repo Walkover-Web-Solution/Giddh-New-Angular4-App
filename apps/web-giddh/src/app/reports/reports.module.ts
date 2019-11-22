@@ -5,7 +5,7 @@ import { ReportsDetailsComponent } from './components/report-details-components/
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { Options } from 'highcharts';
-import { BsDropdownModule, DatepickerModule, } from 'ngx-bootstrap';
+import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
 
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ReportsGraphComponent } from './components/report-graph-component/report.graph.component';
@@ -58,7 +58,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
     CurrencyModule,
     AccountDetailModalModule,
     ReactiveFormsModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    TooltipModule
   ]
 })
 

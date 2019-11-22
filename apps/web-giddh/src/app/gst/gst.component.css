@@ -37,8 +37,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
     border-color: #5B64C9 !important;
-    background: #e5e5e5;
-    color: #5B64C9;
+    background: #5B64C9;
+    color: #ffffff;
 
 }
 

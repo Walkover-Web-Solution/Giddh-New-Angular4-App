@@ -1,32 +1,33 @@
-import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {ModalDirective} from 'ngx-bootstrap';
-import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
-import {LocationService} from '../../../../services/location.service';
-import {CompanyActions} from '../../../../actions/company.actions';
-import {GeneralActions} from '../../../../actions/general/general.actions';
-import {LoginActions} from '../../../../actions/login.action';
-import {CommonActions} from '../../../../actions/common.actions';
-import {select, Store} from '@ngrx/store';
-import {Router} from '@angular/router';
-import {AuthService} from '../../../../theme/ng-social-login-module/index';
-import {GeneralService} from '../../../../services/general.service';
-import {AuthenticationService} from '../../../../services/authentication.service';
-import {AppState} from '../../../../store';
+import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap';
+import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
+import { LocationService } from '../../../../services/location.service';
+import { CompanyActions } from '../../../../actions/company.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
+import { LoginActions } from '../../../../actions/login.action';
+import { CommonActions } from '../../../../actions/common.actions';
+import { select, Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../../theme/ng-social-login-module/index';
+import { GeneralService } from '../../../../services/general.service';
+import { AuthenticationService } from '../../../../services/authentication.service';
+import { AppState } from '../../../../store';
 import {
-    CompanyCreateRequest,
+    CompanyRequest,
     CompanyResponse,
     SocketNewCompanyRequest,
-    StateDetailsRequest
+    StateDetailsRequest,
+    CompanyCreateRequest
 } from '../../../../models/api-models/Company';
-import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
-import {CompanyService} from '../../../../services/companyService.service';
-import {ToasterService} from '../../../../services/toaster.service';
-import {userLoginStateEnum} from '../../../../models/user-login-state';
-import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels';
-import {NgForm} from '@angular/forms';
-import {CountryRequest} from "../../../../models/api-models/Common";
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { CompanyService } from '../../../../services/companyService.service';
+import { ToasterService } from '../../../../services/toaster.service';
+import {  userLoginStateEnum } from '../../../../models/user-login-state';
+import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
+import { NgForm } from '@angular/forms';
+import { CountryRequest } from "../../../../models/api-models/Common";
 import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
@@ -45,7 +46,44 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
-    public company: CompanyCreateRequest = new CompanyCreateRequest();
+    public company: CompanyCreateRequest = {
+        name: '',
+        country: '',
+        phoneCode: '',
+        contactNo: '',
+        uniqueName: '',
+        isBranch: false,
+        subscriptionRequest: {
+            planUniqueName: '',
+            subscriptionId: '',
+            userUniqueName: '',
+            licenceKey: ''
+        },
+        addresses: [],
+        businessNature: '',
+        businessType: '',
+        address: '',
+        industry: '',
+        baseCurrency: '',
+        isMultipleCurrency: false,
+        city: '',
+        pincode: '',
+        email: '',
+        taxes: [],
+        userBillingDetails: {
+            name: '',
+            email: '',
+            mobile: '',
+            gstin: '',
+            state: '',
+            address: '',
+            autorenew: ''
+        },
+        nameAlias: '',
+        paymentId: '',
+        amountPaid: '',
+        razorpaySignature: ''
+    };
     public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
     public companies$: Observable<CompanyResponse[]>;
     public isCompanyCreationInProcess$: Observable<boolean>;
@@ -58,7 +96,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public countryCurrency: any[] = [];
     public isMobileNumberValid: boolean = false;
-    public createNewCompanyObject: CompanyCreateRequest = new CompanyCreateRequest();
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isNewUser: boolean = false;
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
@@ -186,7 +224,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     previousState = se;
                 });
                 if (previousState) {
-                    this._route.navigate([`pages/${previousState}`]);
+                    if (!this.createBranch) {
+                        this._route.navigate([`pages/${previousState}`]);
+                    }
                 }
                 this.closeCompanyModal.emit();
             } else {
@@ -324,7 +364,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({label: res[key].code, value: res[key].code});
+                    this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -337,12 +377,18 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
                 this.store.dispatch(this.commonActions.GetCallingCodes());
             }
         });
+    }
+
+    public removeCompanySessionData() {
+        this._generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 }

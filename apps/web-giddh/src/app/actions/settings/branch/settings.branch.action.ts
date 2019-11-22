@@ -53,7 +53,7 @@ export class SettingsBranchActions {
 	public RemoveBranch$: Observable<Action> = this.action$
 		.ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH).pipe(
 			switchMap((action: CustomActions) => this.settingsBranchService.RemoveBranch(action.payload)),
-			map(response => this.CreateBranchesResponse(response)));
+			map(response => this.RemoveBranchResponse(response)));
 
 	@Effect()
 	public RemoveBranchResponse$: Observable<Action> = this.action$
@@ -65,8 +65,10 @@ export class SettingsBranchActions {
 				} else {
 					this.toasty.successToast(data.body);
 				}
-				let branchFilterRequest = new BranchFilterRequest();
-				return this.GetALLBranches(branchFilterRequest);
+				return {
+					type: SETTINGS_BRANCH_ACTIONS.REMOVED_BRANCH_RESPONSE,
+					payload: true
+				};
 			}));
 
 	@Effect()
@@ -127,6 +129,12 @@ export class SettingsBranchActions {
 		return {
 			type: SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY_RESPONSE,
 			payload: value
+		};
+	}
+
+	public ResetBranchRemoveResponse(): CustomActions {
+		return {
+			type: SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE
 		};
 	}
 

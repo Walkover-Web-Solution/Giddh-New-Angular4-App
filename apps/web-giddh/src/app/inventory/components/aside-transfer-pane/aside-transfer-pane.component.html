@@ -1,53 +1,60 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)"
-    *ngIf="selectedAsideView=='mainview'">X</button>
-  <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="selectedAsideView!='mainview'"><i
-      class="fa fa-arrow-left"></i></button>
-  <div [ngSwitch]="selectedAsideView">
-    <ng-container *ngSwitchCase="'inward'">       
-      <transfer-inward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-        [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
-      </transfer-inward-note>
-    </ng-container>
-    <ng-container *ngSwitchCase="'outward'">
-      
-      <transfer-outward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-      [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
-      </transfer-outward-note>
-    </ng-container>
-    <ng-container *ngSwitchCase="'transfer'">
-      
-      <transfer-notes [stockList]="stockList$ | async" [userList]="userList$ | async"
-      [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)" (onCancel)="onCancel()">
-      </transfer-notes>
-    </ng-container>
-    <ng-container *ngSwitchCase="'createStock'">
-      <div class="pdT1">
-        <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
-      </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="'createAccount'">
-      <transfer-inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></transfer-inventory-user>
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      <div class="aside-body flexy-child vmiddle" vr-item>
-        <div class="pd1 alC">
-          <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward Note</button>
-        </div>
-        <div class="pd1 alC">
-          <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward Note</button>
-        </div>
-        <div class="pd1 alC">
-          <button type="button" class="btn btn-lg btn-primary" (click)="selectView('transfer')">Transfer Note</button>
-        </div>
-        <div class="pd1 alC">
-          <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create Stock</button>
-        </div>
-        <div class="pd1 alC">
-          <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
-            Account</button>
-        </div>
-      </div>      
-    </ng-container>
-  </div>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)"
+        *ngIf="selectedAsideView=='mainview'">X</button>
+    <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="selectedAsideView!='mainview'"><i
+            class="fa fa-arrow-left"></i></button>
+    <div [ngSwitch]="selectedAsideView">
+        <ng-container *ngSwitchCase="'inward'">
+            <transfer-inward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
+                (onCancel)="onCancel()">
+            </transfer-inward-note>
+        </ng-container>
+        <ng-container *ngSwitchCase="'outward'">
+
+            <transfer-outward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
+                (onCancel)="onCancel()">
+            </transfer-outward-note>
+        </ng-container>
+        <ng-container *ngSwitchCase="'transfer'">
+
+            <transfer-notes [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)"
+                (onCancel)="onCancel()">
+            </transfer-notes>
+        </ng-container>
+        <ng-container *ngSwitchCase="'createStock'">
+            <div class="pdT1">
+                <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'createAccount'">
+            <transfer-inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></transfer-inventory-user>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <div class="aside-body flexy-child vmiddle asidePanelLedger" vr-item>
+                <div class="pd1 alC">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward
+                        Note</button>
+                </div>
+                <div class="pd1 alC">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward
+                        Note</button>
+                </div>
+                <div class="pd1 alC">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('transfer')">Transfer
+                        Note</button>
+                </div>
+                <div class="pd1 alC">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
+                        Stock</button>
+                </div>
+                <div class="pd1 alC">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
+                        Account</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
 </div>

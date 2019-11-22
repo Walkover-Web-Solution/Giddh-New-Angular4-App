@@ -38,7 +38,7 @@
         <!-- img zoom pls uncomment this code -->
         <div class="clearfix img-zoom" *ngIf="isImageZoomView">
             <img [src]="zoomViewImageSrc" alt="">
-            <a class="img-close" (click)="hideZoomImageView()">
+            <a class="img-close pointer" (click)="hideZoomImageView()">
                 <i class="icon-cross"></i>
             </a>
         </div>
@@ -47,9 +47,9 @@
 
     <div class="bg-white p-15">
         <div class="form-group mb-2">
-            <label>Comment</label>
+            <label>Description</label>
             <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
-                      placeholder='Add comments'></textarea>
+                      placeholder='Add Description'></textarea>
         </div>
 
         <div class="row">
@@ -179,7 +179,7 @@
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
     <petty-cash-approve-confirm-dialog
-        [selectedEntryForApprove]="selectedItem"
+        [selectedEntryForApprove]="selectedEntryForApprove"
         [approveEntryRequestInProcess]="approveEntryRequestInProcess"
         (approveEntry)="hideApproveConfirmPopup($event)"
     ></petty-cash-approve-confirm-dialog>
