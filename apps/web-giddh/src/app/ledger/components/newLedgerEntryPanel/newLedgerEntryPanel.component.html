@@ -403,7 +403,7 @@
         </div>
 
         <div class="pull-right">
-            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
+            <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
                    [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput>
           <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}" (click)="onUploadOutput()">
 

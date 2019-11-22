@@ -70,7 +70,7 @@ export function download(filename, data, mimeType) {
                             debugger;
                             file.createWriter(
                                 (fileWriter) => {
-                                    debugger;
+
                                     fileWriter.write(blob);
 
                                     fileWriter.onwriteend = () => {
