@@ -9,6 +9,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
+import {AccountsAction} from "../../../../actions/accounts.actions";
+import {GeneralService} from "../../../../services/general.service";
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -37,11 +39,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public groupAndAccountSearchString$: Observable<string>;
   private groupSearchTerms = new Subject<string>();
 
+  public searchString: any = '';
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef,
-              private renderer: Renderer2) {
+              private renderer: Renderer2, private _generalService: GeneralService) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
     this.groupAndAccountSearchString$ = this.store.select(s => s.groupwithaccounts.groupAndAccountSearchString).pipe(takeUntil(this.destroyed$));
@@ -68,6 +72,18 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     this.groupAndAccountSearchString$.subscribe(s => {
       this.renderer.setProperty(this.groupSrch.nativeElement, 'value', s);
+    });
+
+    this._generalService.invokeEvent.subscribe(value => {
+      console.log(value);
+      if(value[0] === "accountdeleted") {
+        if(this.searchString) {
+          setTimeout(() => {
+            this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
+          }, 2000);
+        }
+      }
     });
   }
 

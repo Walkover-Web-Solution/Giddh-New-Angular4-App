@@ -594,6 +594,7 @@ export class AccountsAction {
         if (action.payload.status === 'error') {
           this._toasty.errorToast(action.payload.message, action.payload.code);
         } else {
+            this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request.groupUniqueName]);
           this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
           this._generalServices.eventHandler.next({name: eventsConst.accountDeleted, payload: action.payload});
           this._toasty.successToast(action.payload.body, '');
