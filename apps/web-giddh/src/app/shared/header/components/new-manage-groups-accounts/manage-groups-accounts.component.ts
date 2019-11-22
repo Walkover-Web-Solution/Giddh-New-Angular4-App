@@ -77,10 +77,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this._generalService.invokeEvent.subscribe(value => {
       if(value[0] === "accountdeleted") {
         if(this.searchString) {
-          setTimeout(() => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
             this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
-          }, 2000);
         }
       }
     });
