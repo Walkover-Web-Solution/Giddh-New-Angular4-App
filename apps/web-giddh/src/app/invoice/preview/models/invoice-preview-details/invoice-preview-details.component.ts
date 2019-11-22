@@ -324,4 +324,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this._cdr.detectChanges();
         }
     }
+
+    public invokeLoadPaymentModes() {
+        this._generalService.invokeEvent.next("loadPaymentModes");
+    }
 }
