@@ -16,6 +16,7 @@ import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
 import {AccountService} from "../../../../services/account.service";
 import {INameUniqueName} from "../../../../models/api-models/Inventory";
+import {GeneralService} from "../../../../services/general.service";
 
 @Component({
     selector: 'invoice-payment-model',
@@ -62,8 +63,10 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         private store: Store<AppState>,
         private _settingsTagActions: SettingsTagActions,
         private _ledgerService: LedgerService,
-        private _accountService: AccountService
+        private _accountService: AccountService,
+        private _generalService: GeneralService
     ) {
+        this.loadPaymentModes();
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
 
         this.paymentActionFormObj = new InvoicePaymentRequest();
@@ -125,6 +128,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
+            }
+        });
+
+        this._generalService.invokeEvent.subscribe(value => {
+            if (value === 'loadPaymentModes') {
+                this.loadPaymentModes();
             }
         });
     }
@@ -198,6 +207,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(c: SimpleChanges) {
         if (c.selectedInvoiceForPayment.currentValue) {
+            this.loadPaymentModes();
             let paymentModeChanges: IOption[] = [];
             this.originalPaymentMode.forEach(payMode => {
                 if (!payMode.additional.currencySymbol || payMode.additional.currencySymbol === this.baseCurrencySymbol || payMode.additional.currencySymbol === c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol) {
@@ -259,6 +269,10 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public focusAmountField() {
+        this.amountField.nativeElement.focus();
+    }
+
+    public loadPaymentModes() {
         this._accountService.GetFlattenAccounts().subscribe((res) => {
             if (res.status === 'success') {
                 let arr = res.body.results;
@@ -280,6 +294,5 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 this.paymentModes$ = observableOf(paymentMode);
             }
         });
-        this.amountField.nativeElement.focus();
     }
 }
