@@ -218,7 +218,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private _breakpointObserver: BreakpointObserver,
     private _generalService: GeneralService,
   ) {
-    this.isProdMode = AppUrl === 'https://app.giddh.com/';
+    this.isProdMode = AppUrl === 'http://app.giddh.com/';
     this.isElectron = isElectron;
     this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
