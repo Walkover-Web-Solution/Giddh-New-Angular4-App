@@ -19,6 +19,7 @@ module.exports = {
       'process.env.AppUrl': JSON.stringify('https://app.giddh.com/'),
       'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
       'process.env.APP_FOLDER': JSON.stringify('app/')
+
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]
