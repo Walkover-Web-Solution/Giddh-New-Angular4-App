@@ -589,6 +589,7 @@ small {
 
   .form_wrapper form {
     margin: 0 auto;
+    width: 100%;
   }
 
   .client_testimonial {
@@ -608,5 +609,19 @@ small {
     top: -12px;
     transform: rotate(-90deg);
     right: inherit;
+  }
+  .account {
+    margin-left: 0px;
+    margin-top: 10px;
+  }
+  .giddh_login {
+    margin-left: 0;
+    width: 100%;
+  }
+  .login_left {
+      display: none;
+  }
+  linkedin_ico {
+    margin-top: 15px;
   }
 }

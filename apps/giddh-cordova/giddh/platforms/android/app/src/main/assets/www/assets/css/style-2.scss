@@ -532,7 +532,7 @@
                 }
 
                 .bold {
-                    font-family: ''opensans-semibold'';
+                    font-family: opensans-semibold;
                 }
 
                 .modal-open {
@@ -1451,7 +1451,11 @@
                     color: #fff;
                     border-color: $border-blue;
                 }
-
+.btn-primary.disabled.focus, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled].focus, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover{
+    background: $border-blue;
+                    color: #fff;
+                    border-color: $border-blue;
+}
                 .btn {
                     padding: 7px 16px;
                     border-radius: 2px;
@@ -2648,7 +2652,7 @@
 
                 .daterangepicker td.active,
                 .daterangepicker td.active:hover {
-                    background-color: #ff5e01 !important;
+                    background-color: #5864C9 !important;
                     border-color: transparent;
                     color: #fff;
                 }
@@ -8083,20 +8087,22 @@ GST filing
 
                 .btn-lg.btn-primary {
                     min-width: 155px;
-                    background: #e5e5e5;
+                    background: #fff;
                     color: #5B64C9;
                     border-radius: 0px;
                     box-shadow: none;
                 }
 
                 .btn-lg.btn-primary:hover {
-                    background: #5B64C9;
+                    background: #5b64c9;
                     color: #ffffff;
                     box-shadow: 0px 4px 4px -3px #afabab;
                     border-radius: 0px;
-                    border-color: #5B64C9;
+                    border-color:#5b64c9;
                 }
-
+                .asidePanelLedger button.btn.btn-lg.btn-primary {
+                    min-width: 170px;
+                }
                 .settingPage ul.nav.nav-tabs {
                     margin-bottom: 15px;
                     padding: 0 0px 0 15px !important;
@@ -8110,7 +8116,7 @@ GST filing
                     padding: 2px 0px;
                     margin-right: 35px;
                     padding-bottom: 7px;
-                    font-size: 16px;
+                    font-size: 14px;
                     color: #333 !important;
                 }
 
@@ -8347,8 +8353,69 @@ GST filing
                     .panel{
                         border-radius: 2px;
                     }
+                    .invoice-modal-content .app-aside-menu-other-taxes:host{
+                     top:60px !important;
+                    }
 
+                    #top0{
+                        top:0 !important;
 
+                    }
+
+                    #top0 app-aside-menu-other-taxes {
+                            top: 0 !important;
+                        }
+                        .invoice-modal-content #top0 app-aside-menu-other-taxes{
+                             top: 60px !important;
+                        }
+                        p.remvBrnchName {
+                            word-break: break-all;
+                            white-space: normal;
+                            display: inline;
+                        }
+                        .asidePanelLedger {
+                            display: flex !important;
+                            vertical-align: middle;
+                            justify-content: center !important;
+                            align-items: center;
+                            height: 100vh;
+                            position: relative !important;
+                            top: 0 !important;
+                            transform: translate(0) !important;
+
+                        }
+                        .asidePanelLedger .btn-lg:hover{
+                            background-color: #5B64C9 !important;
+                            border-color: #5B64C9 !important;
+                            color: #fff !important;
+                        }
+                        .daterangepicker td.active, .daterangepicker td.active:hover {
+                            background-color: #5864C9!important;
+                        }
+                         .theme-green .bs-datepicker-head {
+                            background-color: #5864C9;
+                        }
+                        .theme-green .bs-datepicker-body table td span.selected, .theme-green .bs-datepicker-body table td.selected span, .theme-green .bs-datepicker-body table td span[class*="select-"]:after, .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
+                            background-color: #5864C9;
+                        }
+                        .bs-datepicker-body table.days td.active:not(.select-start):before, .bs-datepicker-body table.days td.in-range:not(.select-start):before, .bs-datepicker-body table.days span.active:not(.select-start):before, .bs-datepicker-body table.days span.in-range:not(.select-start):before {
+                            background: #ebedff;
+                        }
+                        .theme-green .bs-datepicker-body table td.week span {
+                            color: #5864C9;
+                        }
+                        .mobileNumberWidth .menu {
+                            min-width: 90px !important;
+                        }
+                       #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
+                        border-bottom: 1px solid #e0e0e0;
+                        padding: 0 0px 0 0 !important;
+                        background-color: transparent;
+                        z-index: 9;
+                        position: relative;
+                        top: -4px;
+                        margin-bottom: 10px;
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -9060,3 +9127,10 @@ GST filing
                         margin-top: 5px;
                     }
                 }
+@media(min-width:768px){
+     .invoice-modal-content .modal-dialog{
+                                margin: 70px auto;
+                        }
+}
+
+
