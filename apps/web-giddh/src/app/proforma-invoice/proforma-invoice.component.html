@@ -251,14 +251,6 @@
                                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                                                                (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                                placeholder="GSTIN"/>
-                                                                        <input maxLength="15" autocomplete="None"
-                                                                               type="text"
-                                                                               name="billingDetails.gstNumber"
-                                                                               class="form-control input-custom"
-                                                                               *ngIf="showTRNNo"
-                                                                               [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
-                                                                               (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
-                                                                               placeholder="TRN"/>
                                                                     </div>
                                                                 </div>
 
