@@ -1,111 +1,19 @@
-<div class="flex-container">
-  <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png"/> </a>
-  <!-- slide1 -->
-  <div class="slide_content col-xs-7 slide1" [hidden]="selectedBanner !== 'slide1'">
-    <div>
-      <img src="./assets/images/login/img1.png" class="img-responsive"/>
-    </div>
-    <div>
-      <h1>Automatic entries when you receive payments <br/>online from any payment gateway. <span class="hash_tag">#automation</span>
-      </h1>
-    </div>
-    <a href="http://faq.giddh.com/integration/how-to-integrate-razorpay-payment-gateway" target="_blank"
-       class="btn btn-white">Know more</a>
-  </div>
-
-  <!-- slide2 -->
-  <div class="slide_content col-xs-7 slide2" [hidden]="selectedBanner !== 'slide2'">
-    <div class="mrB4">
-      <h1>Giddh handles your accounting seamlessly, wherever you are!</h1>
-    </div>
-    <div>
-      <img src="./assets/images/login/img2.png" class="img-responsive"/>
-    </div>
-
-    <div class="app_ico">
-      <ul>
-        <li class="mrR2"><a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank"><i
-          class="fa fa-android"></i></a></li>
-        <li>
-          <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" class="img_hover">
-            <i class="">
-              <img src="./assets/images/new/ios.svg"/>
-              <img src="./assets/images/new/ios_hover.svg" [style.display]="'none'"/>
-            </i>
-          </a>
-        </li>
-        <h1>Mobile App</h1>
-      </ul>
-      <ul>
-        <li class="mrR2"><a
-          href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe"
-          target="_blank"><i class="fa fa-windows"></i></a></li>
-        <li class="mrR2"><a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg"
-                            target="_blank"><i class="fa fa-apple"></i></a>
-        </li>
-        <!-- <li><a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank"><i
-  class="fa fa-linux"></i></a></li> -->
-        <h1>Desktop App</h1>
-      </ul>
-    </div>
-  </div>
-
-  <!-- slide3 -->
-  <div class="slide_content col-xs-7 slide3" [hidden]="selectedBanner !== 'slide3'">
-    <div>
-      <img src="./assets/images/login/img3.png" class="img-responsive"/>
-    </div>
-    <div>
-      <h1>Send automated electronic receipts and past due payment <br/> reminders by email or SMS. <span
-        class="hash_tag">#automation</span></h1>
-    </div>
-    <a
-      href="http://faq.giddh.com/invoice/send-automated-electronic-receipts-and-past-due-payment-reminders-by-email-or-sms"
-      target="_blank" class="btn btn-white">Know more</a>
-  </div>
-
-  <!-- slide4 -->
-  <div class="slide_content col-xs-7 slide4" [hidden]="selectedBanner !== 'slide4'">
-    <div>
-      <img src="./assets/images/login/img4.png" class="img-responsive"/>
-    </div>
-    <div>
-      <h1><span class="hash_tag">Share your accounts</span> in real time with your<br/> customers and vendors. And the
-        company with your CA</h1>
-    </div>
-    <a href="http://faq.giddh.com/ledger/what-is-magic-link-and-how-to-get-it" target="_blank" class="btn btn-white">Know
-      more</a>
-  </div>
-
-  <!-- slide5 -->
-  <div class="slide_content col-xs-7 slide5" [hidden]="selectedBanner !== 'slide5'">
-    <div>
-      <img src="./assets/images/login/img5.png" class="img-responsive" [style.max-width.px]="500"/>
-    </div>
-    <div>
-      <h1><span class="hash_tag">Import/Sync</span> all your data from <br/>an old accounting software</h1>
-    </div>
-    <a href="http://faq.giddh.com/tally/how-to-sync-your-data-from-tally-to-giddh" target="_blank"
-       class="btn btn-white">Know more</a>
-  </div>
-
-  <!-- show on small device -->
-  <div class="slide_content col-xs-12 on_mobile" [hidden]="true">
-    <div>
-      <h1>Giddh handles your accounting seamlessly, wherever you are! <span class="hash_tag">Download</span></h1>
-    </div>
-
-    <div class="download_app mrT4">
-      <ul>
-        <li><a href="" target="_blank"><i class="fa fa-android"></i>Download</a></li>
-        <li><a href="" target="_blank"><i class="fa fa-apple"></i>Download</a></li>
-      </ul>
-    </div>
-  </div>
+  <!-- <a href="/" class="logo"><img src="./assets/images/new/giddh-logo-white.png"/> </a> -->
 
 
-  <div class="login_box flex col-md-5 col-xs-12">
-    <div class="">
+  <div class="login">
+    <div class="login_left"></div>
+
+    <div class="login_right">
+    <div class="giddh_login">
+    <div class="giddh_login_inner">
+
+    <div class="logo_login">
+        <img src="http://staginglabs.in/v2giddh/wp-content/uploads/2019/11/login-Page-Logo .png" alt="" width="141px">
+    </div>
+
+
+    <div class="accounting_space">
       <h1 class="mrB3">Login to your secure accounting space</h1>
       <div class="form_wrapper" *ngIf="loginUsing">
 
@@ -180,7 +88,7 @@
               Login
             </button>
           </div>
-          <a href="javascript:void(0)" class="pull-right btn-link fs14" (click)="showForgotPasswordModal()">Forgot
+          <a href="javascript:void(0)" class="bold btn-link fs14" (click)="showForgotPasswordModal()">Forgot
             password?</a>
         </form>
         <form class="" *ngIf="isLoginWithPasswordSuccessNotVerified$ | async" id="signupVerifyForm"
@@ -243,7 +151,7 @@
         <li class="google_ico"><a href="javascript:void(0);" (click)="signInWithProviders('google')"><i
           class="ico-google">
           <img src="./assets/images/new/google_ico.svg"/>
-        </i><span>Login with Google</span></a></li>
+        </i><span>Sign in</span></a></li>
         <li class="linkedin_ico" *ngIf="showLinkedInButton"><a href="javascript:void(0);"
                                                                (click)="signInWithProviders('linkedin')"><i
           class="fa fa-linkedin"></i></a></li>
@@ -257,48 +165,16 @@
         <!-- or <a href="javascript:void(0);" (click)="loginUsing = 'mobile';resetForgotPasswordProcess()">Mobile</a> -->
       </div>
 
-      <div class="mrT4">
-        Don't have an account? <a routerLink="/signup" class="btn btn-sm btn-primary mrL">Signup</a>
+      <div class="mrT1">
+        <span class="bold">Don't have an account?</span> <a routerLink="/signup" class="btn account">Signup</a>
       </div>
+    </div>
+    <!-- login right -->
     </div>
   </div>
 </div>
+</div>
 
-
-<!-- <section id="videoBg" class="intro login" style="height: 100%;">
-    <div class="intro-body">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h1 class="brand-heading arvo">Enter your accounting space</h1>
-
-                    <div id="box" class="text-uppercase">
-                        <div class="clearfix mrB1">
-                            <p class="lead ">Sign In or register</p>
-                        </div>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
-              <img src="./assets/images/google-plus-icon.png">
-              connect with Google
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
-              <img src="./assets/images/linkedin-icon.png">
-              Login with LinkedIn
-            </button>
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="showEmailModal()">
-              <i class="glyphicon glyphicon-envelope"></i>
-              connect with Email
-    </button>
-
-                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
-              <i class="glyphicon glyphicon-phone"></i>
-              Login with Mobile
-            </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section> -->
 
 <!--email varify modal  -->
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
@@ -412,38 +288,3 @@
 </div>
 <!-- two way auth popup -->
 
-<!--mobile varify form  -->
-<!-- <div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="noBrdRdsModal">
-                <div class="modal-header">
-                    <h3>Forgot Password</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>
-                </div>
-                <div class="modal-body clearfix">
-                    <form class="col-xs-12" id="forgotPassword" name="forgotPassword" novalidate [formGroup]="forgotPasswordForm" *ngIf="!(isForgotPasswordInProgress$ | async)">
-                        <div class="clearfix form-group">
-                            <input class="form-control" formControlName="userId" type="text" placeholder="Email Id" required />
-                        </div>
-                        <button class="btn btn-sm btn-success pull-right" type="submit" (click)="forgotPassword(forgotPasswordForm.controls['userId'].value)">Reset Password</button>
-                    </form>
-                    <form class="col-xs-12" id="resetPassword" name="resetPassword" novalidate [formGroup]="resetPasswordForm" *ngIf="isForgotPasswordInProgress$ | async">
-                        <div class="row">
-                            <div class="clearfix form-group">
-                                <div class="col-xs-6">
-                                    <input class="form-control" formControlName="verificationCode" type="text" placeholder="Verification Code" required />
-                                </div>
-                                <div class="col-xs-6">
-                                    <input class="form-control" formControlName="newPassword" type="password" placeholder="New Password" required />
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn btn-sm btn-success  pull-right" type="submit" (click)="resetPassword(resetPasswordForm)">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!--mobile verify form  -->
