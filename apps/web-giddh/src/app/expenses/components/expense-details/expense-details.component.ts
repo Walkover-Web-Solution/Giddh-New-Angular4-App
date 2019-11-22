@@ -424,7 +424,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
             this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.debtorsAccountsOptions;
-        } else if (res.pettyCashEntryStatus.entryType === 'purchase') {
+        } else if (res.pettyCashEntryStatus.entryType === 'expense') {
 
             this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
             this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expense';
