@@ -247,12 +247,18 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             accountUniqueName: this.accountEntryPettyCash.particular.uniqueName
         };
 
-        let ledgerRequest = this.updateLedgerComponentInstance.saveLedgerTransaction();
+        let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
         // check if there any validation error occurs from ledger component then don't do any thing just return
         if (!ledgerRequest) {
             this.approveEntryRequestInProcess = false;
             return;
         }
+
+        // delete extra keys from request
+        delete ledgerRequest['ledgerUniqueNames'];
+        delete ledgerRequest['pettyCashEntryStatus'];
+        delete ledgerRequest['pettyCashEntryStatus'];
+        delete ledgerRequest['othersCategory'];
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest}).subscribe(res => {
             this.approveEntryRequestInProcess = false;
@@ -424,7 +430,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
             this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.debtorsAccountsOptions;
-        } else if (res.pettyCashEntryStatus.entryType === 'purchase') {
+        } else if (res.pettyCashEntryStatus.entryType === 'expense') {
 
             this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
             this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expense';

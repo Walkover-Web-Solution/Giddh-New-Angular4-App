@@ -39,7 +39,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 	public moment = moment;
 	public currentData: any[] = [];
 	public previousData: any[] = [];
-	public summaryData: any = {totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0};
+	public summaryData: any = {totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0, highestLabel: '', lowestLabel: ''};
 	public activeCompany: any = {};
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public getCurrentWeekStartEndDate: any = '';
@@ -140,6 +140,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 					});
 				}
 
+				let currentHighest = 0;
+				let currentLowest = 0;
+				let previousHighest = 0;
+				let previousLowest = 0;
+
 				if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
 					this.summaryData.totalCurrent = res.currentClosingBalance.amount;
 				}
@@ -149,11 +154,35 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 				}
 
 				if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
-					this.summaryData.highest = res.previousHighestClosingBalance.amount;
+					previousHighest = res.previousHighestClosingBalance.amount;
+				}
+
+				if (res.currentHighestClosingBalance !== null && res.currentHighestClosingBalance.amount !== null) {
+					currentHighest = res.currentHighestClosingBalance.amount;
+				}
+
+				if (res.previousLowestClosingBalance !== null && res.previousLowestClosingBalance.amount !== null) {
+					previousLowest = res.previousLowestClosingBalance.amount;
 				}
 
 				if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
+					currentLowest = res.currentLowestClosingBalance.amount;
+				}
+
+				if(currentHighest > previousHighest) {
+					this.summaryData.highest = res.currentHighestClosingBalance.amount;
+					this.summaryData.highestLabel = res.currentHighestClosingBalance.dateLabel;
+				} else {
+					this.summaryData.highest = res.previousHighestClosingBalance.amount;
+					this.summaryData.highestLabel = res.previousHighestClosingBalance.dateLabel;
+				}
+
+				if(currentLowest < previousLowest) {
 					this.summaryData.lowest = res.currentLowestClosingBalance.amount;
+					this.summaryData.lowestLabel = res.currentLowestClosingBalance.dateLabel;
+				} else {
+					this.summaryData.lowest = res.previousLowestClosingBalance.amount;
+					this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
 				}
 
 				this.generateChart();

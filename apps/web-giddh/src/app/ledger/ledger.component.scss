@@ -468,6 +468,7 @@ sh-select:focus {
   .daterngoption{
     margin-bottom: 10px;
     text-align:left !important;
+    z-index:1;
   }
   .advanceSearchByDate:before, .advanceSearchByDate:after{
     display:none;
@@ -539,6 +540,12 @@ sh-select:focus {
     .left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
         border-left: 0px solid #ccc !important;
     }
+    .ledgHead.some.transactions-page {
+    margin-top: 50px;
+}
+.ledger-head {
+    margin-top: 0;
+}
 }
 
 @media(min-width:991px){

@@ -1671,8 +1671,7 @@
                                                                    (noResultsClicked)="onNoResultsClicked(entryIdx)"
                                                                    [multiple]="false" [ItemHeight]="67"
                                                                    (onClear)="onClearSalesAccount(transaction)"
-                                                                   [useInBuiltFilterForFlattenAc]="true"
-                                                                   [showClear]="true">
+                                                                   [useInBuiltFilterForFlattenAc]="true">
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
