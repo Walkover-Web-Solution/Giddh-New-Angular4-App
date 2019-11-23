@@ -1164,7 +1164,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.invFormData.accountDetails[type].stateCode = null;
                 this._toasty.clearAllToaster();
-                this._toasty.warningToast('Invalid GSTIN.');
+
+                if(this.showGSTINNo) {
+                    this._toasty.warningToast('Invalid GSTIN.');
+                } else {
+                    this._toasty.warningToast('Invalid TRN.');
+                }
             }
             statesEle.disabled = true;
 
