@@ -181,6 +181,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
+
+                for(let i = 0; i <= 20; i++) {
+                    this.removeGstDetailsForm(0);
+                }
+
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.country) {
                     if (accountDetails.country.countryCode) {
