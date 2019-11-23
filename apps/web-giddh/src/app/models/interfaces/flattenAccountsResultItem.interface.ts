@@ -6,6 +6,9 @@ export interface IFlattenAccountsResultItem extends IAccountsInfo, IHelpersForSe
   applicableTaxes: any[];
   isFixed: boolean;
   parentGroups: INameUniqueName[];
+  currency?: string;
+  currencySymbol?: string;
+  isDummy?: boolean; // added for when we need to add dummy account and want to identify that this is dummy account
 }
 
 export interface IFlattenAccountItem extends IFlattenAccountsResultItem {

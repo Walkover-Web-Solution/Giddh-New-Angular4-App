@@ -30,9 +30,13 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       td {
           vertical-align: middle !important;
       }
+      .customItem {
+      padding-top: 5px;
+
+      }
 
       .customItem:hover {
-          background-color: rgb(244, 245, 248) !important;
+          background-color:#e3e4ed !important;
       }
 
       .customItem {
@@ -41,12 +45,12 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       }
 
       .customItem:hover span {
-          color: rgb(210, 95, 42) !important;
+          color:#5B64C9 !important;
       }
 
-      .multi-select input.form-control {
-          background-image: unset !important;
-      }
+      // .multi-select input.form-control {
+      //     background-image: unset !important;
+      // }
 
       .multi-select .caret {
           display: block !important;

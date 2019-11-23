@@ -1,134 +1,177 @@
 <section class="container nopad"></section>
-<div class="top_bar col-xs-12 bdrB">
+<!-- <div class="top_bar col-xs-12 bdrB">
   <h1 class="section_title">DayBook</h1>
-</div>
+</div> -->
 <div class="container-fluid">
 
 </div>
 
-<div class="transactions-page mrT2 pos-rel clearfix">
+<div class="transactions-page mrT1 pos-rel clearfix">
 
-  <!-- ledger header -->
-  <div class="col-md-12">
-    <div class="row">
-      <div class="col-xs-2 form-group">
-        <label>Period</label>
-        <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions"
-               (hideDaterangepicker)="selectedDate($event)"
-               (applyDaterangepicker)="selectedDate($event)" class="form-control"/>
-      </div>
-      <div class="pull-left form-group">
-        <label class="d-block"> &nbsp; </label>
-        <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button>
-        <button type="button" class="btn btn-success" (click)="go()">GO</button>
-        <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
-          'Expand All'}}
-        </button>
-      </div>
-      <div class="pull-right form-group">
-        <button type="button" class="btn btn-default" (click)="exportDaybook()">Export</button>
-      </div>
+    <!-- ledger header -->
+    <div class="col-md-12">
+        <div class="">
+
+            <div class="form-inline">
+                <div class=" form-group">
+                    <label>Period</label>
+                    <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
+                            daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
+                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                    </span>
+
+                </div>
+                <div class=" form-group">
+                    <label class="d-block"> &nbsp; </label>
+
+                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                        <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
+                    </div>
+
+                    <!-- <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button> -->
+                    <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
+
+                </div>
+                <div class=" form-group">
+                    <label class="d-block"> &nbsp; </label>
+                    <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                              'Expand All'}}
+                    </button>
+
+                </div>
+                <button type="button" class="btn btn-default pull-right" (click)="exportDaybook()">Export</button>
+            </div>
+
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="container-fluid">
-  <div class="box clearfix mrT2">
-    <div class="text-center mrB2">
-      <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
+    <div class="box clearfix mrT2">
+        <div class="text-center mrB2">
+            <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
       <br /> -->
-      <p>Transaction Report</p>
-      <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
-    </div>
+            <p>Transaction Report</p>
+            <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
+        </div>
 
-    <div class="table-container clearfix trial-balance">
+        <div class="table-container clearfix trial-balance">
 
-      <table class="tb-head table basic">
-        <thead>
-        <tr>
-          <th class="col-xs-1">Date</th>
-          <th class="col-xs-3">Particular</th>
-          <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
-          <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
-          <th class="col-xs-2 text-right">Debit Amt</th>
-          <th class="col-xs-2 text-right">Credit Amt</th>
-        </tr>
-        </thead>
-      </table>
+            <table class="tb-head table-bordered table basic">
+                <thead>
+                    <tr>
+                        <th class="col-xs-1">Date</th>
+                        <th class="col-xs-3">Particular</th>
+                        <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
+                        <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
+                        <th class="col-xs-2 text-right">Debit Amt</th>
+                        <th class="col-xs-2 text-right">Credit Amt</th>
+                    </tr>
+                </thead>
 
-      <div>
-        <!-- loop over entries -->
-        <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
-                 (click)="entry.isExpanded = !entry.isExpanded">
-          <div class="row">
-            <div class="col-xs-1 group">{{ entry.entryDate }}</div>
-            <div class="col-xs-3 group">{{ entry.particular.name }}
+                <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
+                    class="daybookTableTbody">
+                    <tr>
+                        <td>{{ entry.entryDate }}</td>
+                        <td>{{ entry.particular.name }}</td>
+                        <td>{{ entry.voucherName }}</td>
+                        <td>{{ entry.voucherNo }}</td>
+                        <td>{{ entry.debitAmount }}</td>
+                        <td>{{ entry.creditAmount }}</td>
+                    </tr>
+                    <ng-container *ngIf="entry !== undefined && entry.isExpanded">
+                        <tr *ngFor="let details of entry.otherTransactions">
+                            <td></td>
+                            <td>{{ details.particular.name }}</td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">
+                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
+                            </td>
+                            <td class="text-right">
+                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+
+            </table>
+
+            <div>
+                <!-- loop over entries -->
+                <!-- <section class="row row-1" *ngFor="let entry of (daybookData$ | async)?.entries"
+                    (click)="entry.isExpanded = !entry.isExpanded">
+                    <div class="row">
+                        <div class="col-xs-1 group">{{ entry.entryDate }}</div>
+                        <div class="col-xs-3 group">{{ entry.particular.name }}
+                        </div>
+                        <div class="col-xs-2 group">{{ entry.voucherName }}
+                        </div>
+                        <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
+                        <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
+                        <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
+                        </div>
+                    </div>
+
+
+                    <ng-container *ngIf="entry.isExpanded">
+                        <section class="row row-2 account" *ngFor="let details of entry.otherTransactions">
+                            <div class="row">
+                                <div class="col-xs-1 account"></div>
+                                <div class="col-xs-3 account" style="padding-left: 15px;">{{ details.particular.name }}
+                                </div>
+                                <div class="col-xs-2 account"></div>
+                                <div class="col-xs-2 account"></div>
+                                <div class="col-xs-2 account text-right">
+                                    <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
+                                </div>
+                                <div class="col-xs-2 account text-right">
+                                    <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
+                                </div>
+                            </div>
+                        </section>
+                    </ng-container>
+
+                </section> -->
+                <!-- loop over entries -->
             </div>
-            <div class="col-xs-2 group">{{ entry.voucherName }}
-            </div>
-            <div class="col-xs-2 group text-right">{{ entry.voucherNo }}</div>
-            <div class="col-xs-2 group text-right">{{ entry.debitAmount }}</div>
-            <div class="col-xs-2 group text-right">{{ entry.creditAmount }}
-            </div>
-          </div>
+        </div>
 
-          <!--entry details container-->
-          <ng-container *ngIf="entry.isExpanded">
-            <section class="row row-2 account" *ngFor="let details of entry.otherTransactions">
-              <div class="row">
-                <div class="col-xs-1 account"></div>
-                <div class="col-xs-3 account" style="padding-left: 15px;">{{ details.particular.name }}</div>
-                <div class="col-xs-2 account"></div>
-                <div class="col-xs-2 account"></div>
-                <div class="col-xs-2 account text-right">
-                  <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
-                </div>
-                <div class="col-xs-2 account text-right">
-                  <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
-                </div>
-              </div>
-            </section>
-          </ng-container>
-          <!--entry details container-->
-        </section>
-        <!-- loop over entries -->
-      </div>
+        <div class=" mrT2 text-center">
+            <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
+                Transactions
+                | {{(daybookData$ | async)?.totalPages}} Pages
+            </small>
+            <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages</small>
+        </div>
+
+        <!-- pagination -->
+        <div style="text-align: center;">
+            <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
+        </div>
+        <!-- pagination -->
+
     </div>
-
-    <div class=" mrT2 text-center">
-      <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}} Transactions
-        | {{(daybookData$ | async)?.totalPages}} Pages
-      </small>
-      <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages</small>
-    </div>
-
-    <!-- pagination -->
-    <div style="text-align: center;">
-      <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
-    </div>
-    <!-- pagination -->
-
-  </div>
 </div>
 
 
 <!-- Advance search popup -->
-<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
-                                    (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+<div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
+                (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+        </div>
     </div>
-  </div>
 </div>
 <!-- ./Advance  search popup -->
 
 <!-- export ladger popup -->
 <div bsModal #exportDaybookModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <export-daybook (closeExportDaybookModal)="hideExportDaybookModal($event)"></export-daybook>
+        </div>
     </div>
-  </div>
 </div>
 <!-- ./ export ladger popup -->

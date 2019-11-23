@@ -208,7 +208,7 @@
                             <label>To: </label><span>{{invoice?.account.name}}</span>
                         </div>
                         <div class="mb-1 ">
-                            <label>Amt: </label><span>{{invoice?.grandTotal}}</span>
+                            <label>Amt: </label><span>{{invoice?.grandTotal?.amountForAccount}}</span>
                         </div>
                         <div><button (click)="removeInvoice(invoice)" class="btn btn-danger ">Remove</button></div>
                     </div>

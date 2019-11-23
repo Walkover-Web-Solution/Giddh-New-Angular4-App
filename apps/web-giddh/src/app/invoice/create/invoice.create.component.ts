@@ -3,7 +3,7 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { Store } from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContentCommon, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { ReciptRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { TaxResponse } from '../../models/api-models/Company';
+import {StatesRequest, TaxResponse} from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 
 let THEAD_ARR_READONLY = [
@@ -98,7 +98,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
   public totalTax: number = 0;
   public tx_discount: number = 0;
   public tx_total: number = 0;
-
+  public states: any[] = [];
 
   @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
   // public methods above
@@ -125,7 +125,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         this.selectedVoucher = a.voucherType;
       }
     });
-
 
     this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
       if (o) {
@@ -222,14 +221,13 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       );
 
     // bind state sources
-    this.store.select(p => p.general.states).pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-      let arr: IOption[] = [];
-      if (states) {
-        states.map(d => {
-          arr.push({label: `${d.name}`, value: d.code});
+    this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.stateList).forEach(key => {
+          this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
         });
+        this.statesSource$ = observableOf(this.states);
       }
-      this.statesSource$ = observableOf(arr);
     });
   }
 

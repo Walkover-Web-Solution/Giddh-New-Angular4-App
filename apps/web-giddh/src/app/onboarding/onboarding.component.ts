@@ -78,7 +78,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
   }
 
   public openScheduleModal() {
-    this.talkSalesModal.show();
+    this._generalService.invokeEvent.next("openschedulemodal");
   }
 
   public loadScript() {

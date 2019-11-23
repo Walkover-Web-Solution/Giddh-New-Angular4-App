@@ -1,23 +1,34 @@
 {
-  "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "dist": true,
-    "dev": true,
-    "node_modules": true,
-    "compiled": true,
-    "packages": true,
-    ".github": true,
-    ".awcache": true,
-    "node_modules_electron": true,
-    "config/old Files": true
-  },
-  "typescript.tsdk": "node_modules/typescript/lib/",
-  "search.exclude": {
-    "**/dist": true,
-  },
-  "mocha.enabled": false
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "dist": true,
+        "dev": true,
+        "node_modules": true,
+        "compiled": true,
+        "packages": true,
+        ".github": true,
+        ".awcache": true,
+        "node_modules_electron": true,
+        "config/old Files": true
+    },
+    "typescript.tsdk": "node_modules/typescript/lib/",
+    "search.exclude": {
+        "**/dist": true
+    },
+    // "[scss]": {
+    //     "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // },
+    // "[typescript]": {
+    //     "editor.defaultFormatter": "vscode.typescript-language-features"
+    // },
+    // "[html]": {
+    //     "editor.defaultFormatter": "vscode.html-language-features"
+    // },
+    // "[css]": {
+    //     "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // }
 }

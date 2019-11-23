@@ -10,7 +10,7 @@ export const COMPANY_API = {
   DELETE_COMPANY: 'company/:companyUniqueName',
   TAX: 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: 'company/:companyUniqueName/users',
-  GET_ALL_STATES: 'states',
+  GET_ALL_STATES: 'country/:country',
   GET_COUPON: 'coupon/:code',
   UNIVERSAL_DATE: 'company/:companyUniqueName/entry-settings',
   CONTACT_FORM: 'contact/submitDetails',
@@ -25,6 +25,7 @@ export const COMPANY_API = {
   GET_OTP: 'company/:companyUniqueName/bank/generateotp?urn=:urn',
   CONFIRM_OTP: 'company/:companyUniqueName/bank/transactionWithOtp',
   GET_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-overview?from=:fromDate&to=:toDate&interval=:interval',
-  GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?'
+  GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 
+  GET_ALL_TAXES: 'ui/taxes?country=:country',
 };

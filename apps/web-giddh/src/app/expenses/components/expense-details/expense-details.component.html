@@ -1,77 +1,88 @@
-<div class="clearfix p-15">
-    <div class="row">
-        <div class="col-sm-6">
-            <p class="bold mb-05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
-        </div>
-        <div class="col-sm-6 text-right xs-left">
-            <button type="button" class="mb-05 btn btn-success" disabled>Approve</button>
-            <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
-            <span class="close-modal cp" (click)="closeDetailsMode()">
+<div *ngIf="ispPettycashEntrySuccess$ | async">
+    <div class="clearfix p-15">
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="bold mb-05">{{selectedItem?.entryDate}} | {{selectedItem.baseAccount.name}}</p>
+            </div>
+            <div class="col-sm-6 text-right xs-left">
+                <button type="button" class="mb-05 btn btn-success" (click)="showApproveConfirmPopup(ApproveConfirm)">
+                    Approve
+                </button>
+                <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
+                <span class="close-modal cp" (click)="closeDetailsMode()">
           <img src="assets/images/multiply.svg">
         </span>
+            </div>
         </div>
-    </div>
 
-    <div class="upload-fil cursor-pointer" *ngIf="!isImageZoomView">
-        <ul>
-            <ng-container *ngFor="let item of imageURL let i=index;">
+        <div class="upload-fil cursor-pointer" *ngIf="!isImageZoomView">
+            <ul>
+                <ng-container *ngFor="let item of imageURL let i=index;">
+                    <li>
+                        <div class="upload-img">
+                            <img [src]="item" alt="test" (click)="clickZoomImageView(i)" id="signatureImage"/>
+                        </div>
+                    </li>
+                </ng-container>
                 <li>
-                    <div class="upload-img">
-                        <img [src]="item" alt="test" (click)="clickZoomImageView(i)" id="signatureImage" />
+                    <div class="upload-img add-img">
+                        <label for="signatureImg-edit"><i class="icon-plus"></i></label>
+                        <input type="file" accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect
+                               (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
+                               [uploadInput]="uploadInput">
                     </div>
                 </li>
-            </ng-container>
-            <li>
-                <div class="upload-img add-img">
-                    <label for="signatureImg-edit"><i class="icon-plus"></i></label>
-                    <input type="file" accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions" [uploadInput]="uploadInput">
-                </div>
-            </li>
-        </ul>
+            </ul>
+        </div>
+
+        <!-- img zoom pls uncomment this code -->
+        <div class="clearfix img-zoom" *ngIf="isImageZoomView">
+            <img [src]="zoomViewImageSrc" alt="">
+            <a class="img-close pointer" (click)="hideZoomImageView()">
+                <i class="icon-cross"></i>
+            </a>
+        </div>
+
     </div>
 
-    <!-- img zoom pls uncomment this code -->
-    <div class="clearfix img-zoom" *ngIf="isImageZoomView">
-        <img [src]="zoomViewImageSrc" alt="">
-        <a class="img-close" (click)="hideZoomImageView()">
-            <i class="icon-cross"></i>
-        </a>
-    </div>
+    <div class="bg-white p-15">
+        <div class="form-group mb-2">
+            <label>Description</label>
+            <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
+                      placeholder='Add Description'></textarea>
+        </div>
 
-</div>
+        <div class="row">
+            <div class="col-sm-8">
 
-<div class="bg-white p-15">
-    <div class="form-group mb-2">
-        <label>Comment</label>
-        <textarea name="" class="textarea form-control" placeholder="Add Comment"></textarea>
-    </div>
+                <div class="mb-2 d-inline-block mr-2">
 
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="mb-2 d-inline-block mr-2">
-                <label>Payment Mode
-          <span class="text-danger">*</span>
+                    <label>
+                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                     </label>
-                <div class="select-style">
-                    <!-- <select name="">
-            <option value="">Standard Chartered Bank Indore A/c</option>
-            <option value="">Option 2</option>
-            <option value="">Option 3</option>
-          </select> -->
-                    <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                        [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
-                        <ng-template #optionTemplate1 let-option="option">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                <div class="item">{{ option.label }}</div>
-                                <div class="item_unq">{{ option.value }}</div>
-                            </a>
-                        </ng-template>
-                    </sh-select>
 
+                    <div class="clearfix">
+
+                        <sh-select class="pull-right text-left" name="depositAccountUniqueName"
+                                   #entryAgainstAccountDropDown
+                                   [options]="entryAgainstObject.dropDownOption"
+                                   [(ngModel)]="entryAgainstObject.model"
+                                   (selected)="onSelectEntryAgainstAccount($event)"
+                                   [placeholder]="'Select Account'" [notFoundLink]="false"
+                                   [forceClearReactive]="forceClear$ | async"
+                                   [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
+                            <ng-template #optionTemplate1 let-option="option">
+                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                    <div class="item">{{ option.label }}</div>
+                                    <div class="item_unq">{{ option.value }}</div>
+                                </a>
+                            </ng-template>
+                        </sh-select>
+
+                    </div>
                 </div>
-            </div>
 
-            <div class="d-inline-block">
+                <!-- <div class="d-inline-block">
                 <span class="mr-1 d-inilne-block font-14">USD</span>
                 <div class="toggle d-inline-block" data-key="disabled">
                     <input type="checkbox" class="toggle-checkbox" id="disabled">
@@ -81,29 +92,43 @@
           </label>
                 </div>
                 <span class="ml-1 d-inline-block font-14">INR</span>
+            </div> -->
+
+            </div>
+
+            <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()" *ngIf="entryAgainstObject.against">
+                <a href="javascript:void(0)" class="d-inline-block pt-3">
+                    {{entryAgainstObject.against}}
+                </a>
             </div>
 
         </div>
-        <div class="col-sm-4 text-right xs-left">
-            <a href="javascript:void(0)" class="d-inline-block pt-3">Entry against {{accountType}}</a>
-        </div>
     </div>
 
-    <div class="clearfix">
-        <ledger [selectedAccountUniqueName]="selectedAccountUniqueName"></ledger>
+    <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
+        <update-ledger-entry-panel [isPettyCash]="true"
+                                   [pettyCashEntry]="accountEntryPettyCash"
+                                   [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                   [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                                   (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+        ></update-ledger-entry-panel>
+    </div>
+</div>
+<div *ngIf="(ispPettycashEntryInprocess$ | async) ">
+    <div class="no-data mrT2 d-flex "
+         style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
+        <div class="giddh-spinner vertical-center-spinner "></div>
     </div>
 
 </div>
-
-
 
 <!-- modal start -->
 <ng-template #RejectionReason>
     <div class="modal-header">
         <h3 class="modal-title pull-left">Rejection Reason</h3>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 
     <div class="modal-body">
@@ -141,10 +166,33 @@
         </div>
         <div class="form-group">
             <label for="rejectReason">Reason</label> <sup>*</sup>
-            <textarea name="rejectReason" required id="rejectReason" [formControl]="rejectReason" class="textarea form-control" placeholder="Add Reason"></textarea>
+            <textarea name="rejectReason" required id="rejectReason" [formControl]="rejectReason"
+                      class="textarea form-control" placeholder="Add Reason"></textarea>
         </div>
 
         <input type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
     </div>
 </ng-template>
 <!-- modal end -->
+
+
+<!-- region approve entry confirm -->
+<ng-template #ApproveConfirm>
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    ></petty-cash-approve-confirm-dialog>
+</ng-template>
+<!-- endregion -->
+
+<!-- region other taxes aside menu -->
+<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
+<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'"
+                                  [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
+                                  [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+                                  [@slideInOut]="asideMenuStateForOtherTaxes"
+                                  (closeModal)="toggleOtherTaxesAsidePane(null)"
+                                  (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
+</app-aside-menu-sales-other-taxes>
+<!-- endregion -->

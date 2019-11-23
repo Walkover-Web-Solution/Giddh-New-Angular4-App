@@ -14,8 +14,8 @@
 
           <div class="form-group col-sm-6 col-xs-12">
             <label>Select Tax <span class="text-danger">*</span> </label><br>
-            <sh-select [options]="taxList" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"
-              required [ItemHeight]="33"></sh-select>
+            <sh-select [options]="taxListSource$ | async" name="taxType" [(ngModel)]="newTaxObj.taxType" [defaultValue]="selectedTax" [placeholder]="'Select Tax'"
+              required [ItemHeight]="33" (selected)="selectTax($event)"></sh-select>
           </div>
 
 
@@ -43,8 +43,8 @@
 
           <div class="form-group col-sm-6 col-xs-12" *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'">
             <label>Select Type <span class="text-danger">*</span> </label><br>
-            <sh-select [options]="tdsTcsTaxSubTypes" name="tdsTcsTaxSubTypes" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes"
-              [placeholder]="'Select Type'" [ItemHeight]="33" required></sh-select>
+            <sh-select [options]="taxNameTypesMapping[newTaxObj.taxType]" name="tdsTcsTaxSubTypes" [(ngModel)]="newTaxObj.tdsTcsTaxSubTypes"
+              [placeholder]="'Select Type'" [ItemHeight]="33" required [forceClearReactive]="forceClear$ | async"></sh-select>
           </div>
 
         </div>

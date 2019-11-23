@@ -1,3 +1,5 @@
+@import '../../../../assets/css/color.scss';
+
 .bdrT {
   border-color: #ccc;
 }
@@ -17,15 +19,18 @@
 }
 
 .td_in_searchBox div span {
-  flex: 1 1 auto;
+
   padding-left: 8px;
 }
 
 .td_in_searchBox div i {
-  margin-top: 3px;
-  color: #8080808c;
-  padding-right: 8px;
-  cursor: pointer;
+   margin-top: 1px;
+    color: #757BB9;
+    padding-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
 }
 
 .td_in_searchBox {
@@ -36,11 +41,13 @@
   position: relative;
 }
 .td_in_searchBox .input-container input {
-  min-height: 38px;
-  width: 100%;
-  padding: 8px;
-  padding-right: 40px;
-  border: 0px;
+  height: 50px;
+    min-width: 100%;
+    padding: 11px;
+    padding-right: 40px;
+    color: #1c1c1c;
+    border: none;
+    background-color: #f2f2f2;
 }
 
 .td_in_searchBox .input-container i {
@@ -62,7 +69,7 @@
 }
 
 .td_in_searchBox div i:hover {
-  color: #ff5f00;
+  color: #999;
 }
 
 .dropdown-menu > li > a:hover {
@@ -70,14 +77,21 @@
   background: #f4f5f8;
 }
 .stock-input {
-  background-color: transparent !important;
-  border-bottom: 1px dotted black !important;
-  border: none;
-  width: auto;
-  padding: 0 !important;
-  height: auto;
-  text-align: center;
-  min-width: 155px;
+background-color: transparent !important;
+    border-bottom: 1px dotted #fff !important;
+    border: none;
+    width: auto;
+    padding: 0 !important;
+    height: auto;
+    text-align: center;
+    min-width: 155px;
+    color: #fff;
+}
+.inventoryStockTable input.form-control.stock-input {
+    color: #1c1c1c;    text-align: left;
+}
+.table-border input.form-control.stock-input {
+    color: #1c1c1c;    text-align: left;
 }
 .footer-tr td {
   background-color: #e5e5e5;
@@ -156,13 +170,15 @@
 
 /* voucher type DDL */
 .c-3 {
-  color: #333333;
+  color: #fff;
 }
 .btn-group-voucher-type {
   width: 100%;
+  color: #1c1c1c;
   button {
     text-align: left;
     width: 100%;
+    color: #1c1c1c;
     &:focus,
     &:hover {
       text-decoration: none;
@@ -185,10 +201,10 @@
     top: 2px;
   }
   input[type="checkbox"]:before {
-    top: 5px;
+    top: 6px;
     width: 9px;
     height: 5px;
-    border: 1px solid #ff5f00;
+    border: 2px solid #fff;
     border-top-style: none;
     border-right-style: none;
   }
@@ -203,7 +219,7 @@
   }
 }
 button[aria-expanded="true"] i {
-  color: #ff5f00;
+  color: #adadad;
 }
 /* voucher type DDL */
 
@@ -223,14 +239,14 @@ button[aria-expanded="true"] i {
   padding-left: 3px;
   text-transform: lowercase;
 }
-.icon-pointer .fa-long-arrow-up,
-.icon-pointer .fa-long-arrow-down {
+.icon-pointer .icon-sort-asc,
+.icon-pointer .icon-sort-dsc {
   line-height: 20px;
   width: 15px;
-  color: #a9a9a9;
+  color: #757BB9;
 }
 .icon-pointer .activeTextColor {
-  color: #ff5200;
+  color: $activeIconTh;
 }
 .stickyFooterSaleAmount {
   .innerContentFooter {
@@ -271,7 +287,7 @@ button[aria-expanded="true"] i {
   width: 100% !important;
 }
 .text-orange {
-  color: #ff5f00;
+  color: #5B64C9;
 }
 .bg-white {
   background: white;
@@ -281,4 +297,33 @@ button[aria-expanded="true"] i {
 }
 .mB100{
   margin-bottom: 100px;
+}
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid #5B64C9;
+    border-radius: 2px;
+    color: #1A237E;
+    background: #fff;
+}
+.inventoryStockTable .d-flex{
+  align-items: center;
+}
+.icon-pointer {
+    padding-left: 5px;
+}
+button.btn.btn-filter {
+    background: #E4E4E4;
+    border: 1px solid #E4E4E4;
+    font-size: 16px;
+    color: #1A237E;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 10px;
 }

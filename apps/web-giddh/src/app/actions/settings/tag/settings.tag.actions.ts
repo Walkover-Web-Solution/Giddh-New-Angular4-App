@@ -23,7 +23,7 @@ export class SettingsTagActions {
         return {type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res};
       }));
 
-  @Effect()
+  @Effect({dispatch: false})
   public GetAllTagsResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE).pipe(
       map((response: CustomActions) => {

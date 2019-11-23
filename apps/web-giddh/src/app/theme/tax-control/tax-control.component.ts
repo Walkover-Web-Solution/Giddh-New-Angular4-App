@@ -26,12 +26,12 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
 };
 
 export class TaxControlData {
-  public name: string;
+  public name?: string;
   public uniqueName: string;
-  public amount: number;
-  public isChecked: boolean;
-  public isDisabled: boolean;
-  public type: string;
+  public amount?: number;
+  public isChecked?: boolean;
+  public isDisabled?: boolean;
+  public type?: string;
 }
 
 @Component({
@@ -68,9 +68,9 @@ export class TaxControlData {
       display: block !important;
     }
 
-    #tax-control-multi-select.multi-select input.form-control[readonly] {
-      background-image: unset !important;
-    }
+    // #tax-control-multi-select.multi-select input.form-control[readonly] {
+    //   background-image: unset !important;
+    // }
   `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
@@ -88,6 +88,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public exceptTaxTypes: string[] = [];
   @Input() public allowedSelection: number = 0;
   @Input() public allowedSelectionOfAType: Array<{ type: string[], count: number }>;
+  @Input() public maskInput: string;
+  @Input() public prefixInput: string;
+  @Input() public suffixInput: string;
 
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -146,7 +149,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
       // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
       if (index > -1) {
-        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        this.taxRenderData[index].isChecked = this.taxRenderData[index].isChecked ? true : (this.applicableTaxes && this.applicableTaxes.length) ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
       } else {
 
         let taxObj = new TaxControlData();
@@ -173,7 +176,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
           taxObj.amount = tx.taxDetail[0].taxValue;
         }
 
-        taxObj.isChecked = this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
+        taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tx.uniqueName) : false;
         taxObj.isDisabled = false;
         this.taxRenderData.push(taxObj);
       }
@@ -188,7 +191,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    * hide menus on outside click of span
    */
   public toggleTaxPopup(action: any) {
-    console.log("showTaxPopup : " + action);
     this.showTaxPopup = action;
   }
 
@@ -320,4 +322,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       this.toggleTaxPopup(false);
     }
   }
+
 }
