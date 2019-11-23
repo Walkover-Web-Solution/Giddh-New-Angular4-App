@@ -251,6 +251,14 @@
                                                                                [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
                                                                                (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                                placeholder="GSTIN"/>
+                                                                        <input maxLength="15" autocomplete="None"
+                                                                               type="text"
+                                                                               name="billingDetails.gstNumber"
+                                                                               class="form-control input-custom"
+                                                                               *ngIf="showTRNNo"
+                                                                               [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber"
+                                                                               (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                                                               placeholder="TRN"/>
                                                                     </div>
                                                                 </div>
 
@@ -2536,7 +2544,7 @@
 
 <!-- region models section -->
 <!-- open account aside -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
+<div class="aside-overlay" (click)="saveTaxes()" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
      asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
@@ -2605,7 +2613,7 @@
 </ng-template>
 <!-- endregion -->
 
-<ng-template let-entry #otherTaxesModal>
+<ng-template let-entry #otherTaxesModal >
     <div id="top0">
         <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
                                     [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal"
