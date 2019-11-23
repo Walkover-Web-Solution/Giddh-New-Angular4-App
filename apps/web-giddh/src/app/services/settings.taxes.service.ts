@@ -15,8 +15,7 @@ export class SettingsTaxesService {
   private user: UserDetails;
   private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /**
@@ -56,5 +55,17 @@ export class SettingsTaxesService {
       data.request = taxUniqueName;
       return data;
     }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, taxUniqueName)));
+  }
+
+  /**
+   * Get Tax List
+   */
+  public GetTaxList(countryCode: string): Observable<BaseResponse<any, any>> {
+    this.user = this._generalService.user;
+
+    return this._http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAXES.replace(':country', encodeURIComponent(countryCode))).pipe(map((res) => {
+      let data: BaseResponse<any, any> = res;
+      return data;
+    }));
   }
 }

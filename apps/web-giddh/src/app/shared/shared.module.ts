@@ -1,4 +1,3 @@
-// import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';
@@ -18,7 +17,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 
-import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateNewComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -49,102 +48,166 @@ import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/key
 
 import { CKEditorModule } from 'ng2-ckeditor';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
+import { NgxMaskModule } from './helpers/directives/ngx-mask';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { PaginationModule, DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
+import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 
 const getGoogleCredentials = (baseHref: string) => {
-  if (baseHref === 'https://giddh.com/' || isElectron) {
-    return {
-      GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
-    };
-  } else {
-    return {
-      GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
-    };
-  }
+    if (baseHref === 'https://giddh.com/' || isElectron) {
+        return {
+            GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+        };
+    } else {
+        return {
+            GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+        };
+    }
 };
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
+    suppressScrollX: true
 };
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
-  {
-    id: GoogleLoginProvider.PROVIDER_ID,
-    // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
-    provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
-  },
-  {
-    id: LinkedinLoginProvider.PROVIDER_ID,
-    provider: new LinkedinLoginProvider('817roify24ig8g')
-  }
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+        provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
+    },
+    {
+        id: LinkedinLoginProvider.PROVIDER_ID,
+        provider: new LinkedinLoginProvider('817roify24ig8g')
+    }
 ], false);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+    return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
-  declarations: [
-    LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective, ExportGroupLedgerComponent,
-    AsideMenuOtherTaxes],
-  imports: [
-    KeyboardShortutModule,
+    declarations: [
+        MfReportComponent,
+        LayoutComponent,
+        LedgerDiscountComponent,
+        HeaderComponent,
+        FooterComponent,
+        FixedFooterComponent,
+        AccountsSideBarComponent,
+        ManageGroupsAccountsComponent,
+        CompanyAddComponent,
+        CompanyAddNewUiComponent,
+        AccountOperationsComponent,
+        AccountFilterPipe,
 
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ModalModule,
-    TypeaheadModule,
-    UniversalListModule,
-    NgbTypeaheadModule,
-    TooltipModule,
-    BsDropdownModule,
-    PopoverModule,
-    PerfectScrollbarModule,
-    SocialLoginModule,
-    FormWizardModule,
-    // SelectModule,
-    ClickOutsideModule,
-    ConfirmModalModule,
-    LaddaModule,
-    ElementViewChildModule,
-    DisableFormFieldModule,
-    ShSelectModule,
-    DecimalDigitsModule,
-    DigitsOnlyModule,
-    // BsDatepickerModule,
-    Daterangepicker,
-    TextCaseChangeModule,
-    HighlightModule,
-    TabsModule,
-    CKEditorModule
+        GroupsAccountSidebarComponent,
+        GroupAddComponent,
+        GroupUpdateComponent,
+        ShareGroupModalComponent,
+        ShareAccountModalComponent,
+        VsForDirective,
+        CheckPermissionDirective,
+        ExportGroupLedgerComponent,
+        AsideMenuOtherTaxes,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
+    ],
+    imports: [
+        KeyboardShortutModule,
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ModalModule,
+        DatepickerModule,
+        TypeaheadModule,
+        UniversalListModule,
+        NgbTypeaheadModule,
+        TooltipModule,
+        BsDropdownModule,
+        PopoverModule,
+        PerfectScrollbarModule,
+        SocialLoginModule,
+        FormWizardModule,
+        SelectModule,
+        ClickOutsideModule,
+        ConfirmModalModule,
+        LaddaModule,
+        ElementViewChildModule,
+        DisableFormFieldModule,
+        ShSelectModule,
+        DecimalDigitsModule,
+        DigitsOnlyModule,
+        BsDatepickerModule.forRoot(),
+        PaginationModule,
+        Daterangepicker,
+        TextCaseChangeModule,
+        HighlightModule,
+        TabsModule,
+        CKEditorModule,
+        NgxMaskModule
+    ],
+    exports: [
+        CommonModule,
+        DatepickerModule,
+        DecimalDigitsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        LaddaModule,
+        LayoutComponent,
+        ShSelectModule,
+        LedgerDiscountComponent,
+        ModalModule,
+        HeaderComponent,
+        FooterComponent,
+        FixedFooterComponent,
+        ManageGroupsAccountsComponent,
+        AccountFilterPipe,
+        SelectModule,
+        PaginationModule,
+        ClickOutsideModule,
+        PerfectScrollbarModule,
 
-    // Ng2UiAuthModule.forRoot(MyAuthConfig)
-  ],
-  exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
-    CKEditorModule, AsideMenuOtherTaxes
-  ],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
-    AccountAddNewComponent, AccountUpdateNewComponent],
-  providers: [
-    {
-      provide: AuthServiceConfig,
-      useFactory: provideConfig
-    },
-    {
-      provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }
-  ]
+        ConfirmModalModule,
+        NgbTypeaheadModule,
+        VsForDirective,
+        AccountsSideBarComponent,
+        TextCaseChangeModule,
+        KeyboardShortutModule,
+        CompanyAddNewUiComponent,
+        CKEditorModule,
+        AsideMenuOtherTaxes,
+        MfReportComponent,
+        AccountAddNewDetailsComponent,
+        AccountUpdateNewDetailsComponent
+    ],
+    entryComponents: [
+        ManageGroupsAccountsComponent,
+        CompanyAddComponent,
+        CompanyAddNewUiComponent,
+        AccountOperationsComponent,
+        GroupsAccountSidebarComponent,
+        AccountAddNewDetailsComponent,
+
+        AccountUpdateNewDetailsComponent
+    ],
+    providers: [
+        {
+            provide: AuthServiceConfig,
+            useFactory: provideConfig
+        },
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        }
+    ]
 })
 export class SharedModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SharedModule,
-      providers: []
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: SharedModule,
+            providers: []
+        };
+    }
 }

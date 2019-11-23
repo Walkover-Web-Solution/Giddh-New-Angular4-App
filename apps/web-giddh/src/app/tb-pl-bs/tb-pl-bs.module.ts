@@ -31,53 +31,54 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-  declarations: [
-    TbPlBsComponent,
-    TbGridComponent,
-    TbPlBsFilterComponent,
-    TlPlGridRowComponent,
-    TbComponent,
-    TbSynramComponent,
-    PlComponent,
-    PlGridComponent,
-    PlGridRowComponent,
-    PlExportXlsComponent,
-    TbExportCsvComponent,
-    TbExportPdfComponent,
-    TbExportXlsComponent,
-    BsExportXlsComponent,
-    BsComponent,
-    BsGridComponent,
-    BsGridRowComponent,
-    TrialAccordionDirective,
-    TbsearchPipe,
-  ],
-  exports: [
-    TbPlBsComponent, CurrencyModule
-  ],
-  providers: [],
-  imports: [
-    CommonModule,
-    ModalModule,
-    FormsModule,
-    ReactiveFormsModule,
-    Daterangepicker,
-    TbPlBsRoutingModule,
-    TabsModule,
-    DatePickerCustomModule,
-    LaddaModule,
-    HighlightModule,
-    RecTypeModule,
-    ShSelectModule,
-    ClickOutsideModule,
-    BsDropdownModule,
-    CurrencyModule,
-    AccountDetailModalModule
-  ],
+    declarations: [
+        TbPlBsComponent,
+        TbGridComponent,
+        TbPlBsFilterComponent,
+        TlPlGridRowComponent,
+        TbComponent,
+        TbSynramComponent,
+        PlComponent,
+        PlGridComponent,
+        PlGridRowComponent,
+        PlExportXlsComponent,
+        TbExportCsvComponent,
+        TbExportPdfComponent,
+        TbExportXlsComponent,
+        BsExportXlsComponent,
+        BsComponent,
+        BsGridComponent,
+        BsGridRowComponent,
+        TrialAccordionDirective,
+        TbsearchPipe,
+    ],
+    exports: [
+        TbPlBsComponent, CurrencyModule
+    ],
+    providers: [],
+    imports: [
+        CommonModule,
+        ModalModule,
+        FormsModule,
+        ReactiveFormsModule,
+        Daterangepicker,
+        TbPlBsRoutingModule,
+        TabsModule,
+        DatePickerCustomModule,
+        LaddaModule,
+        HighlightModule,
+        RecTypeModule,
+        ShSelectModule,
+        ClickOutsideModule,
+        BsDropdownModule,
+        CurrencyModule,
+        TooltipModule,
+        AccountDetailModalModule
+    ],
 })
 export class TBPlBsModule {
 }

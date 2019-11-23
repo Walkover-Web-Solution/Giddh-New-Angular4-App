@@ -4,7 +4,7 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
-    top: 92px;
+    top: 170px;
     bottom: 0;
     left: 0;
     z-index: -1;
@@ -21,12 +21,12 @@
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 92px;
+    top: 59px;
     width: 100%;
     background-color: #fff;
     margin: 0 0;
     height: 100vh;
-    z-index: 9;
+    z-index: 990;
     left: 0;
     //padding-left: 215px;
 }
@@ -34,7 +34,7 @@
 .invoice-sidebar {
     background-color: #fff;
     padding: 0;
-    height: calc(100vh - 155px);
+    height: calc(100vh - 20px);
 }
 
 .d-flex {
@@ -273,14 +273,17 @@ span.close-modal.cp.pull-right {
     display: inline-grid;
     justify-content: center;
     align-items: center;
-    height: 30px;
+    height: 32px;
+    width: 32px;
+    background-color: #ddd;
+    border: 1px solid #d1d1d1;
 }
 
 .changeStatus-dropdown .dropdown-menu {
     width: 160px;
 }
 
-.dropdown-toggle.btn-blue {
+.dropdown-toggle.btn-pink {
     padding: 6px 16px;
 }
 
@@ -335,7 +338,7 @@ span.close-modal.cp.pull-right {
 .invoice-editWrapper {
     height: 100vh;
     overflow-y: auto;
-    padding-bottom: 92px;
+    padding-bottom:58px;
     .invoice-editHeader {
         display: flex;
         justify-content: space-between;
@@ -351,9 +354,19 @@ span.close-modal.cp.pull-right {
                 font-weight: bold;
             }
         }
+        span.close-modal{
+                height: 32px;
+                width: 32px;
+                background-color: #ddd;
+                border: 1px solid #d1d1d1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 10px;
+        }
     }
     .invoice-editBody {
-        padding-bottom: 90px;
+        padding-bottom: 0;
     }
 }
 
@@ -466,7 +479,7 @@ label.labeled {
 }
 
 .btn-dropdown-ddl-newinv {
-    padding: 8.5px 16px!important;
+    padding: 5px 16px!important;
 }
 
 @media(max-width:1024px) {
@@ -482,7 +495,7 @@ label.labeled {
         vertical-align: top;
         margin-top: 4px;
     }
-    .dropdown-toggle.btn-blue {
+    .dropdown-toggle.btn-pink {
         padding: 6px 8px;
     }
     .invoice-sidebar .singleInvoiceDetail {
@@ -530,11 +543,30 @@ label.labeled {
     .invoiceDetail-header .edit-change-status {
         padding-top: 10px;
     }
+  .invoice-modal-content:after,
+    .invoice-modal-content {
+      top: 131px;
+}
+.invoice-modal-content {
+    height: 100vh !important;
+    overflow-y: auto !important;
+}
+.invoice-modal-content  .invoice-detail{
+  height: 100vh;
+}
+.single-paymentDetail{
+      margin-bottom: 10px;
+}
+.payment-detail .payment-icon{
+      margin-right: 10px;
+      margin-bottom: 40px;
+      float: left;
+}
 }
 
 @media(max-width:375px) {
     .invoice-modal-content:after,
     .invoice-modal-content {
-        top: 148px;
-    }
+      top: 121px;
+}
 }

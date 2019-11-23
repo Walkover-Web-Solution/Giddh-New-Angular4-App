@@ -700,6 +700,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       }
       return state;
     }
+
+    case CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION:
+      return Object.assign({}, state, { createCompanyUserStoreRequestObj: null });
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-<div class="box clearfix mrT2">
+<div class="box clearfix mrT1">
   <h1 class="section_head pdT0">Create New Trigger</h1>
   <div class="row">
     <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-sm-10 col-xs-12 ">
@@ -61,7 +61,7 @@
       <div class="row">
         <div class=col-xs-12>
           <button type="submit" class="btn btn-success">Add</button>
-          <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>
+          <button type="button" (click)="onCancel()" class="btn btn-cancel">Cancel</button>
         </div>
       </div>
     </form>
@@ -73,7 +73,7 @@
         <table class="table table-bordered basic mrB onMobileView">
           <thead>
             <tr>
-              <th>S. No.</th>
+              <th>#</th>
               <th>Name</th>
               <th>Entity type</th>
               <th>Entity</th>
@@ -88,7 +88,7 @@
           </thead>
           <tbody *ngIf="availableTriggers.length">
             <tr *ngFor="let trigger of availableTriggers; let i = index">
-              <td data-title="S. No.">{{i+1}}</td>
+              <td data-title="#">{{i+1}}</td>
               <td data-title="Name">
                 <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
                 <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"

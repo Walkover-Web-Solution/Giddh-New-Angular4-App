@@ -43,15 +43,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
   public isCreateAndSwitchCompanyInProcess: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
-  // private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
-  //     private _router: Route, private _generalService: GeneralService, private _toasty: ToasterService,private companyActions: CompanyActions
   constructor(private store: Store<AppState>, private _generalService: GeneralService, private _companyService: CompanyService, private _route: Router, private _authenticationService: AuthenticationService, private companyActions: CompanyActions, private _toasty: ToasterService) {
-
-    // this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-
-    //   this.SubscriptionPlans = res.body;
-    // });
 
   }
 
@@ -59,26 +51,24 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
 
     this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
-        if (!res.isBranch && !res.city) {
           this.createNewCompanyPreObj = res;
+          this.getSubscriptionPlans();
           if (this.createNewCompanyPreObj.baseCurrency) {
             this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
           }
-        }
       }
     });
+
     this.store.pipe(select(s => s.session.createBranchUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
         if (res.isBranch && res.city) {
           this.createNewCompanyPreObj = res;
+          this.getSubscriptionPlans();
           if (this.createNewCompanyPreObj.baseCurrency) {
             this.UserCurrency = this.createNewCompanyPreObj.baseCurrency;
           }
         }
       }
-    });
-    this._authenticationService.getAllUserSubsciptionPlans().subscribe(res => {
-      this.SubscriptionPlans = res.body;
     });
 
     this.logedInUser = this._generalService.user;
@@ -95,8 +85,8 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     this.isRefreshing$.pipe(takeUntil(this.destroyed$)).subscribe(isInpro => {
       this.isCreateAndSwitchCompanyInProcess = isInpro;
     });
-
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -126,17 +116,15 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         }
       });
     }
-
   }
 
-  // public paidPlanSelected(plan: CreateCompanyUsersPlan) {
-
-  //   this.SubscriptionRequestObj.subscriptionUnqiueName = plan.subscriptionId;
-  //   this._route.navigate(['billing-detail']);
-  //   this.store.dispatch(this.companyActions.selectedPlan(plan));
-  // }
-
   public createCompany(item: CreateCompanyUsersPlan) {
+    let activationKey = this.licenceKey.value;
+    if (activationKey) {
+      this.SubscriptionRequestObj.licenceKey = activationKey;
+    } else {
+      this.SubscriptionRequestObj.licenceKey = "";
+    }
     this.store.dispatch(this.companyActions.selectedPlan(item));
     if (!this.createNewCompanyPreObj) {
       this._route.navigate(['new-user']);
@@ -150,15 +138,23 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
         this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
       }
-
     }
   }
+
   public createCompanyViaActivationKey() {
     let activationKey = this.licenceKey.value;
     if (activationKey) {
       this.SubscriptionRequestObj.licenceKey = activationKey;
       this.createNewCompanyPreObj.subscriptionRequest = this.SubscriptionRequestObj;
       this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
+    } else {
+      this.SubscriptionRequestObj.licenceKey = "";
     }
+  }
+
+  public getSubscriptionPlans() {
+    this._authenticationService.getAllUserSubsciptionPlans(this.createNewCompanyPreObj.country).subscribe(res => {
+      this.SubscriptionPlans = res.body;
+    });
   }
 }

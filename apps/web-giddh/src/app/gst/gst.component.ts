@@ -97,12 +97,12 @@ export class GstComponent implements OnInit {
       }))
     ).subscribe(activeCompany => {
       if (activeCompany) {
-        if (activeCompany.gstDetails && activeCompany.gstDetails.length) {
-          let defaultGst = activeCompany.gstDetails.find(f => !!(f.addressList.find(a => a.isDefault)));
+        if (activeCompany.addresses && activeCompany.addresses.length) {
+          let defaultGst = activeCompany.addresses.find(a => a.isDefault);
           if (defaultGst) {
-            this.activeCompanyGstNumber = defaultGst.gstNumber;
+            this.activeCompanyGstNumber = defaultGst.taxNumber;
           } else {
-            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+            this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
           }
           this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         }
@@ -200,7 +200,7 @@ export class GstComponent implements OnInit {
         // get gstr1 and gstr2 summary
         this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
         this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
-         this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
+        this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
       } else {
         // only get gstr1 data
         this.store.dispatch(this._gstAction.GetOverView('gstr1', request));
@@ -209,7 +209,7 @@ export class GstComponent implements OnInit {
       this._toasty.warningToast('Please add GSTIN in company');
     }
     this._cdRf.detectChanges();
-  
+
   }
 
   /**

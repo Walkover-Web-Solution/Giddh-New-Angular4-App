@@ -6,7 +6,7 @@ import { IOption } from './sh-options.interface';
   selector: 'sh-select-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './sh-select-menu.component.html',
-  styleUrls: ['./sh-select-menu.component.css']
+  styleUrls: ['./sh-select-menu.component.scss']
 })
 export class SalesShSelectMenuComponent implements OnChanges {
   @Input() public selectedValues: any[];

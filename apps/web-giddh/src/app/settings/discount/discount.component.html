@@ -1,11 +1,11 @@
-<div class="box clearfix mrT2">
+<div class="box clearfix mrT1">
   <div class="row">
     <h1 class="section_head pdT0 col-xs-6">Create Discount</h1>
   </div>
 
-  <form #discountForm="ngForm" novalidate (submit)="submit()">
+  <form #discountForm="ngForm" novalidate (submit)="submit()" class="discountFormSettingTab">
     <div class="row ">
-      <div class="form-group col-sm-6 col-md-2 col-xs-12">
+      <div class="form-group col-sm-2 col-md-2 col-xs-12">
         <label>Select Discount</label><br>
         <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type" [(ngModel)]="createRequest.type"
           [placeholder]="'Select Type'" [ItemHeight]="33"></sh-select>
@@ -13,18 +13,18 @@
 
 
       <ng-container *ngIf="createRequest.type">
-        <div class="form-group col-sm-6 col-md-2 col-xs-12">
+        <div class="form-group col-sm-2 col-md-2 col-xs-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="createRequest.name" name="name" placeholder="Name" class="form-control" />
         </div>
 
-        <div class="form-group col-sm-6 col-md-2 col-xs-12">
+        <div class="form-group col-sm-2 col-md-2 col-xs-12">
           <label>Value</label>
           <input type="text" [(ngModel)]="createRequest.discountValue" name="value" placeholder="Value"
             class="form-control" />
         </div>
 
-        <div class="form-group col-sm-6 col-md-2 col-xs-12">
+        <div class="form-group col-sm-2 col-md-2 col-xs-12">
           <label>Linked Accounts</label>
           <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
             [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
@@ -33,13 +33,13 @@
           </sh-select>
         </div>
 
-        <div class="col-sm-6 col-md-2 col-xs-12 form-group d-flex" style="align-items: flex-end">
+        <div class="col-sm-2 col-md-2 col-xs-12 form-group d-flex hideLableOnMobile" style="align-items: flex-end">
           <label class="d-block"></label>
-          <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-            [ladda]="isDiscountCreateInProcess$ | async" style="height: 34px">Add
+          <button type="submit" class="btn btn-success mrTop" *ngIf="!(createRequest.discountUniqueName)"
+            [ladda]="isDiscountCreateInProcess$ | async">Add
           </button>
-          <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-            [ladda]="isDiscountUpdateInProcess$ | async" style="height: 34px">Update
+          <button type="submit" class="btn btn-success mrTop" *ngIf="createRequest.discountUniqueName"
+            [ladda]="isDiscountUpdateInProcess$ | async">Update
           </button>
         </div>
       </ng-container>
@@ -58,7 +58,7 @@
             <tr>
               <th [style.width.px]="'50'">#</th>
               <th>Name</th>
-              <th class="text-center">Action</th>
+              <th class="">Action</th>
             </tr>
           </thead>
 

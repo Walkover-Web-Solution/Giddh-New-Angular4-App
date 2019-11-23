@@ -114,16 +114,17 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
     }
 
     case INVOICE_RECEIPT_ACTIONS.UPDATE_VOUCHER_DETAILS_AFTER_VOUCHER_UPDATE: {
-      let vouchers = {...state.vouchers};
-      let result = action.payload as BaseResponse<VoucherClass, GenericRequestForGenerateSCD>;
+      let vouchers = { ...state.vouchers };
+      let result = action.payload;
       return {
         ...state,
         vouchers: {
           ...vouchers,
           items: vouchers.items.map(m => {
-            if (m.voucherNumber === result.body.voucherDetails.voucherNumber) {
-              m.grandTotal = result.body.voucherDetails.grandTotal;
-              m.balanceDue = result.body.voucherDetails.balance;
+            if(m.voucherNumber === result.body.number){
+              m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
+            }else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
+              m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
             }
             return m;
           })
@@ -145,7 +146,13 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         voucher: action.payload.body ? action.payload.body : null
       };
     }
-
+    case INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS_RESPONSEV4: {
+      return {
+        ...state,
+        voucherDetailsInProcess: false,
+        voucher: action.payload.body ? action.payload.body : null
+      };
+    }
     case INVOICE_RECEIPT_ACTIONS.RESET_VOUCHER_DETAILS: {
       return {
         ...state,
@@ -206,7 +213,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return {...state, ...newState};
+      return { ...state, ...newState };
     }
 
     case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
@@ -217,7 +224,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
       } else {
         newState.invoiceDataHasError = true;
       }
-      return {...state, ...newState};
+      return { ...state, ...newState };
     }
     case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
       return Object.assign({}, state, {

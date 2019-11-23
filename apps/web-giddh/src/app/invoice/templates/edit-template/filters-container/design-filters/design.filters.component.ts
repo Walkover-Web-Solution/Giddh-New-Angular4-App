@@ -51,7 +51,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
   public _presetFonts = [
     {label: 'Open Sans', value: 'Open Sans'},
     {label: 'Sans-Serif', value: 'Sans-Serif'},
-    {label: 'Lato', value: 'Lato'}
+    {label: 'opensans-regular', value: 'opensans-regular'}
   ];
   public _presetFontsSize = [
     {label: '16px', value: 16},

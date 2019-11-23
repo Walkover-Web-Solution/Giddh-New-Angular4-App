@@ -22,7 +22,7 @@ import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
-  states: States[];
+  states: States;
   addAndManageClosed: boolean;
   flattenGroups: IFlattenGroupsAccountsDetail[];
   smartCombinedList: IUlist[];
@@ -79,7 +79,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       return state;
     }
     case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
-      let result: BaseResponse<States[], string> = action.payload;
+      let result: BaseResponse<States, string> = action.payload;
       if (result.status === 'success') {
         return {
           ...state,
@@ -87,6 +87,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         };
       }
       return state;
+    }
+    case GENERAL_ACTIONS.RESET_STATES_LIST: {
+      return {...state, states: null};
     }
     // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
     case GENERAL_ACTIONS.RESET_SMART_LIST: {
@@ -202,7 +205,9 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
         UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
         let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-        flattenAccountsArray[index] = updatedAccount.body;
+        let accResp = cloneDeep(updatedAccount.body);
+        accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
+        flattenAccountsArray[index] = accResp;
         return {
           ...state,
           groupswithaccounts: groupArray,
@@ -455,13 +460,15 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
       let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-      grp.accounts[index].uniqueName = aData.uniqueName;
-      grp.accounts[index].name = aData.name;
-      grp.accounts[index].isActive = true;
-      grp.accounts[index].stocks = aData.stocks;
-      grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-      result = true;
-      return result;
+      if (index > -1) {
+        grp.accounts[index].uniqueName = aData.uniqueName;
+        grp.accounts[index].name = aData.name;
+        grp.accounts[index].isActive = true;
+        grp.accounts[index].stocks = aData.stocks;
+        grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+        result = true;
+        return result;
+      }
     }
     if (grp.groups) {
       result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);

@@ -1,73 +1,58 @@
 <div id="main" class="welcome_outer">
-    <layout-main>
+    <layout-main [sideMenu]="false">
         <div class="welcome-header">
             <h2>Welcome To Giddh! </h2>
         </div>
         <hr />
         <div class="welcome-msg">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-sm-9">
                     <p>Hi {{logedInUser?.name}} !</p>
-                    <p>You belong to the following plan. Please select the plan in which you wish to create new company "{{createNewCompanyPreObj?.name}}".
+                    <p>You belong to the following plan. Please select the plan in which you wish to create new company
+                        <strong> "{{createNewCompanyPreObj?.name}}". </strong>
                     </p>
 
                 </div>
-                <div class="col-md-3">
-                    <div class="col-md-3 pull-right xs-left">
-                        <a [routerLink]="['/welcome']" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+                <div class="col-sm-3">
+                    <div class=" pull-right xs-left">
+                        <a [routerLink]="['/welcome']" class="btn btn-default mrR0 pr-3 pl-3 mb-2">Back</a>
                     </div>
                 </div>
             </div>
 
 
-            <div *ngIf="!isCreateAndSwitchCompanyInProcess" class="choose-ur-plan">
-                <div class="row">
-                    <div class="col-sm-9">
+      <div *ngIf="!isCreateAndSwitchCompanyInProcess" class="choose-ur-plan">
+        <div class="row">
+          <div class="col-sm-12 col-md-9">
+            <div class="row">
+              <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
+                <!-- Free plans -->
+                <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
+                  <div class="col-md-4 col-sm-6 col-xs-12 ">
+                    <div class="select-plan-block">
+                      {{item?.planDetails?.name}}
+                      <div class="your-account">
                         <div class="row">
-                            <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
-                                <!-- Free plans -->
-                                <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-                                    <div class="col-sm-4">
-                                        <div class="select-plan-block">
-                                            {{item?.planDetails?.name}}
-                                            <div class="your-account">
-
-                                                <!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
-
-                                                <!--  -->
-                                                <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
+                          <div class="col-xs-6">
+                            <span>
                               Subscription Price
                             </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p *ngIf="item?.planDetails?.amount">
-                                                            {{item?.planDetails?.amount | number}}
-                                                        </p>
-                                                        <p *ngIf="!item?.planDetails?.amount">
-                                                            FREE
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <!--  -->
+                          </div>
+                          <div class="col-xs-6">
+                            <p *ngIf="item?.planDetails?.amount">
+                              {{item?.planDetails?.amount | number}}
+                            </p>
+                            <p *ngIf="!item?.planDetails?.amount">
+                              FREE
+                            </p>
+                          </div>
+                        </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Total Companies
-                            </span>
+                                                            Total Companies
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
@@ -79,8 +64,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Transactions Limit
-                            </span>
+                                                            Transactions Limit
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -92,67 +77,55 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Subscription Renewal
-                            </span>
+                                                            Subscription Renewal
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.duration }} {{item?.planDetails?.durationUnit}}(s)
+                                                            {{item?.planDetails?.duration }}
+                                                            {{item?.planDetails?.durationUnit}}(s)
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" (click)="createCompany(item);" [ladda]="isCompanyCreationInProcess$ | async">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2"
+                                                            (click)="createCompany(item);"
+                                                            [ladda]="isCompanyCreationInProcess$ | async">Select
+                                                            Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
 
-                                    </div>
-                                </ng-container>
-                                <!-- new plan after free -->
-                                <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
-                                    <div class="col-sm-4">
-                                        <div class="select-plan-block">
-                                            {{item?.planDetails?.name}}
-                                            <div class="your-account">
-
-                                                <!-- <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
-                      Subscription ID
-                    </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            -
-                                                        </p>
-                                                    </div>
-                                                </div> -->
-
-                                                <!--  -->
-                                                <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <span>
+                  </div>
+                </ng-container>
+                <!-- new plan after free -->
+                <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
+                  <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="select-plan-block">
+                      {{item?.planDetails?.name}}
+                      <div class="your-account">
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span>
                               Subscription Price
                             </span>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <p>
-                                                            {{item?.planDetails?.amount | number}}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <!--  -->
+                          </div>
+                          <div class="col-xs-6">
+                            <p>
+                              {{item?.planDetails?.amount | number}}
+                            </p>
+                          </div>
+                        </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Total Companies
-                            </span>
+                                                            Total Companies
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
@@ -164,8 +137,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Transactions Limit
-                            </span>
+                                                            Transactions Limit
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -177,19 +150,21 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Subscription Renewal
-                            </span>
+                                                            Subscription Renewal
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
-                                                            {{item?.planDetails?.duration}} {{item?.planDetails?.durationUnit}}(s)
+                                                            {{item?.planDetails?.duration}}
+                                                            {{item?.planDetails?.durationUnit}}(s)
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-success mrT1 mrB2" (click)="buyPlanClicked(item)">Buy Plan</button>
+                                                        <button class="btn btn-success mrT1 mrB2"
+                                                            (click)="buyPlanClicked(item)">Buy Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,9 +177,10 @@
                         </div>
                         <div class="row">
                             <ng-container *ngFor="let paidItem of SubscriptionPlans">
-                                <ng-container *ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
+                                <ng-container
+                                    *ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
 
-                                    <div class="col-sm-4">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="select-plan-block">
                                             {{paidItem?.planDetails?.name}}
                                             <div class="your-account">
@@ -212,8 +188,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Subscription ID
-                            </span>
+                                                            Subscription ID
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -226,8 +202,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Subscription Price
-                            </span>
+                                                            Subscription Price
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -240,12 +216,13 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Total Companies
-                            </span>
+                                                            Total Companies
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p class="">
-                                                            {{ paidItem?.totalCompanies | number}} out of {{ paidItem?.planDetails?.companiesLimit | number}}
+                                                            {{ paidItem?.totalCompanies | number}} out of
+                                                            {{ paidItem?.planDetails?.companiesLimit | number}}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -253,8 +230,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Transactions Limit
-                            </span>
+                                                            Transactions Limit
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -266,8 +243,8 @@
                                                 <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
-                              Subscription Renewal
-                            </span>
+                                                            Subscription Renewal
+                                                        </span>
                                                     </div>
                                                     <div class="col-xs-6">
                                                         <p>
@@ -278,7 +255,9 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2" [ladda]="isCompanyCreationInProcess$ | async" (click)="createCompany(paidItem)">Select Plan</button>
+                                                        <button class="btn btn-primary mrT1 mrB2"
+                                                            [ladda]="isCompanyCreationInProcess$ | async"
+                                                            (click)="createCompany(paidItem)">Select Plan</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -291,28 +270,23 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-3">
-                        <div class="activation-key">
-                            <label>Activation Key</label>
-                            <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
-                        </div>
-                        <div class="activation-btn">
-                            <button class="btn btn-green mrT1" [disabled]="!licenceKey.value" (click)="createCompanyViaActivationKey()"> Activate</button>
-                        </div>
-                    </div>
-                </div>
+          <div class="col-sm-12 col-md-3">
+            <div class="activation-key">
+              <label>Activation Key</label>
+              <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey" class="form-control mrT1" placeholder="Enter activation key">
             </div>
-            <div *ngIf="isCreateAndSwitchCompanyInProcess">
-                <div class="no-data mrT2 d-flex" style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-                    <div class="giddh-spinner vertical-center-spinner"></div>
-                </div>
+            <div class="activation-btn">
+              <button class="btn btn-green mrT1" [disabled]="!licenceKey.value" (click)="createCompanyViaActivationKey()"> Activate</button>
             </div>
-
-            <div class="note-wrap">
-                <p>Note:</p>
-                <p>* revenue more than 12 and less than 20 lacs</p>
-            </div>
-
+          </div>
         </div>
-    </layout-main>
+      </div>
+      <div *ngIf="isCreateAndSwitchCompanyInProcess">
+        <div class="no-data mrT2 d-flex"
+          style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
+          <div class="giddh-spinner vertical-center-spinner"></div>
+        </div>
+      </div>
+    </div>
+  </layout-main>
 </div>

@@ -86,7 +86,7 @@
 
 .giddh_logo_welcome img {
     max-width: 140px;
-    margin: 10px auto;
+    margin: 50px auto;
     display: block;
 }
 
@@ -98,6 +98,9 @@
     width: 100%;
 }
 
-#shareModal .btn.btn-blue {
+#shareModal .btn.btn-pink {
     width: 100%;
+}
+.add-companyDetail{
+      background-color: #F7F8FA;
 }

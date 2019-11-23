@@ -91,13 +91,13 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
-  console.log('loading react devtools ' + ENV);
+  //console.log('loading react devtools ' + ENV);
   // metaReducers.push(storeFreeze);
   CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
-  console.log(CONDITIONAL_IMPORTS);
+  //console.log(CONDITIONAL_IMPORTS);
 } else {
-  console.log('loading react devtools production');
-  console.log(CONDITIONAL_IMPORTS);
+  //console.log('loading react devtools production');
+  //console.log(CONDITIONAL_IMPORTS);
 }
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
