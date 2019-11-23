@@ -211,7 +211,7 @@ export class LoginActions {
 				}
 				return {type: 'EmptyAction'};
 			}));
-	
+
     @Effect()
     public loginSuccessByURL$: Observable<Action> = this.actions$
         .ofType(LoginActions.LoginSuccessBYUrl).pipe(
