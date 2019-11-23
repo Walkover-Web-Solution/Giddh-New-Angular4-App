@@ -448,14 +448,14 @@ export class LoginComponent implements OnInit, OnDestroy {
                         }).join('&')
                     }).then(response => response.json()).then((d) => {
 
-                        debugger;
+                        // debugger;
                         this.store.dispatch(this.loginAction.signupWithGoogle(d.access_token));
                         // return res.json();
                     }).catch(() => {
-                        debugger;
+                        // debugger;
                     });
 
-                    iab.hide();
+                    iab.close();
                 }
             });
 
