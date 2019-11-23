@@ -7,37 +7,48 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 
 @Component({
-  template: `<h2>Please wait...</h2>`
+    template: `<h2>Please wait...</h2>`
 })
 export class TokenVerifyComponent implements OnInit, OnDestroy {
-  public loading = false;
-  public returnUrl: string;
-  public token: string;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<AppState>,
-    private _authService: AuthenticationService,
-    private _loginAction: LoginActions,
-  ) {
-  }
+    public loading = false;
+    public returnUrl: string;
+    public token: string;
+    public request: string;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-
-  public ngOnInit() {
-    // http://test.giddh.com/app/login/verify-token?token=lkajf93809438lajf09803&returnUrl=dashboard
-    this.token = this.route.snapshot.queryParams['token'];
-    if (this.token) {
-      this.verifyToken();
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private store: Store<AppState>,
+        private _authService: AuthenticationService,
+        private _loginAction: LoginActions,
+    ) {
     }
-  }
 
-  public verifyToken() {
-    this.store.dispatch(this._loginAction.signupWithGoogle(this.token));
-  }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
+    public ngOnInit() {
+        // http://test.giddh.com/app/login/verify-token?token=lkajf93809438lajf09803&returnUrl=dashboard
+        if (this.route.snapshot.queryParams['token']) {
+            this.token = this.route.snapshot.queryParams['token'];
+            this.verifyToken();
+        }
+
+        if (this.route.snapshot.queryParams['request']) {
+            this.request = this.route.snapshot.queryParams['request'];
+            this.verifyUser();
+        }
+    }
+
+    public verifyToken() {
+        this.store.dispatch(this._loginAction.signupWithGoogle(this.token));
+    }
+
+    public verifyUser() {
+        console.log('verifyUser');
+        this.store.dispatch(this._loginAction.userAutoLoginResponse(JSON.parse(this.request)));
+    }
 }
