@@ -71,10 +71,12 @@ export class UserDetailsCompanyComponent implements OnInit {
       }
     });
   }
+
   createNewCompany(){
     this._generalService.invokeEvent.next("resetcompanysession");
     this.showAddCompanyModal();
   }
+
   public showAddCompanyModal() {
     this.loadAddCompanyNewUiComponent();
     this.addCompanyNewModal.show();
@@ -83,10 +85,12 @@ export class UserDetailsCompanyComponent implements OnInit {
   public hideAddCompanyModal() {
     this.addCompanyNewModal.hide();
   }
+
   private filterCompanyOnRole(a: CompanyResponse[]) {
     let filteredData = a.filter((element) => element.userEntityRoles.some((subElement) => subElement.entity.entity === "COMPANY"));
     return filteredData;
   }
+
   public loadAddCompanyNewUiComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
     let viewContainerRef = this.companynewadd.viewContainerRef;
