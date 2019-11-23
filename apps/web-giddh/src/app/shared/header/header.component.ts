@@ -347,6 +347,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (value === 'openschedulemodal') {
                 this.openScheduleModal();
             }
+
+            if (value === 'resetcompanysession') {
+                this.removeCompanySessionData();
+            }
         });
     }
 

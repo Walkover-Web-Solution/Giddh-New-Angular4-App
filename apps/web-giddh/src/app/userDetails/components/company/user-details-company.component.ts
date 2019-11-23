@@ -9,6 +9,7 @@ import {CompanyActions} from "../../../actions/company.actions";
 import {CompanyAddNewUiComponent} from "../../../shared/header/components";
 import {ElementViewContainerRef} from "../../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
+import {GeneralService} from "../../../services/general.service";
 
 @Component({
   selector: 'user-detail-company',
@@ -40,7 +41,7 @@ export class UserDetailsCompanyComponent implements OnInit {
 
   constructor(private modalService: BsModalService, private store: Store<AppState>,
               private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
-              private groupWithAccountsAction: GroupWithAccountsAction) {
+              private groupWithAccountsAction: GroupWithAccountsAction, private _generalService: GeneralService) {
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
     this.isGetAllRequestInProcess$ = this.store.select(p => p.company.isCompanyActionInProgress).pipe(takeUntil(this.destroyed$));
   }
@@ -71,6 +72,7 @@ export class UserDetailsCompanyComponent implements OnInit {
     });
   }
   createNewCompany(){
+    this._generalService.invokeEvent.next("resetcompanysession");
     this.showAddCompanyModal();
   }
   public showAddCompanyModal() {
