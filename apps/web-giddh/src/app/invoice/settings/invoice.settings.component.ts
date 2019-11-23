@@ -426,20 +426,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
   private getRedirectUrl(baseHref: string) {
     if (baseHref.indexOf('dev.giddh.com') > -1) {
-      return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'http://dev.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else if (baseHref.indexOf('test.giddh.com') > -1) {
-      return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'http://test.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-      return 'http://stage.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'http://stage.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else {
-      return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'https://app.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     }
   }
 
   private getGoogleCredentials(baseHref: string) {
-    if (baseHref === 'https://giddh.com/' || isElectron) {
+    if (baseHref === 'https://app.giddh.com/' || isElectron) {
       return {
         GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
       };

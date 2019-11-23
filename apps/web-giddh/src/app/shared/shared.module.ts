@@ -51,7 +51,7 @@ import { CKEditorModule } from 'ng2-ckeditor';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 
 const getGoogleCredentials = (baseHref: string) => {
-  if (baseHref === 'https://giddh.com/' || isElectron) {
+  if (baseHref === 'https://app.giddh.com/' || isElectron) {
     return {
       GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
     };
@@ -78,7 +78,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ], false);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
@@ -124,7 +124,7 @@ export function provideConfig() {
   ],
   exports: [LayoutComponent, LedgerDiscountComponent, HeaderComponent, FooterComponent, FixedFooterComponent, ManageGroupsAccountsComponent,
     AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent, AccountUpdateNewComponent,
-    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule,CompanyAddNewUiComponent,
+    ConfirmModalModule, NgbTypeaheadModule, VsForDirective, AccountsSideBarComponent, TextCaseChangeModule, KeyboardShortutModule, CompanyAddNewUiComponent,
     CKEditorModule, AsideMenuOtherTaxes
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, CompanyAddNewUiComponent, AccountOperationsComponent, GroupsAccountSidebarComponent,
