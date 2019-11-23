@@ -490,12 +490,12 @@ export class SettingIntegrationComponent implements OnInit {
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
             return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
         } else {
-            return 'https://giddh.com/app/pages/settings?tab=integration';
+            return 'https://app.giddh.com/app/pages/settings?tab=integration';
         }
     }
 
     private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://giddh.com/' || isElectron) {
+        if (baseHref === 'https://app.giddh.com/' || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
             };

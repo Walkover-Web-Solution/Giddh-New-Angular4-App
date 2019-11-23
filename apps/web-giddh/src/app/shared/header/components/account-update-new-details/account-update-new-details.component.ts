@@ -130,7 +130,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+        // this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
@@ -168,7 +168,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
-
+                this.addAccountForm.reset();
                 if (acc && acc.parentGroups[0].uniqueName) {
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -179,7 +179,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
-                    address.stateCodeName = address.state.code + " - " + address.state.name;
+                    // address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.country) {
@@ -355,7 +355,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 // });
             }
         });
-        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
             if (this.selectedaccountForMerge.length > 0) {
                 this.selectedaccountForMerge.forEach((element) => {
@@ -392,12 +392,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
+        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
         }
+
         this.prepareTaxDropdown();
     }
 
@@ -552,22 +554,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             partyType: ['NOT APPLICABLE']
         });
         if (val) {
-            val.stateCode = val.state ? (val.state.code ? val.state.code : val.stateCode) : val.stateCode;
             gstFields.patchValue(val);
         }
         return gstFields;
     }
 
-    public resetGstStateForm() {
-        this.forceClear$ = observableOf({ status: true });
+    // public resetGstStateForm() {
+    //     this.forceClear$ = observableOf({ status: true });
 
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
-        for (let control of addresses.controls) {
-            control.get('stateCode').patchValue(null);
-            control.get('state').get('code').patchValue(null);
-            control.get('gstNumber').setValue("");
-        }
-    }
+    //     let addresses = this.addAccountForm.get('addresses') as FormArray;
+    //     for (let control of addresses.controls) {
+    //         control.get('stateCode').patchValue(null);
+    //         control.get('state').get('code').patchValue(null);
+    //         control.get('gstNumber').setValue("");
+    //     }
+    // }
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
         // if (value && !value.startsWith(' ', 0)) {
@@ -576,12 +577,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (addresses.length > 4) {
             this.moreGstDetailsVisible = false;
         }
-        // } else {
-        //     this._toaster.clearAllToaster();
-        //     if (this.formFields['taxName']) {
-        //         this._toaster.errorToast(`Please fill ${this.formFields['taxName'].label} field first`);
-        //     }
-        // }
         return;
     }
 
