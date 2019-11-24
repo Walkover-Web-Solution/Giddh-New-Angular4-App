@@ -76,8 +76,9 @@
                     </td>
 
                     <td data-title="File">
-                        <a *ngIf="!expenses.fileNames" class="font-12">
-                            <i class="icon-file-path middle"></i> attach file</a>
+                        <!-- <a *ngIf="!expenses.fileNames" class="font-12">
+                            <i class="icon-file-path middle"></i> attach file</a> -->
+
                         <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                     </td>
 
@@ -145,7 +146,7 @@
 
     <div [hidden]="show">
         <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+        <!-- <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i> -->
     </div>
 
     <div class="input-container" [hidden]="!show">
