@@ -1,4 +1,4 @@
-<div class="aside-pane aside-pane-other-tax text-left" [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
+<div class="aside-pane aside-pane-other-tax text-left"  (clickOutside)="hideListItems()"  [keyboardShortcut]="'esc'" (onShortcutPress)="saveTaxes()">
 
   <button id="close" type="button" class="btn btn-sm btn-primary" (click)="saveTaxes()">X</button>
 
