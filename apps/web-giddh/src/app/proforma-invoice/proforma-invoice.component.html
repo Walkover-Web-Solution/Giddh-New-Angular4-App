@@ -1,9 +1,19 @@
-<div *ngIf="showLoader">
-    <div class="no-data mrT2 d-flex"
-         style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-        <div class="giddh-spinner vertical-center-spinner"></div>
+<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
     </div>
-</div>
+
+<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
     <div class="form-group mrB mrT2 clearfix">
@@ -38,8 +48,16 @@
     <ng-container *ngIf="isUpdateDataInProcess">
 
         <div class="loaderClass">
-            <div class="giddh-spinner vertical-center-spinner"></div>
+            <div class="no-data mrT2 loader-main">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
         </div>
+
+
 
     </ng-container>
     <!--endregion-->
