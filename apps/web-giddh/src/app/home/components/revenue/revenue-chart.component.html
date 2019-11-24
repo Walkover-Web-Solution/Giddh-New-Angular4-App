@@ -27,7 +27,13 @@
                     </div>
                     <div class="panel-body pos-rel">
                         <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                            <div class="giddh-spinner vertical-center-spinner"></div>
+                                <div class="no-data mrT2 loader-main">
+                                        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                        <div class="spinner2">
+                                            <div class="cube1"></div>
+                                            <div class="cube2"></div>
+                                        </div>
+                                    </div>
                         </div>
                         <div class="chart-div" google-chart chart="myChartObject">
                             <perfect-scrollbar [scrollIndicators]="true">
