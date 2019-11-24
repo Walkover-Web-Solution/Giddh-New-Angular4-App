@@ -298,19 +298,22 @@ var app = new Vue({
       switch (window.location.hostname) {
         case 'localapp.giddh.com':
         case 'dev.giddh.com':
-          apiBaseUrl = 'http://apirelease.giddh.com/';
+          apiBaseUrl = 'http://apitest.giddh.com/';
           break;
         case 'test.giddh.com':
-          apiBaseUrl = 'http://apirelease.giddh.com/';
+          apiBaseUrl = 'http://apitest.giddh.com/';
           break;
         case 'stage.giddh.com':
-          apiBaseUrl = 'http://spi.giddh.com/';
+          apiBaseUrl = 'http://apitest.giddh.com/';
           break;
         case 'giddh.com':
           apiBaseUrl = 'https://api.giddh.com/';
           break;
+        case 'app.giddh.com':
+            apiBaseUrl = 'https://api.giddh.com/';
+          break;
         default:
-          apiBaseUrl = 'http://apirelease.giddh.com/';
+          apiBaseUrl = 'http://apitest.giddh.com/';
       }
       return apiBaseUrl;
     }
