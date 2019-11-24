@@ -441,7 +441,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // endregion
 
         // region subscribe to last state for showing title of page this.selectedPage
-        this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
+        this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
             this.isLedgerAccSelected = false;
             const lastState = s.toLowerCase();
 
@@ -1329,9 +1329,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.commonActions.GetPartyType());
     }
 
-	public removeCompanySessionData() {
-		this._generalService.createNewCompany = null;
-		this.store.dispatch(this.commonActions.resetCountry());
-		this.store.dispatch(this.companyActions.removeCompanyCreateSession());
-	}
+    public removeCompanySessionData() {
+        this._generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
 }
