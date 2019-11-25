@@ -393,11 +393,11 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 20">
+        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 10">
             <pagination [totalItems]="
                     (SalesRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
-                [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
+                [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
