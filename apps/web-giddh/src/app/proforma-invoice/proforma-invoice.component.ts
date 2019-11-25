@@ -45,7 +45,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon } from '../models/api-models/Invoice';
-import {CompanyResponse, StateDetailsRequest, TaxResponse} from '../models/api-models/Company';
+import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -73,7 +73,6 @@ import { GeneralService } from '../services/general.service';
 import { LoaderState } from "../loader/loader";
 import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
-import {createSelector} from "reselect";
 
 const THEAD_ARR_READONLY = [
     {
@@ -1165,7 +1164,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.accountDetails[type].stateCode = null;
                 this._toasty.clearAllToaster();
 
-                if(this.showGSTINNo) {
+                if (this.showGSTINNo) {
                     this._toasty.warningToast('Invalid GSTIN.');
                 } else {
                     this._toasty.warningToast('Invalid TRN.');
@@ -3183,14 +3182,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let stateName = $event.label;
         let stateCode = $event.value;
 
-        if (!isBilling && !this.autoFillShipping) {
-            this.invFormData.accountDetails.shippingDetails.stateName = stateName;
-            this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+        if (isBilling) {
+            // update account details address if it's billing details
+            this.invFormData.accountDetails.billingDetails.state.name = stateName;
+            this.invFormData.accountDetails.billingDetails.stateName = stateName;
+            this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+        } else {
+            // if it's not billing address then only update shipping details
+            // check if it's not auto fill shipping address from billing address then and then only update shipping details
+            if (!this.autoFillShipping) {
+                this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+                this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+                this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+            }
         }
-        this.invFormData.accountDetails.billingDetails.state.name = stateName;
-        this.invFormData.accountDetails.billingDetails.stateName = stateName;
-        this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
     }
 
     private updateAddressShippingBilling(obj) {
@@ -3232,11 +3237,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showTRNNo = false;
         }*/
 
-        if(this.selectedCompany.country === name) {
-            if(name === 'India') {
+        if (this.selectedCompany.country === name) {
+            if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
-            } else if(name === 'United Arab Emirates') {
+            } else if (name === 'United Arab Emirates') {
                 this.showGSTINNo = false;
                 this.showTRNNo = true;
             }
