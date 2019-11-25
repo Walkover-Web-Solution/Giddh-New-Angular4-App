@@ -9,6 +9,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
  */
 export interface CurrentCommonState {
     countries: CountryResponse[];
+    countriesAll: CountryResponse[];
     currencies: CurrencyResponse[];
     callingcodes: CallingCodesResponse;
     onboardingform: OnboardingFormResponse,
@@ -17,6 +18,7 @@ export interface CurrentCommonState {
 
 const initialState: CurrentCommonState = {
     countries: null,
+    countriesAll: null,
     currencies: null,
     callingcodes: null,
     onboardingform: null,
@@ -34,7 +36,14 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
                 });
             }
             return Object.assign({}, state, {});
-
+        case CommonActions.GET_ALL_COUNTRY_RESPONSE:
+            let countriesRes: BaseResponse<CountryResponse[], string> = action.payload;
+            if (countriesRes.status === 'success') {
+                return Object.assign({}, state, {
+                    countriesAll: countriesRes.body
+                });
+            }
+            return Object.assign({}, state, {});
         case CommonActions.GET_CURRENCY_RESPONSE:
             let currencies: BaseResponse<CurrencyResponse[], string> = action.payload;
             if (currencies.status === 'success') {
@@ -75,11 +84,11 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return { ...state, onboardingform: null };
         }
 
-	    case CommonActions.RESET_COUNTRY: {
-	      return Object.assign({}, state, {countries: null});
-	    }
+        case CommonActions.RESET_COUNTRY: {
+            return Object.assign({}, state, { countries: null });
+        }
 
-	    default:
-	      return state;
-  }
+        default:
+            return state;
+    }
 }
