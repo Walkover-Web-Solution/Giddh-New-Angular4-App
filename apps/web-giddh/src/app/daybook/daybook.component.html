@@ -14,7 +14,7 @@
 
             <div class="form-inline">
                 <div class=" form-group">
-                    <label>Period</label>
+
                     <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
                             daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
                             (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
@@ -22,7 +22,7 @@
 
                 </div>
                 <div class=" form-group">
-                    <label class="d-block"> &nbsp; </label>
+
 
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
                         <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
@@ -33,7 +33,7 @@
 
                 </div>
                 <div class=" form-group">
-                    <label class="d-block"> &nbsp; </label>
+
                     <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                               'Expand All'}}
                     </button>
@@ -55,7 +55,7 @@
             <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
         </div>
 
-        <div class="table-container clearfix trial-balance">
+        <div class=" clearfix trial-balance">
 
             <table class="tb-head table-bordered table basic">
                 <thead>
@@ -75,9 +75,9 @@
                         <td>{{ entry.entryDate }}</td>
                         <td>{{ entry.particular.name }}</td>
                         <td>{{ entry.voucherName }}</td>
-                        <td>{{ entry.voucherNo }}</td>
-                        <td>{{ entry.debitAmount }}</td>
-                        <td>{{ entry.creditAmount }}</td>
+                        <td class="text-right">{{ entry.voucherNo }}</td>
+                        <td class="text-right">{{ entry.debitAmount }}</td>
+                        <td class="text-right">{{ entry.creditAmount }}</td>
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
