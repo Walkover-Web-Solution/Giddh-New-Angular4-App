@@ -8972,6 +8972,13 @@ GST filing
                     #content_wrapper {
                         overflow-x: hidden;
                     }
+                         #companyList {
+                        background: #fff;
+                        padding-bottom: 4px;
+                        left: 0px;
+                        top: 30px;
+                        padding-top: 0;
+                    }
                 }
 
                 @media (max-width: 500px) {
@@ -9007,15 +9014,7 @@ GST filing
                     }
                 }
 
-                @media(max-width:411px) {
-                    #companyList {
-                        background: #fff;
-                        padding-bottom: 4px;
-                        left: 0px;
-                        top: 30px;
-                        padding-top: 0;
-                    }
-                }
+
 
                 @media (max-width: 360px) {
                     .pagination-sm>li>a,
