@@ -26,7 +26,7 @@
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                 </th>
 
-                <th class="text-right pr-2 amount-arrow"><div class="d-flex align-items-center"><span>Amount</span>
+                <th class="pr-2 amount-arrow"><div class="d-flex align-items-center"><span>Amount</span>
                     <ng-container class="d-inline-block "
                     *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                 </div>
@@ -65,7 +65,7 @@
                     </td>
 
                     <td data-title="Amount"
-                        class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                        class="pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
 
                     <td data-title="Payment/Receipt">
                         <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>
@@ -76,8 +76,9 @@
                     </td>
 
                     <td data-title="File">
-                        <a *ngIf="!expenses.fileNames" class="font-12">
-                            <i class="icon-file-path middle"></i> attach file</a>
+                        <!-- <a *ngIf="!expenses.fileNames" class="font-12">
+                            <i class="icon-file-path middle"></i> attach file</a> -->
+
                         <i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
                     </td>
 
@@ -106,10 +107,13 @@
 </div> -->
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">
-    <div class="no-data mrT2 d-flex "
-         style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
-        <div class="giddh-spinner vertical-center-spinner "></div>
-    </div>
+        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
 
 </div>
 <div class="no-data"
@@ -145,7 +149,7 @@
 
     <div [hidden]="show">
         <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+        <!-- <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i> -->
     </div>
 
     <div class="input-container" [hidden]="!show">

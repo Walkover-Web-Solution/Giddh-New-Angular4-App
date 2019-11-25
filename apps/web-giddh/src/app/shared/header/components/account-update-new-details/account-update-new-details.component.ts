@@ -134,7 +134,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-
+        this.store.dispatch(this.commonActions.resetCountry());
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -181,6 +181,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
+
+                for(let i = 0; i <= 20; i++) {
+                    this.removeGstDetailsForm(0);
+                }
+
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.country) {
                     if (accountDetails.country.countryCode) {

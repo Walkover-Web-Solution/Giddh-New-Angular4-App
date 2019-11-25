@@ -82,6 +82,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public formFields: any[] = [];
     public isGstValid: boolean;
     public GSTIN_OR_TRN: string;
+    public selectedCountry: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
@@ -89,6 +90,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        this.store.dispatch(this.commonActions.resetCountry());
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -264,6 +266,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
             this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
+            this.selectedCountry = result.countryflag + ' - ' + result.countryName;
             this.addAccountForm.get('mobileCode').setValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
@@ -273,6 +276,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');
+            this.selectedCountry = 'IN - India';
             this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
