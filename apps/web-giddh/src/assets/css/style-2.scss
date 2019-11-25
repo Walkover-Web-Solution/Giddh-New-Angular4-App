@@ -1142,7 +1142,8 @@
                 }
 
                 .tooltip {
-                    white-space: nowrap !important;
+                    white-space: normal;
+                    z-index: 9998;
                 }
 
                 .nowrap {
@@ -7945,7 +7946,6 @@ GST filing
 
                 .headerTooltip .tooltip-inner {
                     word-break: break-word !important;
-                    white-space: pre-line !important;
                 }
 
                 .icon-btn .tooltip-inner {

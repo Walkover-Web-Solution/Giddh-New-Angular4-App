@@ -107,7 +107,7 @@
                                                             <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                         </ng-template>
 
-                                                        <span [tooltip]="CompanyBranchname" placement="bottom">
+                                                        <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                                             {{ cmp.name }} <span
                                                                 *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                         </span>
@@ -389,7 +389,7 @@
                                                     <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                 </ng-template>
 
-                                                <span [tooltip]="CompanyBranchname" placement="bottom">
+                                                <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                                     {{ cmp.name }} <span
                                                         *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
 
