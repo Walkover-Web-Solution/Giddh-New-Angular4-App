@@ -2083,8 +2083,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
-                // this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
             }
+
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
                     //this.getAccountDetails(event.value);
@@ -2097,15 +2097,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.invFormData.accountDetails.currencySymbol = '';
             }
+
             if (this.isCashInvoice) {
                 this.companyCurrencyName = event.additional.currency;
             }
         } else {
             this.depositAccountUniqueName = '';
         }
-        // if (this.isMulticurrencyAccount) {
-        //     this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
-        // }
 
         this.calculateBalanceDue();
     }
