@@ -81,9 +81,6 @@
        color: #1c1c1c;
    }
 
-   .gstinAddress .button-group,
-   .ContactFromWrap .button-group {}
-
    .contactForm,
    .otherFormWrap,
    .bankDetialsForm {
@@ -100,3 +97,6 @@
        flex-direction: row-reverse;
        justify-content: flex-end;
    }
+   .remove {
+        padding-top: 33px;
+    }
