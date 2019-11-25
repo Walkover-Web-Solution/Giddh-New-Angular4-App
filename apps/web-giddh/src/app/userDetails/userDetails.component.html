@@ -3,7 +3,7 @@
     <tabset #staticTabs>
 
         <!-- start auth tab tab -->
-        <tab heading="Auth Key">
+        <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (select)="onTabChanged('auth-key')">
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <h1 class="section_head pdT0">Main Auth-key</h1>
@@ -25,7 +25,7 @@
             </div>
         </tab>
         <!-- end of auth tab tab -->
-        <tab heading="Mobile Number" select="getUserDetails()">
+        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" select="getUserDetails()" (select)="onTabChanged('mobile-number')">
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <form class="" name="mobileForm" novalidate>
@@ -137,7 +137,7 @@
         <!-- end of Mobile Number tab tab -->
 
         <!-- start session tab tab -->
-        <tab heading="Session" [active]="">
+        <tab heading="Session" [active]="activeTab == 'session'" (select)="onTabChanged('session')">
             <div class="wrap-tab-content-pd-15">
                 <div class="box clearfix mrT2">
                     <div class="max900 d-flex pdB1  activity-title">
@@ -202,13 +202,13 @@
             </div>
         </tab>
 
-        <tab heading="Subscription" [active]="">
+        <tab heading="Subscription" [active]="activeTab == 'subscription'" (select)="onTabChanged('subscription')">
             <div class="wrap-tab-content-pd-15">
                 <subscriptions></subscriptions>
             </div>
         </tab>
 
-        <tab heading="Company">
+        <tab heading="Company" [active]="activeTab == 'company'" (select)="onTabChanged('company')">
             <user-detail-company></user-detail-company>
         </tab>
         <!-- end of session tab -->

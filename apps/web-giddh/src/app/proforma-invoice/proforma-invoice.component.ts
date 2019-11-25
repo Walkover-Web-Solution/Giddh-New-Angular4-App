@@ -682,17 +682,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     bankaccounts = _.orderBy(bankaccounts, 'label');
                     this.bankAccounts$ = observableOf(bankaccounts);
 
-                    if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-                        if (bankaccounts) {
-                            if (bankaccounts.length > 0) {
-                                this.invFormData.accountDetails.uniqueName = 'cash';
-                            } else if (bankaccounts.length === 1) {
-                                this.depositAccountUniqueName = 'cash';
-                            }
+                    if (this.invFormData.accountDetails) {
+                        if (!this.invFormData.accountDetails.uniqueName) {
+                            this.invFormData.accountDetails.uniqueName = 'cash';
                         }
                     }
-
-                    this.depositAccountUniqueName = '';
+                    this.depositAccountUniqueName = 'cash';
                 }
 
                 // update mode because voucher details is available
