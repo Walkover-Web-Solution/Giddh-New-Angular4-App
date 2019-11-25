@@ -191,6 +191,7 @@ export class AccountRequestV2 {
     public sacNumber: string;
     public mobileCode?: string;
     public accountBankDetails?: AccountBankDetails[];
+    public currency?: string;
 }
 
 export class AccountResponseV2 {

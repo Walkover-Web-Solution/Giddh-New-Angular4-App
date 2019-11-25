@@ -116,6 +116,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
     public GSTIN_OR_TRN: string;
+    public selectedCompanyCountryName: string;
+    public selectedCurrency: string;
 
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
@@ -125,7 +127,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
@@ -134,7 +135,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        this.store.dispatch(this.commonActions.resetCountry());
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -182,7 +182,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
 
-                for(let i = 0; i <= 20; i++) {
+                for (let i = 0; i <= 20; i++) {
                     this.removeGstDetailsForm(0);
                 }
 
@@ -225,6 +225,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else {
                     this.addAccountForm.get('mobileNo').patchValue('');
                     this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
+                }
+                if (accountDetails.currency) {
+                    this.selectedCurrency = accountDetails.currency;
+                } else {
+                    this.selectedCurrency = this.companyCurrency;
                 }
             }
 
@@ -283,7 +288,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (!a) {
@@ -314,6 +319,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let companies = _.cloneDeep(session.companies);
                 let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
                 if (currentCompany) {
+                    if (currentCompany.countryV2) {
+                        this.selectedCompanyCountryName = currentCompany.countryV2.alpha2CountryCode + ' - ' + currentCompany.country;
+                    }
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
                     this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
                 }
@@ -839,7 +847,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public getCountry() {
-        this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
@@ -853,7 +861,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = '';
-                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+                this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
             }
         });
     }

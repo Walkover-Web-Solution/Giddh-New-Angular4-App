@@ -273,6 +273,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public selectedDate(value: any) {
         this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
         this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
+        this.filterData();
     }
 
     public selectFinancialYearOption(v: IOption) {
@@ -294,6 +295,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 fy: ''
             });
         }
+        this.filterData();
     }
 
     public filterData() {
