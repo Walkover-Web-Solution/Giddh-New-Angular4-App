@@ -40,7 +40,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public allowVatReportAccess: boolean = false;
 	@ViewChild('monthWise') public monthWise: BsDropdownDirective;
-	public isMonthSelected: boolean = true;
+	public isMonthSelected: boolean = false;
 	public selectedMonth: any = null;
 	public currentPeriod: any = {};
 	public showCalendar: boolean = false;
