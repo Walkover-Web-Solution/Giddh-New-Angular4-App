@@ -91,7 +91,7 @@
                 "output": "/"
               },
               {
-                "glob": "favicons.ico",
+                "glob": "favicon.ico",
                 "input": "apps/web-giddh/src/",
                 "output": "/"
               }
@@ -349,7 +349,7 @@
                 "output": "/"
               },
               {
-                "glob": "favicons.ico",
+                "glob": "favicon.ico",
                 "input": "apps/web-giddh/src/",
                 "output": "/"
               },
