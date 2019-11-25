@@ -7,10 +7,10 @@
 
                 <th>
                     <div class="d-flex align-items-center">
-                    <span class="pull-left">Date</span>
-                    <ng-container class="d-inline-block"
-                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
-                </div>
+                        <span class="pull-left">Date</span>
+                        <ng-container class="d-inline-block"
+                                      *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'entry_date'}"></ng-container>
+                    </div>
                 </th>
 
                 <th class="td_in_searchBox" #submittedBySearchContainer
@@ -26,10 +26,11 @@
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                 </th>
 
-                <th class="pr-2 amount-arrow"><div class="d-flex align-items-center"><span>Amount</span>
-                    <ng-container class="d-inline-block "
-                    *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
-                </div>
+                <th class="pr-2 amount-arrow">
+                    <div class="d-flex align-items-center"><span>Amount</span>
+                        <ng-container class="d-inline-block "
+                                      *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
+                    </div>
                 </th>
 
                 <th class="td_in_searchBox" #paymentReceiptSearchContainer
@@ -102,20 +103,23 @@
     </div>
 </div>
 
-<!-- <div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems>1" class="paginationWrapper">
-    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
-</div> -->
+<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="paginationWrapper">
+    <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm"
+                [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
+                (pageChanged)="pageChanged($event)"></pagination>
+</div>
 
 <div *ngIf="(getPettycashReportInprocess$ | async) ">
-        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
-            </div>
+    <div class="no-data mrT2 loader-main">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
 
 </div>
+
 <div class="no-data"
      *ngIf="(pettyCashReportsResponse$ | async)?.results?.length === 0 && !(getPettycashReportInprocess$ | async)">
     <h1>No entries found within given criteria.</h1>
@@ -127,18 +131,18 @@
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
 
-    <div class="icon-sort-asc" *ngIf="key !== col" (click)="sort('asc', col)"
-         [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+    <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
+         [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
-    <div class="icon-sort-asc" *ngIf="key === col && order === 'asc'"
+    <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
          (click)="sort('desc', col)"
-         [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+         [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
-    <div class="icon-sort-dsc" *ngIf="key === col && order === 'desc'"
+    <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
          (click)="sort('asc', col)"
-         [ngClass]="{'activeTextColor': key === col && order === 'desc'}">
+         [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
     </div>
 
 </ng-template>
