@@ -149,28 +149,38 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label>Party Type<span class="red-text">*</span></label>
-                                        <div class="custom-select pos-rel">
-                                            <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
+                                <ng-container *ngIf="companyCountry !=='IN'">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Party Type<span class="red-text">*</span></label>
+                                            <div class="custom-select pos-rel">
+                                                <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="d-block">&nbsp;</label>
-                                        <label *ngIf="gst.get('gstNumber').value && isGstValid">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="d-block">&nbsp;</label>
+                                            <label *ngIf="gst.get('gstNumber').value && isGstValid">
                                             <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is
                                                 Composite?
                                             </label></label>
-                                        <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
-                                            <i class="fa fa-times"> </i> Remove
-                                        </a>
+                                        </div>
+
+                                    </div>
+                                </ng-container>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <span class="text-right">
+                                            <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                                <i class="fa fa-times"> </i> Remove
+                                            </a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
                                 <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all
                                     ({{addAccountForm.get('addresses')['controls'].length}})</a>

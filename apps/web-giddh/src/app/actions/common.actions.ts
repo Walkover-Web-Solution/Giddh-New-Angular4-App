@@ -15,6 +15,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 export class CommonActions {
     public static GET_COUNTRY = 'GetCountry';
     public static GET_COUNTRY_RESPONSE = "GetCountryResponse";
+    public static GET_ALL_COUNTRY = 'GetAllCountry';
+    public static GET_ALL_COUNTRY_RESPONSE = "GetA;;CountryResponse";
     public static GET_CURRENCY = 'GetCurrency';
     public static GET_CURRENCY_RESPONSE = "GetCurrencyResponse";
     public static GET_CALLING_CODES = 'GetCallingCodes';
@@ -31,6 +33,11 @@ export class CommonActions {
         .ofType(CommonActions.GET_COUNTRY).pipe(
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
             map(response => this.GetCountryResponse(response)));
+    @Effect()
+    public getAllCountry$: Observable<Action> = this.action$
+        .ofType(CommonActions.GET_ALL_COUNTRY).pipe(
+            switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
+            map(response => this.GetAllCountryResponse(response)));
 
     @Effect()
     public getCurrency$: Observable<Action> = this.action$
@@ -69,6 +76,19 @@ export class CommonActions {
     public GetCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
         return {
             type: CommonActions.GET_COUNTRY_RESPONSE,
+            payload: value
+        };
+    }
+    public GetAllCountry(value: CountryRequest): CustomActions {
+        return {
+            type: CommonActions.GET_ALL_COUNTRY,
+            payload: value
+        };
+    }
+
+    public GetAllCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
+        return {
+            type: CommonActions.GET_ALL_COUNTRY_RESPONSE,
             payload: value
         };
     }
@@ -132,9 +152,9 @@ export class CommonActions {
         };
     }
 
-	public resetCountry(): CustomActions {
-		return {
-			type: CommonActions.RESET_COUNTRY
-		};
-	}
+    public resetCountry(): CustomActions {
+        return {
+            type: CommonActions.RESET_COUNTRY
+        };
+    }
 }
