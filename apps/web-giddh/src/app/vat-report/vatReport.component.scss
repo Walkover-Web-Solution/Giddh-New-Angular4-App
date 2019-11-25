@@ -42,6 +42,17 @@
 .tax-engine {
     background: none;
 }
+.advanceSearchByDate .btn-group > .dropdown-menu {
+    margin-top: 40px;
+}
+.month-picker {
+    position: absolute;
+    top: 10px !important;
+    left: 185px !important;
+}
+.advanceSearchByDate.date-advanceSearch {
+    width: 280px;
+}
 
 
 @media only screen and (max-width: 767px) {
