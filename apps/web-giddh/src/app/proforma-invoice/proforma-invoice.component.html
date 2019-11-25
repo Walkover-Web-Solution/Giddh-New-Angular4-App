@@ -2562,7 +2562,7 @@
 
 <!-- region models section -->
 <!-- open account aside -->
-<div class="aside-overlay" (click)="saveTaxes()" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
      asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
