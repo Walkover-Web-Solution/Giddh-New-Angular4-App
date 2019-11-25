@@ -39,6 +39,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CountryRequest } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -574,6 +575,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.totalNumberOfcompanies = res;
         });
         this.getPartyTypeForCreateAccount();
+        this.getAllCountries();
     }
 
     public ngAfterViewInit() {
@@ -1327,6 +1329,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
+    }
+    public getAllCountries() {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
     }
 
     public removeCompanySessionData() {
