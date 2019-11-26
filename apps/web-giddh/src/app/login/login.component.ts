@@ -341,15 +341,24 @@ export class LoginComponent implements OnInit, OnDestroy {
   public async signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
       // electronOauth2
-      const { ipcRenderer } = (window as any).require("electron");
+      const {ipcRenderer} = (window as any).require("electron");
       if (provider === "google") {
         // google
-        const t = ipcRenderer.sendSync("authenticate", provider);
-        this.store.dispatch(this.loginAction.signupWithGoogle(t));
+        ipcRenderer.send("authenticate", provider);
+        ipcRenderer.once("authenticate-token", (event, res) => {
+          // debugger;
+          console.log(res);
+          this.store.dispatch(this.loginAction.signupWithGoogle(res));
+        });
+        // this.store.dispatch(this.loginAction.signupWithGoogle(t));
       } else {
         // linked in
-        const t = ipcRenderer.sendSync("authenticate", provider);
-        this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+        ipcRenderer.send("authenticate", provider);
+
+        ipcRenderer.once("authenticate-token", (event, res) => {
+          // debugger;
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+        });
       }
 
     } else {
@@ -407,7 +416,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public forgotPassword(userId) {
-    this.resetPasswordForm.patchValue({ uniqueKey: userId });
+    this.resetPasswordForm.patchValue({uniqueKey: userId});
     this.userUniqueKey = userId;
     this.store.dispatch(this.loginAction.forgotPasswordRequest(userId));
   }
