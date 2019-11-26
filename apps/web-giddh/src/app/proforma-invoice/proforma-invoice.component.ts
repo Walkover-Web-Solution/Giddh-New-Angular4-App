@@ -2266,28 +2266,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 number: this.invoiceNo,
                 uniqueName: unqName
             };
-            this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
-                .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                    if (response.status === 'success') {
-                        // reset form and other
-                        this.resetInvoiceForm(f);
-                        this._toasty.successToast('Voucher updated Successfully');
-                        this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-                        this.voucherNumber = response.body.number;
-                        this.invoiceNo = this.voucherNumber;
-                        this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
-                        this.postResponseAction(this.invoiceNo);
 
-                        this.depositAccountUniqueName = '';
-                        this.depositAmount = 0;
-                        this.isUpdateMode = false;
-                    } else {
-                        this._toasty.errorToast(response.message, response.code);
-                    }
-                    this.updateAccount = false;
-                }, (err) => {
-                    this._toasty.errorToast('Something went wrong! Try again');
-                });
+            if (this.isSalesInvoice || this.isCashInvoice) {
+                this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
+                    .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
+                        if (response.status === 'success') {
+                            // reset form and other
+                            this.resetInvoiceForm(f);
+                            this._toasty.successToast('Voucher updated Successfully');
+                            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
+                            this.voucherNumber = response.body.number;
+                            this.invoiceNo = this.voucherNumber;
+                            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+                            this.postResponseAction(this.invoiceNo);
+
+                            this.depositAccountUniqueName = '';
+                            this.depositAmount = 0;
+                            this.isUpdateMode = false;
+                        } else {
+                            this._toasty.errorToast(response.message, response.code);
+                        }
+                        this.updateAccount = false;
+                    }, (err) => {
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+            } else {
+                this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+                    .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
+                        if (response.status === 'success') {
+                            // reset form and other
+                            this.resetInvoiceForm(f);
+                            this._toasty.successToast('Voucher updated Successfully');
+                            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
+                            this.voucherNumber = response.body.number;
+                            this.invoiceNo = this.voucherNumber;
+                            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+                            this.postResponseAction(this.invoiceNo);
+
+                            this.depositAccountUniqueName = '';
+                            this.depositAmount = 0;
+                            this.isUpdateMode = false;
+                        } else {
+                            this._toasty.errorToast(response.message, response.code);
+                        }
+                        this.updateAccount = false;
+                    }, (err) => {
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+            }
         }
     }
 
