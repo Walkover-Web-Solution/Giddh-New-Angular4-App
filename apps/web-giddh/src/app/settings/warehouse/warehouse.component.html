@@ -1,160 +1,166 @@
 <div class="createWarehouse">
 
-  <img src="../../../assets/images/warehouse-vector.svg" alt="warehouse image">
-  <h2>Create Warehouse</h2>
-  <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
-  <button class="btn btn-pink mrT2" (click)="openCreateCompanyModal()">Create Warehouse</button>
+    <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image">
+    <h2>Create Warehouse</h2>
+    <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
+    <button class="btn btn-pink mrT2" (click)="openCreateCompanyModal()">Create Warehouse</button>
 </div>
 
 
 <!-- if any 1 warehouse created then below code should be visible (Developer end) -->
 <div class="warehouseCardView" *ngIf="warehouseDetails">
-  <div class="row">
-    <div class="col-sm-4 pdR1">
-      <div class="warehouseCard">
-        <div class="d-flex">
-          <h3>Warehouse 1 </h3>
-          <div class="warehouseOptions">
-            <span class="setAsDefault"> <i class="icon-favorite-no-selected"></i> Set as Default</span>
-            <div class="btn-group" dropdown>
-              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                aria-controls="dropdown-basic">
-                <span class="icon-dots-three-vertical"></span>
-              </button>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
-                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
-              </ul>
+    <div class="row">
+        <div class="col-sm-4 pdR1">
+            <div class="warehouseCard">
+                <div class="d-flex">
+                    <h3>Warehouse 1 </h3>
+                    <div class="warehouseOptions">
+                        <span class="setAsDefault"> <i class="icon-favorite-no-selected"></i> Set as Default</span>
+                        <div class="btn-group" dropdown>
+                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                                aria-controls="dropdown-basic">
+                                <span class="icon-dots-three-vertical"></span>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="warehouse-details">
+                    <div class="clearfix about-warehaouse">
+                        <label>Linked with:</label>
+                        <p>Head Quarter, Branch 1, Branch 3</p>
+                    </div>
+
+                    <div class="clearfix about-warehaouse">
+                        <label>Inventory Value:</label>
+                        <p>22,000/-</p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>GSTIN:</label>
+                        <p><span class="gray-text">not available</span></p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>Address:</label>
+                        <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP
+                        </p>
+                    </div>
+                </div>
             </div>
-
-          </div>
         </div>
+        <div class="col-sm-4 pdL1 pdR1">
+            <div class="warehouseCard">
+                <div class="d-flex">
+                    <h3>Warehouse 2 </h3>
+                    <div class="warehouseOptions">
+                        <span class="setAsDefault"> <i class="icon-favorite-selected"></i> Set as Default</span>
+                        <div class="btn-group" dropdown>
+                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                                aria-controls="dropdown-basic">
+                                <span class="icon-dots-three-vertical"></span>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                            </ul>
+                        </div>
 
-        <div class="warehouse-details">
-          <div class="clearfix about-warehaouse">
-            <label>Linked with:</label>
-            <p>Head Quarter, Branch 1, Branch 3</p>
-          </div>
+                    </div>
+                </div>
 
-          <div class="clearfix about-warehaouse">
-            <label>Inventory Value:</label>
-            <p>22,000/-</p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>GSTIN:</label>
-            <p><span class="gray-text">not available</span></p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>Address:</label>
-            <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4 pdL1 pdR1">
-      <div class="warehouseCard">
-        <div class="d-flex">
-          <h3>Warehouse 2 </h3>
-          <div class="warehouseOptions">
-            <span class="setAsDefault"> <i class="icon-favorite-selected"></i> Set as Default</span>
-            <div class="btn-group" dropdown>
-              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                aria-controls="dropdown-basic">
-                <span class="icon-dots-three-vertical"></span>
-              </button>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
-                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
-              </ul>
+                <div class="warehouse-details">
+                    <div class="clearfix about-warehaouse">
+                        <label>Linked with:</label>
+                        <p>Head Quarter, Branch 1, Branch 3</p>
+                    </div>
+
+                    <div class="clearfix about-warehaouse">
+                        <label>Inventory Value:</label>
+                        <p>22,000/-</p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>GSTIN:</label>
+                        <p><span class="gray-text">not available</span></p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>Address:</label>
+                        <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP
+                        </p>
+                    </div>
+                </div>
             </div>
-
-          </div>
         </div>
+        <div class="col-sm-4 pdL1">
+            <div class="warehouseCard">
+                <div class="d-flex">
+                    <h3>Warehouse 3 </h3>
+                    <div class="warehouseOptions">
+                        <span class="setAsDefault"> <i class="icon-favorite-no-selected"></i> Set as Default</span>
+                        <div class="btn-group" dropdown>
+                            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                                aria-controls="dropdown-basic">
+                                <span class="icon-dots-three-vertical"></span>
+                            </button>
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                            </ul>
+                        </div>
 
-        <div class="warehouse-details">
-          <div class="clearfix about-warehaouse">
-            <label>Linked with:</label>
-            <p>Head Quarter, Branch 1, Branch 3</p>
-          </div>
+                    </div>
+                </div>
 
-          <div class="clearfix about-warehaouse">
-            <label>Inventory Value:</label>
-            <p>22,000/-</p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>GSTIN:</label>
-            <p><span class="gray-text">not available</span></p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>Address:</label>
-            <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4 pdL1">
-      <div class="warehouseCard">
-        <div class="d-flex">
-          <h3>Warehouse 3 </h3>
-          <div class="warehouseOptions">
-            <span class="setAsDefault"> <i class="icon-favorite-no-selected"></i> Set as Default</span>
-            <div class="btn-group" dropdown>
-              <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                aria-controls="dropdown-basic">
-                <span class="icon-dots-three-vertical"></span>
-              </button>
-              <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
-                <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
-              </ul>
+                <div class="warehouse-details">
+                    <div class="clearfix about-warehaouse">
+                        <label>Linked with:</label>
+                        <p>Head Quarter, Branch 1, Branch 3</p>
+                    </div>
+
+                    <div class="clearfix about-warehaouse">
+                        <label>Inventory Value:</label>
+                        <p>22,000/-</p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>GSTIN:</label>
+                        <p><span class="gray-text">not available</span></p>
+                    </div>
+                    <div class="clearfix about-warehaouse">
+                        <label>Address:</label>
+                        <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP
+                        </p>
+                    </div>
+                </div>
             </div>
-
-          </div>
         </div>
 
-        <div class="warehouse-details">
-          <div class="clearfix about-warehaouse">
-            <label>Linked with:</label>
-            <p>Head Quarter, Branch 1, Branch 3</p>
-          </div>
-
-          <div class="clearfix about-warehaouse">
-            <label>Inventory Value:</label>
-            <p>22,000/-</p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>GSTIN:</label>
-            <p><span class="gray-text">not available</span></p>
-          </div>
-          <div class="clearfix about-warehaouse">
-            <label>Address:</label>
-            <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP</p>
-          </div>
+        <div class="col-sm-4 pdR1 ">
+            <div class="warehouseCard createNewWarehouseBtn">
+                <div class="">
+                    <button class="btn btn-pink" (click)="openCreateCompanyModal()">
+                        Create New
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-
-    <div class="col-sm-4 pdR1 ">
-      <div class="warehouseCard createNewWarehouseBtn">
-        <div class="">
-          <button class="btn btn-pink" (click)="openCreateCompanyModal()">
-            Create New
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!--add company modal  -->
 
 
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-  class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-      </ng-template>
+    class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+            </ng-template>
+        </div>
     </div>
-  </div>
 </div>
