@@ -31,3 +31,7 @@ if (typeof isElectron === 'undefined') {
   APP_URL_WA = './';
   APP_FOLDER_WA = '';
 }
+
+export enum ONBOARDING_TYPE {
+    WAREHOUSE
+}

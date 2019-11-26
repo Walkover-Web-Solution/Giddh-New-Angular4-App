@@ -1,11 +1,9 @@
 <div class="createWarehouse">
-
     <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image">
     <h2>Create Warehouse</h2>
     <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
     <button class="btn btn-pink mrT2" (click)="openCreateCompanyModal()">Create Warehouse</button>
 </div>
-
 
 <!-- if any 1 warehouse created then below code should be visible (Developer end) -->
 <div class="warehouseCardView" *ngIf="warehouseDetails">

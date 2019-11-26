@@ -17,7 +17,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 
-import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent, OnBoardingComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -54,6 +54,7 @@ import { PaginationModule, DatepickerModule, BsDatepickerModule } from 'ngx-boot
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
+
 
 const getGoogleCredentials = (baseHref: string) => {
     if (baseHref === 'https://giddh.com/' || isElectron) {
@@ -100,7 +101,7 @@ export function provideConfig() {
         CompanyAddNewUiComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
-
+        OnBoardingComponent,
         GroupsAccountSidebarComponent,
         GroupAddComponent,
         GroupUpdateComponent,
@@ -168,7 +169,7 @@ export function provideConfig() {
         PaginationModule,
         ClickOutsideModule,
         PerfectScrollbarModule,
-
+        OnBoardingComponent,
         ConfirmModalModule,
         NgbTypeaheadModule,
         VsForDirective,
@@ -189,7 +190,7 @@ export function provideConfig() {
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
         AccountAddNewDetailsComponent,
-
+        OnBoardingComponent,
         AccountUpdateNewDetailsComponent
     ],
     providers: [
