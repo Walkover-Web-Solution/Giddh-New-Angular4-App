@@ -8,7 +8,7 @@ import { LiveAccountsComponent } from './components/live-accounts/live-accounts.
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import { ActiveFinancialYear, CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
@@ -23,6 +23,9 @@ import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
+import {SubscriptionsUser} from "../models/api-models/Subscriptions";
+import {createSelector} from "reselect";
+import {GeneralService} from "../services/general.service";
 
 @Component({
   selector: 'home',
@@ -50,9 +53,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('crdrlist') public crdrlist: CrDrComponent;
   @ViewChild('totalSales') public totalSales: TotalSalesComponent;
 
+  public selectedCompany: Observable<CompanyResponse>;
+  public subscribedPlan: SubscriptionsUser;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public hideallcharts: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -60,7 +66,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdRef: ChangeDetectorRef,
     private _homeActions: HomeActions,
     private _router: Router,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _generalService: GeneralService
   ) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
     this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
@@ -70,6 +77,34 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.networthComparisionChartData$ = this.store.select(p => p.home.networth_comparisionChart).pipe(takeUntil(this.destroyed$));
     this.revenueChartData$ = this.store.select(p => p.home.revenueChart).pipe(takeUntil(this.destroyed$));
     this.needsToRedirectToLedger$ = this.store.select(p => p.login.needsToRedirectToLedger).pipe(takeUntil(this.destroyed$));
+
+    this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
+        return;
+      }
+
+      let orderedCompanies = _.orderBy(companies, 'name');
+      this.companies$ = observableOf(orderedCompanies);
+      this.store.dispatch(this.companyActions.setTotalNumberofCompanies(orderedCompanies.length));
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
+      });
+
+      return selectedCmp;
+    })).pipe(takeUntil(this.destroyed$));
+
+    this.selectedCompany.subscribe((res: any) => {
+      if (res) {
+        if (res.subscription) {
+          this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+          this.subscribedPlan = res.subscription;
+        }
+      }
+    });
   }
 
   public ngOnInit() {
@@ -79,6 +114,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'home';
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+
+    this._generalService.invokeEvent.subscribe(value => {
+      if (value === 'hideallcharts') {
+          this.hideallcharts = true;
+      }
+      if (value === 'showallcharts') {
+        this.hideallcharts = false;
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
@@ -91,6 +135,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
           let res = c.find(p => p.uniqueName === a);
           if (res) {
             this.activeFinancialYear = res.activeFinancialYear;
+
             this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
               if (result) {
                 this._accountService.GetFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -122,27 +167,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
               }
             }
           }
+
           if (activeCmpUniqueName) {
-            this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-              this.activeFinancialYear.financialYearStarts,
-              this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
-
-            if(this.expence !== undefined) {
-              this.expence.fetchChartData();
-            }
-
-            if(this.revenue !== undefined) {
-              this.revenue.fetchChartData();
-            }
-
-            if(this.history !== undefined) {
-              this.history.requestInFlight = true;
-            }
-
-            if(this.networth !== undefined) {
-              this.networth.requestInFlight = true;
-            }
-
+            this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
             this.cdRef.detectChanges();
           }
         }
@@ -154,14 +181,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public hardRefresh() {
     let API = [API_TO_CALL.PL];
     if (this.activeFinancialYear) {
-      this.expence.refresh = true;
+      //this.expence.refresh = true;
       this.compare.requestInFlight = true;
-      this.history.requestInFlight = true;
-      this.networth.requestInFlight = true;
-      this.expence.fetchChartData();
+      //this.history.requestInFlight = true;
+      //this.networth.requestInFlight = true;
+      //this.expence.fetchChartData();
 
-      this.revenue.refresh = true;
-      this.revenue.fetchChartData();
+      this.revenue.refreshChart();
       if (this.compare.showProfitLoss) {
         API.push(API_TO_CALL.PL);
       }
@@ -182,7 +208,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         API.push(API_TO_CALL.REVENUE);
       }
 
-      // if(this.networth.)
       let unique = API.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });
@@ -211,7 +236,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         API.push(API_TO_CALL.REVENUE);
       }
 
-      // if(this.networth.)
       unique = API.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });
@@ -227,5 +251,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(this._homeActions.ResetHomeState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public goToSelectPlan() {
+    this._router.navigate(['pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, isPlanPage: true } });
   }
 }

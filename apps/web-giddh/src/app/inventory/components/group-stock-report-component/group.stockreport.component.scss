@@ -70,15 +70,19 @@ tfoot {
 }
 
 .td_in_searchBox div span {
-  flex: 1 1 auto;
+
   padding-left: 8px;
 }
 
 .td_in_searchBox div i {
-  margin-top: 3px;
-  color: #a9a9a9;
-  padding-right: 8px;
-  cursor: pointer;
+ margin-top: 1px;
+    color: #757BB9;
+    padding-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+
 }
 
 .td_in_searchBox {
@@ -90,10 +94,13 @@ tfoot {
 }
 
 .td_in_searchBox .input-container input {
-  min-height: 36px;
-  width: 100%;
-  padding: 6px;
-  padding-right: 40px;
+ height: 50px;
+    min-width: 100%;
+    padding: 11px;
+    padding-right: 40px;
+    color: #1c1c1c;
+    border: none;
+    background-color: #f2f2f2;
 }
 
 .td_in_searchBox .input-container i {

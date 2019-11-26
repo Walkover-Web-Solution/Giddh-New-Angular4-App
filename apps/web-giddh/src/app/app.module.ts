@@ -60,6 +60,7 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { environment } from '../environments/environment';
 import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
+import { TokenVerifyComponent } from './login/token-verify.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -90,13 +91,13 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
-  console.log('loading react devtools ' + ENV);
+  //console.log('loading react devtools ' + ENV);
   // metaReducers.push(storeFreeze);
   CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
-  console.log(CONDITIONAL_IMPORTS);
+  //console.log(CONDITIONAL_IMPORTS);
 } else {
-  console.log('loading react devtools production');
-  console.log(CONDITIONAL_IMPORTS);
+  //console.log('loading react devtools production');
+  //console.log(CONDITIONAL_IMPORTS);
 }
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -113,6 +114,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NoContentComponent,
     PublicPageHandlerComponent,
     NotFoundComponent,
+    TokenVerifyComponent,
     DummyComponent,
     BillingDetailComponent,
 
@@ -163,7 +165,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule.forRoot(ROUTES, {useHash: IS_ELECTRON_WA, preloadingStrategy: CustomPreloadingStrategy, onSameUrlNavigation: 'reload'}),
     StoreRouterConnectingModule,
     ...CONDITIONAL_IMPORTS,
-    
+
     /**
      * This section will import the `DevModuleModule` only in certain build types.
      * When the module is not imported it will get tree shaked.

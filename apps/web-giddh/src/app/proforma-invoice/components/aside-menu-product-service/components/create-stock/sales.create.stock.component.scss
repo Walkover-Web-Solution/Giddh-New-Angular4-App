@@ -8,6 +8,7 @@
 
 .table_label td {
   padding-top: 12px !important;
+  padding-bottom:5px;
 }
 
 .dropdown-menu {
@@ -52,4 +53,16 @@
 
 .opacity{
   opacity: 0.5;
+}
+.fsstock td {
+    padding-right: 10px;
+}
+tr.fsstock td {
+    padding-bottom: 15px;
+}
+.table_label strong {
+    color: #484848;
+    font-weight: normal !important;
+    font-size: 14px;
+    font-family: 'opensans-regular';
 }

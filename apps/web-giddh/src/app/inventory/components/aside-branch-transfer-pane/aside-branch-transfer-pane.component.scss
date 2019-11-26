@@ -18,14 +18,26 @@
 }
 
 :host.in #close {
+    // display: block;
+    // position: fixed;
+    // left: auto;
+    // right: 572px;
+    // top: 0;
+    // z-index: 5;
+    // border: 0;
+    // border-radius: 0;
     display: block;
     position: fixed;
     left: auto;
-    right: 572px;
-    top: 0;
+    right: 0;
+    top: 7px;
     z-index: 5;
     border: 0;
     border-radius: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
 }
 
 :host .container-fluid {

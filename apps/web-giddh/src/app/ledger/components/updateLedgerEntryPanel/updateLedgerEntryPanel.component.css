@@ -157,6 +157,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
   min-width: 80px;
 }
 
+
+
 @media only screen and (max-width: 1024px) {
   .ledger_book {
     display: block;

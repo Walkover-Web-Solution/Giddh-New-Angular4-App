@@ -4,4 +4,5 @@ export interface IOption {
   disabled?: boolean;
   additional?: any;
   isAlreadyPushed?: boolean;
+  stateGstCode?: any;
 }

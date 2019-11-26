@@ -283,6 +283,9 @@ table th {
 .table-middle th .d-flex {
   align-items: center;
 }
+.sales-register-table {
+    padding-bottom: 170px;
+}
 @media (max-width: 1366px) {
   .main-sale-register-box {
     padding-right: 70px;
@@ -297,3 +300,8 @@ table th {
     padding-right: 270px;
   }
 }
+@media (max-width: 991px) {
+    .sales-register-table {
+        padding-bottom: 50px;
+    }
+  }

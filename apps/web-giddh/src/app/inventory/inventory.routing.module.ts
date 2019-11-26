@@ -11,6 +11,7 @@ import { JobworkComponent } from './jobwork/jobwork.component';
 
 import { InvViewService } from './inv.view.service';
 import {ManufacturingComponent} from "./manufacturing/manufacturing.component";
+import {ReceiptNoteComponent} from './components/receipt-note-components/receipt.note.component'
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {ManufacturingComponent} from "./manufacturing/manufacturing.component";
           { path: 'jobwork', component: JobworkComponent },
           { path: 'jobwork/:type/:uniqueName', component: JobworkComponent },
           { path: 'manufacturing', component: ManufacturingComponent },
+          {path: 'receipt-note', component: ReceiptNoteComponent}
         ],
       }
     ])

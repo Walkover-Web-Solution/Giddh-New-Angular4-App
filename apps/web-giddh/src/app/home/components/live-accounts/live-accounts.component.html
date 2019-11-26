@@ -15,7 +15,13 @@
         </div>
       </div>
       <div class="dashboard-reconnectdiv" *ngIf="(isGetBankAccountsInProcess$ | async)">
-        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+        <div ng-if="errorMessage == ''">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
       </div>
       <div [ngClass]="{'dashboard-reconnectdiv': (bankAccountsError$ | async)}"
            *ngIf="!(isGetBankAccountsInProcess$ | async)">

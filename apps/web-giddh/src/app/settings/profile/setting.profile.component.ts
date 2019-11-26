@@ -16,7 +16,7 @@ import { TypeaheadMatch } from 'ngx-bootstrap';
 import { contriesWithCodes }  from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal }  from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
-import {CountryRequest} from "../../models/api-models/Common";
+import {CountryRequest, OnboardingFormRequest} from "../../models/api-models/Common";
 import { GeneralActions } from '../../actions/general/general.actions';
 import { CommonActions } from '../../actions/common.actions';
 
@@ -71,6 +71,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public CompanySettingsObj: any = {};
   public numberSystemSource: IOption[] = [];
   public decimalDigitSource: IOption[] = [];
+  public selectedState : any = '';
+  public stateGstCode: any[] = [];
+  public formFields: any[] = [];
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -89,34 +92,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     this.getCountry();
     this.getCurrency();
-
-    // this.stateStream$ = this.store.select(s => s.general.states).pipe(takeUntil(this.destroyed$));
-    // contriesWithCodes.map(c => {
-    //   this.countrySource.push({value: c.countryName, label: `${c.countryflag} - ${c.countryName}`});
-    // });
-    // this.stateStream$.subscribe((data) => {
-    //   if (data) {
-    //     this.stateResponse = _.cloneDeep(data);
-    //     data.map(d => {
-    //       this.states.push({label: `${d.code} - ${d.name}`, value: d.code});
-    //       this.statesInBackground.push({label: `${d.name}`, value: d.code});
-    //       this.statesSourceCompany.push({label: `${d.name}`, value: `${d.name}`});
-    //     });
-    //   }
-    //   this.statesSource$ = observableOf(this.states);
-    // }, (err) => {
-    //   // console.log(err);
-    // });
-
-    // this.store.select(s => s.session.currencies).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-    //   let currencies: IOption[] = [];
-    //   if (data) {
-    //     data.map(d => {
-    //       currencies.push({label: d.code, value: d.code});
-    //     });
-    //   }
-    //   this.currencySource$ = observableOf(currencies);
-    // });
 
     currencyNumberSystems.map(c => {
       this.numberSystemSource.push({value: c.value , label: `${c.name}` , additional: c});
@@ -166,7 +141,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         , takeUntil(this.destroyed$))
       .subscribe((event: any) => {
         if (this.isGstValid) {
-        this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+
+          // let addresses = [];
+          //
+          // for(let addressLoop = 0; addressLoop < this.companyProfileObj.addresses.length; addressLoop++) {
+          //   if(this.companyProfileObj.addresses[addressLoop].taxNumber && this.companyProfileObj.addresses[addressLoop].stateCode) {
+          //     addresses.push(this.companyProfileObj.addresses[addressLoop]);
+          //   }
+          // }
+
+          //this.patchProfile({addresses: addresses});
+          this.patchProfile({addresses: this.companyProfileObj.addresses});
         }
       });
   }
@@ -199,30 +184,34 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
           profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
         }
-        if (profileObj.gstDetails && profileObj.gstDetails.length > 3) {
-          this.gstDetailsBackup = _.cloneDeep(profileObj.gstDetails);
+        if (profileObj.addresses && profileObj.addresses.length > 3) {
+          this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
           this.showAllGST = false;
-          profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
+          profileObj.addresses = profileObj.addresses.slice(0, 3);
         }
 
-        if (profileObj.gstDetails && !profileObj.gstDetails.length) {
+        if (profileObj.addresses && !profileObj.addresses.length) {
           let newGstObj = {
-            gstNumber: '',
-            addressList: [{
+              taxNumber: '',
               stateCode: '',
               stateName: '',
               address: '',
               isDefault: false
-            }]
           };
-          profileObj.gstDetails.push(newGstObj);
+          profileObj.addresses.push(newGstObj);
         }
+
+        if(profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
+          profileObj.country = profileObj.countryV2.alpha2CountryCode;
+        }
+
         this.companyProfileObj = profileObj;
         this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
         if (profileObj && profileObj.country) {
-          if(profileObj.countryV2 !== undefined) {
-            this.getStates(profileObj.countryV2.alpha2CountryCode)
+          if(profileObj.countryV2 !== undefined && this.states.length === 0) {
+            this.getStates(profileObj.countryV2.alpha2CountryCode);
+            this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
           }
 
           let countryName = profileObj.country.toLocaleLowerCase();
@@ -231,7 +220,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           }
         }
         this.checkCountry(false);
-        // this.selectState(false);
       }
     });
     this.store.pipe(take(1)).subscribe(s => {
@@ -243,33 +231,42 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public addGst() {
-    let gstDetails = _.cloneDeep(this.companyProfileObj.gstDetails);
+    let addresses = _.cloneDeep(this.companyProfileObj.addresses);
     let gstNumber;
     let isValid;
-    if (gstDetails && gstDetails.length) {
-      gstNumber = gstDetails[gstDetails.length - 1].gstNumber;
-      isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+    if (addresses && addresses.length) {
+      gstNumber = addresses[addresses.length - 1].taxNumber;
+      //isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(gstNumber)) {
+            isValid = true;
+            break;
+          }
+        }
+      } else {
+        isValid = true;
+      }
     } else {
       isValid = true;
     }
 
-    // this.isGstValid
     if (isValid) {
       let companyDetails = _.cloneDeep(this.companyProfileObj);
       let newGstObj = {
-        gstNumber: '',
-        addressList: [{
-          stateCode: '',
-          stateName: '',
-          address: '',
-          isDefault: false
-        }]
+        taxNumber: '',
+        stateCode: '',
+        stateName: '',
+        address: '',
+        isDefault: false
       };
 
-      companyDetails.gstDetails.push(newGstObj);
+      companyDetails.addresses.push(newGstObj);
       this.companyProfileObj = companyDetails;
     } else {
-      this._toasty.errorToast('Please enter valid GST number to add more GST details.');
+      this._toasty.errorToast('Please enter valid '+this.formFields['taxName'].label+' to add more '+this.formFields['taxName'].label+' details.');
     }
   }
 
@@ -278,21 +275,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.value === selectedStateCode);
     if (selectedState && selectedState.value) {
-      profileObj.gstDetails[indx].addressList[0].stateName = '';
+      profileObj.addresses[indx].stateName = '';
       this.companyProfileObj = profileObj;
-
-      // this.checkGstDetails();
     }
+    this.checkGstDetails();
   }
 
   public updateProfile(data) {
 
     let dataToSave = _.cloneDeep(data);
-    if (dataToSave.gstDetails.length > 0) {
-      // console.log('dataToSave.gstDetails is :', dataToSave.gstDetails);
-      for (let entry of dataToSave.gstDetails) {
-        if (!entry.gstNumber && entry.addressList && !entry.addressList[0].stateCode && !entry.addressList[0].address) {
-          dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
+    if (dataToSave.addresses.length > 0) {
+      for (let entry of dataToSave.addresses) {
+        if (!entry.taxNumber && !entry.stateCode && !entry.address) {
+          dataToSave.addresses = _.without(dataToSave.addresses, entry);
         }
       }
     }
@@ -301,12 +296,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
     this.companyProfileObj = _.cloneDeep(dataToSave);
     if (this.gstDetailsBackup) {
-      dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+      dataToSave.addresses = _.cloneDeep(this.gstDetailsBackup);
     }
 
-    // if (this.countryIsIndia) {
-    //   dataToSave.state = null;
-    // }
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
   }
@@ -322,7 +314,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public removeGstEntry(indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1) {
-      profileObj.gstDetails.splice(indx, 1);
+      profileObj.addresses.splice(indx, 1);
       if (this.gstDetailsBackup) {
         this.gstDetailsBackup.splice(indx, 1);
       }
@@ -333,41 +325,68 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public setGstAsDefault(indx, ev) {
     if (indx > -1 && ev.target.checked) {
-      for (let entry of this.companyProfileObj.gstDetails) {
-        entry.addressList[0].isDefault = false;
+      for (let entry of this.companyProfileObj.addresses) {
+        entry.isDefault = false;
       }
-      if (this.companyProfileObj.gstDetails && this.companyProfileObj.gstDetails[indx] && this.companyProfileObj.gstDetails[indx].addressList && this.companyProfileObj.gstDetails[indx].addressList[0]) {
-        this.companyProfileObj.gstDetails[indx].addressList[0].isDefault = true;
+      if (this.companyProfileObj.addresses && this.companyProfileObj.addresses[indx] && this.companyProfileObj.addresses[indx] && this.companyProfileObj.addresses[indx]) {
+        this.companyProfileObj.addresses[indx].isDefault = true;
       }
     }
   }
 
   public getDefaultGstNumber() {
-    if (this.companyProfileObj && this.companyProfileObj.gstDetails) {
+    if (this.companyProfileObj && this.companyProfileObj.addresses) {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
-      profileObj.gstDetails.forEach((obj, indx) => {
-        if (profileObj.gstDetails[indx] && profileObj.gstDetails[indx].addressList[0] && profileObj.gstDetails[indx].addressList[0].isDefault) {
+      profileObj.addresses.forEach((obj, indx) => {
+        if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
           defaultGstObjIndx = indx;
         }
       });
-      // console.log('defaultGstObjIndx is :', defaultGstObjIndx);
       return '';
     }
     return '';
   }
 
+  // public checkGstNumValidation(ele: HTMLInputElement) {
+  //   let isInvalid: boolean = false;
+  //   if (ele.value) {
+  //     if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
+  //       this._toasty.errorToast('Invalid GST number');
+  //       ele.classList.add('error-box');
+  //       this.isGstValid = false;
+  //     } else {
+  //       ele.classList.remove('error-box');
+  //       this.isGstValid = true;
+  //     }
+  //   } else {
+  //     ele.classList.remove('error-box');
+  //   }
+  // }
+
   public checkGstNumValidation(ele: HTMLInputElement) {
-    let isInvalid: boolean = false;
+    let isValid: boolean = false;
+
     if (ele.value) {
-      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
-        this._toasty.errorToast('Invalid GST number');
+      if(this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+        for(let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+          let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+          if(regex.test(ele.value)) {
+            isValid = true;
+            break;
+          }
+        }
+      } else {
+        isValid = true;
+      }
+
+      if (!isValid) {
+        this._toasty.errorToast('Invalid '+this.formFields['taxName'].label);
         ele.classList.add('error-box');
         this.isGstValid = false;
       } else {
         ele.classList.remove('error-box');
         this.isGstValid = true;
-        // this.checkGstDetails();
       }
     } else {
       ele.classList.remove('error-box');
@@ -379,16 +398,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public setChildState(ele: HTMLInputElement, index: number) {
-    let stateCode: any = Number(ele.value.substring(0, 2));
-    if (stateCode <= 37) {
-      if (stateCode < 10 && stateCode !== 0) {
-        stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
-      } else if (stateCode === 0) {
-        stateCode = '';
-      }
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode.toString();
+    let gstVal: string = ele.value;
+    if (gstVal.length >= 2) {
+      this.statesSource$.pipe(take(1)).subscribe(state => {
+        let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
+        let s = state.find(st => st.value === stateCode);
+        _.uniqBy(s, 'value');
+        if(s) {
+          this.companyProfileObj.addresses[index].stateCode = s.value;
+        } else {
+          this.companyProfileObj.addresses[index].stateCode = '';
+        }
+      });
     } else {
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = '';
+      this.companyProfileObj.addresses[index].stateCode = '';
     }
   }
 
@@ -433,15 +457,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public onToggleAllGSTDetails() {
-    if ((this.companyProfileObj.gstDetails.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
+    if ((this.companyProfileObj.addresses.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
       this.gstDetailsBackup = null;
     } else {
       this.showAllGST = !this.showAllGST;
       if (this.gstDetailsBackup) {
         if (this.showAllGST) {
-          this.companyProfileObj.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+          this.companyProfileObj.addresses = _.cloneDeep(this.gstDetailsBackup);
         } else {
-          this.companyProfileObj.gstDetails = this.companyProfileObj.gstDetails.slice(0, 3);
+          this.companyProfileObj.addresses = this.companyProfileObj.addresses.slice(0, 3);
         }
       }
     }
@@ -462,6 +486,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.companyProfileObj.state = '';
       }
       this.getStates(event.value);
+      this.getOnboardingForm(event.value);
       this.patchProfile({country: this.companyProfileObj.country});
     }
   }
@@ -477,7 +502,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public checkGstDetails() {
-    this.patchProfile({gstDetails: this.companyProfileObj.gstDetails});
+    this.patchProfile({addresses: this.companyProfileObj.addresses});
   }
 
   public patchProfile(obj) {
@@ -497,26 +522,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (item.city === e.item) {
         this.companyProfileObj.country = item.country;
         this.patchProfile({city: this.companyProfileObj.city});
-        // set country and state values
-        // try {
-        //   item.address_components.forEach(address => {
-        //     let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
-        //     let countryIdx = _.indexOf(address.types, 'country');
-        //     if (stateIdx !== -1) {
-        //       if (this.stateResponse) {
-        //         let selectedState = this.stateResponse.find((state: States) => state.name === address.long_name);
-        //         if (selectedState) {
-        //           this.companyProfileObj.state = selectedState.code;
-        //         }
-        //       }
-        //     }
-        //     if (countryIdx !== -1) {
-        //       this.companyProfileObj.country = address.long_name;
-        //     }
-        //   });
-        // } catch (e) {
-        //   console.log(e);
-        // }
       }
     });
   }
@@ -568,7 +573,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countrySource$ = observableOf(this.countrySource);
       } else {
         let countryRequest = new CountryRequest();
-        countryRequest.formName = '';
+        countryRequest.formName = 'onboarding';
         this.store.dispatch(this.commonActions.GetCountry(countryRequest));
       }
     });
@@ -577,16 +582,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public getStates(countryCode) {
     this.store.dispatch(this._generalActions.resetStatesList());
 
-    this.states = [];
-    this.statesInBackground = [];
-    this.statesSourceCompany = [];
-
     this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
       if (res) {
+        this.states = [];
+        this.statesInBackground = [];
+        this.statesSourceCompany = [];
+
         Object.keys(res.stateList).forEach(key => {
           this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
           this.statesInBackground.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
           this.statesSourceCompany.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
+
+          if(this.companyProfileObj.state === res.stateList[key].code) {
+              this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
+          }
+
+          if(res.stateList[key].stateGstCode !== null) {
+            this.stateGstCode[res.stateList[key].stateGstCode] = [];
+            this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
+          }
         });
         this.statesSource$ = observableOf(this.states);
       } else {
@@ -606,6 +620,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currencySource$ = observableOf(this.currencies);
       } else {
         this.store.dispatch(this.commonActions.GetCurrency());
+      }
+    });
+  }
+
+  public getOnboardingForm(countryCode) {
+    this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+      if (res) {
+        Object.keys(res.fields).forEach(key => {
+          this.formFields[res.fields[key].name] = [];
+          this.formFields[res.fields[key].name] = res.fields[key];
+        });
+      } else {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
       }
     });
   }

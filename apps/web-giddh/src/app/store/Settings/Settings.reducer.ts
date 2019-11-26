@@ -107,6 +107,7 @@ export interface SettingsState {
   isPaymentAdditionSuccess: boolean;
   isPaymentUpdationSuccess: boolean;
   taxes: Taxes;
+  branchRemoved: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -129,7 +130,8 @@ export const initialState: SettingsState = {
   isGmailIntegrated: false,
   isPaymentAdditionSuccess: false,
   isPaymentUpdationSuccess: false,
-  taxes: null
+  taxes: null,
+  branchRemoved: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -691,6 +693,13 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
       return {...state, taxes: null};
     }
 
+    case SETTINGS_BRANCH_ACTIONS.REMOVED_BRANCH_RESPONSE: {
+      return Object.assign({}, state, {branchRemoved: true});
+    }
+
+    case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
+      return Object.assign({}, state, {branchRemoved: false});
+    }
 
     //  endregion discount reducer
     default: {
