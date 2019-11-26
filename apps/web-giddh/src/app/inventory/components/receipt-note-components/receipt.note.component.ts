@@ -23,7 +23,12 @@ import { DiscountListComponent } from '../../../sales/discount-list/discountList
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IContentCommon } from '../../../models/api-models/Invoice';
-import { TaxResponse, StateDetailsRequest } from '../../../models/api-models/Company';
+import {
+    TaxResponse,
+    StateDetailsRequest,
+    BranchFilterRequest,
+    CompanyResponse
+} from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -58,10 +63,11 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../../models/api-models/Ledger';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import {NewBranchTransferResponse} from '../../../models/api-models/BranchTransfer';
 
 @Component({
-    selector: 'receipt-note',  // <home></home>
+    selector: 'receipt-note',
     templateUrl: './receipt.note.component.html',
     styleUrls: ['./receipt.note.component.scss'],
     animations: [
@@ -78,7 +84,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ]
 })
 
-export class ReceiptNoteComponent {
+export class ReceiptNoteComponent implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     public selectedAction: string = 'Multiple Products';
     public sendersOptions = [{
@@ -107,9 +113,34 @@ export class ReceiptNoteComponent {
     ];
 
     public hideSenderReciverDetails = false;
-    constructor(private _router: Router, private invViewService: InvViewService) {
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public branches$: Observable<CompanyResponse[]>;
+    public branchTransfer: NewBranchTransferResponse;
+
+    constructor(private _router: Router, private invViewService: InvViewService, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions) {
+
+        this.getAllBranches();
+
+        this.store.pipe(select(s => s.settings.branches), takeUntil(this.destroyed$)).subscribe(branches => {
+            if (branches) {
+                if (branches.results.length) {
+                    this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
+                } else if (branches.results.length === 0) {
+                    this.branches$ = observableOf(null);
+                }
+            }
+        });
+    }
+
+    public ngOnInit() {
 
     }
+
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
     public backToInv() {
         this.invViewService.setActiveView(null, null);
         this._router.navigate(['/pages/inventory']);
@@ -129,6 +160,14 @@ export class ReceiptNoteComponent {
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    public getAllBranches() {
+        let branchFilterRequest = new BranchFilterRequest();
+        branchFilterRequest.from = "";
+        branchFilterRequest.to = "";
+
+        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     }
 }
 
