@@ -82,9 +82,9 @@
                         </li>
                     </ul>
                 </div>
-<!--                <button class="btn btn-pink" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P"-->
-<!--                    (click)="toggleTransferAsidePane()">New Transfer-->
-<!--                </button>-->
+                <button class="btn btn-pink" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P"
+                    (click)="toggleTransferAsidePane()">New Transfer
+                </button>
                 <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
                     New
                 </button>
@@ -619,3 +619,22 @@
     </div>
 </div>
 <!-- Advance  search popup -->
+
+
+<!-- recipt note modal -->
+<ng-template #template>
+
+    <div class="recept-modal">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Modal</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <receipt-note></receipt-note>
+        </div>
+
+    </div>
+
+</ng-template>

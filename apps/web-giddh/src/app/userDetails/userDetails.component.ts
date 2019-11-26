@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
@@ -16,7 +16,8 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService, TabsetComponent } from 'ngx-bootstrap';
+import { BsModalRef, TabsetComponent } from 'ngx-bootstrap';
+import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
     selector: 'user-details',
@@ -62,6 +63,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
     public modalRef: BsModalRef;
+    public activeTab: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -72,11 +74,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private _subscriptionsActions: SubscriptionsActions,
         private _companyService: CompanyService,
-        private _companyActions: CompanyActions,
+        private companyActions: CompanyActions,
         private router: Router,
         private _sessionAction: SessionActions,
         public _route: ActivatedRoute,
-        private modalService: BsModalService) {
+        private generalActions: GeneralActions) {
         this.contactNo$ = this.store.select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
@@ -101,6 +103,15 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._route.params.subscribe(params => {
+            if (params['type'] && this.activeTab !== params['type']) {
+                // if active tab is null or undefined then it means component initialized for the first time
+                if (!this.activeTab) {
+                    this.setStateDetails(params['type']);
+                }
+                this.activeTab = params['type'];
+            }
+        });
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
@@ -158,14 +169,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
                 this.userSessionId = _.cloneDeep(session.user.session.id);
             }
         });
-
-        let cmpUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => cmpUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = cmpUniqueName;
-        stateDetailsRequest.lastState = 'user-details';
-
-        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
         this.userSessionResponse$.subscribe(s => {
             if (s && s.length) {
@@ -365,6 +368,37 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
     public clearAllSession() {
         this.store.dispatch(this._sessionAction.deleteAllSession());
+    }
+
+    /**
+     * Tab change handler, used to set the state for selected page
+     * which is used by header component, update menu panel and
+     * change the route URL as per selected tab
+     *
+     * @param {string} tabName Current selected tab
+     * @memberof UserDetailsComponent
+     */
+    public onTabChanged(tabName: string): void {
+        this.setStateDetails(tabName);
+        this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
+        this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
+    }
+
+    /**
+     * Sets the state for selected page
+     * which is used by header component
+     *
+     * @private
+     * @param {string} tabName Current selected tab
+     * @memberof UserDetailsComponent
+     */
+    private setStateDetails(tabName: string): void {
+        let companyUniqueName = null;
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
 }
