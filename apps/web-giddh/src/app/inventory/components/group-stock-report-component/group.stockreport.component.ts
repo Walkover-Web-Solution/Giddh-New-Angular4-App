@@ -205,6 +205,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     modalRef: BsModalRef;
     valueWidth = false;
+    public branchTransferMode: string = '';
 
     constructor(
         private _generalService: GeneralService,
@@ -357,8 +358,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
 
         this._generalService.invokeEvent.subscribe(value => {
             if (value[0] === "openbranchtransferpopup") {
+                this.branchTransferMode = value[1];
                 this.toggleTransferAsidePane();
                 this.openModal();
+            } else if(value[0] === "closebranchtransferpopup") {
+                this.branchTransferMode = "";
+                this.hideModal();
             }
         });
     }
@@ -774,6 +779,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         );
     }
 
-
+    hideModal() {
+        this.modalRef.hide();
+    }
 
 }

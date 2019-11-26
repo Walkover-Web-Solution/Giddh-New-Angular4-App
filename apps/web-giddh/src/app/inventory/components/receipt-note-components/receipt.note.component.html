@@ -1,106 +1,210 @@
 <section class="reciptNote" autocomplete="off">
-    <div class="reciptNoteHeader d-flex">
-        <h3>Receipt Note</h3>
-        <div class="closeRecipt" (click)="backToInv()">
-            <span class="icon-cross"></span>
-        </div>
-    </div>
-    <div class="reciptNoteRadioBtn">
-        <span class="mrR1"><input class="radio_theme" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction"><label for="multipleProducts">Multiple Products</label></span>
-        <span><input class="radio_theme" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" [value]="'Multiple Senders'" [(ngModel)]="selectedAction"><label for="multipleSenders">Multiple Senders</label></span>
-    </div>
-    <div class="reciptNoteContent">
-        <div class="multipleProductsWrapper" *ngIf="selectedAction === 'Multiple Products'">
-            <div class="multipleProducts clearfix">
-                <div class="col-sm-6">
-                    <div class="row mrB2">
+	<div class="reciptNoteHeader d-flex">
+		<h3>{{branchTransferMode}} Note</h3>
+		<div class="closeRecipt" (click)="closeBranchTransferPopup()">
+			<span class="icon-cross"></span>
+		</div>
+	</div>
+	<div class="reciptNoteRadioBtn">
+		<span class="mrR1"><input class="radio_theme" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" [value]="'products'" [(ngModel)]="transferType"><label for="multipleProducts">Multiple Products</label></span>
+		<span><input class="radio_theme" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" [value]="'senders'" [(ngModel)]="transferType"><label for="multipleSenders" *ngIf="branchTransferMode === 'receipt'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'delivery'">Multiple Receivers</label></span>
+	</div>
+	<div class="reciptNoteContent">
+		<div class="multipleProductsWrapper">
+			<div class="multipleProducts clearfix">
+				<div class="col-sm-6" *ngIf="branchTransferMode === 'delivery'">
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Date of Supply<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<input type="text" placeholder="Date of Supply" class="form-control" [(ngModel)]="branchTransfer.dateOfSupply" readonly bsDatepicker>
+						</div>
+					</div>
+                    <div *ngIf="transferType === 'senders'" class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                                Date of Supply<span class="red-text">*</span>
+                                Product's Name<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Datepicker" class="form-control" readonly bsDatepicker>
+                            <input type="text" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName">
                         </div>
                     </div>
-                    <div class="row mrB2">
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Sender's Name<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [options]="branches$ | async"></sh-select>
+						</div>
+					</div>
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Sender's Warehouse<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName">
+
+							</sh-select>
+						</div>
+					</div>
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Sender's GSTIN<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
+						</div>
+					</div>
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Sender’s Address
+							</label>
+						</div>
+						<div class="col-md-4">
+							<textarea class="form-control" [(ngModel)]="branchTransfer.source[0].warehouse.address"></textarea>
+						</div>
+					</div>
+					<div class="row mrB2" *ngIf="transferType !== 'senders'">
+						<div class="col-md-3">
+							<label>
+								Receiver’s Name<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<input type="text" [(ngModel)]="branchTransfer.destination[0].uniqueName" disabled class="form-control">
+						</div>
+					</div>
+					<div class="row mrB2" *ngIf="transferType !== 'senders'">
+						<div class="col-md-3">
+							<label>
+								Receiver's Warehouse<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
+						</div>
+					</div>
+					<div class="row mrB2" *ngIf="transferType !== 'senders'">
+						<div class="col-md-3">
+							<label>
+								Receiver’s GSTIN<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<sh-select [options]="recGstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
+						</div>
+					</div>
+					<div class="row mrB2" *ngIf="transferType !== 'senders'">
+						<div class="col-md-3">
+							<label>
+								Receiver’s Address
+							</label>
+						</div>
+						<div class="col-md-4">
+							<textarea class="form-control" [(ngModel)]="branchTransfer.destination[0].warehouse.address"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" *ngIf="branchTransferMode === 'receipt'">
+					<div class="row mrB2">
+						<div class="col-md-3">
+							<label>
+								Date of Supply<span class="red-text">*</span>
+							</label>
+						</div>
+						<div class="col-md-4">
+							<input type="text" placeholder="Date of Supply" class="form-control" [(ngModel)]="branchTransfer.dateOfSupply" readonly bsDatepicker>
+						</div>
+					</div>
+                    <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div class="col-md-3">
+                            <label>
+                                Product's Name<span class="red-text">*</span>
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName">
+                        </div>
+                    </div>
+                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
                         <div class="col-md-3">
                             <label>
                                 Sender's Name<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="branches$ | async"></sh-select>
+                            <sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [options]="branches$ | async"></sh-select>
                         </div>
                     </div>
-                    <div class="row mrB2">
+                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
                         <div class="col-md-3">
                             <label>
                                 Sender's Warehouse<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions">
-
-                            </sh-select>
+                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
-                    <div class="row mrB2">
+                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
                         <div class="col-md-3">
                             <label>
                                 Sender's GSTIN<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions">
-
-                            </sh-select>
+                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
                         </div>
                     </div>
-                    <div class="row mrB2">
+                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
                         <div class="col-md-3">
                             <label>
                                 Sender’s Address
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <textarea class="form-control"></textarea>
+							<textarea class="form-control" [(ngModel)]="branchTransfer.source[0].warehouse.address"></textarea>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                                Reference Docs <span class="gray-text"> (Optional) </span>
+                                Receiver's Name<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="selectRefDoc">
-
-                            </sh-select>
+                            <sh-select [(ngModel)]="branchTransfer.destination[0].uniqueName" [options]="branches$ | async"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                                Receiver’s Name<span class="red-text">*</span>
+                                Receiver's Warehouse<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" value="walkover web soution" disabled class="form-control">
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
-                                Details</div>
+                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                                Receiver’s GSTIN<span class="red-text">*</span>
+                                Receiver's GSTIN<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="recGstinOptions">
-
-                            </sh-select>
+                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">
@@ -110,38 +214,45 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <textarea class="form-control"></textarea>
+							<textarea class="form-control" [(ngModel)]="branchTransfer.destination[0].warehouse.address"></textarea>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="rightTotalAmount">
-                        <p>Total Amount</p>
-                        <h3>0.00</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-12">
-                <!-- make it functional -->
-                <table class="table  basic" id="table-recipt">
-                    <thead>
+				</div>
+				<div class="col-sm-6">
+					<div class="rightTotalAmount">
+						<p>Total Amount</p>
+						<h3>0.00</h3>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<table class="table  basic" id="table-recipt">
+					<thead *ngIf="transferType === 'products'">
                         <tr>
                             <th>#</th>
                             <th>Product Service Details</th>
                             <th>Qty/Unit</th>
                             <th>Rate</th>
                             <th>Amount</th>
-                            <th>Tax</th>
+                            <th>Total</th>
+                            <th>&nbsp;</th>
+                        </tr>
+					</thead>
+                    <thead *ngIf="transferType !== 'products'">
+                        <tr>
+                            <th>#</th>
+                            <th *ngIf="branchTransferMode === 'delivery'">Receiver’s Details</th>
+                            <th *ngIf="branchTransferMode === 'receipt'">Sender’s Details</th>
+                            <th>Qty/Unit</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
                             <th>Total</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                1.
-                            </td>
+					<tbody *ngIf="transferType === 'products'">
+                        <tr *ngFor="let product of branchTransfer.product; let i = index;">
+                            <td>{{i+1}}.</td>
                             <td>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)
                                 <p>SKU:Number</p>
                                 <textarea rows="5" cols="5" class="form-control"></textarea>
@@ -155,250 +266,19 @@
                                 <input type="text" value="2,300" class="form-control" disabled>
                             </td>
                             <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i class="fa fa-trash"></i>
+                                <a (click)="removeProduct(i)" *ngIf="branchTransfer.product.length > 0"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
-                    </tbody>
-                    <div class="addNewLine mrT1">
-                        <span class="multipleRecivers"> + Add Mulitple Products</span>
-                    </div>
-                    <tfoot id="tfoot">
-                        <tr>
-                            <td colspan="4">
-                                <div class="transportation-details pdT2">
-                                    <h3 class="mrB1">Transportation Details</h3>
-                                    <div class="row">
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Dispatched Date" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Company" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Mode" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Vehicle Number" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h3 class="mrB1">Note</h3>
-                                            <textarea class="form-control" rows="5" cols="5"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td colspan="4">
-                                <section class="tableSec form-group">
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Total Amount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Discount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Taxable Value</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Tax</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-                                    <div class="tableRow ">
-                                        <div class="tableCell biggerDollar">
-                                            <strong>Total</strong>
-                                        </div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-                                </section>
-                            </td>
+					</tbody>
+                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'delivery'">
+                        <tr *ngFor="let destination of branchTransfer.destination; let i = index;">
+                            <td>{{i+1}}.</td>
                             <td>
-                                &nbsp;
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <section id="actionPane" class="text-center clearfix">
-
-                <div class="col-xs-12">
-
-                    <!-- region generate mode -->
-                    <div class="pull-right pr">
-                        <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel
-                        </button>
-                        <button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note
-                        </button>
-                    </div>
-
-                </div>
-            </section>
-        </div>
-
-
-        <div class="multipleReciverWrapper clearfix" *ngIf="selectedAction === 'Multiple Senders'">
-            <div class="multipleProducts ">
-                <div class="col-sm-6">
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Date of Supply<span class="red-text">*</span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Receipt Note #
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Sender’s Name<span class="red-text">*</span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <sh-select [options]="sendersOptions">
-
-                            </sh-select>
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s
-                                Details</div>
-                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt
-                                Note</p>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Sender’s GSTIN<span class="red-text">*</span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <sh-select [options]="gstinOptions">
-
-                            </sh-select>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Sender’s Address
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <textarea class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Reference Docs <span class="gray-text"> (Optional) </span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <sh-select [options]="selectRefDoc">
-
-                            </sh-select>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Receiver’s Name<span class="red-text">*</span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" value="walkover web soution" disabled class="form-control">
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
-                                Details</div>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Receiver’s GSTIN<span class="red-text">*</span>
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <sh-select [options]="recGstinOptions">
-
-                            </sh-select>
-                        </div>
-                    </div>
-                    <div class="row mrB2">
-                        <div class="col-md-3">
-                            <label>
-                                Receiver’s Address
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            <textarea class="form-control"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="rightTotalAmount">
-                        <p>Total Amount</p>
-                        <h3>0.00</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-12">
-                <!-- make it functional -->
-                <table class="table  basic" id="table-recipt">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Receiver’s Details</th>
-                            <th>Qty/Unit</th>
-                            <th>Rate</th>
-                            <th>Amount</th>
-                            <th>Tax</th>
-                            <th>Total</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                1.
-                            </td>
-                            <td>
-
-                                <sh-select [options]="selectRecivers">
-
-                                </sh-select>
-                                <div class="senderRecivers"><i class="fa fa-user"></i> Sender’s Details</div>
-
+                                <sh-select [options]="selectRecivers"></sh-select>
+                                <div class="senderRecivers"><i class="fa fa-user"></i> Receiver’s Details</div>
+                                <sh-select [options]="gstinOptions" [(ngModel)]="destination.warehouse.uniqueName"></sh-select>
+                                <sh-select [options]="gstinOptions" [(ngModel)]="destination.warehouse.taxNumber"></sh-select>
+                                <textarea class="form-control" [(ngModel)]="destination.warehouse.address"></textarea>
                             </td>
                             <td>500 Meters</td>
                             <td>200</td>
@@ -409,34 +289,55 @@
                                 <input type="text" value="2,300" class="form-control" disabled>
                             </td>
                             <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i class="fa fa-trash"></i>
+                                <i (click)="removeReceiver(i)" *ngIf="branchTransfer.destination.length > 0" class="fa fa-trash"></i>
                             </td>
                         </tr>
                     </tbody>
-
+                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receipt'">
+                        <tr *ngFor="let source of branchTransfer.source; let i = index;">
+                            <td>{{i+1}}.</td>
+                            <td>
+                                <sh-select [options]="selectRecivers"></sh-select>
+                                <div class="senderRecivers"><i class="fa fa-user"></i> Sender’s Details</div>
+                                <sh-select [options]="gstinOptions" [(ngModel)]="source.warehouse.uniqueName"></sh-select>
+                                <sh-select [options]="gstinOptions" [(ngModel)]="source.warehouse.taxNumber"></sh-select>
+                                <textarea class="form-control" [(ngModel)]="source.warehouse.address"></textarea>
+                            </td>
+                            <td>500 Meters</td>
+                            <td>200</td>
+                            <td>
+                                <input type="text" value="2,300" class="form-control" disabled>
+                            </td>
+                            <td>
+                                <input type="text" value="2,300" class="form-control" disabled>
+                            </td>
+                            <td>
+                                <i (click)="removeSender(i)" *ngIf="branchTransfer.source.length > 0" class="fa fa-trash"></i>
+                            </td>
+                        </tr>
+                    </tbody>
                     <div class="addNewLine mrT1">
-                        <span class="multipleRecivers"> + Add Mulitple Recivers</span>
+                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'delivery'"> + Add Multiple Receivers</a>
+                        <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receipt'"> + Add Multiple Senders</a>
+                        <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> + Add Multiple Products</a>
                     </div>
-                    <tfoot id="tfoot">
+					<tfoot id="tfoot">
                         <tr>
                             <td colspan="4">
                                 <div class="transportation-details pdT2">
                                     <h3 class="mrB1">Transportation Details</h3>
                                     <div class="row">
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Dispatched Date" class="form-control">
+                                            <input type="text" placeholder="Dispatched Date" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.dispatchedDate" readonly bsDatepicker>
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Company" class="form-control">
+                                            <input type="text" placeholder="Transport Company" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.transporterName">
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Mode" class="form-control">
+                                            <input type="text" placeholder="Transport Mode" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.transportMode">
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Vehicle Number" class="form-control">
+                                            <input type="text" placeholder="Vehicle Number" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.vehicleNumber">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -449,90 +350,63 @@
                             </td>
                             <td colspan="4">
                                 <section class="tableSec form-group">
-
                                     <div class="tableRow">
                                         <div class="tableCell">Total Amount</div>
                                         <div class="tableCell figureCell">
                                             0.00
                                         </div>
                                     </div>
-
                                     <div class="tableRow">
                                         <div class="tableCell">Discount</div>
                                         <div class="tableCell figureCell">
                                             0.00
                                         </div>
                                     </div>
-
                                     <div class="tableRow">
                                         <div class="tableCell">Taxable Value</div>
                                         <div class="tableCell figureCell">
                                             0.00
                                         </div>
                                     </div>
-
                                     <div class="tableRow">
                                         <div class="tableCell">Tax</div>
                                         <div class="tableCell figureCell">
                                             0.00
                                         </div>
                                     </div>
-
-
-
                                     <div class="tableRow ">
-
                                         <div class="tableCell biggerDollar">
                                             <strong>Total</strong>
                                         </div>
-
                                         <div class="tableCell figureCell">
                                             0.00
                                         </div>
-
                                     </div>
-
-
-
                                 </section>
-
                             </td>
                             <td>
                                 &nbsp;
                             </td>
                         </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <section id="actionPane" class="text-center clearfix">
-
-                <div class="col-xs-12">
-
-                    <!-- region generate mode -->
-                    <div class="pull-right pr">
-                        <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel
-                        </button>
-                        <button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note
-                        </button>
-                    </div>
-
-                </div>
-            </section>
-        </div>
-    </div>
-
-
+					</tfoot>
+				</table>
+			</div>
+			<section id="actionPane" class="text-center clearfix">
+				<div class="col-xs-12">
+					<div class="pull-right pr">
+						<button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel
+						</button>
+						<button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note
+						</button>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
 </section>
-
-
 <!-- open account aside -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<!-- <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="asideMenuState  transinherit" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)"
-    (getUpdateList)="getUpdatedList($event)">
-</aside-menu-account> -->
-
 <!-- hide for recent discuss with reavindrji -->
 <aside-sender-receiver-details-pane *ngIf="hideSenderReciverDetails" [class]="asideMenuState"
-    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
+                                    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
 </aside-sender-receiver-details-pane>
