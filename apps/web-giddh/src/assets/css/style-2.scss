@@ -8505,6 +8505,11 @@ GST filing
                             margin-top: 0;
                             border-radius: 0;
                         }
+                         @media (min-width: 564px){
+                            #date-range-picker-parent .daterangepicker {
+                                width: 100%;
+                            }
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
