@@ -285,24 +285,18 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem("email");
   }
 
-  public signInWithProviders(provider: string) {
+  public async signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
 
-      const {ipcRenderer} = (window as any).require("electron");
+      const { ipcRenderer } = (window as any).require("electron");
       if (provider === "google") {
         // google
-        ipcRenderer.send("authenticate", provider);
-        ipcRenderer.once("authenticate-token", (event, res) => {
-          this.store.dispatch(this.loginAction.signupWithGoogle(res));
-        });
-        // this.store.dispatch(this.loginAction.signupWithGoogle(t));
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.signupWithGoogle(t));
       } else {
         // linked in
-        ipcRenderer.send("authenticate", provider);
-        ipcRenderer.once("authenticate-token", (event, res) => {
-          this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
-        });
-        // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+        const t = ipcRenderer.sendSync("authenticate", provider);
+        this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
       }
 
     } else {

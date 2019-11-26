@@ -81,11 +81,7 @@ export class NeedsAuthorization implements CanActivate {
             let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0].name);
             this._router.navigate([firstPermittedScope.key]);
           } else {
-            if (isElectron) {
-                this._router.navigate(['/login']);
-            } else {
-                window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
-            }
+            this._router.navigate(['/login']);
           }
         }
         return false;

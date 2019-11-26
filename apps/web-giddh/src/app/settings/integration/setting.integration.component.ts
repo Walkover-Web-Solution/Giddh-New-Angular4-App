@@ -482,20 +482,20 @@ export class SettingIntegrationComponent implements OnInit {
 
     private getRedirectUrl(baseHref: string) {
         if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/pages/settings?tab=integration';
+            return 'http://dev.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/settings?tab=integration';
+            return 'http://test.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/settings?tab=integration';
+            return 'http://stage.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
             return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
         } else {
-            return 'https://app.giddh.com/pages/settings?tab=integration';
+            return 'https://giddh.com/app/pages/settings?tab=integration';
         }
     }
 
     private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+        if (baseHref === 'https://giddh.com/' || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
             };
