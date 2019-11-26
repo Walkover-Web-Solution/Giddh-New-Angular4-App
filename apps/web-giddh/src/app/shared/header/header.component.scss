@@ -644,16 +644,32 @@ ul.sub-list{
 //     width:40%;
 // }
 // }
-@media(max-width:991px) {
-    // .primary-header .companyName-financeYear span.ellp.pdR1 {
-    //     width:30%;
-    // }
+
+/* responsive */
+
+
+@media(max-width:1023px) {
+
     .modal-liq90 {
         width: 100% !important;
     }
-    // .primary-header .companyName-financeYear span.ellp.pdR1 {
-    //     width:50%;
-    // }
+
+    .logo-hide-ipad{
+        display: none;
+    }
+    .primary-header .col-sm-5{
+        width: 50%;
+    }
+    .primary-header .btn-group.cp.mrL1.d-inline-block{
+        margin-left:0;
+
+    }
+   .primary-header   ul.nav.universal_date.mr-2,  .primary-header #AddManage.btn-gray {
+    margin-right: 5px;
+}
+.primary-header .row .col-sm-5:nth-child(3) {
+    padding-left: 0;
+}
 }
 
 @media(max-width:768px){
@@ -695,6 +711,10 @@ span.icon-support.dropdown-toggle{
 }
 }
 @media(max-width:767px){
+    .nav-left-bar{
+       width: 270px;
+       left: -270px;
+    }
 .upperLayerHeader {
     padding-top: 5px;
 }
@@ -742,7 +762,7 @@ span.icon-support.dropdown-toggle{
 @media(min-width:412px) and (max-width:840px){
   ul.sub-list{
       min-height: 30px ;
-    max-height: 140px;
+    max-height: 190px;
 }
 .sub_menu_nav{
       top: -60px;
