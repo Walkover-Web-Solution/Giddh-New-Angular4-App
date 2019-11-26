@@ -609,7 +609,7 @@
                 }
 
                 .bold {
-                    font-family: opensans-semibold;
+                    font-family: ''opensans-semibold'';
                 }
 
                 .modal-open {
@@ -8496,20 +8496,8 @@ GST filing
                         .contactForm .mobileNumberWidth input {
                             padding-right: 0 !important;
                         }
-                            .reciptNoteModal{
-                            width: 100% !important;
-                            top: 0;
 
-                        }
-                        .inventorypage .modal, .inventorypage .reciptNoteModal {
-                            margin-top: 0;
-                            border-radius: 0;
-                        }
-                         @media (min-width: 564px){
-                            #date-range-picker-parent .daterangepicker {
-                                width: 100%;
-                            }
-                        }
+
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -8986,13 +8974,6 @@ GST filing
                     #content_wrapper {
                         overflow-x: hidden;
                     }
-                         #companyList {
-                        background: #fff;
-                        padding-bottom: 4px;
-                        left: 0px;
-                        top: 30px;
-                        padding-top: 0;
-                    }
                 }
 
                 @media (max-width: 500px) {
@@ -9028,7 +9009,15 @@ GST filing
                     }
                 }
 
-
+                @media(max-width:411px) {
+                    #companyList {
+                        background: #fff;
+                        padding-bottom: 4px;
+                        left: 0px;
+                        top: 30px;
+                        padding-top: 0;
+                    }
+                }
 
                 @media (max-width: 360px) {
                     .pagination-sm>li>a,
@@ -9242,3 +9231,8 @@ GST filing
                 }
 
 
+                @media(min-width:992px){
+                    .modal-dialog.modal-lg.reciptNoteModal {
+                            width: 100% !important;
+                        }
+                }

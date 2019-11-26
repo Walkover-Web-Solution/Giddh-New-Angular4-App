@@ -111,9 +111,9 @@
         <div class="custom-tabs mt-2 mb-2">
             <ul class="nav nav-tabs pt-0">
                 <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)"
-                        (click)="toggleShow()">DR</a></li>
+                        (click)="toggleShow()">Debit</a></li>
                 <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)"
-                        (click)="toggleShow()">CR</a></li>
+                        (click)="toggleShow()">Credit</a></li>
             </ul>
         </div>
 
@@ -1150,7 +1150,7 @@
 
                     <br>
 
-                    <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex debitCreditAmount" style="justify-content: space-between">
 
                         <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
                             <span class="digitBlue mt-1">
