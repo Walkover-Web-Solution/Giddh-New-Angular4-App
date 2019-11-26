@@ -395,10 +395,13 @@
         </div>
 
         <!--loading-->
-        <div class="no-data mrT2 d-flex" *ngIf="(isGetAllInProcess$ | async)"
-            style="justify-content: center;align-items: center">
-            <div class="giddh-spinner vertical-center-spinner"></div>
-        </div>
+        <div class="no-data mrT2 loader-main" *ngIf="(isGetAllInProcess$ | async)">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
 
     </div>
 

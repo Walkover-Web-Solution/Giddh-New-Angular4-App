@@ -205,17 +205,17 @@ export class AccountsAction {
           if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
             this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
           }
-          if (action.payload.body.errorMessageForBankDetails) {
-            this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
-          }
+          // if (action.payload.body.errorMessageForBankDetails) {
+          //   this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
+          // }
         }
         let groupSearchString: string;
         this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
-        if (groupSearchString) {
+        //if (groupSearchString) {
           // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
-        } else {
+        //} else {
           // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-        }
+        //}
         setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
         return {type: 'EmptyAction'};
       }));

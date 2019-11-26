@@ -10,7 +10,14 @@
 
     <div class="panel-body pos-rel ratioAnalysisPanelBody">
       <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+        <div class="no-data mrT2 loader-main" ng-if="errorMessage == ''">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
+
         <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
       </div>
       <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">

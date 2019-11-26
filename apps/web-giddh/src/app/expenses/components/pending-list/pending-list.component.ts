@@ -142,7 +142,6 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-
         if (changes['isClearFilter']) {
             if (changes['isClearFilter'].currentValue) {
                 this.clearFilter();
@@ -153,8 +152,6 @@ export class PendingListComponent implements OnInit, OnChanges {
     public sort(ord: 'asc' | 'desc' = 'asc', key: string) {
         this.pettycashRequest.sortBy = key;
         this.pettycashRequest.sort = ord;
-        this.key = key;
-        this.order = ord;
         this.getPettyCashPendingReports(this.pettycashRequest);
         this.isFilteredSelected.emit(true);
     }

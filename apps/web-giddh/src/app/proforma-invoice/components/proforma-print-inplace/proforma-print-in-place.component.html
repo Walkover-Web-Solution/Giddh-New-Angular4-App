@@ -7,9 +7,13 @@
 
   <div class="invoice-image-section">
 
-    <div *ngIf="isVoucherDownloading" style="display:flex;justify-content: center;align-items: center;height: 100%">
-      <div class="giddh-spinner vertical-center-spinner" style="top: 0"></div>
-    </div>
+    <div *ngIf="isVoucherDownloading" class="no-data mrT2 loader-main">
+            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
+            </div>
+        </div>
 
     <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
               <span>

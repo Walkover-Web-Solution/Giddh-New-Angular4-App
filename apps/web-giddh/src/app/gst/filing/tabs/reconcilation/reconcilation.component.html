@@ -277,7 +277,14 @@
 <!-- region loader template-->
 <ng-template #loaderTmpl>
   <div class="filings-empty-state" *ngIf="(gstReconcileInvoiceRequestInProcess$ | async)">
-    <div class="giddh-spinner vertical-center-spinner"></div>
+
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+
+    </div>
+
     <div class="empty-msg"><span>  Loading Data.  </span></div>
   </div>
 </ng-template>

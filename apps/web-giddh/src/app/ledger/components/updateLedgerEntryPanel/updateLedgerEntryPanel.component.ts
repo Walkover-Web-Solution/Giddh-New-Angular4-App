@@ -352,7 +352,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.selectedLedger.transactions.forEach(f => {
                             f.isDiscount = false;
                             f.isTax = false;
-                            f.type = f.type === 'cr' ? 'CREDIT' : 'DEBIT';
 
                             // special case in petty cash mode
                             // others account entry

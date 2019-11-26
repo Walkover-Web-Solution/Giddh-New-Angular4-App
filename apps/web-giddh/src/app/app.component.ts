@@ -21,20 +21,20 @@ import {reassignNavigationalArray} from './models/defaultMenus'
  * Top Level Component
  */
 @Component({
-    selector: 'body',
-    encapsulation: ViewEncapsulation.None,
-    styleUrls: [
-        './app.component.css'
-    ],
-    template: `
-        <noscript *ngIf="isProdMode && !isElectron">
-            <iframe [src]="tagManagerUrl"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-        <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
-        <router-outlet></router-outlet>
-    `,
-    // changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'body',
+  encapsulation: ViewEncapsulation.None,
+  styleUrls: [
+    './app.component.css'
+  ],
+  template: `
+      <noscript *ngIf="isProdMode && !isElectron">
+          <iframe [src]="tagManagerUrl"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+      <div id="loader-1" *ngIf="!IAmLoaded"><div class="spinner2"><div class="cube1"></div><div class="cube2"></div></div></div>
+      <router-outlet></router-outlet>
+  `,
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
