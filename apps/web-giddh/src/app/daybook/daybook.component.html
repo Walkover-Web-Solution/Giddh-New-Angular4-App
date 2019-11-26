@@ -144,7 +144,7 @@
                 Transactions
                 | {{(daybookData$ | async)?.totalPages}} Pages
             </small>
-            <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages</small>
+            <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 Transactions | 0 Pages</small>
         </div>
 
         <!-- pagination -->

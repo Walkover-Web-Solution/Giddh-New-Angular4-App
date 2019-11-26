@@ -1,19 +1,19 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { map, take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
-import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+
+import { CompanyActions } from '../actions/company.actions';
+import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
-import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 
 @Component({
     selector: 'daybook',
@@ -77,8 +77,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
-    constructor(private store: Store<AppState>, private _daybookActions: DaybookActions,
-        private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+    constructor(
+        private changeDetectorRef: ChangeDetectorRef,
+        private _companyActions: CompanyActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private _daybookActions: DaybookActions,
+        private store: Store<AppState>
+    ) {
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.store.select(s => s.daybook.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.entries) {
@@ -93,6 +98,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 });
                 this.loadPaginationComponent(data);
                 this.daybookData$ = observableOf(data);
+                this.changeDetectorRef.detectChanges();
             }
         });
         let companyUniqueName;
