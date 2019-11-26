@@ -1,3 +1,4 @@
+import { Component, TemplateRef } from '@angular/core';
 import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
@@ -9,7 +10,7 @@ import { AppState } from '../../../store';
 
 import { select, Store } from '@ngrx/store';
 
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -19,14 +20,13 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { createSelector } from 'reselect';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective, PaginationComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
-
-
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -55,6 +55,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     @ViewChild('shCategory') public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+    @ViewChild('template') public template: ElementRef;
 
     public today: Date = new Date();
     public activeGroup$: Observable<StockGroupResponse>;
@@ -202,9 +203,12 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
 
     public branchAvailable: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    modalRef: BsModalRef;
+    valueWidth = false;
 
     constructor(
+        private _generalService: GeneralService,
+        private modalService: BsModalService,
         private store: Store<AppState>,
         private route: ActivatedRoute,
         private sideBarAction: SidebarAction,
@@ -349,6 +353,13 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             filterCategory: [''],
             filterCategoryType: [''],
             filterValueCondition: ['']
+        });
+
+        this._generalService.invokeEvent.subscribe(value => {
+            if (value[0] === "openbranchtransferpopup") {
+                this.toggleTransferAsidePane();
+                this.openModal();
+            }
         });
     }
 
@@ -755,5 +766,14 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     }
 
     //************************************//
+
+    openModal() {
+        this.modalRef = this.modalService.show(
+            this.template,
+            Object.assign({}, { class: 'modal-lg reciptNoteModal' })
+        );
+    }
+
+
 
 }

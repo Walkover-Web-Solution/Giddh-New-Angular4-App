@@ -8496,15 +8496,8 @@ GST filing
                         .contactForm .mobileNumberWidth input {
                             padding-right: 0 !important;
                         }
-                            .reciptNoteModal{
-                            width: 100% !important;
-                            top: 0;
 
-                        }
-                        .inventorypage .modal, .inventorypage .reciptNoteModal {
-                            margin-top: 0;
-                            border-radius: 0;
-                        }
+
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -9238,3 +9231,8 @@ GST filing
                 }
 
 
+                @media(min-width:992px){
+                    .modal-dialog.modal-lg.reciptNoteModal {
+                            width: 100% !important;
+                        }
+                }
