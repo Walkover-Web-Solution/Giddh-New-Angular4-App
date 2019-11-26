@@ -20,7 +20,7 @@ ipcMain.on("open-url", (event, arg) => {
 });
 
 
-ipcMain.on("authenticate", async function (event, arg) {
+ipcMain.on("authenticate", async function(event, arg) {
 
   const electronOauth2 = require("electron-oauth");
   let config = {};
@@ -44,21 +44,16 @@ ipcMain.on("authenticate", async function (event, arg) {
         nodeIntegration: false
       }
     });
-
-    myApiOauth.getAccessToken(bodyParams, (token) => {
-      if (arg === "google") {
-        // google
-        event.returnValue = token.access_token;
-        // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-      } else {
-        // linked in
-        event.returnValue = token.access_token;
-        // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-      }
-      event.sender.send('authenticate-token',event.returnValue);
-    });
-
-
+    const token = await myApiOauth.getAccessToken(bodyParams);
+    if (arg === "google") {
+      // google
+      event.returnValue = token.access_token;
+      // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+    } else {
+      // linked in
+      event.returnValue = token.access_token;
+      // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+    }
   } catch (e) {
     //
   }

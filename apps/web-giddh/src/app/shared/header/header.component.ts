@@ -39,8 +39,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { environment } from 'apps/web-giddh/src/environments/environment';
-
 import { CountryRequest } from '../../models/api-models/Common';
 
 @Component({
@@ -587,11 +585,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                if (isElectron) {
-                    this.router.navigate(['/login']);
-                } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
-                }
+                this.router.navigate(['/login']);
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
                 this.router.navigate(['/new-user']);
