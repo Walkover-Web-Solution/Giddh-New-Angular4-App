@@ -8505,6 +8505,11 @@ GST filing
                             margin-top: 0;
                             border-radius: 0;
                         }
+                         @media (min-width: 564px){
+                            #date-range-picker-parent .daterangepicker {
+                                width: 100%;
+                            }
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -8981,6 +8986,13 @@ GST filing
                     #content_wrapper {
                         overflow-x: hidden;
                     }
+                         #companyList {
+                        background: #fff;
+                        padding-bottom: 4px;
+                        left: 0px;
+                        top: 30px;
+                        padding-top: 0;
+                    }
                 }
 
                 @media (max-width: 500px) {
@@ -9016,15 +9028,7 @@ GST filing
                     }
                 }
 
-                @media(max-width:411px) {
-                    #companyList {
-                        background: #fff;
-                        padding-bottom: 4px;
-                        left: 0px;
-                        top: 30px;
-                        padding-top: 0;
-                    }
-                }
+
 
                 @media (max-width: 360px) {
                     .pagination-sm>li>a,
