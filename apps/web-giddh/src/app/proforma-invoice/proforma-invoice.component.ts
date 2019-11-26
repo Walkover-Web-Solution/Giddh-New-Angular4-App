@@ -1125,6 +1125,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
+        debugger
         this.customerCountryName = data.country.countryName;
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         if (this.isInvoiceRequestedFromPreviousPage) {
@@ -2864,7 +2865,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        obj.account.mobileNumber = obj.account.contactNumber;
+        // obj.account.mobileNumber = obj.account.contactNumber;
         obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
@@ -3014,6 +3015,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
+        voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
@@ -3025,7 +3027,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
         voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
-        voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
+        // voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
         voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
         voucherClassConversion.accountDetails.email = result.account.email;
         voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;
