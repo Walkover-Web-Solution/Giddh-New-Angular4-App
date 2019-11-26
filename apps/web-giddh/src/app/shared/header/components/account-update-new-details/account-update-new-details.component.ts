@@ -321,6 +321,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (currentCompany) {
                     if (currentCompany.countryV2) {
                         this.selectedCompanyCountryName = currentCompany.countryV2.alpha2CountryCode + ' - ' + currentCompany.country;
+                        this.companyCountry = currentCompany.countryV2.alpha2CountryCode
                     }
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
                     this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
