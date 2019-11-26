@@ -135,11 +135,11 @@ export class ReceiptNoteComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged()).subscribe(a => {
 			if (a) {
-				if (this.branchTransferMode === "receipt") {
-					this.branchTransfer.source[0].uniqueName = a;
-				} else {
-					this.branchTransfer.destination[0].uniqueName = a;
-				}
+				// if (this.branchTransferMode === "receipt") {
+				// 	this.branchTransfer.source[0].uniqueName = a;
+				// } else {
+				// 	this.branchTransfer.destination[0].uniqueName = a;
+				// }
 			}
 		});
 	}
@@ -178,43 +178,15 @@ export class ReceiptNoteComponent implements OnInit, OnDestroy {
 	}
 
 	public addReceiver() {
-		this.branchTransfer.destination.push({
-			name: null,
-			uniqueName: null,
-			warehouse: {
-				name: null,
-				uniqueName: null,
-				taxNumber: null,
-				address: null
-			}
-		});
+		this.branchTransfer.destination.push(new NewBranchTransferSourceDestination());
 	}
 
 	public addSender() {
-		this.branchTransfer.source.push({
-			name: null,
-			uniqueName: null,
-			warehouse: {
-				name: null,
-				uniqueName: null,
-				taxNumber: null,
-				address: null
-			}
-		});
+		this.branchTransfer.source.push(new NewBranchTransferSourceDestination());
 	}
 
 	public addProduct() {
-		this.branchTransfer.product.push({
-			name: null,
-			hsnNumber: null,
-			sacNumber: null,
-			uniqueName: null,
-			stockUnit: null,
-			amount: null,
-			rate: null,
-			quantity: null,
-			description: null
-		});
+		this.branchTransfer.product.push(new NewBranchTransferProduct());
 	}
 
 	public removeProduct(i) {
