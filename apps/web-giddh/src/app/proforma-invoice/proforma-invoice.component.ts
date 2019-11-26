@@ -682,17 +682,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     bankaccounts = _.orderBy(bankaccounts, 'label');
                     this.bankAccounts$ = observableOf(bankaccounts);
 
-                    if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-                        if (bankaccounts) {
-                            if (bankaccounts.length > 0) {
-                                this.invFormData.accountDetails.uniqueName = 'cash';
-                            } else if (bankaccounts.length === 1) {
-                                this.depositAccountUniqueName = 'cash';
-                            }
+                    if (this.invFormData.accountDetails) {
+                        if (!this.invFormData.accountDetails.uniqueName) {
+                            this.invFormData.accountDetails.uniqueName = 'cash';
                         }
                     }
-
-                    this.depositAccountUniqueName = '';
+                    this.depositAccountUniqueName = 'cash';
                 }
 
                 // update mode because voucher details is available
@@ -2083,13 +2078,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
-                this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
             }
+
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
                     //this.getAccountDetails(event.value);
                     this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
-                    this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice) {
                     this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
@@ -2097,14 +2092,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.invFormData.accountDetails.currencySymbol = '';
             }
+
             if (this.isCashInvoice) {
                 this.companyCurrencyName = event.additional.currency;
             }
         } else {
             this.depositAccountUniqueName = '';
-        }
-        if (this.isMulticurrencyAccount) {
-            this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
         }
 
         this.calculateBalanceDue();
