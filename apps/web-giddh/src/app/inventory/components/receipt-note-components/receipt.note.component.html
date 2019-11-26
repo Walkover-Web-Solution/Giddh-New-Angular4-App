@@ -8,11 +8,11 @@
     </div>
     <div class="reciptNoteRadioBtn">
         <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-        type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction">Multiple Products
-    </span>
+                type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction">Multiple Products
+        </span>
 
-        <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio"
-        [value]="'Multiple Senders'" [(ngModel)]="selectedAction">Multiple Senders</span>
+        <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
+                type="radio" [value]="'Multiple Senders'" [(ngModel)]="selectedAction">Multiple Senders</span>
     </div>
 
     <div class="reciptNoteContent">
@@ -22,8 +22,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Date of Supply<span class="red-text">*</span>
-              </label>
+                                Date of Supply<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker>
@@ -32,8 +32,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receipt Note #
-              </label>
+                                Receipt Note #
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" class="form-control">
@@ -42,22 +42,24 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s Name<span class="red-text">*</span>
-              </label>
+                                Sender’s Name<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="sendersOptions">
 
                             </sh-select>
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s Details</div>
-                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt Note</p>
+                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s
+                                Details</div>
+                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt
+                                Note</p>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s GSTIN<span class="red-text">*</span>
-              </label>
+                                Sender’s GSTIN<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="gstinOptions">
@@ -68,8 +70,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s Address
-              </label>
+                                Sender’s Address
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <textarea class="form-control"></textarea>
@@ -78,8 +80,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Reference Docs <span class="gray-text"> (Optional) </span>
-              </label>
+                                Reference Docs <span class="gray-text"> (Optional) </span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="selectRefDoc">
@@ -90,19 +92,20 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s Name<span class="red-text">*</span>
-              </label>
+                                Receiver’s Name<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" value="walkover web soution" disabled class="form-control">
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's Details</div>
+                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
+                                Details</div>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s GSTIN<span class="red-text">*</span>
-              </label>
+                                Receiver’s GSTIN<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="recGstinOptions">
@@ -113,8 +116,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s Address
-              </label>
+                                Receiver’s Address
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <textarea class="form-control"></textarea>
@@ -265,9 +268,9 @@
                     <!-- region generate mode -->
                     <div class="pull-right pr">
                         <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel
-            </button>
+                        </button>
                         <button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note
-            </button>
+                        </button>
                     </div>
 
                 </div>
@@ -281,8 +284,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Date of Supply<span class="red-text">*</span>
-              </label>
+                                Date of Supply<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker>
@@ -291,8 +294,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receipt Note #
-              </label>
+                                Receipt Note #
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" class="form-control">
@@ -301,22 +304,24 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s Name<span class="red-text">*</span>
-              </label>
+                                Sender’s Name<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="sendersOptions">
 
                             </sh-select>
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s Details</div>
-                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt Note</p>
+                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s
+                                Details</div>
+                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt
+                                Note</p>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s GSTIN<span class="red-text">*</span>
-              </label>
+                                Sender’s GSTIN<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="gstinOptions">
@@ -327,8 +332,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Sender’s Address
-              </label>
+                                Sender’s Address
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <textarea class="form-control"></textarea>
@@ -337,8 +342,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Reference Docs <span class="gray-text"> (Optional) </span>
-              </label>
+                                Reference Docs <span class="gray-text"> (Optional) </span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="selectRefDoc">
@@ -349,19 +354,20 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s Name<span class="red-text">*</span>
-              </label>
+                                Receiver’s Name<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" value="walkover web soution" disabled class="form-control">
-                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's Details</div>
+                            <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
+                                Details</div>
                         </div>
                     </div>
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s GSTIN<span class="red-text">*</span>
-              </label>
+                                Receiver’s GSTIN<span class="red-text">*</span>
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <sh-select [options]="recGstinOptions">
@@ -372,8 +378,8 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                Receiver’s Address
-              </label>
+                                Receiver’s Address
+                            </label>
                         </div>
                         <div class="col-md-4">
                             <textarea class="form-control"></textarea>
@@ -528,9 +534,9 @@
                     <!-- region generate mode -->
                     <div class="pull-right pr">
                         <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel
-            </button>
+                        </button>
                         <button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note
-            </button>
+                        </button>
                     </div>
 
                 </div>
@@ -547,5 +553,8 @@
 <!-- <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="asideMenuState  transinherit" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)"
     (getUpdateList)="getUpdatedList($event)">
 </aside-menu-account> -->
-<aside-sender-receiver-details-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
+
+<!-- hide for recent discuss with reavindrji -->
+<aside-sender-receiver-details-pane *ngIf="hideSenderReciverDetails" [class]="asideMenuState"
+    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
 </aside-sender-receiver-details-pane>
