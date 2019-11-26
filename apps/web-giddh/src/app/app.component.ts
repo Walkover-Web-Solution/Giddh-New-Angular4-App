@@ -49,7 +49,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // private activatedRoute: ActivatedRoute,
         // private location: Location
     ) {
-        this.isProdMode = AppUrl === 'https://giddh.com/';
+        this.isProdMode = AppUrl === 'https://app.giddh.com/';
         this.isElectron = isElectron;
         this.store.select(s => s.session).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
@@ -80,7 +80,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     }
     // tslint:disable-next-line:no-empty
-
+    // <noscript * ngIf="isProdMode && !isElectron" >
+    //   <iframe[src]="tagManagerUrl"
+    // height = "0" width = "0" style = "display:none;visibility:hidden" > </iframe>
+    //   < /noscript>
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;

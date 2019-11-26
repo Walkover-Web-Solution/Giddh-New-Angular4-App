@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'publicPageHandler',
@@ -22,29 +23,11 @@ export class PublicPageHandlerComponent {
       url = url.replace('/app', '');
       this.router.navigateByUrl(url);
     } else {
-      // console.log('the last else');
-      // let url = this.router.routerState.snapshot.url;
-      // url = url.replace('/app/', '');
-      // console.log('the formatted url is :', url);
-      // let existingRouteIndx = this.router.config.findIndex((r) => url.startsWith(r.path));
-      // console.log('existingRouteIndx is :', existingRouteIndx);
-      // if (existingRouteIndx > -1) {
-      //   console.log('YES');
-      //   this.router.navigateByUrl(url);
-      // } else {
-      //   console.log('NO');
-      //   this.router.navigateByUrl('404');
-      // }
-
-      // this.router.navigateByUrl(url).then((res) => {
-      //   console.log('the res then success is :', res);
-      // }).catch((err) => {
-      //   console.log('the err from catch is :', err);
-      // });
-
-      // console.log('last else');
-      this.router.navigate(['login']);
-      // // this.router.navigateByUrl('404');
+        if (isElectron) {
+            this.router.navigate(['/login']);
+        } else {
+            window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+        }
     }
   }
 }

@@ -184,8 +184,8 @@
             "prod": {
               "outputPath": "dist/apps/web-giddh-prod",
               "extraWebpackConfig": "./webpack.prod.partial.js",
-              "baseHref": "https://giddh.com/app/",
-              "baseUrl": "giddh.com",
+              "baseHref": "https://app.giddh.com/",
+              "baseUrl": "app.giddh.com",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
