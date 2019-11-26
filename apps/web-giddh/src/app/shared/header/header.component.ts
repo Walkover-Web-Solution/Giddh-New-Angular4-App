@@ -49,18 +49,19 @@ import {FormControl} from '@angular/forms';
 import {GeneralActions} from '../../actions/general/general.actions';
 import {createSelector} from 'reselect';
 import * as moment from 'moment/moment';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ICompAidata, IUlist} from '../../models/interfaces/ulist.interface';
-import {cloneDeep, concat, orderBy, sortBy} from '../../lodash-optimized';
-import {DbService} from '../../services/db.service';
-import {CompAidataModel} from '../../models/db';
-import {WindowRef} from '../helpers/window.object';
-import {AccountResponse} from 'apps/web-giddh/src/app/models/api-models/Account';
-import {GeneralService} from 'apps/web-giddh/src/app/services/general.service';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST} from '../../models/defaultMenus';
-import {userLoginStateEnum} from '../../models/user-login-state';
-import {SubscriptionsUser} from '../../models/api-models/Subscriptions';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
+import { DbService } from '../../services/db.service';
+import { CompAidataModel } from '../../models/db';
+import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { userLoginStateEnum } from '../../models/user-login-state';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CountryRequest } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -370,6 +371,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (value === 'openschedulemodal') {
                 this.openScheduleModal();
             }
+            if (value === 'resetcompanysession') {
+                this.removeCompanySessionData();
+            }
         });
     }
 
@@ -461,7 +465,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // endregion
 
         // region subscribe to last state for showing title of page this.selectedPage
-        this.store.pipe(select(s => s.session.lastState), takeUntil(this.destroyed$)).subscribe(s => {
+        this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
             this.isLedgerAccSelected = false;
             const lastState = s.toLowerCase();
 
@@ -594,6 +598,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.totalNumberOfcompanies = res;
         });
         this.getPartyTypeForCreateAccount();
+        this.getAllCountries();
     }
 
     public ngAfterViewInit() {
@@ -1362,6 +1367,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public getPartyTypeForCreateAccount() {
         this.store.dispatch(this.commonActions.GetPartyType());
+    }
+    public getAllCountries() {
+        let countryRequest = new CountryRequest();
+        countryRequest.formName = '';
+        this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
     }
 
     public removeCompanySessionData() {

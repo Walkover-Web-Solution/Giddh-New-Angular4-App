@@ -21,7 +21,7 @@
         "@ionic-native/file-chooser": "^5.17.0",
         "cordova-android": "^8.1.0",
         "cordova-browser": "^6.0.0",
-        "cordova-ios": "^5.0.1",
+        "cordova-ios": "^5.1.0",
         "cordova-plugin-camera": "^4.1.0",
         "cordova-plugin-contacts": "^3.0.1",
         "cordova-plugin-device": "^2.0.3",

@@ -45,7 +45,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon } from '../models/api-models/Invoice';
-import {CompanyResponse, StateDetailsRequest, TaxResponse} from '../models/api-models/Company';
+import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -73,7 +73,6 @@ import { GeneralService } from '../services/general.service';
 import { LoaderState } from "../loader/loader";
 import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
-import {createSelector} from "reselect";
 
 const THEAD_ARR_READONLY = [
     {
@@ -683,17 +682,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     bankaccounts = _.orderBy(bankaccounts, 'label');
                     this.bankAccounts$ = observableOf(bankaccounts);
 
-                    if (this.invFormData.accountDetails && !this.invFormData.accountDetails.uniqueName) {
-                        if (bankaccounts) {
-                            if (bankaccounts.length > 0) {
-                                this.invFormData.accountDetails.uniqueName = 'cash';
-                            } else if (bankaccounts.length === 1) {
-                                this.depositAccountUniqueName = 'cash';
-                            }
+                    if (this.invFormData.accountDetails) {
+                        if (!this.invFormData.accountDetails.uniqueName) {
+                            this.invFormData.accountDetails.uniqueName = 'cash';
                         }
                     }
-
-                    this.depositAccountUniqueName = '';
+                    this.depositAccountUniqueName = 'cash';
                 }
 
                 // update mode because voucher details is available
@@ -1164,7 +1158,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.invFormData.accountDetails[type].stateCode = null;
                 this._toasty.clearAllToaster();
-                this._toasty.warningToast('Invalid GSTIN.');
+
+                if (this.showGSTINNo) {
+                    this._toasty.warningToast('Invalid GSTIN.');
+                } else {
+                    this._toasty.warningToast('Invalid TRN.');
+                }
             }
             statesEle.disabled = true;
 
@@ -2079,13 +2078,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
-                this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
             }
+
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
                     //this.getAccountDetails(event.value);
                     this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
-                    this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice) {
                     this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
@@ -2093,14 +2092,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.invFormData.accountDetails.currencySymbol = '';
             }
+
             if (this.isCashInvoice) {
                 this.companyCurrencyName = event.additional.currency;
             }
         } else {
             this.depositAccountUniqueName = '';
-        }
-        if (this.isMulticurrencyAccount) {
-            this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
         }
 
         this.calculateBalanceDue();
@@ -3178,14 +3175,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let stateName = $event.label;
         let stateCode = $event.value;
 
-        if (!isBilling && !this.autoFillShipping) {
-            this.invFormData.accountDetails.shippingDetails.stateName = stateName;
-            this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+        if (isBilling) {
+            // update account details address if it's billing details
+            this.invFormData.accountDetails.billingDetails.state.name = stateName;
+            this.invFormData.accountDetails.billingDetails.stateName = stateName;
+            this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+        } else {
+            // if it's not billing address then only update shipping details
+            // check if it's not auto fill shipping address from billing address then and then only update shipping details
+            if (!this.autoFillShipping) {
+                this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+                this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+                this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+            }
         }
-        this.invFormData.accountDetails.billingDetails.state.name = stateName;
-        this.invFormData.accountDetails.billingDetails.stateName = stateName;
-        this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
     }
 
     private updateAddressShippingBilling(obj) {
@@ -3227,11 +3230,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showTRNNo = false;
         }*/
 
-        if(this.selectedCompany.country === name) {
-            if(name === 'India') {
+        if (this.selectedCompany.country === name) {
+            if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
-            } else if(name === 'United Arab Emirates') {
+            } else if (name === 'United Arab Emirates') {
                 this.showGSTINNo = false;
                 this.showTRNNo = true;
             }

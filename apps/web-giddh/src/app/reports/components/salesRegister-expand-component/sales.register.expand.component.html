@@ -160,7 +160,7 @@
 
 <ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
     <div class="clearfix ">
-        <div class="responsive mt-2 ">
+        <div class="responsive mt-2 sales-register-table">
             <table class="table basic table-bordered table-middle ">
                 <thead>
                     <tr>
@@ -393,11 +393,11 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 20">
+        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 10">
             <pagination [totalItems]="
                     (SalesRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
-                [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
+                [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
@@ -480,10 +480,13 @@
 </ng-container>
 
 <div *ngIf="(isGetSalesDetailsInProcess$ | async)">
-    <div class="no-data mrT2 d-flex "
-        style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px; ">
-        <div class="giddh-spinner vertical-center-spinner "></div>
-    </div>
+        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
 </div>
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>

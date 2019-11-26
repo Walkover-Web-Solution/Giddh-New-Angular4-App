@@ -113,9 +113,9 @@ export class SalesActions {
           if (action.payload.body.errorMessageForCashFreeVirtualAccount) {
             this._toasty.warningToast('Virtual account could not be created for Account "' + action.payload.body.name + '", ' + action.payload.body.errorMessageForCashFreeVirtualAccount);
           }
-          if (action.payload.body.errorMessageForBankDetails) {
-            this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
-          }
+          // if (action.payload.body.errorMessageForBankDetails) {
+          //   this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
+          // }
         }
         return {type: 'EmptyAction'};
       }));

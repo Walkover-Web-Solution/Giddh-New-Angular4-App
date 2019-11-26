@@ -33,6 +33,10 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges {
         return {label: m.name, value: m.uniqueName};
       })
   }
+  public hideListItems() {
+      console.log("hideListItems");
+      this.saveTaxes();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
