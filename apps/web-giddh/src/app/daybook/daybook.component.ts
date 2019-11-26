@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { map, take, takeUntil } from 'rxjs/operators';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
@@ -77,8 +77,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
-    constructor(private store: Store<AppState>, private _daybookActions: DaybookActions,
-        private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+    constructor(
+        private changeDetectorRef: ChangeDetectorRef,
+        private _companyActions: CompanyActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private _daybookActions: DaybookActions,
+        private store: Store<AppState>
+    ) {
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.store.select(s => s.daybook.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.entries) {
@@ -93,6 +98,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 });
                 this.loadPaginationComponent(data);
                 this.daybookData$ = observableOf(data);
+                this.changeDetectorRef.detectChanges();
             }
         });
         let companyUniqueName;
