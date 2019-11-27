@@ -40,7 +40,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async" (selected)="selectCompany($event)"></sh-select>
+							<sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2">
@@ -80,7 +80,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [(ngModel)]="branchTransfer.destination[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async" (selected)="selectCompany($event)"></sh-select>
+							<sh-select [(ngModel)]="branchTransfer.destination[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -230,7 +230,7 @@
                             <th>#</th>
                             <th>Product Service Details</th>
                             <th>Qty/Unit</th>
-                            <th>Rate</th>
+	                        <th>Rate</th>
                             <th>Amount</th>
                             <th>Total</th>
                             <th>&nbsp;</th>
@@ -242,7 +242,7 @@
                             <th *ngIf="branchTransferMode === 'delivery'">Receiver’s Details</th>
                             <th *ngIf="branchTransferMode === 'receipt'">Sender’s Details</th>
                             <th>Qty/Unit</th>
-                            <th>Rate</th>
+	                        <th>Rate</th>
                             <th>Amount</th>
                             <th>Total</th>
                             <th>&nbsp;</th>
@@ -256,12 +256,12 @@
                                 <textarea rows="5" cols="5" class="form-control" [(ngModel)]="product.description"></textarea>
                             </td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.quantity">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.stockDetails.quantity">
 	                        </td>
+	                        <td>{{product.stockDetails.rate}}</td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.rate">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.stockDetails.amount">
 	                        </td>
-	                        <td>500</td>
 	                        <td>200</td>
                             <td>
                                 <a (click)="removeProduct(i)" *ngIf="branchTransfer.product.length > 1"><i class="fa fa-trash"></i></a>
@@ -279,12 +279,12 @@
                                 <textarea class="form-control" [(ngModel)]="destination.warehouse.address"></textarea>
                             </td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="destination.warehouse.stockDetails.quantity">
 	                        </td>
+	                        <td>{{destination.warehouse.stockDetails.rate}}</td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="destination.warehouse.stockDetails.amount">
 	                        </td>
-                            <td>500</td>
                             <td>200</td>
                             <td>
                                 <i (click)="removeReceiver(i)" *ngIf="branchTransfer.destination.length > 1" class="fa fa-trash"></i>
@@ -302,12 +302,12 @@
                                 <textarea class="form-control" [(ngModel)]="source.warehouse.address"></textarea>
                             </td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="source.warehouse.stockDetails.quantity">
 	                        </td>
+	                        <td>{{source.warehouse.stockDetails.rate}}</td>
 	                        <td>
-		                        <input type="text" value="2,300" class="form-control">
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="source.warehouse.stockDetails.amount">
 	                        </td>
-	                        <td>500</td>
 	                        <td>200</td>
                             <td>
                                 <i (click)="removeSender(i)" *ngIf="branchTransfer.source.length > 1" class="fa fa-trash"></i>
@@ -341,7 +341,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <h3 class="mrB1">Note</h3>
-                                            <textarea class="form-control" rows="5" cols="5"></textarea>
+                                            <textarea class="form-control" rows="5" cols="5" [(ngModel)]="branchTransfer.note"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -369,7 +369,7 @@
 				<div class="col-xs-12">
 					<div class="pull-right pr">
 						<button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="closeBranchTransferPopup()">Cancel</button>
-						<button type="button" class="btn btn-success-text d-inline-block v-align-middle">Create Note</button>
+						<button type="button" class="btn btn-success-text d-inline-block v-align-middle" (click)="submit()">Create Note</button>
 					</div>
 				</div>
 			</section>

@@ -1,5 +1,5 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {AppState} from '../../../store';
 import {Store, select} from '@ngrx/store';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
@@ -22,9 +22,6 @@ import {
 import {InventoryAction} from "../../../actions/inventory/inventory.actions";
 import {OnboardingFormRequest} from "../../../models/api-models/Common";
 import {CommonActions} from "../../../actions/common.actions";
-import {
-	StocksResponse
-} from '../../../models/api-models/Inventory';
 import {IOption} from "../../../theme/ng-select/option.interface";
 
 @Component({
@@ -61,7 +58,6 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 		dateOfSupply: null,
 		challanNo: null,
 		note: null,
-		transferDate: null,
 		uniqueName: null,
 		source: [{
 			name: null,
@@ -70,7 +66,13 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 				name: null,
 				uniqueName: null,
 				taxNumber: null,
-				address: null
+				address: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null
+				}
 			}
 		}],
 		destination: [{
@@ -80,7 +82,13 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 				name: null,
 				uniqueName: null,
 				taxNumber: null,
-				address: null
+				address: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null
+				}
 			}
 		}],
 		product: [{
@@ -88,10 +96,12 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 			hsnNumber: null,
 			sacNumber: null,
 			uniqueName: null,
-			stockUnit: null,
-			amount: null,
-			rate: null,
-			quantity: null,
+			stockDetails: {
+				stockUnit: null,
+				amount: null,
+				rate: null,
+				quantity: null
+			},
 			description: null
 		}],
 		transportationDetails: {
@@ -109,6 +119,7 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	public warehouses: any[] = [];
 	public formFields: any[] = [];
 	public stockList: IOption[] = [];
+	public newProduct: NewBranchTransferProduct = new NewBranchTransferProduct();
 
 	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction) {
 		this.store.dispatch(this.inventoryAction.GetStock());
@@ -164,15 +175,57 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	}
 
 	public addReceiver() {
-		this.branchTransfer.destination.push(new NewBranchTransferSourceDestination());
+		this.branchTransfer.destination.push({
+			name: null,
+			uniqueName: null,
+			warehouse: {
+				name: null,
+				uniqueName: null,
+				taxNumber: null,
+				address: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null
+				}
+			}
+		});
 	}
 
 	public addSender() {
-		this.branchTransfer.source.push(new NewBranchTransferSourceDestination());
+		this.branchTransfer.source.push({
+			name: null,
+			uniqueName: null,
+			warehouse: {
+				name: null,
+				uniqueName: null,
+				taxNumber: null,
+				address: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null
+				}
+			}
+		});
 	}
 
 	public addProduct() {
-		this.branchTransfer.product.push(new NewBranchTransferProduct());
+		this.branchTransfer.product.push({
+			name: null,
+			hsnNumber: null,
+			sacNumber: null,
+			uniqueName: null,
+			stockDetails: {
+				stockUnit: null,
+				amount: null,
+				rate: null,
+				quantity: null
+			},
+			description: null
+		});
 	}
 
 	public removeProduct(i) {
@@ -185,10 +238,6 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 
 	public removeReceiver(i) {
 		this.branchTransfer.destination.splice(i, 1);
-	}
-
-	public selectCompany(event) {
-
 	}
 
 	public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
@@ -241,8 +290,14 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	}
 
 	public selectProduct(event, product) {
-		if(event) {
-			console.log(event);
+		if (event) {
+			product.stockDetails.rate = event.additional.rate;
+			product.stockDetails.amount = event.additional.amount;
+			product.stockDetails.quantity = event.additional.openingQuantity;
 		}
+	}
+
+	public submit() {
+		console.log(this.branchTransfer);
 	}
 }

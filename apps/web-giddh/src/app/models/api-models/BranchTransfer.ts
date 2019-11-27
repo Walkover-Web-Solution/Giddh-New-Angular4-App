@@ -75,12 +75,20 @@ export class NewBranchTransferWarehouse {
 	public uniqueName: string;
 	public taxNumber: any;
 	public address: string;
+	public stockDetails: NewBranchTransferProductStockDetails;
 }
 
 export class NewBranchTransferSourceDestination {
 	public name: string;
 	public uniqueName: string;
-	public warehouse: NewBranchTransferWarehouse
+	public warehouse: NewBranchTransferWarehouse;
+}
+
+export class NewBranchTransferProductStockDetails {
+	public stockUnit: any;
+	public amount: any;
+	public rate: any;
+	public quantity: any;
 }
 
 export class NewBranchTransferProduct {
@@ -88,10 +96,7 @@ export class NewBranchTransferProduct {
 	public hsnNumber: any;
 	public sacNumber: any;
 	public uniqueName: any;
-	public stockUnit: any;
-	public amount: any;
-	public rate: any;
-	public quantity: any;
+	public stockDetails: NewBranchTransferProductStockDetails;
 	public description: string;
 }
 
@@ -106,7 +111,6 @@ export class NewBranchTransferResponse {
 	public dateOfSupply: any;
 	public challanNo: any;
 	public note: string;
-	public transferDate: any;
 	public uniqueName: any;
 	public source: NewBranchTransferSourceDestination[];
 	public destination: NewBranchTransferSourceDestination[];
