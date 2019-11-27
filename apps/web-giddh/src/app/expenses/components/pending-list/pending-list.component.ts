@@ -153,7 +153,6 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.pettycashRequest.sortBy = key;
         this.pettycashRequest.sort = ord;
         this.getPettyCashPendingReports(this.pettycashRequest);
-        this.isFilteredSelected.emit(true);
     }
 
     public clearFilter() {
