@@ -1125,7 +1125,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
-        debugger
         this.customerCountryName = data.country.countryName;
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         if (this.isInvoiceRequestedFromPreviousPage) {
@@ -2255,6 +2254,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
 
+            // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice) {
                 result = {
                     account: data.accountDetails,
@@ -2271,51 +2271,45 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        if (response.status === 'success') {
-                            // reset form and other
-                            this.resetInvoiceForm(f);
-                            this._toasty.successToast('Voucher updated Successfully');
-                            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-                            this.voucherNumber = response.body.number;
-                            this.invoiceNo = this.voucherNumber;
-                            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
-                            this.postResponseAction(this.invoiceNo);
-
-                            this.depositAccountUniqueName = '';
-                            this.depositAmount = 0;
-                            this.isUpdateMode = false;
-                        } else {
-                            this._toasty.errorToast(response.message, response.code);
-                        }
-                        this.updateAccount = false;
+                        this.actionsAfterVoucherUpdate(response, f);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             } else {
+                // credit and debit note still uses old api so just pass result to service don't parse it
                 this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        if (response.status === 'success') {
-                            // reset form and other
-                            this.resetInvoiceForm(f);
-                            this._toasty.successToast('Voucher updated Successfully');
-                            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-                            this.voucherNumber = response.body.number;
-                            this.invoiceNo = this.voucherNumber;
-                            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
-                            this.postResponseAction(this.invoiceNo);
-
-                            this.depositAccountUniqueName = '';
-                            this.depositAmount = 0;
-                            this.isUpdateMode = false;
-                        } else {
-                            this._toasty.errorToast(response.message, response.code);
-                        }
-                        this.updateAccount = false;
+                        this.actionsAfterVoucherUpdate(response, f);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             }
         }
+    }
+
+    /**
+     * used for doing same thing after sales/ cash or credit / debit note voucher updates
+     * @param response
+     * @param f
+     */
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, f: NgForm) {
+        if (response.status === 'success') {
+            // reset form and other
+            this.resetInvoiceForm(f);
+            this._toasty.successToast('Voucher updated Successfully');
+            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
+            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+            this.postResponseAction(this.invoiceNo);
+
+            this.depositAccountUniqueName = '';
+            this.depositAmount = 0;
+            this.isUpdateMode = false;
+        } else {
+            this._toasty.errorToast(response.message, response.code);
+        }
+        this.updateAccount = false;
     }
 
     public prepareDataForApi(): GenericRequestForGenerateSCD {
