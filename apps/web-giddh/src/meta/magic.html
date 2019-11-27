@@ -178,7 +178,7 @@
                               <!-- ng-if="txn.type == 'DEBIT'" -->
                               <!-- | filter: searchText -->
                               <template v-for="txn in filterBy(ledger.transactions, searchText)">
-                                <tr class="text-left bdrB" v-if="txn.type === 'DEBIT'">
+                                <tr class="text-left bdrB magicTable" v-if="txn.type === 'DEBIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
                                   <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
@@ -271,7 +271,7 @@
                             <tbody>
                               <!-- | filter: searchText -->
                               <template v-for="txn in filterBy(ledger.transactions, searchText)">
-                                <tr class="text-left bdrB" v-if="txn.type === 'CREDIT'">
+                                <tr class="text-left magicTable bdrB" v-if="txn.type === 'CREDIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
                                   <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
