@@ -295,23 +295,20 @@ var app = new Vue({
     },
     getApi: function () {
       var apiBaseUrl = '';
-      switch (window.location.hostname) {
-        case 'localapp.giddh.com':
-        case 'dev.giddh.com':
-          apiBaseUrl = 'http://apitest.giddh.com/';
-          break;
-        case 'test.giddh.com':
-          apiBaseUrl = 'http://apitest.giddh.com/';
-          break;
-        case 'stage.giddh.com':
-          apiBaseUrl = 'http://spi.giddh.com/';
-          break;
-        case 'giddh.com':
-          apiBaseUrl = 'https://api.giddh.com/';
-          break;
-        default:
-          apiBaseUrl = 'http://apitest.giddh.com/';
-      }
+        switch (window.location.hostname) {
+            case 'localapp.giddh.com':
+            case 'dev.giddh.com':
+            case 'test.giddh.com':
+            case 'stage.giddh.com':
+                apiBaseUrl = 'http://apitest.giddh.com/';
+                break;
+            case 'giddh.com':
+            case 'app.giddh.com':
+                apiBaseUrl = 'https://api.giddh.com/';
+                break;
+            default:
+                apiBaseUrl = 'http://apitest.giddh.com/';
+        }
       return apiBaseUrl;
     }
   }
