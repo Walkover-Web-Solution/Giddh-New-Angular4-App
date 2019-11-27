@@ -332,7 +332,12 @@ h4 {
     color: #f9ac80;
 }
 
-
+.magicTable .download-invoice-ledger{
+    padding: 0 5px;
+}
+.magicTable .pdR25imp {
+    padding-right: 25px !important;
+}
 /*footer style end*/
 
 
