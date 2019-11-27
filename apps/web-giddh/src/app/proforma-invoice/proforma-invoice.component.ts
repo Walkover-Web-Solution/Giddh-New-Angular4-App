@@ -2292,7 +2292,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * used for doing same thing after sales/ cash or credit / debit note voucher updates
+     * used for re-sating invoice form as well as showing appropriate toaster
+     * and performing post update actions
+     * thing after sales/ cash or credit / debit note voucher updates
      * @param response
      * @param invoiceForm
      */
