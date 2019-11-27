@@ -30,6 +30,7 @@ import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModel
 import { NgForm } from '@angular/forms';
 import { CountryRequest } from "../../../../models/api-models/Common";
 import * as googleLibphonenumber from 'google-libphonenumber';
+import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'on-boarding',
@@ -44,7 +45,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     @ViewChild('companyForm') public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
-    @Input() public onboardingType: string;
+    /** Stores the on boarding type of any item */
+    @Input() public onboardingType: OnBoardingType;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -194,9 +196,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit();
-            this._route.navigate(['welcome']);
-
+            this.closeCompanyModal.emit({ isFirstStepCompleted: true });
+            // this._route.navigate(['welcome']);
             if (companies) {
                 if (companies.length === 0) {
                     this.fireSocketCompanyCreateRequest();
@@ -219,17 +220,17 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.companies$.pipe(take(1)).subscribe(c => companies = c);
         if (companies) {
             if (companies.length > 0) {
-                let previousState;
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
-                this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
-                    previousState = se;
-                });
-                if (previousState) {
-                    if (!this.createBranch) {
-                        this._route.navigate([`pages/${previousState}`]);
-                    }
-                }
+                // let previousState;
+                // this.store.dispatch(this._generalActions.getGroupWithAccounts());
+                // this.store.dispatch(this._generalActions.getFlattenAccount());
+                // this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+                //     previousState = se;
+                // });
+                // if (previousState) {
+                //     if (!this.createBranch) {
+                //         this._route.navigate([`pages/${previousState}`]);
+                //     }
+                // }
                 this.closeCompanyModal.emit();
             } else {
                 this.showLogoutModal();

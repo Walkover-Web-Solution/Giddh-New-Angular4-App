@@ -54,6 +54,7 @@ import { PaginationModule, DatepickerModule, BsDatepickerModule } from 'ngx-boot
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { AccountAddNewDetailsComponent } from './header/components/account-add-new-details/account-add-new-details.component';
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
+import { WelcomeComponent } from '../welcome/welcome.component';
 
 
 const getGoogleCredentials = (baseHref: string) => {
@@ -112,7 +113,8 @@ export function provideConfig() {
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
         AccountAddNewDetailsComponent,
-        AccountUpdateNewDetailsComponent
+        AccountUpdateNewDetailsComponent,
+        WelcomeComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -181,7 +183,13 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         MfReportComponent,
         AccountAddNewDetailsComponent,
-        AccountUpdateNewDetailsComponent
+        AccountUpdateNewDetailsComponent,
+        WelcomeComponent,
+        TabsModule,
+        BsDropdownModule,
+        ElementViewChildModule,
+        TooltipModule,
+        BsDatepickerModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

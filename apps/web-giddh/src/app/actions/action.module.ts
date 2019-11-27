@@ -51,6 +51,7 @@ import { SubscriptionsActions } from './userSubscriptions/subscriptions.action';
 import { ProformaActions } from './proforma/proforma.actions';
 import { ExpencesAction } from './expences/expence.action';
 import { CommonActions } from './common.actions';
+import { ItemOnBoardingActions } from './item-on-boarding/item-on-boarding.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -106,7 +107,8 @@ import { CommonActions } from './common.actions';
       GstReconcileActions,
       SubscriptionsActions,
       ProformaActions,
-      CommonActions
+      CommonActions,
+      ItemOnBoardingActions
     ])
   ],
   exports: [EffectsModule]
