@@ -116,7 +116,7 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	public transferType: string = 'products';
 	public branches: any;
 	public branches$: Observable<CompanyResponse[]>;
-	public warehouses: any[] = [];
+	public warehouses: IOption[] = [];
 	public formFields: any[] = [];
 	public stockList: IOption[] = [];
 	public newProduct: NewBranchTransferProduct = new NewBranchTransferProduct();
@@ -242,11 +242,15 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 
 	public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
 		let branches: LinkedStocksVM[] = [];
+		this.warehouses = [];
 		data.forEach(d => {
 			branches.push(new LinkedStocksVM(d.name, d.uniqueName));
 			if (d.warehouses.length) {
 				this.warehouses[d.uniqueName] = [];
-				this.warehouses[d.uniqueName].push.apply(this.warehouses, d.warehouses.map(w => new LinkedStocksVM(w.name, w.uniqueName)));
+
+				d.warehouses.forEach(key => {
+					this.warehouses[d.uniqueName].push({label: key.name, value: key.uniqueName});
+				});
 			}
 		});
 		return branches;
