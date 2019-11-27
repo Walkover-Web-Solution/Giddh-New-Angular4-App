@@ -2254,20 +2254,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let data = result.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-            result = {
-                account: data.accountDetails,
-                updateAccountDetails: this.updateAccount,
-                voucher: data,
-                entries: [],
-                date: data.voucherDetails.voucherDate,
-                type: this.parseVoucherType(this.invoiceType),
-                exchangeRate: exRate,
-                dueDate: data.voucherDetails.dueDate,
-                number: this.invoiceNo,
-                uniqueName: unqName
-            };
 
             if (this.isSalesInvoice || this.isCashInvoice) {
+                result = {
+                    account: data.accountDetails,
+                    updateAccountDetails: this.updateAccount,
+                    voucher: data,
+                    entries: [],
+                    date: data.voucherDetails.voucherDate,
+                    type: this.parseVoucherType(this.invoiceType),
+                    exchangeRate: exRate,
+                    dueDate: data.voucherDetails.dueDate,
+                    number: this.invoiceNo,
+                    uniqueName: unqName
+                };
+
                 this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         if (response.status === 'success') {
@@ -2376,9 +2377,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
             }
-
-            delete data.accountDetails.billingDetails['stateName'];
-            delete data.accountDetails.shippingDetails['stateName'];
         }
 
         // replace /n to br for (shipping and billing)
