@@ -2746,7 +2746,7 @@
                     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, .14);
                     color: #616161;
                     border: 1px solid #ccc;
-                    z-index: 9999 !important;
+                    z-index:99 !important;
                 }
 
                 .daterangepicker .input-mini.active {
@@ -8505,6 +8505,14 @@ GST filing
                             margin-top: 0;
                             border-radius: 0;
                         }
+                         @media (min-width: 564px){
+                            #date-range-picker-parent .daterangepicker {
+                                width: 100%;
+                            }
+                        }
+                        .dayBookAdvanceSearch input{
+                            width: 100%;
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -8981,6 +8989,13 @@ GST filing
                     #content_wrapper {
                         overflow-x: hidden;
                     }
+                         #companyList {
+                        background: #fff;
+                        padding-bottom: 4px;
+                        left: 0px;
+                        top: 30px;
+                        padding-top: 0;
+                    }
                 }
 
                 @media (max-width: 500px) {
@@ -9016,15 +9031,7 @@ GST filing
                     }
                 }
 
-                @media(max-width:411px) {
-                    #companyList {
-                        background: #fff;
-                        padding-bottom: 4px;
-                        left: 0px;
-                        top: 30px;
-                        padding-top: 0;
-                    }
-                }
+
 
                 @media (max-width: 360px) {
                     .pagination-sm>li>a,

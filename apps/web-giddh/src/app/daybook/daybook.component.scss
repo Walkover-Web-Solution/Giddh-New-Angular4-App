@@ -7,14 +7,14 @@
     background-repeat: no-repeat !important;
         padding-left: 45px !important;
     position: relative;
-    z-index: 99;
+    z-index: 1;
     cursor: default;
     border: 1px solid #d9d9d9;
     text-align: left;
 }
 
 .date-range-picker:focus {
-    border-color: #d9d9d9;
+    border-color: #d9d9d9 !important;
 }
 .inputWrapper{
     position: relative;
@@ -29,7 +29,7 @@
     width: 1px;
     background-color: #d9d9d9;
     left: 37px!important;
-    z-index: 100;
+    z-index: 2;
     top: 0;
 }
 .transactions-page .form-group label {
@@ -54,4 +54,47 @@
 }
 .table>tbody+tbody {
     border-top: none;
+}
+.expandBtnHideDesktop{
+    display: none;
+}
+.expand-export {
+    float: right;
+}
+/*responsive */
+@media (max-width: 768px){
+.onMobileView th {
+    display: none !important;
+}
+.hideTD{
+    display: none;
+}
+.transctionReport{
+    margin-bottom: 0;
+}
+td.text-right.hideTd {
+    display: none;
+}
+}
+@media (max-width:575px){
+   .expand-collapse-btn.form-group{
+       display: none !important;
+   }
+   .expandBtnHideDesktop{
+       display: inline-block;
+   }
+   .expand-export{
+       margin-top: 10px;
+   }
+.expand-export {
+    float: none;
+}
+
+}
+@media (min-width: 320px){
+.form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
 }
