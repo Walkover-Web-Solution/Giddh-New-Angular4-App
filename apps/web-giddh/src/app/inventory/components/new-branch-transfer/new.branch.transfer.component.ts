@@ -6,7 +6,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {
-	BranchFilterRequest,
 	CompanyResponse
 } from '../../../models/api-models/Company';
 import * as moment from 'moment/moment';
@@ -14,10 +13,19 @@ import {GeneralService} from '../../../services/general.service';
 import {trigger, state, style, transition, animate} from '@angular/animations';
 import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
 import {
+	ILinkedStocksResult,
+	LinkedStocksResponse, LinkedStocksVM,
 	NewBranchTransferProduct,
 	NewBranchTransferResponse,
 	NewBranchTransferSourceDestination, NewBranchTransferTransportationDetails
 } from '../../../models/api-models/BranchTransfer';
+import {InventoryAction} from "../../../actions/inventory/inventory.actions";
+import {OnboardingFormRequest} from "../../../models/api-models/Common";
+import {CommonActions} from "../../../actions/common.actions";
+import {
+	StocksResponse
+} from '../../../models/api-models/Inventory';
+import {IOption} from "../../../theme/ng-select/option.interface";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -41,34 +49,14 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	@Input() public branchTransferMode: string;
 
 	public asideMenuState: string = 'out';
-	public sendersOptions = [{
-		label: 'Shalinee', value: 'Shalinee'
-	}, {
-		label: 'Shalinee12', value: 'Shalinee12'
-	}];
 
 	public gstinOptions = [
 		{label: 'GSTIN1', value: 'GSTIN1'},
 		{label: 'GSTIN2', value: 'GSTIN1'}
 	];
 
-	public selectRefDoc = [
-		{label: 'Ref doc 1', vaue: 'Ref doc 1'},
-		{label: 'Ref doc 2', vaue: 'Ref doc 2'}
-	];
-
-	public recGstinOptions = [
-		{label: '23KSJDOS48293K', value: '23KSJDOS48293K'},
-		{label: '23KSJDOS48293S', value: '23KSJDOS48293S'}
-	];
-	public selectRecivers = [
-		{label: 'Shalinee01', value: 'Shalinee01'},
-		{label: 'Shalinee02', value: 'Shalinee02'}
-	];
-
 	public hideSenderReciverDetails = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	public branches$: Observable<CompanyResponse[]>;
 	public branchTransfer: NewBranchTransferResponse = {
 		dateOfSupply: null,
 		challanNo: null,
@@ -116,32 +104,38 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	};
 
 	public transferType: string = 'products';
+	public branches: any;
+	public branches$: Observable<CompanyResponse[]>;
+	public warehouses: any[] = [];
+	public formFields: any[] = [];
+	public stockList: IOption[] = [];
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction) {
+		this.store.dispatch(this.inventoryAction.GetStock());
 
-		this.getAllBranches();
+		this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
+			if (o && !_.isEmpty(o)) {
+				this.stockList = [];
+				let stockList = _.cloneDeep(o);
 
-		this.store.pipe(select(s => s.settings.branches), takeUntil(this.destroyed$)).subscribe(branches => {
-			if (branches) {
-				if (branches.results.length) {
-					this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
-				} else if (branches.results.length === 0) {
-					this.branches$ = observableOf(null);
-				}
+				stockList.results.forEach(key => {
+					this.stockList.push({label: key.name, value: key.uniqueName, additional: key});
+				});
 			}
 		});
+
+		this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
+			if (o && !_.isEmpty(o)) {
+				let companyInfo = _.cloneDeep(o);
+				this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
+			}
+		});
+
+		this.getBranches();
 	}
 
 	public ngOnInit() {
-		this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged()).subscribe(a => {
-			if (a) {
-				// if (this.branchTransferMode === "receipt") {
-				// 	this.branchTransfer.source[0].uniqueName = a;
-				// } else {
-				// 	this.branchTransfer.destination[0].uniqueName = a;
-				// }
-			}
-		});
+
 	}
 
 	public ngOnDestroy() {
@@ -169,14 +163,6 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 		this.toggleBodyClass();
 	}
 
-	public getAllBranches() {
-		let branchFilterRequest = new BranchFilterRequest();
-		branchFilterRequest.from = "";
-		branchFilterRequest.to = "";
-
-		this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-	}
-
 	public addReceiver() {
 		this.branchTransfer.destination.push(new NewBranchTransferSourceDestination());
 	}
@@ -202,7 +188,61 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	}
 
 	public selectCompany(event) {
-		console.log(event.uniqueName);
+
+	}
+
+	public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
+		let branches: LinkedStocksVM[] = [];
+		data.forEach(d => {
+			branches.push(new LinkedStocksVM(d.name, d.uniqueName));
+			if (d.warehouses.length) {
+				this.warehouses[d.uniqueName] = [];
+				this.warehouses[d.uniqueName].push.apply(this.warehouses, d.warehouses.map(w => new LinkedStocksVM(w.name, w.uniqueName)));
+			}
+		});
+		return branches;
+	}
+
+	public getOnboardingForm(countryCode) {
+		this.store.dispatch(this.commonActions.resetOnboardingForm());
+
+		this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+			if (res) {
+				Object.keys(res.fields).forEach(key => {
+					this.formFields[res.fields[key].name] = [];
+					this.formFields[res.fields[key].name] = res.fields[key];
+				});
+			} else {
+				let onboardingFormRequest = new OnboardingFormRequest();
+				onboardingFormRequest.formName = '';
+				onboardingFormRequest.country = countryCode;
+				this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+			}
+		});
+	}
+
+	public getBranches() {
+		this.store.dispatch(this._inventoryAction.GetAllLinkedStocks());
+
+		this.store.pipe(select(s => s.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+			if (branches) {
+				if (branches.results.length) {
+					this.branches = this.linkedStocksVM(branches.results).map(b => ({
+						label: b.name,
+						value: b.uniqueName,
+						additional: b
+					}));
+					this.branches$ = observableOf(this.branches);
+				} else {
+					this.branches$ = observableOf(null);
+				}
+			}
+		});
+	}
+
+	public selectProduct(event, product) {
+		if(event) {
+			console.log(event);
+		}
 	}
 }
-

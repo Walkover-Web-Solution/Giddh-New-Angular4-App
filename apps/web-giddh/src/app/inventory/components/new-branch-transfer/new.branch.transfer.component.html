@@ -30,7 +30,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName">
+	                        <sh-select [isFilterEnabled]="true" [options]="stockList" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName" (selected)="selectProduct($event, branchTransfer.product[0])"></sh-select>
                         </div>
                     </div>
 					<div class="row mrB2">
@@ -50,15 +50,13 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName">
-
-							</sh-select>
+							<sh-select [options]="warehouses[branchTransfer.source[0].uniqueName]" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
 						</div>
 					</div>
-					<div class="row mrB2">
+					<div class="row mrB2" *ngIf="formFields && formFields['taxName']">
 						<div class="col-md-3">
 							<label>
-								Sender's GSTIN<span class="red-text">*</span>
+								Sender's {{formFields['taxName'].label}}<span class="red-text">*</span>
 							</label>
 						</div>
 						<div class="col-md-4">
@@ -68,7 +66,7 @@
 					<div class="row mrB2">
 						<div class="col-md-3">
 							<label>
-								Sender’s Address
+								Sender's Address
 							</label>
 						</div>
 						<div class="col-md-4">
@@ -78,11 +76,11 @@
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
 						<div class="col-md-3">
 							<label>
-								Receiver’s Name<span class="red-text">*</span>
+								Receiver's Name<span class="red-text">*</span>
 							</label>
 						</div>
 						<div class="col-md-4">
-							<input type="text" [(ngModel)]="branchTransfer.destination[0].uniqueName" class="form-control">
+							<sh-select [(ngModel)]="branchTransfer.destination[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async" (selected)="selectCompany($event)"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -92,23 +90,23 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
+							<sh-select [options]="warehouses[branchTransfer.destination[0].uniqueName]" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
 						</div>
 					</div>
-					<div class="row mrB2" *ngIf="transferType !== 'senders'">
+					<div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
 						<div class="col-md-3">
 							<label>
-								Receiver’s GSTIN<span class="red-text">*</span>
+								Receiver's {{formFields['taxName'].label}}<span class="red-text">*</span>
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="recGstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
+							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
 						<div class="col-md-3">
 							<label>
-								Receiver’s Address
+								Receiver's Address
 							</label>
 						</div>
 						<div class="col-md-4">
@@ -134,7 +132,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName">
+	                        <sh-select [isFilterEnabled]="true" [options]="stockList" placeholder="Product's Name" class="form-control" [(ngModel)]="branchTransfer.product[0].uniqueName" (selected)="selectProduct($event, branchTransfer.product[0])"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -154,13 +152,13 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="warehouses[branchTransfer.source[0].uniqueName]" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
-                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                    <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
                         <div class="col-md-3">
                             <label>
-                                Sender's GSTIN<span class="red-text">*</span>
+                                Sender's {{formFields['taxName'].label}}<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -170,7 +168,7 @@
                     <div class="row mrB2" *ngIf="transferType !== 'senders'">
                         <div class="col-md-3">
                             <label>
-                                Sender’s Address
+                                Sender's Address
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -194,13 +192,13 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="warehouses[branchTransfer.destination[0].uniqueName]" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
-                    <div class="row mrB2">
+                    <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
                         <div class="col-md-3">
                             <label>
-                                Receiver's GSTIN<span class="red-text">*</span>
+                                Receiver's {{formFields['taxName'].label}}<span class="red-text">*</span>
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -210,7 +208,7 @@
                     <div class="row mrB2">
                         <div class="col-md-3">
                             <label>
-                                Receiver’s Address
+                                Receiver's Address
                             </label>
                         </div>
                         <div class="col-md-4">
@@ -253,20 +251,20 @@
 					<tbody *ngIf="transferType === 'products'">
                         <tr *ngFor="let product of branchTransfer.product; let i = index;">
                             <td>{{i+1}}.</td>
-                            <td>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)
+	                        <td><sh-select [isFilterEnabled]="true" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)"></sh-select>
                                 <p>SKU:Number</p>
-                                <textarea rows="5" cols="5" class="form-control"></textarea>
+                                <textarea rows="5" cols="5" class="form-control" [(ngModel)]="product.description"></textarea>
                             </td>
-                            <td>500 Meters</td>
-                            <td>200</td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.quantity">
+	                        </td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control" [(ngModel)]="product.rate">
+	                        </td>
+	                        <td>500</td>
+	                        <td>200</td>
                             <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <a (click)="removeProduct(i)" *ngIf="branchTransfer.product.length > 0"><i class="fa fa-trash"></i></a>
+                                <a (click)="removeProduct(i)" *ngIf="branchTransfer.product.length > 1"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
 					</tbody>
@@ -274,22 +272,22 @@
                         <tr *ngFor="let destination of branchTransfer.destination; let i = index;">
                             <td>{{i+1}}.</td>
                             <td>
-                                <sh-select [options]="selectRecivers"></sh-select>
-                                <div class="senderRecivers"><i class="fa fa-user"></i> Receiver’s Details</div>
-                                <sh-select [options]="gstinOptions" [(ngModel)]="destination.warehouse.uniqueName"></sh-select>
-                                <sh-select [options]="gstinOptions" [(ngModel)]="destination.warehouse.taxNumber"></sh-select>
+                                <sh-select [(ngModel)]="destination.uniqueName" [options]="branches$ | async"></sh-select>
+                                <div class="senderRecivers"><i class="fa fa-user"></i> Receiver's Details</div>
+                                <sh-select [options]="warehouses[destination.uniqueName]" [(ngModel)]="destination.warehouse.uniqueName"></sh-select>
+                                <sh-select [options]="gstinOptions" *ngIf="formFields && formFields['taxName']" [(ngModel)]="destination.warehouse.taxNumber"></sh-select>
                                 <textarea class="form-control" [(ngModel)]="destination.warehouse.address"></textarea>
                             </td>
-                            <td>500 Meters</td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control">
+	                        </td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control">
+	                        </td>
+                            <td>500</td>
                             <td>200</td>
                             <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i (click)="removeReceiver(i)" *ngIf="branchTransfer.destination.length > 0" class="fa fa-trash"></i>
+                                <i (click)="removeReceiver(i)" *ngIf="branchTransfer.destination.length > 1" class="fa fa-trash"></i>
                             </td>
                         </tr>
                     </tbody>
@@ -297,22 +295,22 @@
                         <tr *ngFor="let source of branchTransfer.source; let i = index;">
                             <td>{{i+1}}.</td>
                             <td>
-                                <sh-select [options]="selectRecivers"></sh-select>
+                                <sh-select [(ngModel)]="source.uniqueName" [options]="branches$ | async"></sh-select>
                                 <div class="senderRecivers"><i class="fa fa-user"></i> Sender’s Details</div>
-                                <sh-select [options]="gstinOptions" [(ngModel)]="source.warehouse.uniqueName"></sh-select>
-                                <sh-select [options]="gstinOptions" [(ngModel)]="source.warehouse.taxNumber"></sh-select>
+                                <sh-select [options]="warehouses[source.uniqueName]" [(ngModel)]="source.warehouse.uniqueName"></sh-select>
+                                <sh-select [options]="gstinOptions" *ngIf="formFields && formFields['taxName']" [(ngModel)]="source.warehouse.taxNumber"></sh-select>
                                 <textarea class="form-control" [(ngModel)]="source.warehouse.address"></textarea>
                             </td>
-                            <td>500 Meters</td>
-                            <td>200</td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control">
+	                        </td>
+	                        <td>
+		                        <input type="text" value="2,300" class="form-control">
+	                        </td>
+	                        <td>500</td>
+	                        <td>200</td>
                             <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i (click)="removeSender(i)" *ngIf="branchTransfer.source.length > 0" class="fa fa-trash"></i>
+                                <i (click)="removeSender(i)" *ngIf="branchTransfer.source.length > 1" class="fa fa-trash"></i>
                             </td>
                         </tr>
                     </tbody>
