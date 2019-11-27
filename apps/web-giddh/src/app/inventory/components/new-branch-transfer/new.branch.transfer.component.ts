@@ -20,9 +20,9 @@ import {
 } from '../../../models/api-models/BranchTransfer';
 
 @Component({
-	selector: 'receipt-note',
-	templateUrl: './receipt.note.component.html',
-	styleUrls: ['./receipt.note.component.scss'],
+	selector: 'new-branch-transfer',
+	templateUrl: './new.branch.transfer.component.html',
+	styleUrls: ['./new.branch.transfer.component.scss'],
 	animations: [
 		trigger('slideInOut', [
 			state('in', style({
@@ -37,7 +37,7 @@ import {
 	]
 })
 
-export class ReceiptNoteComponent implements OnInit, OnDestroy {
+export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	@Input() public branchTransferMode: string;
 
 	public asideMenuState: string = 'out';
@@ -199,6 +199,10 @@ export class ReceiptNoteComponent implements OnInit, OnDestroy {
 
 	public removeReceiver(i) {
 		this.branchTransfer.destination.splice(i, 1);
+	}
+
+	public selectCompany(event) {
+		console.log(event.uniqueName);
 	}
 }
 

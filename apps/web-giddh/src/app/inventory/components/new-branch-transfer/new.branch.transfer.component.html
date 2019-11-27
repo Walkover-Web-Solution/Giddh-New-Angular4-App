@@ -40,7 +40,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [options]="branches$ | async"></sh-select>
+							<sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [isFilterEnabled]="true" [options]="branches$ | async" (selected)="selectCompany($event)"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2">
@@ -50,7 +50,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName">
+							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName">
 
 							</sh-select>
 						</div>
@@ -62,7 +62,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
+							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2">
@@ -92,7 +92,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
+							<sh-select [options]="gstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -102,7 +102,7 @@
 							</label>
 						</div>
 						<div class="col-md-4">
-							<sh-select [options]="recGstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
+							<sh-select [options]="recGstinOptions" [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
 						</div>
 					</div>
 					<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -144,7 +144,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [(ngModel)]="branchTransfer.source[0].uniqueName" [options]="branches$ | async"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [(ngModel)]="branchTransfer.source[0].uniqueName" [options]="branches$ | async"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -154,7 +154,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -164,7 +164,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.source[0].warehouse.taxNumber"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -184,7 +184,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [(ngModel)]="branchTransfer.destination[0].uniqueName" [options]="branches$ | async"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [(ngModel)]="branchTransfer.destination[0].uniqueName" [options]="branches$ | async"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">
@@ -194,7 +194,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.uniqueName"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">
@@ -204,7 +204,7 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <sh-select [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
+                            <sh-select [isFilterEnabled]="true" [options]="gstinOptions" [(ngModel)]="branchTransfer.destination[0].warehouse.taxNumber"></sh-select>
                         </div>
                     </div>
                     <div class="row mrB2">

@@ -627,12 +627,9 @@
     <div class="recept-modal">
         <div class="modal-header">
             <h4 class="modal-title pull-left">Modal</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
         <div class="modal-body">
-            <receipt-note [branchTransferMode]="branchTransferMode"></receipt-note>
+            <new-branch-transfer [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
 
     </div>

@@ -26,10 +26,6 @@
             </section>
           </section>
         </ng-container>
-        <ng-container *ngIf="activeTabIndex === 0 && activeView === 'receipt'">
-          <receipt-note></receipt-note>
-        </ng-container>
-
       </tab>
 
       <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)" [active]="activeTabIndex === 1">
