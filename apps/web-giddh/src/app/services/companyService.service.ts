@@ -5,7 +5,8 @@ import {
 	ICurrencyResponse,
 	SocketNewCompanyRequest,
 	CompanyCreateRequest,
-	StatesRequest
+	StatesRequest,
+	WareHouseResponse
 } from './../models/api-models/Company';
 import {AccountSharedWithResponse} from '../models/api-models/Account';
 import {
@@ -386,5 +387,18 @@ export class CompanyService {
 			let data: BaseResponse<ReportsResponseModel, string> = res;
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
+	}
+
+	/*
+  * get registered sales
+  * */
+	public getWarehouseDetails(warehouseUniqueName: string) {
+		this.companyUniqueName = this._generalService.companyUniqueName;
+		return this._http.get(this.config.apiUrl + COMPANY_API.GET_WAREHOUSE_DETAILS
+			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+			.replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {
+			let data: BaseResponse<WareHouseResponse, string> = res;
+			return data;
+		}), catchError((e) => this.errorHandler.HandleCatch<WareHouseResponse, string>(e, WareHouseResponse)));
 	}
 }

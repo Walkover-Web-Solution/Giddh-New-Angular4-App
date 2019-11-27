@@ -23,6 +23,7 @@ import {InventoryAction} from "../../../actions/inventory/inventory.actions";
 import {OnboardingFormRequest} from "../../../models/api-models/Common";
 import {CommonActions} from "../../../actions/common.actions";
 import {IOption} from "../../../theme/ng-select/option.interface";
+import {CompanyActions} from "../../../actions/company.actions";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -119,9 +120,8 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	public warehouses: IOption[] = [];
 	public formFields: any[] = [];
 	public stockList: IOption[] = [];
-	public newProduct: NewBranchTransferProduct = new NewBranchTransferProduct();
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private companyActions: CompanyActions) {
 		this.store.dispatch(this.inventoryAction.GetStock());
 
 		this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -303,5 +303,17 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 
 	public submit() {
 		console.log(this.branchTransfer);
+	}
+
+	public getWarehouseDetails(warehouse) {
+		this.store.dispatch(this.companyActions.getWarehouseDetails(warehouse.uniqueName));
+
+		this.store.pipe(select(s => s.company.warehouse), takeUntil(this.destroyed$)).subscribe(res => {
+			if (res) {
+				warehouse.name = res.name;
+				warehouse.taxNumber = res.taxNumber;
+				warehouse.address = res.address;
+			}
+		});
 	}
 }

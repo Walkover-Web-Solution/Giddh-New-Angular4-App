@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry, WareHouseResponse } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
@@ -58,6 +58,9 @@ export class CompanyActions {
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
   public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
+
+  public static GET_WAREHOUSE_DETAILS = 'GET_WAREHOUSE_DETAILS';
+  public static GET_WAREHOUSE_DETAILS_RESPONSE = 'GET_WAREHOUSE_DETAILS_RESPONSE';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -372,6 +375,25 @@ export class CompanyActions {
         return { type: 'EmptyAction' };
       }));
 
+  @Effect()
+  public getWarehouseDetails$: Observable<Action> = this.action$
+      .ofType(CompanyActions.GET_WAREHOUSE_DETAILS).pipe(
+          switchMap((action: CustomActions) => this._companyService.getWarehouseDetails(action.payload)),
+          map(response => {
+            return this.getWarehouseDetailsResponse(response);
+          }));
+
+  @Effect()
+  public getWarehouseDetailsResponse$: Observable<Action> = this.action$
+      .ofType(CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE).pipe(
+          map((action: CustomActions) => {
+            if (action.payload.status === 'error') {
+              this._toasty.errorToast(action.payload.message, action.payload.code);
+            }
+            return { type: 'EmptyAction' };
+          }));
+
+
   constructor(
     private action$: Actions,
     private _companyService: CompanyService,
@@ -580,6 +602,7 @@ export class CompanyActions {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT
     };
   }
+
   public getAllRegistrationsResponse(value: BaseResponse<IRegistration, string>): CustomActions {
     return {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
@@ -589,5 +612,19 @@ export class CompanyActions {
 
   public removeCompanyCreateSession(): CustomActions {
     return { type: CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION };
+  }
+
+  public getWarehouseDetails(warehouseUniqueName) {
+    return {
+      type: CompanyActions.GET_WAREHOUSE_DETAILS,
+      payload: warehouseUniqueName
+    };
+  }
+
+  public getWarehouseDetailsResponse(value: BaseResponse<WareHouseResponse, string>): CustomActions {
+    return {
+      type: CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE,
+      payload: value
+    };
   }
 }

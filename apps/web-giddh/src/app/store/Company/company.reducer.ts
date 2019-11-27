@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse, WareHouseResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';
@@ -23,6 +23,7 @@ export interface CurrentCompanyState {
   isTaxUpdatedSuccessfully: boolean;
   isCompanyActionInProgress: boolean;
   isAccountInfoLoading: boolean;
+  warehouse: WareHouseResponse;
 }
 
 /**
@@ -87,7 +88,8 @@ const initialState: CurrentCompanyState = {
   isTaxUpdatingInProcess: false,
   isTaxUpdatedSuccessfully: false,
   isCompanyActionInProgress: false,
-  isAccountInfoLoading: false
+  isAccountInfoLoading: false,
+  warehouse: null
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -224,6 +226,17 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
       }
       return Object.assign({}, state, {
         isAccountInfoLoading: false
+      });
+    }
+    case CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE: {
+      let warehouse: BaseResponse<WareHouseResponse, string> = action.payload;
+      if (warehouse.status === 'success') {
+        return Object.assign({}, state, {
+          warehouse: warehouse.body
+        });
+      }
+      return Object.assign({}, state, {
+        warehouse: null
       });
     }
     default:
