@@ -2242,7 +2242,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleAccountAsidePane();
     }
 
-    public submitUpdateForm(f: NgForm) {
+    /**
+     * update invoice function
+     * @param invoiceForm
+     */
+    public submitUpdateForm(invoiceForm: NgForm) {
         let result = this.prepareDataForApi();
         if (!result) {
             return;
@@ -2271,7 +2275,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, f);
+                        this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
@@ -2279,7 +2283,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // credit and debit note still uses old api so just pass result to service don't parse it
                 this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                        this.actionsAfterVoucherUpdate(response, f);
+                        this.actionsAfterVoucherUpdate(response, invoiceForm);
                     }, (err) => {
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
@@ -2290,12 +2294,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * used for doing same thing after sales/ cash or credit / debit note voucher updates
      * @param response
-     * @param f
+     * @param invoiceForm
      */
-    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, f: NgForm) {
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, invoiceForm: NgForm) {
         if (response.status === 'success') {
             // reset form and other
-            this.resetInvoiceForm(f);
+            this.resetInvoiceForm(invoiceForm);
             this._toasty.successToast('Voucher updated Successfully');
             this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
             this.voucherNumber = response.body.number;
