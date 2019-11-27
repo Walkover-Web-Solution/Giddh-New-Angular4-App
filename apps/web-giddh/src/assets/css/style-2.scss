@@ -8513,6 +8513,14 @@ GST filing
                         .dayBookAdvanceSearch input{
                             width: 100%;
                         }
+                        .createAccForm li.highlighted.selected , .createAccForm li.highlighted {
+                            background-color: #eeeff9 !important;
+                        }
+                         .createAccForm li.highlighted.selected .account-list-item , .createAccForm li.highlighted .account-list-item{
+                          color: $lightTextBlue !important;
+                        }
+
+
                 /* responsive */
 
                 @media (max-width: 1440px) {
