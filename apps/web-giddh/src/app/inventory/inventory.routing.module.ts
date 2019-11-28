@@ -11,7 +11,7 @@ import {JobworkComponent} from './jobwork/jobwork.component';
 
 import {InvViewService} from './inv.view.service';
 import {ManufacturingComponent} from "./manufacturing/manufacturing.component";
-import {NewBranchTransferComponent} from './components/new-branch-transfer/new.branch.transfer.component'
+import {NewBranchTransferAddComponent} from './components/new-branch-transfer/new.branch.transfer.add.component'
 
 @NgModule({
 	imports: [

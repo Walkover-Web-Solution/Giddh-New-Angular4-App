@@ -37,7 +37,7 @@ import { InwardNoteComponent } from './components/forms/inward-note/inward-note.
 import { OutwardNoteComponent } from './components/forms/outward-note/outward-note.component';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-import { NewBranchTransferComponent } from "./components/new-branch-transfer/new.branch.transfer.component";
+import { NewBranchTransferAddComponent } from "./components/new-branch-transfer/new.branch.transfer.add.component";
 import { AsideSenderReceiverDetailsPaneComponent } from './components/aside-sender-receiver-details/aside-sender-receiver-details.component';
 
 import { DateFormatterPipe } from "./dateFormatter.pipe";
@@ -77,7 +77,7 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
         OutwardNoteComponent,
         JobworkSidebarComponent,
         ManufacturingComponent,
-        NewBranchTransferComponent,
+        NewBranchTransferAddComponent,
         AsideSenderReceiverDetailsPaneComponent,
         DateFormatterPipe
     ],
@@ -110,7 +110,7 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
         OutwardNoteComponent,
         JobworkSidebarComponent,
         ManufacturingComponent,
-        NewBranchTransferComponent,
+        NewBranchTransferAddComponent,
     ],
     providers: [],
 	imports: [

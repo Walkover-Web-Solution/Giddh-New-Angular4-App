@@ -29,7 +29,7 @@ import {IForceClear} from "../../../models/api-models/Sales";
 
 @Component({
 	selector: 'new-branch-transfer',
-	templateUrl: './new.branch.transfer.component.html',
+	templateUrl: './new.branch.transfer.add.component.html',
 	styleUrls: ['./new.branch.transfer.component.scss'],
 	animations: [
 		trigger('slideInOut', [
@@ -45,7 +45,7 @@ import {IForceClear} from "../../../models/api-models/Sales";
 	]
 })
 
-export class NewBranchTransferComponent implements OnInit, OnDestroy {
+export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	@Input() public branchTransferMode: string;
 
 	public asideMenuState: string = 'out';
