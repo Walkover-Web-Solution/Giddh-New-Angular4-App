@@ -49,16 +49,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	@Input() public branchTransferMode: string;
 
 	public asideMenuState: string = 'out';
-
-	public gstinOptions = [
-		{label: 'GSTIN1', value: 'GSTIN1'},
-		{label: 'GSTIN2', value: 'GSTIN1'}
-	];
-
 	public hideSenderReciverDetails = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public branchTransfer: NewBranchTransferResponse;
-
 	public transferType: string = 'products';
 	public branches: any;
 	public branches$: Observable<CompanyResponse[]>;
@@ -260,6 +253,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public getWarehouseDetails(warehouse) {
+		console.log(this.branchTransfer);
+		console.log(warehouse);
+
 		if (warehouse.uniqueName !== null) {
 			this.store.dispatch(this.companyActions.getWarehouseDetails(warehouse.uniqueName));
 
@@ -268,6 +264,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 					warehouse.name = res.name;
 					warehouse.taxNumber = res.taxNumber;
 					warehouse.address = res.address;
+
+					console.log(this.branchTransfer);
+					console.log(warehouse);
 				}
 			});
 		} else {
@@ -375,8 +374,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.activeRow = index;
 	}
 
-	public selectCompany(object) {
+	public selectCompany(event, object) {
 		if(object) {
+			object.name = event.label;
 			object.warehouse.name = "";
 			object.warehouse.uniqueName = "";
 			object.warehouse.taxNumber = "";
