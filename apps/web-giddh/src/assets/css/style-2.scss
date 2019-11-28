@@ -2746,7 +2746,7 @@
                     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, .14);
                     color: #616161;
                     border: 1px solid #ccc;
-                    z-index:99 !important;
+                    z-index:9993 !important;
                 }
 
                 .daterangepicker .input-mini.active {
@@ -8519,7 +8519,9 @@ GST filing
                          .createAccForm li.highlighted.selected .account-list-item , .createAccForm li.highlighted .account-list-item{
                           color: $lightTextBlue !important;
                         }
-
+                        .modal.fade.fullScreenMy.mangeAccountPopup.addManageGroupAcc.in.show {
+                            z-index: 9999;
+                        }
 
                 /* responsive */
 
@@ -8955,6 +8957,11 @@ GST filing
                         width: 100%;
                         top: 85px;
                     }
+                    .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
+                        position: relative;
+                        width: 100%;
+                        top: 0;
+                    }
                     .custom-tabs .top_bar {
                         margin-top: 40px;
                     }
@@ -9248,8 +9255,12 @@ GST filing
                 }
                 @media(min-width:768px){
                     .invoice-modal-content .modal-dialog{
-                                                margin: 70px auto;
-                                        }
+                         margin: 70px auto;
+                     }
+                      .modal-dialog {
+
+                            margin: 70px auto;
+                     }
                 }
 
 
