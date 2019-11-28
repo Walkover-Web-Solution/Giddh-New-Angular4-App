@@ -34,7 +34,6 @@ export interface LinkedAccountsState {
 export interface DiscountState {
     isDiscountListInProcess: boolean;
     discountList: IDiscountList[];
-    discountListOfAccount: any[];
     isDiscountCreateInProcess: boolean;
     isDiscountCreateSuccess: boolean;
     isDiscountUpdateInProcess: boolean;
@@ -45,7 +44,6 @@ export interface DiscountState {
 
 const discountInitialState: DiscountState = {
     discountList: [],
-    discountListOfAccount: [],
     isDeleteDiscountInProcess: false,
     isDeleteDiscountSuccess: false,
     isDiscountCreateInProcess: false,
@@ -702,23 +700,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
             return Object.assign({}, state, { branchRemoved: false });
-        }
-        case AccountsAction.GET_DISCOUNT_OF_ACCOUNT_RESPONSE: {
-            let res: BaseResponse<any, string> = action.payload;
-            let listOfDiscount = [];
-            let accountName = res.request;
-            if (res.status === 'success') {
-                if (res.body) {
-                    if (res.body[accountName]) {
-                        listOfDiscount = res.body[accountName];
-                    }
-                    console.log('taaccountDiscount', res);
-                }
-                return Object.assign({}, state, { discountListOfAccount: listOfDiscount });
-            } else {
-                return Object.assign({}, state, {});
-            }
-
         }
 
         //  endregion discount reducer

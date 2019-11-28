@@ -90,6 +90,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public companyCountry: string = '';
     public activeAccountName: string = '';
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClearDiscount$: Observable<IForceClear> = observableOf({ status: false });
     public isDiscount: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public countrySource: IOption[] = [];
@@ -108,7 +109,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
-    public discountListOfAccount$: Observable<any[]>;
 
     public discountList: any[] = [];
     public setAccountForMove: string;
@@ -121,7 +121,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
-    public selectedDiscounts: any = [];
+    public selectedDiscounts: any[] = [];
+    public selectedDiscountList: any[] = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
@@ -135,10 +136,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _settingsDiscountAction: SettingsDiscountActions, private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
-        this.discountListOfAccount$ = this.store.select(s => s.settings.discount.discountListOfAccount).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
@@ -177,7 +177,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
-
                 if (acc && acc.parentGroups[0].uniqueName) {
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
@@ -187,8 +186,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails.uniqueName) {
-                    this.store.dispatch(this.accountsAction.getApplyDiscountOfAccount(accountDetails.uniqueName));
+                    this._accountService.GetApplyDiscount(accountDetails.uniqueName).subscribe(response => {
+                        this.selectedDiscounts = [];
+                        this.forceClearDiscount$ = observableOf({ status: true });
+                        if (response.status === 'success') {
+                            if (response.body) {
+                                if (response.body[accountDetails.uniqueName]) {
+                                    let list = response.body[accountDetails.uniqueName];
+                                    Object.keys(list).forEach(key => {
+                                        let UniqueName = list[key]['discount']['uniqueName'];
+                                        this.selectedDiscounts.push(UniqueName);
+                                    });
+                                }
+                            }
+                        }
+                        console.log('selectedDiscounts', this.selectedDiscounts);
+                        _.uniq(this.selectedDiscounts);
+                        console.log('selectedDiscounts uni', this.selectedDiscounts);
+                    });
                 }
+
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
@@ -367,9 +384,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.autoFocusUpdate.nativeElement.focus();
             }, 50);
         }
-        this.discountListOfAccount$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            console.log('acc update discountlist', res);
-        });
+
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.fields).forEach(key => {
@@ -503,6 +518,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getDiscountList() {
         this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                this.discountList = [];
                 Object.keys(res).forEach(key => {
                     this.discountList.push({
                         label: res[key].name,
@@ -1193,23 +1209,25 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
     }
-    public selectDiscounts(event: any) {
-        if (event) {
-            if (this.accountDetails) {
-                this.activeAccountName = this.accountDetails.uniqueName;
-            } else {
-                this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
-            }
-            if (this.activeAccountName) {
-                let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
-                assignDescountObject.accountUniqueName = this.activeAccountName;
-                assignDescountObject.discountUniqueNames = this.selectedDiscounts;
-                console.log('assignDescountObject', assignDescountObject);
-                this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
-            }
 
+    /**
+     *
+     *This is for apply discount for an account
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public applyDiscount(): void {
+        if (this.accountDetails) {
+            this.activeAccountName = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
         }
-        console.log('event', this.selectedDiscounts);
+        if (this.activeAccountName) {
+            _.uniq(this.selectedDiscounts);
+            let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
+            assignDescountObject.accountUniqueName = this.activeAccountName;
+            assignDescountObject.discountUniqueNames = this.selectedDiscounts;
+            this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
+        }
     }
 
     private getStateGSTCode(stateList, code: string) {

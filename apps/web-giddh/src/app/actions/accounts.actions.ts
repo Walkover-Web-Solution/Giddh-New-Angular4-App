@@ -66,8 +66,7 @@ export class AccountsAction {
     public static UNMERGE_ACCOUNT = 'AccountUnMerge';
     public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
-    public static GET_DISCOUNT_OF_ACCOUNT = 'GET_DISCOUNT_OF_ACCOUNT';
-    public static GET_DISCOUNT_OF_ACCOUNT_RESPONSE = 'GET_DISCOUNT_OF_ACCOUNT_RESPONSE';
+
 
     @Effect()
     public ApplyAccountTax$: Observable<Action> = this.action$
@@ -110,16 +109,10 @@ export class AccountsAction {
                 let data: BaseResponse<string, AssignDiscountRequestForAccount> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
-                    return { type: 'EmptyAction' };
+                } else {
+                    this._toasty.successToast('Discount Linked Successfully', action.payload.status);
                 }
-                this._toasty.successToast('Discount Linked Successfully', action.payload.status);
-                let accName = null;
-                this.store.pipe(take(1)).subscribe((s) => {
-                    if (s.groupwithaccounts.activeGroup) {
-                        accName = s.groupwithaccounts.activeAccount.uniqueName;
-                    }
-                });
-                return this.getAccountDetails(accName);
+                return { type: 'EmptyAction' };
             }));
 
     @Effect()
@@ -316,13 +309,7 @@ export class AccountsAction {
                     type: 'EmptyAction'
                 };
             }));
-    @Effect()
-    public getApplyDiscountOfAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_DISCOUNT_OF_ACCOUNT).pipe(
-            switchMap((action: CustomActions) => this._accountService.GetApplyDiscount(action.payload)),
-            map(response => {
-                return this.getApplyDiscountOfAccountResponse(response);
-            }));
+
 
     @Effect()
     public shareEntity$: Observable<Action> = this.action$
@@ -825,19 +812,6 @@ export class AccountsAction {
             payload: value
         };
     }
-    public getApplyDiscountOfAccount(value: string): CustomActions {
-        return {
-            type: AccountsAction.GET_DISCOUNT_OF_ACCOUNT,
-            payload: value
-        };
-    }
-    public getApplyDiscountOfAccountResponse(value: BaseResponse<any, string>): CustomActions {
-        return {
-            type: AccountsAction.GET_DISCOUNT_OF_ACCOUNT_RESPONSE,
-            payload: value
-        };
-    }
-
 
     public applyAccountDiscount(value: AssignDiscountRequestForAccount): CustomActions {
         return {
