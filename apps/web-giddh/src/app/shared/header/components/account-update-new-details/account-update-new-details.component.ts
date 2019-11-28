@@ -200,9 +200,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 }
                             }
                         }
-                        console.log('selectedDiscounts', this.selectedDiscounts);
                         _.uniq(this.selectedDiscounts);
-                        console.log('selectedDiscounts uni', this.selectedDiscounts);
                     });
                 }
 
