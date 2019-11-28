@@ -23,7 +23,6 @@ export interface CurrentCompanyState {
   isTaxUpdatedSuccessfully: boolean;
   isCompanyActionInProgress: boolean;
   isAccountInfoLoading: boolean;
-  warehouse: WareHouseResponse;
 }
 
 /**
@@ -88,8 +87,7 @@ const initialState: CurrentCompanyState = {
   isTaxUpdatingInProcess: false,
   isTaxUpdatedSuccessfully: false,
   isCompanyActionInProgress: false,
-  isAccountInfoLoading: false,
-  warehouse: null
+  isAccountInfoLoading: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -228,17 +226,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         isAccountInfoLoading: false
       });
     }
-    case CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE: {
-      let warehouse: BaseResponse<WareHouseResponse, string> = action.payload;
-      if (warehouse.status === 'success') {
-        return Object.assign({}, state, {
-          warehouse: warehouse.body
-        });
-      }
-      return Object.assign({}, state, {
-        warehouse: null
-      });
-    }
+
     default:
       return state;
   }
