@@ -249,15 +249,76 @@
 					<tbody *ngIf="transferType === 'products'">
                         <tr *ngFor="let product of branchTransfer.product; let i = index;" (click)="setActiveRow(i); $event.stopPropagation()" (clickOutside)="activeRow = null">
                             <td>{{i+1}}.</td>
-	                        <td>
-								<div *ngIf="activeRow === i">
-			                        <sh-select name="productName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)"></sh-select>
-	                                <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
-								</div>
-		                        <div *ngIf="activeRow !== i">
-			                        <div *ngIf="product.uniqueName">{{product.uniqueName}}</div>
-			                        <div *ngIf="product.description">{{product.description}}</div>
-		                        </div>
+                            <td>
+                                <div *ngIf="activeRow === i">
+                                    <sh-select name="productName{{i}}" [isFilterEnabled]="true"
+                                        [forceClearReactive]="forceClear$ | async" [options]="stockList"
+                                        [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)">
+                                    </sh-select>
+                                    <div class="pos-rel">
+                                        <div class="skuCode" (click)="skuNumber=!skuNumber"
+                                            *ngIf="activeRow == i && product.uniqueName"><label class="">SKU
+                                                Number</label>
+                                            <span class="">
+                                                1234567890
+                                                <span class="updateText ">Update </span>
+                                                <span class="edit-icon cp">
+                                                    <img class="" src="assets/images/edit-pencilicon.svg"></span>
+                                            </span>
+                                        </div>
+
+                                        <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumber">
+                                            <label>SKU Number</label>
+                                            <input type="text" maxLength="10" placeholder="SKU Number" />
+                                            <div class="btngroup m-t-10">
+                                                <button class="btn btn-sm btn-success" type="button"
+                                                    (click)="skuNumber=!skuNumber">Save
+                                                </button>
+                                                <button class="btn btn-sm btn-primary" type="button"
+                                                    (click)="skuNumber=!skuNumber">
+                                                    Cancel
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}"
+                                        *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+                                </div>
+                                <div *ngIf="activeRow !== i">
+                                    <div *ngIf="product.uniqueName">{{product.uniqueName}}</div>
+                                    <div *ngIf="product.description">{{product.description}}</div>
+                                </div>
+
+
+                                <div class="pos-rel">
+                                    <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow"
+                                        *ngIf="activeRow == i"><label class="">HSN/SAC:</label>
+                                        <span class="">
+                                            asdfghj
+                                            <span class="updateText ">Update </span>
+                                            <span class="edit-icon cp">
+                                                <img class="" src="assets/images/edit-pencilicon.svg"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                        <label>HSN/SAC</label>
+                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
+                                        <div class="btngroup m-t-10">
+                                            <button class="btn btn-sm btn-success" type="button"
+                                                (click)="hsnDropdownShow=!hsnDropdownShow">Save
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" type="button"
+                                                (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                Cancel
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">

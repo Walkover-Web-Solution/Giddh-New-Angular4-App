@@ -49,7 +49,9 @@ import { transporterModes } from "../../../shared/helpers/transporterModes";
 })
 
 export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
-	@Input() public branchTransferMode: string;
+    @Input() public branchTransferMode: string;
+    public hsnDropdownShow: boolean = false;
+    public skuNumber: boolean = false;
 
 	public asideMenuState: string = 'out';
 	public hideSenderReciverDetails = false;
