@@ -24,6 +24,8 @@ import {OnboardingFormRequest} from "../../../models/api-models/Common";
 import {CommonActions} from "../../../actions/common.actions";
 import {IOption} from "../../../theme/ng-select/option.interface";
 import {CompanyActions} from "../../../actions/company.actions";
+import {ToasterService} from "../../../services/toaster.service";
+import {IForceClear} from "../../../models/api-models/Sales";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -55,64 +57,7 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 
 	public hideSenderReciverDetails = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	public branchTransfer: NewBranchTransferResponse = {
-		dateOfSupply: null,
-		challanNo: null,
-		note: null,
-		uniqueName: null,
-		source: [{
-			name: null,
-			uniqueName: null,
-			warehouse: {
-				name: null,
-				uniqueName: null,
-				taxNumber: null,
-				address: null,
-				stockDetails: {
-					stockUnit: null,
-					amount: null,
-					rate: null,
-					quantity: null
-				}
-			}
-		}],
-		destination: [{
-			name: null,
-			uniqueName: null,
-			warehouse: {
-				name: null,
-				uniqueName: null,
-				taxNumber: null,
-				address: null,
-				stockDetails: {
-					stockUnit: null,
-					amount: null,
-					rate: null,
-					quantity: null
-				}
-			}
-		}],
-		product: [{
-			name: null,
-			hsnNumber: null,
-			sacNumber: null,
-			uniqueName: null,
-			stockDetails: {
-				stockUnit: null,
-				amount: null,
-				rate: null,
-				quantity: null
-			},
-			description: null
-		}],
-		transportationDetails: {
-			dispatchedDate: null,
-			transporterName: null,
-			transportMode: null,
-			vehicleNumber: null
-		},
-		entity: null,
-	};
+	public branchTransfer: NewBranchTransferResponse;
 
 	public transferType: string = 'products';
 	public branches: any;
@@ -120,8 +65,14 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	public warehouses: IOption[] = [];
 	public formFields: any[] = [];
 	public stockList: IOption[] = [];
+	public forceClear$: Observable<IForceClear> = observableOf({status: false});
+	public activeRow: number = -1;
+	public activeCompany: any = {};
+	public inputMaskFormat: any = '';
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private companyActions: CompanyActions) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private companyActions: CompanyActions, private _toasty: ToasterService) {
+		this.initFormFields();
+
 		this.store.dispatch(this.inventoryAction.GetStock());
 
 		this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -138,6 +89,8 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 		this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
 			if (o && !_.isEmpty(o)) {
 				let companyInfo = _.cloneDeep(o);
+				this.activeCompany = companyInfo;
+				this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
 				this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
 			}
 		});
@@ -295,6 +248,7 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 
 	public selectProduct(event, product) {
 		if (event) {
+			console.log(event);
 			product.stockDetails.rate = event.additional.rate;
 			product.stockDetails.amount = event.additional.amount;
 			product.stockDetails.quantity = event.additional.openingQuantity;
@@ -306,14 +260,127 @@ export class NewBranchTransferComponent implements OnInit, OnDestroy {
 	}
 
 	public getWarehouseDetails(warehouse) {
-		this.store.dispatch(this.companyActions.getWarehouseDetails(warehouse.uniqueName));
+		if (warehouse.uniqueName !== null) {
+			this.store.dispatch(this.companyActions.getWarehouseDetails(warehouse.uniqueName));
 
-		this.store.pipe(select(s => s.company.warehouse), takeUntil(this.destroyed$)).subscribe(res => {
-			if (res) {
-				warehouse.name = res.name;
-				warehouse.taxNumber = res.taxNumber;
-				warehouse.address = res.address;
+			this.store.pipe(select(s => s.company.warehouse), takeUntil(this.destroyed$)).subscribe(res => {
+				if (res) {
+					warehouse.name = res.name;
+					warehouse.taxNumber = res.taxNumber;
+					warehouse.address = res.address;
+				}
+			});
+		} else {
+			warehouse.name = "";
+			warehouse.taxNumber = "";
+			warehouse.address = "";
+		}
+	}
+
+	public checkTaxNumberValidation(ele: HTMLInputElement) {
+		let isValid: boolean = false;
+
+		if (ele.value) {
+			if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+				for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+					let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+					if (regex.test(ele.value)) {
+						isValid = true;
+					}
+				}
+			} else {
+				isValid = true;
 			}
-		});
+
+			if (!isValid) {
+				this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
+				ele.classList.add('error-box');
+			} else {
+				ele.classList.remove('error-box');
+			}
+		} else {
+			ele.classList.remove('error-box');
+		}
+	}
+
+	public changeTransferType(type) {
+		this.initFormFields();
+		this.transferType = type;
+	}
+
+	public initFormFields() {
+		this.branchTransfer = {
+			dateOfSupply: null,
+			challanNo: null,
+			note: null,
+			uniqueName: null,
+			source: [{
+				name: null,
+				uniqueName: null,
+				warehouse: {
+					name: null,
+					uniqueName: null,
+					taxNumber: null,
+					address: null,
+					stockDetails: {
+						stockUnit: null,
+						amount: null,
+						rate: null,
+						quantity: null
+					}
+				}
+			}],
+			destination: [{
+				name: null,
+				uniqueName: null,
+				warehouse: {
+					name: null,
+					uniqueName: null,
+					taxNumber: null,
+					address: null,
+					stockDetails: {
+						stockUnit: null,
+						amount: null,
+						rate: null,
+						quantity: null
+					}
+				}
+			}],
+			product: [{
+				name: null,
+				hsnNumber: null,
+				sacNumber: null,
+				uniqueName: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null
+				},
+				description: null
+			}],
+			transportationDetails: {
+				dispatchedDate: null,
+				transporterName: null,
+				transportMode: null,
+				vehicleNumber: null
+			},
+			entity: null,
+		};
+		this.forceClear$ = observableOf({status: true});
+		this.activeRow = -1;
+	}
+
+	public setActiveRow(index) {
+		this.activeRow = index;
+	}
+
+	public selectCompany(object) {
+		if(object) {
+			object.warehouse.name = "";
+			object.warehouse.uniqueName = "";
+			object.warehouse.taxNumber = "";
+			object.warehouse.address = "";
+		}
 	}
 }

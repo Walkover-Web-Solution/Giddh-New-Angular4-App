@@ -43,6 +43,7 @@ import { AsideSenderReceiverDetailsPaneComponent } from './components/aside-send
 import { DateFormatterPipe } from "./dateFormatter.pipe";
 import { ReactiveFormsModule } from '@angular/forms';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
 
 @NgModule({
     declarations: [
@@ -112,19 +113,20 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
         NewBranchTransferComponent,
     ],
     providers: [],
-    imports: [
-        InventoryRoutingModule,
-        TooltipModule,
-        SharedModule,
-        Daterangepicker,
-        TextCaseChangeModule,
-        BsDropdownModule,
-        BsDatepickerModule.forRoot(),
-        CurrencyModule,
-        TabsModule,
-        ReactiveFormsModule,
-        DigitsOnlyModule
-    ],
+	imports: [
+		InventoryRoutingModule,
+		TooltipModule,
+		SharedModule,
+		Daterangepicker,
+		TextCaseChangeModule,
+		BsDropdownModule,
+		BsDatepickerModule.forRoot(),
+		CurrencyModule,
+		TabsModule,
+		ReactiveFormsModule,
+		DigitsOnlyModule,
+        NgxMaskModule.forRoot()
+	],
     entryComponents: [
         PaginationComponent
     ],
