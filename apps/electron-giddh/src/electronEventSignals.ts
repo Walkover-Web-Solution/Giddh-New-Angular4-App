@@ -1,60 +1,76 @@
-import { app, BrowserWindow, EventEmitter, WebContents } from 'electron';
+import {app, BrowserWindow, WebContents} from 'electron';
+import App = Electron.App;
 
 export interface WindowEvent {
-  sender: BrowserWindow;
+    sender: BrowserWindow;
 }
 
 export interface WebContentsEvent {
-  sender: WebContents;
+    sender: WebContents;
 }
 
 function isEnvTrue(v: string): boolean {
-  return v != null && (v.length === 0 || v === 'true');
+    return v != null && (v.length === 0 || v === 'true');
 }
 
 const isLogEvent = isEnvTrue(process.env.LOG_EVENTS);
 
-function addHandler(emitter: EventEmitter, event: string, handler: (...args: any[]) => void) {
-  if (isLogEvent) {
-    emitter.on(event, (...args: any[]) => {
-      console.log('%s %s', event, args);
-      handler.apply(this, args);
-    });
-  } else {
-    emitter.on(event, handler);
-  }
+function addHandlerWebContents(emitter: WebContents, event: string, handler: (...args: any[]) => void) {
+    if (isLogEvent) {
+        // @ts-ignore
+        emitter.on(event, (...args: any[]) => {
+            console.log('%s %s', event, args);
+            handler.apply(this, args);
+        });
+    } else {
+        // @ts-ignore
+        emitter.on(event, handler);
+    }
+}
+
+function addHandlerApp(emitter: App, event: string, handler: (...args: any[]) => void) {
+    if (isLogEvent) {
+        // @ts-ignore
+        emitter.on(event, (...args: any[]) => {
+            console.log('%s %s', event, args);
+            handler.apply(this, args);
+        });
+    } else {
+        // @ts-ignore
+        emitter.on(event, handler);
+    }
 }
 
 export class WebContentsSignal {
-  constructor(private emitter: WebContents) {
-  }
+    constructor(private emitter: WebContents) {
+    }
 
-  public navigated(handler: (event: WebContentsEvent, url: string) => void): WebContentsSignal {
-    addHandler(this.emitter, 'did-navigate', handler);
-    return this;
-  }
+    public navigated(handler: (event: WebContentsEvent, url: string) => void): WebContentsSignal {
+        addHandlerWebContents(this.emitter, 'did-navigate', handler);
+        return this;
+    }
 
-  public navigatedInPage(handler: (event: WebContentsEvent, url: string) => void): WebContentsSignal {
-    addHandler(this.emitter, 'did-navigate-in-page', handler);
-    return this;
-  }
+    public navigatedInPage(handler: (event: WebContentsEvent, url: string) => void): WebContentsSignal {
+        addHandlerWebContents(this.emitter, 'did-navigate-in-page', handler);
+        return this;
+    }
 
-  public frameLoaded(handler: (event: any, isMainFrame: boolean) => void): WebContentsSignal {
-    addHandler(this.emitter, 'did-frame-finish-load', handler);
-    return this;
-  }
+    public frameLoaded(handler: (event: any, isMainFrame: boolean) => void): WebContentsSignal {
+        addHandlerWebContents(this.emitter, 'did-frame-finish-load', handler);
+        return this;
+    }
 }
 
 export class AppSignal {
-  private emitter = app;
+    private emitter = app;
 
-  public windowBlurred(handler: (event: any, window: BrowserWindow) => void): AppSignal {
-    addHandler(this.emitter, 'browser-window-blur', handler);
-    return this;
-  }
+    public windowBlurred(handler: (event: any, window: BrowserWindow) => void): AppSignal {
+        addHandlerApp(this.emitter, 'browser-window-blur', handler);
+        return this;
+    }
 
-  public windowFocused(handler: (event: any, window: BrowserWindow) => void): AppSignal {
-    addHandler(this.emitter, 'browser-window-focus', handler);
-    return this;
-  }
+    public windowFocused(handler: (event: any, window: BrowserWindow) => void): AppSignal {
+        addHandlerApp(this.emitter, 'browser-window-focus', handler);
+        return this;
+    }
 }

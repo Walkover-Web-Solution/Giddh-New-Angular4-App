@@ -5,9 +5,10 @@ function isEnvTrue(v) {
     return v != null && (v.length === 0 || v === 'true');
 }
 var isLogEvent = isEnvTrue(process.env.LOG_EVENTS);
-function addHandler(emitter, event, handler) {
+function addHandlerWebContents(emitter, event, handler) {
     var _this = this;
     if (isLogEvent) {
+        // @ts-ignore
         emitter.on(event, function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -18,6 +19,25 @@ function addHandler(emitter, event, handler) {
         });
     }
     else {
+        // @ts-ignore
+        emitter.on(event, handler);
+    }
+}
+function addHandlerApp(emitter, event, handler) {
+    var _this = this;
+    if (isLogEvent) {
+        // @ts-ignore
+        emitter.on(event, function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            console.log('%s %s', event, args);
+            handler.apply(_this, args);
+        });
+    }
+    else {
+        // @ts-ignore
         emitter.on(event, handler);
     }
 }
@@ -26,15 +46,15 @@ var WebContentsSignal = /** @class */ (function () {
         this.emitter = emitter;
     }
     WebContentsSignal.prototype.navigated = function (handler) {
-        addHandler(this.emitter, 'did-navigate', handler);
+        addHandlerWebContents(this.emitter, 'did-navigate', handler);
         return this;
     };
     WebContentsSignal.prototype.navigatedInPage = function (handler) {
-        addHandler(this.emitter, 'did-navigate-in-page', handler);
+        addHandlerWebContents(this.emitter, 'did-navigate-in-page', handler);
         return this;
     };
     WebContentsSignal.prototype.frameLoaded = function (handler) {
-        addHandler(this.emitter, 'did-frame-finish-load', handler);
+        addHandlerWebContents(this.emitter, 'did-frame-finish-load', handler);
         return this;
     };
     return WebContentsSignal;
@@ -45,11 +65,11 @@ var AppSignal = /** @class */ (function () {
         this.emitter = electron_1.app;
     }
     AppSignal.prototype.windowBlurred = function (handler) {
-        addHandler(this.emitter, 'browser-window-blur', handler);
+        addHandlerApp(this.emitter, 'browser-window-blur', handler);
         return this;
     };
     AppSignal.prototype.windowFocused = function (handler) {
-        addHandler(this.emitter, 'browser-window-focus', handler);
+        addHandlerApp(this.emitter, 'browser-window-focus', handler);
         return this;
     };
     return AppSignal;

@@ -75,7 +75,7 @@ function setMenu() {
                 {
                     label: 'Select All',
                     accelerator: 'CmdOrCtrl+A',
-                    role: 'selectall'
+                    role: 'selectAll'
                 },
             ]
         },
@@ -132,7 +132,7 @@ function setMenu() {
                 {
                     label: 'Hide Others',
                     accelerator: 'Command+Shift+H',
-                    role: 'hideothers'
+                    role: 'hideOthers'
                 },
                 {
                     label: 'Show All',

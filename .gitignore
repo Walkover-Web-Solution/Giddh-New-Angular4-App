@@ -160,3 +160,7 @@ xplat/**/*.ngsummary.json
 
 
 
+/apps/giddh-cordova/giddh/node_modules/
+/apps/giddh-cordova/giddh/platforms/android/
+/apps/giddh-cordova/giddh/www/
+/apps/giddh-cordova/giddh/plugins/
