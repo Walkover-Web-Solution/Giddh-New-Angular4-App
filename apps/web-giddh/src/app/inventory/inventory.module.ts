@@ -39,11 +39,14 @@ import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.si
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { NewBranchTransferAddComponent } from "./components/new-branch-transfer/new.branch.transfer.add.component";
 import { AsideSenderReceiverDetailsPaneComponent } from './components/aside-sender-receiver-details/aside-sender-receiver-details.component';
+import { NewBranchTransfListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
+
+
 
 import { DateFormatterPipe } from "./dateFormatter.pipe";
 import { ReactiveFormsModule } from '@angular/forms';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
-import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
+import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 
 @NgModule({
     declarations: [
@@ -78,6 +81,7 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
+        NewBranchTransfListComponent,
         AsideSenderReceiverDetailsPaneComponent,
         DateFormatterPipe
     ],
@@ -111,22 +115,23 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
+        NewBranchTransfListComponent,
     ],
     providers: [],
-	imports: [
-		InventoryRoutingModule,
-		TooltipModule,
-		SharedModule,
-		Daterangepicker,
-		TextCaseChangeModule,
-		BsDropdownModule,
-		BsDatepickerModule.forRoot(),
-		CurrencyModule,
-		TabsModule,
-		ReactiveFormsModule,
-		DigitsOnlyModule,
+    imports: [
+        InventoryRoutingModule,
+        TooltipModule,
+        SharedModule,
+        Daterangepicker,
+        TextCaseChangeModule,
+        BsDropdownModule,
+        BsDatepickerModule.forRoot(),
+        CurrencyModule,
+        TabsModule,
+        ReactiveFormsModule,
+        DigitsOnlyModule,
         NgxMaskModule.forRoot()
-	],
+    ],
     entryComponents: [
         PaginationComponent
     ],

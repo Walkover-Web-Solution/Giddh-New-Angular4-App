@@ -1,0 +1,63 @@
+<div class="branch-transfer-report">
+    <div class="container-fluid">
+        <div class="row pdT1">
+            <div class="col-sm-6 form-group">
+                <div class="input-group ">
+                    <!-- <span class="icon-calender"></span> -->
+                    <span class="inputWrapper">
+                        <input class="form-control" placeholder="Daterangepicker" bsDaterangepicker
+                            #dpr="bsDaterangepicker">
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-6 form-group">
+                <button class="btn btn-pink pull-right">+ New Transfer</button>
+            </div>
+        </div>
+
+
+        <div class="report-table">
+            <table class="table basic">
+
+                <thead>
+                    <tr>
+                        <th width="3%">#</th>
+                        <th width="10%%">Date</th>
+                        <th width="20%">Voucher Type</th>
+                        <th width="20%">Voucher No.</th>
+                        <th width="10%">Sender/Receiver</th>
+                        <th width="10%" class="text-right">Total Amount</th>
+                        <th width="10%">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reportTableData of reportTableDatas">
+                        <td> {{reportTableData.serialNo}} </td>
+                        <td> {{reportTableData.Date}} </td>
+                        <td> {{reportTableData.VoucherType}} </td>
+                        <td> {{reportTableData.VoucherNo}} </td>
+                        <td> {{reportTableData.SenderReciver}} </td>
+                        <td class="text-right"> {{reportTableData.TotalAmount}} </td>
+                        <td> {{reportTableData.Action}}
+                            <div class="btn-group pull-right" dropdown [autoClose]="true">
+                                <a id="button-basic" dropdownToggle type="button"
+                                    class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
+
+                                </a>
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                    aria-labelledby="button-basic">
+                                    <li role="menuitem"><a class="dropdown-item" href="#">Received</a></li>
+                                    <li role="menuitem"><a class="dropdown-item" href="#">Delivered</a></li>
+                                    <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
