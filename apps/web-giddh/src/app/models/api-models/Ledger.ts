@@ -177,6 +177,7 @@ export interface DownloadLedgerAttachmentResponse {
 
 export class TransactionsResponse implements ITransactions {
   public closingBalance: IClosingBalance;
+  public convertedClosingBalance?: IClosingBalance;
   public count: number;
   public creditTotal: number;
   public creditTransactions: ITransactionItem[];
@@ -185,6 +186,7 @@ export class TransactionsResponse implements ITransactions {
   public debitTransactions: ITransactionItem[];
   public debitTransactionsCount: number;
   public forwardedBalance: IForwardBalance;
+  public convertedForwardedBalance?: IForwardBalance;
   public page: number;
   public totalItems: number;
   public totalPages: number;
