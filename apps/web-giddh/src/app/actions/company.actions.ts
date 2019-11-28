@@ -61,6 +61,7 @@ export class CompanyActions {
 
   public static GET_WAREHOUSE_DETAILS = 'GET_WAREHOUSE_DETAILS';
   public static GET_WAREHOUSE_DETAILS_RESPONSE = 'GET_WAREHOUSE_DETAILS_RESPONSE';
+  public static RESET_WAREHOUSE_DETAILS_RESPONSE = 'RESET_WAREHOUSE_DETAILS_RESPONSE';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -375,25 +376,6 @@ export class CompanyActions {
         return { type: 'EmptyAction' };
       }));
 
-  @Effect()
-  public getWarehouseDetails$: Observable<Action> = this.action$
-      .ofType(CompanyActions.GET_WAREHOUSE_DETAILS).pipe(
-          switchMap((action: CustomActions) => this._companyService.getWarehouseDetails(action.payload)),
-          map(response => {
-            return this.getWarehouseDetailsResponse(response);
-          }));
-
-  @Effect()
-  public getWarehouseDetailsResponse$: Observable<Action> = this.action$
-      .ofType(CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE).pipe(
-          map((action: CustomActions) => {
-            if (action.payload.status === 'error') {
-              this._toasty.errorToast(action.payload.message, action.payload.code);
-            }
-            return { type: 'EmptyAction' };
-          }));
-
-
   constructor(
     private action$: Actions,
     private _companyService: CompanyService,
@@ -612,19 +594,5 @@ export class CompanyActions {
 
   public removeCompanyCreateSession(): CustomActions {
     return { type: CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION };
-  }
-
-  public getWarehouseDetails(warehouseUniqueName) {
-    return {
-      type: CompanyActions.GET_WAREHOUSE_DETAILS,
-      payload: warehouseUniqueName
-    };
-  }
-
-  public getWarehouseDetailsResponse(value: BaseResponse<WareHouseResponse, string>): CustomActions {
-    return {
-      type: CompanyActions.GET_WAREHOUSE_DETAILS_RESPONSE,
-      payload: value
-    };
   }
 }

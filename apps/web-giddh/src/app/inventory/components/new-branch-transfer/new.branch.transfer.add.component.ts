@@ -23,9 +23,9 @@ import {InventoryAction} from "../../../actions/inventory/inventory.actions";
 import {OnboardingFormRequest} from "../../../models/api-models/Common";
 import {CommonActions} from "../../../actions/common.actions";
 import {IOption} from "../../../theme/ng-select/option.interface";
-import {CompanyActions} from "../../../actions/company.actions";
 import {ToasterService} from "../../../services/toaster.service";
 import {IForceClear} from "../../../models/api-models/Sales";
+import {CompanyService} from "../../../services/companyService.service";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -63,7 +63,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public activeCompany: any = {};
 	public inputMaskFormat: any = '';
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private companyActions: CompanyActions, private _toasty: ToasterService) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService) {
 		this.initFormFields();
 
 		this.store.dispatch(this.inventoryAction.GetStock());
@@ -252,27 +252,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		console.log(this.branchTransfer);
 	}
 
-	public getWarehouseDetails(warehouse) {
-		console.log(this.branchTransfer);
-		console.log(warehouse);
-
-		if (warehouse.uniqueName !== null) {
-			this.store.dispatch(this.companyActions.getWarehouseDetails(warehouse.uniqueName));
-
-			this.store.pipe(select(s => s.company.warehouse), takeUntil(this.destroyed$)).subscribe(res => {
+	public getWarehouseDetails(type, index) {
+		if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
+			this._companyService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
 				if (res) {
-					warehouse.name = res.name;
-					warehouse.taxNumber = res.taxNumber;
-					warehouse.address = res.address;
-
-					console.log(this.branchTransfer);
-					console.log(warehouse);
+					this.branchTransfer[type][index].warehouse.name = res.body.name;
+					this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
+					this.branchTransfer[type][index].warehouse.address = res.body.address;
 				}
 			});
 		} else {
-			warehouse.name = "";
-			warehouse.taxNumber = "";
-			warehouse.address = "";
+			this.branchTransfer[type][index].warehouse.name = "";
+			this.branchTransfer[type][index].warehouse.taxNumber = "";
+			this.branchTransfer[type][index].warehouse.address = "";
 		}
 	}
 
