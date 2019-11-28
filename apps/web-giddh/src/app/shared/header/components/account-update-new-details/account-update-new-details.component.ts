@@ -30,6 +30,9 @@ import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyT
 import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { DbService } from 'apps/web-giddh/src/app/services/db.service';
+import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
+import { AssignDiscountRequestForAccount } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 
 @Component({
     selector: 'account-update-new-details',
@@ -61,7 +64,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    public discountAccountForm: FormGroup;
     @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
     @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
 
@@ -105,6 +107,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isGstValid: boolean;
     public selectedTab: string = 'address';
     public moveAccountSuccess$: Observable<boolean>;
+    public discountList$: Observable<IDiscountList[]>;
+    public discountListOfAccount$: Observable<any[]>;
+
+    public discountList: any[] = [];
     public setAccountForMove: string;
     public showDeleteMove: boolean = false;
     public deleteMergedAccountModalBody: string;
@@ -115,6 +121,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedAccountCallingCode: string = '';
     public isOtherSelectedTab: boolean = false;
     public selectedaccountForMerge: any = [];
+    public selectedDiscounts: any = [];
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
@@ -128,13 +135,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        private _settingsDiscountAction: SettingsDiscountActions, private _dbService: DbService, private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        // this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+        this.discountListOfAccount$ = this.store.select(s => s.settings.discount.discountListOfAccount).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -142,7 +152,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
-        this.prepareTaxDropdown()
+        this.prepareTaxDropdown();
+        this.getDiscountList();
+
     }
 
     public ngOnInit() {
@@ -162,9 +174,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             taxes: ['']
         });
 
-        this.discountAccountForm = this._fb.group({
-            discountUniqueName: ['', Validators.required],
-        });
         // fill form with active account
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
@@ -177,6 +186,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                if (accountDetails.uniqueName) {
+                    this.store.dispatch(this.accountsAction.getApplyDiscountOfAccount(accountDetails.uniqueName));
+                }
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
@@ -355,6 +367,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.autoFocusUpdate.nativeElement.focus();
             }, 50);
         }
+        this.discountListOfAccount$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            console.log('acc update discountlist', res);
+        });
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.fields).forEach(key => {
@@ -485,6 +500,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return arr;
             })).pipe(takeUntil(this.destroyed$));
     }
+    public getDiscountList() {
+        this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res).forEach(key => {
+                    this.discountList.push({
+                        label: res[key].name,
+                        value: res[key].uniqueName,
+                        isSelected: false
+                    });
+                });
+            } else {
+                this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+            }
+        });
+    }
+
 
     public onViewReady(ev) {
         let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
@@ -839,6 +870,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.activeGroupUniqueName = event.value;
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                if (event.value === 'sundrycreditors') {
+                    this.showBankDetail = true;
+                }
                 this.isDebtorCreditor = true;
             } else {
                 this.isDebtorCreditor = false;
@@ -1159,6 +1193,25 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
     }
+    public selectDiscounts(event: any) {
+        if (event) {
+            if (this.accountDetails) {
+                this.activeAccountName = this.accountDetails.uniqueName;
+            } else {
+                this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+            }
+            if (this.activeAccountName) {
+                let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
+                assignDescountObject.accountUniqueName = this.activeAccountName;
+                assignDescountObject.discountUniqueNames = this.selectedDiscounts;
+                console.log('assignDescountObject', assignDescountObject);
+                this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
+            }
+
+        }
+        console.log('event', this.selectedDiscounts);
+    }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }

@@ -39,17 +39,17 @@
                         <!-- <input type="text" value="INR" class="form-control">
                             <span class="dr-label active">DR</span>
                             <span class="cr-label">CR</span> -->
-                            <div class="input-group">
-                        <input type="text" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                        <div class="input-group">
+                            <input type="text" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
-                        </div>
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                            </div>
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">CR.
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -356,20 +356,22 @@
 
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
-    <!-- <div class="row ">
-        <div class="col-sm-6 ">
+    <div class="row ">
+        <div class="col-xs-12 mrB2 selectBox">
             <div class="form-group ">
-                <label>Default Discount</label>
-                <input type="text " disabled class="form-control " placeholder="Select Discount ">
+                <label>Default discount <span
+                        class="primary_clr"></span></label>
+                <div class="clearfix">
+                    <span>
+                        <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true"
+                           [multiple]="true" [(ngModel)]="selectedDiscounts" (selected)="selectDiscounts($event)"
+                            [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
+                    </span>
+
+                </div>
             </div>
         </div>
-        <div class="col-sm-6 ">
-            <div class="form-group ">
-                <label>Default Tax</label>
-                <input type="text " disabled class="form-control " placeholder="Select Tax ">
-            </div>
-        </div>
-    </div> -->
+    </div>
     <div *ngIf="(activeAccount$ | async)" class="form-group">
         <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
             <div class="row">
@@ -443,8 +445,7 @@
                 <div class="form-group">
                     <div class="input-group">
 
-                        <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true"
-                            formControlName="taxes" style="width: calc(100% - 20px);">
+                        <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
                         </sh-select>
                         <span class="input-group-btn ">
                             <button type="submit" class="btn btn-success">Save</button>
