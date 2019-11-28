@@ -2078,6 +2078,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
+                // only for cash invoice
+                // check if selected payment account currency is different then company currency
+                // also get rates for selected account currency if it's multi-currency
+                if (this.isCashInvoice) {
+                    this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
+                    if (this.isMulticurrencyAccount) {
+                        this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
+                    }
+                }
             }
 
             if (this.isMulticurrencyAccount) {
@@ -2242,7 +2251,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleAccountAsidePane();
     }
 
-    public submitUpdateForm(f: NgForm) {
+    /**
+     * update invoice function
+     * @param invoiceForm
+     */
+    public submitUpdateForm(invoiceForm: NgForm) {
         let result = this.prepareDataForApi();
         if (!result) {
             return;
@@ -2253,41 +2266,65 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let data = result.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-            result = {
-                account: data.accountDetails,
-                updateAccountDetails: this.updateAccount,
-                voucher: data,
-                entries: [],
-                date: data.voucherDetails.voucherDate,
-                type: this.parseVoucherType(this.invoiceType),
-                exchangeRate: exRate,
-                dueDate: data.voucherDetails.dueDate,
-                number: this.invoiceNo,
-                uniqueName: unqName
-            };
-            this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
-                .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
-                    if (response.status === 'success') {
-                        // reset form and other
-                        this.resetInvoiceForm(f);
-                        this._toasty.successToast('Voucher updated Successfully');
-                        this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
-                        this.voucherNumber = response.body.number;
-                        this.invoiceNo = this.voucherNumber;
-                        this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
-                        this.postResponseAction(this.invoiceNo);
 
-                        this.depositAccountUniqueName = '';
-                        this.depositAmount = 0;
-                        this.isUpdateMode = false;
-                    } else {
-                        this._toasty.errorToast(response.message, response.code);
-                    }
-                    this.updateAccount = false;
-                }, (err) => {
-                    this._toasty.errorToast('Something went wrong! Try again');
-                });
+            // sales and cash invoice uses v4 api so need to parse main object to regarding that
+            if (this.isSalesInvoice || this.isCashInvoice) {
+                result = {
+                    account: data.accountDetails,
+                    updateAccountDetails: this.updateAccount,
+                    voucher: data,
+                    entries: [],
+                    date: data.voucherDetails.voucherDate,
+                    type: this.parseVoucherType(this.invoiceType),
+                    exchangeRate: exRate,
+                    dueDate: data.voucherDetails.dueDate,
+                    number: this.invoiceNo,
+                    uniqueName: unqName
+                };
+
+                this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
+                    .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
+                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                    }, (err) => {
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+            } else {
+                // credit and debit note still uses old api so just pass result to service don't parse it
+                this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
+                    .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
+                        this.actionsAfterVoucherUpdate(response, invoiceForm);
+                    }, (err) => {
+                        this._toasty.errorToast('Something went wrong! Try again');
+                    });
+            }
         }
+    }
+
+    /**
+     * used for re-sating invoice form as well as showing appropriate toaster
+     * and performing post update actions
+     * thing after sales/ cash or credit / debit note voucher updates
+     * @param response
+     * @param invoiceForm
+     */
+    private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>, invoiceForm: NgForm) {
+        if (response.status === 'success') {
+            // reset form and other
+            this.resetInvoiceForm(invoiceForm);
+            this._toasty.successToast('Voucher updated Successfully');
+            this.store.dispatch(this.invoiceReceiptActions.updateVoucherDetailsAfterVoucherUpdate(response));
+            this.voucherNumber = response.body.number;
+            this.invoiceNo = this.voucherNumber;
+            this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
+            this.postResponseAction(this.invoiceNo);
+
+            this.depositAccountUniqueName = '';
+            this.depositAmount = 0;
+            this.isUpdateMode = false;
+        } else {
+            this._toasty.errorToast(response.message, response.code);
+        }
+        this.updateAccount = false;
     }
 
     public prepareDataForApi(): GenericRequestForGenerateSCD {
@@ -2349,9 +2386,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
             }
-
-            delete data.accountDetails.billingDetails['stateName'];
-            delete data.accountDetails.shippingDetails['stateName'];
         }
 
         // replace /n to br for (shipping and billing)
@@ -2864,7 +2898,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-        obj.account.mobileNumber = obj.account.contactNumber;
+        // obj.account.mobileNumber = obj.account.contactNumber;
         obj.deposit = deposit;
 
         obj.account.billingDetails.countryName = this.customerCountryName;
@@ -3014,6 +3048,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
+        voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
@@ -3025,7 +3060,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
         voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
-        voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
+        // voucherClassConversion.accountDetails.contactNumber = result.account.mobileNumber;
         voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
         voucherClassConversion.accountDetails.email = result.account.email;
         voucherClassConversion.accountDetails.uniqueName = result.account.uniqueName;

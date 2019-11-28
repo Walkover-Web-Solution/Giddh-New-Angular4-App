@@ -185,6 +185,7 @@ tfoot {
     top: 0;
 }
 // responsive
+
 @media(max-width:768px){
   .basic.onMobileView {
     background: transparent;
@@ -201,37 +202,36 @@ tfoot {
     margin: 0 !important;
     width: 100% !important;
     float: left;
-}
-.pending-tabel .nested_table > tbody tr td{
-  padding: 0 !important;
-}
-.pending-tabel   tr   td  {
-  padding: 5px 10px 5px 50% !important;
-}
-.onMobileView tbody .nested_table  td{
-  min-height: auto !important;
-}
-.form-group button, .form-group .input-group {
-  width: 48.5%;
-  float: left;
-
-  margin-bottom: 10px;
-  min-height: 34px;
-}
-.form-inline .d-flex, .form-inline .form-group{
-  margin: 0 !important;
-}
-.paginationWrapper {
-  margin-top: 20px;
-  border: none;
-  background-color: transparent;
-}
-}
-@media(max-width:768px){
-  #centerAlign td {
+    }
+    .pending-tabel .nested_table > tbody tr td{
     padding: 0 !important;
+    }
+    .pending-tabel   tr   td  {
+    padding: 5px 10px 5px 50% !important;
+    }
+    .onMobileView tbody .nested_table  td{
+    min-height: auto !important;
+    }
+    .form-group button, .form-group .input-group {
+    width: 48.5%;
+    float: left;
+
+    margin-bottom: 10px;
+    min-height: 34px;
+    }
+    .form-inline .d-flex, .form-inline .form-group{
+    margin: 0 !important;
+    }
+    .paginationWrapper {
+    margin-top: 20px;
+    border: none;
+    background-color: transparent;
+    }
+    #centerAlign td {
+        padding: 0 !important;
+    }
 }
-}
+
 @media(max-width:550px){
   .form-group button, .form-group .input-group {
     width: 48%;
@@ -250,6 +250,6 @@ tfoot {
   }
   div#dp-parent {
     margin-bottom: 0;
-       width: 100%;;
-}
+    width: 100%;;
+  }
 }
