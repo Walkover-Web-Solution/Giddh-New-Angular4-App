@@ -2078,11 +2078,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
+
                 // only for cash invoice
                 // check if selected payment account currency is different then company currency
                 // also get rates for selected account currency if it's multi-currency
                 if (this.isCashInvoice) {
                     this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
+                    if (this.isMulticurrencyAccount) {
+                        this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
+                    }
+                }
+
+                if (this.isSalesInvoice) {
                     if (this.isMulticurrencyAccount) {
                         this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '');
                     }
