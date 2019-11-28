@@ -153,16 +153,16 @@
 <!--add company modal  -->
 
 
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-    class="modal fade openPoup" role="dialog">
+<div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
+    class="modal fade openPoup" role="dialog" (onHidden)="onModalDismiss($event)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+            <ng-template element-view-container-ref #onBoardingContainer=elementviewcontainerref>
             </ng-template>
         </div>
     </div>
 </div>
 
 <ng-template #welcomeComponent>
-    <welcome-component></welcome-component>
+    <welcome-component (backButtonClicked)="hideWelcomePage()" (nextButtonClicked)="handleFormSubmit($event)"></welcome-component>
 </ng-template>
