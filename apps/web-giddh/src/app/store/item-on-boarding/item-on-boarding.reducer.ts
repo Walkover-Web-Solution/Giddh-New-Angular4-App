@@ -37,5 +37,6 @@ export function itemOnBoardingReducer(state: ItemOnBoarding = initialState, acti
             return { ...state, isOnBoardingInProgress: action.payload };
         case ItemOnBoardingActions.SET_ON_BOARDING_TYPE:
             return { ...state, onBoardingType: action.payload };
+        default: return state;
     }
 }

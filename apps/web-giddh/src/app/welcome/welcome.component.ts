@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, EventEmitter, Output } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { StatesRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
 import * as _ from '../lodash-optimized';
@@ -19,6 +19,7 @@ import { CommonActions } from '../actions/common.actions';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { IForceClear } from "../models/api-models/Sales";
 import { ItemOnBoarding } from '../store/item-on-boarding/item-on-boarding.reducer';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'welcome-component',
@@ -108,10 +109,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isTaxNumberSameAsHeadQuarter: number = 0;
     public activeCompany: any;
     public currentTaxList: any[] = [];
+    /** Stores the item on boarding store data */
+    public itemOnBoardingDetails: ItemOnBoarding;
+
+    /** Event emitter to represent back button click */
+    @Output() backButtonClicked: EventEmitter<any> = new EventEmitter();
+    /** Event emitter to represent next button click */
+    @Output() nextButtonClicked: EventEmitter<any> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Stores the item on boarding store data */
-    private itemOnBoardingDetails: ItemOnBoarding;
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -138,9 +144,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
         }).pipe(takeUntil(this.destroyed$)).subscribe();
-        this.store.pipe(select(state => state.itemOnboarding), take(1)).subscribe((itemOnBoardingDetails: ItemOnBoarding) => {
-            this.itemOnBoardingDetails = itemOnBoardingDetails;
-        });
     }
 
     public ngOnInit() {
@@ -156,7 +159,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.prepareWelcomeForm();
             }
         });
-        this.store.pipe(select(store => store)).subscribe(store => console.log('Store value: ', store));
 
         this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
             _.map(res.body, (o) => {
@@ -170,7 +172,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.businessNatureList.push({ label: o, value: o });
             });
         });
-
+        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoarding) => {
+            this.itemOnBoardingDetails = itemOnBoardingDetails;
+        });
         this.reFillForm();
     }
 
@@ -237,26 +241,33 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public submit() {
-        this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
-        this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
-        this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
-        this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
-        if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-            if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
-                this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
-            }
-        }
-        let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-        if (gstDetails.taxNumber || gstDetails.address) {
-            this.createNewCompanyPreparedObj.addresses.push(gstDetails);
-        } else {
-            this.createNewCompanyPreparedObj.addresses = [];
-        }
+    public submit(welcomeForm: NgForm) {
+        // this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
+        // this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
+        // this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
+        // this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
+        // if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
+        //     if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+        //         this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+        //     }
+        // }
+        // let gstDetails = this.prepareGstDetail(this.companyProfileObj);
+        // if (gstDetails.taxNumber || gstDetails.address) {
+        //     this.createNewCompanyPreparedObj.addresses.push(gstDetails);
+        // } else {
+        //     this.createNewCompanyPreparedObj.addresses = [];
+        // }
 
-        this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
-        this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
-        this._router.navigate(['select-plan']);
+        // this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
+        // this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
+        // this._router.navigate(['select-plan']);
+        console.log('Tax detail: ', this.formFields);
+        this.nextButtonClicked.emit({
+            welcomeForm,
+            otherData: {
+                taxName: this.formFields
+            }
+        });
     }
 
     public prepareGstDetail(obj) {
@@ -372,11 +383,18 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public back(isbranch: boolean) {
-        if (isbranch) {
-            this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
+        if (!(this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress)) {
+            /* Company or Branch on boarding is going on */
+            if (isbranch) {
+                this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
+            } else {
+                this._router.navigate(['new-user']);
+            }
         } else {
-            this._router.navigate(['new-user']);
+            /** On boarding of warehouse is going on */
+            this._router.navigate(['pages', 'settings', 'warehouse']);
         }
+        this.backButtonClicked.emit();
     }
 
     public ngOnDestroy() {
