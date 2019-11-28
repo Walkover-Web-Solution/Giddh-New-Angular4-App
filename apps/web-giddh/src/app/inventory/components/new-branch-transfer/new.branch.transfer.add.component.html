@@ -392,22 +392,22 @@
                                     <h3 class="mrB1">Transportation Details</h3>
                                     <div class="row">
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Dispatched Date" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.dispatchedDate" readonly bsDatepicker>
+                                            <input type="text" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="branchTransfer.transportationDetails.dispatchedDate" readonly bsDatepicker>
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Company" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.transporterName">
+	                                        <sh-select placeholder="Transport Company" name="transporterName" [options]="transporterDropdown$ | async" [(ngModel)]="branchTransfer.transportationDetails.transporterName"></sh-select>
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Mode" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.transportMode">
+	                                        <sh-select placeholder="Transport Mode" name="transportMode" [options]="transporterMode" [(ngModel)]="branchTransfer.transportationDetails.transportMode"></sh-select>
                                         </div>
                                         <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Vehicle Number" class="form-control" [(ngModel)]="branchTransfer.transportationDetails.vehicleNumber">
+                                            <input type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transportationDetails.vehicleNumber">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <h3 class="mrB1">Note</h3>
-                                            <textarea class="form-control" rows="5" cols="5" [(ngModel)]="branchTransfer.note"></textarea>
+                                            <textarea class="form-control" rows="5" cols="5" name="note" [(ngModel)]="branchTransfer.note"></textarea>
                                         </div>
                                     </div>
                                 </div>

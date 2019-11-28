@@ -26,6 +26,9 @@ import {IOption} from "../../../theme/ng-select/option.interface";
 import {ToasterService} from "../../../services/toaster.service";
 import {IForceClear} from "../../../models/api-models/Sales";
 import {CompanyService} from "../../../services/companyService.service";
+import {IEwayBillfilter, IEwayBillTransporter} from "../../../models/api-models/Invoice";
+import {InvoiceActions} from "../../../actions/invoice/invoice.actions";
+import { transporterModes } from "../../../shared/helpers/transporterModes";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -62,9 +65,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public activeRow: number = -1;
 	public activeCompany: any = {};
 	public inputMaskFormat: any = '';
+	public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
+	public transporterDropdown$: Observable<IOption[]>;
+	public transporterMode: IOption[] = [];
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions) {
 		this.initFormFields();
+		this.getTransportersList();
 
 		this.store.dispatch(this.inventoryAction.GetStock());
 
@@ -92,7 +99,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-
+		transporterModes.map(c => {
+			this.transporterMode.push({ label: c.value, value: c.label });
+		});
 	}
 
 	public ngOnDestroy() {
@@ -374,5 +383,24 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 			object.warehouse.taxNumber = "";
 			object.warehouse.address = "";
 		}
+	}
+
+	public getTransportersList() {
+		//this.transporterFilterRequest.page = 1;
+		//this.transporterFilterRequest.count = 100;
+
+		this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+
+		this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
+			if (p && p.length) {
+				let transporterDropdown = null;
+				let transporterArr = null;
+				transporterDropdown = p;
+				transporterArr = transporterDropdown.map(trans => {
+					return { label: trans.transporterName, value: trans.transporterId };
+				});
+				this.transporterDropdown$ = observableOf(transporterArr);
+			}
+		});
 	}
 }
