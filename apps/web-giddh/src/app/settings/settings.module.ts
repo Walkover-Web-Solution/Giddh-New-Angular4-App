@@ -28,38 +28,40 @@ import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confir
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
+import { SettingsServiceModule } from './settings-service.module';
 
 @NgModule({
-  declarations: [
-    SettingsComponent,
-    SettingIntegrationComponent,
-    SettingProfileComponent,
-    SettingTaxesComponent,
-    DeleteTaxConfirmationModelComponent,
-    SettingLinkedAccountsComponent,
-    ConnectBankModalComponent,
-    SettingLinkedAccountsConfirmationModalComponent,
-    FinancialYearComponent,
-    SettingPermissionComponent,
-    SettingPermissionFormComponent,
-    BranchComponent,
-    DiscountComponent,
-    SettingsTagsComponent,
-    SettingTriggerComponent,
-    BunchComponent,
-    CreateBunchModalComponent,
-    BunchAddCompanyModalComponent,
-    GetBunchModalComponent,
-    WarehouseComponent
-  ],
-  imports: [
-    SharedModule,
-    SettingRountingModule,
-    AsideMenuCreateTaxModule,
-    ContactModule,
-    CurrencyModule,
-    OmitByKeyPipeModule
-  ]
+    declarations: [
+        SettingsComponent,
+        SettingIntegrationComponent,
+        SettingProfileComponent,
+        SettingTaxesComponent,
+        DeleteTaxConfirmationModelComponent,
+        SettingLinkedAccountsComponent,
+        ConnectBankModalComponent,
+        SettingLinkedAccountsConfirmationModalComponent,
+        FinancialYearComponent,
+        SettingPermissionComponent,
+        SettingPermissionFormComponent,
+        BranchComponent,
+        DiscountComponent,
+        SettingsTagsComponent,
+        SettingTriggerComponent,
+        BunchComponent,
+        CreateBunchModalComponent,
+        BunchAddCompanyModalComponent,
+        GetBunchModalComponent,
+        WarehouseComponent
+    ],
+    imports: [
+        SharedModule,
+        SettingRountingModule,
+        AsideMenuCreateTaxModule,
+        ContactModule,
+        CurrencyModule,
+        OmitByKeyPipeModule,
+        SettingsServiceModule
+    ]
 })
 
 export class SettingsModule {
