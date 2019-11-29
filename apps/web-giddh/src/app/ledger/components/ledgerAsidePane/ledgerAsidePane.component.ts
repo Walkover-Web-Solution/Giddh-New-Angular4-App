@@ -8,10 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 @Component({
     selector: 'ledger-aside-pane',
     templateUrl: './ledgerAsidePane.component.html',
-    styleUrls: ['./ledgerAsidePane.component.scss'],
-    styles: [`
-
-  `]
+    styleUrls: ['./ledgerAsidePane.component.scss']
 })
 
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
