@@ -36,6 +36,7 @@ import * as fromProforma from './proforma/proforma.reducer';
 import * as fromCommon from './Common/common.reducer';
 // import * as fromWarehouse from './warehouse/warehouse.reducer';
 import * as fromItemOnBoarding from './item-on-boarding/item-on-boarding.reducer';
+import * as fromWarehouse from '../settings/warehouse/reducer/warehouse.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -77,7 +78,8 @@ export interface AppState {
     subscriptions: fromSubscriptions.SubscriptionState;
     proforma: fromProforma.ProformaState
     common: fromCommon.CurrentCommonState,
-    itemOnboarding: fromItemOnBoarding.ItemOnBoarding
+    itemOnboarding: fromItemOnBoarding.ItemOnBoardingState
+    warehouse: fromWarehouse.WarehouseState
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -119,5 +121,6 @@ export const reducers: ActionReducerMap<AppState> = {
     subscriptions: fromSubscriptions.SubscriptionReducer,
     proforma: fromProforma.ProformaReducer,
     common: fromCommon.CommonReducer,
-    itemOnboarding: fromItemOnBoarding.itemOnBoardingReducer
+    itemOnboarding: fromItemOnBoarding.itemOnBoardingReducer,
+    warehouse: fromWarehouse.warehouseReducer
 };
