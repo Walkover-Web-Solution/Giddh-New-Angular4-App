@@ -573,6 +573,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                if (event.value === 'sundrycreditors') {
+                    this.showBankDetail = true;
+                }
                 this.isDebtorCreditor = true;
             } else {
                 this.isDebtorCreditor = false;
