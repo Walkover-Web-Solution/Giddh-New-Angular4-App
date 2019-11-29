@@ -113,8 +113,8 @@ export class NewBranchTransferResponse {
 	public challanNo: any;
 	public note: string;
 	public uniqueName: any;
-	public source: NewBranchTransferSourceDestination[];
-	public destination: NewBranchTransferSourceDestination[];
+	public sources: NewBranchTransferSourceDestination[];
+	public destinations: NewBranchTransferSourceDestination[];
 	public products: NewBranchTransferProduct[];
 	public transportationDetails: NewBranchTransferTransportationDetails;
 	public entity: string;
@@ -123,8 +123,8 @@ export class NewBranchTransferResponse {
 export class NewBranchTransferRequest {
 	public dateOfSupply: any;
 	public note: string;
-	public source: NewBranchTransferSourceDestination[];
-	public destination: NewBranchTransferSourceDestination[];
+	public sources: NewBranchTransferSourceDestination[];
+	public destinations: NewBranchTransferSourceDestination[];
 	public products: NewBranchTransferProduct[];
 	public transportationDetails: NewBranchTransferTransportationDetails;
 	public entity: string;

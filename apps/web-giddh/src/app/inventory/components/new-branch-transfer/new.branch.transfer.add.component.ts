@@ -153,7 +153,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.branchTransfer = {
 			dateOfSupply: null,
 			note: null,
-			source: [{
+			sources: [{
 				name: null,
 				uniqueName: null,
 				warehouse: {
@@ -170,7 +170,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 					}
 				}
 			}],
-			destination: [{
+			destinations: [{
 				name: null,
 				uniqueName: null,
 				warehouse: {
@@ -245,7 +245,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public addReceiver() {
-		this.branchTransfer.destination.push({
+		this.branchTransfer.destinations.push({
 			name: null,
 			uniqueName: null,
 			warehouse: {
@@ -265,7 +265,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public addSender() {
-		this.branchTransfer.source.push({
+		this.branchTransfer.sources.push({
 			name: null,
 			uniqueName: null,
 			warehouse: {
@@ -306,12 +306,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public removeSender(i) {
-		this.branchTransfer.source.splice(i, 1);
+		this.branchTransfer.sources.splice(i, 1);
 		this.calculateOverallTotal();
 	}
 
 	public removeReceiver(i) {
-		this.branchTransfer.destination.splice(i, 1);
+		this.branchTransfer.destinations.splice(i, 1);
 		this.calculateOverallTotal();
 	}
 
@@ -377,8 +377,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 			product.stockDetails.quantity = event.additional.openingQuantity;
 
 			if (this.transferType === 'senders') {
-				this.branchTransfer.destination[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
-				this.branchTransfer.source[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+				this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+				this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
 			}
 		}
 	}
@@ -479,7 +479,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				this.overallTotal += overallTotal;
 			});
 		} else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
-			this.branchTransfer.destination.forEach(product => {
+			this.branchTransfer.destinations.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
 					overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
@@ -493,7 +493,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				this.overallTotal += overallTotal;
 			});
 		} else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
-			this.branchTransfer.source.forEach(product => {
+			this.branchTransfer.sources.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
 					overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
@@ -524,6 +524,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
 			if (res) {
 				this.isLoading = false;
+				this.initFormFields();
+				this.tempDateParams.dateOfSupply = "";
+				this.tempDateParams.dispatchedDate = "";
 				console.log(res);
 			}
 		});
