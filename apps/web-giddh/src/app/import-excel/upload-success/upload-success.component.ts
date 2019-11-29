@@ -23,15 +23,18 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     public selectedType: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _route: Router) {
+    constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _route: Router, private _activateRoute: ActivatedRoute) {
         //
     }
     public ngOnInit() {
-        let params = this._route.url.toString().split('/');
-        this.selectedType = params[params.length - 1];
-        if (!this.selectedType) {
-            this.selectedType = 'accounts';
-        }
+        this._activateRoute.params.subscribe(res => {
+
+            if (res.type) {
+                this.selectedType = res.type
+            } else {
+                this.selectedType = 'accounts';
+            }
+        });
     }
 
     public downloadImportFile() {
