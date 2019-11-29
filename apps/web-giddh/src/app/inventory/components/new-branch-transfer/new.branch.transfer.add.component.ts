@@ -2,7 +2,7 @@ import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {AppState} from '../../../store';
 import {Store, select} from '@ngrx/store';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -15,9 +15,7 @@ import {SettingsBranchActions} from '../../../actions/settings/branch/settings.b
 import {
 	ILinkedStocksResult,
 	LinkedStocksResponse, LinkedStocksVM,
-	NewBranchTransferProduct,
-	NewBranchTransferResponse,
-	NewBranchTransferSourceDestination, NewBranchTransferTransportationDetails
+	NewBranchTransferRequest
 } from '../../../models/api-models/BranchTransfer';
 import {InventoryAction} from "../../../actions/inventory/inventory.actions";
 import {OnboardingFormRequest} from "../../../models/api-models/Common";
@@ -26,9 +24,11 @@ import {IOption} from "../../../theme/ng-select/option.interface";
 import {ToasterService} from "../../../services/toaster.service";
 import {IForceClear} from "../../../models/api-models/Sales";
 import {CompanyService} from "../../../services/companyService.service";
-import {IEwayBillfilter, IEwayBillTransporter} from "../../../models/api-models/Invoice";
+import {IEwayBillfilter} from "../../../models/api-models/Invoice";
 import {InvoiceActions} from "../../../actions/invoice/invoice.actions";
 import {transporterModes} from "../../../shared/helpers/transporterModes";
+import {InventoryService} from "../../../services/inventory.service";
+import {GIDDH_DATE_FORMAT} from "../../../shared/helpers/defaultDateFormat";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -50,12 +50,14 @@ import {transporterModes} from "../../../shared/helpers/transporterModes";
 
 export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	@Input() public branchTransferMode: string;
-	public hsnDropdownShow: boolean = false;
-	public skuNumber: boolean = false;
+	@ViewChild('productSkuCode') productSkuCode;
+	@ViewChild('productHsnNumber') productHsnNumber;
 
+	public hsnPopupShow: boolean = false;
+	public skuNumberPopupShow: boolean = false;
 	public asideMenuState: string = 'out';
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	public branchTransfer: NewBranchTransferResponse;
+	public branchTransfer: NewBranchTransferRequest;
 	public transferType: string = 'products';
 	public branches: any;
 	public branches$: Observable<CompanyResponse[]>;
@@ -73,8 +75,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public overallTotal: number = 0;
 	public isValidSourceTaxNumber: boolean = true;
 	public isValidDestinationTaxNumber: boolean = true;
+	public tempDateParams: any = {dateOfSupply: '', dispatchedDate: ''};
+	public isLoading: boolean = false;
+	public hsnNumber: any = '';
+	public skuNumber: any = '';
 
-	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions) {
+	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService) {
 		this.initFormFields();
 		this.getTransportersList();
 
@@ -136,6 +142,108 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.toggleBodyClass();
 	}
 
+	public changeTransferType(type) {
+		this.initFormFields();
+		this.tempDateParams.dateOfSupply = "";
+		this.tempDateParams.dispatchedDate = "";
+		this.transferType = type;
+	}
+
+	public initFormFields() {
+		this.branchTransfer = {
+			dateOfSupply: null,
+			note: null,
+			source: [{
+				name: null,
+				uniqueName: null,
+				warehouse: {
+					name: null,
+					uniqueName: null,
+					taxNumber: null,
+					address: null,
+					stockDetails: {
+						stockUnit: null,
+						amount: null,
+						rate: null,
+						quantity: null,
+						skuCode: null
+					}
+				}
+			}],
+			destination: [{
+				name: null,
+				uniqueName: null,
+				warehouse: {
+					name: null,
+					uniqueName: null,
+					taxNumber: null,
+					address: null,
+					stockDetails: {
+						stockUnit: null,
+						amount: null,
+						rate: null,
+						quantity: null,
+						skuCode: null
+					}
+				}
+			}],
+			products: [{
+				name: null,
+				hsnNumber: null,
+				uniqueName: null,
+				stockDetails: {
+					stockUnit: null,
+					amount: null,
+					rate: null,
+					quantity: null,
+					skuCode: null
+				},
+				description: null
+			}],
+			transportationDetails: {
+				dispatchedDate: null,
+				transporterName: null,
+				transporterId: null,
+				transportMode: null,
+				vehicleNumber: null
+			},
+			entity: (this.branchTransferMode) ? this.branchTransferMode : null
+		};
+
+		this.forceClear$ = observableOf({status: true});
+		this.activeRow = -1;
+	}
+
+	public setActiveRow(index) {
+		this.activeRow = index;
+	}
+
+	public selectCompany(event, object) {
+		if (object) {
+			object.name = event.label;
+			object.warehouse.name = "";
+			object.warehouse.uniqueName = "";
+			object.warehouse.taxNumber = "";
+			object.warehouse.address = "";
+		}
+	}
+
+	public getTransportersList() {
+		this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+
+		this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
+			if (p && p.length) {
+				let transporterDropdown = null;
+				let transporterArr = null;
+				transporterDropdown = p;
+				transporterArr = transporterDropdown.map(trans => {
+					return {label: trans.transporterName, value: trans.transporterId};
+				});
+				this.transporterDropdown$ = observableOf(transporterArr);
+			}
+		});
+	}
+
 	public addReceiver() {
 		this.branchTransfer.destination.push({
 			name: null,
@@ -146,7 +254,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				taxNumber: null,
 				address: null,
 				stockDetails: {
-					stockUnit: null,
+					stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
 					amount: null,
 					rate: null,
 					quantity: null,
@@ -166,7 +274,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				taxNumber: null,
 				address: null,
 				stockDetails: {
-					stockUnit: null,
+					stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
 					amount: null,
 					rate: null,
 					quantity: null,
@@ -177,7 +285,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public addProduct() {
-		this.branchTransfer.product.push({
+		this.branchTransfer.products.push({
 			name: null,
 			hsnNumber: null,
 			uniqueName: null,
@@ -193,7 +301,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public removeProduct(i) {
-		this.branchTransfer.product.splice(i, 1);
+		this.branchTransfer.products.splice(i, 1);
 		this.calculateOverallTotal();
 	}
 
@@ -262,15 +370,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 	public selectProduct(event, product) {
 		if (event) {
+			product.name = event.additional.name;
 			product.stockDetails.stockUnit = event.additional.stockUnit.code;
 			product.stockDetails.rate = event.additional.rate;
 			product.stockDetails.amount = event.additional.amount;
 			product.stockDetails.quantity = event.additional.openingQuantity;
-		}
-	}
 
-	public submit() {
-		console.log(this.branchTransfer);
+			if (this.transferType === 'senders') {
+				this.branchTransfer.destination[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+				this.branchTransfer.source[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+			}
+		}
 	}
 
 	public getWarehouseDetails(type, index) {
@@ -330,107 +440,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	public changeTransferType(type) {
-		this.initFormFields();
-		this.transferType = type;
-	}
-
-	public initFormFields() {
-		this.branchTransfer = {
-			dateOfSupply: null,
-			challanNo: null,
-			note: null,
-			uniqueName: null,
-			source: [{
-				name: null,
-				uniqueName: null,
-				warehouse: {
-					name: null,
-					uniqueName: null,
-					taxNumber: null,
-					address: null,
-					stockDetails: {
-						stockUnit: null,
-						amount: null,
-						rate: null,
-						quantity: null,
-						skuCode: null
-					}
-				}
-			}],
-			destination: [{
-				name: null,
-				uniqueName: null,
-				warehouse: {
-					name: null,
-					uniqueName: null,
-					taxNumber: null,
-					address: null,
-					stockDetails: {
-						stockUnit: null,
-						amount: null,
-						rate: null,
-						quantity: null,
-						skuCode: null
-					}
-				}
-			}],
-			product: [{
-				name: null,
-				hsnNumber: null,
-				uniqueName: null,
-				stockDetails: {
-					stockUnit: null,
-					amount: null,
-					rate: null,
-					quantity: null,
-					skuCode: null
-				},
-				description: null
-			}],
-			transportationDetails: {
-				dispatchedDate: null,
-				transporterName: null,
-				transporterId: null,
-				transportMode: null,
-				vehicleNumber: null
-			},
-			entity: null,
-		};
-		this.forceClear$ = observableOf({status: true});
-		this.activeRow = -1;
-	}
-
-	public setActiveRow(index) {
-		this.activeRow = index;
-	}
-
-	public selectCompany(event, object) {
-		if (object) {
-			object.name = event.label;
-			object.warehouse.name = "";
-			object.warehouse.uniqueName = "";
-			object.warehouse.taxNumber = "";
-			object.warehouse.address = "";
-		}
-	}
-
-	public getTransportersList() {
-		this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-
-		this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
-			if (p && p.length) {
-				let transporterDropdown = null;
-				let transporterArr = null;
-				transporterDropdown = p;
-				transporterArr = transporterDropdown.map(trans => {
-					return {label: trans.transporterName, value: trans.transporterId};
-				});
-				this.transporterDropdown$ = observableOf(transporterArr);
-			}
-		});
-	}
-
 	public calculateRowTotal(product) {
 		if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
 			product.stockDetails.amount = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
@@ -440,6 +449,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				product.stockDetails.amount = parseFloat(product.stockDetails.amount).toFixed(2);
 			}
 		} else {
+			if (isNaN(parseFloat(product.stockDetails.rate))) {
+				product.stockDetails.rate = 0;
+			}
+			if (isNaN(parseFloat(product.stockDetails.quantity))) {
+				product.stockDetails.quantity = 0;
+			}
 			product.stockDetails.amount = 0;
 		}
 
@@ -450,7 +465,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.overallTotal = 0;
 
 		if (this.transferType === 'products') {
-			this.branchTransfer.product.forEach(product => {
+			this.branchTransfer.products.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
 					overallTotal = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
@@ -463,7 +478,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 				this.overallTotal += overallTotal;
 			});
-		} else if (this.transferType !== 'products' && this.branchTransferMode === 'delivery') {
+		} else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
 			this.branchTransfer.destination.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
@@ -477,7 +492,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 				this.overallTotal += overallTotal;
 			});
-		} else if (this.transferType !== 'products' && this.branchTransferMode === 'receipt') {
+		} else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
 			this.branchTransfer.source.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
@@ -492,5 +507,69 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				this.overallTotal += overallTotal;
 			});
 		}
+	}
+
+	public selectDateOfSupply(date) {
+		if (date && this.branchTransfer.transportationDetails.dispatchedDate && date > this.branchTransfer.transportationDetails.dispatchedDate) {
+			this.branchTransfer.transportationDetails.dispatchedDate = date;
+		}
+	}
+
+	public submit() {
+		this.isLoading = true;
+		this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
+		this.branchTransfer.transportationDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+		this.branchTransfer.entity = this.branchTransferMode;
+
+		this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+			if (res) {
+				this.isLoading = false;
+				console.log(res);
+			}
+		});
+	}
+
+	public focusHsnNumber() {
+		this.hideSkuNumberPopup();
+		this.hsnNumber = (this.branchTransfer.products[this.activeRow].hsnNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : "";
+		this.hsnPopupShow = true;
+		setTimeout(() => {
+			this.productHsnNumber.nativeElement.focus();
+		}, 300);
+	}
+
+	public focusSkuNumber() {
+		this.hideHsnNumberPopup();
+		this.skuNumber = (this.branchTransfer.products[this.activeRow].stockDetails.skuCode) ? this.branchTransfer.products[this.activeRow].stockDetails.skuCode : "";
+		this.skuNumberPopupShow = true;
+		setTimeout(() => {
+			this.productSkuCode.nativeElement.focus();
+		}, 300);
+	}
+
+	public hideHsnNumberPopup() {
+		this.hsnPopupShow = false;
+		this.hsnNumber = "";
+	}
+
+	public hideSkuNumberPopup() {
+		this.skuNumberPopupShow = false;
+		this.skuNumber = "";
+	}
+
+	public hideActiveRow() {
+		this.activeRow = null;
+		this.hideHsnNumberPopup();
+		this.hideSkuNumberPopup();
+	}
+
+	public saveHsnNumberPopup(product) {
+		product.hsnNumber = this.hsnNumber;
+		this.hsnPopupShow = false;
+	}
+
+	public saveSkuNumberPopup(product) {
+		product.stockDetails.skuCode = this.skuNumber;
+		this.skuNumberPopupShow = false;
 	}
 }

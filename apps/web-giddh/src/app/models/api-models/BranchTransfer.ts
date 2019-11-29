@@ -115,7 +115,17 @@ export class NewBranchTransferResponse {
 	public uniqueName: any;
 	public source: NewBranchTransferSourceDestination[];
 	public destination: NewBranchTransferSourceDestination[];
-	public product: NewBranchTransferProduct[];
+	public products: NewBranchTransferProduct[];
+	public transportationDetails: NewBranchTransferTransportationDetails;
+	public entity: string;
+}
+
+export class NewBranchTransferRequest {
+	public dateOfSupply: any;
+	public note: string;
+	public source: NewBranchTransferSourceDestination[];
+	public destination: NewBranchTransferSourceDestination[];
+	public products: NewBranchTransferProduct[];
 	public transportationDetails: NewBranchTransferTransportationDetails;
 	public entity: string;
 }
