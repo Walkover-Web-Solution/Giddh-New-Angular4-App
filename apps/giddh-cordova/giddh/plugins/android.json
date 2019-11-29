@@ -1,0 +1,70 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-x-socialsharing": {
+      "ANDROID_SUPPORT_V4_VERSION": "24.1.1+",
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-file-downloader": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-filechooser": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-filepicker": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-file-opener2": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-inappbrowser-popup-bridge": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    }
+  },
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-zip": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    },
+    "cordova-plugin-file-md5": {
+      "PACKAGE_NAME": "com.app.Giddh"
+    }
+  }
+}

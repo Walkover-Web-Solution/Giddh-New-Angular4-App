@@ -1,0 +1,69 @@
+{
+  "_from": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+  "_id": "cordova-plugin-wkwebview-engine@1.2.2-dev",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-wkwebview-engine",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+    "rawSpec": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+    "saveSpec": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+    "fetchSpec": "https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git#3be1b118f4b629f9a770821ebaa06c0129ea7590",
+  "_spec": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git",
+  "_where": "/Users/nishagupta/Projects/Giddh-New-Angular4-App/apps/giddh-cordova/giddh",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-wkwebview-engine/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "The official Apache Cordova WKWebView Engine Plugin",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-wkwebview-engine#readme",
+  "keywords": [
+    "cordova",
+    "wkwebview",
+    "cordova-ios",
+    "ecosystem:cordova"
+  ],
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "name": "cordova-plugin-wkwebview-engine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-wkwebview-engine.git"
+  },
+  "scripts": {
+    "eslint": "eslint src",
+    "objc-tests": "cd tests/ios && npm test",
+    "preobjc-tests": "cd tests/ios && npm install",
+    "test": "npm run eslint && npm run objc-tests"
+  },
+  "version": "1.2.2-dev"
+}
