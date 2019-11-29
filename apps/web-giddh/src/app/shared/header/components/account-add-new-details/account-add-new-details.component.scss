@@ -100,3 +100,9 @@
    .remove {
         padding-top: 33px;
     }
+
+    @media(max-width:767px){
+        .upper-form .selectGroup {
+            margin-bottom: 15px;
+        }
+    }
