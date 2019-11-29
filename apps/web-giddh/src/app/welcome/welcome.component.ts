@@ -1,5 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, EventEmitter, Output } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { StatesRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
@@ -18,7 +19,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CommonActions } from '../actions/common.actions';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { IForceClear } from "../models/api-models/Sales";
-import { ItemOnBoarding } from '../store/item-on-boarding/item-on-boarding.reducer';
+import { ItemOnBoardingState } from '../store/item-on-boarding/item-on-boarding.reducer';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -110,7 +111,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeCompany: any;
     public currentTaxList: any[] = [];
     /** Stores the item on boarding store data */
-    public itemOnBoardingDetails: ItemOnBoarding;
+    public itemOnBoardingDetails: ItemOnBoardingState;
+    /** True, if on boarding is going on */
+    public isOnBoardingInProgress: boolean;
 
     /** Event emitter to represent back button click */
     @Output() backButtonClicked: EventEmitter<any> = new EventEmitter();
@@ -147,6 +150,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$))
+        .subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
+            this.itemOnBoardingDetails = itemOnBoardingDetails;
+            this.isOnBoardingInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress;
+        });
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isbranch = res.isBranch;
@@ -159,23 +167,32 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.prepareWelcomeForm();
             }
         });
-
-        this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
-            _.map(res.body, (o) => {
-                this.businessTypeList.push({ label: o, value: o });
+        combineLatest([
+            this._companyService.GetAllBusinessTypeList(),
+            this._companyService.GetAllBusinessNatureList()
+        ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
+            _.map(businessTypeResponse.body, (businessType) => {
+                this.businessTypeList.push({ label: businessType, value: businessType });
             });
+            _.map(businessNatureResponse.body, (businessNature) => {
+                this.businessNatureList.push({ label: businessNature, value: businessNature });
+            });
+            this.reFillForm();
         });
 
-        this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
-            this.businessNatureList = [];
-            _.map(res.body, (o) => {
-                this.businessNatureList.push({ label: o, value: o });
-            });
-        });
-        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoarding) => {
-            this.itemOnBoardingDetails = itemOnBoardingDetails;
-        });
-        this.reFillForm();
+        // this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
+        //     _.map(res.body, (o) => {
+        //         this.businessTypeList.push({ label: o, value: o });
+        //     });
+        // });
+
+        // this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
+        //     this.businessNatureList = [];
+        //     _.map(res.body, (o) => {
+        //         this.businessNatureList.push({ label: o, value: o });
+        //     });
+        // });
+        // this.reFillForm();
     }
 
     public ngAfterViewInit() {
@@ -187,15 +204,36 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public reFillForm() {
-        this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
-        this.companyProfileObj.businessType = this.createNewCompany.businessType;
-        this.selectedBusinesstype = this.createNewCompany.businessType;
-        if (this.selectedBusinesstype === 'Registered') {
-            if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
-                this.companyProfileObj.taxNumber = this.createNewCompany.addresses[0].taxNumber;
+        if (this.isOnBoardingInProgress) {
+            // TODO: Add default warehouse logic
+            this.companyProfileObj.businessNature = this.activeCompany.businessNature;
+            this.companyProfileObj.businessType = this.activeCompany.businessType;
+            this.selectedBusinesstype = this.activeCompany.businessType;
+            // Autofill GST and Address from default warehouse and default company
+            let autoFillAddress = '', autoFillTaxNumber = '';
+            if (this.activeCompany && this.activeCompany.addresses) {
+                this.activeCompany.addresses.forEach((address: any) => {
+                    if (address.isDefault) {
+                        autoFillAddress = address.address;
+                        autoFillTaxNumber = address.taxNumber;
+                    }
+                });
             }
+            this.companyProfileObj.address = autoFillAddress;
+            if (this.selectedBusinesstype === 'Registered') {
+                this.companyProfileObj.taxNumber = autoFillTaxNumber;
+            }
+        } else {
+            this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
+            this.companyProfileObj.businessType = this.createNewCompany.businessType;
+            this.selectedBusinesstype = this.createNewCompany.businessType;
+            if (this.selectedBusinesstype === 'Registered') {
+                if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                    this.companyProfileObj.taxNumber = this.createNewCompany.addresses[0].taxNumber;
+                }
+            }
+            this.companyProfileObj.address = this.createNewCompany.address;
         }
-        this.companyProfileObj.address = this.createNewCompany.address;
     }
 
     public reFillState() {
@@ -242,26 +280,27 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public submit(welcomeForm: NgForm) {
-        // this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
-        // this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
-        // this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
-        // this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
-        // if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-        //     if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
-        //         this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
-        //     }
-        // }
-        // let gstDetails = this.prepareGstDetail(this.companyProfileObj);
-        // if (gstDetails.taxNumber || gstDetails.address) {
-        //     this.createNewCompanyPreparedObj.addresses.push(gstDetails);
-        // } else {
-        //     this.createNewCompanyPreparedObj.addresses = [];
-        // }
+        if (!this.isOnBoardingInProgress) {
+            this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
+            this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
+            this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
+            this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes.length > 0) ? this.selectedTaxes : [];
+            if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
+                if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+                    this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
+                }
+            }
+            let gstDetails = this.prepareGstDetail(this.companyProfileObj);
+            if (gstDetails.taxNumber || gstDetails.address) {
+                this.createNewCompanyPreparedObj.addresses.push(gstDetails);
+            } else {
+                this.createNewCompanyPreparedObj.addresses = [];
+            }
 
-        // this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
-        // this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
-        // this._router.navigate(['select-plan']);
-        console.log('Tax detail: ', this.formFields);
+            this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
+            this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
+            this._router.navigate(['select-plan']);
+        }
         this.nextButtonClicked.emit({
             welcomeForm,
             otherData: {
@@ -383,7 +422,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public back(isbranch: boolean) {
-        if (!(this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress)) {
+        if (!this.isOnBoardingInProgress) {
             /* Company or Branch on boarding is going on */
             if (isbranch) {
                 this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
@@ -429,7 +468,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.getStates();
             } else {
                 let countryRequest = new CountryRequest();
-                countryRequest.formName = 'onboarding';
+                if (this.isOnBoardingInProgress) {
+                    countryRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                } else {
+                    countryRequest.formName = 'onboarding';
+                }
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
@@ -482,7 +525,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.reFillTax();
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
-                onboardingFormRequest.formName = 'onboarding';
+                if (this.isOnBoardingInProgress) {
+                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                } else {
+                    onboardingFormRequest.formName = 'onboarding';
+                }
                 onboardingFormRequest.country = this.createNewCompanyPreparedObj.country;
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
