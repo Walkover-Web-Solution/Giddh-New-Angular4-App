@@ -1,58 +1,58 @@
 .output_row > td {
-  padding: 12px 10px 12px 0 !important;
+    padding: 12px 10px 12px 0 !important;
 }
 
 .basic > tbody > tr > td {
-  padding: 2px 10px 2px 0;
+    padding: 2px 10px 2px 0;
 }
 
 .table_label td {
-  padding-top: 12px !important;
-      padding-bottom: 5px;
+    padding-top: 12px !important;
+    padding-bottom: 5px;
 }
 
 .dropdown-menu {
-  max-height: 168px;
-  overflow: auto;
+    max-height: 168px;
+    overflow: auto;
 }
 .sku-row {
-  label{
-    width:100%;
-  }
-  position: relative;
-  .label-input {
-    background: none;
-    border: none;
-    max-width: 108px;
-    border-bottom: 1px solid #dddddd;
-  }
-  .item-label {
-    display: inline-block;
-  }
-  .item-label:first-child {
-    max-width: 108px;
-  }
-  .item-label:last-child {
-    text-align: right;
-  }
-  i {
-    margin-left: 10px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid #dddddd;
-  }
-  .new-btn {
-    font-size: 12px;
-    color: #2262d1;
-    padding-top: 30px;
-    cursor: pointer;
-  }
-  .text-danger{
-    color: #F80606;
-  }
+    label {
+        width: 100%;
+    }
+    position: relative;
+    .label-input {
+        background: none;
+        border: none;
+        max-width: 108px;
+        border-bottom: 1px solid #dddddd;
+    }
+    .item-label {
+        display: inline-block;
+    }
+    .item-label:first-child {
+        max-width: 108px;
+    }
+    .item-label:last-child {
+        text-align: right;
+    }
+    i {
+        margin-left: 10px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid #dddddd;
+    }
+    .new-btn {
+        font-size: 12px;
+        color: #2262d1;
+        padding-top: 30px;
+        cursor: pointer;
+    }
+    .text-danger {
+        color: #f80606;
+    }
 }
 
-.opacity{
-  opacity: 0.5;
+.opacity {
+    opacity: 0.5;
 }
 .fsstock td {
     padding-right: 10px;
@@ -64,22 +64,21 @@ tr.fsstock td {
     color: #484848;
     font-weight: normal !important;
     font-size: 14px;
-    font-family: 'opensans-regular';
+    font-family: "opensans-regular";
 }
-.inputLabelStock{
+.inputLabelStock {
     display: none;
 }
-@media(max-width:767px){
+@media (max-width: 767px) {
     section.form_body table.noHover td {
-    width: 100%;
-    display: block;
-    margin-bottom: 0;
-}
-tr.noHover.table_label {
-    display: none;
-}
-.inputLabelStock{
-    display: block;
-}
-
+        width: 100%;
+        display: block;
+        margin-bottom: 0;
+    }
+    tr.noHover.table_label {
+        display: none;
+    }
+    .inputLabelStock {
+        display: block;
+    }
 }
