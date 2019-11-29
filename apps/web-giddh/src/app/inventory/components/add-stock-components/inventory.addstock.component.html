@@ -13,7 +13,7 @@
                     <section class="form_body witBg clearfix mrBChldLbl">
                         <div class="form_bg clearfix">
                             <div class="row">
-                                <div class="form-group col-xs-5">
+                                <div class="form-group col-sm-5 col-xs-12">
                                     <label>Under Group</label>
                                     <sh-select #groupDDList [options]="groupsData$ | async"
                                         formControlName="parentGroup" [placeholder]="'Select Group'" [multiple]="false"
@@ -22,7 +22,7 @@
                                         (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false"
                                         [dropdownMinHeight]="33"></sh-select>
                                 </div>
-                                <div class="form-group col-xs-5" *ngIf="isUpdatingStockForm">
+                                <div class="form-group col-sm-5 col-xs-12" *ngIf="isUpdatingStockForm">
                                     <label class="d-block">&nbsp;</label>
                                     <button type="button" class="btn btn-default" (click)="moveStock()"
                                         [disabled]="addStockForm.get('parentGroup').value === activeGroup.uniqueName">Move
@@ -32,12 +32,12 @@
                             </div>
 
                             <div class="clearfix row">
-                                <div class="form-group col-xs-5">
+                                <div class="form-group col-sm-5 col-xs-12">
                                     <label>Stock Name <sup>*</sup></label>
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()"
                                         formControlName="name" />
                                 </div>
-                                <div class="form-group col-xs-5">
+                                <div class="form-group col-sm-5 col-xs-12">
                                     <label>Stock Unit <sup>*</sup></label>
                                     <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
                                         [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33"
@@ -60,13 +60,13 @@
 
                             <ng-container *ngIf="showOtherDetails">
                                 <div class="row">
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>Unique Name</label>
                                         <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
                                             [control]="addStockForm.get('uniqueName')" class="form-control"
                                             formControlName="uniqueName">
                                     </div>
-                                    <div class="form-group col-xs-4" [hidden]="!(isManageInventory$ | async)">
+                                    <div class="form-group col-sm-4 col-xs-12" [hidden]="!(isManageInventory$ | async)">
                                         <label>HSN Code</label>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                             formControlName="hsnNumber" />
@@ -94,7 +94,7 @@
                                     <!--                  </div>-->
 
 
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>Tax</label>
 
 
@@ -125,21 +125,21 @@
 
                                 <div class="row">
 
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>Open. Qty</label>
                                         <input type="text" name="openingQuantity" decimalDigitsDirective
                                             [DecimalPlaces]="4" (change)="calCulateRate()" class="form-control"
                                             formControlName="openingQuantity">
                                     </div>
 
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>Amount</label>
                                         <input type="text" name="openingAmount" (change)="calCulateRate()"
                                             decimalDigitsDirective [DecimalPlaces]="2" class="form-control"
                                             formControlName="openingAmount">
                                     </div>
 
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>Rate</label>
                                         <input type="text" name="stockRate" formControlName="stockRate"
                                             class="form-control" placeholder="Auto calculate">
@@ -148,7 +148,7 @@
                                 </div>
 
                                 <div class="row sku-row">
-                                    <div class="form-group col-xs-4" [hidden]="(isManageInventory$ | async)">
+                                    <div class="form-group col-sm-4 col-xs-12" [hidden]="(isManageInventory$ | async)">
                                         <label>SAC Code</label>
                                         <input type="text" class="form-control" maxlength="10"
                                             formControlName="sacNumber" decimalDigitsDirective />
@@ -156,7 +156,7 @@
 
 
                                     <!-- SKU Code -->
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <label>
                                             <span
                                                 *ngIf="!editSKUlabel && !addStockForm.controls['skuCodeHeading'].value">SKU
@@ -175,7 +175,7 @@
 
 
                                     <!-- field 1 -->
-                                    <div class="form-group col-xs-4"
+                                    <div class="form-group col-sm-4 col-xs-12"
                                         *ngIf="customField1 || addStockForm.controls['customField1Heading'].value">
 
                                         <label>
@@ -200,7 +200,7 @@
 
                                     </div>
                                     <!-- field 2 -->
-                                    <div class="form-group col-xs-4"
+                                    <div class="form-group col-sm-4 col-xs-12"
                                         *ngIf="customField2 || addStockForm.controls['customField2Heading'].value">
                                         <label>
                                             <span
@@ -223,7 +223,7 @@
                                             formControlName="customField2Value">
                                     </div>
                                     <!-- field 2 end -->
-                                    <div class="form-group col-xs-4">
+                                    <div class="form-group col-sm-4 col-xs-12">
                                         <div class="new-btn" (click)="addCustomField()"
                                             *ngIf="!customField2 || !customField1">+ Custom
                                             field</div>
@@ -235,7 +235,7 @@
                         </div>
 
                         <div class="pdL pdR pdT">
-                            <div class="col-xs-6">
+                            <div class="col-sm-6 col-xs-12">
                                 <div class="checkbox">
                                     <label class="" for="enablePurchase">
                                         <input type="checkbox" formControlName="enablePurchase" id="enablePurchase"
@@ -290,7 +290,7 @@
                             </div>
 
 
-                            <div class="col-xs-6">
+                            <div class="col-sm-6 col-xs-12">
                                 <div class="checkbox">
                                     <label class="" for="enableSales">
                                         <input type="checkbox" formControlName="enableSales" id="enableSales"
@@ -401,6 +401,7 @@
                                             <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last"
                                                 [formGroupName]="i" class="fsstock">
                                                 <td>
+                                                    <label class="inputLabelStock">Input Stock Name</label>
                                                     <sh-select [options]="stockListDropDown$ | async"
                                                         formControlName="stockUniqueName" [multiple]="false"
                                                         [placeholder]="'Select Stock Name'"
@@ -410,11 +411,13 @@
                                                 </td>
 
                                                 <td>
+                                                    <label class="inputLabelStock">Stock Qty</label>
                                                     <input type="text" formControlName="quantity" decimalDigitsDirective
                                                         [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity"
                                                         class="form-control" />
                                                 </td>
                                                 <td>
+                                                    <label class="inputLabelStock">Stock Unit</label>
                                                     <sh-select [options]="stockUnitsDropDown$ | async"
                                                         formControlName="stockUnitCode" [multiple]="false"
                                                         [placeholder]="'Select Unit'" [ItemHeight]="33"
