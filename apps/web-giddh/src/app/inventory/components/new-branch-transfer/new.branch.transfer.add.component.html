@@ -219,7 +219,7 @@
 				<div class="col-sm-6">
 					<div class="rightTotalAmount">
 						<p>Total Amount</p>
-						<h3>0.00</h3>
+						<h3>{{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}</h3>
 					</div>
 				</div>
 			</div>
@@ -228,10 +228,10 @@
 					<thead *ngIf="transferType === 'products'">
                         <tr>
                             <th>#</th>
-                            <th>Product/Service Description</th>
+                            <th>Product Description</th>
                             <th>Qty/Unit</th>
 	                        <th>Rate</th>
-                            <th>Total</th>
+                            <th>Amount</th>
                             <th>&nbsp;</th>
                         </tr>
 					</thead>
@@ -242,7 +242,7 @@
                             <th *ngIf="branchTransferMode === 'receipt'">Sender’s Details</th>
                             <th>Qty/Unit</th>
 	                        <th>Rate</th>
-                            <th>Total</th>
+                            <th>Amount</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -251,86 +251,63 @@
                             <td>{{i+1}}.</td>
                             <td>
                                 <div *ngIf="activeRow === i">
-                                    <sh-select name="productName{{i}}" [isFilterEnabled]="true"
-                                        [forceClearReactive]="forceClear$ | async" [options]="stockList"
-                                        [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)">
-                                    </sh-select>
+                                    <sh-select name="productName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)"></sh-select>
                                     <div class="pos-rel">
-                                        <div class="skuCode" (click)="skuNumber=!skuNumber"
-                                            *ngIf="activeRow == i && product.uniqueName"><label class="">SKU
-                                                Number</label>
-                                            <span class="">
-                                                1234567890
-                                                <span class="updateText ">Update </span>
+                                        <div class="skuCode" (click)="skuNumber=!skuNumber" *ngIf="activeRow == i && product.uniqueName">
+	                                        <label class="">SKU Number: </label>
+                                            <span>{{product.stockDetails.skuCode}}
                                                 <span class="edit-icon cp">
-                                                    <img class="" src="assets/images/edit-pencilicon.svg"></span>
+                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                </span>
                                             </span>
                                         </div>
-
-                                        <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumber">
-                                            <label>SKU Number</label>
-                                            <input type="text" maxLength="10" placeholder="SKU Number" />
+                                        <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumber && activeRow == i">
+                                            <label>SKU Number:</label>
+                                            <input type="text" maxLength="10" placeholder="SKU Number" name="productSkuCode{{i}}" [(ngModel)]="product.stockDetails.skuCode" />
                                             <div class="btngroup m-t-10">
-                                                <button class="btn btn-sm btn-success" type="button"
-                                                    (click)="skuNumber=!skuNumber">Save
-                                                </button>
-                                                <button class="btn btn-sm btn-primary" type="button"
-                                                    (click)="skuNumber=!skuNumber">
-                                                    Cancel
-                                                </button>
+                                                <button class="btn btn-sm btn-success" type="button" (click)="skuNumber=!skuNumber">Save</button>
+                                                <button class="btn btn-sm btn-primary" type="button" (click)="skuNumber=!skuNumber">Cancel</button>
                                             </div>
-
                                         </div>
-
                                     </div>
-                                    <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}"
-                                        *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+                                    <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
                                 </div>
                                 <div *ngIf="activeRow !== i">
                                     <div *ngIf="product.uniqueName">{{product.uniqueName}}</div>
+	                                <div *ngIf="product.stockDetails.skuCode">SKU Number: {{product.stockDetails.skuCode}}</div>
+	                                <div *ngIf="product.hsnNumber">HSN: {{product.hsnNumber}}</div>
                                     <div *ngIf="product.description">{{product.description}}</div>
                                 </div>
-
-
                                 <div class="pos-rel">
-                                    <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow"
-                                        *ngIf="activeRow == i"><label class="">HSN/SAC:</label>
-                                        <span class="">
-                                            asdfghj
-                                            <span class="updateText ">Update </span>
+                                    <div class="hsnCode text-right" (click)="hsnDropdownShow=!hsnDropdownShow" *ngIf="activeRow == i">
+	                                    <label class="">HSN: </label>
+                                        <span>{{product.hsnNumber}}
                                             <span class="edit-icon cp">
-                                                <img class="" src="assets/images/edit-pencilicon.svg"></span>
+                                                <img src="assets/images/edit-pencilicon.svg">
+                                            </span>
                                         </span>
                                     </div>
-
-                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
-                                        <label>HSN/SAC</label>
-                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
+                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow && activeRow == i">
+                                        <label>HSN</label>
+                                        <input type="text" maxLength="10" placeholder="HSN Number" name="productHsnNumber{{i}}" [(ngModel)]="product.hsnNumber" />
                                         <div class="btngroup m-t-10">
-                                            <button class="btn btn-sm btn-success" type="button"
-                                                (click)="hsnDropdownShow=!hsnDropdownShow">Save
-                                            </button>
-                                            <button class="btn btn-sm btn-primary" type="button"
-                                                (click)="hsnDropdownShow=!hsnDropdownShow">
-                                                Cancel
-                                            </button>
+                                            <button class="btn btn-sm btn-success" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Save</button>
+                                            <button class="btn btn-sm btn-primary" type="button" (click)="hsnDropdownShow=!hsnDropdownShow">Cancel</button>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-		                            <input type="text" class="form-control text-right" name="productQty{{i}}" decimalDigitsDirective [(ngModel)]="product.stockDetails.quantity">
+		                            <input type="text" class="form-control text-right" name="productQty{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.quantity"> {{stockCodeName[product.stockDetails.stockUnit]}}
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
-			                        <div class="text-right">{{product.stockDetails.quantity}}</div>
+			                        <div class="text-right">{{product.stockDetails.quantity}} {{stockCodeName[product.stockDetails.stockUnit]}}</div>
 		                        </div>
 	                        </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-		                            <input type="text" class="form-control text-right" name="productRate{{i}}" decimalDigitsDirective [(ngModel)]="product.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat">
+		                            <input type="text" class="form-control text-right" name="productRate{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat">
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
 			                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.rate | giddhCurrency}}</div>
@@ -368,7 +345,7 @@
                             </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-		                            <input type="text" class="form-control text-right" name="destinationQty{{i}}" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.quantity">
+		                            <input type="text" class="form-control text-right" name="destinationQty{{i}}" (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.quantity">
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
 			                        <div class="text-right">{{destination.warehouse.stockDetails.quantity}}</div>
@@ -376,7 +353,7 @@
 	                        </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-		                            <input type="text" class="form-control text-right" name="destinationRate{{i}}" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+		                            <input type="text" class="form-control text-right" name="destinationRate{{i}}" (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
 			                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
@@ -414,7 +391,7 @@
                             </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-			                        <input type="text" class="form-control text-right" name="sourceQty{{i}}" decimalDigitsDirective [(ngModel)]="source.warehouse.stockDetails.quantity">
+			                        <input type="text" class="form-control text-right" name="sourceQty{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.quantity">
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
 			                        <div class="text-right">{{source.warehouse.stockDetails.quantity}}</div>
@@ -422,7 +399,7 @@
 	                        </td>
 	                        <td>
 		                        <div *ngIf="activeRow === i">
-			                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+			                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
 		                        </div>
 		                        <div *ngIf="activeRow !== i">
 			                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
@@ -480,7 +457,7 @@
                                             <strong>Total</strong>
                                         </div>
                                         <div class="tableCell figureCell">
-                                            0.00
+	                                        {{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}
                                         </div>
                                     </div>
                                 </section>
@@ -503,9 +480,3 @@
 		</div>
 	</div>
 </section>
-<!-- open account aside -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<!-- hide for recent discuss with reavindrji -->
-<aside-sender-receiver-details-pane *ngIf="hideSenderReciverDetails" [class]="asideMenuState"
-                                    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
-</aside-sender-receiver-details-pane>

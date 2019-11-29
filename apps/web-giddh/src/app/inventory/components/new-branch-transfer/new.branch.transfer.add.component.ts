@@ -28,7 +28,7 @@ import {IForceClear} from "../../../models/api-models/Sales";
 import {CompanyService} from "../../../services/companyService.service";
 import {IEwayBillfilter, IEwayBillTransporter} from "../../../models/api-models/Invoice";
 import {InvoiceActions} from "../../../actions/invoice/invoice.actions";
-import { transporterModes } from "../../../shared/helpers/transporterModes";
+import {transporterModes} from "../../../shared/helpers/transporterModes";
 
 @Component({
 	selector: 'new-branch-transfer',
@@ -49,12 +49,11 @@ import { transporterModes } from "../../../shared/helpers/transporterModes";
 })
 
 export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
-    @Input() public branchTransferMode: string;
-    public hsnDropdownShow: boolean = false;
-    public skuNumber: boolean = false;
+	@Input() public branchTransferMode: string;
+	public hsnDropdownShow: boolean = false;
+	public skuNumber: boolean = false;
 
 	public asideMenuState: string = 'out';
-	public hideSenderReciverDetails = false;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public branchTransfer: NewBranchTransferResponse;
 	public transferType: string = 'products';
@@ -70,6 +69,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
 	public transporterDropdown$: Observable<IOption[]>;
 	public transporterMode: IOption[] = [];
+	public stockCodeName: any[] = [];
+	public overallTotal: number = 0;
 
 	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions) {
 		this.initFormFields();
@@ -83,6 +84,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				let stockList = _.cloneDeep(o);
 
 				stockList.results.forEach(key => {
+					this.stockCodeName[key.stockUnit.code] = [];
+					this.stockCodeName[key.stockUnit.code] = key.stockUnit.name;
 					this.stockList.push({label: key.name, value: key.uniqueName, additional: key});
 				});
 			}
@@ -102,7 +105,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 	public ngOnInit() {
 		transporterModes.map(c => {
-			this.transporterMode.push({ label: c.value, value: c.label });
+			this.transporterMode.push({label: c.value, value: c.label});
 		});
 	}
 
@@ -144,7 +147,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 					stockUnit: null,
 					amount: null,
 					rate: null,
-					quantity: null
+					quantity: null,
+					skuCode: null
 				}
 			}
 		});
@@ -163,7 +167,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 					stockUnit: null,
 					amount: null,
 					rate: null,
-					quantity: null
+					quantity: null,
+					skuCode: null
 				}
 			}
 		});
@@ -173,13 +178,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 		this.branchTransfer.product.push({
 			name: null,
 			hsnNumber: null,
-			sacNumber: null,
 			uniqueName: null,
 			stockDetails: {
 				stockUnit: null,
 				amount: null,
 				rate: null,
-				quantity: null
+				quantity: null,
+				skuCode: null
 			},
 			description: null
 		});
@@ -187,14 +192,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 	public removeProduct(i) {
 		this.branchTransfer.product.splice(i, 1);
+		this.calculateOverallTotal();
 	}
 
 	public removeSender(i) {
 		this.branchTransfer.source.splice(i, 1);
+		this.calculateOverallTotal();
 	}
 
 	public removeReceiver(i) {
 		this.branchTransfer.destination.splice(i, 1);
+		this.calculateOverallTotal();
 	}
 
 	public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
@@ -253,6 +261,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public selectProduct(event, product) {
 		if (event) {
 			console.log(event);
+			product.stockDetails.stockUnit = event.additional.stockUnit.code;
 			product.stockDetails.rate = event.additional.rate;
 			product.stockDetails.amount = event.additional.amount;
 			product.stockDetails.quantity = event.additional.openingQuantity;
@@ -328,7 +337,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 						stockUnit: null,
 						amount: null,
 						rate: null,
-						quantity: null
+						quantity: null,
+						skuCode: null
 					}
 				}
 			}],
@@ -344,20 +354,21 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 						stockUnit: null,
 						amount: null,
 						rate: null,
-						quantity: null
+						quantity: null,
+						skuCode: null
 					}
 				}
 			}],
 			product: [{
 				name: null,
 				hsnNumber: null,
-				sacNumber: null,
 				uniqueName: null,
 				stockDetails: {
 					stockUnit: null,
 					amount: null,
 					rate: null,
-					quantity: null
+					quantity: null,
+					skuCode: null
 				},
 				description: null
 			}],
@@ -378,7 +389,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public selectCompany(event, object) {
-		if(object) {
+		if (object) {
 			object.name = event.label;
 			object.warehouse.name = "";
 			object.warehouse.uniqueName = "";
@@ -388,9 +399,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	}
 
 	public getTransportersList() {
-		//this.transporterFilterRequest.page = 1;
-		//this.transporterFilterRequest.count = 100;
-
 		this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
 		this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
@@ -399,10 +407,73 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 				let transporterArr = null;
 				transporterDropdown = p;
 				transporterArr = transporterDropdown.map(trans => {
-					return { label: trans.transporterName, value: trans.transporterId };
+					return {label: trans.transporterName, value: trans.transporterId};
 				});
 				this.transporterDropdown$ = observableOf(transporterArr);
 			}
 		});
+	}
+
+	public calculateRowTotal(product) {
+		if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
+			product.stockDetails.amount = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
+			if (isNaN(parseFloat(product.stockDetails.amount))) {
+				product.stockDetails.amount = 0;
+			} else {
+				product.stockDetails.amount = parseFloat(product.stockDetails.amount).toFixed(2);
+			}
+		} else {
+			product.stockDetails.amount = 0;
+		}
+
+		this.calculateOverallTotal();
+	}
+
+	public calculateOverallTotal() {
+		this.overallTotal = 0;
+
+		if(this.transferType === 'products') {
+			this.branchTransfer.product.forEach(product => {
+				let overallTotal = 0;
+				if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
+					overallTotal = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
+					if (isNaN(overallTotal)) {
+						overallTotal = 0;
+					}
+				} else {
+					overallTotal = 0;
+				}
+
+				this.overallTotal += overallTotal;
+			});
+		} else if(this.transferType !== 'products' && this.branchTransferMode === 'delivery') {
+			this.branchTransfer.destination.forEach(product => {
+				let overallTotal = 0;
+				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
+					overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
+					if (isNaN(overallTotal)) {
+						overallTotal = 0;
+					}
+				} else {
+					overallTotal = 0;
+				}
+
+				this.overallTotal += overallTotal;
+			});
+		} else if(this.transferType !== 'products' && this.branchTransferMode === 'receipt') {
+			this.branchTransfer.source.forEach(product => {
+				let overallTotal = 0;
+				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
+					overallTotal = parseFloat(product.warehouse.stockDetails.rate) * parseFloat(product.warehouse.stockDetails.quantity);
+					if (isNaN(overallTotal)) {
+						overallTotal = 0;
+					}
+				} else {
+					overallTotal = 0;
+				}
+
+				this.overallTotal += overallTotal;
+			});
+		}
 	}
 }
