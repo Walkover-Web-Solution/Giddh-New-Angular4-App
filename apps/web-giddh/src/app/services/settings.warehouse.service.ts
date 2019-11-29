@@ -1,13 +1,13 @@
-import { Injectable, Optional, Inject } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
-import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from './service.config';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { map, catchError } from 'rxjs/operators';
-import { ErrorHandler } from './catchManager/catchmanger';
+import { catchError, map } from 'rxjs/operators';
 
+import { BaseResponse } from '../models/api-models/BaseResponse';
 import { WAREHOUSE_API } from '../settings/warehouse/constants/warehouse.constant';
+import { ErrorHandler } from './catchManager/catchmanger';
+import { GeneralService } from './general.service';
+import { HttpWrapperService } from './httpWrapper.service';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +37,21 @@ export class SettingsWarehouseService {
                 data.request = params;
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
+    }
+
+    /**
+     * Sends the fetch warehouse request to server
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable of fetch warehouse to carry out further operations
+     * @memberof SettingsWarehouseService
+     */
+    public fetchAllWarehouse(): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + WAREHOUSE_API.CREATE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(
+            map((response) => {
+                let data: BaseResponse<any, any> = response;
+                return data;
+            }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
 }

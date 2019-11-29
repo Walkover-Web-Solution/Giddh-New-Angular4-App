@@ -111,15 +111,14 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
         private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
         private _toaster: ToasterService, private commonActions: CommonActions
-    ) {
+    ) { }
+
+    public ngOnInit() {
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
         this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
@@ -171,11 +170,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                this.company = res;
-            }
-        });
+        // this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+        //     if (res) {
+        //         this.company = res;
+        //     }
+        // });
     }
 
 	/**
@@ -258,7 +257,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
                     this.socialAuthService.signOut().then().catch((err) => {
-                        // console.log ('err', err);
                     });
                     this.store.dispatch(this._loginAction.ClearSession());
                     this.store.dispatch(this._loginAction.socialLogoutAttempt());
@@ -357,7 +355,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
                 let countryRequest = new CountryRequest();
-                countryRequest.formName = 'onboarding';
+                countryRequest.formName = (this.onboardingType) ? this.onboardingType.toLowerCase() : 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
