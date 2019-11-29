@@ -27,9 +27,6 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
     selector: 'account-add-new-details',
-    styles: [`
-
-  `],
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
 })

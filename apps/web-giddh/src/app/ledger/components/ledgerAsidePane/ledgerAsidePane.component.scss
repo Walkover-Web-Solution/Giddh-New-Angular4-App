@@ -1,0 +1,127 @@
+#close.closeBtnPosAbs {
+    position: absolute !important;
+    left: auto !important;
+    right: 0 !important;
+    z-index: 9999999 !important;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 9px !important;
+    margin-right: 0;
+}
+:host {
+      position: fixed;
+      left: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width:760px;
+      z-index: 99999;
+    }
+
+    #close {
+      display: none;
+    }
+
+    :host.in #close {
+      display: block;
+      position: fixed;
+      left: -41px;
+      top: 0;
+      z-index: 5;
+      border: 0;
+      border-radius: 0;
+    }
+
+    :host .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    :host .aside-pane {
+      width: 100%;
+      max-width:760px;
+      background: #fff;
+    }
+
+    .aside-pane {
+      width: 100%;
+    }
+
+    .flexy-child {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flexy-child-1 {
+      flex-grow: 1;
+    }
+
+    .vmiddle {
+      position: absolute;
+      top: 50%;
+      bottom: 0;
+      left: 0;
+      display: table;
+      width: 100%;
+      right: 0;
+      transform: translateY(-50%);
+      text-align: center;
+      margin: 0 auto;
+    }
+
+    #back {
+      display: none;
+    }
+
+    :host.in #back {
+      display: block;
+      position: fixed;
+      left: -44px;
+      top: 0;
+      z-index: 5;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .btn-lg {
+      min-width: 130px;
+    }
+
+     @media(max-width:991px){
+        :host {
+        max-width:500px;
+        }
+        :host .aside-pane {
+        max-width: 500px;
+        }
+    }
+
+
+ @media(max-width:575px){
+    :host {
+      max-width: 370px;
+    }
+    :host .aside-pane {
+      max-width: 370px;
+    }
+}
+@media(max-width:375px){
+  :host {
+    max-width: 310px;
+  }
+  :host .aside-pane {
+      max-width: 310px;
+    }
+}
+@media(max-width:320px){
+  :host {
+    max-width: 280px;
+  }
+  :host .aside-pane {
+      max-width: 280px;
+      }
+}

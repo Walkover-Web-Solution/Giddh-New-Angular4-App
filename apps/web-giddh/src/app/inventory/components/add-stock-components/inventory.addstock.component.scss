@@ -66,3 +66,20 @@ tr.fsstock td {
     font-size: 14px;
     font-family: 'opensans-regular';
 }
+.inputLabelStock{
+    display: none;
+}
+@media(max-width:767px){
+    section.form_body table.noHover td {
+    width: 100%;
+    display: block;
+    margin-bottom: 0;
+}
+tr.noHover.table_label {
+    display: none;
+}
+.inputLabelStock{
+    display: block;
+}
+
+}

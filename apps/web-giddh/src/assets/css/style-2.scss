@@ -8520,7 +8520,9 @@ GST filing
                           color: $lightTextBlue !important;
                         }
 
-
+                        button{
+                            transition:none !important;
+                        }
                 /* responsive */
 
                 @media (max-width: 1440px) {
@@ -9044,6 +9046,10 @@ GST filing
                     }
                     #settingTab .tab-container .nav.nav-tabs, .custom-tabs .nav.nav-tabs {
                         top: 78px;
+                    }
+
+                   .aside-pane-form .custom-tabs .nav.nav-tabs > li {
+                        padding-right: 20px;
                     }
                 }
 

@@ -1572,6 +1572,9 @@ b, strong {
 .edit-card-invoiceTable .differ-currency {
     text-align: right;
 }
+.proformaSalesTime ul {
+    top: 30px !important;
+}
 // resposnvie
 @media (min-width: 768px) {
   .table.customerInvoiceTable .form-group {

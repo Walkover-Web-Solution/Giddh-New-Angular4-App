@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <button id="close" class="" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <!-- <button id="close" class="" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button> -->
     <div class="aside-body">
 
         <div class="aside-pane-form">
@@ -25,8 +25,12 @@
             </div> -->
 
             <div class="">
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flattenGroupsArray" [fetchingAccUniqueName$]="fetchingAccUniqueName$" (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
-                    [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$" (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                    [flatGroupsOptions]="flattenGroupsArray" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                    (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
+                    [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
+                    (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
                 </account-add-new-details>
             </div>
         </div>
