@@ -165,8 +165,8 @@ ul.selectActionDropdown {
   display: block;
 }
 .selectActionDropdown a:hover{
-  background-color: #e5e5e5;
-  color: #ff5f00;
+  color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 .dropdown-toggle.spcl_dropdown{
   color: $border-blueDark;
@@ -355,9 +355,6 @@ display: none;
 @media(max-width:360px){
   .date-advanceSearch .input-group {
     width: 100%;
-}
-  .input-grp-dateRangePicker .d-flex {
-    flex-direction: column;
 }
 .input-grp-dateRangePicker .btn {
   padding-left: 0;
