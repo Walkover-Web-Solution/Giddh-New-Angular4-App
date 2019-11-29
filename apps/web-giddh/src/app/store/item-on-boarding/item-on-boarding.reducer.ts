@@ -6,9 +6,9 @@ import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-bo
  * Item on boarding store interface that holds on boarding state
  *
  * @export
- * @interface ItemOnBoarding
+ * @interface ItemOnBoardingState
  */
-export interface ItemOnBoarding {
+export interface ItemOnBoardingState {
     isOnBoardingInProgress: boolean;
     onBoardingType: OnBoardingType | null;
 }
@@ -18,7 +18,7 @@ export interface ItemOnBoarding {
  *
  * @export
  */
-export const initialState: ItemOnBoarding = {
+export const initialState: ItemOnBoardingState = {
     isOnBoardingInProgress: false,
     onBoardingType: null
 }
@@ -27,11 +27,11 @@ export const initialState: ItemOnBoarding = {
  * Reducer to handle item on boarding related actions
  *
  * @export
- * @param {ItemOnBoarding} [state=initialState] Current state at any instance
+ * @param {ItemOnBoardingState} [state=initialState] Current state at any instance
  * @param {CustomActions} action Action received from dispatcher
  * @returns
  */
-export function itemOnBoardingReducer(state: ItemOnBoarding = initialState, action: CustomActions) {
+export function itemOnBoardingReducer(state: ItemOnBoardingState = initialState, action: CustomActions) {
     switch (action.type) {
         case ItemOnBoardingActions.SET_ON_BOARDING_STATUS:
             return { ...state, isOnBoardingInProgress: action.payload };
