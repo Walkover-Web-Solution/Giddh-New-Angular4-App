@@ -52,10 +52,10 @@
             <div class="custom-tabs mt-2 mb-2">
                 <ul class="nav nav-tabs pt-0">
                     <li role="presentation" [className]="condition ? 'active' : ''">
-                        <a href="javascript:void(0)" (click)="toggleShow()">DR</a>
+                        <a href="javascript:void(0)" (click)="toggleShow()">Debit</a>
                     </li>
                     <li role="presentation" [className]="condition2 ? 'active' : ''">
-                        <a href="javascript:void(0)" (click)="toggleShow()">CR</a>
+                        <a href="javascript:void(0)" (click)="toggleShow()">Credit</a>
                     </li>
                 </ul>
             </div>
@@ -628,9 +628,11 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 mrT2">
-                                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description"
-                                    class="form-control" placeholder="Description"></textarea>
+                            <div [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
+                                <div class="row">
+                                    <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                                        placeholder="Description"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -787,7 +789,7 @@
                                 <span *ngIf="vm.isMultiCurrencyAvailable" class="primary_clr">
                                     Total in {{ vm.foreignCurrencyDetails?.code }}
                                     : {{ vm.foreignCurrencyDetails?.symbol }} {{ vm.convertedCompoundTotal | giddhCurrency
-                                                    }}
+                                    }}
                                 </span>
 
                             </div>
@@ -815,7 +817,7 @@
                                         <input type="text" class="price-input"
                                             [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
                                             (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code
-                                                        }}
+                                        }}
                                     </li>
 
                                 </ul>

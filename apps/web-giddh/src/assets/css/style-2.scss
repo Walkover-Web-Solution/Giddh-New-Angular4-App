@@ -8956,6 +8956,11 @@ GST filing
                         width: 100%;
                         top: 85px;
                     }
+                    .ledgHead.entry-popup .custom-tabs .nav.nav-tabs {
+                        position: relative;
+                        width: 100%;
+                        top: 0;
+                    }
                     .custom-tabs .top_bar {
                         margin-top: 40px;
                     }
@@ -8978,6 +8983,9 @@ GST filing
                     }
                     .daterangepicker.dropdown-menu.show-calendar {
                          z-index: 1 !important;
+                    }
+                    .mt-xs-60 {
+                        margin-top: 60px;
                     }
                 }
 
@@ -9249,8 +9257,8 @@ GST filing
                 }
                 @media(min-width:768px){
                     .invoice-modal-content .modal-dialog{
-                                                margin: 70px auto;
-                                        }
+                         margin: 70px auto;
+                     }
                 }
 
 
