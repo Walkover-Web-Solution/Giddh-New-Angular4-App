@@ -71,6 +71,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public transporterMode: IOption[] = [];
 	public stockCodeName: any[] = [];
 	public overallTotal: number = 0;
+	public isValidSourceTaxNumber: boolean = true;
+	public isValidDestinationTaxNumber: boolean = true;
 
 	constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions) {
 		this.initFormFields();
@@ -260,7 +262,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 	public selectProduct(event, product) {
 		if (event) {
-			console.log(event);
 			product.stockDetails.stockUnit = event.additional.stockUnit.code;
 			product.stockDetails.rate = event.additional.rate;
 			product.stockDetails.amount = event.additional.amount;
@@ -306,11 +307,26 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 			if (!isValid) {
 				this._toasty.errorToast('Invalid ' + this.formFields['taxName'].label);
 				ele.classList.add('error-box');
+				if (ele.name === "sourceTaxNumber") {
+					this.isValidSourceTaxNumber = false;
+				} else {
+					this.isValidDestinationTaxNumber = false;
+				}
 			} else {
 				ele.classList.remove('error-box');
+				if (ele.name === "sourceTaxNumber") {
+					this.isValidSourceTaxNumber = true;
+				} else {
+					this.isValidDestinationTaxNumber = true;
+				}
 			}
 		} else {
 			ele.classList.remove('error-box');
+			if (ele.name === "sourceTaxNumber") {
+				this.isValidSourceTaxNumber = true;
+			} else {
+				this.isValidDestinationTaxNumber = true;
+			}
 		}
 	}
 
@@ -375,6 +391,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 			transportationDetails: {
 				dispatchedDate: null,
 				transporterName: null,
+				transporterId: null,
 				transportMode: null,
 				vehicleNumber: null
 			},
@@ -432,7 +449,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 	public calculateOverallTotal() {
 		this.overallTotal = 0;
 
-		if(this.transferType === 'products') {
+		if (this.transferType === 'products') {
 			this.branchTransfer.product.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
@@ -446,7 +463,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 				this.overallTotal += overallTotal;
 			});
-		} else if(this.transferType !== 'products' && this.branchTransferMode === 'delivery') {
+		} else if (this.transferType !== 'products' && this.branchTransferMode === 'delivery') {
 			this.branchTransfer.destination.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {
@@ -460,7 +477,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
 				this.overallTotal += overallTotal;
 			});
-		} else if(this.transferType !== 'products' && this.branchTransferMode === 'receipt') {
+		} else if (this.transferType !== 'products' && this.branchTransferMode === 'receipt') {
 			this.branchTransfer.source.forEach(product => {
 				let overallTotal = 0;
 				if (!isNaN(parseFloat(product.warehouse.stockDetails.rate)) && !isNaN(parseFloat(product.warehouse.stockDetails.quantity))) {

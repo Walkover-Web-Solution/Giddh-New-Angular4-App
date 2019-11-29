@@ -103,6 +103,7 @@ export class NewBranchTransferProduct {
 export class NewBranchTransferTransportationDetails {
 	public dispatchedDate: any;
 	public transporterName: string;
+	public transporterId: any;
 	public transportMode: string;
 	public vehicleNumber: any;
 }
