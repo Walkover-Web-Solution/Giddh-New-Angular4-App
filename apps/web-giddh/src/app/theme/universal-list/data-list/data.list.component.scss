@@ -182,3 +182,11 @@
         // line-height: 50px;
     }
 }
+/*responsive*/
+@media(max-width:575px){
+    :host {
+    .search-wrapper {
+            padding: 1rem 2rem 1rem 4.2rem;
+    }
+}
+}
