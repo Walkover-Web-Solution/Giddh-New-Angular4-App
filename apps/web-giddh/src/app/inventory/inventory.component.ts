@@ -162,22 +162,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
 
-        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : 0;
-        // if (this.router.url.indexOf('jobwork') > 0) {
-        //   this.activeTabIndex = 1;
-        //   this.redirectUrlToActiveTab('jobwork', null, 1, this.currentUrl);
-        //   // get view from sidebar while clicking on group/stock
-        //   this.invViewService.getJobworkActiveView().subscribe(v => {
-        //     this.activeView = v.view;
-        //   });
-        // }
-        // if (this.router.url.indexOf('manufacturing') > 0) {
-        //   this.activeTabIndex = 2;
-        //   this.redirectUrlToActiveTab('manufacturing', null, 2, this.currentUrl);
-        // }
+        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('report') > -1 ? 3 : 0;;
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : 0;
+                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('report') > -1 ? 3 : 0;
                 if (this.activeTabIndex !== index) {
                     this.activeTabIndex = index;
                     this.saveLastState();

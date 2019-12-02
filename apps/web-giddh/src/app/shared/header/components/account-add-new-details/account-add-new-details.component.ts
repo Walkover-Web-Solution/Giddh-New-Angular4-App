@@ -27,9 +27,6 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
     selector: 'account-add-new-details',
-    styles: [`
-
-  `],
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
 })
@@ -576,6 +573,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                if (event.value === 'sundrycreditors') {
+                    this.showBankDetail = true;
+                }
                 this.isDebtorCreditor = true;
             } else {
                 this.isDebtorCreditor = false;

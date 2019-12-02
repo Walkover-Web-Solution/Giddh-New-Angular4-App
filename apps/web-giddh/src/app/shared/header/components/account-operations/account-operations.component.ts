@@ -451,9 +451,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.accountsAction.RemoveAccountDiscountResponse$.subscribe(res => {
-            this.discountShSelect.clear();
-        });
+
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
             if (this.selectedaccountForMerge.length > 0) {
                 this.selectedaccountForMerge.forEach((element) => {
@@ -706,33 +704,33 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     }
 
-    public applyDiscount() {
-        //
-        let activeAccount: AccountResponseV2 = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => {
-            if (s) {
-                activeAccount = s;
-            }
-        });
-        if (activeAccount) {
-            let data: ApplyDiscountRequest = this.discountAccountForm.value;
-            data.accountUniqueNames = [activeAccount.uniqueName];
-            this.store.dispatch(this.accountsAction.applyAccountDiscount(data));
-        }
-    }
+    // public applyDiscount() {
+    //     //
+    //     let activeAccount: AccountResponseV2 = null;
+    //     this.activeAccount$.pipe(take(1)).subscribe(s => {
+    //         if (s) {
+    //             activeAccount = s;
+    //         }
+    //     });
+    //     if (activeAccount) {
+    //         let data: ApplyDiscountRequest = this.discountAccountForm.value;
+    //         data.accountUniqueNames = [activeAccount.uniqueName];
+    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(data));
+    //     }
+    // }
 
-    public removeDiscount() {
-        let activeAccount: AccountResponseV2 = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => {
-            if (s) {
-                activeAccount = s;
-            }
-        });
-        if (activeAccount) {
-            this.store.dispatch(
-                this.accountsAction.removeAccountDiscount(activeAccount.discounts[0].uniqueName, activeAccount.uniqueName));
-        }
-    }
+    // public removeDiscount() {
+    //     let activeAccount: AccountResponseV2 = null;
+    //     this.activeAccount$.pipe(take(1)).subscribe(s => {
+    //         if (s) {
+    //             activeAccount = s;
+    //         }
+    //     });
+    //     if (activeAccount) {
+    //         this.store.dispatch(
+    //             this.accountsAction.removeAccountDiscount(activeAccount.discounts[0].uniqueName, activeAccount.uniqueName));
+    //     }
+    // }
 
     public showShareGroupModal() {
         this.shareGroupModal.show();

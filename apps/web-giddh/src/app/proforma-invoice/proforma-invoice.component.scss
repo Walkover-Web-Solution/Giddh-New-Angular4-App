@@ -541,7 +541,7 @@ textarea:focus {
   left: 198px;
   position: absolute;
   top: 70px;
-  z-index: 99;
+  z-index: 98;
 }
 
 .tip_img.for_purchase_invoice {
@@ -1406,7 +1406,7 @@ table.table.table-custom-invoice.basic {
   bottom: 0;
   top: 100px;
   opacity: 0.6;
-  z-index: 99;
+  z-index: 98;
   background: #F7F8FA;
 }
 
@@ -1571,6 +1571,9 @@ b, strong {
 }
 .edit-card-invoiceTable .differ-currency {
     text-align: right;
+}
+.proformaSalesTime ul {
+    top: 30px !important;
 }
 // resposnvie
 @media (min-width: 768px) {
