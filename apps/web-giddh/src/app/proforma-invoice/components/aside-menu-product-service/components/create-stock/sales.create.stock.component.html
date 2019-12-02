@@ -17,7 +17,7 @@
                                     <label>Under Group</label>
                                     <sh-select #groupDDList [options]="groupsData$ | async"
                                         formControlName="parentGroup" [placeholder]="'Select Group'" [multiple]="false"
-                                        [ItemHeight]="33" (selected)="groupSelected($event)" [isFilterEnabled]="true"
+                                        [ItemHeight]="33" (selected)="groupSelected($event);" [isFilterEnabled]="true"
                                         [forceClearReactive]="forceClear$ | async" [notFoundLinkText]="'+ Add New'"
                                         (noResultsClicked)="addNewGroupPane()" [notFoundLink]="false"
                                         [dropdownMinHeight]="33"></sh-select>
@@ -35,13 +35,13 @@
                                 <div class="form-group col-xs-5">
                                     <label>Stock Name <sup>*</sup></label>
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()"
-                                        formControlName="name" />
+                                        formControlName="name" #stockName />
                                 </div>
                                 <div class="form-group col-xs-5">
                                     <label>Stock Unit <sup>*</sup></label>
                                     <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
                                         [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33"
-                                        [forceClearReactive]="forceClear$ | async"></sh-select>
+                                        [forceClearReactive]="forceClear$ | async" (change)="openShowOtherDetailsSection()" (selected)="openShowOtherDetailsSection()"></sh-select>
                                 </div>
                             </div>
                             <!-- other details -->
@@ -66,7 +66,7 @@
                                         <label>Unique Name</label>
                                         <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
                                             [control]="addStockForm.get('uniqueName')" class="form-control"
-                                            formControlName="uniqueName">
+                                            formControlName="uniqueName" #uniqueName>
                                     </div>
 
 
