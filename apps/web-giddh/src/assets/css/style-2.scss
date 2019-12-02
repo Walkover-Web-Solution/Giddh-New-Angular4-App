@@ -387,8 +387,8 @@ input {
     margin-top: 125px;
     margin-bottom: 105px;
 }
-//
 
+/**/
 .invoce-controll .nav.nav-tabs {
     margin-bottom: 20px;
     padding: 0 0px 0 15px !important;
@@ -8196,11 +8196,11 @@ ul.dropdown-menu p.lead.pd {
     height: 36px;
 }
 
-.nav.nav-tabs > li > a {
-    color: $dark-blue00 !important;
-    border-bottom: 4px solid transparent !important;
-}
-
+/*  .nav.nav-tabs>li>a {
+                    color: $dark-blue00 !important;
+                    border-bottom: 4px solid transparent !important;
+                }
+            */
 .nav-tabs > li.active > a,
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;

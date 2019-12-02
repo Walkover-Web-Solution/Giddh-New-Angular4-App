@@ -2,6 +2,7 @@
 $themeClr: #fe5f00;
 $greyClr: #6d6d6d;
 // mixins
+@import "../../assets/css/color.scss";
 
 /**
 # margin mixin pass direction and number
@@ -1565,6 +1566,12 @@ strong {
 }
 .proformaSalesTime ul {
     top: 30px !important;
+}
+.item-total input.other-taxes-checkobx[type="checkbox"]:focus:after {
+    border-color: $border-blue !important ;
+}
+.add-line-bulk-item a:focus {
+    text-decoration: underline;
 }
 // resposnvie
 @media (min-width: 768px) {
