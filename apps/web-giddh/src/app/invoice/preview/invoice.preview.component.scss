@@ -439,8 +439,8 @@ button.btn.btn-filter span.icon-cross {
 //     box-shadow: 1px 1px 0 #d9d9d9;
 // }
 .inputWrapper {
-      display: block !important;
-    width: 100% !important;
+    display: block !important;
+    width: 200px !important;
     position: relative;
     height: 36px !important;
 }
@@ -584,12 +584,6 @@ button.btn.btn-filter span.icon-cross {
   .mobileSearch .input-container input{
     font-size: 13px;
   }
-.addInvoice{
-  display: none;
-}
-.moreExportBtn{
-  margin-top: 10px;
-}
 .input-grp-dateRangePicker .form-group {
   margin-bottom: 10px;
 }
@@ -598,11 +592,7 @@ button.btn.btn-filter span.icon-cross {
   }
 }
 
-@media(max-width:767px){
-  .mobileSearch {
-
-    margin-top: 20px;
-}
+@media(max-width:767px) {
 .invoice-modal-content:after, .invoice-modal-content {
     top: 131px;
 }
@@ -626,20 +616,6 @@ button.btn.btn-filter span.icon-cross {
     margin-bottom: 28px;
 
   }
-
-  .date-advanceSearch {
-    display: block;
-  }
-
-
-  .date-advanceSearch .btn-wrapper button {
-    float: left;
-    width: 48%;
-  }
-
-  .date-advanceSearch .btn-wrapper {
-    width: 100%;
-  }
   #dropdown-ddl-newinv {
     right: -20px !important;
 }
@@ -647,9 +623,6 @@ button.btn.btn-filter span.icon-cross {
     display: flex;
     padding: 10px 0;
   }
-  .date-advanceSearch .input-group {
-    width: 49%;
-}
 }
 
 @media (max-width: 420px) {

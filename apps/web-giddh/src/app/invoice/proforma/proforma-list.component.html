@@ -61,20 +61,19 @@
             </div>
             <!-- endregion -->
 
-            <div *ngIf="voucherType === 'proformas' && !isMobileView" class="btn-wrapper">
+            <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mb-1">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
-            <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
+            <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mb-1">
                 <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimates
                 </button>
             </div>
 
         </div>
-
     </div>
 
     <div class="mobileSearch mrB1">
@@ -92,22 +91,8 @@
                         name="customerNameInput" [formControl]="customerNameInput" />
                 </div>
             </div>
-
-
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                    <button class="btn btn-pink" (click)="goToInvoice('proformas')">+ New Proforma
-                    </button>
-                </div>
 
-                <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                    <button class="btn btn-pink" (click)="goToInvoice('estimates')">+ New Estimates
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!--  -->

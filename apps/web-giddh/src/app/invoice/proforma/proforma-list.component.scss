@@ -212,8 +212,6 @@ ul.selectActionDropdown {
     position: relative;
     z-index: 99;
     cursor: default;
-
-
 }
 .input-group input.form-control:focus{
     border-color:$border-blue;
@@ -278,8 +276,8 @@ a.btn-link-2 {
 
 
 .inputWrapper {
-      display: block !important;
-    width: 100% !important;
+    display: block !important;
+    width: 200px !important;
     position: relative;
     height: 36px !important;
 }
@@ -314,9 +312,9 @@ span.icon-advance-serch {
     width: 100%;
     margin-top: 10px !important;
 }
-.date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-pink{
-display: none;
-}
+// .date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-pink{
+// display: none;
+// }
 .input-grp-dateRangePicker .form-group {
   margin-bottom: 10px;
 }
@@ -324,11 +322,6 @@ display: none;
 @media(max-width:767px){
     .proforma-container {
     padding-top: 60px;
-}
-}
-@media(max-width:500px){
-  .date-advanceSearch .input-group {
-    width: 49%;
 }
 }
 @media(max-width:420px){
@@ -343,26 +336,18 @@ display: none;
 }
 @media(max-width:500px){
   .date-advanceSearch{
-   display: block;
+        display: block;
   }
   .form-group div {
+        display: block;
+    }
+    .input-grp-dateRangePicker .btn {
+        padding-left: 0;
+        padding-top: 10px;
+        padding-bottom: 0;
+    }
+    .smallLoading{
+        top: 5px;
 
-    display: block;
-}
-
-
-}
-@media(max-width:360px){
-  .date-advanceSearch .input-group {
-    width: 100%;
-}
-.input-grp-dateRangePicker .btn {
-  padding-left: 0;
-  padding-top: 10px;
-  padding-bottom: 0;
-}
-.smallLoading{
-  top: 5px;
-
-}
+    }
 }
