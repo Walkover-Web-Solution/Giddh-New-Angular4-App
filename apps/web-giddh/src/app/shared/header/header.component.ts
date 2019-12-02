@@ -1379,4 +1379,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
+
 }

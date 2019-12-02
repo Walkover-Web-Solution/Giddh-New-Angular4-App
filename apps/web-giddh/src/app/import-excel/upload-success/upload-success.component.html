@@ -1,20 +1,18 @@
 <div class="ImportedFileDesign">
-  <div class="ImportedFileDesign-box">
-    <i class="fa fa-exclamation-circle mr-3"></i>
-    <div class="ImportedFileDesign-content">
-      <div class="clearfix">
-        <h2 class="mt-0">{{UploadExceltableResponse.successCount}} out
-          of {{UploadExceltableResponse.failureCount + UploadExceltableResponse.successCount}} accounts are successfully
-          imported. </h2>
-        <h3>Report of failed accounts will be mailed shortly.</h3>
+    <div class="ImportedFileDesign-box">
+        <i class="fa fa-exclamation-circle mr-3"></i>
+        <div class="ImportedFileDesign-content">
+            <div class="clearfix">
+                <h2 class="mt-0">{{UploadExceltableResponse.successCount}} out of {{UploadExceltableResponse.failureCount + UploadExceltableResponse.successCount}} {{selectedType}} are successfully imported. </h2>
+                <h3>Report of failed {{selectedType}} will be mailed shortly.</h3>
 
-      </div>
+            </div>
 
-      <div class="clearfix mt-4">
-        <button class="btn btn-success" [routerLink]="['/pages/import/select']" type="button">Continue</button>
-        <a class="btn" (click)="downloadImportFile()">Download Report</a>
-      </div>
+            <div class="clearfix mt-4">
+                <button class="btn btn-success" [routerLink]="['/pages/import/select']" type="button">Continue</button>
+                <a class="btn" (click)="downloadImportFile()">Download Report</a>
+            </div>
 
+        </div>
     </div>
-  </div>
 </div>

@@ -5452,6 +5452,9 @@ form#groupDetailForm {
     display: none;
     height: initial;
   }
+  .modal-dialog.universal_modal .shortcuts{
+      display: none;
+  }
 }
 
 

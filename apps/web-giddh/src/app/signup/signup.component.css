@@ -16,7 +16,9 @@ body.ununresponsive {
   width: 100%;
   display: table;
 }
-
+.middle {
+    vertical-align: middle;
+}
 .btn-lg {
   padding: 10px 16px;
   font-size: 16px;
@@ -578,11 +580,6 @@ small {
     display: block;
   }
 
-  .logo {
-    padding: 20px;
-    float: left;
-  }
-
   .logo img {
     max-width: 130px;
   }
@@ -612,16 +609,19 @@ small {
   }
   .account {
     margin-left: 0px;
-    margin-top: 10px;
   }
-  .giddh_login {
-    margin-left: 0;
-    width: 100%;
-  }
-  .login_left {
-      display: none;
-  }
-  linkedin_ico {
+
+  .linkedin_ico {
     margin-top: 15px;
   }
+}
+@media only screen and (max-width: 576px) {
+    .login_left {
+        display: none;
+    }
+    .giddh_login {
+        margin-left: 0px;
+        width: 495px;
+        max-width: 100%;
+    }
 }

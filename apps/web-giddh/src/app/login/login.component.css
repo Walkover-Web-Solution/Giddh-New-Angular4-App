@@ -228,7 +228,9 @@ button.close {
 strong {
   font-family: 'Roboto', sans-serif;
 }
-
+.middle {
+    vertical-align: middle;
+}
 .flex-container {
   display: flex;
   height: 100%;
@@ -582,7 +584,6 @@ small {
     width: 100%;
   }
   .account {
-    margin-top: 10px;
     margin-left: 0px;
   }
 }
