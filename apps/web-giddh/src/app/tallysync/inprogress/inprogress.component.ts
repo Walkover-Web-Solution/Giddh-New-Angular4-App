@@ -40,7 +40,6 @@ export class InprogressComponent implements OnInit, OnDestroy {
                 this.getCurrentData();
             }
         }, 30000);
-
         this.imgPath = isElectron
             ? "assets/images/"
             : AppUrl + APP_FOLDER + "assets/images/";
