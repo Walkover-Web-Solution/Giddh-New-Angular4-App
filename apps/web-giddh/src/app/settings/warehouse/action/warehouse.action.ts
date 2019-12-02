@@ -72,6 +72,12 @@ export class WarehouseActions {
         })
     );
 
+    /**
+     * Effect to update warehouse
+     *
+     * @private
+     * @memberof WarehouseActions
+     */
     @Effect()
     private updateWarehouse$ = this.action$.pipe(
         ofType(WarehouseActions.UPDATE_WAREHOUSE),
@@ -81,7 +87,6 @@ export class WarehouseActions {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
-            console.log('Response from update service: ', response);
             this.toast.successToast('Warehouse updated successfully', 'Success');
             return this.updateWarehouseResponse(response);
         })
@@ -147,10 +152,24 @@ export class WarehouseActions {
         return { type: WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE, payload: response };
     }
 
+    /**
+     * Returns the action to trigger update warehouse service
+     *
+     * @param {*} params Request parameter required for update warehouse service
+     * @returns {CustomActions} Action to perform update warehouse operation
+     * @memberof WarehouseActions
+     */
     public updateWarehouse(params: any): CustomActions {
         return { type: WarehouseActions.UPDATE_WAREHOUSE, payload: params };
     }
 
+    /**
+     * Returns the action to handle update warehouse response
+     *
+     * @param {BaseResponse<any, any>} response Response received from service
+     * @returns {CustomActions} Action to handle update warehouse response
+     * @memberof WarehouseActions
+     */
     public updateWarehouseResponse(response: BaseResponse<any, any>): CustomActions {
         return { type: WarehouseActions.UPDATE_WAREHOUSE_RESPONSE, payload: response };
     }
