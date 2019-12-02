@@ -21,8 +21,10 @@
                                 </button>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
-                                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Edit</a></li>
-                                    <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                                    <li role="menuitem" (click)="editWarehouse(warehouse)"><a
+                                            class="dropdown-item">Edit</a></li>
+                                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -78,6 +80,7 @@
 
 <!-- Welcome component (Step 2) -->
 <ng-template #welcomeComponent>
-    <welcome-component (backButtonClicked)="handleBackButtonClick()" (nextButtonClicked)="handleFormSubmit($event)">
+    <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick()"
+        (nextButtonClicked)="handleFormSubmit($event)">
     </welcome-component>
 </ng-template>

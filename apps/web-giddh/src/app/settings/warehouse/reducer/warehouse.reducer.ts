@@ -10,12 +10,14 @@ import { WarehouseActions } from '../action/warehouse.action';
  */
 export interface WarehouseState {
     warehouseCreated: boolean,
+    warehouseUpdated: boolean;
     warehouses: Array<any> | null
 }
 
 /** Initial warehouse state */
 export const initialState: WarehouseState = {
     warehouseCreated: false,
+    warehouseUpdated: false,
     warehouses: null
 };
 
@@ -38,6 +40,10 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
                 return { ...state, warehouses: _.cloneDeep(action.payload.body.results) };
             }
             return state;
+        case WarehouseActions.UPDATE_WAREHOUSE_RESPONSE:
+            return { ...state, warehouseUpdated: true };
+        case WarehouseActions.RESET_UPDATE_WAREHOUSE:
+            return { ...state, warehouseUpdated: false };
         default: return state;
     }
 }

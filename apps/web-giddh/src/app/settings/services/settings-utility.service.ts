@@ -17,7 +17,7 @@ export class SettingsUtilityService {
      * @returns {*} Request object for warehouse create request
      * @memberof WarehouseComponent
      */
-    public getWarehouseRequestObject(formControls: any, taxDetails: Array<any>): any {
+    public getCreateWarehouseRequestObject(formControls: any, taxDetails: Array<any>): any {
         let taxType = '';
         if (taxDetails) {
             taxType = taxDetails['taxName'] ? taxDetails['taxName'].label : '';

@@ -24,7 +24,13 @@ export class WarehouseActions {
     public static readonly GET_ALL_WAREHOUSE = 'GET_ALL_WAREHOUSE';
     /** Action to handle all warehouse response */
     public static readonly GET_ALL_WAREHOUSE_RESPONSE = 'GET_ALL_WAREHOUSE_RESPONSE';
-    /** Action to reset create warehouse operation (triggered after successful warehouse creation) */
+    /** Action to update warehouse */
+    public static readonly UPDATE_WAREHOUSE = 'UPDATE_WAREHOUSE';
+    /** Action to handle update warehouse response */
+    public static readonly UPDATE_WAREHOUSE_RESPONSE = 'UPDATE_WAREHOUSE_RESPONSE';
+    /** Action to reset update warehouse flag (triggered after successful warehouse updation) */
+    public static readonly RESET_UPDATE_WAREHOUSE = 'RESET_UPDATE_WAREHOUSE';
+    /** Action to reset create warehouse flag (triggered after successful warehouse creation) */
     public static readonly RESET_CREATE_WAREHOUSE = 'RESET_CREATE_WAREHOUSE';
 
     /**
@@ -65,6 +71,21 @@ export class WarehouseActions {
             return this.fetchAllWarehousesResponse(response);
         })
     );
+
+    @Effect()
+    private updateWarehouse$ = this.action$.pipe(
+        ofType(WarehouseActions.UPDATE_WAREHOUSE),
+        switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
+        map((response: BaseResponse<any, any>) => {
+            if (response.status === 'error') {
+                this.toast.errorToast(response.message, response.code);
+                return { type: 'EmptyAction' };
+            }
+            console.log('Response from update service: ', response);
+            this.toast.successToast('Warehouse updated successfully', 'Success');
+            return this.updateWarehouseResponse(response);
+        })
+    )
 
     /** @ignore */
     constructor(
@@ -124,6 +145,24 @@ export class WarehouseActions {
      */
     public fetchAllWarehousesResponse(response: BaseResponse<any, any>): CustomActions {
         return { type: WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE, payload: response };
+    }
+
+    public updateWarehouse(params: any): CustomActions {
+        return { type: WarehouseActions.UPDATE_WAREHOUSE, payload: params };
+    }
+
+    public updateWarehouseResponse(response: BaseResponse<any, any>): CustomActions {
+        return { type: WarehouseActions.UPDATE_WAREHOUSE_RESPONSE, payload: response };
+    }
+
+    /**
+     * Resets the warehouse updation flag in store
+     *
+     * @returns {CustomActions} Action to reset create warehouse operation
+     * @memberof WarehouseActions
+     */
+    public resetUpdateWarehouse(): CustomActions {
+        return { type: WarehouseActions.RESET_UPDATE_WAREHOUSE };
     }
 
 }

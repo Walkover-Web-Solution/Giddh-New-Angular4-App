@@ -24,8 +24,9 @@
                             <label for="name" class="m-t-30" *ngIf="!isbranch">{{itemOnBoardingDetails?.onBoardingType}}
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
-                        <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name"
-                            placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                        <input name="name" id="name" type="text" required
+                            [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress" placeholder="Name"
+                            [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
                     </div>
                     <div class="col-xs-6 mrB2 ">
                         <span>
@@ -55,14 +56,14 @@
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
                                 <sh-select class="pull-left select-caret"
-                                    [disabled]="createNewCompanyPreparedObj.phoneCode"
+                                    [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
                                     style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
                                     [options]="callingCodesSource$ | async"
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
-                                    [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988"
-                                    id="contactNo" autocomplete="off"
+                                    [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
+                                    placeholder="9998899988" id="contactNo" autocomplete="off"
                                     [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
                             </div>
                         </span>
@@ -107,9 +108,10 @@
                                     name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
-                                <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input type="checkbox"
-                                        name="isTaxNumberSameAsHeadQuarter" [(ngModel)]="isTaxNumberSameAsHeadQuarter"
-                                        value="1" (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
+                                <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
+                                        type="checkbox" name="isTaxNumberSameAsHeadQuarter"
+                                        [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
+                                        (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
                                     Headquarter</span>
 
                             </div>
@@ -171,25 +173,6 @@
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
-                    <!-- <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
-                        <div class="clearfix ">
-                            <ng-container
-                                *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingUnregisteredItemAddress">
-                                <label for="address" class="d-block" *ngIf="!isbranch">Company Address</label>
-                                <label for="address" class="d-block" *ngIf="isbranch">Branch Address</label>
-                            </ng-container>
-                            <ng-template #onBoardingUnregisteredItemAddress>
-                                <label for="address" class="d-block"
-                                    *ngIf="!isbranch">{{itemOnBoardingDetails?.onBoardingType}} Address <sup
-                                        class="text-danger">*</sup></label>
-                            </ng-template>
-                            <ng-container
-                                *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else itemOnBoardingName">
-                            </ng-container>
-                            <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address"
-                                [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
-                        </div>
-                    </div> -->
                     <div class="col-xs-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.
                         </p>
@@ -198,11 +181,11 @@
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
                         <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)"
                             [disabled]="welcomeForm.invalid || !isGstValid">
-                            Next
+                            {{itemOnBoardingDetails?.isOnBoardingInProgress ?
+                                itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
+                                'Next'
+                            }}
                         </button>
-                        <!--						<button type="submit " class="btn btn-pink  " *ngIf="isbranch" (click)="submit()" [disabled]="welcomeForm.invalid || !isGstValid">-->
-                        <!--							Create Branch-->
-                        <!--						</button>-->
                     </div>
                 </div>
             </form>

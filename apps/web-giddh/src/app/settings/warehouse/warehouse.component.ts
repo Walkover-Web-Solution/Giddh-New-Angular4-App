@@ -4,6 +4,8 @@ import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOpti
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { CommonActions } from '../../actions/common.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType } from '../../app.constant';
 import { OnBoardingComponent } from '../../shared/header/components';
@@ -36,6 +38,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** Observable that keep track of all warehouses created for a company */
     public allWarehouses$: Observable<any>;
+    /** Selected warehouse for welcome page to update warehouse information */
+    public selectedWarehouse: any;
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
@@ -51,11 +55,13 @@ export class WarehouseComponent implements OnInit, OnDestroy {
 
     /** @ignore */
     constructor(
-        private store: Store<AppState>,
-        private itemOnBoardingActions: ItemOnBoardingActions,
         private bsModalService: BsModalService,
+        private commonActions: CommonActions,
         private componentFactoryResolver: ComponentFactoryResolver,
+        private generalActions: GeneralActions,
+        private itemOnBoardingActions: ItemOnBoardingActions,
         private settingsUtilityService: SettingsUtilityService,
+        private store: Store<AppState>,
         private warehouseActions: WarehouseActions
     ) { }
 
@@ -71,13 +77,13 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
             this.itemOnBoardingDetails = itemOnBoardingDetails;
         });
-        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe((warehouseState: WarehouseState) => {
-            if (warehouseState && warehouseState.warehouseCreated) {
+        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
+            if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
+                await this.hideWelcomePage();
                 this.endOnBoarding();
-                this.hideWelcomePage();
                 this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
+                this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
-
             }
         });
     }
@@ -88,6 +94,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -107,22 +114,38 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * Hides the welcome page modal once the user presses 'back' button
      * on Welcome page
      *
+     * @returns {Promise<any>} Promise to indicate successful hiding of model
      * @memberof WarehouseComponent
      */
-    public hideWelcomePage(): void {
-        if (this.welcomePageModalInstance) {
-            this.welcomePageModalInstance.hide();
-        }
+    public hideWelcomePage(): Promise<any> {
+        return new Promise((resolve) => {
+            if (this.welcomePageModalInstance) {
+                this.welcomePageModalInstance.hide();
+                setTimeout(() => {
+                    resolve();
+                }, 500);
+            }
+        });
     }
 
     /**
      * Handler for back button on on boarding step 2 (Welcome page)
      *
+     * @returns {Promise<any>} Promise to carry out further operation
      * @memberof WarehouseComponent
      */
-    public handleBackButtonClick(): void {
-        this.hideWelcomePage();
-        this.openCreateWarehouseModal();
+    public async handleBackButtonClick(): Promise<any> {
+        await this.hideWelcomePage();
+        this.resetWelcomeForm();
+        if (this.itemOnBoardingDetails) {
+            if (!this.itemOnBoardingDetails.isItemUpdateInProgress) {
+                this.openCreateWarehouseModal();
+            } else {
+                // Warehouse (item) update process was in progress, end it
+                this.endOnBoarding();
+                this.selectedWarehouse = null;
+            }
+        }
     }
 
     /**
@@ -132,11 +155,17 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public handleFormSubmit(formData: any): void {
-        if (formData) {
+        this.resetWelcomeForm();
+        if (formData && formData.otherData) {
             const { controls: formControls } = formData.welcomeForm;
-            if (formControls && formData.otherData) {
-                const requestParamter = this.settingsUtilityService.getWarehouseRequestObject(formControls, formData.otherData.taxName);
-                this.store.dispatch(this.warehouseActions.createWarehouse(requestParamter));
+            if (formControls) {
+                const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls, formData.otherData.taxName);
+                if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress) {
+                    requestParamter['warehouseUniqueName'] = this.selectedWarehouse.uniqueName;
+                    this.store.dispatch(this.warehouseActions.updateWarehouse(requestParamter));
+                } else {
+                    this.store.dispatch(this.warehouseActions.createWarehouse(requestParamter));
+                }
             }
         }
     }
@@ -159,14 +188,26 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles the update warehouse flow
+     *
+     * @param {*} warehouse Warehouse to update
+     * @memberof WarehouseComponent
+     */
+    public editWarehouse(warehouse: any): void {
+        this.selectedWarehouse = warehouse;
+        this.startOnBoarding();
+        this.store.dispatch(this.itemOnBoardingActions.getItemUpdateAction(true));
+        this.showWelcomePage();
+    }
+
+    /**
      * Ends the on boarding process
      *
      * @private
      * @memberof WarehouseComponent
      */
     private endOnBoarding(): void {
-        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingStatusAction(false));
-        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingTypeAction(null));
+        this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
     }
 
     /**
@@ -214,13 +255,15 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Displays the welcome page for second step of warehouse on boarding
+     * Displays the welcome page for second step of warehouse on boarding and for update
+     * warehouse flow
      *
      * @private
      * @memberof WarehouseComponent
      */
     private showWelcomePage(): void {
-        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress) {
+        if (this.itemOnBoardingDetails &&
+            (this.itemOnBoardingDetails.isOnBoardingInProgress || this.itemOnBoardingDetails.isItemUpdateInProgress)) {
             const modalConfig: ModalOptions = {
                 class: 'warehouse-welcome-modal',
                 animated: false,
@@ -229,5 +272,16 @@ export class WarehouseComponent implements OnInit, OnDestroy {
             };
             this.welcomePageModalInstance = this.bsModalService.show(this.welcomeComponentTemplate, modalConfig);
         }
+    }
+
+    /**
+     * Resets the welcome form
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private resetWelcomeForm(): void {
+        this.store.dispatch(this.generalActions.resetStatesList());
+        this.store.dispatch(this.commonActions.resetOnboardingForm());
     }
 }

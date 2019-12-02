@@ -9,6 +9,12 @@ import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
+/**
+ * Provider to carry out warehouse related operations
+ *
+ * @export
+ * @class SettingsWarehouseService
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -52,6 +58,25 @@ export class SettingsWarehouseService {
                 let data: BaseResponse<any, any> = response;
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
+     * Sends the update warehouse request to server
+     *
+     * @param {*} params Request parameter required for the service
+     * @returns {Observable<BaseResponse<any, any>>} Observable of update warehouse to carry out further operations
+     * @memberof SettingsWarehouseService
+     */
+    public updateWarehouse(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const contextPath = WAREHOUSE_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':warehouseUniqueName', params.warehouseUniqueName);
+        return this.http.put(this.config.apiUrl + contextPath, params).pipe(
+            map((response) => {
+                let data: BaseResponse<any, any> = response;
+                data.request = params;
+                return data;
+            }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
     }
 
 }

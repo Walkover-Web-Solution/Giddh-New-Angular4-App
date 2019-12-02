@@ -1,26 +1,36 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
-import { AfterViewInit, Component, OnDestroy, OnInit, ComponentFactoryResolver, EventEmitter, Output } from '@angular/core';
-import { IOption } from '../theme/ng-select/option.interface';
-import { StatesRequest, CompanyCreateRequest, Addresses } from '../models/api-models/Company';
-import * as _ from '../lodash-optimized';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../store';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import {
+    AfterViewInit,
+    Component,
+    ComponentFactoryResolver,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    Output,
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { ModalOptions } from 'ngx-bootstrap';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { CommonActions } from '../actions/common.actions';
+import { CompanyActions } from '../actions/company.actions';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { OnBoardingType } from '../app.constant';
+import * as _ from '../lodash-optimized';
+import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
+import { Addresses, CompanyCreateRequest, StatesRequest } from '../models/api-models/Company';
+import { IForceClear } from '../models/api-models/Sales';
+import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
-import { CompanyActions } from '../actions/company.actions';
-import { CompanyService } from '../services/companyService.service';
-import { ModalOptions } from 'ngx-bootstrap';
-import { GeneralActions } from '../actions/general/general.actions';
-import { CommonActions } from '../actions/common.actions';
-import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
-import { IForceClear } from "../models/api-models/Sales";
+import { AppState } from '../store';
 import { ItemOnBoardingState } from '../store/item-on-boarding/item-on-boarding.reducer';
-import { NgForm } from '@angular/forms';
+import { IOption } from '../theme/ng-select/option.interface';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'welcome-component',
@@ -114,11 +124,16 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** True, if on boarding is going on */
     public isOnBoardingInProgress: boolean;
+    /** True, if item update is in progress */
+    public isItemUpdateInProgress: boolean;
 
     /** Event emitter to represent back button click */
     @Output() backButtonClicked: EventEmitter<any> = new EventEmitter();
     /** Event emitter to represent next button click */
     @Output() nextButtonClicked: EventEmitter<any> = new EventEmitter();
+
+    /** Item details to be pre-filled in welcome form */
+    @Input() itemDetails: any;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -151,22 +166,31 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$))
-        .subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
-            this.itemOnBoardingDetails = itemOnBoardingDetails;
-            this.isOnBoardingInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress;
-        });
-        this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                this.isbranch = res.isBranch;
-                this.createNewCompany = res;
-                this.company = this.createNewCompany;
-                if (this.company.contactNo.toString().includes('-')) {
-                    let contact = this.company.contactNo.split('-');
-                    this.company.contactNo = contact[1];
+            .subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
+                this.itemOnBoardingDetails = itemOnBoardingDetails;
+                this.isOnBoardingInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isOnBoardingInProgress;
+                this.isItemUpdateInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress;
+            });
+
+        if (this.isItemUpdateInProgress) {
+            this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
+            this.company.phoneCode = (this.itemDetails && this.itemDetails.callingCode) ? this.itemDetails.callingCode : '';
+            this.company.contactNo = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getFormattedContactNumber(this.itemDetails.mobileNumber) : '';
+            this.company.uniqueName = (this.itemDetails && this.itemDetails.uniqueName) ? this.itemDetails.uniqueName : '';
+            this.company.country = (this.itemDetails && this.itemDetails.countryCode) ? this.itemDetails.countryCode : '';
+            this.company.baseCurrency = (this.itemDetails && this.itemDetails.currencyCode) ? this.itemDetails.currencyCode : '';
+            this.prepareWelcomeForm();
+        } else {
+            this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+                if (res) {
+                    this.isbranch = res.isBranch;
+                    this.createNewCompany = res;
+                    this.company = this.createNewCompany;
+                    this.company.contactNo = this.getFormattedContactNumber(this.company.contactNo);
+                    this.prepareWelcomeForm();
                 }
-                this.prepareWelcomeForm();
-            }
-        });
+            });
+        }
         combineLatest([
             this._companyService.GetAllBusinessTypeList(),
             this._companyService.GetAllBusinessNatureList()
@@ -179,20 +203,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
             this.reFillForm();
         });
-
-        // this._companyService.GetAllBusinessTypeList().subscribe((res: any) => {
-        //     _.map(res.body, (o) => {
-        //         this.businessTypeList.push({ label: o, value: o });
-        //     });
-        // });
-
-        // this._companyService.GetAllBusinessNatureList().subscribe((res: any) => {
-        //     this.businessNatureList = [];
-        //     _.map(res.body, (o) => {
-        //         this.businessNatureList.push({ label: o, value: o });
-        //     });
-        // });
-        // this.reFillForm();
     }
 
     public ngAfterViewInit() {
@@ -205,24 +215,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public reFillForm() {
         if (this.isOnBoardingInProgress) {
-            // TODO: Add default warehouse logic
-            this.companyProfileObj.businessNature = this.activeCompany.businessNature;
-            this.companyProfileObj.businessType = this.activeCompany.businessType;
-            this.selectedBusinesstype = this.activeCompany.businessType;
-            // Autofill GST and Address from default warehouse and default company
-            let autoFillAddress = '', autoFillTaxNumber = '';
-            if (this.activeCompany && this.activeCompany.addresses) {
-                this.activeCompany.addresses.forEach((address: any) => {
-                    if (address.isDefault) {
-                        autoFillAddress = address.address;
-                        autoFillTaxNumber = address.taxNumber;
-                    }
-                });
-            }
-            this.companyProfileObj.address = autoFillAddress;
-            if (this.selectedBusinesstype === 'Registered') {
-                this.companyProfileObj.taxNumber = autoFillTaxNumber;
-            }
+            this.fillOnBoardingDetails();
         } else {
             this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
             this.companyProfileObj.businessType = this.createNewCompany.businessType;
@@ -429,9 +422,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 this._router.navigate(['new-user']);
             }
-        } else {
-            /** On boarding of warehouse is going on */
-            this._router.navigate(['pages', 'settings', 'warehouse']);
         }
         this.backButtonClicked.emit();
     }
@@ -629,5 +619,56 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.getStateCode(gstNo, statesEle);
         }
+    }
+
+    /**
+     * Auto fills the on boarding details
+     *
+     * @private
+     * @memberof WelcomeComponent
+     */
+    private fillOnBoardingDetails(): void {
+        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            // TODO: Add default warehouse logic
+            this.companyProfileObj.businessNature = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessNature : this.activeCompany.businessNature;
+            this.companyProfileObj.businessType = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessType : this.activeCompany.businessType;
+            this.selectedBusinesstype = this.companyProfileObj.businessType;
+
+            let autoFillAddress = '', autoFillTaxNumber = '';
+            if (this.itemOnBoardingDetails.isItemUpdateInProgress && this.itemDetails) {
+                // Autofill GST and Address from warehouse being updated
+                autoFillAddress = this.itemDetails.address;
+                autoFillTaxNumber = this.itemDetails.taxNumber;
+            } else {
+                // Autofill GST and Address from default warehouse and default company
+                if (this.activeCompany && this.activeCompany.addresses) {
+                    this.activeCompany.addresses.forEach((address: any) => {
+                        if (address.isDefault) {
+                            autoFillAddress = address.address;
+                            autoFillTaxNumber = address.taxNumber;
+                        }
+                    });
+                }
+            }
+            this.companyProfileObj.address = autoFillAddress;
+            if (this.selectedBusinesstype === 'Registered') {
+                this.companyProfileObj.taxNumber = autoFillTaxNumber;
+            }
+        }
+    }
+
+    /**
+     * Returns the formatted contact number (without '-')
+     *
+     * @private
+     * @param {string} contactNumber Contact number to be formatted
+     * @returns {string} Formatted contact number
+     * @memberof WelcomeComponent
+     */
+    private getFormattedContactNumber(contactNumber: string): string {
+        if (contactNumber.toString().includes('-')) {
+            return contactNumber.split('-')[1];
+        }
+        return contactNumber;
     }
 }

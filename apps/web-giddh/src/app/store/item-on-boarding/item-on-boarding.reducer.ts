@@ -10,6 +10,7 @@ import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-bo
  */
 export interface ItemOnBoardingState {
     isOnBoardingInProgress: boolean;
+    isItemUpdateInProgress: boolean;
     onBoardingType: OnBoardingType | null;
 }
 
@@ -20,6 +21,7 @@ export interface ItemOnBoardingState {
  */
 export const initialState: ItemOnBoardingState = {
     isOnBoardingInProgress: false,
+    isItemUpdateInProgress: false,
     onBoardingType: null
 }
 
@@ -37,6 +39,10 @@ export function itemOnBoardingReducer(state: ItemOnBoardingState = initialState,
             return { ...state, isOnBoardingInProgress: action.payload };
         case ItemOnBoardingActions.SET_ON_BOARDING_TYPE:
             return { ...state, onBoardingType: action.payload };
+        case ItemOnBoardingActions.SET_ITEM_UPDATE_PROGRESS:
+            return { ...state, isItemUpdateInProgress: action.payload };
+        case ItemOnBoardingActions.RESET_ON_BOARDING:
+            return initialState;
         default: return state;
     }
 }
