@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
@@ -152,8 +152,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
-    @ViewChild('selectAccount') public selectAccount: ShSelectComponent;
-    @ViewChild('description') public description: ElementRef;
+    @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
+    @ViewChildren('description') public description: QueryList<ElementRef>;
+
+    @ViewChild('inputCustomerName') public inputCustomerName: ElementRef;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
     public editCurrencyInputField: boolean = false;
@@ -365,6 +367,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
+                if (this.isSalesInvoice) {
+                    setTimeout(() => {
+                        if (this.customerNameDropDown) {
+                            this.customerNameDropDown.show('');
+                        }
+                    }, 200);
+                } else if (this.isCashInvoice) {
+                    setTimeout(() => {
+                        if (this.inputCustomerName) {
+                            this.inputCustomerName.nativeElement.focus();
+                        }
+                    }, 200);
+                }
             }
         });
     }
@@ -386,7 +401,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             }, 400);
-            // this.fristElementToFocus.nativeElement.focus(); // not working
         }
     }
 
@@ -1790,8 +1804,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             setTimeout(() => {
-                if (this.description) {
-                    this.description.nativeElement.focus();
+                let description = this.description.toArray();
+                if (description && description[this.activeIndx]) {
+                    description[this.activeIndx].nativeElement.focus();
                 }
             }, 200);
 
@@ -1809,8 +1824,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.applicableTaxes = [];
 
             setTimeout(() => {
-                if (this.description) {
-                    this.description.nativeElement.focus();
+                let description = this.description.toArray();
+                if (description && description[this.activeIndx]) {
+                    description[this.activeIndx].nativeElement.focus();
                 }
             }, 200);
 
@@ -1905,6 +1921,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.entryDate = this.universalDate || new Date();
             }
             this.invFormData.entries.push(entry);
+            setTimeout(() => {
+                this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndx);
+            }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
             if (!txn.isValid()) {
@@ -1913,10 +1933,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             let entry: SalesEntryClass = new SalesEntryClass();
             this.invFormData.entries.push(entry);
-
-            // setTimeout(() => {
-            this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
-            // }, 10);
+            setTimeout(() => {
+                this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndx);
+            }, 200);
         }
     }
 
@@ -3299,19 +3319,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onBlurDueDate() {
-        this.setActiveIndx(0);
+    public onBlurDueDate(index) {
+        this.setActiveIndx(index);
         setTimeout(() => {
-            if (this.selectAccount !== undefined) {
-                this.selectAccount.show('');
+            let selectAccount = this.selectAccount.toArray();
+            if (selectAccount !== undefined && selectAccount[index] !== undefined) {
+                selectAccount[index].show('');
             }
         }, 200);
     }
 
-    public onBlurInvoiceDate() {
+    public onBlurInvoiceDate(index) {
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
-            this.onBlurDueDate();
+            this.onBlurDueDate(index);
         }
     }
 }
