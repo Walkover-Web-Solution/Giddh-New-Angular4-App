@@ -459,7 +459,8 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="isUpdateMode"
-                                                    [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
+                                                    [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" 
+                                                    (blur)="onBlurInvoiceDate()" />
                                                 <p class="text-danger"
                                                     *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                                     Invalid Date
