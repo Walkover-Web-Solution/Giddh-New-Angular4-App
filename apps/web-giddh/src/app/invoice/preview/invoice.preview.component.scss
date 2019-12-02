@@ -51,7 +51,7 @@
 }
 
 .td_in_searchBox div span {
-    // flex: 1 1 auto;
+    /*flex: 1 1 auto;*/
     padding: 8px 0 8px 10px;
 }
 
@@ -322,9 +322,6 @@ ul.selectActionDropdown {
       color: $border-blue !important;
     background: #EEEFF9 !important;
 }
-// .dropdown-toggle{
-//   color: #333;
-// }
 .addInvoice .dropdown-toggle {
   color: #fff;
 }
@@ -429,15 +426,6 @@ button.btn.btn-filter span.icon-cross {
   color: #1C1C1C;
 }
 
-// table{
-//   position: relative;
-// }
-// .basic > thead > tr > th{
-//     position: sticky !important;
-//     top: 59px;
-//     z-index: 99;
-//     box-shadow: 1px 1px 0 #d9d9d9;
-// }
 .inputWrapper {
     display: block !important;
     width: 200px !important;
@@ -637,9 +625,6 @@ button.btn.btn-filter span.icon-cross {
   }
 }
 @media(max-width:360px){
-//   .input-grp-dateRangePicker .d-flex {
-//     flex-direction: column;
-// }
 .date-advanceSearch .input-group {
   width: 100%;
 }

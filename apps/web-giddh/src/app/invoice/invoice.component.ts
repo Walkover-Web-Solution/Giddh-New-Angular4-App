@@ -11,7 +11,6 @@ import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../services/general.service';
 @Component({
-    styles: [],
     templateUrl: './invoice.component.html'
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
