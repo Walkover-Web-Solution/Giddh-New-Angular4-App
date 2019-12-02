@@ -152,6 +152,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
 
+    @ViewChild('selectAccount') public selectAccount: ShSelectComponent;
+    @ViewChild('description') public description: ElementRef;
+
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
     public editCurrencyInputField: boolean = false;
     public showCurrencyValue: boolean = false;
@@ -1785,6 +1788,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 txn.sacNumber = o.sacNumber;
                 txn.hsnOrSac = 'sac';
             }
+
+            setTimeout(() => {
+                if(this.description) {
+                    this.description.nativeElement.focus();
+                }
+            }, 200);
+
             return txn;
             // }
             // });
@@ -1800,6 +1810,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.sacNumber = null;
             txn.taxableValue = 0;
             txn.applicableTaxes = [];
+
+            setTimeout(() => {
+                if(this.description) {
+                    this.description.nativeElement.focus();
+                }
+            }, 200);
+
             return txn;
         }
     }
@@ -3283,5 +3300,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.depositAccountUniqueName) {
             this.depositAccountUniqueName = 'cash';
         }
+    }
+
+    public onBlurDueDate() {
+        this.setActiveIndx(0);
+        setTimeout(() => {
+            if(this.selectAccount !== undefined) {
+                this.selectAccount.show('');
+            }
+        }, 200);
     }
 }
