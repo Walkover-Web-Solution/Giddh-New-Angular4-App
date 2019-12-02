@@ -667,9 +667,12 @@ ul.sub-list{
    .primary-header   ul.nav.universal_date.mr-2,  .primary-header #AddManage.btn-gray {
     margin-right: 5px;
 }
-.primary-header .row .col-sm-5:nth-child(3) {
-    padding-left: 0;
-}
+    .primary-header .row .col-sm-5:nth-child(3) {
+        padding-left: 0;
+    }
+    .account-search:after {
+        display: none;
+    }
 }
 
 @media(max-width:768px){

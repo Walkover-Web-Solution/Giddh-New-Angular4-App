@@ -96,13 +96,13 @@
 
         </div>
         <div class="row">
-            <div class="col-xs-12" *ngIf="!isMobileView">
+            <div class="col-xs-12">
                 <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
                     <button class="btn btn-pink" (click)="goToInvoice('proformas')">+ New Proforma
                     </button>
                 </div>
 
-                <div *ngIf="voucherType === 'estimates' && !isMobileView" class="btn-wrapper">
+                <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
                     <button class="btn btn-pink" (click)="goToInvoice('estimates')">+ New Estimates
                     </button>
                 </div>
