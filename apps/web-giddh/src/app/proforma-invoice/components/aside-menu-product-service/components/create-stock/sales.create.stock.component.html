@@ -41,7 +41,7 @@
                                     <label>Stock Unit <sup>*</sup></label>
                                     <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
                                         [placeholder]="'Choose a parent unit'" [multiple]="false" [ItemHeight]="33"
-                                        [forceClearReactive]="forceClear$ | async" (change)="openShowOtherDetailsSection()" (selected)="openShowOtherDetailsSection()"></sh-select>
+                                        [forceClearReactive]="forceClear$ | async" (selected)="openShowOtherDetailsSection()"></sh-select>
                                 </div>
                             </div>
                             <!-- other details -->
