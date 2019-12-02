@@ -1796,9 +1796,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }, 200);
 
             return txn;
-            // }
-            // });
-            // });
         } else {
             txn.isStockTxn = false;
             txn.amount = 0;
@@ -3309,5 +3306,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.selectAccount.show('');
             }
         }, 200);
+    }
+
+    public onBlurInvoiceDate() {
+        if(!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
+            this.onBlurDueDate();
+        }
     }
 }
