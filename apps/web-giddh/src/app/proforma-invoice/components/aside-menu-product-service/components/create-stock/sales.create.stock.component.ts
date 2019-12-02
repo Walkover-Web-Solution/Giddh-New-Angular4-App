@@ -50,6 +50,18 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     @ViewChild('uniqueName') public uniqueName: ElementRef;
     @ViewChild('stockName') public stockName: ElementRef;
 
+    @ViewChild('purchaseAccountUniqueName') public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode') public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate') public purchaseRate: ElementRef;
+
+    @ViewChild('salesAccountUniqueName') public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode') public salesStockUnitCode: any;
+    @ViewChild('salesRate') public salesRate: ElementRef;
+
+    @ViewChild('manufacturingQuantity') public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName') public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode') public manufacturingStockUnitCode; any;
+
     public groupUniqueName: string;
     public stockUniqueName: string;
     public addStockForm: FormGroup;
@@ -959,7 +971,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.inputFilter.nativeElement.click();
+            this.groupDDList.show('');
         }
     }
 
@@ -1060,6 +1072,62 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.showOtherDetails = true;
         setTimeout(() => {
             this.uniqueName.nativeElement.focus();
+        }, 200);
+    }
+
+    public focusInPurchaseAccountField() {
+        setTimeout(() => {
+            this.purchaseAccountUniqueName.show('');
+        }, 200);
+    }
+
+    public onSelectPurchaseAccount() {
+        setTimeout(() => {
+            this.purchaseStockUnitCode.show('');
+        }, 200);
+    }
+
+    public focusInSalesAccountField() {
+        setTimeout(() => {
+            this.salesAccountUniqueName.show('');
+        }, 200);
+    }
+
+    public onSelectSalesAccount() {
+        setTimeout(() => {
+            this.salesStockUnitCode.show('');
+        }, 200);
+    }
+
+    public onSelectPurchaseStockUnitCode() {
+        setTimeout(() => {
+            this.purchaseRate.nativeElement.focus();
+        }, 200);
+    }
+
+    public onSelectSalesStockUnitCode() {
+        setTimeout(() => {
+            this.salesRate.nativeElement.focus();
+        }, 200);
+    }
+
+    public showManufacturingQuantitySection() {
+        if (this.addStockForm.value.isFsStock) {
+            setTimeout(() => {
+                this.manufacturingQuantity.nativeElement.focus();
+            }, 200);
+        }
+    }
+
+    public onSelectManufacturingStockUnitCode() {
+        setTimeout(() => {
+            this.manufacturingStockUniqueName.show();
+        }, 200);
+    }
+
+    public onSelectManufacturingStockQuantity() {
+        setTimeout(() => {
+            this.manufacturingStockUnitCode.show();
         }, 200);
     }
 }
