@@ -1,13 +1,27 @@
 <div class="branch-transfer-report">
     <div class="container-fluid">
         <div class="row pdT1">
-            <div class="col-sm-6 form-group">
+            <div class="col-sm-6 form-group d-flex">
                 <div class="input-group ">
                     <!-- <span class="icon-calender"></span> -->
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Daterangepicker" bsDaterangepicker
-                            #dpr="bsDaterangepicker">
+                        <input
+                            class="form-control"
+                            placeholder="Daterangepicker"
+                            bsDaterangepicker
+                            #dpr="bsDaterangepicker"
+                        />
                     </span>
+                </div>
+                <div
+                    class="advance-icon"
+                    style="align-items: center"
+                    tooltip="Advance Search"
+                >
+                    <span
+                        class="icon-advance-serch"
+                        (click)="openModal(template)"
+                    ></span>
                 </div>
             </div>
             <div class="col-sm-6 form-group">
@@ -15,49 +29,157 @@
             </div>
         </div>
 
-
         <div class="report-table">
             <table class="table basic">
-
                 <thead>
                     <tr>
                         <th width="3%">#</th>
                         <th width="10%%">Date</th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <th width="10%">Sender/Receiver</th>
+                        <th width="10%" class="td_in_searchBox">
+                            <div>
+                                <span>Sender/Receiver</span>
+                                <i class="icon-search"></i>
+                            </div>
+                            <div class="input-container" hidden>
+                                <input
+                                    type="text"
+                                    placeholder="Search Sender/Receiver"
+                                    class="w100"
+                                />
+                            </div>
+                        </th>
+                        <th width="10%" class="td_in_searchBox">
+                            <div>
+                                <span>Warehouse</span>
+                                <i class="icon-search"></i>
+                            </div>
+                            <div class="input-container" hidden>
+                                <input
+                                    type="text"
+                                    placeholder="Search Sender/Receiver"
+                                    class="w100"
+                                />
+                            </div>
+                        </th>
+
                         <th width="10%" class="text-right">Total Amount</th>
                         <th width="10%">Action</th>
-
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let reportTableData of reportTableDatas">
-                        <td> {{reportTableData.serialNo}} </td>
-                        <td> {{reportTableData.Date}} </td>
-                        <td> {{reportTableData.VoucherType}} </td>
-                        <td> {{reportTableData.VoucherNo}} </td>
-                        <td> {{reportTableData.SenderReciver}} </td>
-                        <td class="text-right"> {{reportTableData.TotalAmount}} </td>
-                        <td> {{reportTableData.Action}}
-                            <div class="btn-group pull-right" dropdown [autoClose]="true">
-                                <a id="button-basic" dropdownToggle type="button"
-                                    class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
+                        <td>{{ reportTableData.serialNo }}</td>
+                        <td>{{ reportTableData.Date }}</td>
+                        <td>{{ reportTableData.VoucherType }}</td>
+                        <td>{{ reportTableData.VoucherNo }}</td>
+                        <td>{{ reportTableData.SenderReciver }}</td>
+                        <td>{{ reportTableData.wareHouse }}</td>
 
+                        <td class="text-right">
+                            {{ reportTableData.TotalAmount }}
+                        </td>
+                        <td>
+                            {{ reportTableData.Action }}
+                            <div
+                                class="btn-group pull-right"
+                                dropdown
+                                [autoClose]="true"
+                            >
+                                <a
+                                    id="button-basic"
+                                    dropdownToggle
+                                    type="button"
+                                    class="icon-dots-three-vertical dropdown-toggle"
+                                    aria-controls="dropdown-basic"
+                                >
                                 </a>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                                    aria-labelledby="button-basic">
-                                    <li role="menuitem"><a class="dropdown-item" href="#">Received</a></li>
-                                    <li role="menuitem"><a class="dropdown-item" href="#">Delivered</a></li>
-                                    <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                                <ul
+                                    id="dropdown-basic"
+                                    *dropdownMenu
+                                    class="dropdown-menu"
+                                    role="menu"
+                                    aria-labelledby="button-basic"
+                                >
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="#"
+                                            >Received</a
+                                        >
+                                    </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="#"
+                                            >Delivered</a
+                                        >
+                                    </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="#"
+                                            >Delete</a
+                                        >
+                                    </li>
                                 </ul>
                             </div>
                         </td>
-
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <div class="paginationWrapper">
+            <pagination [totalItems]="30"></pagination>
+        </div>
     </div>
 </div>
+<!-- advance search start -->
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Advance Search</h4>
+        <button
+            type="button"
+            class="close pull-right"
+            aria-label="Close"
+            (click)="modalRef.hide()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body pdL2 pdR2">
+        <form class="clearfix">
+            <div class="row">
+                <div class="col-sm-4"><label>Voucher Type</label></div>
+
+                <div class="col-sm-8">
+                    <sh-select [options]="voucherType"></sh-select>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col-sm-4"><label>Total Amount</label></div>
+
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <sh-select [options]="totalAmount"></sh-select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="00"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pull-right">
+                <button class="btn btn-md btn-success mrR1" type="submit">
+                    Search
+                </button>
+                <button class="btn btn-md btn-cancel" type="submit">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+<!-- advance search end -->
