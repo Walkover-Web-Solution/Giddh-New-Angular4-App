@@ -3310,6 +3310,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onBlurInvoiceDate() {
         if(!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
+            // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate();
         }
     }
