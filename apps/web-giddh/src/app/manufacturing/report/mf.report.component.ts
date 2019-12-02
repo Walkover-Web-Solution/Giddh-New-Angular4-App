@@ -59,7 +59,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	constructor(private store: Store<AppState>,
 	            private manufacturingActions: ManufacturingActions,
 	            private inventoryAction: InventoryAction,
-	            private router: Router, private bsConfig: BsDatepickerConfig) {
+	            private router: Router, public bsConfig: BsDatepickerConfig) {
 		this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
 		this.mfStockSearchRequest.product = '';
 		this.mfStockSearchRequest.searchBy = '';
