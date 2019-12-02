@@ -49,7 +49,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
     @ViewChild('uniqueName') public uniqueName: ElementRef;
     @ViewChild('stockName') public stockName: ElementRef;
-    
+
     @ViewChild('purchaseAccountUniqueName') public purchaseAccountUniqueName: any;
     @ViewChild('purchaseStockUnitCode') public purchaseStockUnitCode: any;
     @ViewChild('purchaseRate') public purchaseRate: ElementRef;
@@ -1112,7 +1112,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public showManufacturingQuantitySection() {
-        if(this.addStockForm.value.isFsStock) {
+        if (this.addStockForm.value.isFsStock) {
             setTimeout(() => {
                 this.manufacturingQuantity.nativeElement.focus();
             }, 200);
