@@ -472,7 +472,8 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="isUpdateMode"
-                                                    [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
+                                                    [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" 
+                                                    (blur)="onBlurInvoiceDate()" />
                                                 <p class="text-danger"
                                                     *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                                     Invalid Date
@@ -488,7 +489,8 @@
                                                     name="dueDate" class="form-control dateinvoice" bsDatepicker
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
-                                                    [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)" />
+                                                    [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                                                    (blur)="onBlurDueDate()" />
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
@@ -827,7 +829,7 @@
 
                                         <div class="productName">
                                             <div class="ng-select-wrap">
-                                                <sh-select [options]="salesAccounts$ | async"
+                                                <sh-select [options]="salesAccounts$ | async" #selectAccount
                                                     [(ngModel)]="transaction.fakeAccForSelect2"
                                                     name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                     (selected)="onSelectSalesAccount($event,transaction, entry)"
@@ -869,7 +871,7 @@
                                             <div class="discription">
                                                 <textarea type="text" placeholder="Add Description"
                                                     name="transaction.description_{{entryIdx}}" class="form-control"
-                                                    [(ngModel)]="transaction.description">
+                                                    [(ngModel)]="transaction.description" #description>
                   </textarea>
                                                 <p class="small text-muted sku_and_customfields"
                                                     *ngIf="transaction.sku_and_customfields">
