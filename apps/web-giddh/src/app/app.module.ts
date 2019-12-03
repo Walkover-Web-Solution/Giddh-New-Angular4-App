@@ -48,7 +48,6 @@ import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { IS_ELECTRON_WA } from './app.constant';
@@ -121,7 +120,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // SuccessComponent,
     NewUserComponent,
     BrowserDetectComponent,
-    WelcomeComponent,
     OnboardingComponent,
     LoaderComponent,
     SocialLoginCallbackComponent,

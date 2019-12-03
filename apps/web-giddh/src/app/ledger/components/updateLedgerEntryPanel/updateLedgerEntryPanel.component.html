@@ -596,10 +596,49 @@
 
             <div class="row d-flex d-sm-block">
                 <div class="col-md-6 pt-1">
-                    <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
-                        <div class="row">
-                            <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
-                                placeholder="Description"></textarea>
+                    <!-- make it functional (Developer end) -->
+                    <div class="" [ngClass]="{'col-xs-8': !vm.showNewEntryPanel}">
+                        <div class="row mrB2">
+                            <div class="col-sm-6 pdR1">
+                                <div class="selectWarehouse">
+                                    <label class="font-12">Select Warehouse</label>
+                                    <sh-select [options]="selectWarehouse">
+                                    </sh-select>
+                                </div>
+                            </div>
+
+                            <ng-template [ngIf]="vm.stockTrxEntry">
+                                <div class="col-sm-3 pdL1 pdR1">
+                                    <div class="table-amount text-right ">
+                                        <label class="font-12">Quantity</label>
+                                        <input type="text" name="" class="form-control text-right"
+                                               [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
+                                               [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
+                                               (change)="vm.inventoryQuantityChanged($event.target.value)"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 pdL1">
+                                    <div class="text-right table-amount">
+                                        <label class="font-12">Unit</label>
+                                        <select class="form-control text-right no-padding"
+                                                [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                                                (change)="vm.unitChanged($event.target.value)">
+                                            <option *ngFor="let item of vm.stockTrxEntry.unitRate"
+                                                    [value]="item.stockUnitCode">
+                                                {{item.stockUnitCode}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <div [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
+                                <div class="row">
+                                    <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                                        placeholder="Description"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -634,7 +673,8 @@
                                         <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
                                             [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                             (selected)="getInvoiveListsData($event)" [ItemHeight]="'auto'"
-                                            [width]="'161px'"></sh-select>
+                                            [width]="'161px'">
+                                        </sh-select>
                                     </div>
                                 </td>
 
@@ -817,14 +857,16 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
 
+
+
+        </div>
     </div>
-    <!-- endregion -->
 
 </div>
+<!-- endregion -->
+
 
 <!-- region modals -->
 <!--deleteAttachedFile  -->
