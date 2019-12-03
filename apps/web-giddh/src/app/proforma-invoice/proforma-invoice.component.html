@@ -113,7 +113,7 @@
                                                         [(ngModel)]="invFormData.voucherDetails.customerUniquename"
                                                         [customFilter]="customMoveGroupFilter"
                                                         (noOptionsFound)="noResultsForCustomer($event)"
-                                                        (selected)="onSelectCustomer($event)"
+                                                        (selected)="onSelectCustomer($event);"
                                                         [placeholder]="customerPlaceHolder" [notFoundLink]="true"
                                                         [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
                                                         [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
@@ -144,7 +144,7 @@
                                                 <!-- endregion -->
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="isCashInvoice">
-                                                    <input type="text" name="voucherDetails.customerName"
+                                                    <input type="text" name="voucherDetails.customerName" #inputCustomerName
                                                         class="form-control cashInvoiceInput"
                                                         [(ngModel)]="invFormData.voucherDetails.customerName"
                                                         (blur)='selectDefaultbank()' [readOnly]="isUpdateMode">
@@ -224,7 +224,7 @@
                                                                     (keyup)="autoFillShippingDetails()" rows="3"
                                                                     autocomplete="off"
                                                                     [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]"
-                                                                    autofocus="off" aria-autocomplete="none"></textarea>
+                                                                    autofocus="off" aria-autocomplete="none" #customerBillingAddress></textarea>
 
                                                                 <div class="">
                                                                     <div class="col-sm-6 pd ">
@@ -473,7 +473,7 @@
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="isUpdateMode"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" 
-                                                    (blur)="onBlurInvoiceDate()" />
+                                                    (blur)="onBlurInvoiceDate(0)" />
                                                 <p class="text-danger"
                                                     *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                                     Invalid Date
@@ -490,7 +490,7 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                     [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    (blur)="onBlurDueDate()" />
+                                                    (blur)="onBlurDueDate(0)" />
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
