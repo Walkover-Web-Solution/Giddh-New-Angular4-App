@@ -361,12 +361,12 @@
                     <td colspan="10" class="text-center empty_table">
                         <!--loading-->
                         <div class="no-data mrT2 loader-main">
-                                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                                <div class="spinner2">
-                                    <div class="cube1"></div>
-                                    <div class="cube2"></div>
-                                </div>
+                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
                             </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -397,7 +397,7 @@
     <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length>0">
         <!-- <span>{{activeGroupName}} Value:</span> -->
         <div class="sticky-footer stickyFooterSaleAmount">
-            <div class="innerContentFooter">
+            <div class="innerContentFooter" [ngClass]="{paddingR80: isProdEnv}">
 
                 <div class="row">
                     <div class="col-sm-3 pr-0">
