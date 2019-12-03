@@ -120,13 +120,9 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>State</label>
-                                        <div class="custom-select" *ngIf="gst.value.state.code && gst.value.state.name">
-                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" defaultValue="{{gst.value.state.code}} - {{gst.value.state.name}}" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                style="width:100%">
-                                            </sh-select>
-                                        </div>
-                                        <div class="custom-select" *ngIf="!gst.value.state.code && !gst.value.state.name">
-                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%">
+                                        <div class="custom-select">
+                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async"
+                                                formControlName="stateCode" style="width:100%">
                                             </sh-select>
                                         </div>
                                     </div>

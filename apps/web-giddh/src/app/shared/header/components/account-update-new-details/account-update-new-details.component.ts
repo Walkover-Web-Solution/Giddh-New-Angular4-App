@@ -436,6 +436,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            if (this.activeGroupUniqueName === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
@@ -823,7 +828,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-
+        if (this.activeGroupUniqueName === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
+        }
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
@@ -876,6 +885,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (gstForm && event.label) {
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
+
         }
 
     }
@@ -884,10 +894,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.activeGroupUniqueName = event.value;
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
+                this.isDebtorCreditor = true;
                 if (event.value === 'sundrycreditors') {
                     this.showBankDetail = true;
+                } else {
+                    this.showBankDetail = false;
                 }
-                this.isDebtorCreditor = true;
             } else {
                 this.isDebtorCreditor = false;
             }
