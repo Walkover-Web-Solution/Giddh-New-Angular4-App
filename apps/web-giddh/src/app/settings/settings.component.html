@@ -86,20 +86,16 @@
                         <setting-discount></setting-discount>
                     </div>
                 </tab>
-                <!--  commented due to under discussion
-
-        -->
-                <tab heading="" (select)="tagsTabSelected($event)">
-                    <div class="setting-container">
-                        <setting-bunch #bunchComp></setting-bunch>
-                    </div>
-                </tab>
                 <tab heading="Warehouse" [active]="activeTab === 'warehouse'" (select)="tabChanged('warehouse')">
                     <div class="setting-container">
                         <setting-warehouse></setting-warehouse>
                     </div>
                 </tab>
-
+                <tab heading="" (select)="tagsTabSelected($event)">
+                    <div class="setting-container">
+                        <setting-bunch #bunchComp></setting-bunch>
+                    </div>
+                </tab>
             </tabset>
 
         </div>
