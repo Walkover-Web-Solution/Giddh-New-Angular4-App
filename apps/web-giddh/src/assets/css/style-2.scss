@@ -8405,6 +8405,13 @@ GST filing
                     align-items: center;
                     display: flex;
                 }
+                button {
+                    transition: none !important;
+                }
+                .paddingR80{
+                    padding-right: 80px !important;
+                }
+/* responsive */
 
                 .ng-select-wrap.liq ng-select .below {
                     width: 100% !important;
