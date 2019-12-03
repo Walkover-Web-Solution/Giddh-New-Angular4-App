@@ -159,6 +159,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('customerBillingAddress') public customerBillingAddress: ElementRef;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public isProdEnv: boolean = false;
 
     public selectWarehouse = [
         { label: 'Warehouse 1', value: 'Warehouse 1' },
@@ -376,7 +377,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.showLoader = false;
 
-                if(this.isCashInvoice) {
+                if (this.isCashInvoice) {
                     this.focusInCustomerName();
                 }
             }
@@ -404,6 +405,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
+        this.isProdEnv = ENV === 'production';
         this.autoFillShipping = true;
         this.isUpdateMode = false;
 
