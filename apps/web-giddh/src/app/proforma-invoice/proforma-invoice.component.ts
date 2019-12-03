@@ -367,19 +367,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
-                if (this.isSalesInvoice) {
-                    setTimeout(() => {
-                        if (this.customerNameDropDown) {
-                            this.customerNameDropDown.show('');
-                        }
-                    }, 200);
-                } else if (this.isCashInvoice) {
-                    setTimeout(() => {
-                        if (this.inputCustomerName) {
-                            this.inputCustomerName.nativeElement.focus();
-                        }
-                    }, 200);
-                }
+                this.focusInCustomerName();
             }
         });
     }
@@ -1230,6 +1218,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
         this.ngAfterViewInit();
+        this.focusInCustomerName();
     }
 
     public triggerSubmitInvoiceForm(f: NgForm, isUpdate) {
@@ -3320,19 +3309,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onBlurDueDate(index) {
-        this.setActiveIndx(index);
-        setTimeout(() => {
-            let selectAccount = this.selectAccount.toArray();
-            if (selectAccount !== undefined && selectAccount[index] !== undefined) {
-                selectAccount[index].show('');
-            }
-        }, 200);
+        if (this.invFormData.voucherDetails.customerUniquename) {
+            this.setActiveIndx(index);
+            setTimeout(() => {
+                let selectAccount = this.selectAccount.toArray();
+                if (selectAccount !== undefined && selectAccount[index] !== undefined) {
+                    selectAccount[index].show('');
+                }
+            }, 200);
+        }
     }
 
     public onBlurInvoiceDate(index) {
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate(index);
+        }
+    }
+
+    public focusInCustomerName() {
+        if (this.isCashInvoice) {
+            setTimeout(() => {
+                if (this.inputCustomerName) {
+                    this.inputCustomerName.nativeElement.focus();
+                }
+            }, 200);
+        } else {
+            setTimeout(() => {
+                if (this.customerNameDropDown) {
+                    this.customerNameDropDown.show('');
+                }
+            }, 200);
         }
     }
 }
