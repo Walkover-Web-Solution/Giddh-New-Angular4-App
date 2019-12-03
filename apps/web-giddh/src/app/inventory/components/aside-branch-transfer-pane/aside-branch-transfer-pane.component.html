@@ -1,11 +1,11 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-
-  <div>
-    <ng-container>
-      <branch-transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async"
-        [stockUnits]="stockUnits$ | async" [branchList]="branches$ | async"  [currentCompany]="currentCompany" [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
-      </branch-transfer-note>
-    </ng-container>
-  </div>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+    <div>
+        <ng-container>
+            <branch-transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [branchList]="branches$ | async" [currentCompany]="currentCompany"
+                [isLoading]="isLoading" (onSave)="onSave($event)" (onCancel)="onCancel()">
+            </branch-transfer-note>
+        </ng-container>
+    </div>
 </div>
