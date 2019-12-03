@@ -216,7 +216,8 @@
                             <div class="clearfix">
 
                                 <div class="col-sm-4 pd0"
-                                    *ngIf="selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel'">
+                                    *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                    (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments

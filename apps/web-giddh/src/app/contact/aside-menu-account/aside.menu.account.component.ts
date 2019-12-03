@@ -18,61 +18,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 
 @Component({
     selector: 'aside-menu-account',
-    styles: [`
-      :host {
-          position: fixed;
-          left: auto;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          max-width: 760px;
-          width: 100%;
-          z-index: 99999;
-      }
-        .aside-pane{
-            padding:0 !important;
-    }
-
-      :host.in #close {
-          display: block;
-          position: fixed;
-          left: -41px;
-          top: 0;
-          z-index: 5;
-          border: 0;
-          border-radius: 0;
-      }
-
-      :host .container-fluid {
-          padding-left: 0;
-          padding-right: 0;
-      }
-
-      :host .aside-pane {
-          max-width: 760px;
-          width: 100%;
-      }
-.aside-body{
-    padding:0 15px;
-}
- .aside-pane-form {
-       background-color: #fff;
-       box-shadow: 0px 3px 6px #0000001A;
-       padding: 15px 15px;
-        height: calc(100vh - 90px);
-       overflow: scroll;
-       position: relative;
-       margin-top:15px;
-   }
-
-      @media (max-width: 575px) {
-          :host {
-              max-width: 275px;
-              width: 100%;
-          }
-
-      }
-  `],
+    styleUrls: ['aside.menu.account.component.scss'],
     templateUrl: './aside.menu.account.component.html'
 })
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {

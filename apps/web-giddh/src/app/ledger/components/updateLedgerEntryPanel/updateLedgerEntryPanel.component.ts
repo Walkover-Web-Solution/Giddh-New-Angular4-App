@@ -70,7 +70,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
-
+    public selectWarehouse = [
+        { label: 'Vijay Nagar', value: 'Vijay Nagar' },
+        { label: 'Gita Bhawan', value: 'Gita Bhawan' },
+        { label: 'Rajendra Nagar', value: 'Rajendra Nagar' },
+    ];
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;

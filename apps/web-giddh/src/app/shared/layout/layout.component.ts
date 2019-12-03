@@ -7,7 +7,7 @@ import { AfterViewInit, Component, OnInit, Input } from '@angular/core';
   #content_wrapper {
     min-height: calc(100vh - 120px);
     height: 100%;
-    padding-bottom: 90px;
+    /*padding-bottom: 80px;*/
   }
     `]
 })

@@ -1,102 +1,108 @@
-   .form_header {
-       padding: 20px 15px;
-       background: #1A237E;
-       color: #fff;
-   }
+.form_header {
+    padding: 20px 15px;
+    background: #1A237E;
+    color: #fff;
+}
 
-   .aside-pane-form {
-       background-color: #fff;
-       box-shadow: 0px 3px 6px #0000001A;
-       padding: 15px 15px;
-       //  height: 100vh;
-       overflow: scroll;
-       position: relative;
-   }
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0px 3px 6px #0000001A;
+    padding: 15px 15px;
+    //  height: 100vh;
+    overflow: scroll;
+    position: relative;
+}
 
-   .aside-pane-conatainer {
-       padding: 15px;
-       font-size: 14px;
-       color: #1c1c1c;
-   }
+.aside-pane-conatainer {
+    padding: 15px;
+    font-size: 14px;
+    color: #1c1c1c;
+}
 
-   .aside-pane-form label {
-       margin-bottom: 5px;
-       display: block;
-   }
+.aside-pane-form label {
+    margin-bottom: 5px;
+    display: block;
+}
 
-   .cr-dr-account {
-       position: relative;
-   }
+.cr-dr-account {
+    position: relative;
+}
 
-   .cr-dr-account span {
-       width: 36px;
-       display: inline-flex;
-       height: 36px;
-       text-align: center;
-       vertical-align: middle;
-       justify-content: center;
-       align-items: center;
-       position: absolute;
-       top: 25px;
-       right: 0;
-   }
+.cr-dr-account span {
+    width: 36px;
+    display: inline-flex;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 25px;
+    right: 0;
+}
 
-   span.dr-label {
-       right: 36px !important;
-   }
+span.dr-label {
+    right: 36px !important;
+}
 
-   .cr-dr-account span.active {
-       background-color: #5B64C9;
-       color: #fff;
-   }
+.cr-dr-account span.active {
+    background-color: #5B64C9;
+    color: #fff;
+}
 
-   .aside-pane-form .col-sm-4,
-   .aside-pane-form .col-sm-8,
-   .aside-pane-form .col-sm-10,
-   .aside-pane-form .col-sm-2,
-   .aside-pane-form .col-sm-6,
-   .aside-pane-form .col-sm-12 {
-       padding: 0 10px;
-   }
+.aside-pane-form .col-sm-4,
+.aside-pane-form .col-sm-8,
+.aside-pane-form .col-sm-10,
+.aside-pane-form .col-sm-2,
+.aside-pane-form .col-sm-6,
+.aside-pane-form .col-sm-12 {
+    padding: 0 10px;
+}
 
-   .upper-form {
-       margin-bottom: 20px;
-   }
+.upper-form {
+    margin-bottom: 20px;
+}
 
-   form.gstinForm {
-       padding-top: 15px;
-   }
+form.gstinForm {
+    padding-top: 15px;
+}
 
-   .add-address-default {
-       display: flex;
-       justify-content: space-between;
-       background-color: #d9d9d9;
-       padding: 6px 10px;
-       align-items: center;
-       margin: 20px 0;
-   }
+.add-address-default {
+    display: flex;
+    justify-content: space-between;
+    background-color: #d9d9d9;
+    padding: 6px 10px;
+    align-items: center;
+    margin: 20px 0;
+}
 
-   .add-address-default h3 {
-       font-size: 16px;
-       color: #1c1c1c;
-   }
+.add-address-default h3 {
+    font-size: 16px;
+    color: #1c1c1c;
+}
 
-   .contactForm,
-   .otherFormWrap,
-   .bankDetialsForm {
-       padding-top: 15px;
-   }
+.contactForm,
+.otherFormWrap,
+.bankDetialsForm {
+    padding-top: 15px;
+}
 
-   .otherForm .btn-pink {
-       display: block;
-   }
+.otherForm .btn-pink {
+    display: block;
+}
 
-   #asidePaneFormTabs ul.nav.nav-tabs {
-       display: flex;
-       align-items: flex-start;
-       flex-direction: row-reverse;
-       justify-content: flex-end;
-   }
-   .remove {
-        padding-top: 33px;
-    }
+#asidePaneFormTabs ul.nav.nav-tabs {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.remove {
+     padding-top: 33px;
+ }
+
+ @media(max-width:767px){
+     .upper-form .selectGroup {
+         margin-bottom: 15px;
+     }
+ }

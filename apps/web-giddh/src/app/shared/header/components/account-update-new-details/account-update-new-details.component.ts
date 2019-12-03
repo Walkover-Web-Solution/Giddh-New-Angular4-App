@@ -436,11 +436,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
-            if (this.activeGroupUniqueName === 'sundrycreditors') {
-                this.showBankDetail = true;
-            } else {
-                this.showBankDetail = false;
-            }
+            this.isShowBankDetails(this.activeGroupUniqueName);
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
@@ -828,11 +824,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        if (this.activeGroupUniqueName === 'sundrycreditors') {
-            this.showBankDetail = true;
-        } else {
-            this.showBankDetail = false;
-        }
+        this.isShowBankDetails(this.activeGroupUniqueName);
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
@@ -895,18 +887,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeGroupUniqueName = event.value;
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
-                if (event.value === 'sundrycreditors') {
-                    this.showBankDetail = true;
-                } else {
-                    this.showBankDetail = false;
-                }
+                this.isShowBankDetails(event.value);
             } else {
                 this.isDebtorCreditor = false;
             }
             this.isGroupSelected.emit(event.value);
         }
     }
-
+    public isShowBankDetails(accountType: string) {
+        if (accountType === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
+        }
+    }
     public getCountry() {
         this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
