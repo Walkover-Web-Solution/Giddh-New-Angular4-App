@@ -7,7 +7,6 @@ import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
 
-
 export enum VoucherTypeEnum {
     'sales' = 'sales',
     'purchase' = 'purchase',
@@ -113,6 +112,7 @@ export class GstDetailsClass {
     * */
     public stateCode?: string;
     public stateName?: string;
+
     constructor() {
         this.address = [];
         this.state = new StateCode();
@@ -121,6 +121,7 @@ export class GstDetailsClass {
 
 class CurrencyClass {
     public code: string;
+
     constructor(attrs?: any) {
         if (attrs) {
             this.code = attrs.currency;
@@ -146,6 +147,7 @@ export class AccountDetailsClass {
     public currencySymbol: string = '';
     public customerName: string;
     public mobileNumber?: string;
+
     constructor(attrs?: any) {
         //this.country = new CountryClass();
         this.currency = new CurrencyClass(attrs);
@@ -157,7 +159,7 @@ export class AccountDetailsClass {
             }
             Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email', 'attentionTo']));
             this.contactNumber = attrs.mobileNo || '';
-            //this.mobileNo = attrs.mobileNo || '';
+            this.mobileNumber = attrs.mobileNo || '';
             this.email = attrs.email || '';
             this.customerName = attrs.updatedBy.name || '';
             if (attrs.country) {
@@ -524,6 +526,7 @@ export class SalesAddBulkStockItems {
 export class CodeStockMulticurrency {
     code: string;
 }
+
 export class SalesStockItemMulticurrency {
     name: string;
     uniqueName: string;
@@ -533,6 +536,7 @@ export class SalesStockItemMulticurrency {
     skuCodeHeading?: string;
     stockUnit?: string;
 }
+
 export class StateCode {
     name: string;
     code: string;
@@ -570,6 +574,7 @@ export class TransactionClassMulticurrency {
     public amount: AmountClassMulticurrency;
     public stock?: SalesAddBulkStockItems;
     public description?: string;
+
     constructor() {
         this.account = new class implements INameUniqueName {
             name: 'sales';
@@ -608,4 +613,3 @@ export class DiscountMulticurrency {
         this.particular = ledgerDiscountClass.particular;
     }
 }
-

@@ -1,4 +1,4 @@
-<form name="addAccountForm" [formGroup]="addAccountForm">
+<form name="addAccountForm" class="createAccForm" [formGroup]="addAccountForm">
     <div class="">
         <div class="upper-form">
             <div class="row ">
@@ -160,13 +160,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
                                         <div class="form-group">
                                             <label class="d-block">&nbsp;</label>
-                                            <label *ngIf="gst.get('gstNumber').value && isGstValid">
-                                            <input type="checkbox" name="isComposite"
-                                                formControlName="isComposite"><label>&nbsp; Is Composite?
-                                            </label></label>
+                                            <label>
+                                                <input type="checkbox" name="isComposite"
+                                                    formControlName="isComposite"><label>&nbsp; Is Composite?
+                                                </label></label>
 
                                         </div>
                                     </div>
@@ -174,7 +174,8 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <span class="text-right">
-                                             <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                            <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
+                                                class="grey_clr btn btn-danger">
                                                 <i class="fa fa-times"> </i> Remove
                                             </a>
                                         </span>

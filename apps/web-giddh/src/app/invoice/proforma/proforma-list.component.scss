@@ -165,8 +165,8 @@ ul.selectActionDropdown {
   display: block;
 }
 .selectActionDropdown a:hover{
-  background-color: #e5e5e5;
-  color: #ff5f00;
+  color: $border-blue !important;
+    background: #EEEFF9 !important;
 }
 .dropdown-toggle.spcl_dropdown{
   color: $border-blueDark;

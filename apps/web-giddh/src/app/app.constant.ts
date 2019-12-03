@@ -36,7 +36,7 @@ if (typeof isElectron === 'undefined') {
  * Enum for type of on boarding
  *
  * @export
- * @enum {number}
+ * @enum {string}
  */
 export enum OnBoardingType {
     Warehouse = 'Warehouse',
