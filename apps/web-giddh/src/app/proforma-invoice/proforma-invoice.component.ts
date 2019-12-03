@@ -156,6 +156,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('description') public description: ElementRef;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public isProdEnv: boolean = false;
     public editCurrencyInputField: boolean = false;
     public showCurrencyValue: boolean = false;
     public autoSaveIcon: boolean = false;
@@ -391,6 +392,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
+        this.isProdEnv = ENV === 'production';
         this.autoFillShipping = true;
         this.isUpdateMode = false;
 
