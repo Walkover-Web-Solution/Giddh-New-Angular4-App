@@ -5,11 +5,13 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../../actions/common.actions';
+import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType } from '../../app.constant';
-import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
+import { GeneralService } from '../../services/general.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
 import { SettingsUtilityService } from '../services/settings-utility.service';
@@ -57,8 +59,10 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     constructor(
         private bsModalService: BsModalService,
         private commonActions: CommonActions,
+        private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private generalActions: GeneralActions,
+        private generalService: GeneralService,
         private itemOnBoardingActions: ItemOnBoardingActions,
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
@@ -105,6 +109,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public openCreateWarehouseModal(): void {
+        this.resetOnboardingForm();
         this.startOnBoarding();
         this.createNewWarehouseModal();
         this.warehouseOnBoardingModal.show();
@@ -198,6 +203,18 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.startOnBoarding();
         this.store.dispatch(this.itemOnBoardingActions.getItemUpdateAction(true));
         this.showWelcomePage();
+    }
+
+    /**
+     * Resets the on boarding form
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private resetOnboardingForm(): void {
+        this.generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
     /**
