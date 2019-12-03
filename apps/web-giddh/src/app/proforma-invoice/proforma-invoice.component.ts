@@ -159,6 +159,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('customerBillingAddress') public customerBillingAddress: ElementRef;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    public selectWarehouse = [
+        { label: 'Warehouse 1', value: 'Warehouse 1' },
+        { label: 'Warehouse 2', value: 'Warehouse 2' },
+        { label: 'Warehouse 3', value: 'Warehouse 3' },
+    ];
+
     public editCurrencyInputField: boolean = false;
     public showCurrencyValue: boolean = false;
     public autoSaveIcon: boolean = false;

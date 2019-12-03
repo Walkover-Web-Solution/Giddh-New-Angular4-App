@@ -29,7 +29,7 @@ const COMPARISON_FILTER = [
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
     styleUrls: ['./daybook-advance-search.component.scss']
- 
+
 })
 
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
