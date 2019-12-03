@@ -1,11 +1,11 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .reciptNoteHeader {
     display: flex;
     justify-content: space-between;
     background-color: #fff;
     border-bottom: 1px solid #d9d9d9;
     font-size: 18px;
-    font-family: 'opensans-bold';
+    font-family: "opensans-bold";
     padding: 15px 15px;
     align-items: center;
 }
@@ -25,125 +25,131 @@ section.reciptNote {
     vertical-align: middle;
     line-height: 2.5;
 }
-#table-recipt th, #table-recipt td {
+#table-recipt th,
+#table-recipt td {
     border-left: 1px solid #ddd !important;
 }
-#table-recipt td{
-  vertical-align: top !important;
+#table-recipt td {
+    vertical-align: top !important;
 }
 .tableSec .tableRow .tableCell {
     vertical-align: middle;
     text-align: right;
     padding-bottom: 7px;
     display: table-cell;
-        width: 200px;
+    width: 200px;
 }
 .tableSec .tableRow .figureCell {
     width: 140px;
     padding-right: 0;
 }
-.tableSec{
-  float: right;
-  margin-right: 35px;
+.tableSec {
+    float: right;
+    margin-right: 35px;
 }
 #table-recipt #tfoot tr td {
     border: none !important;
 }
-.copyReciptNote{
+.copyReciptNote {
     position: absolute;
     right: -60%;
     top: 9px;
     font-size: 12px;
-    color: #0C8FE6;
+    color: #0c8fe6;
     z-index: 9;
 }
-.senderDetails , .senderRecivers , .multipleRecivers{
-   font-size: 12px;
-   color: #0C8FE6;
-   margin-top: 7px;
-  }
-  .rightTotalAmount {
+.senderDetails,
+.senderRecivers,
+.multipleRecivers {
+    font-size: 12px;
+    color: #0c8fe6;
+    margin-top: 7px;
+}
+.rightTotalAmount {
     text-align: right;
     color: #1c1c1c;
 }
 
-  .rightTotalAmount h3 {
+.rightTotalAmount h3 {
     font-size: 26px;
     font-family: opensans-semibold;
 }
 
-.multipleProductsWrapper table thead  , .multipleReciverWrapper table thead {
+.multipleProductsWrapper table thead,
+.multipleReciverWrapper table thead {
     border-top: 1px solid #d9d9d9;
 }
-.multipleProductsWrapper table tbody  , .multipleReciverWrapper table tbody {
+.multipleProductsWrapper table tbody,
+.multipleReciverWrapper table tbody {
     border-bottom: 1px solid #d9d9d9;
 }
 #actionPane {
- background-color: #ccc;
- padding: 20px 0;
+    background-color: #ccc;
+    padding: 20px 0;
 }
-.btn-success-text{
-  background-color: #E6E6E6;
-  color: #28AB00;
+.btn-success-text {
+    background-color: #e6e6e6;
+    color: #28ab00;
 }
-.btn-danger:hover{
-    background-color: #E6E6E6;
+.btn-danger:hover {
+    background-color: #e6e6e6;
 }
 
 .hsnCodeDropdown {
-  position: absolute;
-  background-color: #fff;
-  border: 1px solid #c7c7c7;
-  border-radius: 3px;
-  width: 100%;
-  max-width: 250px;
-  left: auto;
-  top: 31px;
-  padding: 8px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-  right: 0;
-  z-index: 4;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #c7c7c7;
+    border-radius: 3px;
+    width: 100%;
+    max-width: 250px;
+    left: auto;
+    top: 31px;
+    padding: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    right: 0;
+    z-index: 4;
 }
-.skuNumberDropdown{
+.skuNumberDropdown {
     left: 0 !important;
 }
 .hsnCodeDropdown label {
-  font-size: 12px !important;
-  margin-bottom: 5px;
-  display: block;
+    font-size: 12px !important;
+    margin-bottom: 5px;
+    display: block;
 }
 
 .hsnCodeDropdown input {
-  width: 100%;
-  height: 28px !important;
-  padding: 5px;
-  max-width: 200px;
-  border: 1px solid #c7c7c7;
+    width: 100%;
+    height: 28px !important;
+    padding: 5px;
+    max-width: 200px;
+    border: 1px solid #c7c7c7;
 }
 
 .hsnCodeDropdown input::placeholder,
 .hsnCodeDropdown input::-webkit-input-placeholder {
-  color: #C6C6C6;
+    color: #c6c6c6;
 }
 
 .hsnCodeDropdown a {
-  display: inline-block;
-  text-align: center;
-  color: #CCCCCC;
-  padding: 5px 8px;
-  font-size: 16px;
+    display: inline-block;
+    text-align: center;
+    color: #cccccc;
+    padding: 5px 8px;
+    font-size: 16px;
 }
 
 .hsnCodeDropdown .btn-group {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .hsnCodeDropdown button.btn.btn-sm.btn-success,
 .bulkItemBtnGroup button.btn.btn-sm.btn-success {
-  background-color: #28AB00;
-  color: #fff;
+    background-color: #28ab00;
+    color: #fff;
 }
-.skuCode, .hsnCode{
+.skuCode,
+.hsnCode {
     padding: 5px 0;
 }
 /* new branch transfer list css  */
@@ -151,14 +157,14 @@ section.reciptNote {
     width: 230px;
 }
 .branch-transfer-report .inputWrapper {
-      display: block !important;
+    display: block !important;
     width: 100% !important;
     position: relative;
     height: 36px !important;
 }
 .branch-transfer-report .inputWrapper:before {
-       position: absolute;
-    content: '';
+    position: absolute;
+    content: "";
     display: block;
     height: 36px;
     width: 1px;
@@ -169,8 +175,8 @@ section.reciptNote {
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color:#d1d1d1 ;
-    background-image: url('../../../../assets/images/calender.svg') !important;
+    border-color: #d1d1d1;
+    background-image: url("../../../../assets/images/calender.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
@@ -179,11 +185,11 @@ section.reciptNote {
     z-index: 99;
     cursor: default;
 }
-.branch-transfer-report .input-group input.form-control:focus{
-    border-color:#d1d1d1 !important;
+.branch-transfer-report .input-group input.form-control:focus {
+    border-color: #d1d1d1 !important;
 }
 .branch-transfer-report .btn-group.show {
-    display: inline!important;
+    display: inline !important;
 }
 .branch-transfer-report .btn-group a {
     color: #333;
@@ -197,4 +203,66 @@ section.reciptNote {
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
     left: auto !important;
+}
+
+.td_in_searchBox div {
+    display: flex;
+}
+
+.td_in_searchBox div span {
+    padding-right: 8px;
+}
+
+.td_in_searchBox div i {
+    margin-top: 3px;
+    color: #8080808c;
+    padding-right: 8px;
+    cursor: pointer;
+}
+
+.td_in_searchBox {
+    padding: 0px !important;
+    position: relative;
+}
+.td_in_searchBox .input-container {
+    position: relative;
+}
+.td_in_searchBox .input-container input {
+    min-height: 38px;
+    width: 100%;
+    padding: 8px;
+    padding-right: 40px;
+    border: 0px;
+}
+
+.td_in_searchBox .input-container i {
+    position: absolute;
+    right: 0px;
+    top: 9px;
+}
+.td_in_searchBox .input-container input {
+    height: 50px;
+    min-width: 100%;
+    padding: 11px;
+    padding-right: 0;
+    color: #1c1c1c;
+    border: none;
+    background-color: #f2f2f2;
+}
+
+.advance-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 10px;
+    border: 1px solid $inputBorderColor;
+    border-radius: 2px;
+    color: $dark-blue00;
+    background: #fff;
+}
+.advance-icon:hover {
+    background: #eaeaea;
 }
