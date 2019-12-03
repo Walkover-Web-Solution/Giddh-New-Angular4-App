@@ -3,7 +3,7 @@
        background: #1A237E;
        color: #fff;
    }
-
+   
    .aside-pane-form {
        background-color: #fff;
        box-shadow: 0px 3px 6px #0000001A;
@@ -12,22 +12,22 @@
        overflow: scroll;
        position: relative;
    }
-
+   
    .aside-pane-conatainer {
        padding: 15px;
        font-size: 14px;
        color: #1c1c1c;
    }
-
+   
    .aside-pane-form label {
        margin-bottom: 5px;
        display: block;
    }
-
+   
    .cr-dr-account {
        position: relative;
    }
-
+   
    .cr-dr-account span {
        width: 36px;
        display: inline-flex;
@@ -40,16 +40,16 @@
        top: 25px;
        right: 0;
    }
-
+   
    span.dr-label {
        right: 36px !important;
    }
-
+   
    .cr-dr-account span.active {
        background-color: #5B64C9;
        color: #fff;
    }
-
+   
    .aside-pane-form .col-sm-4,
    .aside-pane-form .col-sm-8,
    .aside-pane-form .col-sm-10,
@@ -58,15 +58,15 @@
    .aside-pane-form .col-sm-12 {
        padding: 0 10px;
    }
-
+   
    .upper-form {
        margin-bottom: 20px;
    }
-
+   
    form.gstinForm {
        padding-top: 15px;
    }
-
+   
    .add-address-default {
        display: flex;
        justify-content: space-between;
@@ -75,23 +75,26 @@
        align-items: center;
        margin: 20px 0;
    }
-
+   
    .add-address-default h3 {
        font-size: 16px;
        color: #1c1c1c;
    }
-
-
-
+   
    .contactForm,
    .otherFormWrap,
-   .bankDetialsForm{
+   .bankDetialsForm {
        padding-top: 15px;
    }
-
+   
    .otherForm .btn-pink {
        display: block;
    }
-.updateBtnZindex{
-    z-index: 0;
-}
+   
+   .updateBtnZindex {
+       z-index: 0;
+   }
+   
+   .wd100 {
+       width: 100% !important;
+   }
