@@ -1,36 +1,35 @@
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
-import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
-import { LocationService } from '../../../../services/location.service';
-import { CompanyActions } from '../../../../actions/company.actions';
-import { GeneralActions } from '../../../../actions/general/general.actions';
-import { LoginActions } from '../../../../actions/login.action';
-import { CommonActions } from '../../../../actions/common.actions';
-import { select, Store } from '@ngrx/store';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../theme/ng-social-login-module/index';
-import { GeneralService } from '../../../../services/general.service';
-import { AuthenticationService } from '../../../../services/authentication.service';
-import { AppState } from '../../../../store';
+import { select, Store } from '@ngrx/store';
+import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
+import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
+import * as googleLibphonenumber from 'google-libphonenumber';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { CommonActions } from '../../actions/common.actions';
+import { CompanyActions } from '../../actions/company.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { LoginActions } from '../../actions/login.action';
+import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
+import { CountryRequest } from '../../models/api-models/Common';
 import {
-    CompanyRequest,
+    CompanyCreateRequest,
     CompanyResponse,
     SocketNewCompanyRequest,
     StateDetailsRequest,
-    CompanyCreateRequest
-} from '../../../../models/api-models/Company';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { CompanyService } from '../../../../services/companyService.service';
-import { ToasterService } from '../../../../services/toaster.service';
-import { CommonService } from '../../../../services/common.service';
-import { userLoginStateEnum } from '../../../../models/user-login-state';
-import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
-import { NgForm } from '@angular/forms';
-import { CountryRequest } from "../../../../models/api-models/Common";
-import * as googleLibphonenumber from 'google-libphonenumber';
-import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
+} from '../../models/api-models/Company';
+import { userLoginStateEnum } from '../../models/user-login-state';
+import { AuthenticationService } from '../../services/authentication.service';
+import { CompanyService } from '../../services/companyService.service';
+import { GeneralService } from '../../services/general.service';
+import { LocationService } from '../../services/location.service';
+import { ToasterService } from '../../services/toaster.service';
+import { AppState } from '../../store';
+import { AuthService } from '../../theme/ng-social-login-module';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     selector: 'on-boarding',
@@ -106,11 +105,20 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
 
-    constructor(private socialAuthService: AuthService,
-        private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-        private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-        private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-        private _toaster: ToasterService, private commonActions: CommonActions
+    constructor(
+        private socialAuthService: AuthService,
+        private store: Store<AppState>,
+        private verifyActions: VerifyMobileActions,
+        private companyActions: CompanyActions,
+        private _location: LocationService,
+        private _route: Router,
+        private _loginAction: LoginActions,
+        private _companyService: CompanyService,
+        private _aunthenticationService: AuthenticationService,
+        private _generalActions: GeneralActions,
+        private _generalService: GeneralService,
+        private _toaster: ToasterService,
+        private commonActions: CommonActions
     ) { }
 
     public ngOnInit() {

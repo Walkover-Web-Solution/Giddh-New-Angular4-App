@@ -8,7 +8,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType } from '../../app.constant';
-import { OnBoardingComponent } from '../../shared/header/components';
+import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ItemOnBoardingState } from '../../store/item-on-boarding/item-on-boarding.reducer';
 import { AppState } from '../../store/roots';
