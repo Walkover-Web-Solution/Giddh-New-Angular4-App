@@ -138,7 +138,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() itemDetails: any;
 
     /** States dropdown instance */
-    @ViewChild('states') statesDropdown: ElementRef<any>;
+    @ViewChild('states') statesDropdown: ShSelectComponent;
     /** GST number field */
     @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
 
@@ -662,11 +662,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.selectedBusinesstype === 'Registered') {
                 this.companyProfileObj.taxNumber = autoFillTaxNumber;
             }
-            if (this.gstNumberField) {
-                // Check the validity of GST number and select the state as per the GST
-                this.checkGstNumValidation(this.gstNumberField.nativeElement);
-                this.getStateCode(this.gstNumberField.nativeElement, this.statesDropdown.nativeElement);
-            }
+            setTimeout(() => {
+                // setTimeout is required as 'gstNumberField' viewchild is not present in ngOnInit() lifecycle
+                if (this.gstNumberField) {
+                    // Check the validity of GST number and select the state as per the GST
+                    this.checkGstNumValidation(this.gstNumberField.nativeElement);
+                    this.getStateCode(this.gstNumberField.nativeElement, this.statesDropdown);
+                }
+            });
         }
     }
 
