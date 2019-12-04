@@ -104,7 +104,7 @@
                                 <input type="text" [ngClass]="{'gstinWidth' : isbranch}" class="form-control"
                                     autocomplete="false" autocomplete="false" minlength="15" required maxlength="15"
                                     #gstNumberField
-                                    (keyup)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
+                                    (change)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
                                     name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 

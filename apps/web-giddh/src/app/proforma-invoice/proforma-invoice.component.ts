@@ -1157,12 +1157,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     setState(event) {
-        console.log(event);
+        
     }
 
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
         let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
-        if (gstVal.length >= 2) {
+        if (gstVal && gstVal.length >= 2) {
             let s = this.statesSource.find(item => item.value === gstVal.substr(0, 2));
             if (s) {
                 this.invFormData.accountDetails[type].stateCode = s.value;
@@ -1722,7 +1722,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             //------------------------
 
             // assign taxes and create fluctuation
-            if (o.stock && o.stock.stockTaxes) {
+            if (o.stock && o.stock.stockTaxes && o.stock.stockTaxes.length) {
                 o.stock.stockTaxes.forEach(t => {
                     let tax = this.companyTaxesList.find(f => f.uniqueName === t);
                     if (tax) {
@@ -3270,7 +3270,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onBlurDueDate(index) {
-        if (this.invFormData.voucherDetails.customerUniquename) {
+        if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
             setTimeout(() => {
                 let selectAccount = this.selectAccount.toArray();

@@ -7,6 +7,8 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    ViewChild,
+    ElementRef,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -134,6 +136,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /** Item details to be pre-filled in welcome form */
     @Input() itemDetails: any;
+
+    /** States dropdown instance */
+    @ViewChild('states') statesDropdown: ShSelectComponent;
+    /** GST number field */
+    @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -654,6 +661,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.selectedBusinesstype === 'Registered') {
                 this.companyProfileObj.taxNumber = autoFillTaxNumber;
             }
+            setTimeout(() => {
+                // setTimeout is required as 'gstNumberField' viewchild is not present in ngOnInit() lifecycle
+                if (this.gstNumberField) {
+                    // Check the validity of GST number and select the state as per the GST
+                    this.checkGstNumValidation(this.gstNumberField.nativeElement);
+                    this.getStateCode(this.gstNumberField.nativeElement, this.statesDropdown);
+                }
+            });
         }
     }
 

@@ -27,8 +27,7 @@
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <li role="menuitem" (click)="editWarehouse(warehouse)"><a
-                                            class="dropdown-item">Edit</a></li>
-                                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                                            class="dropdown-item">Edit</a>
                                     </li>
                                 </ul>
                             </div>
@@ -71,7 +70,7 @@
             <div class="col-sm-4 pdR1 ">
                 <div class="warehouseCard createNewWarehouseBtn">
                     <div class="">
-                        <button class="btn btn-pink" (click)="openCreateWarehouseModal()">
+                        <button class="btn btn-pink" (click)="resetOnboardingForm();openCreateWarehouseModal();">
                             Create New
                         </button>
                     </div>
