@@ -39,12 +39,21 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
+    @ViewChild('branchtransfertemplate') public branchtransfertemplate: ElementRef;
+
     public modalRef: BsModalRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompany: any = {};
     public voucherTypes: IOption[] = [];
     public amountOperators: IOption[] = [];
     public branchTransferResponse: NewBranchTransferListResponse;
+    public universalDate$: Observable<any>;
+    public datePicker: any[] = [];
+    public moment = moment;
+    public asidePaneState: string = 'out';
+    public asideTransferPaneState: string = 'out';
+    public branchTransferMode: string = '';
+    public inlineSearch: any = '';
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
@@ -62,14 +71,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         senderReceiver: null,
         warehouseName: null
     };
-    public universalDate$: Observable<any>;
-    public datePicker: any[] = [];
-    public moment = moment;
-    public asidePaneState: string = 'out';
-    public asideTransferPaneState: string = 'out';
-    public branchTransferMode: string = '';
-    
-    @ViewChild('branchtransfertemplate') public branchtransfertemplate: ElementRef;
+    public timeout: any;
 
     constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -107,7 +109,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this.branchTransferMode = value[1];
                 this.toggleTransferAsidePane();
                 this.openModal();
-            } else if(value[0] === "closebranchtransferpopup") {
+            } else if (value[0] === "closebranchtransferpopup") {
                 this.branchTransferMode = "";
                 this.hideModal();
             }
@@ -192,7 +194,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         );
     }
 
-    hideModal() {
+    public hideModal() {
         this.modalRef.hide();
+    }
+
+    public columnSearch() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+
+        this.timeout = setTimeout(() => {
+            this.getBranchTransferList(true);
+        }, 700);
     }
 }

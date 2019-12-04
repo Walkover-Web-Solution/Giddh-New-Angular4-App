@@ -21,27 +21,27 @@
         <div class="report-table">
             <table class="table basic">
                 <thead>
-                    <tr>
+                    <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
-                        <th width="10%%">Date</th>
+                        <th width="10%">Date</th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
                         <th width="10%" class="td_in_searchBox">
                             <div>
                                 <span>Sender/Receiver</span>
-                                <i class="icon-search"></i>
+                                <i class="icon-search" (click)="inlineSearch = 'senderReceiver'"></i>
                             </div>
-                            <div class="input-container" hidden>
-                                <input type="text" placeholder="Search Sender/Receiver" class="w100" />
+                            <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
+                                <input type="text" placeholder="Search Sender/Receiver" class="w100" name="senderReceiver" [(ngModel)]="branchTransferPostRequestParams.senderReceiver" (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
                         </th>
                         <th width="10%" class="td_in_searchBox">
                             <div>
                                 <span>Warehouse</span>
-                                <i class="icon-search"></i>
+                                <i class="icon-search" (click)="inlineSearch = 'warehouseName'"></i>
                             </div>
-                            <div class="input-container" hidden>
-                                <input type="text" placeholder="Warehouse" class="w100" />
+                            <div class="input-container" [hidden]="inlineSearch !== 'warehouseName'">
+                                <input type="text" placeholder="Warehouse" class="w100" name="warehouseName" [(ngModel)]="branchTransferPostRequestParams.warehouseName" (keypress)="columnSearch()" (keydown)="columnSearch()"  />
                             </div>
                         </th>
                         <th width="10%" class="text-right">Total Amount</th>
@@ -52,7 +52,7 @@
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
                         <td>{{ i+1 }}</td>
                         <td>{{ item.dateOfSupply }}</td>
-                        <td>{{ item.voucherType }}</td>
+                        <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Note</span><span *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
                         <td>{{ item.voucherNo }}</td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
@@ -64,12 +64,12 @@
                                 </a>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
-                                    <li role="menuitem">
+                                    <!-- <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Received</a>
                                     </li>
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Delivered</a>
-                                    </li>
+                                    </li> -->
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Delete</a>
                                     </li>
@@ -81,7 +81,7 @@
             </table>
         </div>
         <div class="paginationWrapper">
-            <pagination [totalItems]="branchTransferResponse.totalItems" [(ngModel)]="branchTransferResponse.page"
+            <pagination [totalItems]="branchTransferResponse.totalPages" [(ngModel)]="branchTransferResponse.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
