@@ -100,14 +100,6 @@
     padding: 0px;
 }
 
-#close {
-    position: fixed;
-    // left: -40px;
-    top: 0;
-    right: 467px;
-    transition: .5s all ease;
-}
-
 .aside-pane.aside-right.out button#close {
     right: -60px;
 }
@@ -150,6 +142,7 @@
 
 .aside-pane.aside-right.in {
     right: 0;
+    z-index: 9999;
 }
 
 .table-modal tbody td {
@@ -187,6 +180,7 @@
 .aside-overlay.in {
     visibility: visible;
     opacity: .6;
+    z-index: 9999;
 }
 
 .aside-overlay {

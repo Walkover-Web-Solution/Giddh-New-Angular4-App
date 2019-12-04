@@ -128,6 +128,12 @@ span.inputAddon {
   span.inputAddon{
     top: 0;
   }
+  .result-total {
+      position: relative;
+  }
+  .paginationWrapper {
+      margin-bottom: 0px;
+  }
 }
 @media(max-width:575px){
   .custumerRightWrap h4.mb-1.pdR2 {
