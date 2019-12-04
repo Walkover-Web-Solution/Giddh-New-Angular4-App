@@ -225,6 +225,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalService: GeneralService,
         private commonActions: CommonActions
     ) {
+        this.setCurrentPageHeading();
 
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
@@ -232,6 +233,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+
+        // SETTING PAGE HEADING
+        this.store.pipe(select(s => s.general.pageHeading), takeUntil(this.destroyed$)).subscribe(response => {
+            let pageHeadingResponse = _.clone(response);
+            if (pageHeadingResponse) {
+                this.selectedPage = pageHeadingResponse.pageHeading;
+            }
+        });
+
+        this.router.events.subscribe((val) => {
+            console.log(val);
+        });
 
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user) {
@@ -266,18 +279,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (!selectedCmp) {
                 return;
             }
-            // Sagar told to change the logic
-            // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
-            //   this.userIsSuperUser = true;
-            // } else {
-            //   this.userIsSuperUser = false;
-            // }
-            // new logic
-            // if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
-            //   this.userIsSuperUser = false;
-            // } else {
-            //   this.userIsSuperUser = true;
-            // }
+
             if (selectedCmp) {
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
@@ -464,7 +466,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
 
                 if (route) {
-                    this.selectedPage = route.name;
+                    //this.selectedPage = route.name;
                     return;
                 }
             } else {
@@ -472,7 +474,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     .substring(7, page.uniqueName.length)
                     .includes(lastState.replace('pages/', '')));
                 if (lastStateName) {
-                    return this.selectedPage = lastStateName.name;
+                    //return this.selectedPage = lastStateName.name;
                 } else if (lastState.includes('ledger/')) {
 
                     let isDestroyed: Subject<boolean> = new Subject<boolean>();
@@ -481,13 +483,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         if (acc) {
                             this.isLedgerAccSelected = true;
                             this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-                            this.selectedPage = 'ledger - ' + acc.name;
+                            //this.selectedPage = 'ledger - ' + acc.name;
                             isDestroyed.next(true);
                             return this.navigateToUser = false;
                         }
                     });
                 } else if (this.selectedPage === 'gst') {
-                    this.selectedPage = 'GST';
+                    //this.selectedPage = 'GST';
                 }
             }
         });
@@ -633,7 +635,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public vendorOrCustomer(path: string) {
-        this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
+        //this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
     }
 
     public handleNoResultFoundEmitter(e: any) {
@@ -700,6 +702,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
         this.doEntryInDb('menus', menu);
+
+        this.store.dispatch(this._generalActions.setPageTitle(menu.name));
 
         if (menu.additional) {
             this.router.navigate([pageName], { queryParams: menu.additional });
@@ -1223,12 +1227,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
         if (entity === 'menus') {
-            this.selectedPage = item.name;
+            //this.selectedPage = item.name;
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
             this.selectedLedgerName = item.uniqueName;
-            this.selectedPage = 'ledger - ' + item.name;
+            //this.selectedPage = 'ledger - ' + item.name;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -1342,4 +1346,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
+    public setCurrentPageHeading() {
+        let currentPageHeading = NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === this.router.url) {
+                return page.name;
+            }
+        });
+
+        if (currentPageHeading) {
+            this.store.dispatch(this._generalActions.setPageTitle(currentPageHeading.name));
+        }
+    }
 }
