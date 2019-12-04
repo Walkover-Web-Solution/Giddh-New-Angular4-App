@@ -372,7 +372,7 @@ span.inputAddon {
 }
 
 }
-@media(max-width:767px){
+@media(max-width:767px) {
   span.inputAddon{
     top: 0;
   }
@@ -393,6 +393,15 @@ span.inputAddon {
   }
   .customer-footer-box {
     padding-top: 0;
+  }
+  .custumerRightWrap {
+        position: relative;
+  }
+  .pagination-main .mt-5 {
+    margin-top: 0px;
+  }
+  .paginationWrapper {
+    margin-bottom: 0px !important;
   }
 }
 @media(max-width:652px){
