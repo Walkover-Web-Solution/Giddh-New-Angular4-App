@@ -225,6 +225,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalService: GeneralService,
         private commonActions: CommonActions
     ) {
+        // SETTING PAGE HEADING BY DEFAULT
         this.setCurrentPageHeading();
 
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -234,7 +235,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
-        // SETTING PAGE HEADING
+        // GETTING PAGE HEADING
         this.store.pipe(select(s => s.general.pageHeading), takeUntil(this.destroyed$)).subscribe(response => {
             let pageHeadingResponse = _.clone(response);
             if (pageHeadingResponse) {
@@ -242,8 +243,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.router.events.subscribe((val) => {
-            console.log(val);
+        // SETTING PAGE HEADING ON ROUTING CHANGE
+        this.router.events.subscribe((routeChanged) => {
+            this.setCurrentPageHeading();
         });
 
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
