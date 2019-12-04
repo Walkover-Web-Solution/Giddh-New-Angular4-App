@@ -524,11 +524,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
             if (res) {
                 this.isLoading = false;
-                this.initFormFields();
-                this.tempDateParams.dateOfSupply = "";
-                this.tempDateParams.dispatchedDate = "";
-                this._toasty.successToast(res.message, "Success");
-                this._router.navigate(['/inventory', 'report']);
+                if(res.status === 'success') {
+                    this.initFormFields();
+                    this.tempDateParams.dateOfSupply = "";
+                    this.tempDateParams.dispatchedDate = "";
+                    this._toasty.successToast(res.message, "Success");
+                    this._router.navigate(['/pages', 'inventory', 'report']);
+                } else {
+                    this._toasty.errorToast(res.message, res.code);
+                }
             } else {
                 this._toasty.errorToast(res.message, res.code);
             }
