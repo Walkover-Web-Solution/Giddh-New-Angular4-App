@@ -436,7 +436,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        console.log('Destroyed');
     }
 
     public getCountry() {
