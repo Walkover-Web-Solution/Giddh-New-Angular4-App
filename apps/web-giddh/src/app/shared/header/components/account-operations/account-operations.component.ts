@@ -339,7 +339,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let flattenGroupsList: IOption[] = [];
 
                 grpsList.forEach(grp => {
-                    flattenGroupsList.push({ label: grp.name, value: grp.uniqueName });
+                    flattenGroupsList.push({ label: grp.name, value: grp.uniqueName, additional: grp.parentGroups });
                 });
                 this.groupsList = flattenGroupsList;
                 this.groupsListBackUp = flattenGroupsList;
