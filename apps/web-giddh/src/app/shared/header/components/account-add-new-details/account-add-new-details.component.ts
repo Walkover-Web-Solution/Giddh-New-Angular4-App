@@ -100,6 +100,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+        } if (this.activeGroupUniqueName === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
         }
         this.initializeNewForm();
 
@@ -238,6 +242,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            if (activegroupName === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
@@ -575,6 +584,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 if (event.value === 'sundrycreditors') {
                     this.showBankDetail = true;
+                } else {
+                    this.showBankDetail = false;
                 }
                 this.isDebtorCreditor = true;
             } else {

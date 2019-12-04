@@ -81,17 +81,20 @@ form.gstinForm {
     color: #1c1c1c;
 }
 
-
-
 .contactForm,
 .otherFormWrap,
-.bankDetialsForm{
+.bankDetialsForm {
     padding-top: 15px;
 }
 
 .otherForm .btn-pink {
     display: block;
 }
-.updateBtnZindex{
- z-index: 0;
+
+.updateBtnZindex {
+    z-index: 0;
+}
+
+.wd100 {
+    width: 100% !important;
 }

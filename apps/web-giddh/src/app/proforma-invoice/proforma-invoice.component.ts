@@ -1722,7 +1722,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             //------------------------
 
             // assign taxes and create fluctuation
-            if (o.stock && o.stock.stockTaxes) {
+            if (o.stock && o.stock.stockTaxes && o.stock.stockTaxes.length) {
                 o.stock.stockTaxes.forEach(t => {
                     let tax = this.companyTaxesList.find(f => f.uniqueName === t);
                     if (tax) {
