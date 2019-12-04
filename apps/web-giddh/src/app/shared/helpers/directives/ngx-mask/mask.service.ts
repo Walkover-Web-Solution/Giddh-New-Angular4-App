@@ -318,7 +318,7 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
                 return result === ''
                     ? result
-                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters.filter(f => f !== '.')));
+                    : this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters.filter(f => f !== '.'));
             }
             return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
         }
