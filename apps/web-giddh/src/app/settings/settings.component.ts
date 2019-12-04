@@ -20,6 +20,7 @@ import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { WarehouseActions } from './warehouse/action/warehouse.action';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -60,6 +61,7 @@ export class SettingsComponent implements OnInit {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
+        private warehouseActions: WarehouseActions
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -153,6 +155,7 @@ export class SettingsComponent implements OnInit {
     public tabChanged(tab: string) {
         this.setStateDetails(tab);
         this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+        this.loadModuleData(tab);
         this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
     }
 
@@ -179,20 +182,20 @@ export class SettingsComponent implements OnInit {
 
     private getRedirectUrl(baseHref: string) {
         if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/pages/settings?tab=integration';
+            return 'http://dev.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/settings?tab=integration';
+            return 'http://test.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/settings?tab=integration';
+            return 'http://stage.giddh.com/app/pages/settings?tab=integration';
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
             return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
         } else {
-            return 'https://app.giddh.com/pages/settings?tab=integration';
+            return 'https://giddh.com/app/pages/settings?tab=integration';
         }
     }
 
     private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+        if (baseHref === 'https://giddh.com/' || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
@@ -215,4 +218,17 @@ export class SettingsComponent implements OnInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
+    /**
+     * Fetches the data for a particular module by calling
+     * respective API
+     *
+     * @private
+     * @param {string} tabName Currently active tab name
+     * @memberof SettingsComponent
+     */
+    private loadModuleData(tabName: string): void {
+        if (tabName === 'warehouse') {
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
+        }
+    }
 }

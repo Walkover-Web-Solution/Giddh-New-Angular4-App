@@ -284,8 +284,7 @@ table th {
   align-items: center;
 }
 .sales-register-table {
-    height: 62vh;
-    overflow-y: auto;
+    padding-bottom: 170px;
 }
 @media (max-width: 1366px) {
   .main-sale-register-box {
@@ -303,7 +302,6 @@ table th {
 }
 @media (max-width: 991px) {
     .sales-register-table {
-        height: auto;
-        overflow-y: inherit;
+        padding-bottom: 50px;
     }
   }

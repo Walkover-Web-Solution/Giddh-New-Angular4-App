@@ -27,9 +27,6 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
     selector: 'account-add-new-details',
-    styles: [`
-
-  `],
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
 })
@@ -103,6 +100,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+        } if (this.activeGroupUniqueName === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
         }
         this.initializeNewForm();
 
@@ -241,9 +242,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            if (activegroupName === 'sundrycreditors') {
+                this.showBankDetail = true;
+            }
             this.isDebtorCreditor = true;
-        } else {
-            this.isDebtorCreditor = false;
         }
 
     }
@@ -575,12 +577,23 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
-                this.isDebtorCreditor = true;
-            } else {
-                this.isDebtorCreditor = false;
+            let parent = event.additional;
+            if (parent[1]) {
+                this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+        }
+    }
+    public isParentDebtorCreditor(activeParentgroup: string) {
+        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
+            if (activeParentgroup === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
         }
     }
 

@@ -141,7 +141,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.pettycashRequest.sortBy = key;
         this.pettycashRequest.sort = ord;
         this.getPettyCashRejectedReports(this.pettycashRequest);
-        this.isFilteredSelected.emit(true);
     }
 
     public pageChanged(ev: any): void {

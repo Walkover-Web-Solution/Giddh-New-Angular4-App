@@ -190,6 +190,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         let flattenItem = cloneDeep(accountData.body);
         flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
+
+          /*
+           check if we account have applicable taxes
+           if yes then parse it because when we create account then we receive applicableTaxes array as INameUniqueName
+           but in flatten accounts we only stores string array [ uniqueName of tax only ]
+           */
+        if (flattenItem.applicableTaxes) {
+            flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
+        }
+
         return {
           ...state,
           groupswithaccounts: groupArray,

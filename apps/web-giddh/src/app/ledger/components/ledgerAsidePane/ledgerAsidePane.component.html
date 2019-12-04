@@ -1,6 +1,10 @@
 <div class="aside-pane">
 
-    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()" *ngIf="!hideFirstScreen">X</button>
+    <button id="close" class="btn btn-sm btn-primary" [ngClass]="hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' "
+        (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+
+
+
     <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="hideFirstScreen"><i
             class="fa fa-arrow-left"></i></button>
 

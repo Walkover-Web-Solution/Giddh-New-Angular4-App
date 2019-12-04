@@ -51,7 +51,7 @@
 }
 
 .td_in_searchBox div span {
-    // flex: 1 1 auto;
+    /*flex: 1 1 auto;*/
     padding: 8px 0 8px 10px;
 }
 
@@ -322,9 +322,6 @@ ul.selectActionDropdown {
       color: $border-blue !important;
     background: #EEEFF9 !important;
 }
-.dropdown-toggle{
-  color: #333;
-}
 .addInvoice .dropdown-toggle {
   color: #fff;
 }
@@ -429,18 +426,9 @@ button.btn.btn-filter span.icon-cross {
   color: #1C1C1C;
 }
 
-// table{
-//   position: relative;
-// }
-// .basic > thead > tr > th{
-//     position: sticky !important;
-//     top: 59px;
-//     z-index: 99;
-//     box-shadow: 1px 1px 0 #d9d9d9;
-// }
 .inputWrapper {
-      display: block !important;
-    width: 100% !important;
+    display: block !important;
+    width: 200px !important;
     position: relative;
     height: 36px !important;
 }
@@ -584,12 +572,6 @@ button.btn.btn-filter span.icon-cross {
   .mobileSearch .input-container input{
     font-size: 13px;
   }
-.addInvoice{
-  display: none;
-}
-.moreExportBtn{
-  margin-top: 10px;
-}
 .input-grp-dateRangePicker .form-group {
   margin-bottom: 10px;
 }
@@ -598,11 +580,7 @@ button.btn.btn-filter span.icon-cross {
   }
 }
 
-@media(max-width:767px){
-  .mobileSearch {
-
-    margin-top: 20px;
-}
+@media(max-width:767px) {
 .invoice-modal-content:after, .invoice-modal-content {
     top: 131px;
 }
@@ -626,20 +604,6 @@ button.btn.btn-filter span.icon-cross {
     margin-bottom: 28px;
 
   }
-
-  .date-advanceSearch {
-    display: block;
-  }
-
-
-  .date-advanceSearch .btn-wrapper button {
-    float: left;
-    width: 48%;
-  }
-
-  .date-advanceSearch .btn-wrapper {
-    width: 100%;
-  }
   #dropdown-ddl-newinv {
     right: -20px !important;
 }
@@ -647,9 +611,6 @@ button.btn.btn-filter span.icon-cross {
     display: flex;
     padding: 10px 0;
   }
-  .date-advanceSearch .input-group {
-    width: 49%;
-}
 }
 
 @media (max-width: 420px) {
@@ -664,9 +625,6 @@ button.btn.btn-filter span.icon-cross {
   }
 }
 @media(max-width:360px){
-  .input-grp-dateRangePicker .d-flex {
-    flex-direction: column;
-}
 .date-advanceSearch .input-group {
   width: 100%;
 }

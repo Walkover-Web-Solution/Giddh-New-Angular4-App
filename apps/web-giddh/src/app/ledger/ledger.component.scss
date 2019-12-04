@@ -566,3 +566,11 @@ sh-select:focus {
     border-right: 1px solid #d1d1d1;
 }
 }
+@media(max-width:575px){
+    .debitCreditAmount {
+    display: block !important;
+}
+.stat-block{
+        padding-left: 15px;
+}
+}

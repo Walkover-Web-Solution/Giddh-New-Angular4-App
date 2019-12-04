@@ -4,7 +4,6 @@ import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginStateEnum } from '../models/user-login-state';
-import { environment } from '../../environments/environment';
 
 
 @Injectable()
@@ -18,11 +17,8 @@ export class NeedsAuthentication implements CanActivate {
         this._router.navigate(['/new-user']);
       }
       if (p === userLoginStateEnum.notLoggedIn) {
-        if (isElectron) {
-            this._router.navigate(['/login']);
-        } else {
-            window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
-        }
+        console.log('NeedsAuthentication');
+        this._router.navigate(['/login']);
       }
       // console.log(userLoginStateEnum.userLoggedIn);
       // console.log('from nedd authentication' + (p === userLoginStateEnum.userLoggedIn));

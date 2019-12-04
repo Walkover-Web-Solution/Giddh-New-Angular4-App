@@ -115,7 +115,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
         });
 
         let flatGrps: IOption[] = items.map(m => {
-            return { label: m.groupName, value: m.groupUniqueName };
+            return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
         });
 
         this.flatAccountWGroupsList$ = of(flatGrps);
