@@ -20,6 +20,7 @@ import { BunchComponent } from './bunch/bunch.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
+import { WarehouseActions } from './warehouse/action/warehouse.action';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -60,6 +61,7 @@ export class SettingsComponent implements OnInit {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
+        private warehouseActions: WarehouseActions
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
@@ -215,4 +217,17 @@ export class SettingsComponent implements OnInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
+    /**
+     * Fetches the data for a particular module by calling
+     * respective API
+     *
+     * @private
+     * @param {string} tabName Currently active tab name
+     * @memberof SettingsComponent
+     */
+    private loadModuleData(tabName: string): void {
+        if (tabName === 'warehouse') {
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
+        }
+    }
 }

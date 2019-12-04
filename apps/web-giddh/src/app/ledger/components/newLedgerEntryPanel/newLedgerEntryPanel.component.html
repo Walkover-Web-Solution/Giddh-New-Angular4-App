@@ -222,7 +222,7 @@
                 <div class="form-group">
                   <label class="default_clr">Voucher Type</label>
                   <sh-select #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
-                    (selected)="getInvoiveListsData($event)" [notFoundLink]="true" [placeholder]="'Select Vouchers'"
+                    (selected)="getInvoiveListsData($event)" [placeholder]="'Select Vouchers'"
                     [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'" [style.width.px]="161"></sh-select>
                 </div>
               </td>

@@ -1,21 +1,19 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
-  <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
-    <div class="pd1 alC">
-      <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Product</button>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
+    <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
+        <div class="pd1 alC">
+            <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Product</button>
+        </div>
+        <div class="pd1 alC">
+            <button class="btn btn-lg btn-primary" (click)="toggleServicePane()">Add Service</button>
+        </div>
     </div>
-    <div class="pd1 alC">
-      <button class="btn btn-lg btn-primary" (click)="toggleServicePane()">Add Service</button>
-    </div>
-  </div>
 
-  <div class="aside-body flexy-child-1 row" *ngIf="isAddStockOpen">
-    <sales-create-stock (closeAsideEvent)="closeAsidePane($event)"
-                        (animateAside)="animateAside($event)"></sales-create-stock>
-  </div>
-  <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
-    <create-account-service (closeAsideEvent)="closeAsidePane($event)"></create-account-service>
-  </div>
+    <div class="aside-body flexy-child-1 row" *ngIf="isAddStockOpen">
+        <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)"
+            (animateAside)="animateAside($event)"></sales-create-stock>
+    </div>
+    <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
+        <create-account-service (closeAsideEvent)="closeAsidePane($event)"></create-account-service>
+    </div>
 </div>
- 
-

@@ -236,12 +236,12 @@
 
 
 
-<div class="right-modal">
+<div class="right-modal accountAsideMenuState2">
     <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
     <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()">X</button>
-        <div class="aside-header">
-            <h3 class="aside-title pd-1 pl-2">Manage Transporter</h3>
+        <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()"><i class="icon-cross"></i></button>
+        <div class="form_header">
+            <h3 class="aside-title pl-2">Manage Transporter</h3>
         </div>
         <form #generateTransporterForm="ngForm" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
@@ -378,8 +378,8 @@
                     <input type="text" class="form-control" placeholder="MH02B8989">
                 </div>
             </div>
-            
-        
+
+
         </div>
 
         <div class="aside-body pd-2 bg-white">

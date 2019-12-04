@@ -1,11 +1,11 @@
-<form name="addAccountForm" [formGroup]="addAccountForm">
+<form name="addAccountForm" class="createAccForm" [formGroup]="addAccountForm">
     <div class="">
         <div class="upper-form">
             <div class="row ">
                 <div class="col-sm-4">
                     <div class="ng-select-wrap liq selectGroup">
                         <label>Select Group<span class="red-text">*</span> </label>
-                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
+                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item fs12">{{option?.value}}</div>
@@ -121,8 +121,8 @@
                                     <div class="form-group">
                                         <label>State</label>
                                         <div class="custom-select">
-                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" defaultValue="{{gst.value.state.code}} - {{gst.value.state.name}}" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                style="width:100%">
+                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async"
+                                                formControlName="stateCode" class="wd100">
                                             </sh-select>
                                         </div>
                                     </div>
@@ -156,13 +156,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
                                         <div class="form-group">
                                             <label class="d-block">&nbsp;</label>
-                                            <label *ngIf="gst.get('gstNumber').value && isGstValid">
-                                            <input type="checkbox" name="isComposite"
-                                                formControlName="isComposite"><label>&nbsp; Is Composite?
-                                            </label></label>
+                                            <label>
+                                                <input type="checkbox" name="isComposite"
+                                                    formControlName="isComposite"><label>&nbsp; Is Composite?
+                                                </label></label>
 
                                         </div>
                                     </div>
@@ -170,7 +170,8 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <span class="text-right">
-                                             <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                            <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
+                                                class="grey_clr btn btn-danger">
                                                 <i class="fa fa-times"> </i> Remove
                                             </a>
                                         </span>
@@ -356,20 +357,23 @@
 
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
-    <!-- <div class="row ">
-        <div class="col-sm-6 ">
+    <div class="row ">
+        <div class="col-xs-12 mrB2 selectBox">
             <div class="form-group ">
-                <label>Default Discount</label>
-                <input type="text " disabled class="form-control " placeholder="Select Discount ">
+                <label>Default discount <span
+                        class="primary_clr"></span></label>
+                <div class="clearfix">
+                    <span>
+                        <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
+                    </span>
+                    <span class="pull-right">
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
+                    </span>
+
+                </div>
             </div>
         </div>
-        <div class="col-sm-6 ">
-            <div class="form-group ">
-                <label>Default Tax</label>
-                <input type="text " disabled class="form-control " placeholder="Select Tax ">
-            </div>
-        </div>
-    </div> -->
+    </div>
     <div *ngIf="(activeAccount$ | async)" class="form-group">
         <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
             <div class="row">
