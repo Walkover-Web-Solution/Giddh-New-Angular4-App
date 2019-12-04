@@ -57,7 +57,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('shCategory') public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
-    public isProdEnv: boolean = false;
+
     public today: Date = new Date();
     public activeStock$: string;
     public stockReport$: Observable<StockReportResponse>;
@@ -286,7 +286,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public ngOnInit() {
-        this.isProdEnv = ENV === 'production';
+
+
 
         if (this.route.firstChild) {
             this.route.firstChild.params.pipe(take(1)).subscribe(s => {
