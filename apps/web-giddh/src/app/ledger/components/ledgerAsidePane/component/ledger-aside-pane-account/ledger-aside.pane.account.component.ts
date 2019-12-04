@@ -59,7 +59,8 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
                 let groupsListArray: IOption[] = [];
                 result.body.results = this.removeFixedGroupsFromArr(result.body.results);
                 result.body.results.forEach(a => {
-                    groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
+                    let parentgroup = a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
+                    groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
                 });
                 this.flattenGroupsArray = groupsListArray;
             }

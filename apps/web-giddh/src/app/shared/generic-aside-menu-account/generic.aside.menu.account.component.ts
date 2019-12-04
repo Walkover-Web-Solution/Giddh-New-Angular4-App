@@ -154,7 +154,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         });
 
         let flatGrps: IOption[] = items.map(m => {
-            return { label: m.groupName, value: m.groupUniqueName };
+            return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
         });
 
         this.flatAccountWGroupsList$ = of(flatGrps);
