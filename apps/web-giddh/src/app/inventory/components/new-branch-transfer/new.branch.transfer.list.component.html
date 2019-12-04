@@ -4,10 +4,12 @@
             <div class="col-sm-6 form-group d-flex">
                 <div class="input-group ">
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
+                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker"
+                            (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
                     </span>
                 </div>
-                <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="openSearchModal(template)">
+                <div class="advance-icon" style="align-items: center" tooltip="Advance Search"
+                    (click)="openSearchModal(template)">
                     <span class="icon-advance-serch"></span>
                 </div>
             </div>
@@ -98,7 +100,8 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select name="voucherType" [(ngModel)]="branchTransferPostRequestParams.voucherType" [options]="voucherTypes"></sh-select>
+                    <sh-select name="voucherType" [(ngModel)]="branchTransferPostRequestParams.voucherType"
+                        [options]="voucherTypes"></sh-select>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -106,10 +109,13 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select name="amountOperators" [(ngModel)]="branchTransferPostRequestParams.amountOperators" [options]="amountOperators"></sh-select>
+                            <sh-select name="amountOperators"
+                                [(ngModel)]="branchTransferPostRequestParams.amountOperators"
+                                [options]="amountOperators"></sh-select>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferPostRequestParams.amount" />
+                            <input type="text" class="form-control" placeholder="0" name="amount"
+                                [(ngModel)]="branchTransferPostRequestParams.amount" />
                         </div>
                     </div>
                 </div>
@@ -129,15 +135,13 @@
 
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
-<aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+<aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"
+    [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">Modal</h4>
-        </div>
         <div class="modal-body">
             <new-branch-transfer [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>

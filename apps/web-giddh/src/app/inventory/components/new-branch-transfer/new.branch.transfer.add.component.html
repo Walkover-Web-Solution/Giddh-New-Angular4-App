@@ -13,7 +13,7 @@
 	<div class="reciptNoteContent">
 		<div class="multipleProductsWrapper">
 			<form #newBranchTransferForm="ngForm" novalidate="">
-				<div class="multipleProducts clearfix">
+				<div class="multipleProducts row clearfix">
 					<div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
 						<div class="row mrB2">
 							<div class="col-md-3">
@@ -229,23 +229,23 @@
 					<table class="table  basic" id="table-recipt">
 						<thead *ngIf="transferType === 'products'">
 	                        <tr>
-	                            <th>#</th>
-	                            <th>Product Description</th>
-	                            <th>Qty/Unit</th>
-		                        <th>Rate</th>
-	                            <th>Amount</th>
-	                            <th>&nbsp;</th>
+	                            <th width="2%">#</th>
+	                            <th width="30%">Product Description</th>
+	                            <th width="20%">Qty/Unit</th>
+		                        <th width="20%">Rate</th>
+	                            <th width="20%">Amount</th>
+	                            
 	                        </tr>
 						</thead>
 	                    <thead *ngIf="transferType !== 'products'">
 	                        <tr>
-	                            <th>#</th>
-	                            <th *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
-	                            <th *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
-	                            <th>Qty/Unit</th>
-		                        <th>Rate</th>
-	                            <th>Amount</th>
-	                            <th>&nbsp;</th>
+	                            <th width="2%">#</th>
+	                            <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
+	                            <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
+	                            <th width="20%">Qty/Unit</th>
+		                        <th width="20%">Rate</th>
+	                            <th width="20%">Amount</th>
+	                           
 	                        </tr>
 	                    </thead>
 						<tbody *ngIf="transferType === 'products'">
@@ -315,17 +315,18 @@
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.rate | giddhCurrency}}</div>
 			                        </div>
 		                        </td>
-		                        <td>
+		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
 			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.amount | giddhCurrency}}</div>
-			                        </div>
+                                    </div>
+                                    <div class="trashIconDlt">
+                                    <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i class="fa fa-trash"></i></a>
+                                    </div>
 		                        </td>
-	                            <td>
-	                                <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i class="fa fa-trash"></i></a>
-	                            </td>
+	                             
 	                        </tr>
 						</tbody>
 	                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
@@ -361,17 +362,18 @@
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
 			                        </div>
 		                        </td>
-		                        <td>
+		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
 			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
-			                        </div>
+                                    </div>
+                                    <div class="trashIconDlt">
+                                      <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">  <i  class="fa fa-trash"></i></a>
+                                    </div>
 		                        </td>
-	                            <td>
-	                                <i (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1" class="fa fa-trash"></i>
-	                            </td>
+	                             
 	                        </tr>
 	                    </tbody>
 	                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
@@ -407,17 +409,20 @@
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
 			                        </div>
 		                        </td>
-		                        <td>
+		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
 				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
-			                        </div>
-		                        </td>
-	                            <td>
-	                                <i (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1" class="fa fa-trash"></i>
-	                            </td>
+                                    </div>
+                                    <div class="trashIconDlt">
+                                       <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i  class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                              
+                                    
+	                            
 	                        </tr>
 	                    </tbody>
 	                    <div class="addNewLine mrT1">
@@ -428,7 +433,7 @@
 						<tfoot id="tfoot">
 	                        <tr>
 	                            <td colspan="4">
-	                                <div class="transportation-details pdT2">
+	                                <div class="transportation-details pdT3">
 	                                    <h3 class="mrB1">Transportation Details</h3>
 	                                    <div class="row">
 	                                        <div class="col-sm-6 mrB2">
@@ -464,9 +469,7 @@
 	                                    </div>
 	                                </section>
 	                            </td>
-	                            <td>
-	                                &nbsp;
-	                            </td>
+	                             
 	                        </tr>
 						</tfoot>
 					</table>
