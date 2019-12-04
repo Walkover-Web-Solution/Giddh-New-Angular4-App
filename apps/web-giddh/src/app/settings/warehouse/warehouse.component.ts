@@ -109,7 +109,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @memberof WarehouseComponent
      */
     public openCreateWarehouseModal(): void {
-        this.resetOnboardingForm();
         this.startOnBoarding();
         this.createNewWarehouseModal();
         this.warehouseOnBoardingModal.show();
