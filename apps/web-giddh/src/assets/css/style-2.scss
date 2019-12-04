@@ -8499,7 +8499,7 @@ button.ladda-button .ladda-label {
 .accountAsideMenuState2 #close {
     display: block;
     position: absolute;
-    right: 0;
+    right: 10px;
     top: 16px;
     z-index: 5;
     border: 0;
@@ -9114,15 +9114,15 @@ button {
     .mt-xs-60 {
         margin-top: 60px;
     }
+    .tooltip.bs-tooltip-top {
+        display: none !important;
+    }
 }
 
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
     }
-    /*.accountAsideMenuState2 #close {
-                        right: 267px;
-                    }*/
     .vendorPayNow .accountAsideMenuState2 #close {
         right: 312px;
     }
