@@ -56,7 +56,7 @@ export class AgingReportComponent implements OnInit {
         ignoreBackdropClick: true
     };
     public isAdvanceSearchApplied: boolean = false;
-    public isProdEnv: boolean = false;
+
 
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
@@ -115,7 +115,7 @@ export class AgingReportComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.isProdEnv = ENV === 'production';
+
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions.startDate = a[0];
