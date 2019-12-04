@@ -586,7 +586,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.invoicePaymentModelComponent.focusAmountField();
                 }, 500);
             } else {
-                this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform}));
+                this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {action: actionToPerform, voucherType: objItem.voucherType}));
             }
         }
     }
