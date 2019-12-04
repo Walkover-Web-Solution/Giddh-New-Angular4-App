@@ -103,7 +103,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
                 }).map(m => {
                     return {
-                        value: m.groupUniqueName, label: m.groupName
+                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
                     }
                 });
                 this.flatGroupsOptions = items;
@@ -128,8 +128,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             // in case of sundrycreditors or sundrydebtors no need to show address tab
             if (event === 'sundrycreditors' || event === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
-            } else {
-                this.isDebtorCreditor = false;
             }
         }
     }

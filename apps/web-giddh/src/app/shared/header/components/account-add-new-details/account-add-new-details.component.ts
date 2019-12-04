@@ -244,12 +244,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             if (activegroupName === 'sundrycreditors') {
                 this.showBankDetail = true;
-            } else {
-                this.showBankDetail = false;
             }
             this.isDebtorCreditor = true;
-        } else {
-            this.isDebtorCreditor = false;
         }
 
     }
@@ -581,17 +577,24 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
-                if (event.value === 'sundrycreditors') {
-                    this.showBankDetail = true;
-                } else {
-                    this.showBankDetail = false;
-                }
-                this.isDebtorCreditor = true;
-            } else {
-                this.isDebtorCreditor = false;
+            let parent = event.additional;
+            if (parent[1]) {
+                this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+        }
+    }
+    public isParentDebtorCreditor(activeParentgroup: string) {
+        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
+            if (activeParentgroup === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
         }
     }
 

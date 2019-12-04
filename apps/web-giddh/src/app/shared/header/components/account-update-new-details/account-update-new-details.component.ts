@@ -181,7 +181,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
+                    // this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -438,8 +438,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             this.isShowBankDetails(this.activeGroupUniqueName);
             this.isDebtorCreditor = true;
-        } else {
-            this.isDebtorCreditor = false;
         }
         this.prepareTaxDropdown();
     }
@@ -885,13 +883,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
-                this.isDebtorCreditor = true;
-                this.isShowBankDetails(event.value);
-            } else {
-                this.isDebtorCreditor = false;
+            let parent = event.additional;
+            if (parent[1]) {
+                this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+        }
+    }
+    public isParentDebtorCreditor(activeParentgroup: string) {
+        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
+            if (activeParentgroup === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
         }
     }
     public isShowBankDetails(accountType: string) {

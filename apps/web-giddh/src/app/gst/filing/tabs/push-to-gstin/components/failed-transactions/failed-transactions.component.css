@@ -70,12 +70,9 @@
     overflow-y: scroll;
 }
 #content_wrapper {
-    padding-bottom: 0px !important;
+    padding-bottom: 80px !important;
 }
 .tax-engine,
 .transactions-overview {
     background: none !important;
-}
-#content_wrapper {
-    padding-bottom: 0px !important;
 }
