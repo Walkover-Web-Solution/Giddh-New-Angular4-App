@@ -56,7 +56,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
     @ViewChild('template') public template: ElementRef;
-    public isProdEnv: boolean = false;
+
     public today: Date = new Date();
     public activeGroup$: Observable<StockGroupResponse>;
     public groupStockReport$: Observable<GroupStockReportResponse>;
@@ -256,7 +256,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
 
-        this.isProdEnv = ENV === 'production';
+
         // get view from sidebar while clicking on group/stock
         let len = document.location.pathname.split('/').length;
         this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2];
