@@ -594,6 +594,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
+            this.showBankDetail = false;
         }
     }
 
