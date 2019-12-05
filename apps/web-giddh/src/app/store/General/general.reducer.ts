@@ -18,7 +18,7 @@ import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.in
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
-import { currentPage } from '../../models/api-models/Common';
+import { CurrentPage } from '../../models/api-models/Common';
 
 export interface GeneralState {
     groupswithaccounts: GroupsWithAccountsResponse[];
@@ -30,7 +30,7 @@ export interface GeneralState {
     smartList: IUlist[];
     sideMenuBarOpen: boolean;
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
-    currentPage: currentPage;
+    currentPage: CurrentPage;
 }
 
 const initialState: GeneralState = {

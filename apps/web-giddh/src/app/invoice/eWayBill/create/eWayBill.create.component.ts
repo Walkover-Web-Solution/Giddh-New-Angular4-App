@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
 import { ToasterService } from '../../../services/toaster.service';
-import { currentPage } from '../../../models/api-models/Common';
+import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
 
 @Component({
@@ -357,7 +357,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public setCurrentPageTitle() {
-        let currentPageObj = new currentPage();
+        let currentPageObj = new CurrentPage();
         currentPageObj.name = "Invoice > E-way bill";
         currentPageObj.url = this.router.url;
         currentPageObj.additional = "";

@@ -7,7 +7,7 @@ import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Compa
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
-import { currentPage } from '../models/api-models/Common';
+import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
@@ -71,7 +71,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     }
 
     public setCurrentPageTitle(title) {
-        let currentPageObj = new currentPage();
+        let currentPageObj = new CurrentPage();
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         currentPageObj.additional = "";

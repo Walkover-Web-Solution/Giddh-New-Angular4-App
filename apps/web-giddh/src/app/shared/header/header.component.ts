@@ -39,7 +39,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest, currentPage } from '../../models/api-models/Common';
+import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -1368,13 +1368,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let currentUrl = this.router.url;
 
         if (currentUrl.includes('/ledger')) {
-            let currentPageObj = new currentPage();
+            let currentPageObj = new CurrentPage();
             currentPageObj.name = "";
             currentPageObj.url = currentUrl;
             currentPageObj.additional = "";
             this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
+                console.log(page.uniqueName + " : " + decodeURI(currentUrl));
                 if (page.uniqueName === decodeURI(currentUrl)) {
                     this.setCurrentPageTitle(page);
                     return true;
@@ -1384,7 +1385,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public setCurrentPageTitle(menu) {
-        let currentPageObj = new currentPage();
+        let currentPageObj = new CurrentPage();
         currentPageObj.name = menu.name;
         currentPageObj.url = menu.uniqueName;
         currentPageObj.additional = menu.additional;

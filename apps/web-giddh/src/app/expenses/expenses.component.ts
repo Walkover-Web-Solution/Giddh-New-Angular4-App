@@ -12,7 +12,7 @@ import { BsModalRef, BsModalService, TabsetComponent } from 'ngx-bootstrap';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { currentPage } from '../models/api-models/Common';
+import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 
@@ -24,7 +24,7 @@ import { GeneralService } from '../services/general.service';
 
 export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('tabset') tabset: TabsetComponent;
-    
+
     public universalDate: Date[];
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
@@ -272,7 +272,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public setCurrentPageTitle(title) {
-        let currentPageObj = new currentPage();
+        let currentPageObj = new CurrentPage();
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         currentPageObj.additional = "";
@@ -280,10 +280,10 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public getActiveTab() {
-        if(this.route.snapshot.queryParams.tab) {
+        if (this.route.snapshot.queryParams.tab) {
             this.setCurrentPageTitle(this._generalService.capitalizeFirstLetter(this.route.snapshot.queryParams.tab));
             this.currentSelectedTab = this.route.snapshot.queryParams.tab;
-            if(this.currentSelectedTab === "pending") {
+            if (this.currentSelectedTab === "pending") {
                 this.tabset.tabs[0].active = true;
             } else {
                 this.tabset.tabs[1].active = true;

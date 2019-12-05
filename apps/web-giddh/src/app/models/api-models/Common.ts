@@ -47,7 +47,7 @@ export class OnboardingFormResponse {
     }];
 }
 
-export class currentPage {
+export class CurrentPage {
     name: string;
     url: string;
     additional: string;
