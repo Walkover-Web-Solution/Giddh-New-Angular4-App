@@ -91,3 +91,10 @@ span.setAsDefault {
     align-items: center;
     display: flex;
 }
+.warehouse-pagination {
+    width: 100%;
+    text-align: center;
+    .pagination .disabled a {
+        cursor: not-allowed;
+    }
+}

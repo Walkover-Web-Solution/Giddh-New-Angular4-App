@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions, PageChangedEvent } from 'ngx-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -42,6 +42,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public allWarehouses$: Observable<any>;
     /** Selected warehouse for welcome page to update warehouse information */
     public selectedWarehouse: any;
+    /** Configuration object for pagination component */
+    public paginationConfig: any;
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
@@ -76,20 +78,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
-        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
-            this.itemOnBoardingDetails = itemOnBoardingDetails;
-        });
-        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
-            if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
-                await this.hideWelcomePage();
-                this.endOnBoarding();
-                this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
-                this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
-            }
-        });
+        this.initSubscribers();
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
     }
 
     /**
@@ -204,6 +194,43 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.showWelcomePage();
     }
 
+    public pageChanged(event: PageChangedEvent): void {
+        console.log('Page change event: ', event);
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page }));
+    }
+
+    /**
+     * Initializes all the subscribers to warehouse store
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private initSubscribers(): void {
+        this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
+        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
+            this.itemOnBoardingDetails = itemOnBoardingDetails;
+        });
+        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
+            if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
+                // Warehouse creation or updation is successful
+                await this.hideWelcomePage();
+                this.endOnBoarding();
+                this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
+                this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+            }
+        });
+        this.allWarehouses$.subscribe((warehouseData: any) => {
+            this.paginationConfig = {
+                count: warehouseData.count,
+                totalItems: warehouseData.totalItems,
+                totalPages: warehouseData.totalPages
+            }
+            console.log('Pagination ', this.paginationConfig);
+        });
+
+    }
+
     /**
      * Resets the on boarding form
      *
@@ -259,7 +286,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.onBoardingContainer.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as OnBoardingComponent).onboardingType = OnBoardingType.Warehouse;
+        (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
         (componentRef.instance as OnBoardingComponent).closeCompanyModal.subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {
                 this.showWelcomePage();

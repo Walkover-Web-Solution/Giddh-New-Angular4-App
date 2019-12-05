@@ -62,7 +62,7 @@ export class WarehouseActions {
     @Effect()
     private getAllWarehouse$ = this.action$.pipe(
         ofType(WarehouseActions.GET_ALL_WAREHOUSE),
-        switchMap(() => this.settingsWarehouseService.fetchAllWarehouse()),
+        switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
             if (response.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
@@ -135,11 +135,12 @@ export class WarehouseActions {
     /**
      * Fetches all warehouses for a particular company
      *
+     * @param {*} params Request parameter required for fetch all warehouse service
      * @returns {CustomActions} Action to fetch all warehouse
      * @memberof WarehouseActions
      */
-    public fetchAllWarehouses(): CustomActions {
-        return { type: WarehouseActions.GET_ALL_WAREHOUSE }
+    public fetchAllWarehouses(params: any): CustomActions {
+        return { type: WarehouseActions.GET_ALL_WAREHOUSE, payload: params };
     }
 
     /**

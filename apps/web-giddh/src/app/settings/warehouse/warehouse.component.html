@@ -1,4 +1,4 @@
-<ng-container *ngIf="(allWarehouses$ | async) as warehouses">
+<ng-container *ngIf="(allWarehouses$ | async)?.results as warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
         <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
         <h2>Create Warehouse</h2>
@@ -51,7 +51,7 @@
                             </div>
                         -->
                         <div class="clearfix about-warehaouse">
-                            <label>GSTIN:</label>
+                            <label>{{warehouse.taxType}}</label>
                             <p>
                                 <span [class.gray-text]="!warehouse.taxNumber">{{
                                         warehouse.taxNumber
@@ -77,6 +77,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="warehouse-pagination">
+        <pagination *ngIf="warehouses?.length" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
+            (pageChanged)="pageChanged($event)"></pagination>
     </div>
 </ng-container>
 

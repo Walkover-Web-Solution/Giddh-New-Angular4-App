@@ -37,7 +37,7 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
             return { ...state, warehouseCreated: false };
         case WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE:
             if (action.payload) {
-                return { ...state, warehouses: _.cloneDeep(action.payload.body.results) };
+                return { ...state, warehouses: _.cloneDeep(action.payload.body) };
             }
             return state;
         case WarehouseActions.UPDATE_WAREHOUSE_RESPONSE:
