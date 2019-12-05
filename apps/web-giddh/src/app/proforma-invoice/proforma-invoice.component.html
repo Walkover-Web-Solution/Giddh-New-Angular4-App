@@ -186,8 +186,7 @@
 
                                                 <span style="margin-right: 5px" class="cp aquaColor"
                                                     *ngIf="!isCashInvoice && !isUpdateMode">
-                                                    <a href="javascript:void 0" (click)="getCustomerDetails()">Customer
-                                                        Details</a>
+                                                    <a href="javascript:void(0)" (click)="getCustomerDetails()">{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Details</a>
                                                 </span>
                                             </div>
                                             <!-- endregion -->
