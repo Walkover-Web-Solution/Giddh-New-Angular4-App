@@ -1066,4 +1066,17 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferListResponse, NewBranchTransferListPostRequestParams>(e, postParams)));
     }
+
+    public deleteNewBranchTransfer(branchTransferUniqueName: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.DELETE_BRANCH_TRANSFER;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':branchTransferUniqueName', encodeURIComponent(branchTransferUniqueName));
+
+        return this._http.delete(url).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            data.request = branchTransferUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, branchTransferUniqueName)));
+    }
 }

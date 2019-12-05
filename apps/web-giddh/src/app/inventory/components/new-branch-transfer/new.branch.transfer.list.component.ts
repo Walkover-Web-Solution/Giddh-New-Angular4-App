@@ -6,7 +6,7 @@ import {
     ViewChild,
     ElementRef
 } from "@angular/core";
-import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
+import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
@@ -19,6 +19,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -40,6 +41,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     @ViewChild('branchtransfertemplate') public branchtransfertemplate: ElementRef;
+    @ViewChild('deleteBranchTransferModal') public deleteBranchTransferModal: ModalDirective;
 
     public modalRef: BsModalRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -72,8 +74,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         warehouseName: null
     };
     public timeout: any;
+    public selectedBranchTransfer: any = '';
 
-    constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService) {
+    constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 let companyInfo = _.cloneDeep(o);
@@ -206,5 +209,26 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.timeout = setTimeout(() => {
             this.getBranchTransferList(true);
         }, 700);
+    }
+
+    public deleteNewBranchTransfer() {
+        this.hideBranchTransferModal();
+        this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).subscribe((response) => {
+            if(response.status === "success") {
+                this._toasty.successToast(response.body);
+                this.getBranchTransferList(false);
+            } else {
+                this._toasty.errorToast(response.body);
+            }
+        });
+    }
+
+    public showBranchTransferModal(branchTransferUniqueName) {
+        this.selectedBranchTransfer = branchTransferUniqueName;
+        this.deleteBranchTransferModal.show();
+    }
+
+    public hideBranchTransferModal() {
+        this.deleteBranchTransferModal.hide();
     }
 }

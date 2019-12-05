@@ -71,7 +71,7 @@
                                         <a class="dropdown-item" href="javascript:;">Delivered</a>
                                     </li> -->
                                     <li role="menuitem">
-                                        <a class="dropdown-item" href="javascript:;">Delete</a>
+                                        <a class="dropdown-item" href="javascript:;" (click)="showBranchTransferModal(item.uniqueName)">Delete</a>
                                     </li>
                                 </ul>
                             </div>
@@ -147,3 +147,13 @@
         </div>
     </div>
 </ng-template>
+
+<!--delete modal  -->
+<div bsModal #deleteBranchTransferModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <confirm-modal [title]="'Delete Branch Transfer'" [body]="'Are you sure you want to delete this branch transfer?'" (cancelCallBack)="hideBranchTransferModal()" (successCallBack)="deleteNewBranchTransfer()">
+            </confirm-modal>
+        </div>
+    </div>
+</div>
