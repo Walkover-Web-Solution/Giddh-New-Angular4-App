@@ -214,7 +214,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public deleteNewBranchTransfer() {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).subscribe((response) => {
-            if(response.status === "success") {
+            if (response.status === "success") {
                 this._toasty.successToast(response.body);
                 this.getBranchTransferList(false);
             } else {
@@ -230,5 +230,20 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public hideBranchTransferModal() {
         this.deleteBranchTransferModal.hide();
+    }
+
+    public sortBranchTransferList(sortBy) {
+        let sort = "asc";
+
+        if (this.branchTransferGetRequestParams.sortBy === sortBy) {
+            sort = (this.branchTransferGetRequestParams.sort === "asc") ? "desc" : "asc";
+        } else {
+            sort = "asc";
+        }
+
+        this.branchTransferGetRequestParams.sort = sort;
+        this.branchTransferGetRequestParams.sortBy = sortBy;
+
+        this.getBranchTransferList(true);
     }
 }
