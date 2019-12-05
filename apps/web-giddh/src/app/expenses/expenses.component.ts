@@ -10,7 +10,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService, TabsetComponent } from 'ngx-bootstrap';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { currentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -111,19 +111,17 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        if(this.route.snapshot.queryParams.tab) {
-            this.setCurrentPageTitle(this._generalService.capitalizeFirstLetter(this.route.snapshot.queryParams.tab));
-            this.currentSelectedTab = this.route.snapshot.queryParams.tab;
-            if(this.currentSelectedTab === "pending") {
-                this.tabset.tabs[0].active = true;
-            } else {
-                this.tabset.tabs[1].active = true;
-            }
-        }
+        this.getActiveTab();
 
         this.route.params.subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
+            }
+        });
+
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.getActiveTab();
             }
         });
 
@@ -279,5 +277,17 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
         currentPageObj.url = this.router.url;
         currentPageObj.additional = "";
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    public getActiveTab() {
+        if(this.route.snapshot.queryParams.tab) {
+            this.setCurrentPageTitle(this._generalService.capitalizeFirstLetter(this.route.snapshot.queryParams.tab));
+            this.currentSelectedTab = this.route.snapshot.queryParams.tab;
+            if(this.currentSelectedTab === "pending") {
+                this.tabset.tabs[0].active = true;
+            } else {
+                this.tabset.tabs[1].active = true;
+            }
+        }
     }
 }
