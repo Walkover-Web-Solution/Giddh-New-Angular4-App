@@ -1,5 +1,5 @@
 <div class="clearfix">
-    <tabset class="custom-tabs">
+    <tabset class="custom-tabs" #tabset>
 
         <div class="container-fluid mt-2" *ngIf="!isSelectedRow">
             <div class="row">
@@ -10,7 +10,7 @@
                             <div class="input-group input-calender">
                                 <span class="input-group-addon" id="basic-addon1"><i class="icon-calender"></i></span>
                                 <input type="text" class="form-control" placeholder="Daterangepicker" daterangepicker
-                                       [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)">
+                                    [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)">
                             </div>
                         </div>
                         <!-- <div class="btn-group" dropdown="" ng-reflect-placement="right">
@@ -21,8 +21,8 @@
                 <div class="col-sm-6" *ngIf="isFilterSelected">
                     <div class="d-inline-block">
                         <a href="javascript:void(0)" (click)="clearFilter()"
-                           class="btn btn-default d-flex align-items-center ml-1"><i
-                            class=" icon-cross mr-1"></i> Clear Filter</a>
+                            class="btn btn-default d-flex align-items-center ml-1"><i class=" icon-cross mr-1"></i>
+                            Clear Filter</a>
                     </div>
 
                 </div>
@@ -32,27 +32,26 @@
         <tab heading="Pending" id="tab1" (select)="tabChanged('pending', $event);">
             <ng-container *ngIf="currentSelectedTab === 'pending'">
                 <app-pending-list *ngIf=" !isSelectedRow " [isClearFilter]='isClearFilter'
-                                  (isFilteredSelected)=isFilteredSelected($event);
-                                  (selectedRowToggle)="selectedRowToggle($event); "
-                                  (selectedRowInput)=selectedRowInput($event);></app-pending-list>
+                    (isFilteredSelected)=isFilteredSelected($event); (selectedRowToggle)="selectedRowToggle($event); "
+                    (selectedRowInput)=selectedRowInput($event);></app-pending-list>
                 <div class="main-edit-expense " *ngIf="isSelectedRow ">
                     <div class="left-expense ">
                         <app-filter-list [selectedRowItem]='selectedRowItem'
-                                         (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
+                            (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
                     </div>
                     <div class="main-expense-details ">
                         <app-expense-details [selectedRowItem]='selectedRowItem'
-                                             (toggleDetailsMode)="closeDetailedMode($event); "
-                                             (refreshPendingItem)="refreshPendingItem($event); "></app-expense-details>
+                            (toggleDetailsMode)="closeDetailedMode($event); "
+                            (refreshPendingItem)="refreshPendingItem($event); "></app-expense-details>
                     </div>
                 </div>
             </ng-container>
         </tab>
 
-        <tab heading="Rejected " (select)="tabChanged('rejected', $event);">
+        <tab heading="Rejected" (select)="tabChanged('rejected', $event);">
             <ng-container *ngIf="currentSelectedTab === 'rejected'">
-                <app-rejected-list (isFilteredSelected)=isFilteredSelected($event);
-                                   [isClearFilter]='isClearFilter'></app-rejected-list>
+                <app-rejected-list (isFilteredSelected)=isFilteredSelected($event); [isClearFilter]='isClearFilter'>
+                </app-rejected-list>
             </ng-container>
         </tab>
 

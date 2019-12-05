@@ -1156,10 +1156,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
-    setState(event) {
-
-    }
-
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
         let gstVal = _.cloneDeep(this.invFormData.accountDetails[type].gstNumber);
         if (gstVal && gstVal.length >= 2) {
