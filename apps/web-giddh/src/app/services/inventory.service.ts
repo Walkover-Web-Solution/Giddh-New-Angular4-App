@@ -1079,4 +1079,17 @@ export class InventoryService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, branchTransferUniqueName)));
     }
+
+    public getNewBranchTransfer(branchTransferUniqueName: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.DELETE_BRANCH_TRANSFER;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':branchTransferUniqueName', encodeURIComponent(branchTransferUniqueName));
+
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            data.request = branchTransferUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, branchTransferUniqueName)));
+    }
 }
