@@ -14,6 +14,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { CustomActions } from '../../store/customActions';
 import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
 import { IUlist } from '../../models/interfaces/ulist.interface';
+import { currentPage } from '../../models/api-models/Common';
 
 @Injectable()
 export class GeneralActions {
@@ -165,10 +166,10 @@ export class GeneralActions {
         };
     }
 
-    public setPageTitle(pageHeading: string) {
+    public setPageTitle(currentPageObj: currentPage) {
         return {
             type: GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE,
-            payload: { pageHeading }
+            payload: { currentPageObj }
         }
     }
 }

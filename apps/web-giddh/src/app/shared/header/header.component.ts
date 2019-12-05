@@ -39,7 +39,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest } from '../../models/api-models/Common';
+import { CountryRequest, currentPage } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -198,6 +198,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         baseCurrency: '',
         country: ''
     };
+    public currentState: any = '';
 
     /**
      *
@@ -225,27 +226,44 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalService: GeneralService,
         private commonActions: CommonActions
     ) {
-        // SETTING PAGE HEADING BY DEFAULT
-        this.setCurrentPageHeading();
-
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
+        this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
 
-        // GETTING PAGE HEADING
-        this.store.pipe(select(s => s.general.pageHeading), takeUntil(this.destroyed$)).subscribe(response => {
-            let pageHeadingResponse = _.clone(response);
-            if (pageHeadingResponse) {
-                this.selectedPage = pageHeadingResponse.pageHeading;
+        // SETTING CURRENT PAGE ON INIT
+        this.setCurrentPage();
+
+        // SETTING CURRENT PAGE ON ROUTE CHANGE
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.setCurrentPage();
+
+                if (this.router.url.includes("/ledger")) {
+                    this.currentState = this.router.url;
+                    this.setCurrentAccountNameInHeading();
+                }
             }
         });
 
-        // SETTING PAGE HEADING ON ROUTING CHANGE
-        this.router.events.subscribe((routeChanged) => {
-            this.setCurrentPageHeading();
+        // GETTING CURRENT PAGE
+        this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLedgerAccSelected = false;
+            let currentPageResponse = _.clone(response);
+            if (currentPageResponse) {
+                console.log(currentPageResponse);
+
+                if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
+
+                } else {
+                    this.currentState = currentPageResponse.currentPageObj.url;
+                    this.selectedPage = currentPageResponse.currentPageObj.name;
+                }
+            }
         });
 
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
@@ -256,8 +274,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         })).pipe(takeUntil(this.destroyed$));
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
-
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
@@ -705,7 +721,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.doEntryInDb('menus', menu);
 
-        this.store.dispatch(this._generalActions.setPageTitle(menu.name));
+        this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
             this.router.navigate([pageName], { queryParams: menu.additional });
@@ -1348,15 +1364,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
-    public setCurrentPageHeading() {
-        let currentPageHeading = NAVIGATION_ITEM_LIST.find((page) => {
-            if (page.uniqueName === this.router.url) {
-                return page.name;
+    public setCurrentPage() {
+        let currentUrl = this.router.url;
+
+        if (currentUrl.includes('/ledger')) {
+            let currentPageObj = new currentPage();
+            currentPageObj.name = "";
+            currentPageObj.url = currentUrl;
+            currentPageObj.additional = "";
+            this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        } else {
+            NAVIGATION_ITEM_LIST.find((page) => {
+                if (page.uniqueName === decodeURI(currentUrl)) {
+                    this.setCurrentPageTitle(page);
+                    return true;
+                }
+            });
+        }
+    }
+
+    public setCurrentPageTitle(menu) {
+        let currentPageObj = new currentPage();
+        currentPageObj.name = menu.name;
+        currentPageObj.url = menu.uniqueName;
+        currentPageObj.additional = menu.additional;
+
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    public setCurrentAccountNameInHeading() {
+        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
+            if (acc) {
+                this.isLedgerAccSelected = true;
+                this.selectedLedgerName = this.currentState.substr(this.currentState.indexOf('/') + 1);
+                this.selectedPage = 'ledger - ' + acc.name;
+                return this.navigateToUser = false;
             }
         });
-
-        if (currentPageHeading) {
-            this.store.dispatch(this._generalActions.setPageTitle(currentPageHeading.name));
-        }
     }
 }

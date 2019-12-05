@@ -18,6 +18,7 @@ import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.in
 import { IUlist } from '../../models/interfaces/ulist.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
+import { currentPage } from '../../models/api-models/Common';
 
 export interface GeneralState {
     groupswithaccounts: GroupsWithAccountsResponse[];
@@ -29,7 +30,7 @@ export interface GeneralState {
     smartList: IUlist[];
     sideMenuBarOpen: boolean;
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
-    pageHeading: string;
+    currentPage: currentPage;
 }
 
 const initialState: GeneralState = {
@@ -42,7 +43,7 @@ const initialState: GeneralState = {
     smartList: [],
     sideMenuBarOpen: false,
     headerTitle: null,
-    pageHeading: null
+    currentPage: null
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -345,7 +346,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         case GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE: {
             return {
-                ...state, pageHeading: action.payload
+                ...state, currentPage: action.payload
             }
         }
 
