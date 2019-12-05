@@ -60,7 +60,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    public isProdEnv: boolean = false;
+
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -262,7 +262,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        this.isProdEnv = ENV === 'production';
+
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));

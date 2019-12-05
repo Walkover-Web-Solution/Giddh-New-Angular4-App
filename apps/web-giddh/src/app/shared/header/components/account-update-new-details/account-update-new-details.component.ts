@@ -181,7 +181,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
+                    // this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -900,6 +900,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.isDebtorCreditor = true;
         } else {
             this.isDebtorCreditor = false;
+            this.showBankDetail = false;
         }
     }
     public isShowBankDetails(accountType: string) {
