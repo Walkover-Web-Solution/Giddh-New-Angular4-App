@@ -13,13 +13,20 @@
                 autocomplete="off">
                 <div class=" clearfix row">
                     <div class="col-xs-12 mrB2">
-                        <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
-                                class="text-danger">*</sup></label>
-                        <!-- Need to show when creat branch  -->
-                        <label for="name" class="m-t-30" *ngIf="isbranch">Branch Name<sup
-                                class="text-danger">*</sup></label>
-                        <input name="name" id="name" type="text" required [disabled]="createNewCompanyPreparedObj.name"
-                            placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                        <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
+                            <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
+                                    class="text-danger">*</sup></label>
+                            <!-- Need to show when creat branch  -->
+                            <label for="name" class="m-t-30" *ngIf="isbranch">Branch Name<sup
+                                    class="text-danger">*</sup></label>
+                        </ng-container>
+                        <ng-template #onBoardingItemName>
+                            <label for="name" class="m-t-30" *ngIf="!isbranch">{{itemOnBoardingDetails?.onBoardingType}}
+                                Name<sup class="text-danger">*</sup></label>
+                        </ng-template>
+                        <input name="name" id="name" type="text" required
+                            [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress" placeholder="Name"
+                            [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
                     </div>
                     <div class="col-xs-6 mrB2 ">
                         <span>
@@ -49,14 +56,14 @@
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
                                 <sh-select class="pull-left select-caret"
-                                    [disabled]="createNewCompanyPreparedObj.phoneCode"
+                                    [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
                                     style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
                                     [options]="callingCodesSource$ | async"
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
-                                    [disabled]="createNewCompanyPreparedObj.contactNo" placeholder="9998899988"
-                                    id="contactNo" autocomplete="off"
+                                    [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
+                                    placeholder="9998899988" id="contactNo" autocomplete="off"
                                     [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
                             </div>
                         </span>
@@ -97,11 +104,15 @@
                                 <input type="text" [ngClass]="{'gstinWidth' : isbranch}" class="form-control"
                                     autocomplete="false" autocomplete="false" minlength="15" required maxlength="15"
                                     #gstNumberField
-                                    (keyup)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
+                                    (change)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
                                     name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
-                                <span class="sameAsHead" *ngIf="isbranch"> <input type="checkbox" name="isTaxNumberSameAsHeadQuarter" [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1" (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as Headquarter</span>
+                                <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
+                                        type="checkbox" name="isTaxNumberSameAsHeadQuarter"
+                                        [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
+                                        (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
+                                    Headquarter</span>
 
                             </div>
                         </div>
@@ -135,7 +146,8 @@
                                     <ul class="list-inline custom-multi-select">
                                         <li *ngFor="let tax of selectedTaxes">
                                             <a style="color: gray">
-                                                {{currentTaxList[tax].name}} <span class="pdL" (click)="removeTax(tax)">×</span>
+                                                {{currentTaxList[tax].name}} <span class="pdL"
+                                                    (click)="removeTax(tax)">×</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -143,22 +155,21 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="col-xs-12 mrB2 selectBox " *ngIf="selectedBusinesstype === 'Registered'">
-                        <div class="clearfix ">
-                            <label for="address" class="d-block" *ngIf="!isbranch">Company Address <sup
-                                    class="text-danger">*</sup></label>
-                            <label for="address" class="d-block" *ngIf="isbranch">Branch Address <sup
-                                    class="text-danger">*</sup></label>
-                            <textarea placeholder="Address " class="form-control mrT1 " name="address" required
-                                id="address" [(ngModel)]="companyProfileObj.address"
-                                style="min-height:100px; "></textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="selectedBusinesstype === 'Unregistered'">
-                        <div class="clearfix ">
-                            <label for="address" class="d-block" *ngIf="!isbranch">Company Address</label>
-                            <label for="address" class="d-block" *ngIf="isbranch">Branch Address</label>
-                            <textarea placeholder="Address " class="form-control mrT1 " name="address" id="address"
+                    <div class="col-xs-12 mrB2 selectBox">
+                        <div *ngIf="selectedBusinesstype" class="clearfix">
+                            <ng-container
+                                *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
+                                <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address}} <sup
+                                        *ngIf="selectedBusinesstype === 'Registered'"
+                                        class="text-danger">*</sup></label>
+                            </ng-container>
+                            <ng-template #onBoardingItemAddress>
+                                <label for="address" class="d-block">{{itemOnBoardingDetails?.onBoardingType}} Address
+                                    <sup *ngIf="selectedBusinesstype === 'Registered'"
+                                        class="text-danger">*</sup></label>
+                            </ng-template>
+                            <textarea [attr.required]="selectedBusinesstype === 'Registered'" placeholder="Address"
+                                class="form-control mrT1 " name="address" id="address"
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
@@ -168,13 +179,13 @@
                     </div>
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
-                        <button type="submit " class="btn btn-pink" (click)="submit()"
+                        <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)"
                             [disabled]="welcomeForm.invalid || !isGstValid">
-                            Next
+                            {{itemOnBoardingDetails?.isOnBoardingInProgress ?
+                                itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
+                                'Next'
+                            }}
                         </button>
-                        <!--						<button type="submit " class="btn btn-pink  " *ngIf="isbranch" (click)="submit()" [disabled]="welcomeForm.invalid || !isGstValid">-->
-                        <!--							Create Branch-->
-                        <!--						</button>-->
                     </div>
                 </div>
             </form>

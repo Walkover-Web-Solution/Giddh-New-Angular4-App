@@ -303,18 +303,18 @@
                     <div class="row"
                         *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last"
                         [formGroupName]="i">
-                        <div class="form-group col-xs-5">
+                        <div class="form-group col-sm-5">
                             <label for="">Bank Name</label>
                             <input type="text" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-sm-4">
                             <div class="">
                                 <label for="">Account No.</label>
                                 <input type="text" class="form-control" name="accountNum_{{i}}"
                                     formControlName="bankAccountNo" />
                             </div>
                         </div>
-                        <div class="form-group col-xs-3">
+                        <div class="form-group col-sm-3">
                             <label for="">IFSC Code</label>
                             <input type="text" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
                         </div>

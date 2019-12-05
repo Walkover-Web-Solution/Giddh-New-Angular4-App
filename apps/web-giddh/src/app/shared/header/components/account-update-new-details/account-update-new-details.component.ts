@@ -436,9 +436,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            this.isShowBankDetails(this.activeGroupUniqueName);
             this.isDebtorCreditor = true;
-        } else {
-            this.isDebtorCreditor = false;
         }
         this.prepareTaxDropdown();
     }
@@ -823,7 +822,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-
+        this.isShowBankDetails(this.activeGroupUniqueName);
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
@@ -876,6 +875,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (gstForm && event.label) {
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
+
         }
 
     }
@@ -883,18 +883,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
-                if (event.value === 'sundrycreditors') {
-                    this.showBankDetail = true;
-                }
-                this.isDebtorCreditor = true;
-            } else {
-                this.isDebtorCreditor = false;
+            let parent = event.additional;
+            if (parent[1]) {
+                this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
         }
     }
-
+    public isParentDebtorCreditor(activeParentgroup: string) {
+        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
+            if (activeParentgroup === 'sundrycreditors') {
+                this.showBankDetail = true;
+            } else {
+                this.showBankDetail = false;
+            }
+            this.isDebtorCreditor = true;
+        } else {
+            this.isDebtorCreditor = false;
+        }
+    }
+    public isShowBankDetails(accountType: string) {
+        if (accountType === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
+        }
+    }
     public getCountry() {
         this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {

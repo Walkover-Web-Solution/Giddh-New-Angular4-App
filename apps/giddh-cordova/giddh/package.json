@@ -67,8 +67,7 @@
             "cordova-plugin-inappbrowser-popup-bridge": {}
         },
         "platforms": [
-            "ios",
-            "android"
+            "ios"
         ]
     }
 }

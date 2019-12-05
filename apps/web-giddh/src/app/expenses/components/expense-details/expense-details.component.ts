@@ -433,7 +433,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         } else if (res.pettyCashEntryStatus.entryType === 'expense') {
 
             this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
-            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expense';
+            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
             this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.creditorsAccountsOptions;
         } else {
             // deposit

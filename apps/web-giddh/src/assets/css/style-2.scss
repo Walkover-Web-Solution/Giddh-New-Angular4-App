@@ -1209,6 +1209,18 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+modal-container.modal {
+    .warehouse-welcome-modal {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        .modal-content {
+            height: 100%;
+            overflow: scroll;
+            background-color: #f7f8fa;
+        }
+    }
+}
 
 .sales-invoice-modal .modal-header h4 {
     color: #fff !important;
@@ -8487,7 +8499,7 @@ button.ladda-button .ladda-label {
 .accountAsideMenuState2 #close {
     display: block;
     position: absolute;
-    right: 0;
+    right: 10px;
     top: 16px;
     z-index: 5;
     border: 0;
@@ -8627,6 +8639,9 @@ p.remvBrnchName {
 
 button {
     transition: none !important;
+}
+.paddingR80{
+    padding-right: 80px !important;
 }
 /* responsive */
 
@@ -9099,15 +9114,15 @@ button {
     .mt-xs-60 {
         margin-top: 60px;
     }
+    .tooltip.bs-tooltip-top {
+        display: none !important;
+    }
 }
 
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
     }
-    /*.accountAsideMenuState2 #close {
-                        right: 267px;
-                    }*/
     .vendorPayNow .accountAsideMenuState2 #close {
         right: 312px;
     }

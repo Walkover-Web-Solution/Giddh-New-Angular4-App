@@ -34,3 +34,14 @@ if (typeof isElectron === 'undefined') {
     APP_FOLDER_WA = '';
 }
 
+/**
+ * Enum for type of on boarding
+ *
+ * @export
+ * @enum {string}
+ */
+export enum OnBoardingType {
+    Warehouse = 'Warehouse',
+    Company = 'Company',
+    Branch = 'Branch'
+}

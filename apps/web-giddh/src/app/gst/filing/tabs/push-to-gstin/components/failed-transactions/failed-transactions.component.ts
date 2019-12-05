@@ -8,11 +8,6 @@ import { PageChangedEvent } from 'ngx-bootstrap';
     // tslint:disable-next-line:component-selector
     selector: 'failed-transactions',
     templateUrl: './failed-transactions.component.html',
-    styles: [`
-    #content_wrapper {
-      padding-bottom:90px !important;
-    }
-  `],
     styleUrls: ['failed-transactions.component.css'],
 })
 export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy {

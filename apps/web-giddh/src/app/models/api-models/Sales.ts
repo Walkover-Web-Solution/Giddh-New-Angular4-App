@@ -613,4 +613,3 @@ export class DiscountMulticurrency {
         this.particular = ledgerDiscountClass.particular;
     }
 }
-
