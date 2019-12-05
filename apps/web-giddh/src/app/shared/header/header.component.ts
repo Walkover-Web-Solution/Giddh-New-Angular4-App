@@ -39,7 +39,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest } from '../../models/api-models/Common';
+import { CountryRequest, CurrentPage } from '../../models/api-models/Common';
 
 @Component({
     selector: 'app-header',
@@ -198,6 +198,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         baseCurrency: '',
         country: ''
     };
+    public currentState: any = '';
 
     /**
      *
@@ -225,13 +226,45 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _generalService: GeneralService,
         private commonActions: CommonActions
     ) {
-
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
 
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
+        this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+
+        // SETTING CURRENT PAGE ON INIT
+        this.setCurrentPage();
+
+        // SETTING CURRENT PAGE ON ROUTE CHANGE
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.setCurrentPage();
+
+                if (this.router.url.includes("/ledger")) {
+                    this.currentState = this.router.url;
+                    this.setCurrentAccountNameInHeading();
+                }
+            }
+        });
+
+        // GETTING CURRENT PAGE
+        this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLedgerAccSelected = false;
+            let currentPageResponse = _.clone(response);
+            if (currentPageResponse) {
+                console.log(currentPageResponse);
+
+                if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
+
+                } else {
+                    this.currentState = currentPageResponse.currentPageObj.url;
+                    this.selectedPage = currentPageResponse.currentPageObj.name;
+                }
+            }
+        });
 
         this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user) {
@@ -241,8 +274,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         })).pipe(takeUntil(this.destroyed$));
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
-
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
 
@@ -266,18 +297,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (!selectedCmp) {
                 return;
             }
-            // Sagar told to change the logic
-            // if (selectedCmp.createdBy.email === this.loggedInUserEmail) {
-            //   this.userIsSuperUser = true;
-            // } else {
-            //   this.userIsSuperUser = false;
-            // }
-            // new logic
-            // if (selectedCmp.userEntityRoles && selectedCmp.userEntityRoles.length && (selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin') === -1)) {
-            //   this.userIsSuperUser = false;
-            // } else {
-            //   this.userIsSuperUser = true;
-            // }
+
             if (selectedCmp) {
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
@@ -464,7 +484,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
 
                 if (route) {
-                    this.selectedPage = route.name;
+                    //this.selectedPage = route.name;
                     return;
                 }
             } else {
@@ -472,7 +492,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     .substring(7, page.uniqueName.length)
                     .includes(lastState.replace('pages/', '')));
                 if (lastStateName) {
-                    return this.selectedPage = lastStateName.name;
+                    //return this.selectedPage = lastStateName.name;
                 } else if (lastState.includes('ledger/')) {
 
                     let isDestroyed: Subject<boolean> = new Subject<boolean>();
@@ -481,13 +501,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         if (acc) {
                             this.isLedgerAccSelected = true;
                             this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
-                            this.selectedPage = 'ledger - ' + acc.name;
+                            //this.selectedPage = 'ledger - ' + acc.name;
                             isDestroyed.next(true);
                             return this.navigateToUser = false;
                         }
                     });
                 } else if (this.selectedPage === 'gst') {
-                    this.selectedPage = 'GST';
+                    //this.selectedPage = 'GST';
                 }
             }
         });
@@ -633,7 +653,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public vendorOrCustomer(path: string) {
-        this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
+        //this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
     }
 
     public handleNoResultFoundEmitter(e: any) {
@@ -700,6 +720,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
         this.doEntryInDb('menus', menu);
+
+        this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
             this.router.navigate([pageName], { queryParams: menu.additional });
@@ -1223,12 +1245,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
         if (entity === 'menus') {
-            this.selectedPage = item.name;
+            //this.selectedPage = item.name;
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
             this.selectedLedgerName = item.uniqueName;
-            this.selectedPage = 'ledger - ' + item.name;
+            //this.selectedPage = 'ledger - ' + item.name;
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
@@ -1342,4 +1364,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
+    public setCurrentPage() {
+        let currentUrl = this.router.url;
+
+        if (currentUrl.includes('/ledger')) {
+            let currentPageObj = new CurrentPage();
+            currentPageObj.name = "";
+            currentPageObj.url = currentUrl;
+            currentPageObj.additional = "";
+            this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        } else {
+            NAVIGATION_ITEM_LIST.find((page) => {
+                if (page.uniqueName === decodeURI(currentUrl)) {
+                    this.setCurrentPageTitle(page);
+                    return true;
+                }
+            });
+        }
+    }
+
+    public setCurrentPageTitle(menu) {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = menu.name;
+        currentPageObj.url = menu.uniqueName;
+        currentPageObj.additional = menu.additional;
+
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    public setCurrentAccountNameInHeading() {
+        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
+            if (acc) {
+                this.isLedgerAccSelected = true;
+                this.selectedLedgerName = this.currentState.substr(this.currentState.indexOf('/') + 1);
+                this.selectedPage = 'ledger - ' + acc.name;
+                return this.navigateToUser = false;
+            }
+        });
+    }
 }

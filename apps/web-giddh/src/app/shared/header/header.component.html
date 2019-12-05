@@ -539,21 +539,21 @@
                     <li *ngFor="let menu of menuItemsFromIndexDB">
                         <a *ngIf="menu.uniqueName == '/pages/gstfiling' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'"
                             routerLink="{{menu.uniqueName}}"
-                            [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                            [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
                         <a *ngIf="menu.uniqueName == '/pages/vat-report' && activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode != 'IN'"
                             routerLink="{{menu.uniqueName}}"
-                            [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                            [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
                         </a>
                         <a *ngIf="menu.uniqueName != '/pages/gstfiling' && menu.uniqueName != '/pages/vat-report'"
                             routerLink="{{menu.uniqueName}}"
-                            [ngClass]="{'active': selectedPage.toLowerCase() == menu.name.toLowerCase()}"
+                            [ngClass]="{'active': selectedPage && selectedPage.toLowerCase() == menu.name.toLowerCase()}"
                             (click)="analyzeMenus($event, menu.uniqueName, menu.additional)">
                             <span class="icon-dashboard"></span>
                             <span class="label">{{menu.name}}</span>
