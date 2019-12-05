@@ -68,6 +68,9 @@ export class MaskApplierService {
         let backspaceShift: boolean = false;
         let shift: number = 1;
         let stepBack: boolean = false;
+        let isFirstTime: boolean = false;
+        let prefixSuffixLength = this.prefix ? this.prefix.length : this.suffix ? this.suffix.length : 0;
+
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -219,18 +222,43 @@ export class MaskApplierService {
                 let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
 
-                if (resultSpecialCharLength > inputSpecialCharLength) {
-                    this._shift.add(position + resultSpecialCharLength - inputSpecialCharLength);
-                    position += resultSpecialCharLength - inputSpecialCharLength;
+                if (resultSpecialCharLength > 0) {
+                    if (position < result.length + prefixSuffixLength && !isFirstTime) {
+                        if (position === inputValue.length + prefixSuffixLength) {
+
+                        }
+                        if (position === (result.length + prefixSuffixLength) - shiftStep) {
+                            // don't do any thing
+                            this._shift.clear();
+                        } else {
+                            this._shift.add(position + (shiftStep));
+                            position += shiftStep;
+                        }
+                    } else {
+                        this._shift.add(position + (shiftStep));
+                        position += shiftStep;
+                    }
+                    // if (position === (inputValue.length + shiftStep)) {
+                    //     if (position === result.length) {
+                    //         this._shift.add(position - 1);
+                    //         position -= 1;
+                    //     } else if (position < result.length + prefixSuffixLength) {
+                    //         this._shift.add(position + (shiftStep));
+                    //         position += shiftStep;
+                    //     }
+                    // } else {
+                    //     this._shift.add(position + (shiftStep));
+                    //     position += shiftStep;
+                    // }
+                } else if (shiftStep <= 0) {
+                    this._shift.clear();
+                    backspaceShift = true;
+                    shift = shiftStep;
+                    position += shiftStep;
+                    this._shift.add(position);
+                } else {
+                    this._shift.clear();
                 }
-                // let shiftCustomOperatorCalculation = result.indexOf(shiftCustomOperator) - inputValue.indexOf(shiftCustomOperator);
-                // if (shiftCustomOperatorCalculation > 0 && result.length !== inputValue.length) {
-                //     // if (result.indexOf('.') === -1) {
-                //         this._shift.add(position + result.match(new RegExp(shiftCustomOperator, 'g')).length);
-                //         // position += result.match(new RegExp(shiftCustomOperator, 'g')).length;
-                //     // } else {
-                //     // }
-                // }
             }
 
         } else {
@@ -402,7 +430,8 @@ export class MaskApplierService {
         if (stepBack) {
             actualShift--;
         }
-
+        // console.log('position:- ', position);
+        // console.log('actualShift:- ', actualShift);
         cb(actualShift, backspaceShift);
         if (shift < 0) {
             this._shift.clear();
@@ -444,6 +473,7 @@ export class MaskApplierService {
         return res + decimals.substr(0, precision + 1);
     };
 
+    // currency separator like 3-3-3 3 3 3 3,3,3 3'3'3
     private currencySeparator = (str: string, char: string, decimalChar: string, precision: number,
                                  indFormat: boolean = false) => {
         str += '';
@@ -497,6 +527,7 @@ export class MaskApplierService {
         return inputValue;
     };
 
+    // for removing extra decimal points
     private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
         if (precision < Infinity) {
             let precisionRegEx: RegExp;

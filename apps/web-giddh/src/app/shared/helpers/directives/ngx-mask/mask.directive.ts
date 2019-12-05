@@ -316,6 +316,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     const positionToApply: number = this._position
       ? this._inputValue.length + position + caretShift
       : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+    // console.log('positionToApply: ', positionToApply);
     el.setSelectionRange(positionToApply, positionToApply);
     if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
       el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);
