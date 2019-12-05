@@ -102,8 +102,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDiscount = true;
         } if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
-        } else {
-            this.showBankDetail = false;
         }
         this.initializeNewForm();
 
@@ -248,6 +246,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = true;
         }
 
+    }
+    public isShowBankDetails(accountType: string) {
+        if (accountType === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
+        }
     }
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {
@@ -586,12 +591,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
     public isParentDebtorCreditor(activeParentgroup: string) {
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            if (activeParentgroup === 'sundrycreditors') {
-                this.showBankDetail = true;
-            } else {
-                this.showBankDetail = false;
-            }
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
+
+            if (accountAddress.controls.length === 0) {
+                this.addBlankGstForm();
+            }
+            if (!accountAddress.length) {
+                this.addBlankGstForm();
+            }
+
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;

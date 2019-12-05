@@ -181,7 +181,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    // this.activeGroupUniqueName = acc.parentGroups[1] ? acc.parentGroups[1].uniqueName : '';
+                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
+                    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
                 }
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
@@ -892,12 +893,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
     public isParentDebtorCreditor(activeParentgroup: string) {
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
-            if (activeParentgroup === 'sundrycreditors') {
-                this.showBankDetail = true;
-            } else {
-                this.showBankDetail = false;
-            }
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
+
+            if (accountAddress.controls.length === 0) {
+                this.addBlankGstForm();
+            }
+            if (!accountAddress.length) {
+                this.addBlankGstForm();
+            }
+
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
@@ -1228,20 +1234,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      *This is for apply discount for an account
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public applyDiscount(): void {
-        if (this.accountDetails) {
-            this.activeAccountName = this.accountDetails.uniqueName;
-        } else {
-            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
-        }
-        if (this.activeAccountName) {
-            _.uniq(this.selectedDiscounts);
-            let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
-            assignDescountObject.accountUniqueName = this.activeAccountName;
-            assignDescountObject.discountUniqueNames = this.selectedDiscounts;
-            this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
-        }
-    }
+    // public applyDiscount(): void {
+    //     if (this.accountDetails) {
+    //         this.activeAccountName = this.accountDetails.uniqueName;
+    //     } else {
+    //         this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+    //     }
+    //     if (this.activeAccountName) {
+    //         _.uniq(this.selectedDiscounts);
+    //         let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
+    //         assignDescountObject.accountUniqueName = this.activeAccountName;
+    //         assignDescountObject.discountUniqueNames = this.selectedDiscounts;
+    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
+    //     }
+    // }
 
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
