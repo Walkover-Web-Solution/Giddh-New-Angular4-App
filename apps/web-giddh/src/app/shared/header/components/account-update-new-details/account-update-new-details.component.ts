@@ -435,6 +435,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
+        this.taxHierarchy();
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             this.isShowBankDetails(this.activeGroupUniqueName);
