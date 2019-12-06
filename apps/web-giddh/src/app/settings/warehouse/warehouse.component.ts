@@ -194,6 +194,12 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.showWelcomePage();
     }
 
+    /**
+     * Page change event handler
+     *
+     * @param {PageChangedEvent} event Page changed event
+     * @memberof WarehouseComponent
+     */
     public pageChanged(event: PageChangedEvent): void {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page }));
     }
