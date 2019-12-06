@@ -525,10 +525,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     public submit() {
         this.isLoading = true;
         this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
-        this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+
+        if (this.tempDateParams.dispatchedDate) {
+            this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+        }
+
         this.branchTransfer.entity = this.branchTransferMode;
 
-        if(this.editBranchTransferUniqueName) {
+        if (this.editBranchTransferUniqueName) {
             this.inventoryService.updateNewBranchTransfer(this.branchTransfer).subscribe((res) => {
                 if (res) {
                     this.isLoading = false;
