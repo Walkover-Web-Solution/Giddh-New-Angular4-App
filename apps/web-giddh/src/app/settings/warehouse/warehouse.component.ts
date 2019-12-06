@@ -44,6 +44,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public selectedWarehouse: any;
     /** Configuration object for pagination component */
     public paginationConfig: any;
+    /** Stores the current page number */
+    public currentPage: number = 1;
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
@@ -242,11 +244,12 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.paginationConfig = {
                     count: warehouseData.count,
                     totalItems: warehouseData.totalItems,
-                    totalPages: warehouseData.totalPages
+                    totalPages: warehouseData.totalPages,
                 }
+                this.currentPage = warehouseData.page;
             }
+            console.log('Warehouse data: ', warehouseData);
         });
-
     }
 
     /**

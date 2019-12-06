@@ -181,7 +181,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.isItemUpdateInProgress) {
             this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
-            this.company.phoneCode = (this.itemDetails && this.itemDetails.callingCode) ? this.itemDetails.callingCode : '';
+            this.company.phoneCode = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getCallingCode(this.itemDetails.mobileNumber) : '';
             this.company.contactNo = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getFormattedContactNumber(this.itemDetails.mobileNumber) : '';
             this.company.uniqueName = (this.itemDetails && this.itemDetails.uniqueName) ? this.itemDetails.uniqueName : '';
             this.company.country = (this.itemDetails && this.itemDetails.countryCode) ? this.itemDetails.countryCode : '';
@@ -685,5 +685,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             return contactNumber.split('-')[1];
         }
         return contactNumber;
+    }
+
+    /**
+     * Retrieves the calling code from a contact number of the format
+     * <calling_code - number>
+     *
+     * @private
+     * @param {string} contactNumber Contact number
+     * @returns {string} Calling code
+     * @memberof WelcomeComponent
+     */
+    private getCallingCode(contactNumber: string): string {
+        if (contactNumber.toString().includes('-')) {
+            return contactNumber.split('-')[0];
+        }
+        return '';
     }
 }
