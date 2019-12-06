@@ -14,14 +14,14 @@
             style="width:30%">
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
                     </a>
                 </ng-container>
                 <ng-container *ngIf="option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
@@ -712,7 +712,7 @@
 
                                 </td>
 
-                                <td class="">
+                                <td>
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
                                         <input type="text" placeholder="Voucher no." class="form-control"
