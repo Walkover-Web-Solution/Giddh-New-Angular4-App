@@ -2271,7 +2271,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public addAccountFromShortcut() {
-        this.toggleAccountAsidePane();
+        if (!this.isCustomerSelected) {
+            this.selectedCustomerForDetails = null;
+            this.toggleAccountAsidePane();
+        }
     }
 
     /**
@@ -3291,12 +3294,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.inputCustomerName.nativeElement.focus();
                 }
             }, 200);
-        } else {
+        } /*else {
             setTimeout(() => {
                 if (this.customerNameDropDown) {
                     this.customerNameDropDown.show('');
                 }
             }, 200);
-        }
+        }*/
     }
 }

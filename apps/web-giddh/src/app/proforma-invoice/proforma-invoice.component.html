@@ -432,7 +432,7 @@
                             <!-- endregion-->
                             <!-- warehouse selection -->
                             <!-- make it dynamic by ( Developer end ) -->
-                            <div class="row mTB1">
+                            <!-- <div class="row mTB1">
                                 <div class="col-sm-2">
                                     <label>Warehouse <span class="red-text">*</span> </label>
                                 </div>
@@ -442,7 +442,7 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- end warehouse field -->
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
@@ -2046,11 +2046,11 @@
 
                                 </div>
 
-                                <div class="saveCard-data">
+                                <div class="saveCard-data pointer">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
-                                <div class="del-card" (click)="removeTransaction(entryIdx)"
+                                <div class="del-card pointer" (click)="removeTransaction(entryIdx)"
                                     *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                                     <i class="icon-trash" aria-hidden="true"></i>
                                 </div>
