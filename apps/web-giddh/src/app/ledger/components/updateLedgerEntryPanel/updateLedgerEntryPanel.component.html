@@ -77,7 +77,7 @@
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Particular</th>
 
-                                <th class="col-xs-2" style="border-top:none">
+                                <th class="col-xs-2 text-right" style="border-top:none">
                                     Amount
                                 </th>
                             </tr>
@@ -252,7 +252,7 @@
 
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Particular</th>
-                                <th class="col-xs-2" style="border-top:none">Amount</th>
+                                <th class="col-xs-2 text-right" style="border-top:none">Amount</th>
                             </tr>
                         </thead>
 
@@ -599,13 +599,13 @@
                     <!-- make it functional (Developer end) -->
                     <div class="" [ngClass]="{'test': !vm.showNewEntryPanel}">
                         <div class="row mrB2">
-                            <div class="col-sm-6 pdR1">
+                            <!-- <div class="col-sm-6 pdR1">
                                 <div class="selectWarehouse">
                                     <label class="font-12">Select Warehouse</label>
                                     <sh-select [options]="selectWarehouse">
                                     </sh-select>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <ng-template [ngIf]="vm.stockTrxEntry">
                                 <div class="col-sm-3 pdL1 pdR1">
@@ -636,12 +636,9 @@
                         </div>
 
                         <div class="row">
-                            <div [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-12': !vm.showNewEntryPanel}">
-                                <div class="clearfix">
-                                    <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
-                                        placeholder="Description"></textarea>
+                            <div class="col-xs-12">
+                                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description"></textarea>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -861,8 +858,6 @@
                     </div>
                 </div>
             </div>
-
-
 
         </div>
     </div>

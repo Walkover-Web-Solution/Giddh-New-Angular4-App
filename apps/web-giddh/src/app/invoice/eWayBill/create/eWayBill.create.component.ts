@@ -12,6 +12,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
 import { ToasterService } from '../../../services/toaster.service';
+import { CurrentPage } from '../../../models/api-models/Common';
+import { GeneralActions } from '../../../actions/general/general.actions';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -117,7 +119,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
         private _toaster: ToasterService,
-        private _cdRef: ChangeDetectorRef) {
+        private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
         this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
@@ -173,13 +175,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateEwayBillform.toGstIn = 'URP';
         }
         if (this.selectedInvoices.length === 0) {
-            // this._toaster.warningToast('Please select at least one invoice to generate E-way bill');
             this.router.navigate(['/invoice/preview/sales']);
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
                 this.generateEwayBillForm.reset();
-                // this.router.navigate(['/pages/invoice/ewaybill']);
             }
         });
         this.updateTransporterSuccess$.subscribe(s => {
@@ -193,6 +193,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.clearTransportForm();
             }
         });
+
+        this.setCurrentPageTitle();
     }
 
     public clearTransportForm() {
@@ -226,68 +228,59 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
-
     public onCancelGenerateBill() {
-        // this.router.navigate(['/invoice/preview/sales']);
         this.generateEwayBillForm.reset();
         this.subgrp.clear();
         this.doctype.clear();
         this.transport.clear();
-
     }
+
     public selectTransporter(e) {
         this.showClear = true;
         this.generateEwayBillform.transporterName = e.label;
     }
+
     public keydownPressed(e) {
         if (e.code === 'ArrowDown') {
             this.keydownClassAdded = true;
         } else if (e.code === 'Enter' && this.keydownClassAdded) {
             this.keydownClassAdded = true;
             this.OpenTransporterModel();
-            // this.toggleAsidePane();
         } else {
             this.keydownClassAdded = false;
         }
-
     }
+
     public OpenTransporterModel() {
         this.status = !this.status;
         this.generateNewTransporterForm.reset();
         this.transportEditMode = false;
-
     }
-    public generateTransporter(generateTransporterForm: NgForm) {
 
+    public generateTransporter(generateTransporterForm: NgForm) {
         this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
-        // this.OpenTransporterModel();
-
-
     }
 
     public updateTransporter(generateTransporterForm: NgForm) {
-
         this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
-        // this.OpenTransporterModel();
         this.transportEditMode = false;
         this.detectChanges();
-
     }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-
     }
+
     public editTransporter(trans: any) {
-        //
-        // this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
         let transportEditObject: IEwayBillTransporter = Object.assign({}, trans);
         this.seTransporterDetail(trans);
         this.transportEditMode = true;
     }
+
     public seTransporterDetail(trans) {
         if (trans !== undefined && trans) {
             this.generateNewTransporter.transporterId = trans.transporterId;
@@ -296,17 +289,20 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
         this.detectChanges();
     }
+
     public deleteTransporter(trans: IEwayBillTransporter) {
         this.store.dispatch(this.invoiceActions.deleteTransporter(trans.transporterId));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.OpenTransporterModel();
         this.detectChanges();
     }
+
     public removeInvoice(invoice: any[]) {
         this.confirmationFlag = 'closeConfirmation';
         this.deleteTemplateConfirmationMessage = `Are you sure want to remove invoice \'${this.selectedInvoices[0].voucherNumber}\' ?`;
         this.invoiceRemoveConfirmationModel.show();
     }
+
     /**
      * onCloseConfirmationModal
      */
@@ -318,24 +314,26 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         }
         this.invoiceRemoveConfirmationModel.hide();
-
     }
+
     detectChanges() {
         if (!this._cdRef['destroyed']) {
             this._cdRef.detectChanges();
         }
     }
+
     public pageChanged(event: any): void {
         this.transporterFilterRequest.page = event.page;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
-    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
 
+    public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         this.transporterFilterRequest.sort = type;
         this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
+
     public selectedModeOfTrans(mode: string) {
         if (mode !== 'road') {
             this.isTransModeRoad = true;
@@ -343,6 +341,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.isTransModeRoad = false;
         }
     }
+    
     public subTypeElementSelected(event) {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
@@ -357,4 +356,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Invoice > E-way bill";
+        currentPageObj.url = this.router.url;
+        currentPageObj.additional = "";
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
 }

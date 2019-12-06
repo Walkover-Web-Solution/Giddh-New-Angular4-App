@@ -2271,7 +2271,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public addAccountFromShortcut() {
-        this.toggleAccountAsidePane();
+        if (!this.isCustomerSelected) {
+            this.selectedCustomerForDetails = null;
+            this.toggleAccountAsidePane();
+        }
     }
 
     /**

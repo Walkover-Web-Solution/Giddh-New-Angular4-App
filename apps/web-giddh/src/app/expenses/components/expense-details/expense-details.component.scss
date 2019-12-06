@@ -99,3 +99,12 @@ span.close-modal.cp.pull-right {
     opacity: 0;
     visibility: hidden;
 }
+.pettycash {
+    height: 60vh;
+    overflow-y: auto;
+}
+@media only screen and (max-width: 991px) {
+    .pettycash {
+        height: initial;
+    }
+}

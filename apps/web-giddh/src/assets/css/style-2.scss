@@ -430,7 +430,7 @@ input {
 }
 
 .otherAccountEntry .header {
-    border: 1px solid #19237e !important;
+    border: 1px solid #C40000 !important;
     display: block;
     overflow: hidden;
 }
@@ -2433,6 +2433,9 @@ input[type="checkbox"]:checked:after {
 //     transform: translateY(70px) !important;
 //     margin: 10px auto;
 // }
+.pointer {
+    cursor: pointer;
+}
 .pt-05 {
     padding-top: 5px;
 }

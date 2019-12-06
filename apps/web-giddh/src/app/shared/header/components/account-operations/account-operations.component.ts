@@ -382,7 +382,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     this.isDebtorCreditor = true;
                 } else {
                     this.showGroupLedgerExportButton$ = observableOf(false);
-                    this.isDebtorCreditor = false;
+                    // this.isDebtorCreditor = false;
                 }
                 // this.taxGroupForm.get('taxes').reset();
                 // let showAddForm: boolean = null;
@@ -898,7 +898,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
     }
-
+    public isGroupSelected(event) {
+        if (event) {
+            this.activeGroupUniqueName$ = observableOf(event);
+            // in case of sundrycreditors or sundrydebtors no need to show address tab
+            if (event === 'sundrycreditors' || event === 'sundrydebtors') {
+                this.isDebtorCreditor = true;
+            }
+        }
+    }
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

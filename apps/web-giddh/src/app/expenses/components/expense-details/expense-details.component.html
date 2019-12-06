@@ -45,6 +45,8 @@
 
     </div>
 
+    <div class="pettycash">
+
     <div class="bg-white p-15 pb-0">
         <div class="form-group mb-2">
             <label>Description</label>
@@ -113,6 +115,7 @@
                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
         ></update-ledger-entry-panel>
     </div>
+ </div>
 </div>
 <div *ngIf="(ispPettycashEntryInprocess$ | async) ">
         <div class="no-data mrT2 loader-main" *ngIf="showLoader">
