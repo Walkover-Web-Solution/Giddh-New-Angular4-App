@@ -255,8 +255,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             let currentPageResponse = _.clone(response);
             if (currentPageResponse) {
-                console.log(currentPageResponse);
-
                 if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
 
                 } else {
@@ -1388,7 +1386,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         currentPageObj.name = menu.name;
         currentPageObj.url = menu.uniqueName;
         currentPageObj.additional = menu.additional;
-
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 

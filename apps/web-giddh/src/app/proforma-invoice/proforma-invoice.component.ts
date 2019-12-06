@@ -3294,12 +3294,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.inputCustomerName.nativeElement.focus();
                 }
             }, 200);
-        } else {
+        } /*else {
             setTimeout(() => {
                 if (this.customerNameDropDown) {
                     this.customerNameDropDown.show('');
                 }
             }, 200);
-        }
+        }*/
     }
 }
