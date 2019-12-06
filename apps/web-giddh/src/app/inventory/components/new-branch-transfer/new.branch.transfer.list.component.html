@@ -61,7 +61,7 @@
                         <td>{{ item.voucherNo }}</td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
-                        <td class="text-right">{{ item.totalAmount }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
                         <td>
                             <div class="btn-group pull-right" dropdown [autoClose]="true">
                                 <a id="button-basic" dropdownToggle type="button"
