@@ -1,4 +1,4 @@
-<ng-container *ngIf="(allWarehouses$ | async)?.results as warehouses">
+<ng-container *ngIf="warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
         <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
         <h2>Create Warehouse</h2>
@@ -10,14 +10,14 @@
 
     <div *ngIf="warehouses?.length" class="warehouseCardView">
         <div class="row">
-            <div *ngFor="let warehouse of warehouses" class="col-sm-4 pdR1">
+            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-sm-4 pdR1">
                 <div class="warehouseCard">
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouseOptions">
-                            <span class="setAsDefault">
-                                <i class="icon-no-selected"></i>
-                                <i class="icon-favorite-selected" hidden></i>
+                            <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
+                                <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
+                                <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
                                 Set as Default</span>
                             <div class="btn-group" dropdown>
                                 <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"

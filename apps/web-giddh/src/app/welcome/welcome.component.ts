@@ -636,19 +636,16 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private fillOnBoardingDetails(): void {
         if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            // TODO: Add default warehouse logic
-            this.companyProfileObj.businessNature = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessNature : this.activeCompany.businessNature;
-            this.companyProfileObj.businessType = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessType : this.activeCompany.businessType;
-            this.selectedBusinesstype = this.companyProfileObj.businessType;
-
-            let autoFillAddress = '', autoFillTaxNumber = '';
-            if (this.itemOnBoardingDetails.isItemUpdateInProgress && this.itemDetails) {
-                // Autofill GST and Address from warehouse being updated
-                autoFillAddress = this.itemDetails.address;
-                autoFillTaxNumber = this.itemDetails.taxNumber;
-            } else {
-                // Autofill GST and Address from default warehouse and default company
-                if (this.activeCompany && this.activeCompany.addresses) {
+            const defaultWarehouse = this.getDefaultWarehouseDetails();
+            let autoFillAddress = '';
+            let autoFillTaxNumber = '';
+            if (this.isItemUpdateInProgress && this.itemDetails && defaultWarehouse && this.activeCompany) {
+                // Autofill GST, Address and other details from default warehouse
+                this.companyProfileObj.businessNature = this.itemDetails.businessNature || defaultWarehouse.businessNature || this.activeCompany.businessNature || '';
+                this.companyProfileObj.businessType = this.itemDetails.businessType || defaultWarehouse.businessType || this.activeCompany.businessType || '';
+                autoFillAddress = this.itemDetails.address || defaultWarehouse.address;
+                autoFillTaxNumber = this.itemDetails.taxNumber || defaultWarehouse.taxNumber;
+                if (!(autoFillAddress && autoFillTaxNumber)) {
                     this.activeCompany.addresses.forEach((address: any) => {
                         if (address.isDefault) {
                             autoFillAddress = address.address;
@@ -701,5 +698,26 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             return contactNumber.split('-')[0];
         }
         return '';
+    }
+
+    /**
+     * Returns the default warehouse data
+     *
+     * @private
+     * @returns {*} Default warehouse data
+     * @memberof WelcomeComponent
+     */
+    private getDefaultWarehouseDetails(): any {
+        let defaultWarehouse: any;
+        this.store.pipe(select(state => state.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                for (let index = 0; index < warehouses.results.length; index++) {
+                    if (warehouses.results[index].isDefault) {
+                        defaultWarehouse = warehouses.results[index];
+                        return defaultWarehouse;
+                    }
+                }
+            }
+        });
     }
 }

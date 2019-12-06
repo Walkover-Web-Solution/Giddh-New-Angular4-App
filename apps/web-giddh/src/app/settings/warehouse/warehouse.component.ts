@@ -46,6 +46,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public paginationConfig: any;
     /** Stores the current page number */
     public currentPage: number = 1;
+    /** Stores the list of warehouses */
+    public warehouses: Array<any> = [];
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
@@ -219,6 +221,22 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Set the warehouse as default warehouse
+     *
+     * @param {*} warehouse Selected warehouse to set as default
+     * @param {number} warehouseIndex Selected warehouse index
+     * @memberof WarehouseComponent
+     */
+    public setAsDefault(warehouse: any, warehouseIndex: number): void {
+        if (!warehouse.isDefault) {
+            this.store.dispatch(this.warehouseActions.setAsDefaultWarehouse({
+                warehouseUniqueName: warehouse.uniqueName,
+                warehouseIndex
+            }));
+        }
+    }
+
+    /**
      * Initializes all the subscribers to warehouse store
      *
      * @private
@@ -238,9 +256,14 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
             }
+            if (warehouseState && warehouseState.defaultWarehouseData) {
+                this.resetDefaultWarehouse();
+                this.setDefaulWarehouse(warehouseState.defaultWarehouseData);
+            }
         });
         this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
             if (warehouseData) {
+                this.warehouses = warehouseData.results;
                 this.paginationConfig = {
                     count: warehouseData.count,
                     totalItems: warehouseData.totalItems,
@@ -335,5 +358,35 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private resetWelcomeForm(): void {
         this.store.dispatch(this.generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
+    }
+
+    /**
+     * Resets the isDefault flag for older default warehouse
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private resetDefaultWarehouse(): void {
+        for (let index = 0; index < this.warehouses.length; index++) {
+            if (this.warehouses[index].isDefault) {
+                this.warehouses[index].isDefault = false;
+                break;
+            }
+        }
+        this.store.dispatch(this.warehouseActions.resetDefaultWarehouseResponse());
+    }
+
+    /**
+     * Sets the new warehouse as default warehouse
+     *
+     * @private
+     * @param {*} defaultWarehouseData Warehouse data to be set as default
+     * @memberof WarehouseComponent
+     */
+    private setDefaulWarehouse(defaultWarehouseData: any): void {
+        if (defaultWarehouseData && defaultWarehouseData.body) {
+            const warehouseIndex = defaultWarehouseData.request.warehouseIndex;
+            this.warehouses[warehouseIndex].isDefault = true;
+        }
     }
 }

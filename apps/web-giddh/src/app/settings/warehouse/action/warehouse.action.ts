@@ -28,6 +28,12 @@ export class WarehouseActions {
     public static readonly UPDATE_WAREHOUSE = 'UPDATE_WAREHOUSE';
     /** Action to handle update warehouse response */
     public static readonly UPDATE_WAREHOUSE_RESPONSE = 'UPDATE_WAREHOUSE_RESPONSE';
+    /** Action to set the default warehouse */
+    public static readonly SET_AS_DEFAULT_WAREHOUSE = 'SET_AS_DEFAULT_WAREHOUSE';
+    /** Action to set the default warehouse response */
+    public static readonly SET_AS_DEFAULT_WAREHOUSE_RESPONSE = 'SET_AS_DEFAULT_WAREHOUSE_RESPONSE';
+    /** Action to reset the default warehouse response */
+    public static readonly RESET_AS_DEFAULT_WAREHOUSE_RESPONSE = 'RESET_AS_DEFAULT_WAREHOUSE_RESPONSE';
     /** Action to reset update warehouse flag (triggered after successful warehouse updation) */
     public static readonly RESET_UPDATE_WAREHOUSE = 'RESET_UPDATE_WAREHOUSE';
     /** Action to reset create warehouse flag (triggered after successful warehouse creation) */
@@ -89,6 +95,26 @@ export class WarehouseActions {
             }
             this.toast.successToast('Warehouse updated successfully', 'Success');
             return this.updateWarehouseResponse(response);
+        })
+    )
+
+    /**
+     * Effect to update warehouse
+     *
+     * @private
+     * @memberof WarehouseActions
+     */
+    @Effect()
+    private setDefaultWarehouse$ = this.action$.pipe(
+        ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
+        switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
+        map((response: BaseResponse<any, any>) => {
+            if (response.status === 'error') {
+                this.toast.errorToast(response.message, response.code);
+                return { type: 'EmptyAction' };
+            }
+            this.toast.successToast('Warehouse updated successfully', 'Success');
+            return this.setAsDefaultWarehouseResponse(response);
         })
     )
 
@@ -183,6 +209,32 @@ export class WarehouseActions {
      */
     public resetUpdateWarehouse(): CustomActions {
         return { type: WarehouseActions.RESET_UPDATE_WAREHOUSE };
+    }
+
+    /**
+     * Returns the action to handle set default warehouse operation
+     *
+     * @param {*} param Params required for set as default warehouse
+     * @returns {CustomActions} Action to handle set default warehouse operation
+     * @memberof WarehouseActions
+     */
+    public setAsDefaultWarehouse(param: any): CustomActions {
+        return { type: WarehouseActions.SET_AS_DEFAULT_WAREHOUSE, payload: param };
+    }
+
+    /**
+     * Returns the action to handle set default warehouse operation
+     *
+     * @param {*} response Response from set default warehouse service
+     * @returns {CustomActions} Action to handle set default warehouse response
+     * @memberof WarehouseActions
+     */
+    public setAsDefaultWarehouseResponse(response: any): CustomActions {
+        return { type: WarehouseActions.SET_AS_DEFAULT_WAREHOUSE_RESPONSE, payload: response };
+    }
+
+    public resetDefaultWarehouseResponse() {
+        return { type: WarehouseActions.RESET_AS_DEFAULT_WAREHOUSE_RESPONSE };
     }
 
 }

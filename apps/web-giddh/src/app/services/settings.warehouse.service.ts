@@ -57,7 +57,7 @@ export class SettingsWarehouseService {
         const contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':page', params.page)
-        }`;
+            }`;
         return this.http.get(contextPath).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;
@@ -77,6 +77,25 @@ export class SettingsWarehouseService {
         const contextPath = WAREHOUSE_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':warehouseUniqueName', params.warehouseUniqueName);
         return this.http.put(this.config.apiUrl + contextPath, params).pipe(
+            map((response) => {
+                let data: BaseResponse<any, any> = response;
+                data.request = params;
+                return data;
+            }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
+    }
+
+    /**
+     * Sends the update warehouse request to server
+     *
+     * @param {*} params Request parameter required for the service
+     * @returns {Observable<BaseResponse<any, any>>} Observable of update warehouse to carry out further operations
+     * @memberof SettingsWarehouseService
+     */
+    public setAsDefaultWarehouse(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const contextPath = WAREHOUSE_API.SET_DEFAULT_WAREHOUSE.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':warehouseUniqueName', params.warehouseUniqueName);
+        return this.http.patch(this.config.apiUrl + contextPath, params).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;
                 data.request = params;
