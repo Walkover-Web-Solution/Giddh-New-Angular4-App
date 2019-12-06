@@ -161,12 +161,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 
-
-        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('report') > -1 ? 3 : 0;;
+        this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;;
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('report') > -1 ? 3 : 0;
+                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('inventory/report') > -1 ? 3 : 0;
                 if (this.activeTabIndex !== index) {
                     this.activeTabIndex = index;
                     this.saveLastState();
@@ -179,7 +178,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this._inventoryAction.ResetInventoryState());
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        //document.querySelector('body').classList.remove('inventoryPage');
     }
 
     public ngAfterViewInit() {
@@ -210,7 +208,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public openCreateCompanyModal() {
         this.loadAddCompanyComponent();
-        // this.addCompanyModal.show();
     }
 
     public redirectUrlToActiveTab(type: string, event: any, activeTabIndex?: number, currentUrl?: string) {
@@ -257,40 +254,16 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public hideAddCompanyModal() {
-        // this.addCompanyModal.hide();
-    }
-
-    public hideCompanyModalAndShowAddAndManage() {
-        // this.addCompanyModal.hide();
-    }
-
     public loadAddCompanyComponent() {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
         let viewContainerRef = this.companyadd.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance as CompanyAddComponent).createBranch = true;
-        (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
-            this.hideAddCompanyModal();
-        });
-        (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
-            this.hideCompanyModalAndShowAddAndManage();
-        });
     }
 
     public openAddBranchModal() {
         this.branchModal.show();
-    }
-
-    public onHide() {
-        console.log('creat company modal is closed.');
-        // let companyUniqueName = null;
-        // this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
-        // let stateDetailsRequest = new StateDetailsRequest();
-        // stateDetailsRequest.companyUniqueName = companyUniqueName;
-        // stateDetailsRequest.lastState = 'settings';
-        // this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public hideAddBranchModal() {

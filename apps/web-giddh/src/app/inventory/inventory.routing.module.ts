@@ -11,7 +11,6 @@ import { JobworkComponent } from "./jobwork/jobwork.component";
 
 import { InvViewService } from "./inv.view.service";
 import { ManufacturingComponent } from "./manufacturing/manufacturing.component";
-import { NewBranchTransferAddComponent } from "./components/new-branch-transfer/new.branch.transfer.add.component";
 import { NewBranchTransferListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
 
 @NgModule({
@@ -27,8 +26,7 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                         component: InventoryUpdateGroupComponent
                     },
                     {
-                        path:
-                            "add-group/:groupUniqueName/add-stock/:stockUniqueName",
+                        path: "add-group/:groupUniqueName/add-stock/:stockUniqueName",
                         component: InventoryAddStockComponent
                     },
                     {
@@ -48,7 +46,10 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                         pathMatch: "full",
                         component: InventoryWelcomeComponent
                     },
-                    { path: "jobwork", component: JobworkComponent },
+                    { 
+                        path: "jobwork", 
+                        component: JobworkComponent 
+                    },
                     {
                         path: "jobwork/:type/:uniqueName",
                         component: JobworkComponent
@@ -68,4 +69,4 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
     exports: [RouterModule],
     providers: [InvViewService]
 })
-export class InventoryRoutingModule {}
+export class InventoryRoutingModule { }
