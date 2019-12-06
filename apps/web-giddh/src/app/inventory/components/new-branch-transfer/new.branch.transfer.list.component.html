@@ -77,6 +77,10 @@
                                     </li> -->
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;"
+                                            (click)="showEditBranchTransferPopup(item)">Edit</a>
+                                    </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:;"
                                             (click)="showBranchTransferModal(item.uniqueName)">Delete</a>
                                     </li>
                                 </ul>
@@ -149,7 +153,7 @@
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
         <div class="modal-body">
-            <new-branch-transfer [branchTransferMode]="branchTransferMode"></new-branch-transfer>
+            <new-branch-transfer [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
     </div>
 </ng-template>

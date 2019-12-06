@@ -50,6 +50,7 @@ import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 
 export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     @Input() public branchTransferMode: string;
+    @Input() public editBranchTransferUniqueName: string;
     @ViewChild('productSkuCode') productSkuCode;
     @ViewChild('productHsnNumber') productHsnNumber;
 
@@ -115,6 +116,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         transporterModes.map(c => {
             this.transporterMode.push({ label: c.label, value: c.value });
         });
+
+        if (this.editBranchTransferUniqueName) {
+            this.getBranchTransfer();
+        }
     }
 
     public ngOnDestroy() {
@@ -152,6 +157,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     public initFormFields() {
         this.branchTransfer = {
             dateOfSupply: null,
+            challanNo: null,
+            uniqueName: null,
             note: null,
             sources: [{
                 name: null,
@@ -200,7 +207,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 },
                 description: null
             }],
-            transportationDetails: {
+            transporterDetails: {
                 dispatchedDate: null,
                 transporterName: null,
                 transporterId: null,
@@ -510,33 +517,51 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     }
 
     public selectDateOfSupply(date) {
-        if (date && this.branchTransfer.transportationDetails.dispatchedDate && date > this.branchTransfer.transportationDetails.dispatchedDate) {
-            this.branchTransfer.transportationDetails.dispatchedDate = date;
+        if (date && this.branchTransfer.transporterDetails.dispatchedDate && date > this.branchTransfer.transporterDetails.dispatchedDate) {
+            this.branchTransfer.transporterDetails.dispatchedDate = date;
         }
     }
 
     public submit() {
         this.isLoading = true;
         this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
-        this.branchTransfer.transportationDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+        this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         this.branchTransfer.entity = this.branchTransferMode;
 
-        this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
-            if (res) {
-                this.isLoading = false;
-                if(res.status === 'success') {
-                    this.initFormFields();
-                    this.tempDateParams.dateOfSupply = "";
-                    this.tempDateParams.dispatchedDate = "";
-                    this._toasty.successToast(res.message, "Success");
-                    this._router.navigate(['/pages', 'inventory', 'report']);
+        if(this.editBranchTransferUniqueName) {
+            this.inventoryService.updateNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+                if (res) {
+                    this.isLoading = false;
+                    if (res.status === 'success') {
+                        this._toasty.successToast(res.message, "Success");
+                        this.closeBranchTransferPopup();
+                        this._router.navigate(['/pages', 'inventory', 'report']);
+                    } else {
+                        this._toasty.errorToast(res.message, res.code);
+                    }
                 } else {
                     this._toasty.errorToast(res.message, res.code);
                 }
-            } else {
-                this._toasty.errorToast(res.message, res.code);
-            }
-        });
+            });
+        } else {
+            this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+                if (res) {
+                    this.isLoading = false;
+                    if (res.status === 'success') {
+                        this.initFormFields();
+                        this.tempDateParams.dateOfSupply = "";
+                        this.tempDateParams.dispatchedDate = "";
+                        this._toasty.successToast(res.message, "Success");
+                        this.closeBranchTransferPopup();
+                        this._router.navigate(['/pages', 'inventory', 'report']);
+                    } else {
+                        this._toasty.errorToast(res.message, res.code);
+                    }
+                } else {
+                    this._toasty.errorToast(res.message, res.code);
+                }
+            });
+        }
     }
 
     public focusHsnNumber() {
@@ -581,5 +606,33 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     public saveSkuNumberPopup(product) {
         product.stockDetails.skuCode = this.skuNumber;
         this.skuNumberPopupShow = false;
+    }
+
+    public getBranchTransfer() {
+        this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).subscribe((response) => {
+            if (response.status === "success") {
+                this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
+                this.branchTransfer.challanNo = response.body.challanNo;
+                this.branchTransfer.note = response.body.note;
+                this.branchTransfer.uniqueName = response.body.uniqueName;
+                this.branchTransfer.sources = response.body.sources;
+                this.branchTransfer.destinations = response.body.destinations;
+                this.branchTransfer.products = response.body.products;
+                this.branchTransfer.entity = response.body.entity;
+                this.branchTransfer.transporterDetails = response.body.transporterDetails;
+
+                if (response.body.dateOfSupply) {
+                    this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
+                }
+                if (response.body.transporterDetails) {
+                    this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
+                }
+
+                this.calculateOverallTotal();
+            } else {
+                this.closeBranchTransferPopup();
+                this._toasty.errorToast(response.message);
+            }
+        });
     }
 }

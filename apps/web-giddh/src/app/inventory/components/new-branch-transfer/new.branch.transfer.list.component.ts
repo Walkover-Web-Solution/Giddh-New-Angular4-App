@@ -56,6 +56,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public asideTransferPaneState: string = 'out';
     public branchTransferMode: string = '';
     public inlineSearch: any = '';
+    public timeout: any;
+    public selectedBranchTransfer: any = '';
+    public editBranchTransferUniqueName: string = '';
+
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
         to: '',
@@ -73,8 +77,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         senderReceiver: null,
         warehouseName: null
     };
-    public timeout: any;
-    public selectedBranchTransfer: any = '';
 
     constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -174,6 +176,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     // new transfer aside pane
     public toggleTransferAsidePane(event?): void {
+        this.editBranchTransferUniqueName = '';
+
         if (event) {
             event.preventDefault();
         }
@@ -245,5 +249,11 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.branchTransferGetRequestParams.sortBy = sortBy;
 
         this.getBranchTransferList(true);
+    }
+
+    public showEditBranchTransferPopup(item) {
+        this.branchTransferMode = item.voucherType;
+        this.editBranchTransferUniqueName = item.uniqueName;
+        this.openModal();
     }
 }

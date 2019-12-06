@@ -116,17 +116,19 @@ export class NewBranchTransferResponse {
     public sources: NewBranchTransferSourceDestination[];
     public destinations: NewBranchTransferSourceDestination[];
     public products: NewBranchTransferProduct[];
-    public transportationDetails: NewBranchTransferTransportationDetails;
+    public transporterDetails: NewBranchTransferTransportationDetails;
     public entity: string;
 }
 
 export class NewBranchTransferRequest {
     public dateOfSupply: any;
+    public challanNo: string;
+    public uniqueName: string;
     public note: string;
     public sources: NewBranchTransferSourceDestination[];
     public destinations: NewBranchTransferSourceDestination[];
     public products: NewBranchTransferProduct[];
-    public transportationDetails: NewBranchTransferTransportationDetails;
+    public transporterDetails: NewBranchTransferTransportationDetails;
     public entity: string;
 }
 

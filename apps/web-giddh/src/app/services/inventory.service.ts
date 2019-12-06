@@ -1080,16 +1080,29 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, branchTransferUniqueName)));
     }
 
-    public getNewBranchTransfer(branchTransferUniqueName: string): Observable<BaseResponse<string, string>> {
+    public getNewBranchTransfer(branchTransferUniqueName: string): Observable<BaseResponse<NewBranchTransferResponse, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVENTORY_API.DELETE_BRANCH_TRANSFER;
+        let url = this.config.apiUrl + INVENTORY_API.GET_BRANCH_TRANSFER;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url.replace(':branchTransferUniqueName', encodeURIComponent(branchTransferUniqueName));
 
         return this._http.get(url).pipe(map((res) => {
-            let data: BaseResponse<string, string> = res;
+            let data: BaseResponse<NewBranchTransferResponse, string> = res;
             data.request = branchTransferUniqueName;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, branchTransferUniqueName)));
+        }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, string>(e, branchTransferUniqueName)));
+    }
+
+    public updateNewBranchTransfer(branchTransfer: NewBranchTransferRequest): Observable<BaseResponse<NewBranchTransferResponse, NewBranchTransferRequest>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.UPDATE_BRANCH_TRANSFER;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':branchTransferUniqueName', encodeURIComponent(branchTransfer.uniqueName));
+
+        return this._http.put(url, branchTransfer).pipe(map((res) => {
+            let data: BaseResponse<NewBranchTransferResponse, NewBranchTransferRequest> = res;
+            data.request = branchTransfer;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, NewBranchTransferRequest>(e, branchTransfer)));
     }
 }
