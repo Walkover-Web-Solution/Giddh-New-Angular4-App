@@ -255,8 +255,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             let currentPageResponse = _.clone(response);
             if (currentPageResponse) {
-                console.log(currentPageResponse);
-
                 if (currentPageResponse && currentPageResponse.currentPageObj && currentPageResponse.currentPageObj.url && currentPageResponse.currentPageObj.url.includes('ledger/')) {
 
                 } else {
@@ -1372,7 +1370,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             currentPageObj.name = "";
             currentPageObj.url = currentUrl;
             currentPageObj.additional = "";
-            this._generalService.setCurrentPageTitle(currentPageObj);
+            this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
                 if (page.uniqueName === decodeURI(currentUrl)) {
@@ -1388,8 +1386,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         currentPageObj.name = menu.name;
         currentPageObj.url = menu.uniqueName;
         currentPageObj.additional = menu.additional;
-
-        this._generalService.setCurrentPageTitle(currentPageObj);
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     public setCurrentAccountNameInHeading() {

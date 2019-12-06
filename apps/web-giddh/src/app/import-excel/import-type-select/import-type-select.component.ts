@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralService } from '../../services/general.service';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 @Component({
     selector: 'import-type-select',
@@ -18,12 +18,12 @@ export class ImportTypeSelectComponent implements OnInit {
         private store: Store<AppState>,
         private _router: Router,
         private _importExcelActions: ImportExcelActions,
-        private _generalService: GeneralService
+        private _generalActions: GeneralActions
     ) {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Import Data";
         currentPageObj.url = this._router.url;
-        this._generalService.setCurrentPageTitle(currentPageObj);
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     public ngOnInit() {
