@@ -20,18 +20,13 @@ export class ImportTypeSelectComponent implements OnInit {
         private _importExcelActions: ImportExcelActions,
         private _generalActions: GeneralActions
     ) {
-        this.setCurrentPageTitle("Import Data");
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Import Data";
+        currentPageObj.url = this._router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     public ngOnInit() {
         this.store.dispatch(this._importExcelActions.resetImportExcelState());
-    }
-
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this._router.url;
-        currentPageObj.additional = "";
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }
