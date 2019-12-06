@@ -106,7 +106,12 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 /* .ledger-main .form-control {
     height: 26px;
 } */
-
+.ledger-main .form-control {
+    background: #fff!important;
+    height: 45px;
+    padding-right: 12px !important;
+    padding-left: 12px !important;
+}
 .ledger_book {
   position: relative;
   width: 100%;
@@ -156,7 +161,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
   width: 80px !important;
   min-width: 80px;
 }
-
 
 
 @media only screen and (max-width: 1024px) {
