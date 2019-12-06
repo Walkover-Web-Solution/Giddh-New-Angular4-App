@@ -195,8 +195,19 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: PageChangedEvent): void {
-        console.log('Page change event: ', event);
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page }));
+    }
+
+    /**
+     * Resets the on boarding form
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    public resetOnboardingForm(): void {
+        this.generalService.createNewCompany = null;
+        this.store.dispatch(this.commonActions.resetCountry());
+        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
     /**
@@ -220,27 +231,16 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
             }
         });
-        this.allWarehouses$.subscribe((warehouseData: any) => {
-            this.paginationConfig = {
-                count: warehouseData.count,
-                totalItems: warehouseData.totalItems,
-                totalPages: warehouseData.totalPages
+        this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
+            if (warehouseData) {
+                this.paginationConfig = {
+                    count: warehouseData.count,
+                    totalItems: warehouseData.totalItems,
+                    totalPages: warehouseData.totalPages
+                }
             }
-            console.log('Pagination ', this.paginationConfig);
         });
 
-    }
-
-    /**
-     * Resets the on boarding form
-     *
-     * @private
-     * @memberof WarehouseComponent
-     */
-    private resetOnboardingForm(): void {
-        this.generalService.createNewCompany = null;
-        this.store.dispatch(this.commonActions.resetCountry());
-        this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
     /**
