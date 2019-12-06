@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 
@@ -73,6 +73,7 @@ export class AgingReportComponent implements OnInit {
         private _toasty: ToasterService,
         private router: Router, private _agingReportActions: AgingReportActions,
         private _contactService: ContactService,
+        private _cdr: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver) {
         this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
@@ -106,14 +107,18 @@ export class AgingReportComponent implements OnInit {
 
                 });
             }
-
+            setTimeout(() => {
+                this.detetcChanges();
+            }, 60000);
         });
     }
 
-    public go() {
+    public getDueReport() {
         this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
     }
-
+    public detetcChanges() {
+        this._cdr.detectChanges();
+    }
     public ngOnInit() {
 
         this.universalDate$.subscribe(a => {
@@ -129,8 +134,10 @@ export class AgingReportComponent implements OnInit {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'aging-report';
+        this.dueAmountReportRequest.from = this.fromDate;
+        this.dueAmountReportRequest.to = this.toDate;
 
-        this.go();
+        this.getDueReport();
 
         // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
@@ -145,7 +152,7 @@ export class AgingReportComponent implements OnInit {
             distinctUntilChanged()
         ).subscribe(term => {
             this.dueAmountReportRequest.q = term;
-            this.go();
+            this.getDueReport();
         });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
@@ -179,7 +186,7 @@ export class AgingReportComponent implements OnInit {
 
     public pageChangedDueReport(event: any): void {
         this.dueAmountReportRequest.page = event.page;
-        this.go();
+        this.getDueReport();
     }
 
     public loadPaginationComponent(s) {
@@ -204,18 +211,19 @@ export class AgingReportComponent implements OnInit {
         }
     }
     public selectedDate(value: any) {
+        this.isAdvanceSearchApplied = false;
         this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
         this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-        if (value.event.type === 'hide') {
-            this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
-        }
+        this.dueAmountReportRequest.from = this.fromDate;
+        this.dueAmountReportRequest.to = this.toDate;
+        this.resetAdvanceSearch();
     }
 
     public resetAdvanceSearch() {
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
-        this.go();
+        this.getDueReport();
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -254,7 +262,7 @@ export class AgingReportComponent implements OnInit {
             this.agingAdvanceSearchModal.includeTotalDueAmount = false;
         }
         this.isAdvanceSearchApplied = true;
-        this.go();
+        this.getDueReport();
     }
 
     public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
@@ -270,7 +278,7 @@ export class AgingReportComponent implements OnInit {
         this.order = ord;
 
         this.dueAmountReportRequest.sort = ord;
-        this.go();
+        this.getDueReport();
     }
 
     public toggleAdvanceSearchPopup() {
