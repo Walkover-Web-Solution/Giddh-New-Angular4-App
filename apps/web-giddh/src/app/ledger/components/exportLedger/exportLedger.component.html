@@ -1,60 +1,65 @@
 <div id="exportModal" class="" ng-if="ledgerCtrl.LedgerExport">
-  <div class="modal-header">
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()"
-      aria-label="Close">×</span>
-    <h3>Export Ledger</h3>
-  </div>
-  <div class="modal-body mrB4" id="export-body">
-    <form name="addShareEmailForm" novalidate class="" autocomplete="off">
-      <div class="pdB2 clearfix">
-        <label class="w100">Type:</label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
-            class="radio_theme cp">Mini
-        </label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail"
-            class="radio_theme cp">Detailed
-        </label>
-      </div>
-      <div class="pdB2 clearfix">
-        <label class="w100">Export As:</label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'pdf'" class="radio_theme cp">PDF
-        </label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'xlsx'" class="radio_theme cp">Excel
-        </label>
-      </div>
-      <div class="pdB2 clearfix">
-        <label class="w100">Order:</label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="order" [(ngModel)]="order" [value]="'asc'" class="radio_theme cp">Ascending
-        </label>
-        <label class="radio-inline pd0">
-          <input type="radio" name="order" [(ngModel)]="order" [value]="'desc'" class="radio_theme cp">Descending
-        </label>
-      </div>
-      <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed'">
-        <label class="w100">Invoice no.:</label>
-        <label class="radio-inline pd0" style="margin-left: 6px;">
-          <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
-        </label>
-      </div>
-      <button class="btn-success btn" (click)="exportLedger()">Download</button>
-      <div class="modal_wrap">
-        <div class="clearfix"></div>
-        <h3 class="pdT1 pdB1">Or</h3>
-        <div>
-          <h3 class="l8grey pdB size-xs">You can add multiple id's separated comma</h3>
-          <textarea [(ngModel)]="emailData" required name="email" class="form-control"
-            placeholder="Recipents Email Id's"></textarea>
-          <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mrT1" (click)="sendLedgEmail()">Send
-            email
-          </button>
-        </div>
-        <!-- add mailer -->
-      </div>
-    </form>
-  </div>
+    <div class="modal-header">
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()"
+            aria-label="Close">×</span>
+        <h3>Export Ledger</h3>
+    </div>
+    <div class="modal-body mrB4" id="export-body">
+        <form name="addShareEmailForm" novalidate class="" autocomplete="off">
+            <div class="pdB2 clearfix">
+                <label class="w100">Type:</label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected" [value]="emailTypeMini"
+                        class="radio_theme cp">Mini
+                </label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="emailTypeSelected" [(ngModel)]="emailTypeSelected"
+                        [value]="emailTypeDetail" class="radio_theme cp">Detailed
+                </label>
+            </div>
+            <div class="pdB2 clearfix">
+                <label class="w100">Export As:</label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'pdf'"
+                        class="radio_theme cp">PDF
+                </label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="exportAs" [(ngModel)]="exportAs" [value]="'xlsx'"
+                        class="radio_theme cp">Excel
+                </label>
+            </div>
+            <div class="pdB2 clearfix">
+                <label class="w100">Order:</label>
+                <label class="radio-inline pd0">
+                    <input type="radio" name="order" [(ngModel)]="order" [value]="'asc'"
+                        class="radio_theme cp">Ascending
+                </label>
+                <label class="radio-inline descendingRadioBtn pd0">
+                    <input type="radio" name="order" [(ngModel)]="order" [value]="'desc'"
+                        class="radio_theme cp">Descending
+                </label>
+            </div>
+            <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed'">
+                <label class="w100">Invoice no.:</label>
+                <label class="radio-inline pd0" style="margin-left: 6px;">
+                    <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
+                </label>
+            </div>
+            <button class="btn-success btn" (click)="exportLedger()">Download</button>
+            <div class="modal_wrap">
+                <div class="clearfix"></div>
+                <h3 class="pdT1 pdB1">Or</h3>
+                <div>
+                    <h3 class="l8grey pdB size-xs">You can add multiple id's separated comma</h3>
+                    <textarea [(ngModel)]="emailData" required name="email" class="form-control"
+                        placeholder="Recipents Email Id's"></textarea>
+                    <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mrT1"
+                        (click)="sendLedgEmail()">Send
+                        email
+                    </button>
+                </div>
+                <!-- add mailer -->
+            </div>
+        </form>
+    </div>
 </div>

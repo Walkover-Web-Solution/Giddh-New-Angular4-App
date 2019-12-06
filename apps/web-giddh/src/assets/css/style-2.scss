@@ -9115,6 +9115,9 @@ button {
     .tooltip.bs-tooltip-top {
         display: none !important;
     }
+    .custom-body #settingTab .tab-container .nav.nav-tabs{
+            position: inherit;
+    }
 }
 
 @media (max-width: 575px) {
