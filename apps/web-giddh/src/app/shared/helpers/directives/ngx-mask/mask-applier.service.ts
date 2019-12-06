@@ -68,8 +68,6 @@ export class MaskApplierService {
         let backspaceShift: boolean = false;
         let shift: number = 1;
         let stepBack: boolean = false;
-        let isFirstTime: boolean = false;
-        let prefixSuffixLength = this.prefix ? this.prefix.length : this.suffix ? this.suffix.length : 0;
 
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
@@ -107,7 +105,7 @@ export class MaskApplierService {
                 inputValue.match('[wа-яА-Я]') ||
                 inputValue.match('[ЁёА-я]') ||
                 inputValue.match('[a-z]|[A-Z]') ||
-                inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/)
+                inputValue.match(/[-@#!$%\\^&*()_£¬+|~=`{}\[\]:";<>?\/]/)
             ) {
                 inputValue = this._checkInput(inputValue);
             }
@@ -222,42 +220,17 @@ export class MaskApplierService {
                 let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
                 let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
 
-                if (resultSpecialCharLength > 0) {
-                    if (position < result.length + prefixSuffixLength && !isFirstTime) {
-                        if (position === inputValue.length + prefixSuffixLength) {
-
-                        }
-                        if (position === (result.length + prefixSuffixLength) - shiftStep) {
-                            // don't do any thing
-                            this._shift.clear();
-                        } else {
-                            this._shift.add(position + (shiftStep));
-                            position += shiftStep;
-                        }
-                    } else {
-                        this._shift.add(position + (shiftStep));
-                        position += shiftStep;
-                    }
-                    // if (position === (inputValue.length + shiftStep)) {
-                    //     if (position === result.length) {
-                    //         this._shift.add(position - 1);
-                    //         position -= 1;
-                    //     } else if (position < result.length + prefixSuffixLength) {
-                    //         this._shift.add(position + (shiftStep));
-                    //         position += shiftStep;
-                    //     }
-                    // } else {
-                    //     this._shift.add(position + (shiftStep));
-                    //     position += shiftStep;
-                    // }
-                } else if (shiftStep <= 0) {
+                // if new separator character added to result then shift cursor by special character length
+                if (resultSpecialCharLength > inputSpecialCharLength) {
+                    this._shift.add(position + (resultSpecialCharLength - inputSpecialCharLength));
+                    position += resultSpecialCharLength - inputSpecialCharLength;
+                } else {
+                    // this means back space has been pressed, clear shift and mark back shift as true
                     this._shift.clear();
                     backspaceShift = true;
                     shift = shiftStep;
                     position += shiftStep;
                     this._shift.add(position);
-                } else {
-                    this._shift.clear();
                 }
             }
 
@@ -473,7 +446,14 @@ export class MaskApplierService {
         return res + decimals.substr(0, precision + 1);
     };
 
-    // currency separator like 3-3-3 3 3 3 3,3,3 3'3'3
+    /**
+     * convert string in currency like 3-3-3 3 3 3 3,3,3 3'3'3
+     * @param str string of number
+     * @param char by which string will be separated
+     * @param decimalChar decimal character symbol
+     * @param precision number of decimal character allowed
+     * @param indFormat indian format or not ( 2 for indian and 3 for others)
+     */
     private currencySeparator = (str: string, char: string, decimalChar: string, precision: number,
                                  indFormat: boolean = false) => {
         str += '';
@@ -527,7 +507,12 @@ export class MaskApplierService {
         return inputValue;
     };
 
-    // for removing extra decimal points
+    /**
+     * for removing extra decimal places
+     * @param inputValue actual value
+     * @param precision number of decimals
+     * @param decimalMarker symbol
+     */
     private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
@@ -565,6 +550,11 @@ export class MaskApplierService {
         return inputValue;
     };
 
+    /**
+     * remove any unsupported character from string
+     * @param str actual string
+     * @private
+     */
     private _checkInput(str: string): string {
         return str
             .split('')
