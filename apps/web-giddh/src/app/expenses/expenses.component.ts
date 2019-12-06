@@ -94,6 +94,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
         dateFrom: '',
         dateTo: ''
     };
+    public routerSub: any;
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -119,7 +120,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.getActiveTab();
             }
@@ -275,7 +276,6 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
-        currentPageObj.additional = "";
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
