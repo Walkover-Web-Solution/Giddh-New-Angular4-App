@@ -8,7 +8,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { CurrentPage } from '../models/api-models/Common';
-import { GeneralActions } from '../actions/general/general.actions';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'tb-pl-bs',
@@ -29,7 +29,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef, private _route: ActivatedRoute, private _generalActions: GeneralActions, private router: Router) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef, private _route: ActivatedRoute, private router: Router, private _generalService: GeneralService) {
         this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName')).subscribe(p => {
             let companies = p.companies;
             this.selectedCompany = companies.find(q => q.uniqueName === p.companyUniqueName);
@@ -74,7 +74,6 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
-        currentPageObj.additional = "";
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        this._generalService.setCurrentPageTitle(currentPageObj);
     }
 }

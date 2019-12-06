@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { ToasterService } from '../../../services/toaster.service';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -119,7 +120,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
         private _toaster: ToasterService,
-        private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
+        private _cdRef: ChangeDetectorRef, private _generalService: GeneralService) {
         this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
@@ -194,7 +195,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.setCurrentPageTitle();
+        this.setCurrentPageTitle("Invoice > E-way bill");
     }
 
     public clearTransportForm() {
@@ -341,7 +342,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.isTransModeRoad = false;
         }
     }
-    
+
     public subTypeElementSelected(event) {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
@@ -356,11 +357,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setCurrentPageTitle() {
+    public setCurrentPageTitle(title) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Invoice > E-way bill";
+        currentPageObj.name = title;
         currentPageObj.url = this.router.url;
-        currentPageObj.additional = "";
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        this._generalService.setCurrentPageTitle(currentPageObj);
     }
 }

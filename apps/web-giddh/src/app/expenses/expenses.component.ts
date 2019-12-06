@@ -276,8 +276,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
-        currentPageObj.additional = "";
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        this._generalService.setCurrentPageTitle(currentPageObj);
     }
 
     public getActiveTab() {

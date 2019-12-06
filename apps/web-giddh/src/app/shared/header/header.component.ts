@@ -1372,7 +1372,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             currentPageObj.name = "";
             currentPageObj.url = currentUrl;
             currentPageObj.additional = "";
-            this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+            this._generalService.setCurrentPageTitle(currentPageObj);
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
                 if (page.uniqueName === decodeURI(currentUrl)) {
@@ -1389,7 +1389,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         currentPageObj.url = menu.uniqueName;
         currentPageObj.additional = menu.additional;
 
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+        this._generalService.setCurrentPageTitle(currentPageObj);
     }
 
     public setCurrentAccountNameInHeading() {
