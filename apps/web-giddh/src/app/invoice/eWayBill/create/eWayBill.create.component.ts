@@ -341,7 +341,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.isTransModeRoad = false;
         }
     }
-
     public subTypeElementSelected(event) {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;

@@ -35,7 +35,7 @@
                     (isFilteredSelected)=isFilteredSelected($event); (selectedRowToggle)="selectedRowToggle($event); "
                     (selectedRowInput)=selectedRowInput($event);></app-pending-list>
                 <div class="main-edit-expense " *ngIf="isSelectedRow ">
-                    <div class="left-expense ">
+                    <div class="left-expense">
                         <app-filter-list [selectedRowItem]='selectedRowItem'
                             (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
                     </div>

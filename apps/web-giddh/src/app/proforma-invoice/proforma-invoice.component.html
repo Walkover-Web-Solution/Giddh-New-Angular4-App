@@ -2046,11 +2046,11 @@
 
                                 </div>
 
-                                <div class="saveCard-data">
+                                <div class="saveCard-data pointer">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
-                                <div class="del-card" (click)="removeTransaction(entryIdx)"
+                                <div class="del-card pointer" (click)="removeTransaction(entryIdx)"
                                     *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                                     <i class="icon-trash" aria-hidden="true"></i>
                                 </div>

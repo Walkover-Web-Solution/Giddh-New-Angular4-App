@@ -14,14 +14,14 @@
             style="width:30%">
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
                     </a>
                 </ng-container>
                 <ng-container *ngIf="option.additional?.stock">
-                    <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
@@ -77,7 +77,7 @@
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Particular</th>
 
-                                <th class="col-xs-2" style="border-top:none">
+                                <th class="col-xs-2 text-right" style="border-top:none">
                                     Amount
                                 </th>
                             </tr>
@@ -252,7 +252,7 @@
 
                                 </th>
                                 <th class="col-xs-6" style="border-top:none">Particular</th>
-                                <th class="col-xs-2" style="border-top:none">Amount</th>
+                                <th class="col-xs-2 text-right" style="border-top:none">Amount</th>
                             </tr>
                         </thead>
 
@@ -268,7 +268,7 @@
                                             bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                                     </td>
 
-                                    <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-ledger"
+                                    <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
@@ -597,7 +597,6 @@
             <div class="row d-flex d-sm-block">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div class="" [ngClass]="{'col-xs-8': !vm.showNewEntryPanel}">
                         <div class="row mrB2">
                             <!-- <div class="col-sm-6 pdR1">
                                 <div class="selectWarehouse">
@@ -633,14 +632,13 @@
                                 </div>
                             </ng-template>
 
-                            <div [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
-                                <div class="row">
-                                    <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
-                                        placeholder="Description"></textarea>
-                                </div>
-                            </div>
                         </div>
-                    </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description"></textarea>
+                                </div>
+                        </div>
                 </div>
 
                 <div class="col-md-6 font-14 pt-1 bl-1">
@@ -714,7 +712,7 @@
 
                                 </td>
 
-                                <td class="">
+                                <td>
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
                                         <input type="text" placeholder="Voucher no." class="form-control"
@@ -858,8 +856,6 @@
                     </div>
                 </div>
             </div>
-
-
 
         </div>
     </div>
