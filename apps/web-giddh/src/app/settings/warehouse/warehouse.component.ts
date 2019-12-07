@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions, PageChangedEvent } from 'ngx-bootstrap';
+import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions, PageChangedEvent, PaginationComponent } from 'ngx-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -44,8 +44,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public selectedWarehouse: any;
     /** Configuration object for pagination component */
     public paginationConfig: any;
-    /** Stores the current page number */
-    public currentPage: number = 1;
     /** Stores the list of warehouses */
     public warehouses: Array<any> = [];
 
@@ -55,6 +53,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     @ViewChild('warehouseOnBoardingModal') public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
     @ViewChild('welcomeComponent') public welcomeComponentTemplate: TemplateRef<any>;
+    /** Warehouse pagination instance */
+    @ViewChild('warehousePagination') warehousePagination: PaginationComponent;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
@@ -269,9 +269,10 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                     totalItems: warehouseData.totalItems,
                     totalPages: warehouseData.totalPages,
                 }
-                this.currentPage = warehouseData.page;
+                setTimeout(() => {
+                    this.warehousePagination.writeValue(warehouseData.page);
+                });
             }
-            console.log('Warehouse data: ', warehouseData);
         });
     }
 

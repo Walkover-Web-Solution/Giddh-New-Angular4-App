@@ -3,7 +3,7 @@
         <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
         <h2>Create Warehouse</h2>
         <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
-        <button class="btn btn-pink mrT2" (click)="openCreateWarehouseModal()">
+        <button class="btn btn-pink mrT2" (click)="resetOnboardingForm();openCreateWarehouseModal()">
             Create Warehouse
         </button>
     </div>
@@ -79,7 +79,7 @@
         </div>
     </div>
     <div class="warehouse-pagination">
-        <pagination *ngIf="warehouses?.length" [(ngModel)]="currentPage" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
+        <pagination #warehousePagination *ngIf="warehouses?.length" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
             (pageChanged)="pageChanged($event)"></pagination>
     </div>
 </ng-container>
