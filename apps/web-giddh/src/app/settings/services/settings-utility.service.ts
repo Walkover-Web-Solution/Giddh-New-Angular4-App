@@ -19,7 +19,7 @@ export class SettingsUtilityService {
      */
     public getCreateWarehouseRequestObject(formControls: any, taxDetails: Array<any>): any {
         let taxType = '';
-        if (taxDetails) {
+        if (formControls.businessType && formControls.businessType.value === 'Registered' && taxDetails) {
             taxType = taxDetails['taxName'] ? taxDetails['taxName'].label : '';
         }
         return {
