@@ -60,7 +60,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
                 result.body.results = this.removeFixedGroupsFromArr(result.body.results);
                 result.body.results.forEach(a => {
                     let parentgroup = a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
-                    groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
+                    groupsListArray.push({label: a.groupName, value: a.groupUniqueName, additional: parentgroup});
                 });
                 this.flattenGroupsArray = groupsListArray;
             }
@@ -84,6 +84,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;

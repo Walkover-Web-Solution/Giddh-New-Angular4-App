@@ -23,7 +23,7 @@ export const initialState: ItemOnBoardingState = {
     isOnBoardingInProgress: false,
     isItemUpdateInProgress: false,
     onBoardingType: null
-}
+};
 
 /**
  * Reducer to handle item on boarding related actions
@@ -36,13 +36,14 @@ export const initialState: ItemOnBoardingState = {
 export function itemOnBoardingReducer(state: ItemOnBoardingState = initialState, action: CustomActions) {
     switch (action.type) {
         case ItemOnBoardingActions.SET_ON_BOARDING_STATUS:
-            return { ...state, isOnBoardingInProgress: action.payload };
+            return {...state, isOnBoardingInProgress: action.payload};
         case ItemOnBoardingActions.SET_ON_BOARDING_TYPE:
-            return { ...state, onBoardingType: action.payload };
+            return {...state, onBoardingType: action.payload};
         case ItemOnBoardingActions.SET_ITEM_UPDATE_PROGRESS:
-            return { ...state, isItemUpdateInProgress: action.payload };
+            return {...state, isItemUpdateInProgress: action.payload};
         case ItemOnBoardingActions.RESET_ON_BOARDING:
             return initialState;
-        default: return state;
+        default:
+            return state;
     }
 }

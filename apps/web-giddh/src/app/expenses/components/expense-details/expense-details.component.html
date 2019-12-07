@@ -47,84 +47,87 @@
 
     <div class="pettycash">
 
-    <div class="bg-white p-15 pb-0">
-        <div class="form-group mb-2">
-            <label>Description</label>
-            <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
-                      placeholder='Add Description'></textarea>
-        </div>
+        <div class="bg-white p-15 pb-0">
+            <div class="form-group mb-2">
+                <label>Description</label>
+                <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
+                          placeholder='Add Description'></textarea>
+            </div>
 
-        <div class="row">
-            <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-8">
 
-                <div class="form-group d-inline-block mr-2">
+                    <div class="form-group d-inline-block mr-2">
 
-                    <label>
-                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
-                    </label>
+                        <label>
+                            {{ entryAgainstObject.base }}<span class="text-danger">*</span>
+                        </label>
 
-                    <div class="clearfix">
+                        <div class="clearfix">
 
-                        <sh-select class="pull-right text-left" name="depositAccountUniqueName"
-                                   #entryAgainstAccountDropDown
-                                   [options]="entryAgainstObject.dropDownOption"
-                                   [(ngModel)]="entryAgainstObject.model"
-                                   (selected)="onSelectEntryAgainstAccount($event)"
-                                   [placeholder]="'Select Account'" [notFoundLink]="false"
-                                   [forceClearReactive]="forceClear$ | async"
-                                   [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
-                            <ng-template #optionTemplate1 let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                    <div class="item">{{ option.label }}</div>
-                                    <div class="item_unq">{{ option.value }}</div>
-                                </a>
-                            </ng-template>
-                        </sh-select>
+                            <sh-select class="pull-right text-left" name="depositAccountUniqueName"
+                                       #entryAgainstAccountDropDown
+                                       [options]="entryAgainstObject.dropDownOption"
+                                       [(ngModel)]="entryAgainstObject.model"
+                                       (selected)="onSelectEntryAgainstAccount($event)"
+                                       [placeholder]="'Select Account'" [notFoundLink]="false"
+                                       [forceClearReactive]="forceClear$ | async"
+                                       [multiple]="false" [ItemHeight]="33"
+                                       [useInBuiltFilterForIOptionTypeItems]="true">
+                                <ng-template #optionTemplate1 let-option="option">
+                                    <a href="javascript:void(0)" class="list-item"
+                                       style="border-bottom: 1px solid #ccc;">
+                                        <div class="item">{{ option.label }}</div>
+                                        <div class="item_unq">{{ option.value }}</div>
+                                    </a>
+                                </ng-template>
+                            </sh-select>
 
+                        </div>
                     </div>
+
+                    <!-- <div class="d-inline-block">
+                    <span class="mr-1 d-inilne-block font-14">USD</span>
+                    <div class="toggle d-inline-block" data-key="disabled">
+                        <input type="checkbox" class="toggle-checkbox" id="disabled">
+                        <label class="toggle-label" for="disabled">
+                <span class="toggle-inner"></span>
+                <span class="toggle-switch"></span>
+              </label>
+                    </div>
+                    <span class="ml-1 d-inline-block font-14">INR</span>
+                </div> -->
+
                 </div>
 
-                <!-- <div class="d-inline-block">
-                <span class="mr-1 d-inilne-block font-14">USD</span>
-                <div class="toggle d-inline-block" data-key="disabled">
-                    <input type="checkbox" class="toggle-checkbox" id="disabled">
-                    <label class="toggle-label" for="disabled">
-            <span class="toggle-inner"></span>
-            <span class="toggle-switch"></span>
-          </label>
+                <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()"
+                     *ngIf="entryAgainstObject.against">
+                    <a href="javascript:void(0)" class="d-inline-block pt-3">
+                        {{entryAgainstObject.against}}
+                    </a>
                 </div>
-                <span class="ml-1 d-inline-block font-14">INR</span>
-            </div> -->
 
             </div>
+        </div>
 
-            <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()" *ngIf="entryAgainstObject.against">
-                <a href="javascript:void(0)" class="d-inline-block pt-3">
-                    {{entryAgainstObject.against}}
-                </a>
-            </div>
-
+        <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
+            <update-ledger-entry-panel [isPettyCash]="true"
+                                       [pettyCashEntry]="accountEntryPettyCash"
+                                       [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                       [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                                       (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
+            ></update-ledger-entry-panel>
         </div>
     </div>
-
-    <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
-        <update-ledger-entry-panel [isPettyCash]="true"
-                                   [pettyCashEntry]="accountEntryPettyCash"
-                                   [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                                   [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                                   (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-        ></update-ledger-entry-panel>
-    </div>
- </div>
 </div>
 <div *ngIf="(ispPettycashEntryInprocess$ | async) ">
-        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
+    <div class="no-data mrT2 loader-main" *ngIf="showLoader">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
         </div>
+    </div>
 
 </div>
 

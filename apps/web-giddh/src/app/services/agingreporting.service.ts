@@ -14,8 +14,8 @@ export class AgingreportingService implements OnInit {
     private companyUniqueName: string;
 
     constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-        private _generalService: GeneralService,
-        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+                private _generalService: GeneralService,
+                @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
         this.companyUniqueName = this._generalService.companyUniqueName;
     }
 
@@ -58,12 +58,12 @@ export class AgingreportingService implements OnInit {
                     .replace(':toDate', encodeURIComponent(queryRequest.to))
                     .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''))
                 , model).pipe(
-                    map((res) => {
-                        let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
-                        data.request = model;
-                        data.queryString = queryRequest;
-                        return data;
-                    }), catchError((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest)));
+                map((res) => {
+                    let data: BaseResponse<DueAmountReportResponse, DueAmountReportRequest> = res;
+                    data.request = model;
+                    data.queryString = queryRequest;
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<DueAmountReportResponse, DueAmountReportRequest>(e, model, queryRequest)));
         } else {
             return empty();
         }

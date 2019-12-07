@@ -1,16 +1,20 @@
 .form-group .pItem.text-right {
     max-width: 100% !important;
 }
+
 .grp_list li a.list-item {
     text-transform: capitalize;
 }
+
 .horizontal-form {
     max-width: 660px !important;
     width: 100% !important;
 }
-.form-group .pItem .my-dropdown-menu{
-width: 100% !important;
+
+.form-group .pItem .my-dropdown-menu {
+    width: 100% !important;
 }
-.mrgeBtn{
+
+.mrgeBtn {
     padding: 8px 16px;
 }

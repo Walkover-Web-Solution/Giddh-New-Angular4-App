@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -104,7 +104,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 }).map(m => {
                     return {
                         value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-                    }
+                    };
                 });
                 this.flatGroupsOptions = items;
             }
@@ -122,6 +122,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
         this.getUpdateList.emit(this.activeGroupUniqueName);
     }
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;
@@ -183,7 +184,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
             });
-            listItem = Object.assign({}, listItem, { parentGroups: [] });
+            listItem = Object.assign({}, listItem, {parentGroups: []});
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);

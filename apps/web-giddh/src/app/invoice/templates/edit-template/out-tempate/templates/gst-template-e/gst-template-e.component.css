@@ -16,33 +16,42 @@ strong,
 .strong {
     font-weight: bold;
 }
+
 body {
     font-size: 12px;
     background: #fff;
 }
+
 #template-header {
     padding: 15px 15px 0;
     width: auto;
 }
+
 .strong {
     font-weight: bold;
 }
+
 .font-11 {
     font-size: 11px !important;
 }
+
 .font-10 {
     font-size: 10px !important;
 }
+
 .font-12 {
     font-size: 12px !important;
 }
+
 .max-width-180 {
     /* max-width: 180px !important; */
 }
+
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 .seperator {
-  border-top: 1px solid #949494;
+    border-top: 1px solid #949494;
 }
+
 #royal {
     font: 12px/1 'Open Sans', sans-serif;
     overflow: auto;
@@ -163,6 +172,7 @@ body {
 #royal .product-table tbody tr:last-child td {
     padding-bottom: 50px;
 }
+
 /* #royal .product-table:before {
     position: absolute;
     top: 0;
@@ -228,7 +238,7 @@ body {
 }
 
 #royal .bdrB {
-    border-bottom: 1px solid#949494;
+    border-bottom: 1px solid #949494;
     margin-bottom: 10px;
 }
 
@@ -236,6 +246,7 @@ body {
     margin-top: 100px;
     padding: 0 15px;
 }
+
 #royal .subfooter h1 {
     font-size: 24px;
     display: inline-block;
@@ -366,19 +377,23 @@ table.tax-table.item {
 img {
     max-width: 180px;
 }
+
 #royal .product-table tfoot tr th {
     padding: 0 8px;
     font-size: 11px;
 }
+
 #royal footer p {
     font-size: 10px;
     color: #262626;
 }
+
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
 }
-.slogan-pre-line{
+
+.slogan-pre-line {
     display: block;
     white-space: pre-line;
     line-height: 1.1em;
-  }
+}

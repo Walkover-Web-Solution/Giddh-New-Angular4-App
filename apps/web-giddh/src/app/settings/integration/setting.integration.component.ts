@@ -8,19 +8,12 @@ import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import * as _ from '../../lodash-optimized';
-import {
-    AmazonSellerClass,
-    CashfreeClass,
-    EmailKeyClass,
-    PaymentClass,
-    RazorPayClass,
-    SmsKeyClass
-} from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
+import { ModalDirective, TabsetComponent } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { IRegistration } from "../../models/interfaces/registration.interface";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -182,10 +175,10 @@ export class SettingIntegrationComponent implements OnInit {
                 let accounts: IOption[] = [];
                 let bankAccounts: IOption[] = [];
                 _.forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
+                    accounts.push({label: item.name, value: item.uniqueName});
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
+                        bankAccounts.push({label: item.name, value: item.uniqueName});
                     }
                 });
                 this.accounts$ = observableOf(accounts);
@@ -239,7 +232,7 @@ export class SettingIntegrationComponent implements OnInit {
     public setDummyData() {
         this.razorPayObj.userName = '';
         this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.razorPayObj.account = { name: null, uniqueName: null };
+        this.razorPayObj.account = {name: null, uniqueName: null};
         this.razorPayObj.autoCapturePayment = true;
     }
 
@@ -261,7 +254,6 @@ export class SettingIntegrationComponent implements OnInit {
             this.paymentFormObj = new PaymentClass();
         }
     }
-
 
     public toggleCheckBox() {
         return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
@@ -306,7 +298,6 @@ export class SettingIntegrationComponent implements OnInit {
     public removeGmailAccount() {
         this.store.dispatch(this.settingsIntegrationActions.RemoveGmailIntegration());
     }
-
 
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
@@ -534,7 +525,7 @@ export class SettingIntegrationComponent implements OnInit {
         let requestData = {
             URN: regAcc.iciciCorporateDetails.URN,
             accountUniqueName: regAcc.account.uniqueName
-        }
+        };
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
     }

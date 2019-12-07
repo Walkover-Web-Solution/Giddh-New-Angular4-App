@@ -7,23 +7,23 @@ import { AVShSelectComponent } from './virtual-list.component';
 import { AVAccountListComponent } from './virtual-list-menu.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    VirtualScrollModule,
-    ClickOutsideModule
-  ],
-  declarations: [
-    AVShSelectComponent,
-    AVAccountListComponent
-  ],
-  exports: [AVShSelectComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        VirtualScrollModule,
+        ClickOutsideModule
+    ],
+    declarations: [
+        AVShSelectComponent,
+        AVAccountListComponent
+    ],
+    exports: [AVShSelectComponent]
 })
 
 export class AVShSelectModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: AVShSelectModule
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: AVShSelectModule
+        };
+    }
 }

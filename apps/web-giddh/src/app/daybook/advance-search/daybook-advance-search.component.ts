@@ -17,12 +17,12 @@ import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/Da
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 
 const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' },
-    { label: 'Exclude', value: 'exclude' }
+    {label: 'Greater Than', value: 'greaterThan'},
+    {label: 'Less Than', value: 'lessThan'},
+    {label: 'Greater Than or Equals', value: 'greaterThanOrEquals'},
+    {label: 'Less Than or Equals', value: 'lessThanOrEquals'},
+    {label: 'Equals', value: 'equals'},
+    {label: 'Exclude', value: 'exclude'}
 ];
 
 @Component({
@@ -37,13 +37,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Input() public startDate: any;
     @Input() public endDate: any;
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-    @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
+    @ViewChild('dateRangePickerDir', {read: DaterangePickerComponent}) public dateRangePickerDir: DaterangePickerComponent;
 
     public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: FormGroup;
     public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
-    public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
+    public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
     public voucherTypeList: Observable<IOption[]>;
@@ -144,7 +144,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             if (data.status === 'success') {
                 let accounts: IOption[] = [];
                 data.body.results.map(d => {
-                    accounts.push({ label: d.name, value: d.uniqueName });
+                    accounts.push({label: d.name, value: d.uniqueName});
                 });
                 this.accounts$ = observableOf(accounts);
             }
@@ -156,7 +156,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 let units = data.results;
 
                 return units.map(unit => {
-                    return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+                    return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
                 });
             }
         })).pipe(takeUntil(this.destroyed$));
@@ -166,7 +166,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             if (data.status === 'success') {
                 let groups: IOption[] = [];
                 data.body.results.map(d => {
-                    groups.push({ label: d.groupName, value: d.groupUniqueName });
+                    groups.push({label: d.groupName, value: d.groupUniqueName});
                 });
                 this.groups$ = observableOf(groups);
             }
@@ -176,12 +176,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public ngOnChanges(changes: SimpleChanges) {
         if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
             //this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
-            this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, 'DD-MM-YYYY') };
+            this.datePickerOptions = {...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, 'DD-MM-YYYY')};
             this.fromDate = changes.startDate.currentValue;
         }
         if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
             //this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
-            this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, 'DD-MM-YYYY') };
+            this.datePickerOptions = {...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, 'DD-MM-YYYY')};
             this.toDate = changes.endDate.currentValue;
         }
     }

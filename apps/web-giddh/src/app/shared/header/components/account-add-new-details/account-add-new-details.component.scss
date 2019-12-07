@@ -97,12 +97,13 @@ form.gstinForm {
     flex-direction: row-reverse;
     justify-content: flex-end;
 }
-.remove {
-     padding-top: 33px;
- }
 
- @media(max-width:767px){
-     .upper-form .selectGroup {
-         margin-bottom: 15px;
-     }
- }
+.remove {
+    padding-top: 33px;
+}
+
+@media(max-width: 767px) {
+    .upper-form .selectGroup {
+        margin-bottom: 15px;
+    }
+}

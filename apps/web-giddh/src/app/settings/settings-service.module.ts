@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
 
 @NgModule()
-export class SettingsServiceModule { }
+export class SettingsServiceModule {
+}

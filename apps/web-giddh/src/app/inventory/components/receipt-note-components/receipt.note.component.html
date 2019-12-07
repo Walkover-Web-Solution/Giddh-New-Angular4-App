@@ -8,11 +8,12 @@
     </div>
     <div class="reciptNoteRadioBtn">
         <span class="mrR1"> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction">Multiple Products
+                                   type="radio" [value]="'Multiple Products'" [(ngModel)]="selectedAction">Multiple Products
         </span>
 
         <span class=""> <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                type="radio" [value]="'Multiple Senders'" [(ngModel)]="selectedAction">Multiple Senders</span>
+                               type="radio" [value]="'Multiple Senders'"
+                               [(ngModel)]="selectedAction">Multiple Senders</span>
     </div>
 
     <div class="reciptNoteContent">
@@ -50,8 +51,9 @@
 
                             </sh-select>
                             <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s
-                                Details</div>
-                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt
+                                Details
+                            </div>
+                            <p class="aquaColor copyReciptNote"><i class="fa fa-files-o"></i> Copy Previous Receipt
                                 Note</p>
                         </div>
                     </div>
@@ -98,7 +100,8 @@
                         <div class="col-md-4">
                             <input type="text" value="walkover web soution" disabled class="form-control">
                             <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
-                                Details</div>
+                                Details
+                            </div>
                         </div>
                     </div>
                     <div class="row mrB2">
@@ -136,126 +139,124 @@
                 <!-- make it functional -->
                 <table class="table  basic" id="table-recipt">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>PRoduct Service Details</th>
-                            <th>Qty/Unit</th>
-                            <th>Rate</th>
-                            <th>Amount</th>
-                            <th>Tax</th>
-                            <th>Total</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>PRoduct Service Details</th>
+                        <th>Qty/Unit</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                        <th>&nbsp;</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                1.
-                            </td>
-                            <td>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)
-                                <p>SKU:Number</p>
-                                <textarea rows="5" cols="5" class="form-control"></textarea>
-                            </td>
-                            <td>500 Meters</td>
-                            <td>200</td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i class="fa fa-trash"></i>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            1.
+                        </td>
+                        <td>Sales (100 POLYSTER NON TEXTURED LINING FABRIC)
+                            <p>SKU:Number</p>
+                            <textarea rows="5" cols="5" class="form-control"></textarea>
+                        </td>
+                        <td>500 Meters</td>
+                        <td>200</td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <i class="fa fa-trash"></i>
+                        </td>
+                    </tr>
                     </tbody>
                     <div class="addNewLine mrT1">
                         <span class="multipleRecivers"> + Add Mulitple Products</span>
                     </div>
                     <tfoot id="tfoot">
-                        <tr>
-                            <td colspan="4">
-                                <div class="transportation-details pdT2">
-                                    <h3 class="mrB1">Transportation Details</h3>
-                                    <div class="row">
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Dispatched Date" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Company" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Mode" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Vehicle Number" class="form-control">
-                                        </div>
+                    <tr>
+                        <td colspan="4">
+                            <div class="transportation-details pdT2">
+                                <h3 class="mrB1">Transportation Details</h3>
+                                <div class="row">
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Dispatched Date" class="form-control">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h3 class="mrB1">Note</h3>
-                                            <textarea class="form-control" rows="5" cols="5"></textarea>
-                                        </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Transport Company" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Transport Mode" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Vehicle Number" class="form-control">
                                     </div>
                                 </div>
-                            </td>
-                            <td colspan="4">
-                                <section class="tableSec form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h3 class="mrB1">Note</h3>
+                                        <textarea class="form-control" rows="5" cols="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="4">
+                            <section class="tableSec form-group">
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Total Amount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">Total Amount</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Discount</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Taxable Value</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Tax</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+
+                                <div class="tableRow ">
+
+                                    <div class="tableCell biggerDollar">
+                                        <strong>Total</strong>
                                     </div>
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Discount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
+                                    <div class="tableCell figureCell">
+                                        0.00
                                     </div>
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Taxable Value</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Tax</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
+                                </div>
 
 
+                            </section>
 
-                                    <div class="tableRow ">
-
-                                        <div class="tableCell biggerDollar">
-                                            <strong>Total</strong>
-                                        </div>
-
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-
-                                    </div>
-
-
-
-                                </section>
-
-                            </td>
-                            <td>
-                                &nbsp;
-                            </td>
-                        </tr>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
                     </tfoot>
                 </table>
             </div>
@@ -312,8 +313,9 @@
 
                             </sh-select>
                             <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Sender’s
-                                Details</div>
-                            <p class="aquaColor copyReciptNote"> <i class="fa fa-files-o"></i> Copy Previous Receipt
+                                Details
+                            </div>
+                            <p class="aquaColor copyReciptNote"><i class="fa fa-files-o"></i> Copy Previous Receipt
                                 Note</p>
                         </div>
                     </div>
@@ -360,7 +362,8 @@
                         <div class="col-md-4">
                             <input type="text" value="walkover web soution" disabled class="form-control">
                             <div class="senderDetails" (click)="toggleAsidePane()"><i class="fa fa-user"></i> Reciver's
-                                Details</div>
+                                Details
+                            </div>
                         </div>
                     </div>
                     <div class="row mrB2">
@@ -398,131 +401,129 @@
                 <!-- make it functional -->
                 <table class="table  basic" id="table-recipt">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Receiver’s Details</th>
-                            <th>Qty/Unit</th>
-                            <th>Rate</th>
-                            <th>Amount</th>
-                            <th>Tax</th>
-                            <th>Total</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Receiver’s Details</th>
+                        <th>Qty/Unit</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                        <th>&nbsp;</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                1.
-                            </td>
-                            <td>
+                    <tr>
+                        <td>
+                            1.
+                        </td>
+                        <td>
 
-                                <sh-select [options]="selectRecivers">
+                            <sh-select [options]="selectRecivers">
 
-                                </sh-select>
-                                <div class="senderRecivers"><i class="fa fa-user"></i> Sender’s Details</div>
+                            </sh-select>
+                            <div class="senderRecivers"><i class="fa fa-user"></i> Sender’s Details</div>
 
-                            </td>
-                            <td>500 Meters</td>
-                            <td>200</td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <input type="text" value="2,300" class="form-control" disabled>
-                            </td>
-                            <td>
-                                <i class="fa fa-trash"></i>
-                            </td>
-                        </tr>
+                        </td>
+                        <td>500 Meters</td>
+                        <td>200</td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <input type="text" value="2,300" class="form-control" disabled>
+                        </td>
+                        <td>
+                            <i class="fa fa-trash"></i>
+                        </td>
+                    </tr>
                     </tbody>
 
                     <div class="addNewLine mrT1">
                         <span class="multipleRecivers"> + Add Mulitple Recivers</span>
                     </div>
                     <tfoot id="tfoot">
-                        <tr>
-                            <td colspan="4">
-                                <div class="transportation-details pdT2">
-                                    <h3 class="mrB1">Transportation Details</h3>
-                                    <div class="row">
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Dispatched Date" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Company" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Transport Mode" class="form-control">
-                                        </div>
-                                        <div class="col-sm-6 mrB2">
-                                            <input type="text" placeholder="Vehicle Number" class="form-control">
-                                        </div>
+                    <tr>
+                        <td colspan="4">
+                            <div class="transportation-details pdT2">
+                                <h3 class="mrB1">Transportation Details</h3>
+                                <div class="row">
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Dispatched Date" class="form-control">
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h3 class="mrB1">Note</h3>
-                                            <textarea class="form-control" rows="5" cols="5"></textarea>
-                                        </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Transport Company" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Transport Mode" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6 mrB2">
+                                        <input type="text" placeholder="Vehicle Number" class="form-control">
                                     </div>
                                 </div>
-                            </td>
-                            <td colspan="4">
-                                <section class="tableSec form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h3 class="mrB1">Note</h3>
+                                        <textarea class="form-control" rows="5" cols="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td colspan="4">
+                            <section class="tableSec form-group">
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Total Amount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
+                                <div class="tableRow">
+                                    <div class="tableCell">Total Amount</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Discount</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Taxable Value</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+                                <div class="tableRow">
+                                    <div class="tableCell">Tax</div>
+                                    <div class="tableCell figureCell">
+                                        0.00
+                                    </div>
+                                </div>
+
+
+                                <div class="tableRow ">
+
+                                    <div class="tableCell biggerDollar">
+                                        <strong>Total</strong>
                                     </div>
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Discount</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
+                                    <div class="tableCell figureCell">
+                                        0.00
                                     </div>
 
-                                    <div class="tableRow">
-                                        <div class="tableCell">Taxable Value</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
-
-                                    <div class="tableRow">
-                                        <div class="tableCell">Tax</div>
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-                                    </div>
+                                </div>
 
 
+                            </section>
 
-                                    <div class="tableRow ">
-
-                                        <div class="tableCell biggerDollar">
-                                            <strong>Total</strong>
-                                        </div>
-
-                                        <div class="tableCell figureCell">
-                                            0.00
-                                        </div>
-
-                                    </div>
-
-
-
-                                </section>
-
-                            </td>
-                            <td>
-                                &nbsp;
-                            </td>
-                        </tr>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
                     </tfoot>
                 </table>
             </div>
@@ -556,5 +557,5 @@
 
 <!-- hide for recent discuss with reavindrji -->
 <aside-sender-receiver-details-pane *ngIf="hideSenderReciverDetails" [class]="asideMenuState"
-    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
+                                    [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane($event)">
 </aside-sender-receiver-details-pane>

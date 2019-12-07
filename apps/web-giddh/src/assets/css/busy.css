@@ -1,6 +1,7 @@
 .ng-busy {
     z-index: 1002;
 }
+
 .ng-busy,
 .ng-busy > *,
 .ng-busy > ng-component > * {
@@ -10,6 +11,7 @@
   right: 0px;
   bottom: 0px; */
 }
+
 .ng-busy-backdrop {
     position: absolute;
     top: 0;
@@ -20,9 +22,11 @@
     background: #fff;
     opacity: 0.7;
 }
+
 .ng-busy-default-wrapper {
     text-align: center;
 }
+
 .ng-busy-default-sign {
     position: relative;
     display: inline-block;
@@ -37,6 +41,7 @@
     background: #f8f8f8;
     color: #333;
 }
+
 .ng-busy-default-text {
     display: inline-block;
     margin-left: 6px;
@@ -44,6 +49,7 @@
     font-size: 14px;
     text-align: left;
 }
+
 .ng-busy-default-spinner {
     position: relative;
     display: inline-block;
@@ -51,6 +57,7 @@
     height: 25px;
     vertical-align: middle;
 }
+
 .ng-busy-default-spinner div {
     position: absolute;
     left: 44.5%;
@@ -64,78 +71,91 @@
     -webkit-animation: busy-spinner-anim 1s linear infinite;
     animation: busy-spinner-anim 1s linear infinite;
 }
+
 .ng-busy-default-spinner .bar1 {
     -webkit-transform: rotate(0deg) translate(0, -142%);
     transform: rotate(0deg) translate(0, -142%);
     -webkit-animation-delay: -1s;
     animation-delay: -1s;
 }
+
 .ng-busy-default-spinner .bar2 {
     -webkit-transform: rotate(30deg) translate(0, -142%);
     transform: rotate(30deg) translate(0, -142%);
     -webkit-animation-delay: -0.91666667s;
     animation-delay: -0.91666667s;
 }
+
 .ng-busy-default-spinner .bar3 {
     -webkit-transform: rotate(60deg) translate(0, -142%);
     transform: rotate(60deg) translate(0, -142%);
     -webkit-animation-delay: -0.83333333s;
     animation-delay: -0.83333333s;
 }
+
 .ng-busy-default-spinner .bar4 {
     -webkit-transform: rotate(90deg) translate(0, -142%);
     transform: rotate(90deg) translate(0, -142%);
     -webkit-animation-delay: -0.75s;
     animation-delay: -0.75s;
 }
+
 .ng-busy-default-spinner .bar5 {
     -webkit-transform: rotate(120deg) translate(0, -142%);
     transform: rotate(120deg) translate(0, -142%);
     -webkit-animation-delay: -0.66666667s;
     animation-delay: -0.66666667s;
 }
+
 .ng-busy-default-spinner .bar6 {
     -webkit-transform: rotate(150deg) translate(0, -142%);
     transform: rotate(150deg) translate(0, -142%);
     -webkit-animation-delay: -0.58333333s;
     animation-delay: -0.58333333s;
 }
+
 .ng-busy-default-spinner .bar7 {
     -webkit-transform: rotate(180deg) translate(0, -142%);
     transform: rotate(180deg) translate(0, -142%);
     -webkit-animation-delay: -0.5s;
     animation-delay: -0.5s;
 }
+
 .ng-busy-default-spinner .bar8 {
     -webkit-transform: rotate(210deg) translate(0, -142%);
     transform: rotate(210deg) translate(0, -142%);
     -webkit-animation-delay: -0.41666667s;
     animation-delay: -0.41666667s;
 }
+
 .ng-busy-default-spinner .bar9 {
     -webkit-transform: rotate(240deg) translate(0, -142%);
     transform: rotate(240deg) translate(0, -142%);
     -webkit-animation-delay: -0.33333333s;
     animation-delay: -0.33333333s;
 }
+
 .ng-busy-default-spinner .bar10 {
     -webkit-transform: rotate(270deg) translate(0, -142%);
     transform: rotate(270deg) translate(0, -142%);
     -webkit-animation-delay: -0.25s;
     animation-delay: -0.25s;
 }
+
 .ng-busy-default-spinner .bar11 {
     -webkit-transform: rotate(300deg) translate(0, -142%);
     transform: rotate(300deg) translate(0, -142%);
     -webkit-animation-delay: -0.16666667s;
     animation-delay: -0.16666667s;
 }
+
 .ng-busy-default-spinner .bar12 {
     -webkit-transform: rotate(330deg) translate(0, -142%);
     transform: rotate(330deg) translate(0, -142%);
     -webkit-animation-delay: -0.08333333s;
     animation-delay: -0.08333333s;
 }
+
 @-webkit-keyframes busy-spinner-anim {
     from {
         opacity: 1;
@@ -144,6 +164,7 @@
         opacity: 0.25;
     }
 }
+
 @keyframes busy-spinner-anim {
     from {
         opacity: 1;

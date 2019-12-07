@@ -37,7 +37,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public daybookExportRequestType: 'get' | 'post';
     @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
-    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
+    @ViewChild('dateRangePickerCmp', {read: DaterangePickerComponent}) public dateRangePickerCmp: DaterangePickerComponent;
     @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
     public datePickerOptions: any = {
         locale: {
@@ -148,7 +148,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.searchFilterData = null;
         if (!obj.cancle) {
             this.searchFilterData = cloneDeep(obj.dataToSend);
-            this.datePickerOptions = { ...this.datePickerOptions, startDate: obj.fromDate, endDate: obj.toDate };
+            this.datePickerOptions = {...this.datePickerOptions, startDate: obj.fromDate, endDate: obj.toDate};
             this.dateRangePickerCmp.render();
             this.daybookQueryRequest.from = obj.fromDate;
             this.daybookQueryRequest.to = obj.toDate;

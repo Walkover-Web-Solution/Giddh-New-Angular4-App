@@ -39,7 +39,7 @@
     border-left: 0;
 }
 
-.open>.pageListDD {
+.open > .pageListDD {
     display: inline-block;
     min-width: 200px;
     width: 100%;
@@ -56,7 +56,7 @@
     border-bottom: 1px solid gainsboro;
 }
 
-.tr-td-div>td div {
+.tr-td-div > td div {
     padding: 4px 0px;
 }
 
@@ -217,7 +217,7 @@ svg.icon.gstr-icon {
 
 .bottom-action,
 .tax-engine a,
-.tax-engine a>.dropdown {
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
 
@@ -238,7 +238,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color:$border-blue;
+    color: $ border-blue;
 }
 
 svg.icon.icon-xxlg-md {
@@ -278,7 +278,7 @@ svg.icon.icon-xxlg-md {
     display: inline-block;
 }
 
-.filing-demo-video .video-thumbnail>svg {
+.filing-demo-video .video-thumbnail > svg {
     width: 60px;
     height: 40px;
 }
@@ -312,17 +312,17 @@ hr {
     border-radius: 4px;
 }
 
-.filing-due-date .return-details>table {
+.filing-due-date .return-details > table {
     width: 100%;
     font-size: 13px;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:first-child {
+.filing-due-date .return-details > table > tbody > tr > td:first-child {
     padding: 10px 15px;
     vertical-align: top;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:first-child:before {
+.filing-due-date .return-details > table > tbody > tr > td:first-child:before {
     content: " ";
     width: 4px;
     height: 4px;
@@ -333,7 +333,7 @@ hr {
     background-color: #41aaff;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:last-child {
+.filing-due-date .return-details > table > tbody > tr > td:last-child {
     padding: 10px 15px;
     text-align: right;
 }
@@ -411,9 +411,9 @@ hr {
     color: #005BD0;
 }
 
-#c-tab ::ng-deep .nav-tabs>li.active>a,
-.nav-tabs>li.active>a:focus,
-.nav-tabs>li.active>a:hover {
+#c-tab ::ng-deep .nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
     color: #555;
     cursor: default;
     background-color: #fff;

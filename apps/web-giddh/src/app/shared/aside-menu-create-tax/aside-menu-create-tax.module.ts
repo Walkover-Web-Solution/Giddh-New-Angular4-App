@@ -8,14 +8,13 @@ import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimal
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/keyboardShortut.module';
 
-
 @NgModule({
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule, DecimalDigitsModule, BsDatepickerModule, KeyboardShortutModule
-  ],
-  exports: [AsideMenuCreateTaxComponent],
-  declarations: [AsideMenuCreateTaxComponent],
-  providers: [],
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule, DecimalDigitsModule, BsDatepickerModule, KeyboardShortutModule
+    ],
+    exports: [AsideMenuCreateTaxComponent],
+    declarations: [AsideMenuCreateTaxComponent],
+    providers: [],
 })
 export class AsideMenuCreateTaxModule {
 }

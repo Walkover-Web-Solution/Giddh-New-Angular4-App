@@ -1,16 +1,14 @@
-import { Component, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, InventoryDownloadRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 
 import { select, Store } from '@ngrx/store';
-
-import { ChangeDetectorRef, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -20,12 +18,11 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { createSelector } from 'reselect';
-import { ModalDirective, PaginationComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -97,9 +94,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
-        { id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales' },
-        { id: 2, uniqueName: 'transfer', name: 'Transfer' },
-        { id: 3, uniqueName: 'all', name: 'All Transactions' },
+        {id: 1, uniqueName: 'purchase_sale', name: 'Purchase & Sales'},
+        {id: 2, uniqueName: 'transfer', name: 'Transfer'},
+        {id: 3, uniqueName: 'all', name: 'All Transactions'},
     ];
     public CategoryOptions: any[] = [
         {
@@ -233,7 +230,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
                 const stockList = [];
                 this.activeGroupName = stockGroup.name;
                 stockGroup.stocks.forEach((stock) => {
-                    stockList.push({ label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName });
+                    stockList.push({label: `${stock.name} (${stock.uniqueName})`, value: stock.uniqueName});
                 });
                 this.stockList$ = observableOf(stockList);
                 if (this.GroupStockReportRequest && !this.GroupStockReportRequest.stockGroupUniqueName) {
@@ -254,7 +251,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
 
         // get view from sidebar while clicking on group/stock
         let len = document.location.pathname.split('/').length;
@@ -290,7 +286,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
                 this.getGroupReport(true);
@@ -434,7 +430,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-
     public goToManageGroup() {
         if (this.groupUniqueName) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
@@ -484,7 +479,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
      * setInventoryAsideState
      */
     public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+        this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
     }
 
     public pageChanged(event: any): void {
@@ -630,7 +625,7 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
             }
@@ -772,10 +767,8 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-lg reciptNoteModal' })
+            Object.assign({}, {class: 'modal-lg reciptNoteModal'})
         );
     }
-
-
 
 }

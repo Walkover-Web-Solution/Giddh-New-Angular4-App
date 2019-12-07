@@ -14,9 +14,9 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
-import {AccountService} from "../../../../services/account.service";
-import {INameUniqueName} from "../../../../models/api-models/Inventory";
-import {GeneralService} from "../../../../services/general.service";
+import { AccountService } from "../../../../services/account.service";
+import { INameUniqueName } from "../../../../models/api-models/Inventory";
+import { GeneralService } from "../../../../services/general.service";
 
 @Component({
     selector: 'invoice-payment-model',

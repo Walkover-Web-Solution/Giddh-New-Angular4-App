@@ -30,6 +30,7 @@ export class NgxMaskModule {
             ],
         };
     }
+
     public static forChild(_configValue?: optionsConfig): ModuleWithProviders {
         return {
             ngModule: NgxMaskModule,
@@ -44,5 +45,5 @@ export function _configFactory(
     initConfig: optionsConfig,
     configValue: optionsConfig | (() => optionsConfig)
 ): optionsConfig {
-    return configValue instanceof Function ? { ...initConfig, ...configValue() } : { ...initConfig, ...configValue };
+    return configValue instanceof Function ? {...initConfig, ...configValue()} : {...initConfig, ...configValue};
 }

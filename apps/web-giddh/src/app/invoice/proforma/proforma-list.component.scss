@@ -1,177 +1,183 @@
 @import '../../../assets/css/color.scss';
 
 .flex-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  flex-flow: row wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-flow: row wrap;
 }
 
 .mh18_img img {
-  max-height: 20px;
-  cursor: pointer
+    max-height: 20px;
+    cursor: pointer
 }
 
 .btn-orange:hover {
-  background: #ff5f00 !important;
-  color: #fff !important;
+    background: #ff5f00 !important;
+    color: #fff !important;
 }
 
 .btn-orange {
-  border: 1px solid #ff5f00;
-  background: white;
-  color: #ff5f00;
+    border: 1px solid #ff5f00;
+    background: white;
+    color: #ff5f00;
 }
 
 .basic > thead > tr > th {
 
-  border-right: 1px solid #c6c4c4;
+    border-right: 1px solid #c6c4c4;
 }
 
 .flex-fill {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .d-flex {
-  display: flex;
+    display: flex;
 }
 
 .td_in_searchBox div {
-  display: flex;
+    display: flex;
 }
 
 .td_in_searchBox div span {
-  /*flex: 1 1 auto;*/
-  padding: 8px 0 8px 10px;
+    /*flex: 1 1 auto;*/
+    padding: 8px 0 8px 10px;
 }
 
 .td_in_searchBox div i {
-  margin-top: 1px;
-  color: $iconColorTh;
-  padding-right: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
+    margin-top: 1px;
+    color: $iconColorTh;
+    padding-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
 }
 
 .td_in_searchBox div i:hover {
-  color: $activeIconTh;
+    color: $activeIconTh;
 }
 
 .td_in_searchBox {
-  padding: 0 !important;
+    padding: 0 !important;
 }
 
 .td_in_searchBox .input-container input {
-  height: 50px;
-  min-width: 100%;
-  padding: 11px;
-  padding-right: 40px;
-  color:#1c1c1c;
-  border:none;
-  background-color: #f2f2f2;
+    height: 50px;
+    min-width: 100%;
+    padding: 11px;
+    padding-right: 40px;
+    color: #1c1c1c;
+    border: none;
+    background-color: #f2f2f2;
 }
 
 .td_in_searchBox .input-container i {
-  position: absolute;
-  right: 10px;
-  top: 12px;
+    position: absolute;
+    right: 10px;
+    top: 12px;
 
 }
 
 .dropdown-menu > li > a:hover {
-  color: #ff5e01;
-  background: #f4f5f8;
+    color: #ff5e01;
+    background: #f4f5f8;
 }
 
 .dropdown-menu {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .input-h .td_in_searchBox .input-container input {
-  height: 50px !important;
+    height: 50px !important;
 }
 
 
 .click-dropdwon ul {
-  list-style: none;
-  position: absolute;
-  left: -114px;
-  background-color: white;
-  width: 131px;
-  box-shadow: 0px 4px 7px #bfbfbf;
-  border-radius: 3px;
-  z-index: 100;
-  border: 1px solid gainsboro;
+    list-style: none;
+    position: absolute;
+    left: -114px;
+    background-color: white;
+    width: 131px;
+    box-shadow: 0px 4px 7px #bfbfbf;
+    border-radius: 3px;
+    z-index: 100;
+    border: 1px solid gainsboro;
 }
 
 .click-dropdwon {
-  position: relative;
+    position: relative;
 }
 
 .click-dropdwon ul li {
-  padding: 3px 6px;
-  margin-bottom: 4px;
+    padding: 3px 6px;
+    margin-bottom: 4px;
 
-  color: orange;
-  cursor: pointer;
+    color: orange;
+    cursor: pointer;
 }
 
 .click-dropdwon ul li:hover {
-  background-color: #d9d9d970;
+    background-color: #d9d9d970;
 }
 
 .click-dropdwon ul li:hover a {
-  color: orangered;
+    color: orangered;
 }
 
 .click-dropdwon ul li a {
-  color: black;
+    color: black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
-  display: inline-block !important;
-  cursor: pointer;
+    display: inline-block !important;
+    cursor: pointer;
 }
 
 .click-dropdwon .dropdown-btn {
-  display: none;
+    display: none;
 }
 
 .icon-pointer {
-  cursor: pointer;
-  color:$iconColorTh;
-  margin-left:6px;
+    cursor: pointer;
+    color: $iconColorTh;
+    margin-left: 6px;
 }
 
 .icon-pointer .activeTextColor {
-  color: $activeIconTh;
+    color: $activeIconTh;
 }
-.date-advanceSearch{
-  justify-content: space-between;
+
+.date-advanceSearch {
+    justify-content: space-between;
 }
-.mobileSearch{
-  display: none;
-  margin-bottom: 15px;
+
+.mobileSearch {
+    display: none;
+    margin-bottom: 15px;
 }
+
 ul.selectActionDropdown {
-  list-style: none;
+    list-style: none;
 }
+
 .selectActionDropdown a {
-  color: #333;
-  font-size: 14px;
-  padding: 5px 10px;
-  display: block;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 10px;
+    display: block;
 }
-.selectActionDropdown a:hover{
-  color: $border-blue !important;
+
+.selectActionDropdown a:hover {
+    color: $border-blue !important;
     background: #EEEFF9 !important;
 }
-.dropdown-toggle.spcl_dropdown{
-  color: $border-blueDark;
-  border: 1px solid $border-blue;
-      width: 91px;
+
+.dropdown-toggle.spcl_dropdown {
+    color: $border-blueDark;
+    border: 1px solid $border-blue;
+    width: 91px;
     padding-left: 10px;
     padding-right: 10px;
     display: inline-flex;
@@ -181,29 +187,33 @@ ul.selectActionDropdown {
     background-color: #fff;
 
 }
-.dropdown-toggle.spcl_dropdown:hover{
-  background: $border-blue;
-  color: #fff !important;
-  border-color: $border-blue;
-}
-.dropdown-toggle.spcl_dropdown .caret{
-  color: #999999;
-}
-.dropdown-toggle.spcl_dropdown:hover  .caret{
+
+.dropdown-toggle.spcl_dropdown:hover {
+    background: $border-blue;
     color: #fff !important;
+    border-color: $border-blue;
 }
 
+.dropdown-toggle.spcl_dropdown .caret {
+    color: #999999;
+}
+
+.dropdown-toggle.spcl_dropdown:hover .caret {
+    color: #fff !important;
+}
 
 
 .proforma-container {
     padding: 0 15px;
 }
+
 .input-group {
     position: relative;
 }
+
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color:$border-blue;
+    border-color: $border-blue;
     background-image: url('../../../assets/images/calender.svg') !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -213,11 +223,13 @@ ul.selectActionDropdown {
     z-index: 99;
     cursor: default;
 }
-.input-group input.form-control:focus{
-    border-color:$border-blue;
+
+.input-group input.form-control:focus {
+    border-color: $border-blue;
 }
-.icon-calender{
-   position: absolute;
+
+.icon-calender {
+    position: absolute;
     z-index: 9;
     height: 32px;
     width: 32px;
@@ -226,6 +238,7 @@ ul.selectActionDropdown {
     align-items: center;
     border-right: 1px solid $border-blue;
 }
+
 .advance-icon {
     width: 32px;
     height: 32px;
@@ -239,9 +252,11 @@ ul.selectActionDropdown {
     color: $dark-blue00;
     background: #fff;
 }
-.advance-icon:hover{
+
+.advance-icon:hover {
     background: #EAEAEA;
 }
+
 button.btn.btn-filter {
     background: #E4E4E4;
     border: 1px solid #E4E4E4;
@@ -252,15 +267,19 @@ button.btn.btn-filter {
     align-items: center;
     padding: 4px 10px;
 }
+
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
+
 .icon-ellipse.selectAction a {
     color: #333;
 }
+
 .invoice-table th .d-flex {
     align-items: center;
 }
+
 a.btn-link-2 {
     color: #1c1c1c;
 }
@@ -282,8 +301,9 @@ a.btn-link-2 {
     position: relative;
     height: 36px !important;
 }
+
 .inputWrapper:before {
-       position: absolute;
+    position: absolute;
     content: '';
     display: block;
     height: 36px;
@@ -293,6 +313,7 @@ a.btn-link-2 {
     z-index: 100;
     top: 0;
 }
+
 span.icon-advance-serch {
     display: flex;
     justify-content: center;
@@ -300,46 +321,50 @@ span.icon-advance-serch {
     vertical-align: middle;
     height: 34px;
 }
+
 // responsive
-@media(max-width:768px){
-  .mobileSearch{
-    display: block;
-    margin-bottom: 0 !important;
-  }
-  .mobileSearch .input-container input{
-    font-size: 13px;
-  }
-  .mobileSearch button.btn.btn-pink {
-    width: 100%;
-    margin-top: 10px !important;
-}
-/* .date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-pink{
-    display: none;
-} */
-.input-grp-dateRangePicker .form-group {
-  margin-bottom: 10px;
-}
-}
-@media(max-width:767px){
-    .proforma-container {
-    padding-top: 60px;
-}
-}
-@media(max-width:420px){
-  .smallLoading{
-    padding-left: 0;
-    color: #333333;
-    font-size: 12px;
-    position: relative;
-    top: 2px;
-    padding-right: 0;
-  }
-}
-@media(max-width:500px){
-  .date-advanceSearch{
+@media(max-width: 768px) {
+    .mobileSearch {
         display: block;
-  }
-  .form-group div {
+        margin-bottom: 0 !important;
+    }
+    .mobileSearch .input-container input {
+        font-size: 13px;
+    }
+    .mobileSearch button.btn.btn-pink {
+        width: 100%;
+        margin-top: 10px !important;
+    }
+    /* .date-advanceSearch .btn-wrapper  , .date-advanceSearch .btn-pink{
+        display: none;
+    } */
+    .input-grp-dateRangePicker .form-group {
+        margin-bottom: 10px;
+    }
+}
+
+@media(max-width: 767px) {
+    .proforma-container {
+        padding-top: 60px;
+    }
+}
+
+@media(max-width: 420px) {
+    .smallLoading {
+        padding-left: 0;
+        color: #333333;
+        font-size: 12px;
+        position: relative;
+        top: 2px;
+        padding-right: 0;
+    }
+}
+
+@media(max-width: 500px) {
+    .date-advanceSearch {
+        display: block;
+    }
+    .form-group div {
         display: block;
     }
     .input-grp-dateRangePicker .btn {
@@ -347,7 +372,7 @@ span.icon-advance-serch {
         padding-top: 10px;
         padding-bottom: 0;
     }
-    .smallLoading{
+    .smallLoading {
         top: 5px;
 
     }

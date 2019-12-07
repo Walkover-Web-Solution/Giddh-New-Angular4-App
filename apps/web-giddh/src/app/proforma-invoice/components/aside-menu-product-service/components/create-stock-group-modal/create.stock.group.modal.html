@@ -7,12 +7,15 @@
         <div class="row">
             <div class="form-group col-xs-6">
                 <label>Name<span class="required">*</span></label>
-                <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name" autocomplete="off" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
+                <input type="text" name="name" (change)="generateUniqueName()" class="form-control"
+                       formControlName="name" autocomplete="off"
+                       style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
             </div>
 
             <div class="form-group col-xs-6">
                 <label>Unique Name<span class="required">*</span></label>
-                <input type="text" autocomplete="off" name="uniqueName" UniqueNameDirective formControlName="uniqueName" class="form-control">
+                <input type="text" autocomplete="off" name="uniqueName" UniqueNameDirective formControlName="uniqueName"
+                       class="form-control">
             </div>
         </div>
 
@@ -20,25 +23,27 @@
             <div class="form-group col-xs-12">
                 <label>Parent Group</label>
                 <select class="form-control" formControlName="parentStockGroupUniqueName">
-          <option [ngValue]="null">Select</option>
-          <option *ngFor="let unit of stockGroups$ | async;" [ngValue]="unit.value">{{unit.label}}</option>
-        </select>
+                    <option [ngValue]="null">Select</option>
+                    <option *ngFor="let unit of stockGroups$ | async;" [ngValue]="unit.value">{{unit.label}}</option>
+                </select>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-xs-12">
                 <div class="checkbox">
-                    <label for="isSelfParentUpdt"><input type="checkbox" formControlName="isSelfParent" id="isSelfParentUpdt"
-                                               name="parentStockGroup">Assign as a Parent Group</label>
+                    <label for="isSelfParentUpdt"><input type="checkbox" formControlName="isSelfParent"
+                                                         id="isSelfParentUpdt"
+                                                         name="parentStockGroup">Assign as a Parent Group</label>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-xs-12 text-right mrT2">
-                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="isAddStockGroupInProcess" (click)="addStockGroupFormSubmit()" [disabled]="addStockGroupForm.invalid">Save
-        </button>
+                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="isAddStockGroupInProcess"
+                        (click)="addStockGroupFormSubmit()" [disabled]="addStockGroupForm.invalid">Save
+                </button>
                 <button (click)="addStockGroupFormReset()" class="btn btn-md btn-primary">Cancel</button>
             </div>
         </div>

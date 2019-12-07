@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { UploadExceltableResponse } from 'apps/web-giddh/src/app/models/api-models/import-excel';
 import { base64ToBlob } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
@@ -6,7 +6,6 @@ import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
@@ -27,6 +26,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _route: Router, private _activateRoute: ActivatedRoute) {
         //
     }
+
     public ngOnInit() {
         if (this.UploadExceltableResponse) {
             this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? 'are' : 'is';
@@ -45,8 +45,8 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
             }
         });
 
-
     }
+
     public downloadImportFile() {
         // rows less than 400 download report
         if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {

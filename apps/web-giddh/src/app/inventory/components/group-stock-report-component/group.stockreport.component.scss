@@ -16,6 +16,7 @@
 :host ::ng-deep .fb__1-container .date-range-picker {
     min-width: 150px;
 }
+
 a:hover {
     text-decoration: none;
 }
@@ -65,6 +66,7 @@ tfoot {
 .max-width-140 {
     max-width: 140px;
 }
+
 .td_in_searchBox div {
     display: flex;
 }
@@ -87,6 +89,7 @@ tfoot {
     padding: 0px !important;
     position: relative;
 }
+
 .td_in_searchBox .input-container {
     position: relative;
 }
@@ -106,10 +109,12 @@ tfoot {
     right: 0px;
     top: 8px;
 }
+
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
     padding: 8px;
 }
+
 .basic > thead > tr > th {
     border-right: 1px solid #cdcdcd;
 }
@@ -130,6 +135,7 @@ tfoot {
     color: #ff5e01;
     background: #f4f5f8;
 }
+
 .stock-input {
     background-color: transparent !important;
     border-bottom: 1px dotted #fff !important;
@@ -141,50 +147,64 @@ tfoot {
     min-width: 155px;
     color: #fff;
 }
+
 .footer-tr td {
     background-color: #e5e5e5;
 }
+
 .total-footer {
     background-color: white;
     display: flex;
+
     .footitem {
         padding: 41px;
+
         h2 {
             color: #8f9091;
             font-size: 20px;
             margin-bottom: 10px;
         }
+
         h1 {
             font-size: 32px;
         }
     }
 }
+
 .modal-content {
     border-radius: 0px;
     margin-top: 200px;
 }
+
 .btn-download {
     font-size: 14px;
 }
+
 .btn-group.open.show {
     display: inline-block !important;
 }
+
 .dropdown-menu.dropdown-menu-download {
     min-width: 110px;
     border-radius: 0px;
 }
+
 .dropdown-menu-download li {
     cursor: pointer;
 }
+
 .capitalize {
     text-transform: capitalize;
 }
+
 .table-border {
     border: 1px solid #c6c6c6;
 }
+
 .bdrN {
     border: none !important;
 }
+
 .unit-badge {
     display: inline-block;
     min-width: 30px;
@@ -192,12 +212,14 @@ tfoot {
     padding-left: 3px;
     text-transform: lowercase;
 }
+
 .icon-pointer .icon-sort-asc,
 .icon-pointer .icon-sort-dsc {
     line-height: 20px;
     width: 15px;
     color: #757bb9;
 }
+
 .icon-pointer .activeTextColor {
     color: $activeIconTh;
 }
@@ -207,37 +229,46 @@ tfoot {
         padding-left: 0;
         padding-right: 80px;
         min-height: 60px;
+
         .flex-col {
             display: inline-flex;
             justify-content: center;
             align-items: center;
             vertical-align: middle;
         }
+
         .flex-col:nth-child(odd) {
             min-width: 105px;
         }
+
         .flex-col:nth-child(even) {
             min-width: 55px;
         }
+
         .operators {
             font-size: 39px;
             color: #8f9091;
         }
+
         h2 {
             font-size: 18px;
             line-height: 20px;
         }
+
         h3 {
             font-size: 14px;
             line-height: 20px;
         }
+
         h4 {
             font-size: 14px;
             line-height: 20px;
         }
+
         @media only screen and (max-width: 768px) {
             .flex-col {
                 display: block;
+
                 .operators {
                     text-align: right;
                 }
@@ -245,25 +276,32 @@ tfoot {
         }
     }
 }
+
 .countText h4 {
     text-align: left;
     padding-left: 30px;
 }
+
 .select-style select {
     width: 100% !important;
-} /*
+}
+
+/*
 .select-style:before{
-  z-index: 1;
+ z-index: 1;
 }*/
 .text-orange {
     color: #5b64c9;
 }
+
 .btn-link-2 {
     color: #0c8fe6;
 }
+
 .mB100 {
     margin-bottom: 100px;
 }
+
 th.brNone,
 td.brNone {
     border-right: none !important;
@@ -272,6 +310,7 @@ td.brNone {
 .inventoryStockTable td {
     white-space: inherit;
 }
+
 .advance-icon {
     width: 32px;
     height: 32px;
@@ -285,12 +324,15 @@ td.brNone {
     color: #1a237e;
     background: #fff;
 }
+
 .inventoryStockTable .d-flex {
     align-items: center;
 }
+
 .icon-pointer {
     padding-left: 5px;
 }
+
 button.btn.btn-filter {
     background: #e4e4e4;
     border: 1px solid #e4e4e4;
@@ -301,9 +343,11 @@ button.btn.btn-filter {
     align-items: center;
     padding: 4px 10px;
 }
+
 .table-border .d-flex {
     align-items: center;
 }
+
 .inventoryStockTable input.form-control.stock-input {
     color: #1c1c1c;
     text-align: left;

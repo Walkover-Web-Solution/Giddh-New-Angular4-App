@@ -27,7 +27,7 @@ export class ItemOnBoardingActions {
      * @memberof ItemOnBoardingActions
      */
     getOnBoardingTypeAction(value: OnBoardingType): CustomActions {
-        return { type: ItemOnBoardingActions.SET_ON_BOARDING_TYPE, payload: value };
+        return {type: ItemOnBoardingActions.SET_ON_BOARDING_TYPE, payload: value};
     }
 
     /**
@@ -38,7 +38,7 @@ export class ItemOnBoardingActions {
      * @memberof ItemOnBoardingActions
      */
     getOnBoardingStatusAction(value: boolean): CustomActions {
-        return { type: ItemOnBoardingActions.SET_ON_BOARDING_STATUS, payload: value };
+        return {type: ItemOnBoardingActions.SET_ON_BOARDING_STATUS, payload: value};
     }
 
     /**
@@ -49,7 +49,7 @@ export class ItemOnBoardingActions {
      * @memberof ItemOnBoardingActions
      */
     getOnBoardingResetAction(): CustomActions {
-        return { type: ItemOnBoardingActions.RESET_ON_BOARDING };
+        return {type: ItemOnBoardingActions.RESET_ON_BOARDING};
     }
 
     /**
@@ -60,6 +60,6 @@ export class ItemOnBoardingActions {
      * @memberof ItemOnBoardingActions
      */
     getItemUpdateAction(value: boolean): CustomActions {
-        return { type: ItemOnBoardingActions.SET_ITEM_UPDATE_PROGRESS, payload: value };
+        return {type: ItemOnBoardingActions.SET_ITEM_UPDATE_PROGRESS, payload: value};
     }
 }

@@ -1,57 +1,71 @@
 .parent-Group > ul > li ul li div {
-  color: #8a8a8a;
+    color: #8a8a8a;
 }
+
 .btn-group.show {
-  display: inline-block !important;
+    display: inline-block !important;
 }
+
 .btn-group > .btn:first-child {
-  margin-left: 8px;
-  margin-top: -3px;
-  background: none;
-  color: #707070;
-  padding: 6px;
-  margin-right: 0px !important;
+    margin-left: 8px;
+    margin-top: -3px;
+    background: none;
+    color: #707070;
+    padding: 6px;
+    margin-right: 0px !important;
 }
+
 .dropdown-menu > li > a:hover {
-  background: #e5e5e5;
-  cursor: pointer;
+    background: #e5e5e5;
+    cursor: pointer;
 }
+
 .dropdown-menu > li > a {
-  color: #ff5200;
+    color: #ff5200;
 }
+
 span.caret {
-  display: none;
+    display: none;
 }
+
 #inventory-sidebar {
-  background: #fff;
-  min-height: 100vh;
-  width: 260px;
+    background: #fff;
+    min-height: 100vh;
+    width: 260px;
 }
+
 .stock-grp-list > li:hover {
-  background: #EEEFF9;
+    background: #EEEFF9;
 }
+
 .stock-grp-list > li.active {
-  background: #EEEFF9;
+    background: #EEEFF9;
 }
+
 .stock-grp-list > li > a:hover {
-  color: #333333;
+    color: #333333;
 }
+
 :host ::ng-deep .nav-tabs > li {
-  width: 50%;
-  text-align: center;
-  background: #f5f5f5;
+    width: 50%;
+    text-align: center;
+    background: #f5f5f5;
 }
+
 .width-sidebar-form-control {
-  width: 205px;
+    width: 205px;
 }
+
 .width-sidebar-form-control-search {
-  padding-left: 32px !important;
-  width: 205px;
-  display: inline-block;
+    padding-left: 32px !important;
+    width: 205px;
+    display: inline-block;
 }
-.btn-link-2{
-color: #0C8FE6;
+
+.btn-link-2 {
+    color: #0C8FE6;
 }
+
 .no-data-box {
-  border-top: 1px solid #e0e0e0!important;
+    border-top: 1px solid #e0e0e0 !important;
 }

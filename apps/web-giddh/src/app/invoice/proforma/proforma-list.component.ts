@@ -113,7 +113,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public showCustomerSearch: boolean = false;
     public customerNameInput: FormControl = new FormControl();
 
-    public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
+    public sortRequestForUi: { sortBy: string, sort: string } = {sortBy: '', sort: ''};
     public advanceSearchFilter: ProformaFilter = new ProformaFilter();
     public allItemsSelected: boolean = false;
     public hoveredItemUniqueName: string;
@@ -131,7 +131,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public isMobileView = false;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private activatedRouter: ActivatedRoute,
-        private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
+                private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
@@ -533,7 +533,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             localStorage.removeItem(this.localStorageSelectedDate);
         }
         // reset dateRangePicker
-        this.datePickerOptions = { ...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment() };
+        this.datePickerOptions = {...this.datePickerOptions, startDate: moment().subtract(30, 'days'), endDate: moment()};
 
         this.advanceSearchFilter = new ProformaFilter();
         this.advanceSearchFilter.page = 1;
@@ -645,7 +645,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         obj.uniqueName = obj.voucherNumber;
         obj.grandTotal = invoice.grandTotal;
         obj.voucherType = this.voucherType;
-        obj.account = { name: invoice.customerName, uniqueName: invoice.customerUniqueName };
+        obj.account = {name: invoice.customerName, uniqueName: invoice.customerUniqueName};
         obj.voucherStatus = invoice.action;
         return obj;
     }

@@ -174,6 +174,7 @@ export class IAccountAddress {
     public partyType: string;
     public stateCodeName: string;
 }
+
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];
     public attentionTo?: string;
@@ -257,7 +258,7 @@ export class CashFreeVirtualAccount {
 
 export class AddAccountRequest {
     activeGroupUniqueName: string;
-    accountRequest: AccountRequestV2
+    accountRequest: AccountRequestV2;
 }
 
 export class UpdateAccountRequest {
@@ -265,5 +266,5 @@ export class UpdateAccountRequest {
     value: {
         groupUniqueName: string;
         accountUniqueName: string;
-    }
+    };
 }

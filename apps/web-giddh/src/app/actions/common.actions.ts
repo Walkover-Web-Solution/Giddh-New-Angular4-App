@@ -1,8 +1,8 @@
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CommonService } from '../services/common.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
+import { CallingCodesResponse, CountryRequest, CountryResponse, CurrencyResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -79,6 +79,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public GetAllCountry(value: CountryRequest): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY,
@@ -134,6 +135,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public GetPartyType(): CustomActions {
         return {
             type: CommonActions.GET_PARTY_TYPE,
@@ -146,6 +148,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE

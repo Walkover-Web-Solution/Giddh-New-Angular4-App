@@ -6,28 +6,29 @@
             <div class="col" style="flex: 1;">
 
                 <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
-                    name="fromToDateForm" novalidate>
+                      name="fromToDateForm" novalidate>
                     <div class="form-group mrR1" *ngIf="showLabels">
                         <div class="form-group">
                             <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
-                                formControlName="selectedDateOption" [isFilterEnabled]="true"
-                                [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="120px">
+                                       formControlName="selectedDateOption" [isFilterEnabled]="true"
+                                       [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33"
+                                       width="120px">
                             </sh-select>
                         </div>
                     </div>
                     <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '0'">
                         <div class="form-group">
                             <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
-                                [isFilterEnabled]="true" [placeholder]="'Select Option'" [showClear]="false"
-                                (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
+                                       [isFilterEnabled]="true" [placeholder]="'Select Option'" [showClear]="false"
+                                       (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
                     <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
                         <span class="inputWrapper">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                (hideDaterangepicker)="selectedDate($event)"
-                                (applyDaterangepicker)="selectedDate($event)"
-                                class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1" /></span>
+                                   (hideDaterangepicker)="selectedDate($event)"
+                                   (applyDaterangepicker)="selectedDate($event)"
+                                   class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1"/></span>
                     </div>
                     <!--
                     <div class="form-group tb-btnApply">
@@ -39,14 +40,15 @@
                     <div class="form-group mrR1" *ngIf="!(showLoader)">
 
                         <div class="form-group pull-left mrR1 " style="margin-left: 0px;margin-top: -18px;"
-                            *ngIf="(tags$ | async)?.length">
+                             *ngIf="(tags$ | async)?.length">
 
                             <i class="glyphicon glyphicon-triangle-bottom"
-                                style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
+                               style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
                             <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
-                                [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
-                                [ItemHeight]="35" [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
-                                [showNotFoundLinkAsDefault]="false" [width]="'200px'">
+                                       [isFilterEnabled]="true" (selected)="onTagSelected($event)"
+                                       [placeholder]="'Select Tag'"
+                                       [ItemHeight]="35" [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
+                                       [showNotFoundLinkAsDefault]="false" [width]="'200px'">
                             </sh-select>
                         </div>
                         <!-- Filter by Tag -->
@@ -54,19 +56,18 @@
                         <div class="form-group pull-left" style="margin-right: 10px;">
 
                             <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
-                                *ngIf="!expand">
+                               *ngIf="!expand">
 
                                 <span class="icon-expandIcon"></span>
                             </a>
 
                             <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
-                                *ngIf="expand">
+                               *ngIf="expand">
 
                                 <span class="icon-collapse"></span>
                             </a>
 
                         </div>
-
 
 
                         <div class="mrT1 pull-right" *ngIf="showLabels">
@@ -114,8 +115,9 @@
                 <div style="margin-left: 15px">
 
                     <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value"
-                        [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
-                        class="pull-right">
+                                   [selectedCompany]="selectedCompany"
+                                   (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
+                                   class="pull-right">
                     </tb-export-csv>
 
                     <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mrR1">
@@ -123,14 +125,15 @@
 
 
                     <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value"
-                        [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                        class="pull-right mrR1"></tb-export-pdf>
+                                   [selectedCompany]="selectedCompany"
+                                   (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
+                                   class="pull-right mrR1"></tb-export-pdf>
 
                     <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value"
-                        [filters]="filterForm.value" class="pull-right"></pl-export-xls>
+                                   [filters]="filterForm.value" class="pull-right"></pl-export-xls>
 
                     <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value"
-                        [filters]="filterForm.value" class="pull-right"></bs-export-xls>
+                                   [filters]="filterForm.value" class="pull-right"></bs-export-xls>
 
                 </div>
             </div>
@@ -138,7 +141,6 @@
         </div>
 
     </div>
-
 
 
 </div>
@@ -168,12 +170,12 @@
 
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="tagName" formControlName="name"
-                                        placeholder="Tag Name" />
+                                           placeholder="Tag Name"/>
                                 </div>
 
                                 <div class="form-group">
                                     <textarea class="form-control" name="tagDescription" formControlName="description"
-                                        placeholder="Tag Desciption (optional)"></textarea>
+                                              placeholder="Tag Desciption (optional)"></textarea>
                                 </div>
 
                             </div>

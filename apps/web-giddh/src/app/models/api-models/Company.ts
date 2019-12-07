@@ -50,18 +50,18 @@ export class Addresses {
 }
 
 export class CompanyTotals {
-  public sales: {
-    amount: any;
-    type: any;
-  };
-  public expenses: {
-    amount: any;
-    type: any;
-  };
-  public taxes: {
-    amount: any;
-    type: any;
-  };
+    public sales: {
+        amount: any;
+        type: any;
+    };
+    public expenses: {
+        amount: any;
+        type: any;
+    };
+    public taxes: {
+        amount: any;
+        type: any;
+    };
 }
 
 export class CompanyResponse {
@@ -97,7 +97,7 @@ export class CompanyResponse {
     public balanceDisplayFormat?: string;
     public balanceDecimalPlaces?: string;
     public baseCurrencySymbol?: string;
-	public companyTotals: CompanyTotals;
+    public companyTotals: CompanyTotals;
 }
 
 export interface UserEntityRole {
@@ -208,7 +208,7 @@ export class States {
         stateGstCode: string;
         name: string;
         code: string;
-    }]
+    }];
 }
 
 export class GetCouponResp {
@@ -341,13 +341,14 @@ export class CountryResponse {
         symbol: string;
     };
 }
+
 export class StateList {
     code: string;
     name: string;
-    stateGstCode: string
+    stateGstCode: string;
 }
 
 export class BranchFilterRequest {
-  from: string;
-  to: string;
+    from: string;
+    to: string;
 }

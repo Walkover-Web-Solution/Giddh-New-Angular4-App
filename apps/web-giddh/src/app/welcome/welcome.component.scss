@@ -61,15 +61,15 @@
     background: #E6E6E6;
 }
 
-::ng-deep sh-select .header.open>input[type="text"],
- ::ng-deep sh-select .header.open>input[type="text"]:focus {
+::ng-deep sh-select .header.open > input[type="text"],
+::ng-deep sh-select .header.open > input[type="text"]:focus {
     width: 100%;
 }
 
 .welcome-container {
     max-width: 400px;
     margin: 0 auto 20px;
-        width: 100%;
+    width: 100%;
     padding: 0 15px;
 }
 
@@ -91,44 +91,51 @@
     background: #ccc;
     color: #333;
 }
+
 .welcome-container p.welcome_title {
-  font-size: 14px;
-  color: #9B9B9B;
-  margin-top: 25px;
+    font-size: 14px;
+    color: #9B9B9B;
+    margin-top: 25px;
 
 }
-.form-control[disabled], .form-control[readonly],  fieldset[disabled] {
-  color:#707070 !important;
-}
-.welcome-container  sup {
-  top: 0;
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] {
+    color: #707070 !important;
 }
 
-.clearBTn{
-  position: absolute;
+.welcome-container sup {
+    top: 0;
+}
+
+.clearBTn {
+    position: absolute;
     right: -50px;
     top: 38px;
     z-index: 9;
     cursor: pointer;
     color: $btnLink;
 }
-.pos-rel{
-  position: relative;
+
+.pos-rel {
+    position: relative;
 }
+
 .custom-multi-select li {
-  background: #f1f1f1;
-  color: white;
-  margin: 4px;
-  padding: 2px 10px;
-  font-size: 14px;
-  border-radius: 3px;
-  cursor: pointer;
+    background: #f1f1f1;
+    color: white;
+    margin: 4px;
+    padding: 2px 10px;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
 }
+
 span.sameAsHead {
     font-size: 14px;
     position: relative;
     top: 8px;
 }
+
 .gstinWidth {
     width: 50%;
     margin-right: 10px;

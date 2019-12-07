@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'company-import-export-component',
-  templateUrl: 'company-import-export.component.html',
-  styles: [`
+    selector: 'company-import-export-component',
+    templateUrl: 'company-import-export.component.html',
+    styles: [`
     .backup-data {
       padding: 10px 0px;
       border-bottom: 1px solid #6d6d6d;
@@ -51,32 +51,32 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
       margin: 0 auto 20px;
     }
 
-    
+
 
 
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CompanyImportExportComponent implements OnInit {
-  public mode: 'import' | 'export' = 'export';
-  public isFirstScreen: boolean = true;
+    public mode: 'import' | 'export' = 'export';
+    public isFirstScreen: boolean = true;
 
-  constructor(private _cdr: ChangeDetectorRef) {
-    //
-  }
+    constructor(private _cdr: ChangeDetectorRef) {
+        //
+    }
 
-  public ngOnInit() {
-    //
-  }
+    public ngOnInit() {
+        //
+    }
 
-  public setActiveTab(mode: 'import' | 'export') {
-    this.mode = mode;
-    this.isFirstScreen = false;
-    // this._cdr.detectChanges();
-  }
+    public setActiveTab(mode: 'import' | 'export') {
+        this.mode = mode;
+        this.isFirstScreen = false;
+        // this._cdr.detectChanges();
+    }
 
-  public back() {
-    this.isFirstScreen = true;
-  }
+    public back() {
+        this.isFirstScreen = true;
+    }
 }

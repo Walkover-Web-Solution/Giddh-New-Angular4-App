@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormResponse } from '../../models/api-models/Common';
+import { CallingCodesResponse, CountryResponse, CurrencyResponse, OnboardingFormResponse } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { CustomActions } from '../customActions';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -81,11 +81,11 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             return Object.assign({}, state, {});
 
         case CommonActions.RESET_ONBOARDING_FORM_RESPONSE: {
-            return { ...state, onboardingform: null };
+            return {...state, onboardingform: null};
         }
 
         case CommonActions.RESET_COUNTRY: {
-            return Object.assign({}, state, { countries: null });
+            return Object.assign({}, state, {countries: null});
         }
 
         default:

@@ -1,5 +1,5 @@
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { LocationService } from '../../../../services/location.service';
@@ -13,18 +13,11 @@ import { AuthService } from '../../../../theme/ng-social-login-module/index';
 import { GeneralService } from '../../../../services/general.service';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import { AppState } from '../../../../store';
-import {
-    CompanyRequest,
-    CompanyResponse,
-    SocketNewCompanyRequest,
-    StateDetailsRequest,
-    CompanyCreateRequest
-} from '../../../../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyService } from '../../../../services/companyService.service';
 import { ToasterService } from '../../../../services/toaster.service';
-import { CommonService } from '../../../../services/common.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import { NgForm } from '@angular/forms';
@@ -103,10 +96,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public selectedCountry: string = '';
 
     constructor(private socialAuthService: AuthService,
-        private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-        private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-        private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-        private _toaster: ToasterService, private commonActions: CommonActions
+                private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+                private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
+                private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
+                private _toaster: ToasterService, private commonActions: CommonActions
     ) {
         this.getCountry();
         this.getCurrency();
@@ -174,9 +167,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         });
     }
 
-	/**
-	 * createCompany
-	 */
+    /**
+     * createCompany
+     */
     public createCompany(mobileNoEl) {
         this.checkMobileNo(mobileNoEl);
 
@@ -364,7 +357,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -377,7 +370,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {

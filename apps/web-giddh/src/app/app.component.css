@@ -6,6 +6,7 @@ body {
 a.active {
     background-color: gray;
 }
+
 footer#footer.sticky-footer {
     padding-left: 230px;
     text-align: center;
@@ -17,9 +18,11 @@ footer#footer.sticky-footer {
     font-size: 16px;
     border-top: 1px solid #ddd;
 }
+
 .footer-content {
     margin-bottom: 0 !important;
 }
+
 #content_wrapper {
     padding-bottom: 80px;
 }

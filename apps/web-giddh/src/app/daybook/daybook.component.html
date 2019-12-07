@@ -16,8 +16,10 @@
                 <div class=" form-group">
 
                     <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
-                            daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
-                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                                                       daterangepicker [options]="datePickerOptions"
+                                                       (hideDaterangepicker)="selectedDate($event)"
+                                                       (applyDaterangepicker)="selectedDate($event)"
+                                                       class="form-control date-range-picker"/>
                     </span>
 
                 </div>
@@ -34,17 +36,20 @@
                 </div>
                 <div class=" form-group expand-collapse-btn">
 
-                    <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
-                              'Expand All'}}
+                    <button type="button" class="btn btn-default"
+                            (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                        'Expand All'}}
                     </button>
 
                 </div>
-                <div class="expand-export"> <button type="button" class="btn btn-default expandBtnHideDesktop"
-                        (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
-                                              'Expand All'}}
+                <div class="expand-export">
+                    <button type="button" class="btn btn-default expandBtnHideDesktop"
+                            (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                        'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
-                        (click)="exportDaybook()">Export</button>
+                            (click)="exportDaybook()">Export
+                    </button>
                 </div>
 
             </div>
@@ -66,47 +71,46 @@
 
             <table class="tb-head table-bordered table basic onMobileView">
                 <thead>
-                    <tr>
-                        <th class="col-xs-1">Date</th>
-                        <th class="col-xs-3">Particular</th>
-                        <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
-                        <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
-                        <th class="col-xs-2 text-right">Debit Amt</th>
-                        <th class="col-xs-2 text-right">Credit Amt</th>
-                    </tr>
+                <tr>
+                    <th class="col-xs-1">Date</th>
+                    <th class="col-xs-3">Particular</th>
+                    <th class="col-xs-2" style="width: 16.5%;">Vch. Name</th>
+                    <th class="col-xs-2 text-right" style="width: 16.5%;">Vch. No.</th>
+                    <th class="col-xs-2 text-right">Debit Amt</th>
+                    <th class="col-xs-2 text-right">Credit Amt</th>
+                </tr>
                 </thead>
 
                 <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                    class="daybookTableTbody">
-                    <tr>
-                        <td data-title="Date">{{ entry.entryDate }}</td>
-                        <td data-title="Particular">{{ entry.particular.name }}</td>
-                        <td data-title="Vch. Name">{{ entry.voucherName }}</td>
-                        <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
-                        <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
-                        <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
-                    </tr>
-                    <ng-container *ngIf="entry !== undefined && entry.isExpanded">
-                        <tr *ngFor="let details of entry.otherTransactions">
-                            <td class="hideTD"></td>
-                            <td data-title="Particular">{{ details.particular.name }}</td>
-                            <td class="hideTD"></td>
-                            <td class="hideTD"></td>
-                            <td class="text-right" data-title="Debit Amt">
-                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount}}</span>
-                                <span *ngIf="details.type !== 'DEBIT'">-</span>
+                       class="daybookTableTbody">
+                <tr>
+                    <td data-title="Date">{{ entry.entryDate }}</td>
+                    <td data-title="Particular">{{ entry.particular.name }}</td>
+                    <td data-title="Vch. Name">{{ entry.voucherName }}</td>
+                    <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
+                    <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
+                    <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
+                </tr>
+                <ng-container *ngIf="entry !== undefined && entry.isExpanded">
+                    <tr *ngFor="let details of entry.otherTransactions">
+                        <td class="hideTD"></td>
+                        <td data-title="Particular">{{ details.particular.name }}</td>
+                        <td class="hideTD"></td>
+                        <td class="hideTD"></td>
+                        <td class="text-right" data-title="Debit Amt">
+                            <span *ngIf="details.type === 'DEBIT'">{{ details.amount}}</span>
+                            <span *ngIf="details.type !== 'DEBIT'">-</span>
 
-                            </td>
-                            <td class="text-right" data-title="Credit Amt">
-                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
-                                <span *ngIf="details.type !== 'CREDIT'">-</span>
-                            </td>
-                        </tr>
-                    </ng-container>
+                        </td>
+                        <td class="text-right" data-title="Credit Amt">
+                            <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
+                            <span *ngIf="details.type !== 'CREDIT'">-</span>
+                        </td>
+                    </tr>
+                </ng-container>
                 </tbody>
 
             </table>
-
 
 
             <div>
@@ -172,7 +176,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <daybook-advance-search-model [startDate]="daybookQueryRequest.from" [endDate]="daybookQueryRequest.to"
-                (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
+                                          (closeModelEvent)="closeAdvanceSearchPopup($event)"></daybook-advance-search-model>
         </div>
     </div>
 </div>

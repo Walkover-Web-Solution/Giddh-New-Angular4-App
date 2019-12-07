@@ -1,12 +1,11 @@
-import {  Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-fixed-footer',
-  templateUrl: './fixed-footer.component.html',
-  styleUrls:['./fixed-footer.component.scss']
+    selector: 'app-fixed-footer',
+    templateUrl: './fixed-footer.component.html',
+    styleUrls: ['./fixed-footer.component.scss']
 })
- 
-export class FixedFooterComponent  {
- 
-  }
+
+export class FixedFooterComponent {
+
+}

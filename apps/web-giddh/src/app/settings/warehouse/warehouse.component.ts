@@ -30,7 +30,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }]
+    providers: [{provide: BsDropdownConfig, useValue: {autoClose: true}}]
 })
 export class WarehouseComponent implements OnInit, OnDestroy {
 
@@ -67,7 +67,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions
-    ) { }
+    ) {
+    }
 
     /**
      * Initializes the component
@@ -161,7 +162,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public handleFormSubmit(formData: any): void {
         this.resetWelcomeForm();
         if (formData && formData.otherData) {
-            const { controls: formControls } = formData.welcomeForm;
+            const {controls: formControls} = formData.welcomeForm;
             if (formControls) {
                 const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls, formData.otherData.taxName);
                 if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress) {

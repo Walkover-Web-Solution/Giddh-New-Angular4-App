@@ -1,5 +1,5 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
-    *ngIf="!(showNewForm$ | async)">
+     *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-xs-8">
@@ -18,21 +18,21 @@
                     Export
                 </button>
                 <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)"
-                    (click)="showShareGroupModal()">Share
+                        (click)="showShareGroupModal()">Share
                 </button>
                 <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                     *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
                     Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
                 </div>
             </div>
             <!--account-->
             <div class="pull-right col-xs-4 pdR0">
                 <button class="btn btn-share pull-right" *ngIf="(showEditAccount$ | async)"
-                    (click)="showShareAccountModal()">
+                        (click)="showShareAccountModal()">
                     Share
                 </button>
                 <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
                     Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
                 </div>
             </div>
@@ -51,13 +51,15 @@
         <!--account add component-->
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)"
-            [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-            [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-            [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)"
-            [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc"
-            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
-            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-            [isDebtorCreditor]="isDebtorCreditor">
+                                 [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                                 [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                                 [isAccountNameAvailable$]="isAccountNameAvailable$"
+                                 [createAccountInProcess$]="createAccountInProcess$"
+                                 [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)"
+                                 [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc"
+                                 [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
+                                 [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
+                                 [isDebtorCreditor]="isDebtorCreditor">
         </account-add-new-details>
 
         <!--account update component-->
@@ -65,13 +67,16 @@
         <!-- <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-update> -->
 
         <account-update-new-details *ngIf="(activeAccount$ | async)" [activeAccount$]="activeAccount$"
-            [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc"
-            [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
-            [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)"
-            [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$"
-            (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)"
-            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
-            [isDebtorCreditor]="isDebtorCreditor">
+                                    [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+                                    [isGstEnabledAcc]="isGstEnabledAcc"
+                                    [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                                    [updateAccountInProcess$]="updateAccountInProcess$"
+                                    [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)"
+                                    [accountDetails]="accountDetails"
+                                    [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                                    (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)"
+                                    [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount"
+                                    [isDebtorCreditor]="isDebtorCreditor">
         </account-update-new-details>
 
         <!-- move account -->
@@ -345,7 +350,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody'
-                (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
+                           (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
             </confirm-modal>
         </div>
     </div>
@@ -355,7 +360,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <confirm-modal [title]="'Move Merged Account'" [body]='moveMergedAccountModalBody'
-                (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
+                           (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
             </confirm-modal>
         </div>
     </div>
@@ -366,7 +371,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
-                (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+                           (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
             </confirm-modal>
         </div>
     </div>

@@ -1,17 +1,17 @@
 @import '../../assets/css/color.scss';
 
 .inventory-controll ::ng-deep.nav > li > a {
-  padding: 2px 0px !important;
-  margin-right: 35px !important;
+    padding: 2px 0px !important;
+    margin-right: 35px !important;
 }
 
-.inventory-controll ::ng-deep.nav>li>a {
-  border-bottom: 2px solid transparent !important;
-  color: black !important;
-  border-top: transparent !important;
-  border-right: transparent !important;
-  border-left: transparent !important;
-  font-size: 14px;
+.inventory-controll ::ng-deep.nav > li > a {
+    border-bottom: 2px solid transparent !important;
+    color: black !important;
+    border-top: transparent !important;
+    border-right: transparent !important;
+    border-left: transparent !important;
+    font-size: 14px;
 }
 
 .inventory-controll ::ng-deep.nav.nav-tabs {
@@ -23,22 +23,25 @@
     top: -4px;
     background-color: #f7f8fa;
 }
-.inventory-controll ::ng-deep.nav-tabs>li>a:hover {
-  border-color: transparent !important;
+
+.inventory-controll ::ng-deep.nav-tabs > li > a:hover {
+    border-color: transparent !important;
     color: $activeIconTh !important;
 }
-.inventory-controll ::ng-deep.nav-tabs>::ng-deep li.active> a, .nav-tabs>::ng-deep li.active> a:focus, ::ng-deep.nav-tabs> li.active>a:hover {
-  color:#1c1c1c !important;
-  border-bottom: 4px solid $activeIconTh !important;
-  cursor: pointer !important;
-  background-color: unset !important;
-  border-top: transparent !important;
-  border-right: transparent !important;
-  border-left: transparent !important;
+
+.inventory-controll ::ng-deep.nav-tabs > ::ng-deep li.active > a, .nav-tabs > ::ng-deep li.active > a:focus, ::ng-deep.nav-tabs > li.active > a:hover {
+    color: #1c1c1c !important;
+    border-bottom: 4px solid $activeIconTh !important;
+    cursor: pointer !important;
+    background-color: unset !important;
+    border-top: transparent !important;
+    border-right: transparent !important;
+    border-left: transparent !important;
 }
+
 .inventory-controll .nav-tabs > li > a:hover {
-  color: $activeIconTh !important;
-  border-bottom: 4px solid $activeIconTh !important;
+    color: $activeIconTh !important;
+    border-bottom: 4px solid $activeIconTh !important;
 }
 
 //.inventory-controll .invoice-nav.navbar-nav > li > a.active {
@@ -47,13 +50,14 @@
 //}
 
 .navbar {
-  min-height: auto;
-  margin-bottom: 10px;
+    min-height: auto;
+    margin-bottom: 10px;
 }
-.inventory-controll ::ng-deep.nav>li>a:focus, ::ng-deep.nav>li>a:hover {
-  background-color: unset !important;
+
+.inventory-controll ::ng-deep.nav > li > a:focus, ::ng-deep.nav > li > a:hover {
+    background-color: unset !important;
 }
 
 .rightBar {
-  width: calc(100% - 260px);
+    width: calc(100% - 260px);
 }

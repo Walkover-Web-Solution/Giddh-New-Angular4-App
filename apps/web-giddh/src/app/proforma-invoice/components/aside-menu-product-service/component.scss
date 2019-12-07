@@ -1,50 +1,50 @@
 :host {
-  position: fixed;
-  left: auto;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  max-width:580px;
-  z-index: 99999;
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 580px;
+    z-index: 99999;
 }
 
 :host.shifted {
-  right: 500px;
+    right: 500px;
 }
 
 #close {
-  display: none;
+    display: none;
 }
 
 :host.in #close {
-  display: block;
-  position: fixed;
-  left: -41px;
-  top: 0;
-  z-index: 5;
-  border: 0;
-  border-radius: 0;
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
 }
 
 .aside-pane {
-  display: flex;
-  width: 100%;
-  max-width: 580px;
+    display: flex;
+    width: 100%;
+    max-width: 580px;
 }
 
 .flexy-child {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .flexy-child-1 {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 :host .aside-pane {
-  width: 100%;
-  max-width:580px;
+    width: 100%;
+    max-width: 580px;
 }

@@ -42,65 +42,65 @@ import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { BaseAccountComponent } from './components/baseAccountModal/baseAccountModal.component';
 import { SalesModule } from '../sales/sales.module';
-import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask'
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [
-    // Components / Directives/ Pipes
-    LedgerComponent,
-    NewLedgerEntryPanelComponent,
-    //LedgerDiscountComponent,
-    UpdateLedgerEntryPanelComponent,
-    ShareLedgerComponent,
-    ExportLedgerComponent,
-    UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent,
-    AdvanceSearchModelComponent,
-    LedgerAsidePaneComponent,
-    LedgerAsidePaneAccountComponent,
-    BaseAccountComponent
-  ],
-  exports: [
-    LedgerComponent, UpdateLedgerEntryPanelComponent
-  ],
-  entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
-  providers: [],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TaxControlModule.forRoot(),
-    LedgerRoutingModule,
-    ModalModule,
-    TooltipModule,
-    PaginationModule,
-    NgxUploaderModule,
-    ClipboardModule,
-    Daterangepicker,
-    LaddaModule,
-    ElementViewChildModule,
-    TextMaskModule,
-    NumberToWordsModule,
-    ConfirmModalModule,
-    ShSelectModule,
-    DecimalDigitsModule,
-    BsDatepickerModule,
-    DatepickerModule,
-    ButtonsModule,
-    BsDropdownModule,
-    TextCaseChangeModule,
-    ClickOutsideModule,
-    QuickAccountModule.forRoot(),
-    InventoryModule,
-    SharedModule,
-    CurrencyModule,
-    SelectModule.forRoot(),
-    SalesModule,
-    AngularResizedEventModule,
-    NgxMaskModule.forRoot(),
-    NgbTooltipModule
-  ],
+    declarations: [
+        // Components / Directives/ Pipes
+        LedgerComponent,
+        NewLedgerEntryPanelComponent,
+        //LedgerDiscountComponent,
+        UpdateLedgerEntryPanelComponent,
+        ShareLedgerComponent,
+        ExportLedgerComponent,
+        UpdateLedgerTaxControlComponent,
+        UpdateLedgerDiscountComponent,
+        AdvanceSearchModelComponent,
+        LedgerAsidePaneComponent,
+        LedgerAsidePaneAccountComponent,
+        BaseAccountComponent
+    ],
+    exports: [
+        LedgerComponent, UpdateLedgerEntryPanelComponent
+    ],
+    entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
+    providers: [],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TaxControlModule.forRoot(),
+        LedgerRoutingModule,
+        ModalModule,
+        TooltipModule,
+        PaginationModule,
+        NgxUploaderModule,
+        ClipboardModule,
+        Daterangepicker,
+        LaddaModule,
+        ElementViewChildModule,
+        TextMaskModule,
+        NumberToWordsModule,
+        ConfirmModalModule,
+        ShSelectModule,
+        DecimalDigitsModule,
+        BsDatepickerModule,
+        DatepickerModule,
+        ButtonsModule,
+        BsDropdownModule,
+        TextCaseChangeModule,
+        ClickOutsideModule,
+        QuickAccountModule.forRoot(),
+        InventoryModule,
+        SharedModule,
+        CurrencyModule,
+        SelectModule.forRoot(),
+        SalesModule,
+        AngularResizedEventModule,
+        NgxMaskModule.forRoot(),
+        NgbTooltipModule
+    ],
 })
 export class LedgerModule {
 }

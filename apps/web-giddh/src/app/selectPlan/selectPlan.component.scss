@@ -37,28 +37,31 @@
 .choose-ur-plan label.radio-inline {
     display: block;
 }
+
 .select-plan-block {
     margin-bottom: 30px;
     background-color: #fff;
     padding: 15px;
-    box-shadow: 0 0 3px rgba(0,0,0,.1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
 }
-@media(max-width:767px){
-  .welcome-msg .btn-default {
-    margin-top: 10px;
-}
-.select-plan-block {
 
-    margin-bottom: 10px;
-}
-}
-@media(max-width:414px){
-  .your-account span  ,   .your-account p{
-   font-size: 14px;
+@media(max-width: 767px) {
+    .welcome-msg .btn-default {
+        margin-top: 10px;
+    }
+    .select-plan-block {
 
+        margin-bottom: 10px;
+    }
 }
-.choose-ur-plan {
-    padding-top: 0px;
+
+@media(max-width: 414px) {
+    .your-account span, .your-account p {
+        font-size: 14px;
+
+    }
+    .choose-ur-plan {
+        padding-top: 0px;
         margin-bottom: 20px;
-}
+    }
 }

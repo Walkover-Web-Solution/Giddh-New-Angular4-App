@@ -1,7 +1,7 @@
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
@@ -71,9 +71,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
     public selectWarehouse = [
-        { label: 'Vijay Nagar', value: 'Vijay Nagar' },
-        { label: 'Gita Bhawan', value: 'Gita Bhawan' },
-        { label: 'Rajendra Nagar', value: 'Rajendra Nagar' },
+        {label: 'Vijay Nagar', value: 'Vijay Nagar'},
+        {label: 'Gita Bhawan', value: 'Gita Bhawan'},
+        {label: 'Rajendra Nagar', value: 'Rajendra Nagar'},
     ];
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;

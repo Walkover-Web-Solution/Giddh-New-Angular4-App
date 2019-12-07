@@ -1,18 +1,18 @@
-import { Component, Output, EventEmitter, ViewChild, Input, ElementRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap';
-import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { CompanyActions } from '../../../actions/company.actions';
 import { CommonActions } from '../../../actions/common.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CompanyService } from '../../../services/companyService.service';
 import { GeneralActions } from '../../../actions/general/general.actions';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../theme/ng-select/ng-select';
-import { CompanyResponse, StatesRequest, StateList } from '../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest } from '../../../models/api-models/Company';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { AccountRequestV2 } from '../../../models/api-models/Account';
 import { IContriesWithCodes } from '../../../models/interfaces/common.interface';
@@ -93,11 +93,10 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('autoFocus') public autoFocus: ElementRef;
 
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
 
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -128,8 +127,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+                private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         console.log(this.flatGroupsOptions);
@@ -142,7 +142,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         }
     }
 
-
     selectTab(tabId: number) {
         this.staticTabs.tabs[tabId].active = true;
     }
@@ -150,6 +149,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     closeAsidePane(event) {
         this.closeAsideEvent.emit(event);
     }
+
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
@@ -275,6 +275,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
     }
+
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {
             if (flattenGroups) {
@@ -283,7 +284,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 }).map(m => {
                     return {
                         value: m.groupUniqueName, label: m.groupName
-                    }
+                    };
                 });
                 this.flatGroupsOptions = items;
             }
@@ -295,7 +296,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
             this.addAccountForm.get('mobileCode').patchValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
+            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag);
             this.addAccountForm.get('currency').patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
@@ -328,8 +329,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }),
             hsnOrSac: [''],
             currency: [''],
-            hsnNumber: [{ value: '', disabled: false }],
-            sacNumber: [{ value: '', disabled: false }],
+            hsnNumber: [{value: '', disabled: false}],
+            sacNumber: [{value: '', disabled: false}],
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
@@ -351,7 +352,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }],
+            stateCode: [{value: '', disabled: false}],
             isDefault: [false],
             isComposite: [false],
             partyType: ['NOT APPLICABLE']
@@ -360,7 +361,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
 
     public resetGstStateForm() {
-        this.forceClear$ = observableOf({ status: true });
+        this.forceClear$ = observableOf({status: true});
 
         let addresses = this.addAccountForm.get('addresses') as FormArray;
         for (let control of addresses.controls) {
@@ -462,11 +463,13 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public resetAddAccountForm() {
         this.addAccountForm.reset();
     }
+
     public isValidMobileNumber(ele: HTMLInputElement) {
         if (ele.value) {
             this.checkMobileNo(ele);
         }
     }
+
     public checkMobileNo(ele) {
         try {
             let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
@@ -579,12 +582,13 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value)
+            let obj = this.getStateGSTCode(this.stateList, event.value);
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
         }
 
     }
+
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
@@ -596,7 +600,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
+                    this.countrySource.push({value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode});
                     // Creating Country Currency List
                     if (res[key].currency !== undefined && res[key].currency !== null) {
                         this.countryCurrency[res[key].alpha2CountryCode] = [];
@@ -611,6 +615,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+
     public getOnboardingForm(countryCode: string) {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = '';
@@ -622,7 +627,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
@@ -636,7 +641,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -644,6 +649,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
@@ -672,6 +678,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             ele.classList.remove('error-box');
         }
     }
+
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
@@ -687,7 +694,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                         this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                     }
 
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    this.states.push({label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code});
                 });
                 this.statesSource$ = observableOf(this.states);
             } else {
@@ -697,6 +704,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -706,6 +714,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
     }
+
     private getStateGSTCode(stateList, code: string) {
         return stateList.find(res => code === res.code);
     }

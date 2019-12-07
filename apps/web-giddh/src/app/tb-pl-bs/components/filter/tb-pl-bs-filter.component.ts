@@ -1,17 +1,5 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChanges,
-    ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -98,7 +86,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public showClearSearch: boolean;
     public request: TrialBalanceRequest = {};
     public expand: boolean = false;
-    public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Financial Year', value: '0' }];
+    public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
 
@@ -114,9 +102,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     private _selectedCompany: CompanyResponse;
 
     constructor(private fb: FormBuilder,
-        private cd: ChangeDetectorRef,
-        private store: Store<AppState>,
-        private _settingsTagActions: SettingsTagActions) {
+                private cd: ChangeDetectorRef,
+                private store: Store<AppState>,
+                private _settingsTagActions: SettingsTagActions) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
@@ -149,7 +137,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
         this._selectedCompany = value;
         this.financialOptions = value.financialYears.map(q => {
-            return { label: q.uniqueName, value: q.uniqueName };
+            return {label: q.uniqueName, value: q.uniqueName};
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0') {
@@ -177,7 +165,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         //
         if (!this.showLabels) {
-            this.filterForm.patchValue({ selectedDateOption: '0' });
+            this.filterForm.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
             debounceTime(700))
@@ -205,7 +193,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     this.setCurrentFY();
                 } else {
                     this.universalDateICurrent = false;
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: date[0], endDate: date[1] };
+                    this.datePickerOptions = {...this.datePickerOptions, startDate: date[0], endDate: date[1]};
                     this.filterForm.patchValue({
                         from: moment(a[0]).format('DD-MM-YYYY'),
                         to: moment(a[1]).format('DD-MM-YYYY')

@@ -595,7 +595,6 @@ export class UpdateLedgerVm {
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
 
-
         requestObj.voucherType = requestObj.voucher.shortCode;
         requestObj.transactions = requestObj.transactions ? requestObj.transactions.filter(p => p.particular.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger.generateInvoice;

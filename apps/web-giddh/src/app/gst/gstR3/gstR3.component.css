@@ -18,7 +18,7 @@ svg.icon.icon-lg {
 
 .tax-engine .bottom-action,
 .tax-engine a,
-.tax-engine a>.dropdown {
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
 
@@ -234,22 +234,22 @@ address {
     margin-bottom: 20px;
 }
 
-.tax-engine .summary-content .gstr-3b-user.table>tbody>tr>td {
+.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
     border: 1px solid #adb4c3;
     padding: 10px 30px 10px 10px;
 }
 
-.tax-engine .summary-content .gstr-3b-user.table>tbody>tr>td:first-child {
+.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td:first-child {
     padding: 10px 0;
     border: none;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>thead>tr>td:first-child {
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td:first-child {
     padding-left: 14px;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>thead>tr>td {
-    border: 1px solid #adb4c3!important;
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
+    border: 1px solid #adb4c3 !important;
     padding: 6px;
     font-size: 13px;
 }
@@ -270,14 +270,14 @@ table {
     background-color: #f5f4f3;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>tbody>tr>td {
+.tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid #adb4c3!important;
+    border: 1px solid #adb4c3 !important;
     padding: 6px;
 }
 
 .gstr3-subheading,
-.vat-summary thead>tr {
+.vat-summary thead > tr {
     background-color: #f5f4f3;
 }
 
@@ -288,8 +288,8 @@ table {
 }
 
 *,
- :after,
- :before {
+:after,
+:before {
     box-sizing: border-box;
 }
 
@@ -454,7 +454,7 @@ tax-engine .caret-right {
     color: #bbb;
 }
 
-.gstr3-filing-procedure>div {
+.gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
     box-shadow: 1px 1px 11px #ccc;

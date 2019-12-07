@@ -14,10 +14,10 @@
                 <div class="panel-heading">
                     <span class="m-r-15">{{ row.company.name }}</span>
                     <small class="m-r-15"
-                        >Last Import on {{ row.dateString }}</small
+                    >Last Import on {{ row.dateString }}</small
                     >
                     <small class="running"
-                        ><i class="fa fa-circle"></i> {{ row.status }}</small
+                    ><i class="fa fa-circle"></i> {{ row.status }}</small
                     >
                 </div>
                 <div class="panel-body">
@@ -34,11 +34,11 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
                                     <small
-                                        ><em
-                                            >{{ row.totalSavedGroups }}/{{
-                                                row.totalTallyGroups
-                                            }}</em
-                                        ></small
+                                    ><em
+                                    >{{ row.totalSavedGroups }}/{{
+                                        row.totalTallyGroups
+                                        }}</em
+                                    ></small
                                     >
                                     <div class="progress">
                                         <div
@@ -53,8 +53,8 @@
                                         >
                                             >
                                             <span class="sr-only"
-                                                >{{
-                                                    row.groupsPercent
+                                            >{{
+                                                row.groupsPercent
                                                 }}
                                                 Complete</span
                                             >
@@ -64,16 +64,16 @@
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
                                         <small class="m-r-10"
-                                            ><i class="fa fa-check"></i
-                                            >{{
-                                                row.groupsPercent
+                                        ><i class="fa fa-check"></i
+                                        >{{
+                                            row.groupsPercent
                                             }}
                                             Complete</small
                                         >
                                         <small
                                             class="text-danger"
                                             *ngIf="row.tallyErrorGroups > 0"
-                                            >{{ row.groupsErrorPercent }} error
+                                        >{{ row.groupsErrorPercent }} error
                                             occured</small
                                         >
                                     </div>
@@ -92,11 +92,11 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
                                     <small
-                                        ><em
-                                            >{{ row.totalSavedAccounts }}/{{
-                                                row.totalTallyAccounts
-                                            }}</em
-                                        ></small
+                                    ><em
+                                    >{{ row.totalSavedAccounts }}/{{
+                                        row.totalTallyAccounts
+                                        }}</em
+                                    ></small
                                     >
                                     <div class="progress">
                                         <div
@@ -110,8 +110,8 @@
                                             }"
                                         >
                                             <span class="sr-only"
-                                                >{{
-                                                    row.accountsPercent
+                                            >{{
+                                                row.accountsPercent
                                                 }}
                                                 Complete</span
                                             >
@@ -121,17 +121,17 @@
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
                                         <small class="m-r-10"
-                                            ><i class="fa fa-check"></i
-                                            >{{
-                                                row.accountsPercent
+                                        ><i class="fa fa-check"></i
+                                        >{{
+                                            row.accountsPercent
                                             }}
                                             Complete</small
                                         >
                                         <small
                                             class="text-danger"
                                             *ngIf="row.tallyErrorAccounts > 0"
-                                            >{{
-                                                row.accountsErrorPercent
+                                        >{{
+                                            row.accountsErrorPercent
                                             }}
                                             error occured</small
                                         >
@@ -151,11 +151,11 @@
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
                                     <small
-                                        ><em
-                                            >{{ row.totalSavedEntries }}/{{
-                                                row.totalTallyEntries
-                                            }}</em
-                                        ></small
+                                    ><em
+                                    >{{ row.totalSavedEntries }}/{{
+                                        row.totalTallyEntries
+                                        }}</em
+                                    ></small
                                     >
                                     <div class="progress">
                                         <div
@@ -169,8 +169,8 @@
                                             }"
                                         >
                                             <span class="sr-only"
-                                                >{{
-                                                    row.entriesPercent
+                                            >{{
+                                                row.entriesPercent
                                                 }}
                                                 Complete</span
                                             >
@@ -180,16 +180,16 @@
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
                                         <small class="m-r-10"
-                                            ><i class="fa fa-check"></i
-                                            >{{
-                                                row.entriesPercent
+                                        ><i class="fa fa-check"></i
+                                        >{{
+                                            row.entriesPercent
                                             }}
                                             Complete</small
                                         >
                                         <small
                                             class="text-danger"
                                             *ngIf="row.tallyErrorEntries > 0"
-                                            >{{ row.entriesErrorPercent }} error
+                                        >{{ row.entriesErrorPercent }} error
                                             occured</small
                                         >
                                     </div>
@@ -208,7 +208,7 @@
                 >
                     <span class="m-r-15">Error Report:</span>
                     <a class="running" (click)="downloadLog(row)"
-                        >{{ row.company.name }}-error-log.csv</a
+                    >{{ row.company.name }}-error-log.csv</a
                     >
                 </div>
             </div>

@@ -1,37 +1,45 @@
 .invisible {
-  visibility: hidden;
+    visibility: hidden;
 }
+
 .parent-Group > ul > li ul li div {
-  color: #8a8a8a;
+    color: #8a8a8a;
 }
+
 .btn-group.show {
-  display: inline-block !important;
+    display: inline-block !important;
 }
+
 .btn-group > .btn:first-child {
-  margin-left: 8px;
-  margin-top: -3px;
-  background: none;
-  color: #707070;
-  padding: 6px;
-  margin-right: 0px !important;
-  width: 23px;
+    margin-left: 8px;
+    margin-top: -3px;
+    background: none;
+    color: #707070;
+    padding: 6px;
+    margin-right: 0px !important;
+    width: 23px;
 }
-.btn:active{
-  box-shadow:none;
+
+.btn:active {
+    box-shadow: none;
 }
+
 .dropdown-menu > li > a:hover {
-  background: #e5e5e5;
-  cursor: pointer;
+    background: #e5e5e5;
+    cursor: pointer;
 }
+
 .dropdown-menu > li > a {
-  color: #ff5200;
+    color: #ff5200;
 }
+
 span.caret {
-  display: none;
+    display: none;
 }
+
 #inventory-sidebar {
-  background: #fff;
-  min-height: 100vh;
-  width: 260px !important;
-  padding-bottom: 220px
+    background: #fff;
+    min-height: 100vh;
+    width: 260px !important;
+    padding-bottom: 220px
 }

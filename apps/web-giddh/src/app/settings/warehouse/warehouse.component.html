@@ -1,6 +1,6 @@
 <ng-container *ngIf="(allWarehouses$ | async) as warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
-        <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
+        <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image"/>
         <h2>Create Warehouse</h2>
         <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
         <button class="btn btn-pink mrT2" (click)="openCreateWarehouseModal()">
@@ -21,13 +21,13 @@
                                 Set as Default</span>
                             <div class="btn-group" dropdown>
                                 <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
-                                    aria-controls="dropdown-basic">
+                                        aria-controls="dropdown-basic">
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <li role="menuitem" (click)="editWarehouse(warehouse)"><a
-                                            class="dropdown-item">Edit</a>
+                                        class="dropdown-item">Edit</a>
                                     </li>
                                 </ul>
                             </div>
@@ -54,9 +54,9 @@
                             <label>GSTIN:</label>
                             <p>
                                 <span [class.gray-text]="!warehouse.taxNumber">{{
-                                        warehouse.taxNumber
-                                            ? warehouse.taxNumber
-                                            : "not available"
+                                    warehouse.taxNumber
+                                        ? warehouse.taxNumber
+                                        : "not available"
                                     }}</span>
                             </p>
                         </div>
@@ -82,7 +82,7 @@
 
 <!-- Warehouse on boarding modal (Step 1) -->
 <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ backdrop: 'static', keyboard: 'true' }" tabindex="-1"
-    class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
+     class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
@@ -94,6 +94,6 @@
 <!-- Welcome component (Step 2) -->
 <ng-template #welcomeComponent>
     <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick()"
-        (nextButtonClicked)="handleFormSubmit($event)">
+                       (nextButtonClicked)="handleFormSubmit($event)">
     </welcome-component>
 </ng-template>

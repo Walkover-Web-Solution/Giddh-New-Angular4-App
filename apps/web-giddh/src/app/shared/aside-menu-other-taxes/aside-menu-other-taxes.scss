@@ -1,27 +1,27 @@
 :host {
-  position: fixed;
-  left: auto;
-  top: 60px;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 480px;
-  z-index: 99999;
+    position: fixed;
+    left: auto;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    z-index: 99999;
 }
 
 :host.in #close {
-  display: block;
-  position: fixed;
-  left: -41px;
-  top: 0;
-  z-index: 5;
-  border: 0;
-  border-radius: 0;
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
 }
 
 :host .container-fluid {
-  padding-left: 0;
-  padding-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 // :host .aside-pane {
@@ -29,30 +29,34 @@
 // }
 
 .aside-pane-other-tax label {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 
 :host ::ng-deep .selectTaxDropdown .dropdown-menu {
-  //position:  static !important;
+    //position:  static !important;
 }
-@media(max-width:767px){
-  button.btn.btn-success {
-    margin-top: 20px;
+
+@media(max-width: 767px) {
+    button.btn.btn-success {
+        margin-top: 20px;
+    }
 }
+
+@media(max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
 }
-@media(max-width:575px){
- :host {
-   max-width: 370px;
- }
+
+@media(max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
 }
-@media(max-width:375px){
- :host {
-   max-width: 310px;
- }
-}
-@media(max-width:320px){
- :host {
-   max-width: 280px;
- }
+
+@media(max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
 }

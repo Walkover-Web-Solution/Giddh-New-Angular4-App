@@ -14,6 +14,7 @@
 // }
 .flex-row {
     display: flex;
+
     .flex-row-child {
         align-self: center;
     }
@@ -39,20 +40,24 @@
         height: 42px;
         border-radius: 3px;
     }
+
     input,
     select,
     textarea {
         width: 190px;
     }
+
     textarea.form-control {
         height: 140px;
         resize: none
     }
+
     label {
         display: block;
         font-weight: 400;
         margin-bottom: 5px;
     }
+
     &.size_175 {
         input,
         select,
@@ -60,6 +65,7 @@
             width: 175px;
         }
     }
+
     &.size_240 {
         input,
         select,
@@ -67,6 +73,7 @@
             width: 240px;
         }
     }
+
     &.size_340 {
         input,
         select,
@@ -74,6 +81,7 @@
             width: 340px;
         }
     }
+
     &.size_380 {
         input,
         select,
@@ -81,6 +89,7 @@
             width: 380px;
         }
     }
+
     &.noMarg {
         margin: 0;
     }

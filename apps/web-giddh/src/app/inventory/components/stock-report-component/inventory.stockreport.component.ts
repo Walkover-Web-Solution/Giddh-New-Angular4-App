@@ -7,16 +7,7 @@ import { StockReportActions } from '../../../actions/inventory/stocks-report.act
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    HostListener,
-    OnDestroy,
-    OnInit,
-    ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
@@ -26,7 +17,7 @@ import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CompanyResponse, BranchFilterRequest } from '../../../models/api-models/Company';
+import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -91,9 +82,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
-        { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
-        { uniqueName: 'transfer', name: 'Transfer' },
-        { uniqueName: 'all', name: 'All Transactions' },
+        {uniqueName: 'purchase_and_sales', name: 'Purchase & Sales'},
+        {uniqueName: 'transfer', name: 'Transfer'},
+        {uniqueName: 'all', name: 'All Transactions'},
     ];
 
     public VOUCHER_TYPES: any[] = [
@@ -234,16 +225,16 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
 
-	/**
-	 * TypeScript public modifiers
-	 */
+    /**
+     * TypeScript public modifiers
+     */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private stockReportActions: StockReportActions, private router: Router,
-        private _toasty: ToasterService,
-        private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
-        private settingsBranchActions: SettingsBranchActions,
-        private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef
+                private stockReportActions: StockReportActions, private router: Router,
+                private _toasty: ToasterService,
+                private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
+                private settingsBranchActions: SettingsBranchActions,
+                private invViewService: InvViewService,
+                private cdr: ChangeDetectorRef
     ) {
         this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
@@ -265,7 +256,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
                         if (result !== '') {
                             return result;
                         } else {
-                            continue;
+
                         }
                     } else {
                         this.activeStockName = key.stocks[index].name;
@@ -276,7 +267,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
                     if (result !== '') {
                         return result;
                     } else {
-                        continue;
+
                     }
                 }
             }
@@ -286,8 +277,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public ngOnInit() {
-
-
 
         if (this.route.firstChild) {
             this.route.firstChild.params.pipe(take(1)).subscribe(s => {
@@ -324,7 +313,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
                 this.getStockReport(true);
@@ -418,9 +407,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
     }
 
-	/**
-	 * getAllBranch
-	 */
+    /**
+     * getAllBranch
+     */
     public getAllBranch() {
         let branchFilterRequest = new BranchFilterRequest();
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
@@ -508,11 +497,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         }
     }
 
-	/**
-	 * setInventoryAsideState
-	 */
+    /**
+     * setInventoryAsideState
+     */
     public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
+        this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
     }
 
     public pageChanged(event: any): void {
@@ -666,7 +655,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1] };
+                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1]};
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
             }
@@ -686,11 +675,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     public advanceSearchAction(type?: string) {
         if (type === 'cancel') {
             this.advanceSearchModalShow = true;
-            this.clearModal()
+            this.clearModal();
             this.advanceSearchModel.hide();
             return;
         } else if (type === 'clear') {
-            this.clearModal()
+            this.clearModal();
             return;
         }
 
@@ -706,7 +695,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
             this.getStockReport(true);
         }
     }
-
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
@@ -725,9 +713,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
         }
     }
 
-	/**
-	 * onDDElementSelect
-	 */
+    /**
+     * onDDElementSelect
+     */
     public clearShSelect(type?: string) {
         switch (type) {
             case 'filterCategory':  // Opening Stock, inwards, outwards, Closing Stock

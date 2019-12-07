@@ -239,7 +239,7 @@ header img {
     margin: 50px 0px;
     clear: both;
     width: 100%;
-    border-collapse: collapse!important;
+    border-collapse: collapse !important;
 }
 
 .tcs table td,
@@ -275,11 +275,11 @@ header img {
 }
 
 .br0 {
-    border-right: 0px!important;
+    border-right: 0px !important;
 }
 
 .bl0 {
-    border-left: 0px!important;
+    border-left: 0px !important;
 }
 
 

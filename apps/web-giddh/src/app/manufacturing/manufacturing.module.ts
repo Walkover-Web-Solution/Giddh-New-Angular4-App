@@ -8,18 +8,18 @@ import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [
-    ManufacturingComponent,
-    MfEditComponent,
-    DeleteManufacturingConfirmationModelComponent
-  ],
-  exports: [RouterModule],
-  providers: [],
-  imports: [
-      ManufacturingRoutingModule,
-      SharedModule,
-      RouterModule
-  ],
+    declarations: [
+        ManufacturingComponent,
+        MfEditComponent,
+        DeleteManufacturingConfirmationModelComponent
+    ],
+    exports: [RouterModule],
+    providers: [],
+    imports: [
+        ManufacturingRoutingModule,
+        SharedModule,
+        RouterModule
+    ],
 })
 export class ManufacturingModule {
 }

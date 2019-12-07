@@ -92,29 +92,29 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             return state;
         }
         case GENERAL_ACTIONS.RESET_STATES_LIST: {
-            return { ...state, states: null };
+            return {...state, states: null};
         }
         // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
         case GENERAL_ACTIONS.RESET_SMART_LIST: {
-            return { ...state, smartList: [] };
+            return {...state, smartList: []};
         }
 
         case GENERAL_ACTIONS.SET_SMART_LIST: {
             let data: IUlist[] = action.payload;
-            return { ...state, smartList: data };
+            return {...state, smartList: data};
         }
 
         case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
-            return { ...state, smartCombinedList: [] };
+            return {...state, smartCombinedList: []};
         }
 
         case GENERAL_ACTIONS.SET_COMBINED_LIST: {
             let data: IUlist[] = action.payload;
-            return { ...state, smartCombinedList: data };
+            return {...state, smartCombinedList: data};
         }
 
         case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
-            return { ...state, flattenGroups: [] };
+            return {...state, flattenGroups: []};
         }
 
         case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
@@ -127,7 +127,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                     item.uNameStr = o.uNameStr;
                     return item;
                 });
-                return { ...state, flattenGroups: arr };
+                return {...state, flattenGroups: arr};
             }
             return state;
         }
@@ -150,7 +150,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
             let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
             if (activeGrpData.status === 'success') {
-                Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+                Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
                 return {
@@ -324,7 +324,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
             return {
                 ...state
-            }
+            };
         }
         case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
             let newState = _.cloneDeep(state);
@@ -335,19 +335,19 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE: {
             return {
                 ...state, sideMenuBarOpen: action.payload
-            }
+            };
         }
 
         case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
             return {
-                ...state, headerTitle: { uniqueName: action.payload.uniqueName, additional: action.payload.additional }
-            }
+                ...state, headerTitle: {uniqueName: action.payload.uniqueName, additional: action.payload.additional}
+            };
         }
 
         case GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE: {
             return {
                 ...state, currentPage: action.payload
-            }
+            };
         }
 
         default:
@@ -471,7 +471,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-    aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+                           aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
     if (result) {
         return result;
     }
@@ -569,8 +569,8 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-    let o = { nameStr: [], uNameStr: [] };
-    let b = { nameStr: '', uNameStr: '' };
+    let o = {nameStr: [], uNameStr: []};
+    let b = {nameStr: '', uNameStr: ''};
     try {
         arr.forEach((item: INameUniqueName) => {
             o.nameStr.push(item.name);

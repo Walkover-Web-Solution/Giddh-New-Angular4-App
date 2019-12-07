@@ -5,38 +5,39 @@
         <div class="welcome-header">
             <h2>Welcome To Giddh! </h2>
         </div>
-        <hr />
+        <hr/>
 
         <div class="welcome-container ">
             <p class="welcome_title">Set up your organisation profile and start accounting with Giddh.</p>
             <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
-                autocomplete="off">
+                  autocomplete="off">
                 <div class=" clearfix row">
                     <div class="col-xs-12 mrB2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
                             <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
-                                    class="text-danger">*</sup></label>
+                                class="text-danger">*</sup></label>
                             <!-- Need to show when creat branch  -->
                             <label for="name" class="m-t-30" *ngIf="isbranch">Branch Name<sup
-                                    class="text-danger">*</sup></label>
+                                class="text-danger">*</sup></label>
                         </ng-container>
                         <ng-template #onBoardingItemName>
                             <label for="name" class="m-t-30" *ngIf="!isbranch">{{itemOnBoardingDetails?.onBoardingType}}
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required
-                            [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress" placeholder="Name"
-                            [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                               [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress"
+                               placeholder="Name"
+                               [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
                     </div>
                     <div class="col-xs-6 mrB2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
                                 <sh-select id="country" [options]="countrySource$ | async" required
-                                    [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country"
-                                    name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
-                                    class="pull-left  select-caret" style="width: 100%"
-                                    [defaultValue]="selectedCountry">
+                                           [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country"
+                                           name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
+                                           class="pull-left  select-caret" style="width: 100%"
+                                           [defaultValue]="selectedCountry">
                                 </sh-select>
                             </div>
                         </span>
@@ -46,9 +47,9 @@
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true"
-                                [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
-                                [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
+                                       [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true"
+                                       [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
+                                       [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
                     <div class="col-xs-12 mrB2">
@@ -56,15 +57,16 @@
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
                                 <sh-select class="pull-left select-caret"
-                                    [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
-                                    style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
-                                    [options]="callingCodesSource$ | async"
-                                    [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
-                                    [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
+                                           [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
+                                           style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
+                                           [options]="callingCodesSource$ | async"
+                                           [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
+                                           [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
-                                    [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
-                                    placeholder="9998899988" id="contactNo" autocomplete="off"
-                                    [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
+                                       [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
+                                       placeholder="9998899988" id="contactNo" autocomplete="off"
+                                       [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo"
+                                       #mobileNoEl/>
                             </div>
                         </span>
                     </div>
@@ -74,10 +76,10 @@
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
-                                    (onClear)="onClearBusinessType()" autocomplete="false"
-                                    (selected)="selectedbusinessType($event)"
-                                    [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
-                                    [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
+                                           (onClear)="onClearBusinessType()" autocomplete="false"
+                                           (selected)="selectedbusinessType($event)"
+                                           [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
+                                           [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
                                 </sh-select>
                             </div>
                         </div>
@@ -87,10 +89,10 @@
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
-                                    (onClear)="onClearBusinessNature()" autocomplete="false" id="businessNature"
-                                    [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
-                                    [isFilterEnabled]="true" [ItemHeight]="33"
-                                    [defaultValue]="companyProfileObj.businessNature">
+                                           (onClear)="onClearBusinessNature()" autocomplete="false" id="businessNature"
+                                           [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
+                                           [isFilterEnabled]="true" [ItemHeight]="33"
+                                           [defaultValue]="companyProfileObj.businessNature">
                                 </sh-select>
                             </div>
                         </div>
@@ -100,18 +102,18 @@
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
-                                        class="text-danger">*</sup></label>
+                                    class="text-danger">*</sup></label>
                                 <input type="text" [ngClass]="{'gstinWidth' : isbranch}" class="form-control"
-                                    autocomplete="false" autocomplete="false" minlength="15" required maxlength="15"
-                                    #gstNumberField
-                                    (change)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
-                                    name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
-                                    placeholder="Enter {{formFields['taxName'].label}}" />
+                                       autocomplete="false" autocomplete="false" minlength="15" required maxlength="15"
+                                       #gstNumberField
+                                       (change)="getStateCode(gstNumberField, states); checkGstNumValidation(gstNumberField);"
+                                       name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
+                                       placeholder="Enter {{formFields['taxName'].label}}"/>
 
                                 <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
-                                        type="checkbox" name="isTaxNumberSameAsHeadQuarter"
-                                        [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
-                                        (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
+                                    type="checkbox" name="isTaxNumberSameAsHeadQuarter"
+                                    [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
+                                    (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
                                     Headquarter</span>
 
                             </div>
@@ -121,9 +123,10 @@
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div class=" ">
                                     <sh-select #states [options]="statesSource$ | async" required
-                                        [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
-                                        [(ngModel)]="companyProfileObj.state" style="width:100%"
-                                        [defaultValue]="companyProfileObj.selectedState"></sh-select>
+                                               [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
+                                               name="state"
+                                               [(ngModel)]="companyProfileObj.state" style="width:100%"
+                                               [defaultValue]="companyProfileObj.selectedState"></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -132,13 +135,13 @@
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                     <button dropdownToggle type="button"
-                                        class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
-                                            class="select_drop pull-right mrT1"></span></button>
+                                            class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
+                                        class="select_drop pull-right mrT1"></span></button>
                                     <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
                                             <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)"
-                                                [checked]="tax.isSelected" /> {{tax.label}}
+                                                   [checked]="tax.isSelected"/> {{tax.label}}
                                         </li>
                                     </ul>
                                 </div>
@@ -147,7 +150,7 @@
                                         <li *ngFor="let tax of selectedTaxes">
                                             <a style="color: gray">
                                                 {{currentTaxList[tax].name}} <span class="pdL"
-                                                    (click)="removeTax(tax)">×</span>
+                                                                                   (click)="removeTax(tax)">×</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -160,17 +163,17 @@
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
                                 <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address}} <sup
-                                        *ngIf="selectedBusinesstype === 'Registered'"
-                                        class="text-danger">*</sup></label>
+                                    *ngIf="selectedBusinesstype === 'Registered'"
+                                    class="text-danger">*</sup></label>
                             </ng-container>
                             <ng-template #onBoardingItemAddress>
                                 <label for="address" class="d-block">{{itemOnBoardingDetails?.onBoardingType}} Address
                                     <sup *ngIf="selectedBusinesstype === 'Registered'"
-                                        class="text-danger">*</sup></label>
+                                         class="text-danger">*</sup></label>
                             </ng-template>
                             <textarea [attr.required]="selectedBusinesstype === 'Registered'" placeholder="Address"
-                                class="form-control mrT1 " name="address" id="address"
-                                [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
+                                      class="form-control mrT1 " name="address" id="address"
+                                      [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
                     <div class="col-xs-12 ">
@@ -180,10 +183,10 @@
                     <div class="col-xs-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
                         <button type="submit " class="btn btn-pink" (click)="submit(welcomeForm)"
-                            [disabled]="welcomeForm.invalid || !isGstValid">
+                                [disabled]="welcomeForm.invalid || !isGstValid">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ?
-                                itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
-                                'Next'
+                            itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' + itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType :
+                            'Next'
                             }}
                         </button>
                     </div>

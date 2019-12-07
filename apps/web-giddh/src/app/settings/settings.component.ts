@@ -156,7 +156,7 @@ export class SettingsComponent implements OnInit {
         this.setStateDetails(tab);
         this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
         this.loadModuleData(tab);
-        this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
+        this.router.navigate(['pages/settings/', tab], {replaceUrl: true});
     }
 
     private saveGmailAuthCode(authCode: string) {

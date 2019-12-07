@@ -18,7 +18,7 @@
 
 .borderbtm {
     font-size: 16px;
-    font-family: ''opensans-semibold'';
+    font-family: '' opensans-semibold '';
     border-bottom: 1px solid #CCCCCC;
     padding: 7px 0;
     margin-bottom: 10px;
@@ -218,7 +218,7 @@ a.text-dark {
     height: 42px !important;
 }
 
-#talk_sales>li {
+#talk_sales > li {
     text-align: left;
     width: 156px;
 }
@@ -227,18 +227,18 @@ a.text-dark {
     padding-left: 0;
 }
 
-.nav-tabs-talk>li {
+.nav-tabs-talk > li {
     float: left;
     margin-bottom: -1px;
     list-style: none;
 }
 
-#talk_sales>li.active>a {
+#talk_sales > li.active > a {
     font-weight: 500;
     position: relative;
 }
 
-#talk_sales>li>a {
+#talk_sales > li > a {
     color: #333;
     font-family: 'CambriaBold';
     padding-left: 28px !important;
@@ -246,13 +246,13 @@ a.text-dark {
     font-size: 16px;
 }
 
-#talk_sales>li>a:hover,
-#talk_sales>li>a:focus {
+#talk_sales > li > a:hover,
+#talk_sales > li > a:focus {
     border-color: transparent;
     text-decoration: none;
 }
 
-#talk_sales>li.active>a:after {
+#talk_sales > li.active > a:after {
     background: #e34b26;
     position: absolute;
     bottom: -14px;
@@ -279,7 +279,7 @@ a.text-dark {
     margin-bottom: 0;
 }
 
-.nav-tabs-talk.nav-tabs>li.active>a {
+.nav-tabs-talk.nav-tabs > li.active > a {
     background: transparent;
     border: none;
 }
@@ -306,17 +306,19 @@ a.text-dark {
 #sFform-V6Lc input {
     font-family: "AvenirLTStdMedium" !important;
 }
-@media(max-width:767px){
-  .scheduleImg{
-    display: none;
-  }
+
+@media (max-width: 767px) {
+    .scheduleImg {
+        display: none;
+    }
 }
 
 @media (max-width: 600px) {
     .white-popup {
         width: 90%;
     }
-    #talk_sales>li {
+
+    #talk_sales > li {
         width: auto;
     }
 }

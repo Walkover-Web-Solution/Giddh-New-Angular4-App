@@ -4,17 +4,17 @@ import { NavigationWalkerDirective } from './navigationWalker.directive';
 import { NgInitDirective } from './ng-init.directive';
 
 @NgModule({
-  imports: [],
-  declarations: [
-    KeyboardShortcutDirective,
-    NavigationWalkerDirective,
-    NgInitDirective,
-  ],
-  exports: [
-    KeyboardShortcutDirective,
-    NavigationWalkerDirective,
-    NgInitDirective,
-  ]
+    imports: [],
+    declarations: [
+        KeyboardShortcutDirective,
+        NavigationWalkerDirective,
+        NgInitDirective,
+    ],
+    exports: [
+        KeyboardShortcutDirective,
+        NavigationWalkerDirective,
+        NgInitDirective,
+    ]
 })
 export class KeyboardShortutModule {
 //

@@ -32,18 +32,19 @@ export const initialState: WarehouseState = {
 export function warehouseReducer(state: WarehouseState = initialState, action: CustomActions): WarehouseState {
     switch (action.type) {
         case WarehouseActions.CREATE_WAREHOUSE_RESPONSE:
-            return { ...state, warehouseCreated: true };
+            return {...state, warehouseCreated: true};
         case WarehouseActions.RESET_CREATE_WAREHOUSE:
-            return { ...state, warehouseCreated: false };
+            return {...state, warehouseCreated: false};
         case WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE:
             if (action.payload) {
-                return { ...state, warehouses: _.cloneDeep(action.payload.body.results) };
+                return {...state, warehouses: _.cloneDeep(action.payload.body.results)};
             }
             return state;
         case WarehouseActions.UPDATE_WAREHOUSE_RESPONSE:
-            return { ...state, warehouseUpdated: true };
+            return {...state, warehouseUpdated: true};
         case WarehouseActions.RESET_UPDATE_WAREHOUSE:
-            return { ...state, warehouseUpdated: false };
-        default: return state;
+            return {...state, warehouseUpdated: false};
+        default:
+            return state;
     }
 }
