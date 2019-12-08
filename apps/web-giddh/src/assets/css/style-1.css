@@ -5087,7 +5087,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 #settingTab .nav-tabs > li.active > a {
-  color: #ff5f00;
+
   background: transparent;
   border: 0;
   border-bottom: 2px solid #ff5f00;
@@ -5263,8 +5263,8 @@ bs-datepicker-container {
 
 #sFSection-Jkvq .sFsubmit.btn-primary {
   font-size: 14px !important;
-  background: #e5e5e5 !important;
-  color: #28ab00 !important;
+  background: #28ab00 !important;
+  color: #fff !important;
 }
 
 

@@ -194,7 +194,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.setCurrentPageTitle();
+        this.setCurrentPageTitle("Invoice > E-way bill");
     }
 
     public clearTransportForm() {
@@ -341,7 +341,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.isTransModeRoad = false;
         }
     }
-    
     public subTypeElementSelected(event) {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
@@ -356,11 +355,10 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setCurrentPageTitle() {
+    public setCurrentPageTitle(title) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Invoice > E-way bill";
+        currentPageObj.name = title;
         currentPageObj.url = this.router.url;
-        currentPageObj.additional = "";
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }
