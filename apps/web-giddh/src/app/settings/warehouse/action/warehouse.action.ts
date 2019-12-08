@@ -96,7 +96,7 @@ export class WarehouseActions {
             this.toast.successToast('Warehouse updated successfully', 'Success');
             return this.updateWarehouseResponse(response);
         })
-    )
+    );
 
     /**
      * Effect to update warehouse
@@ -116,7 +116,7 @@ export class WarehouseActions {
             this.toast.successToast('Warehouse updated successfully', 'Success');
             return this.setAsDefaultWarehouseResponse(response);
         })
-    )
+    );
 
     /** @ignore */
     constructor(
@@ -233,7 +233,13 @@ export class WarehouseActions {
         return { type: WarehouseActions.SET_AS_DEFAULT_WAREHOUSE_RESPONSE, payload: response };
     }
 
-    public resetDefaultWarehouseResponse() {
+    /**
+     * Returns the action to reset default warehouse data
+     *
+     * @returns {CustomActions} Action to reset default warehouse data
+     * @memberof WarehouseActions
+     */
+    public resetDefaultWarehouseResponse(): CustomActions {
         return { type: WarehouseActions.RESET_DEFAULT_WAREHOUSE_DATA };
     }
 
