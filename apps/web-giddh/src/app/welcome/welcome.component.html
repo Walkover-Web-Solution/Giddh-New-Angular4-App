@@ -159,7 +159,7 @@
                         <div *ngIf="selectedBusinesstype" class="clearfix">
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
-                                <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address}} <sup
+                                <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address <sup
                                         *ngIf="selectedBusinesstype === 'Registered'"
                                         class="text-danger">*</sup></label>
                             </ng-container>
