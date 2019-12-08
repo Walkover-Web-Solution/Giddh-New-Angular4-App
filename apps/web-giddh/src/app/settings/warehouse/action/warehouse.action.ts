@@ -33,7 +33,7 @@ export class WarehouseActions {
     /** Action to set the default warehouse response */
     public static readonly SET_AS_DEFAULT_WAREHOUSE_RESPONSE = 'SET_AS_DEFAULT_WAREHOUSE_RESPONSE';
     /** Action to reset the default warehouse response */
-    public static readonly RESET_AS_DEFAULT_WAREHOUSE_RESPONSE = 'RESET_AS_DEFAULT_WAREHOUSE_RESPONSE';
+    public static readonly RESET_DEFAULT_WAREHOUSE_DATA = 'RESET_DEFAULT_WAREHOUSE_DATA';
     /** Action to reset update warehouse flag (triggered after successful warehouse updation) */
     public static readonly RESET_UPDATE_WAREHOUSE = 'RESET_UPDATE_WAREHOUSE';
     /** Action to reset create warehouse flag (triggered after successful warehouse creation) */
@@ -234,7 +234,7 @@ export class WarehouseActions {
     }
 
     public resetDefaultWarehouseResponse() {
-        return { type: WarehouseActions.RESET_AS_DEFAULT_WAREHOUSE_RESPONSE };
+        return { type: WarehouseActions.RESET_DEFAULT_WAREHOUSE_DATA };
     }
 
 }

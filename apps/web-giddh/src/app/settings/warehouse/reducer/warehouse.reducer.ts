@@ -46,7 +46,7 @@ export function warehouseReducer(state: WarehouseState = initialState, action: C
             return { ...state, warehouseUpdated: true };
         case WarehouseActions.SET_AS_DEFAULT_WAREHOUSE_RESPONSE:
             return { ...state, defaultWarehouseData: action.payload };
-        case WarehouseActions.RESET_AS_DEFAULT_WAREHOUSE_RESPONSE:
+        case WarehouseActions.RESET_DEFAULT_WAREHOUSE_DATA:
             return { ...state, defaultWarehouseData: null };
         case WarehouseActions.RESET_UPDATE_WAREHOUSE:
             return { ...state, warehouseUpdated: false };
