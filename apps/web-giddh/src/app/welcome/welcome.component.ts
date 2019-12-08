@@ -591,14 +591,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public sameAsHeadQuarter(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
         if (this.isTaxNumberSameAsHeadQuarter) {
             if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-                this.activeCompany.addresses.forEach(key => {
-                    if (key.isDefault === true) {
-                        this.companyProfileObj.taxNumber = key.taxNumber;
-                        gstNo.value = key.taxNumber;
-                        this.checkGstNumValidation(gstNo);
-                        this.getStateCode(gstNo, statesEle);
-                    }
-                });
+                const defaultCompany = this.getDefaultCompanyDetails();
+                if (defaultCompany.taxNumber) {
+                    this.companyProfileObj.taxNumber = defaultCompany.taxNumber;
+                    gstNo.value = defaultCompany.taxNumber;
+                    this.checkGstNumValidation(gstNo);
+                    this.getStateCode(gstNo, statesEle);
+                }
             } else {
                 this.companyProfileObj.taxNumber = '';
                 gstNo.value = '';
@@ -627,6 +626,24 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.getStateCode(gstNo, statesEle);
         }
+    }
+
+    /**
+     * GST field change handler
+     *
+     * @param {HTMLInputElement} gstNumberField GST field
+     * @param {ShSelectComponent} states States field
+     * @memberof WelcomeComponent
+     */
+    public handleGstChange(gstNumberField: HTMLInputElement, states: ShSelectComponent): void {
+        if (this.isTaxNumberSameAsHeadQuarter) {
+            const defaultCompany = this.getDefaultCompanyDetails();
+            if (this.companyProfileObj.taxNumber !== defaultCompany.taxNumber) {
+                this.isTaxNumberSameAsHeadQuarter = 0;
+            }
+        }
+        this.getStateCode(gstNumberField, states);
+        this.checkGstNumValidation(gstNumberField);
     }
 
     /**
@@ -660,13 +677,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                     break;
                 case 'DEFAULT_COMPANY':
-                    let autoFillAddress = '', autoFillTaxNumber = '';
-                    this.activeCompany.addresses.forEach((address: any) => {
-                        if (address.isDefault) {
-                            autoFillAddress = address.address;
-                            autoFillTaxNumber = address.taxNumber;
-                        }
-                    });
+                    const { address: autoFillAddress = '', taxNumber: autoFillTaxNumber = '' } = this.getDefaultCompanyDetails();
                     const defaultCompany = {
                         businessType: this.activeCompany.businessType,
                         businessNature: this.activeCompany.businessNature,
@@ -762,5 +773,25 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         return !!(this.companyProfileObj.businessNature || this.companyProfileObj.businessType ||
             this.companyProfileObj.address || this.companyProfileObj.taxNumber);
+    }
+
+    /**
+     * Returns the default company details such as address and tax number
+     *
+     * @private
+     * @returns {*} Default company details
+     * @memberof WelcomeComponent
+     */
+    private getDefaultCompanyDetails(): any {
+        let defaultCompany = {};
+        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+            this.activeCompany.addresses.forEach((address: any) => {
+                if (address.isDefault) {
+                    defaultCompany = address;
+                    return defaultCompany;
+                }
+            });
+        }
+        return defaultCompany;
     }
 }
