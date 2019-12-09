@@ -7,8 +7,7 @@
             <div class="pull-left d-flex wrapsearchingAging">
 
                 <div class="form-group searchField max250">
-                    <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
-                        (ngModelChange)="searchStr$.next($event)" style="width:210px" />
+                    <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" style="width:210px" />
 
                     <span class="inputAddon">
                         <i class="icon-search"></i>
@@ -59,8 +58,7 @@
 
                 <div class="text-center top-aging-table-top pd1">
                     <p (click)="openAgingDropDown()"><strong>Due in Last days </strong></p>
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                        (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
                 </div>
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
@@ -104,8 +102,7 @@
     <div class="modal-dialog">
 
         <div class="modal-content">
-            <app-contact-advance-search-component [request]="commonRequest" [advanceSearch4]="'agingReport'"
-                (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
+            <app-contact-advance-search-component [request]="commonRequest" [advanceSearch4]="'agingReport'" (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
             </app-contact-advance-search-component>
         </div>
 
@@ -117,15 +114,12 @@
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
     <div class="icon-pointer cp">
-        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col"
-            [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col" [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
 
-        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
-            *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+        <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')" *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
         </div>
 
-        <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
-            (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
+        <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'" (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
     </div>
 </ng-template>
 <!-- endregion -->
@@ -139,15 +133,14 @@
                 <td></td>
                 <td colspan="4" class="text-center top-aging-table-top">
                     <p><strong>Due in Last days </strong>
-                         <span class="italic underline">
+                        <span class="italic underline">
                            <input type="text" name="daterangeInputs" daterangepicker [options]="datePickerOptions"
-                              (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
+                               (applyDaterangepicker)="selectedDate($event)"
                               class="form-control date-range-picker"/>
                          </span>
                     </p>
 
-                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
-                        (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
+                    <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions" (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
 
 
                 </td>
@@ -177,8 +170,7 @@
                 </th>
 
                 <th class="italic unbold underline pr-3 text-right">
-                    <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
+                    <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}">
                         </ng-container>
                     </div>
@@ -203,8 +195,7 @@
                 </th>
 
                 <th class="italic text-right pr-3 unbold underline">
-                    <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
+                    <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}">
                         </ng-container>
                     </div>
@@ -232,8 +223,7 @@
                     <td attr.data-title="0 - {{ (agingDropDownoptions$| async)?.fourth }} Days" class="text-right">
                         {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
                     <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}}
-          -{{((agingDropDownoptions$| async)?.fifth)}} Days' class="text-right"> <span
-                            (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
+          -{{((agingDropDownoptions$| async)?.fifth)}} Days' class="text-right"> <span (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
                     </td>
                     <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}}
           -{{((agingDropDownoptions$| async)?.sixth)}} Days" class="text-right">
