@@ -150,6 +150,15 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
       .subscribe((o: any) => {
           if (o && o.voucherDetails) {
             this.invFormData = _.cloneDeep(o);
+
+            if(this.invFormData.entries && this.invFormData.entries.length > 0) {
+              for(let loop = 0; loop < this.invFormData.entries.length; loop++) {
+                if(this.invFormData.entries[loop].entryDate) {
+                  this.invFormData.entries[loop].entryDate = this.invFormData.entries[loop].entryDate.split("-").reverse().join("-");
+                }
+              }
+            }
+
             if (o.voucherDetails.voucherDate) {
               let d = o.voucherDetails.voucherDate.split('-');
               if (d.length === 3) {

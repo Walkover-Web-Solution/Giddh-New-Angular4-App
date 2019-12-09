@@ -1,15 +1,18 @@
 <tabset class="settingPage" id="settingTab" #staticTabsTBPL>
-    <tab heading="Trial Balance" (select)="CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
+    <tab heading="Trial Balance"
+        (select)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
         <div class="container-fluid">
             <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
         </div>
     </tab>
-    <tab heading="Profit &amp; Loss" (select)="CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
+    <tab heading="Profit &amp; Loss"
+        (select)="setCurrentPageTitle('Profit &amp; Loss'); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
         <div class="container-fluid">
             <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
         </div>
     </tab>
-    <tab heading="Balance Sheet" (select)="CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
+    <tab heading="Balance Sheet"
+        (select)="setCurrentPageTitle('Balance Sheet'); CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
         <div class="container-fluid">
             <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
         </div>

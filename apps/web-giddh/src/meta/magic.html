@@ -42,7 +42,11 @@
 </head>
 
 <body>
-  <div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>
+  <div></div>
+        <div id="loader-1"  class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
   <div id="app">
     <section class="bg-f9" id="magicLink">
       <section class="bg-bl">
@@ -174,7 +178,7 @@
                               <!-- ng-if="txn.type == 'DEBIT'" -->
                               <!-- | filter: searchText -->
                               <template v-for="txn in filterBy(ledger.transactions, searchText)">
-                                <tr class="text-left bdrB" v-if="txn.type === 'DEBIT'">
+                                <tr class="text-left bdrB magicTable" v-if="txn.type === 'DEBIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
                                   <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
@@ -267,7 +271,7 @@
                             <tbody>
                               <!-- | filter: searchText -->
                               <template v-for="txn in filterBy(ledger.transactions, searchText)">
-                                <tr class="text-left bdrB" v-if="txn.type === 'CREDIT'">
+                                <tr class="text-left magicTable bdrB" v-if="txn.type === 'CREDIT'">
                                   <td class="col-xs-3">{{ledger.entryDate}}</td>
                                   <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
                                   <td class="col-xs-3 bdrL pos-rel" v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
@@ -604,7 +608,8 @@
   <script>
     document.getElementById("app").style.display = 'none';
 
-    var folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
+    // currently we are using app/ directory only in stage env not in any other env
+    var folderPath = window.location.hostname === 'stage.giddh.com' ? 'app/' : '';
 
     var jquery = document.createElement('script');
     jquery.src = '../' + folderPath + 'assets/js/jquery-1.11.3.min.js';

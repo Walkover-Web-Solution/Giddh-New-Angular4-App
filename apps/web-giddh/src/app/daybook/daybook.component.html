@@ -14,7 +14,7 @@
 
             <div class="form-inline">
                 <div class=" form-group">
-                    <label>Period</label>
+
                     <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
                             daterangepicker [options]="datePickerOptions" (hideDaterangepicker)="selectedDate($event)"
                             (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
@@ -22,7 +22,7 @@
 
                 </div>
                 <div class=" form-group">
-                    <label class="d-block"> &nbsp; </label>
+
 
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
                         <span class="icon-advance-serch" (click)="onOpenAdvanceSearch()"></span>
@@ -32,14 +32,21 @@
                     <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
 
                 </div>
-                <div class=" form-group">
-                    <label class="d-block"> &nbsp; </label>
+                <div class=" form-group expand-collapse-btn">
+
                     <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                               'Expand All'}}
                     </button>
 
                 </div>
-                <button type="button" class="btn btn-default pull-right" (click)="exportDaybook()">Export</button>
+                <div class="expand-export"> <button type="button" class="btn btn-default expandBtnHideDesktop"
+                        (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
+                                              'Expand All'}}
+                    </button>
+                    <button type="button" class="btn btn-default export-btn pull-right"
+                        (click)="exportDaybook()">Export</button>
+                </div>
+
             </div>
 
         </div>
@@ -48,16 +55,16 @@
 
 <div class="container-fluid">
     <div class="box clearfix mrT2">
-        <div class="text-center mrB2">
+        <div class="text-center mrB2 transctionReport">
             <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
       <br /> -->
             <p>Transaction Report</p>
             <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
         </div>
 
-        <div class="table-container clearfix trial-balance">
+        <div class=" clearfix trial-balance">
 
-            <table class="tb-head table-bordered table basic">
+            <table class="tb-head table-bordered table basic onMobileView">
                 <thead>
                     <tr>
                         <th class="col-xs-1">Date</th>
@@ -72,30 +79,35 @@
                 <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
                     class="daybookTableTbody">
                     <tr>
-                        <td>{{ entry.entryDate }}</td>
-                        <td>{{ entry.particular.name }}</td>
-                        <td>{{ entry.voucherName }}</td>
-                        <td>{{ entry.voucherNo }}</td>
-                        <td>{{ entry.debitAmount }}</td>
-                        <td>{{ entry.creditAmount }}</td>
+                        <td data-title="Date">{{ entry.entryDate }}</td>
+                        <td data-title="Particular">{{ entry.particular.name }}</td>
+                        <td data-title="Vch. Name">{{ entry.voucherName }}</td>
+                        <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
+                        <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
+                        <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
-                            <td></td>
-                            <td>{{ details.particular.name }}</td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right">
-                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount }}</span>
+                            <td class="hideTD"></td>
+                            <td data-title="Particular">{{ details.particular.name }}</td>
+                            <td class="hideTD"></td>
+                            <td class="hideTD"></td>
+                            <td class="text-right" data-title="Debit Amt">
+                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount}}</span>
+                                <span *ngIf="details.type !== 'DEBIT'">-</span>
+
                             </td>
-                            <td class="text-right">
-                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount }}</span>
+                            <td class="text-right" data-title="Credit Amt">
+                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
+                                <span *ngIf="details.type !== 'CREDIT'">-</span>
                             </td>
                         </tr>
                     </ng-container>
                 </tbody>
 
             </table>
+
+
 
             <div>
                 <!-- loop over entries -->
@@ -142,7 +154,7 @@
                 Transactions
                 | {{(daybookData$ | async)?.totalPages}} Pages
             </small>
-            <small class="grey" *ngIf="!(daybookData$ | async)?.totalItems">0 Transactions | 0 Pages</small>
+            <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 Transactions | 0 Pages</small>
         </div>
 
         <!-- pagination -->

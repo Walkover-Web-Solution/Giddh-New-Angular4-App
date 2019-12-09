@@ -6,23 +6,19 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      {
-        path: '', component: ImportComponent, children: [
-          {path: '', redirectTo: 'select'},
-          {path: 'select', component: ImportTypeSelectComponent},
-          {path: 'group', component: ImportWizardComponent},
-          {path: 'account', component: ImportWizardComponent},
-          {path: 'entries', component: ImportWizardComponent},
-          {path: 'trial-balance', component: ImportWizardComponent},
-          {path: 'stock', component: ImportWizardComponent},
-          {path: 'import-report', component: ImportReportComponent}
-        ]
-      }
-    ])
-  ],
-  exports: [RouterModule]
+    imports: [
+        RouterModule.forChild([
+            {
+                path: '', component: ImportComponent, children: [
+                    { path: '', redirectTo: 'select' },
+                    { path: 'select', component: ImportTypeSelectComponent },
+                    { path: ':type', component: ImportWizardComponent },
+                    { path: 'import-report', component: ImportReportComponent }
+                ]
+            }
+        ])
+    ],
+    exports: [RouterModule]
 })
 export class ImportExcelRoutingModule {
 }

@@ -13,7 +13,7 @@ export const PURCHASE_INVOICE_API = {
   DOWNLOAD_GSTR2_ERROR_SHEET: COMMON + 'gstreturn/gstr2-error-export?monthYear=:month&gstin=:company_gstin', // GET
   UPDATE_INVOICE: COMMON + 'accounts/:accountUniqueName/' + 'invoices/generate-purchase/:invoiceUniqueName', // PATCH
   DOWNLOAD_GSTR2_SHEET: COMMON + 'gstreturn/gstr2_data/file?monthYear=:month&gstin=:company_gstin', // GET
-  SEND_GSTR3B_EMAIL: COMMON + 'gstreturn/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail'
+  SEND_GSTR3B_EMAIL: 'v2/company/:companyUniqueName/gstr3b-excel-export/email?monthYear=:month&gstin=:company_gstin&detailedSheet=:isNeedDetailSheet&email=:userEmail'
 };
 
 export const GST_RETURN_API = {

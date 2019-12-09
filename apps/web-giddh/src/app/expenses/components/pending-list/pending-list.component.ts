@@ -78,7 +78,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
-        this.approveEntryModalRef = this._modalService.show(ref, {class: 'modal-md'});
+        this.approveEntryModalRef = this._modalService.show(ref, {class: 'modal-md', backdrop: true, ignoreBackdropClick: true});
         this.selectedEntryForApprove = item;
     }
 
@@ -124,7 +124,13 @@ export class PendingListComponent implements OnInit, OnChanges {
 
         this.expenseService.actionPettycashReports(actionType, {ledgerRequest: ledgerRequest.body}).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
-            res.status === 'success' ? this._toasty.successToast(res.body) : this._toasty.errorToast(res.message);
+            if (res.status === 'success') {
+                this._toasty.successToast(res.body);
+                // if entry approved successfully then re get all entries with already sated filter params
+                this.getPettyCashPendingReports(this.pettycashRequest);
+            } else {
+                this._toasty.errorToast(res.message);
+            }
             this.hideApproveConfirmPopup(false);
         });
     }
@@ -142,7 +148,6 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-
         if (changes['isClearFilter']) {
             if (changes['isClearFilter'].currentValue) {
                 this.clearFilter();
@@ -153,10 +158,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     public sort(ord: 'asc' | 'desc' = 'asc', key: string) {
         this.pettycashRequest.sortBy = key;
         this.pettycashRequest.sort = ord;
-        this.key = key;
-        this.order = ord;
         this.getPettyCashPendingReports(this.pettycashRequest);
-        this.isFilteredSelected.emit(true);
     }
 
     public clearFilter() {
