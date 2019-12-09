@@ -31,8 +31,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public universalDate$: Observable<any>;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
-    public key: string = 'entry_date';
-    public order: string = 'asc';
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     // @Input() public dateFrom: string;
     // @Input() public dateTo: string;
@@ -96,11 +94,15 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['isClearFilter']) {
             if (changes['isClearFilter'].currentValue) {
-                this.pettycashRequest.sort = '';
-                this.pettycashRequest.sortBy = '';
-                this.pettycashRequest.page = 1;
+                this.clearFilter();
             }
         }
+    }
+
+    public clearFilter() {
+        this.pettycashRequest.sort = '';
+        this.pettycashRequest.sortBy = '';
+        this.pettycashRequest.page = 1;
     }
 
     public revertActionClicked(item: ExpenseResults) {
@@ -138,10 +140,15 @@ export class RejectedListComponent implements OnInit, OnChanges {
     public sort(ord: 'asc' | 'desc' = 'asc', key: string) {
         this.pettycashRequest.sortBy = key;
         this.pettycashRequest.sort = ord;
-        this.key = key;
-        this.order = ord;
         this.getPettyCashRejectedReports(this.pettycashRequest);
-        this.isFilteredSelected.emit(true);
+    }
+
+    public pageChanged(ev: any): void {
+        if (ev.page === this.pettycashRequest.page) {
+            return;
+        }
+        this.pettycashRequest.page = ev.page;
+        this.getPettyCashPendingReports(this.pettycashRequest);
     }
 
     detectChanges() {

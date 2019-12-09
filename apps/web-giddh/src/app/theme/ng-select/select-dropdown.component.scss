@@ -1,55 +1,57 @@
+@import "../../../assets/css/color.scss";
+
 select-dropdown {
-  font-size: 14px;
-  > div {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-top: none;
-    box-sizing: border-box;
-    position: absolute;
-    z-index: 10;
-    .filter {
-      padding: 3px;
-      width: 100%;
-      input {
-        border: 1px solid #eee;
+    font-size: 14px;
+    > div {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
         box-sizing: border-box;
-        padding: 6px;
-        width: 100%;
-      }
-    }
-    .options {
-      max-height: 200px;
-      overflow-y: auto;
-      ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        li {
-          padding: 6px;
-          cursor: pointer;
-          user-select: none;
-          &.message {
-            cursor: default;
-          }
+        position: absolute;
+        z-index: 10;
+        .filter {
+            padding: 3px;
+            width: 100%;
+            input {
+                border: 1px solid #eee;
+                box-sizing: border-box;
+                padding: 6px;
+                width: 100%;
+            }
         }
-      }
+        .options {
+            max-height: 200px;
+            overflow-y: auto;
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                li {
+                    padding: 6px;
+                    cursor: pointer;
+                    user-select: none;
+                    &.message {
+                        cursor: default;
+                    }
+                }
+            }
+        }
     }
-  }
-  .selected {
-    background-color: #ffffff;
-    &.highlighted {
-      background-color: #2196F3;
-      color: #fff;
+    .selected {
+        background-color: #eeeff9 !important;
+        &.highlighted {
+            background-color: #eeeff9 !important;
+            color: $border-blue !important;
+        }
     }
-  }
-  .highlighted {
-    background-color: #2196F3;
-    color: #fff;
-  }
-  .disabled {
-    background-color: #fff;
-    color: #9e9e9e;
-    cursor: default;
-    pointer-events: none;
-  }
+    .highlighted {
+        background-color: #eeeff9 !important;
+        color: $border-blue !important;
+    }
+    .disabled {
+        background-color: #fff;
+        color: #9e9e9e;
+        cursor: default;
+        pointer-events: none;
+    }
 }

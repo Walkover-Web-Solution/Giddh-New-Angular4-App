@@ -1,4 +1,4 @@
-<div class="invoice-genrate-container">
+<div class="invoice-genrate-container mt-xs-60">
   <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
       style="margin-bottom: 10px;display: inline-block !important;">
@@ -241,10 +241,13 @@
       <tr>
         <td colspan="8">
           <!--loading-->
-          <div class="no-data mrT2 d-flex"
-            style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-            <div class="giddh-spinner vertical-center-spinner"></div>
-          </div>
+          <div class="no-data mrT2 loader-main">
+                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                <div class="spinner2">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
         </td>
       </tr>
     </tbody>

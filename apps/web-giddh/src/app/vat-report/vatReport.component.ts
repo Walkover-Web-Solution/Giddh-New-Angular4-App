@@ -40,7 +40,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public allowVatReportAccess: boolean = false;
 	@ViewChild('monthWise') public monthWise: BsDropdownDirective;
-	public isMonthSelected: boolean = true;
+	public isMonthSelected: boolean = false;
 	public selectedMonth: any = null;
 	public currentPeriod: any = {};
 	public showCalendar: boolean = false;
@@ -119,7 +119,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 		this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
 			if (res.status === "success") {
 				let blob = this.base64ToBlob(res.body, 'application/xls', 512);
-				return saveAs(blob, `VatReport.xls`);
+				return saveAs(blob, `VatReport.xlsx`);
 			} else {
 				this._toasty.clearAllToaster();
 				this._toasty.errorToast(res.message);

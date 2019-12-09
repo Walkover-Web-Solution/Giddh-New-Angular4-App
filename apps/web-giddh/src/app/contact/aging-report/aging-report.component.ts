@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 
@@ -20,269 +20,279 @@ import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
-  selector: 'aging-report',
-  templateUrl: 'aging-report.component.html',
-  styleUrls: ['aging-report.component.scss']
+    selector: 'aging-report',
+    templateUrl: 'aging-report.component.html',
+    styleUrls: ['aging-report.component.scss']
 })
 export class AgingReportComponent implements OnInit {
-  public totalDueSelectedOption: string = '0';
-  public totalDueAmount: number = 0;
-  public includeName: boolean = false;
-  public names: any = [];
-  public dueAmountReportRequest: DueAmountReportQueryRequest;
-  public sundryDebtorsAccountsForAgingReport: IOption[] = [];
-  public setDueRangeOpen$: Observable<boolean>;
-  public agingDropDownoptions$: Observable<AgingDropDownoptions>;
-  public agingDropDownoptions: AgingDropDownoptions;
-  public dueAmountReportData$: Observable<DueAmountReportResponse>;
-  public totalDueAmounts: number = 0;
-  public totalFutureDueAmounts: number = 0;
-  public datePickerOptions: any;
-  public universalDate$: Observable<any>;
-  public toDate: string;
-  public fromDate: string;
-  public moment = moment;
-  public key: string = 'name';
-  public order: string = 'asc';
-  public filter: string = '';
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
-  public searchStr$ = new Subject<string>();
-  public searchStr: string = '';
-  public isMobileScreen: boolean = false;
-  public modalConfig: ModalOptions = {
-    animated: true,
-    keyboard: true,
-    backdrop: 'static',
-    ignoreBackdropClick: true
-  };
-  public isAdvanceSearchApplied: boolean = false;
+    public totalDueSelectedOption: string = '0';
+    public totalDueAmount: number = 0;
+    public includeName: boolean = false;
+    public names: any = [];
+    public dueAmountReportRequest: DueAmountReportQueryRequest;
+    public sundryDebtorsAccountsForAgingReport: IOption[] = [];
+    public setDueRangeOpen$: Observable<boolean>;
+    public agingDropDownoptions$: Observable<AgingDropDownoptions>;
+    public agingDropDownoptions: AgingDropDownoptions;
+    public dueAmountReportData$: Observable<DueAmountReportResponse>;
+    public totalDueAmounts: number = 0;
+    public totalFutureDueAmounts: number = 0;
+    public datePickerOptions: any;
+    public universalDate$: Observable<any>;
+    public toDate: string;
+    public fromDate: string;
+    public moment = moment;
+    public key: string = 'name';
+    public order: string = 'asc';
+    public filter: string = '';
+    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
+    public searchStr$ = new Subject<string>();
+    public searchStr: string = '';
+    public isMobileScreen: boolean = false;
+    public modalConfig: ModalOptions = {
+        animated: true,
+        keyboard: true,
+        backdrop: 'static',
+        ignoreBackdropClick: true
+    };
+    public isAdvanceSearchApplied: boolean = false;
 
-  public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
-  public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
-  @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-  @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-  @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-  @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
-  private createAccountIsSuccess$: Observable<boolean>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
+    public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
-  constructor(
-    private store: Store<AppState>,
-    private _toasty: ToasterService,
-    private router: Router, private _agingReportActions: AgingReportActions,
-    private _contactService: ContactService,
-    private _breakpointObserver: BreakpointObserver,
-    private componentFactoryResolver: ComponentFactoryResolver) {
-    this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
-    this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-    this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
-    this.getDueAmountreportData();
-    this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
-      if (a) {
-        this.datePickerOptions = a;
-      }
-    });
-    this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-    this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-  }
+    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+    private createAccountIsSuccess$: Observable<boolean>;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  public getDueAmountreportData() {
-    this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
-      if (data && data.results) {
-        this.dueAmountReportRequest.page = data.page;
-        setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
-        this.totalDueAmounts = data.overAllDueAmount;
-        this.totalFutureDueAmounts = data.overAllFutureDueAmount;;
-      }
-      this.dueAmountReportData$ = of(data);
-      if (data) {
-        _.map(data.results, (obj: any) => {
-          obj.depositAmount = obj.currentAndPastDueAmount[0].dueAmount;
-          obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
-          obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
-          obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
-
-        });
-      }
-
-    });
-  }
-
-  public go() {
-    this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
-  }
-
-  public ngOnInit() {
-    this.universalDate$.subscribe(a => {
-      if (a) {
-        this.datePickerOptions.startDate = a[0];
-        this.datePickerOptions.endDate = a[1];
-        this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-        this.toDate = moment(a[1]).format('DD-MM-YYYY');
-      }
-    });
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'aging-report';
-
-    this.go();
-
-    // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
-    this.store.dispatch(this._agingReportActions.GetDueRange());
-    this.agingDropDownoptions$.subscribe(p => {
-      this.agingDropDownoptions = _.cloneDeep(p);
-    });
-    this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
-
-    this.searchStr$.pipe(
-      debounceTime(1000),
-      distinctUntilChanged()
-    ).subscribe(term => {
-      this.dueAmountReportRequest.q = term;
-      this.go();
-    });
-
-    this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-      if (yes) {
-        this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
-      }
-    });
-
-    this._breakpointObserver
-      .observe(['(max-width: 768px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isMobileScreen = state.matches;
+    constructor(
+        private store: Store<AppState>,
+        private _toasty: ToasterService,
+        private router: Router, private _agingReportActions: AgingReportActions,
+        private _contactService: ContactService,
+        private _cdr: ChangeDetectorRef,
+        private _breakpointObserver: BreakpointObserver,
+        private componentFactoryResolver: ComponentFactoryResolver) {
+        this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
+        this.dueAmountReportRequest = new DueAmountReportQueryRequest();
+        this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
         this.getDueAmountreportData();
-      });
-
-
-
-  }
-
-  public openAgingDropDown() {
-    this.store.dispatch(this._agingReportActions.OpenDueRange());
-  }
-
-  public closeAgingDropDownop(options: AgingDropDownoptions) {
-    //
-  }
-
-  public hideListItems() {
-    this.filterDropDownList.hide();
-  }
-
-  public pageChangedDueReport(event: any): void {
-    this.dueAmountReportRequest.page = event.page;
-    this.go();
-  }
-
-  public loadPaginationComponent(s) {
-    let transactionData = null;
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-    if (this.paginationChild && this.paginationChild.viewContainerRef) {
-      let viewContainerRef = this.paginationChild.viewContainerRef;
-      viewContainerRef.remove();
-
-      let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-      viewContainerRef.insert(componentInstanceView.hostView);
-
-      let componentInstance = componentInstanceView.instance as PaginationComponent;
-      componentInstance.totalItems = s.count * s.totalPages;
-      componentInstance.itemsPerPage = s.count;
-      componentInstance.maxSize = 5;
-      componentInstance.writeValue(s.page);
-      componentInstance.boundaryLinks = true;
-      componentInstance.pageChanged.subscribe(e => {
-        this.pageChangedDueReport(e);
-      });
-    }
-  }
-  public selectedDate(value: any) {
-    this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-    this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-    if (value.event.type === 'hide') {
-      this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
-    }
-  }
-
-  public resetAdvanceSearch() {
-    this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
-    this.commonRequest = new ContactAdvanceSearchCommonModal();
-    this.isAdvanceSearchApplied = false;
-    this.go();
-  }
-
-  public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
-    this.commonRequest = request;
-    this.agingAdvanceSearchModal.totalDueAmount = request.amount;
-    if (request.category === 'totalDue') {
-      //this.agingAdvanceSearchModal.includeTotalDueAmount = true;
-      switch (request.amountType) {
-        case 'GreaterThan':
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-          break;
-        case 'LessThan':
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-          break;
-        case 'Exclude':
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
-          break;
-        case 'Equals':
-          this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-          this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
-          this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-          break;
-      }
-    } else {
-      // Code here for Future Due category
-      this.agingAdvanceSearchModal.includeTotalDueAmount = false;
-    }
-    this.isAdvanceSearchApplied = true;
-    this.go();
-  }
-
-  public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
-    if (key.includes('range')) {
-      this.dueAmountReportRequest.rangeCol = parseInt(key.replace('range', ''));
-      this.dueAmountReportRequest.sortBy = 'range';
-    } else {
-      this.dueAmountReportRequest.rangeCol = null;
-      this.dueAmountReportRequest.sortBy = key;
+        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+            if (a) {
+                this.datePickerOptions = a;
+            }
+        });
+        this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
 
-    this.key = key;
-    this.order = ord;
+    public getDueAmountreportData() {
+        this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+            if (data && data.results) {
+                this.dueAmountReportRequest.page = data.page;
+                setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
+                this.totalDueAmounts = data.overAllDueAmount;
+                this.totalFutureDueAmounts = data.overAllFutureDueAmount;;
+            }
+            this.dueAmountReportData$ = of(data);
+            if (data) {
+                _.map(data.results, (obj: any) => {
+                    obj.depositAmount = obj.currentAndPastDueAmount[0].dueAmount;
+                    obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
+                    obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
+                    obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
 
-    this.dueAmountReportRequest.sort = ord;
-    this.go();
-  }
+                });
+            }
+            setTimeout(() => {
+                this.detetcChanges();
+            }, 60000);
+        });
+    }
 
-  public toggleAdvanceSearchPopup() {
-    this.advanceSearch.toggle();
-  }
+    public getDueReport() {
+        this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
+    }
+    public detetcChanges() {
+        this._cdr.detectChanges();
+    }
+    public ngOnInit() {
 
-  private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
-    this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
-      if (res.status === 'success') {
-        this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({
-          label: p.name,
-          value: p.uniqueName
-        }));
-      }
-    });
-  }
+        this.universalDate$.subscribe(a => {
+            if (a) {
+                this.datePickerOptions.startDate = a[0];
+                this.datePickerOptions.endDate = a[1];
+                this.fromDate = moment(a[0]).format('DD-MM-YYYY');
+                this.toDate = moment(a[1]).format('DD-MM-YYYY');
+            }
+        });
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'aging-report';
+        this.dueAmountReportRequest.from = this.fromDate;
+        this.dueAmountReportRequest.to = this.toDate;
+
+        this.getDueReport();
+
+        // this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+        this.store.dispatch(this._agingReportActions.GetDueRange());
+        this.agingDropDownoptions$.subscribe(p => {
+            this.agingDropDownoptions = _.cloneDeep(p);
+        });
+        this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+
+        this.searchStr$.pipe(
+            debounceTime(1000),
+            distinctUntilChanged()
+        ).subscribe(term => {
+            this.dueAmountReportRequest.q = term;
+            this.getDueReport();
+        });
+
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
+            if (yes) {
+                this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
+            }
+        });
+
+        this._breakpointObserver
+            .observe(['(max-width: 768px)'])
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                this.getDueAmountreportData();
+            });
+
+
+
+    }
+
+    public openAgingDropDown() {
+        this.store.dispatch(this._agingReportActions.OpenDueRange());
+    }
+
+    public closeAgingDropDownop(options: AgingDropDownoptions) {
+        //
+    }
+
+    public hideListItems() {
+        this.filterDropDownList.hide();
+    }
+
+    public pageChangedDueReport(event: any): void {
+        this.dueAmountReportRequest.page = event.page;
+        this.getDueReport();
+    }
+
+    public loadPaginationComponent(s) {
+        let transactionData = null;
+        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+        if (this.paginationChild && this.paginationChild.viewContainerRef) {
+            let viewContainerRef = this.paginationChild.viewContainerRef;
+            viewContainerRef.remove();
+
+            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+            viewContainerRef.insert(componentInstanceView.hostView);
+
+            let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalItems = s.count * s.totalPages;
+            componentInstance.itemsPerPage = s.count;
+            componentInstance.maxSize = 5;
+            componentInstance.writeValue(s.page);
+            componentInstance.boundaryLinks = true;
+            componentInstance.pageChanged.subscribe(e => {
+                this.pageChangedDueReport(e);
+            });
+        }
+    }
+    public selectedDate(value: any) {
+        this.isAdvanceSearchApplied = false;
+        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.dueAmountReportRequest.from = this.fromDate;
+        this.dueAmountReportRequest.to = this.toDate;
+        this.resetAdvanceSearch();
+    }
+
+    public resetAdvanceSearch() {
+        this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
+        this.commonRequest = new ContactAdvanceSearchCommonModal();
+        this.isAdvanceSearchApplied = false;
+        this.getDueReport();
+    }
+
+    public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
+        this.commonRequest = request;
+        this.agingAdvanceSearchModal.totalDueAmount = request.amount;
+        if (request.category === 'totalDue') {
+            //this.agingAdvanceSearchModal.includeTotalDueAmount = true;
+            switch (request.amountType) {
+                case 'GreaterThan':
+                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                    break;
+                case 'LessThan':
+                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                    break;
+                case 'Exclude':
+                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
+                    break;
+                case 'Equals':
+                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                    break;
+            }
+        } else {
+            // Code here for Future Due category
+            this.agingAdvanceSearchModal.includeTotalDueAmount = false;
+        }
+        this.isAdvanceSearchApplied = true;
+        this.getDueReport();
+    }
+
+    public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
+        if (key.includes('range')) {
+            this.dueAmountReportRequest.rangeCol = parseInt(key.replace('range', ''));
+            this.dueAmountReportRequest.sortBy = 'range';
+        } else {
+            this.dueAmountReportRequest.rangeCol = null;
+            this.dueAmountReportRequest.sortBy = key;
+        }
+
+        this.key = key;
+        this.order = ord;
+
+        this.dueAmountReportRequest.sort = ord;
+        this.getDueReport();
+    }
+
+    public toggleAdvanceSearchPopup() {
+        this.advanceSearch.toggle();
+    }
+
+    private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
+        this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
+            if (res.status === 'success') {
+                this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({
+                    label: p.name,
+                    value: p.uniqueName
+                }));
+            }
+        });
+    }
 }

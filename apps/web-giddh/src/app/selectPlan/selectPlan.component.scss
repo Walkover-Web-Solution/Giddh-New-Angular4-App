@@ -37,12 +37,18 @@
 .choose-ur-plan label.radio-inline {
     display: block;
 }
+.select-plan-block {
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 15px;
+    box-shadow: 0 0 3px rgba(0,0,0,.1);
+}
 @media(max-width:767px){
   .welcome-msg .btn-default {
     margin-top: 10px;
 }
 .select-plan-block {
-    border-bottom: 1px solid #dddd;
+
     margin-bottom: 10px;
 }
 }

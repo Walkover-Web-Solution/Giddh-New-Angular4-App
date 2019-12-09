@@ -1,4 +1,4 @@
-<form name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+<form name="addAccountForm" class="createAccForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
     <div class="">
         <div class="upper-form">
             <div class="row ">
@@ -27,8 +27,9 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" required [isFilterEnabled]="true"
-                            formControlName="countryCode" (selected)="selectCountry($event)"></sh-select>
+                        <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required
+                            [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)">
+                        </sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -175,30 +176,40 @@
                                             placeholder="Enter {{formFields['taxName'].label}}" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label>Party Type<span class="red-text">*</span></label>
-                                        <div class="custom-select pos-rel">
-                                            <sh-select [options]="partyTypeSource" formControlName="partyType"
-                                                [isFilterEnabled]="true"></sh-select>
+                                <ng-container *ngIf="companyCountry ==='IN'">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Party Type<span class="red-text">*</span></label>
+                                            <div class="custom-select pos-rel">
+                                                <sh-select [options]="partyTypeSource" formControlName="partyType"
+                                                    [isFilterEnabled]="true"></sh-select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                    <div class="col-sm-4" *ngIf="gst.get('gstNumber').value && isGstValid">
+                                        <div class="form-group">
+                                            <label class="d-block">&nbsp;</label>
+                                            <label>
+                                                <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is
+                                                    Composite?
+                                                </label></label>
+                                        </div>
+
+                                    </div>
+                                </ng-container>
                                 <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="d-block">&nbsp;</label>
-                                        <label *ngIf="gst.get('gstNumber').value && isGstValid">
-                                            <input type="checkbox" formControlName="isComposite"><label>&nbsp; Is
-                                                Composite?
-                                            </label></label>
-                                        <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
-                                            class="grey_clr mrL3">
-                                            <i class="fa fa-times"> </i> Remove
-                                        </a>
+                                    <div class="form-group remove">
+                                        <span>
+                                            <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
+                                                class="grey_clr btn btn-danger">
+                                                <i class="icon-cross"> </i> Remove
+                                            </a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row"
                                 *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
                                 <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer"
@@ -207,7 +218,7 @@
                                 <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer"
                                     (click)="showLessGst()">Show Less </a>
                             </div>
-                            <div class="text-right pull-right" *ngIf="l">
+                            <div class="clearfix" *ngIf="l">
                                 <a class="text-right  btn btn-primary" href="javascript:void(0);"
                                     (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                                     <i class="fa fa-plus"></i> Add Address
@@ -292,18 +303,18 @@
                     <div class="row"
                         *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last"
                         [formGroupName]="i">
-                        <div class="form-group col-xs-5">
+                        <div class="form-group col-sm-5">
                             <label for="">Bank Name</label>
                             <input type="text" class="form-control" name="bankName_{{i}}" formControlName="bankName" />
                         </div>
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-sm-4">
                             <div class="">
                                 <label for="">Account No.</label>
                                 <input type="text" class="form-control" name="accountNum_{{i}}"
                                     formControlName="bankAccountNo" />
                             </div>
                         </div>
-                        <div class="form-group col-xs-3">
+                        <div class="form-group col-sm-3">
                             <label for="">IFSC Code</label>
                             <input type="text" class="form-control" name="ifsc_{{i}}" formControlName="ifsc" />
                         </div>

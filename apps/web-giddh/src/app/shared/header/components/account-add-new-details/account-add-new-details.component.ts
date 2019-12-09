@@ -27,9 +27,6 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 
 @Component({
     selector: 'account-add-new-details',
-    styles: [`
-
-  `],
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
 })
@@ -82,6 +79,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public formFields: any[] = [];
     public isGstValid: boolean;
     public GSTIN_OR_TRN: string;
+    public selectedCountry: string;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
 
@@ -89,6 +87,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -101,6 +100,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+        } if (this.activeGroupUniqueName === 'sundrycreditors') {
+            this.showBankDetail = true;
         }
         this.initializeNewForm();
 
@@ -146,9 +147,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
-                this.addAccountForm.get('openingBalanceType').patchValue('');
+                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (!a) {
@@ -239,11 +240,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
+            if (activegroupName === 'sundrycreditors') {
+                this.showBankDetail = true;
+            }
             this.isDebtorCreditor = true;
-        } else {
-            this.isDebtorCreditor = false;
         }
 
+    }
+    public isShowBankDetails(accountType: string) {
+        if (accountType === 'sundrycreditors') {
+            this.showBankDetail = true;
+        } else {
+            this.showBankDetail = false;
+        }
     }
     public getAccount() {
         this.flattenGroups$.subscribe(flattenGroups => {
@@ -264,6 +273,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
         if (result) {
             this.addAccountForm.get('country').get('countryCode').setValue(result.countryflag);
+            this.selectedCountry = result.countryflag + ' - ' + result.countryName;
             this.addAccountForm.get('mobileCode').setValue(result.value);
             let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
@@ -273,6 +283,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.addAccountForm.get('mobileCode').setValue('91');
+            this.selectedCountry = 'IN - India';
             this.addAccountForm.get('currency').setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
@@ -571,17 +582,34 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
-                this.isDebtorCreditor = true;
-            } else {
-                this.isDebtorCreditor = false;
+            let parent = event.additional;
+            if (parent[1]) {
+                this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
         }
     }
+    public isParentDebtorCreditor(activeParentgroup: string) {
+        if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
+            const accountAddress = this.addAccountForm.get('addresses') as FormArray;
+            this.isShowBankDetails(activeParentgroup);
+            this.isDebtorCreditor = true;
+
+            if (accountAddress.controls.length === 0) {
+                this.addBlankGstForm();
+            }
+            if (!accountAddress.length) {
+                this.addBlankGstForm();
+            }
+
+        } else {
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
+        }
+    }
 
     public getCountry() {
-        this.store.pipe(select(s => s.common.countries), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.countrySource.push({ value: res[key].alpha2CountryCode, label: res[key].alpha2CountryCode + ' - ' + res[key].countryName, additional: res[key].callingCode });
@@ -595,7 +623,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = '';
-                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+                this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
             }
         });
     }

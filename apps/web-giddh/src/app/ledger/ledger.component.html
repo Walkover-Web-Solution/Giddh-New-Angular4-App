@@ -111,9 +111,9 @@
         <div class="custom-tabs mt-2 mb-2">
             <ul class="nav nav-tabs pt-0">
                 <li role="presentation" [className]="condition ? 'active' : ''"><a href="javascript:void(0)"
-                        (click)="toggleShow()">DR</a></li>
+                        (click)="toggleShow()">Debit</a></li>
                 <li role="presentation" [className]="condition2 ? 'active' : ''"><a href="javascript:void(0)"
-                        (click)="toggleShow()">CR</a></li>
+                        (click)="toggleShow()">Credit</a></li>
             </ul>
         </div>
 
@@ -410,7 +410,7 @@
                     <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.dr}}</b>
                     </th>
-                    <th class="col-xs-6 hidden-xs">
+                    <th [ngClass]="!Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
                         <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
                     </th>
                 </tr>
@@ -683,17 +683,6 @@
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
-
-                <table class="col-xs-12 ledger-head hidden-lg hidden-md hidden-sm">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-12">
-                                <b>{{lc.ledgerUnderStandingObj.text.cr}}</b>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
@@ -1150,7 +1139,7 @@
 
                     <br>
 
-                    <div class="d-flex" style="justify-content: space-between">
+                    <div class="d-flex debitCreditAmount" style="justify-content: space-between">
 
                         <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
                             <span class="digitBlue mt-1">

@@ -30,7 +30,7 @@ import { reassignNavigationalArray } from './models/defaultMenus'
           <iframe [src]="tagManagerUrl"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe>
       </noscript>
-      <div id="loader-1" *ngIf="!IAmLoaded" class="giddh-spinner vertical-center-spinner"></div>
+      <div id="loader-1" *ngIf="!IAmLoaded"><div class="spinner2"><div class="cube1"></div><div class="cube2"></div></div></div>
       <router-outlet></router-outlet>
   `,
   // changeDetection: ChangeDetectionStrategy.OnPush

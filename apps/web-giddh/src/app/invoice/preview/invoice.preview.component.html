@@ -36,10 +36,9 @@
             <div class="d-flex addInvoice">
 
 
-                <div style="height: 30px; " *ngIf="selectedItems.length === 1">
+                <div *ngIf="selectedItems.length === 1">
 
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                        style="margin-bottom: 10px;display: inline-block !important;">
+                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
 
                         <button dropdownToggle type="button" class="btn spcl_dropdown  dropdown-toggle"
                             aria-controls="dropdown-basic" *ngIf="!isMobileView">
@@ -129,13 +128,13 @@
 
 
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                    <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('credit note')">+
+                    <button class="btn btn-pink" (click)="goToInvoice('credit note')">+
                         New Cr. Note
                     </button>
                 </div>
 
                 <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                    <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+ New
+                    <button class="btn btn-pink" (click)="goToInvoice('debit note')">+ New
                         Dr. Note
                     </button>
                 </div>
@@ -143,28 +142,10 @@
             </div>
         </div>
 
-        <div class="mobileSearch mrB1">
-            <div class="row">
-                <div class="col-sm-6 col-xs-6">
-                    <div class="input-container">
-                        <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
-                            name="voucherNumberInput" [formControl]="voucherNumberInput" />
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-6">
-                    <div class="input-container">
-                        <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
-                            name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
-                    </div>
-                </div>
-
-
-            </div>
+        <div class="mobileSearch">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="moreExportBtn d-flex">
-
-
+                    <div class="moreExportBtn d-flex mb-1">
                         <div style="height: 30px; " *ngIf="selectedItems.length === 1">
 
                             <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
@@ -204,7 +185,7 @@
                             <span class="icon-export-icon"></span>
                         </button>
 
-                        <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales' && !isMobileView"
+                        <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'"
                             [autoClose]="true">
                             <button id="ddl-newinv" dropdownToggle type="button"
                                 class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
@@ -249,6 +230,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-6">
+                    <div class="input-container">
+                        <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
+                            name="voucherNumberInput" [formControl]="voucherNumberInput" />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-6">
+                    <div class="input-container">
+                        <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
+                            name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
         <perfect-scrollbar class="invoice-preview" [scrollIndicators]="true"
@@ -610,13 +608,17 @@
 
                 </tbody>
 
+                <!--  -->
                 <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
                     <tr>
                         <td colspan="8">
                             <!--loading-->
-                            <div class="no-data mrT2 d-flex"
-                                style="justify-content: center;align-items: center;margin-top:125px;margin-bottom: 105px;">
-                                <div class="giddh-spinner vertical-center-spinner"></div>
+                            <div class="no-data mrT2 loader-main">
+                                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                <div class="spinner2">
+                                    <div class="cube1"></div>
+                                    <div class="cube2"></div>
+                                </div>
                             </div>
                         </td>
                     </tr>
