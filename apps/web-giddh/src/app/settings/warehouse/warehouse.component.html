@@ -79,7 +79,7 @@
         </div>
     </div>
     <div class="warehouse-pagination">
-        <pagination #warehousePagination *ngIf="warehouses?.length" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
+        <pagination #warehousePagination *ngIf="paginationConfig?.totalItems > paginationLimit" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
             (pageChanged)="pageChanged($event)"></pagination>
     </div>
 </ng-container>
