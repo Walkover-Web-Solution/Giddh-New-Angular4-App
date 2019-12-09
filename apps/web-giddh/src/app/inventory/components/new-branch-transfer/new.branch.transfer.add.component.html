@@ -7,8 +7,8 @@
 		</div>
 	</div>
 	<div class="reciptNoteRadioBtn">
-		<span class="mrR1"><input class="radio_theme" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType('products');" [checked]="!transferType || transferType === 'products'"><label for="multipleProducts">Multiple Products</label></span>
-		<span><input class="radio_theme" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType('senders');" [checked]="transferType === 'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
+		<span class="mrR1"><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label for="multipleProducts">Multiple Products</label></span>
+		<span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
 	</div>
 	<div class="reciptNoteContent">
 		<div class="multipleProductsWrapper">
@@ -58,11 +58,11 @@
 						<div class="row mrB2" *ngIf="formFields && formFields['taxName']">
 							<div class="col-md-3">
 								<label>
-									Sender's {{formFields['taxName'].label}}<span class="red-text">*</span>
+									Sender's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
-								<input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber" required>
+								<input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 							</div>
 						</div>
 						<div class="row mrB2">
@@ -98,11 +98,11 @@
 						<div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
 							<div class="col-md-3">
 								<label>
-									Receiver's {{formFields['taxName'].label}}<span class="red-text">*</span>
+									Receiver's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
-								<input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber" required>
+								<input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber"  [attr.required]="isTaxNumberRequired">
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -160,11 +160,11 @@
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Sender's {{formFields['taxName'].label}}<span class="red-text">*</span>
+	                                Sender's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber" required>
+		                        <input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber"  [attr.required]="isTaxNumberRequired">
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -200,11 +200,11 @@
 	                    <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Receiver's {{formFields['taxName'].label}}<span class="red-text">*</span>
+	                                Receiver's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber" required>
+		                        <input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2">
@@ -336,7 +336,7 @@
 		                            <div *ngIf="activeRow === i">
 		                                <sh-select name="destinationName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="destination.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, destination)"></sh-select>
 		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="destination.uniqueName" [options]="warehouses[destination.uniqueName]" [(ngModel)]="destination.warehouse.uniqueName" name="destinationWarehouse{{i}}" (selected)="getWarehouseDetails('destinations', i)"></sh-select>
-		                                <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName" name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField (change)="checkTaxNumberValidation(destinationGstNumberField);" [(ngModel)]="destination.warehouse.taxNumber">
+		                                <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName" name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField (change)="checkTaxNumberValidation(destinationGstNumberField);" [(ngModel)]="destination.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="destination.warehouse.uniqueName" name="destinationWarehouseAddress{{i}}" [(ngModel)]="destination.warehouse.address"></textarea>
 		                            </div>
 		                            <div *ngIf="activeRow !== i">
@@ -383,7 +383,7 @@
 		                            <div *ngIf="activeRow === i">
 		                                <sh-select name="sourceName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="source.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, source)"></sh-select>
 		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="source.uniqueName" [options]="warehouses[source.uniqueName]" [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}" (selected)="getWarehouseDetails('sources', i)"></sh-select>
-			                            <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName" name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField (change)="checkTaxNumberValidation(sourceGstNumberField);" [(ngModel)]="source.warehouse.taxNumber">
+			                            <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName" name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField (change)="checkTaxNumberValidation(sourceGstNumberField);" [(ngModel)]="source.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="source.warehouse.uniqueName" name="sourceWarehouseAddress{{i}}" [(ngModel)]="source.warehouse.address"></textarea>
 		                            </div>
 		                            <div *ngIf="activeRow !== i">
@@ -423,8 +423,8 @@
 	                        </tr>
 	                    </tbody>
 	                    <div class="addNewLine mrT1">
-	                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add Multiple Receivers</a>
-	                        <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add Multiple Senders</a>
+	                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="!editBranchTransferUniqueName && transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add Multiple Receivers</a>
+	                        <a class="multipleRecivers" (click)="addSender()" *ngIf="!editBranchTransferUniqueName && transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add Multiple Senders</a>
 	                        <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> + Add Multiple Products</a>
 	                    </div>
 						<tfoot id="tfoot">

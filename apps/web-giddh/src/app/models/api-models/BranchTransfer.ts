@@ -118,6 +118,7 @@ export class NewBranchTransferResponse {
     public products: NewBranchTransferProduct[];
     public transporterDetails: NewBranchTransferTransportationDetails;
     public entity: string;
+    public transferType: string;
 }
 
 export class NewBranchTransferRequest {
@@ -130,6 +131,7 @@ export class NewBranchTransferRequest {
     public products: NewBranchTransferProduct[];
     public transporterDetails: NewBranchTransferTransportationDetails;
     public entity: string;
+    public transferType: string;
 }
 
 export class NewBranchTransferListGetRequestParams {

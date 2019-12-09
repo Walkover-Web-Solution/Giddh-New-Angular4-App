@@ -301,3 +301,17 @@ tfoot td .tableSec.form-group {
 .recept-modal .modal-title {
     color: #fff;
 }
+.transfertype-checked:before {
+    border: 1px solid #5B64C9;
+}
+.transfertype-checked:after {
+    content: " ";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #5B64C9;
+    left: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    text-align: center;
+}

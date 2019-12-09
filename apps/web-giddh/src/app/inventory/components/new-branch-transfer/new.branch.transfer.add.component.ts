@@ -80,6 +80,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     public hsnNumber: any = '';
     public skuNumber: any = '';
+    public isTaxNumberRequired: boolean = false;
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService) {
         this.initFormFields();
@@ -106,6 +107,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
                 this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
+
+                if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+                    this.activeCompany.addresses.forEach(key => {
+                        if (key.taxNumber) {
+                            this.isTaxNumberRequired = true;
+                        }
+                    });
+                }
             }
         });
 
@@ -116,10 +125,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         transporterModes.map(c => {
             this.transporterMode.push({ label: c.label, value: c.value });
         });
-
-        if (this.editBranchTransferUniqueName) {
-            this.getBranchTransfer();
-        }
     }
 
     public ngOnDestroy() {
@@ -147,11 +152,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public changeTransferType(type) {
+    public changeTransferType() {
         this.initFormFields();
         this.tempDateParams.dateOfSupply = "";
         this.tempDateParams.dispatchedDate = "";
-        this.transferType = type;
     }
 
     public initFormFields() {
@@ -214,7 +218,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 transportMode: null,
                 vehicleNumber: null
             },
-            entity: (this.branchTransferMode) ? this.branchTransferMode : null
+            entity: (this.branchTransferMode) ? this.branchTransferMode : null,
+            transferType: (this.transferType) ? this.transferType : null
         };
 
         this.forceClear$ = observableOf({ status: true });
@@ -368,8 +373,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                         additional: b
                     }));
                     this.branches$ = observableOf(this.branches);
+
+                    if (this.editBranchTransferUniqueName) {
+                        this.getBranchTransfer();
+                    }
                 } else {
                     this.branches$ = observableOf(null);
+
+                    if (this.editBranchTransferUniqueName) {
+                        this.getBranchTransfer();
+                    }
                 }
             }
         });
@@ -377,15 +390,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
 
     public selectProduct(event, product) {
         if (event) {
-            product.name = event.additional.name;
-            product.stockDetails.stockUnit = event.additional.stockUnit.code;
-            product.stockDetails.rate = event.additional.rate;
-            product.stockDetails.amount = event.additional.amount;
-            product.stockDetails.quantity = event.additional.openingQuantity;
+            if (event.additional) {
+                product.name = event.additional.name;
+                product.stockDetails.stockUnit = event.additional.stockUnit.code;
+                product.stockDetails.rate = event.additional.rate;
+                product.stockDetails.amount = event.additional.amount;
+                product.stockDetails.quantity = event.additional.openingQuantity;
 
-            if (this.transferType === 'senders') {
-                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
-                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                if (this.transferType === 'senders') {
+                    this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                    this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                }
             }
         }
     }
@@ -531,11 +546,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
 
         this.branchTransfer.entity = this.branchTransferMode;
+        this.branchTransfer.transferType = this.transferType;
 
         if (this.editBranchTransferUniqueName) {
             this.inventoryService.updateNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+                this.isLoading = false;
+
                 if (res) {
-                    this.isLoading = false;
                     if (res.status === 'success') {
                         this._toasty.successToast(res.message, "Success");
                         this.closeBranchTransferPopup();
@@ -549,8 +566,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
             });
         } else {
             this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+                this.isLoading = false;
                 if (res) {
-                    this.isLoading = false;
                     if (res.status === 'success') {
                         this.initFormFields();
                         this.tempDateParams.dateOfSupply = "";
@@ -623,6 +640,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
                 this.branchTransfer.entity = response.body.entity;
+                this.branchTransfer.transferType = response.body.transferType;
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
 
                 if (response.body.dateOfSupply) {
