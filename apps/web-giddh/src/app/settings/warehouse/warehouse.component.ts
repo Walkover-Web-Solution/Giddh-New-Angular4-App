@@ -18,6 +18,8 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
 
+import { PAGINATION_LIMIT } from '../../app.constant';
+
 /**
  * Warehouse component
  *
@@ -44,6 +46,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public selectedWarehouse: any;
     /** Configuration object for pagination component */
     public paginationConfig: any;
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
     /** Stores the list of warehouses */
     public warehouses: Array<any> = [];
 
