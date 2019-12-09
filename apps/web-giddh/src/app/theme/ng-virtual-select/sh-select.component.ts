@@ -340,6 +340,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public hide(event?) {
+    if (this.disabled) {
+        return;
+    }
     if (event) {
       if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
         this.isOpen = false;
