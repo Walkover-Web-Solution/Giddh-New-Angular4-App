@@ -6,7 +6,7 @@
 			<span class="icon-cross"></span>
 		</div>
 	</div>
-	<div class="reciptNoteRadioBtn">
+	<div class="reciptNoteRadioBtn" *ngIf="!editBranchTransferUniqueName">
 		<span class="mrR1"><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label for="multipleProducts">Multiple Products</label></span>
 		<span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
 	</div>
@@ -32,7 +32,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <sh-select name="productName" [isFilterEnabled]="true" [options]="stockList" [(ngModel)]="branchTransfer.products[0].uniqueName" [forceClearReactive]="forceClear$ | async" (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
+		                        <sh-select name="productName" [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(0)" [isFilterEnabled]="true" [options]="stockList" [(ngModel)]="branchTransfer.products[0].uniqueName" [forceClearReactive]="forceClear$ | async" (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
 	                        </div>
 	                    </div>
 						<div class="row mrB2">
@@ -42,7 +42,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<sh-select name="sourceName" [(ngModel)]="branchTransfer.sources[0].uniqueName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="branches$ | async" (selected)="selectCompany($event, branchTransfer.sources[0])" required></sh-select>
+								<input name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
 							</div>
 						</div>
 						<div class="row mrB2">
@@ -184,7 +184,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-	                            <sh-select name="destinationName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.destinations[0].uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, branchTransfer.destinations[0])" required></sh-select>
+	                            <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2">
@@ -423,8 +423,8 @@
 	                        </tr>
 	                    </tbody>
 	                    <div class="addNewLine mrT1">
-	                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="!editBranchTransferUniqueName && transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add Multiple Receivers</a>
-	                        <a class="multipleRecivers" (click)="addSender()" *ngIf="!editBranchTransferUniqueName && transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add Multiple Senders</a>
+	                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add Multiple Receivers</a>
+	                        <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add Multiple Senders</a>
 	                        <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> + Add Multiple Products</a>
 	                    </div>
 						<tfoot id="tfoot">

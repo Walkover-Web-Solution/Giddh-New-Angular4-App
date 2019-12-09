@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -48,7 +48,7 @@ import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
     ]
 })
 
-export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
+export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public branchTransferMode: string;
     @Input() public editBranchTransferUniqueName: string;
     @ViewChild('productSkuCode') productSkuCode;
@@ -81,6 +81,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
     public hsnNumber: any = '';
     public skuNumber: any = '';
     public isTaxNumberRequired: boolean = false;
+    public myCurrentCompany: string = '';
+    public innerEntryIndex: number;
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService) {
         this.initFormFields();
@@ -115,28 +117,36 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                         }
                     });
                 }
+
+                this.assignCurrentCompany();
             }
         });
 
         this.getBranches();
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         transporterModes.map(c => {
             this.transporterMode.push({ label: c.label, value: c.value });
         });
     }
 
-    public ngOnDestroy() {
+    public ngOnChanges(changes: SimpleChanges) {
+        if (changes.branchTransferMode.firstChange) {
+            this.assignCurrentCompany();
+        }
+    }
+
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public closeBranchTransferPopup() {
+    public closeBranchTransferPopup(): void {
         this._generalService.invokeEvent.next(["closebranchtransferpopup"]);
     }
 
-    public toggleBodyClass() {
+    public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
@@ -152,13 +162,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public changeTransferType() {
+    public changeTransferType(): void {
         this.initFormFields();
         this.tempDateParams.dateOfSupply = "";
         this.tempDateParams.dispatchedDate = "";
+        this.assignCurrentCompany();
     }
 
-    public initFormFields() {
+    public initFormFields(): void {
         this.branchTransfer = {
             dateOfSupply: null,
             challanNo: null,
@@ -226,11 +237,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         this.activeRow = -1;
     }
 
-    public setActiveRow(index) {
+    public setActiveRow(index): void {
         this.activeRow = index;
     }
 
-    public selectCompany(event, object) {
+    public selectCompany(event, object): void {
         if (object) {
             object.name = event.label;
             object.warehouse.name = "";
@@ -240,7 +251,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getTransportersList() {
+    public getTransportersList(): void {
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
@@ -256,7 +267,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public addReceiver() {
+    public addReceiver(): void {
         this.branchTransfer.destinations.push({
             name: null,
             uniqueName: null,
@@ -276,7 +287,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public addSender() {
+    public addSender(): void {
         this.branchTransfer.sources.push({
             name: null,
             uniqueName: null,
@@ -296,7 +307,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public addProduct() {
+    public addProduct(): void {
         this.branchTransfer.products.push({
             name: null,
             hsnNumber: null,
@@ -312,17 +323,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public removeProduct(i) {
+    public removeProduct(i): void {
         this.branchTransfer.products.splice(i, 1);
         this.calculateOverallTotal();
     }
 
-    public removeSender(i) {
+    public removeSender(i): void {
         this.branchTransfer.sources.splice(i, 1);
         this.calculateOverallTotal();
     }
 
-    public removeReceiver(i) {
+    public removeReceiver(i): void {
         this.branchTransfer.destinations.splice(i, 1);
         this.calculateOverallTotal();
     }
@@ -343,7 +354,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         return branches;
     }
 
-    public getOnboardingForm(countryCode) {
+    public getOnboardingForm(countryCode): void {
         this.store.dispatch(this.commonActions.resetOnboardingForm());
 
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
@@ -361,7 +372,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getBranches() {
+    public getBranches(): void {
         this.store.dispatch(this._inventoryAction.GetAllLinkedStocks());
 
         this.store.pipe(select(s => s.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
@@ -388,7 +399,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectProduct(event, product) {
+    public selectProduct(event, product): void {
         if (event) {
             if (event.additional) {
                 product.name = event.additional.name;
@@ -405,7 +416,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getWarehouseDetails(type, index) {
+    public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
             this._companyService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
                 if (res) {
@@ -421,7 +432,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public checkTaxNumberValidation(ele: HTMLInputElement) {
+    public checkTaxNumberValidation(ele: HTMLInputElement): void {
         let isValid: boolean = false;
 
         if (ele.value) {
@@ -462,7 +473,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public calculateRowTotal(product) {
+    public calculateRowTotal(product): void {
         if (!isNaN(parseFloat(product.stockDetails.rate)) && !isNaN(parseFloat(product.stockDetails.quantity))) {
             product.stockDetails.amount = parseFloat(product.stockDetails.rate) * parseFloat(product.stockDetails.quantity);
             if (isNaN(parseFloat(product.stockDetails.amount))) {
@@ -483,7 +494,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         this.calculateOverallTotal();
     }
 
-    public calculateOverallTotal() {
+    public calculateOverallTotal(): void {
         this.overallTotal = 0;
 
         if (this.transferType === 'products') {
@@ -531,13 +542,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectDateOfSupply(date) {
+    public selectDateOfSupply(date): void {
         if (date && this.branchTransfer.transporterDetails.dispatchedDate && date > this.branchTransfer.transporterDetails.dispatchedDate) {
             this.branchTransfer.transporterDetails.dispatchedDate = date;
         }
     }
 
-    public submit() {
+    public submit(): void {
         this.isLoading = true;
         this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
 
@@ -585,7 +596,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }
     }
 
-    public focusHsnNumber() {
+    public focusHsnNumber(): void {
         this.hideSkuNumberPopup();
         this.hsnNumber = (this.branchTransfer.products[this.activeRow].hsnNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : "";
         this.hsnPopupShow = true;
@@ -594,7 +605,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }, 300);
     }
 
-    public focusSkuNumber() {
+    public focusSkuNumber(): void {
         this.hideHsnNumberPopup();
         this.skuNumber = (this.branchTransfer.products[this.activeRow].stockDetails.skuCode) ? this.branchTransfer.products[this.activeRow].stockDetails.skuCode : "";
         this.skuNumberPopupShow = true;
@@ -603,33 +614,33 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
         }, 300);
     }
 
-    public hideHsnNumberPopup() {
+    public hideHsnNumberPopup(): void {
         this.hsnPopupShow = false;
         this.hsnNumber = "";
     }
 
-    public hideSkuNumberPopup() {
+    public hideSkuNumberPopup(): void {
         this.skuNumberPopupShow = false;
         this.skuNumber = "";
     }
 
-    public hideActiveRow() {
+    public hideActiveRow(): void {
         this.activeRow = null;
         this.hideHsnNumberPopup();
         this.hideSkuNumberPopup();
     }
 
-    public saveHsnNumberPopup(product) {
+    public saveHsnNumberPopup(product): void {
         product.hsnNumber = this.hsnNumber;
         this.hsnPopupShow = false;
     }
 
-    public saveSkuNumberPopup(product) {
+    public saveSkuNumberPopup(product): void {
         product.stockDetails.skuCode = this.skuNumber;
         this.skuNumberPopupShow = false;
     }
 
-    public getBranchTransfer() {
+    public getBranchTransfer(): void {
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
@@ -640,7 +651,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
                 this.branchTransfer.entity = response.body.entity;
-                this.branchTransfer.transferType = response.body.transferType;
+                this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
 
                 if (response.body.dateOfSupply) {
@@ -656,5 +667,23 @@ export class NewBranchTransferAddComponent implements OnInit, OnDestroy {
                 this._toasty.errorToast(response.message);
             }
         });
+    }
+
+    public assignCurrentCompany(): void {
+        if (!this.editBranchTransferUniqueName) {
+            this.myCurrentCompany = this.activeCompany.name;
+            if (this.branchTransferMode === "deliverynote") {
+                this.branchTransfer.sources[0].uniqueName = this.activeCompany.uniqueName;
+            } else if (this.branchTransferMode === "receiptnote") {
+                this.branchTransfer.destinations[0].uniqueName = this.activeCompany.uniqueName;
+            }
+        }
+    }
+
+    public onProductNoResultsClicked(idx?: number): void {
+        this.innerEntryIndex = idx;
+
+        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 }
