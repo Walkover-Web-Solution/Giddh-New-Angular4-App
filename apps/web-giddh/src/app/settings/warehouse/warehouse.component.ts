@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions, PageChangedEvent, PaginationComponent } from 'ngx-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -42,6 +42,10 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public allWarehouses$: Observable<any>;
     /** Selected warehouse for welcome page to update warehouse information */
     public selectedWarehouse: any;
+    /** Configuration object for pagination component */
+    public paginationConfig: any;
+    /** Stores the list of warehouses */
+    public warehouses: Array<any> = [];
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
@@ -49,6 +53,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     @ViewChild('warehouseOnBoardingModal') public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
     @ViewChild('welcomeComponent') public welcomeComponentTemplate: TemplateRef<any>;
+    /** Warehouse pagination instance */
+    @ViewChild('warehousePagination') warehousePagination: PaginationComponent;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
@@ -76,20 +82,8 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
-        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
-            this.itemOnBoardingDetails = itemOnBoardingDetails;
-        });
-        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
-            if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
-                await this.hideWelcomePage();
-                this.endOnBoarding();
-                this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
-                this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
-            }
-        });
+        this.initSubscribers();
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
     }
 
     /**
@@ -205,15 +199,81 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Page change event handler
+     *
+     * @param {PageChangedEvent} event Page changed event
+     * @memberof WarehouseComponent
+     */
+    public pageChanged(event: PageChangedEvent): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page }));
+    }
+
+    /**
      * Resets the on boarding form
      *
      * @private
      * @memberof WarehouseComponent
      */
-    private resetOnboardingForm(): void {
+    public resetOnboardingForm(): void {
         this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    /**
+     * Set the warehouse as default warehouse
+     *
+     * @param {*} warehouse Selected warehouse to set as default
+     * @param {number} warehouseIndex Selected warehouse index
+     * @memberof WarehouseComponent
+     */
+    public setAsDefault(warehouse: any, warehouseIndex: number): void {
+        if (!warehouse.isDefault) {
+            this.store.dispatch(this.warehouseActions.setAsDefaultWarehouse({
+                warehouseUniqueName: warehouse.uniqueName,
+                warehouseIndex
+            }));
+        }
+    }
+
+    /**
+     * Initializes all the subscribers to warehouse store
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private initSubscribers(): void {
+        this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
+        this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
+            this.itemOnBoardingDetails = itemOnBoardingDetails;
+        });
+        this.store.pipe(select(state => state.warehouse), takeUntil(this.destroyed$)).subscribe(async (warehouseState: WarehouseState) => {
+            if (warehouseState && (warehouseState.warehouseCreated || warehouseState.warehouseUpdated)) {
+                // Warehouse creation or updation is successful
+                await this.hideWelcomePage();
+                this.endOnBoarding();
+                this.store.dispatch(this.warehouseActions.resetCreateWarehouse());
+                this.store.dispatch(this.warehouseActions.resetUpdateWarehouse());
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
+            }
+            if (warehouseState && warehouseState.defaultWarehouseData) {
+                this.resetDefaultWarehouse();
+                this.setDefaulWarehouse(warehouseState.defaultWarehouseData);
+            }
+        });
+        this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
+            if (warehouseData) {
+                this.warehouses = warehouseData.results;
+                this.paginationConfig = {
+                    count: warehouseData.count,
+                    totalItems: warehouseData.totalItems,
+                    totalPages: warehouseData.totalPages,
+                }
+                setTimeout(() => {
+                    this.warehousePagination.writeValue(warehouseData.page);
+                });
+            }
+        });
     }
 
     /**
@@ -259,7 +319,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.onBoardingContainer.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as OnBoardingComponent).onboardingType = OnBoardingType.Warehouse;
+        (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
         (componentRef.instance as OnBoardingComponent).closeCompanyModal.subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {
                 this.showWelcomePage();
@@ -299,5 +359,35 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private resetWelcomeForm(): void {
         this.store.dispatch(this.generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
+    }
+
+    /**
+     * Resets the isDefault flag for older default warehouse
+     *
+     * @private
+     * @memberof WarehouseComponent
+     */
+    private resetDefaultWarehouse(): void {
+        for (let index = 0; index < this.warehouses.length; index++) {
+            if (this.warehouses[index].isDefault) {
+                this.warehouses[index].isDefault = false;
+                break;
+            }
+        }
+        this.store.dispatch(this.warehouseActions.resetDefaultWarehouseResponse());
+    }
+
+    /**
+     * Sets the new warehouse as default warehouse
+     *
+     * @private
+     * @param {*} defaultWarehouseData Warehouse data to be set as default
+     * @memberof WarehouseComponent
+     */
+    private setDefaulWarehouse(defaultWarehouseData: any): void {
+        if (defaultWarehouseData && defaultWarehouseData.body) {
+            const warehouseIndex = defaultWarehouseData.request.warehouseIndex;
+            this.warehouses[warehouseIndex].isDefault = true;
+        }
     }
 }

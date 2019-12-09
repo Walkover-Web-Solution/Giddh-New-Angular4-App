@@ -45,7 +45,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
-    @Input() public onboardingType: OnBoardingType;
+    @Input() public onBoardingType: OnBoardingType;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -363,7 +363,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
                 let countryRequest = new CountryRequest();
-                countryRequest.formName = (this.onboardingType) ? this.onboardingType.toLowerCase() : 'onboarding';
+                countryRequest.formName = (this.onBoardingType) ? this.onBoardingType.toLowerCase() : 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
