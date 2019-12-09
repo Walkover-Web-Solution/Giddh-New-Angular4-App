@@ -102,7 +102,7 @@
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
                                         class="text-danger">*</sup></label>
                                 <input type="text" [ngClass]="{'gstinWidth' : isbranch || isOnBoardingInProgress}" class="form-control"
-                                    autocomplete="false" autocomplete="false" required
+                                    autocomplete="false" required
                                     #gstNumberField
                                     (change)="handleGstChange(gstNumberField, states)"
                                     name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
