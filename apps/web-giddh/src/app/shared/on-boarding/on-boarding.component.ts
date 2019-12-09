@@ -400,4 +400,23 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
+
+    /**
+     * On boarding name change handler
+     *
+     * @param {*} event Change event
+     * @memberof OnBoardingComponent
+     */
+    public handleOnBoardingNameChange(event: any): void {
+        if (this.onBoardingType === OnBoardingType.Warehouse) {
+            event.target.value = event.target.value.trim();
+            const warehouseName = event.target.value;
+            if (!warehouseName) {
+                this.companyForm.form.controls['name'].setErrors({'whitespace': true});
+            }
+            if (event.target.value.length > 100) {
+                this.companyForm.form.controls['name'].setErrors({'maxlength': true});
+            }
+        }
+    }
 }

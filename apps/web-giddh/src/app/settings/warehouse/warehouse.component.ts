@@ -274,7 +274,9 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                     totalPages: warehouseData.totalPages,
                 }
                 setTimeout(() => {
-                    this.warehousePagination.writeValue(warehouseData.page);
+                    if (this.warehousePagination) {
+                        this.warehousePagination.writeValue(warehouseData.page);
+                    }
                 });
             }
         });
