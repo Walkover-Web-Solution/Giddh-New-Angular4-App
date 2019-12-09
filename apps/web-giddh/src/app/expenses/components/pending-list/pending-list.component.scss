@@ -1,4 +1,4 @@
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     position: relative;
 }
 
@@ -24,18 +24,22 @@
         color: #757BB9 !important;
     }
 }
+
 .icon-sort-asc, .icon-sort-dsc {
     display: inline-block;
     cursor: pointer;
     float: left;
     margin-left: 6px;
 }
+
 .icon-sort-asc.activeTextColor {
     color: #757BB9 !important;
 }
+
 .td_in_searchBox {
     div {
         display: flex;
+
         i {
             margin-top: 1px;
             color: #757BB9;
@@ -57,6 +61,7 @@
     border: none;
     background-color: #f2f2f2;
 }
+
 .td_in_searchBox {
     // padding: 0px !important;
     position: relative;

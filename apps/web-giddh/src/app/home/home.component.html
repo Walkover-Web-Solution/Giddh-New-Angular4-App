@@ -3,13 +3,14 @@
         <div class="dashboard-container">
             <div class="dashboard-notification">
                 <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'">
-                    <p> <span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
+                    <p><span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
                         {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on
                         {{subscribedPlan.expiry}}. Apply to upgrade your subscription. <a class="clickHere"
-                            (click)="goToSelectPlan()">Click here</a></p>
+                                                                                          (click)="goToSelectPlan()">Click
+                            here</a></p>
                 </div>
                 <div class="white-row" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges">
-                    <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your
+                    <p><span class="icon-traingle-info"></span> You have crossed the transactions limit of your
                         assigned plan {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To
                         continue your accounting with Giddh, Please renew your current plan or switch to another one.
                         Contact us for more assistance. <a class="clickHere" (click)="goToSelectPlan()">Click here</a>

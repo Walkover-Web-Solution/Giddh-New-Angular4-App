@@ -13,9 +13,9 @@ import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { KeyboardService }  from 'apps/web-giddh/src/app/accounting/keyboard.service';
+import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { AccountingSidebarComponent }  from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
+import { AccountingSidebarComponent } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
 import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
@@ -25,37 +25,37 @@ import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { OnReturnDirective } from './keyboard.directive';
 
 @NgModule({
-  declarations: [
-    AccountingComponent,
-    AccountAsInvoiceComponent,
-    AccountingSidebarComponent,
-    AccountAsVoucherComponent,
-    OnReturnDirective
-  ],
-  exports: [RouterModule, AccountingSidebarComponent],
-  providers: [KeyboardService, TallyModuleService],
-  imports: [
-    AccountingRoutingModule,
-    RouterModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DatepickerModule,
-    BsDatepickerModule.forRoot(),
-    ModalModule,
-    LaddaModule,
-    DecimalDigitsModule,
-    AVShSelectModule,
-    SharedModule,
-    ClickOutsideModule,
-    TooltipModule,
-    TypeaheadModule,
-    TextMaskModule,
-    VirtualScrollModule,
-    ElementViewChildModule,
-    QuickAccountModule.forRoot(),
-    InventoryModule
-  ],
+    declarations: [
+        AccountingComponent,
+        AccountAsInvoiceComponent,
+        AccountingSidebarComponent,
+        AccountAsVoucherComponent,
+        OnReturnDirective
+    ],
+    exports: [RouterModule, AccountingSidebarComponent],
+    providers: [KeyboardService, TallyModuleService],
+    imports: [
+        AccountingRoutingModule,
+        RouterModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        DatepickerModule,
+        BsDatepickerModule.forRoot(),
+        ModalModule,
+        LaddaModule,
+        DecimalDigitsModule,
+        AVShSelectModule,
+        SharedModule,
+        ClickOutsideModule,
+        TooltipModule,
+        TypeaheadModule,
+        TextMaskModule,
+        VirtualScrollModule,
+        ElementViewChildModule,
+        QuickAccountModule.forRoot(),
+        InventoryModule
+    ],
 })
 export class AccountingModule {
 }

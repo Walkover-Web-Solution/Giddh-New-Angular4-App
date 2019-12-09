@@ -10,27 +10,27 @@ import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
-  declarations: [
-    // Components / Directives/ Pipes
-    AuditLogsComponent,
-    AuditLogsSidebarComponent,
-    AuditLogsGridComponent
-  ],
-  exports: [
-    AuditLogsComponent,
-    AuditLogsSidebarComponent
-  ],
-  providers: [],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AuditLogsRoutingModule,
-    DatepickerModule,
-    BsDatepickerModule,
-    LaddaModule,
-    ShSelectModule
-  ],
+    declarations: [
+        // Components / Directives/ Pipes
+        AuditLogsComponent,
+        AuditLogsSidebarComponent,
+        AuditLogsGridComponent
+    ],
+    exports: [
+        AuditLogsComponent,
+        AuditLogsSidebarComponent
+    ],
+    providers: [],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AuditLogsRoutingModule,
+        DatepickerModule,
+        BsDatepickerModule,
+        LaddaModule,
+        ShSelectModule
+    ],
 })
 export class AuditLogsModule {
 }

@@ -3,7 +3,8 @@ declare var global: any;
 
 (function() {
     if (!global.KeyboardEvent) {
-        global.KeyboardEvent = function(_eventType: any, _init: any) {};
+        global.KeyboardEvent = function(_eventType: any, _init: any) {
+        };
     }
 })();
 

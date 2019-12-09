@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { GenerateEwayBill, IEwayBillTransporter, IAllTransporterDetails, IEwayBillfilter } from '../../../models/api-models/Invoice';
+import { GenerateEwayBill, IAllTransporterDetails, IEwayBillfilter, IEwayBillTransporter } from '../../../models/api-models/Invoice';
 import { IOption } from '../../../theme/ng-select/ng-select';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import * as moment from 'moment';
 import { ToasterService } from '../../../services/toaster.service';
 import { CurrentPage } from '../../../models/api-models/Common';
@@ -89,37 +89,37 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         ignoreBackdropClick: true
     };
     public SubsupplyTypesList: IOption[] = [
-        { value: '1', label: 'Supply' },
-        { value: '3', label: 'Export' },
-        { value: '4', label: 'Job Work' },
-        { value: '9', label: 'SKD/CKD/Lots' },
+        {value: '1', label: 'Supply'},
+        {value: '3', label: 'Export'},
+        {value: '4', label: 'Job Work'},
+        {value: '9', label: 'SKD/CKD/Lots'},
     ];
     // "INV", "CHL", "BIL","BOE","CNT","OTH"
     public SupplyTypesList: IOption[] = [
-        { value: 'O', label: 'Inward' },
-        { value: 'I', label: 'Outward' },
+        {value: 'O', label: 'Inward'},
+        {value: 'I', label: 'Outward'},
     ];
     public ModifiedTransporterDocType: IOption[] = [
-        { value: 'INV', label: 'Invoice' },
-        { value: 'BIL', label: 'Bill of Supply' },
-        { value: 'CHL', label: 'Delivery Challan' },
+        {value: 'INV', label: 'Invoice'},
+        {value: 'BIL', label: 'Bill of Supply'},
+        {value: 'CHL', label: 'Delivery Challan'},
     ];
-    public TransporterDocType = [{ value: 'INV', label: 'Invoice' },
-    { value: 'BIL', label: 'Bill of Supply' },
-    { value: 'CHL', label: 'Delivery Challan' },
+    public TransporterDocType = [{value: 'INV', label: 'Invoice'},
+        {value: 'BIL', label: 'Bill of Supply'},
+        {value: 'CHL', label: 'Delivery Challan'},
     ];
     public transactionType: IOption[] = [
-        { value: '1', label: 'Regular' },
-        { value: '2', label: 'Credit Notes' },
-        { value: '3', label: 'Delivery challan' }
+        {value: '1', label: 'Regular'},
+        {value: '2', label: 'Credit Notes'},
+        {value: '3', label: 'Delivery challan'}
     ];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
-        private _invoiceService: InvoiceService, private router: Router,
-        private _toaster: ToasterService,
-        private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
+                private _invoiceService: InvoiceService, private router: Router,
+                private _toaster: ToasterService,
+                private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
         this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
@@ -155,14 +155,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
-        })
+        });
         this.store.select(state => state.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let transporterDropdown = null;
                 let transporterArr = null;
                 transporterDropdown = p;
                 transporterArr = transporterDropdown.map(trans => {
-                    return { label: trans.transporterName, value: trans.transporterId };
+                    return {label: trans.transporterName, value: trans.transporterId};
                 });
                 this.transporterDropdown$ = of(transporterArr);
             }
@@ -341,6 +341,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.isTransModeRoad = false;
         }
     }
+
     public subTypeElementSelected(event) {
         this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;

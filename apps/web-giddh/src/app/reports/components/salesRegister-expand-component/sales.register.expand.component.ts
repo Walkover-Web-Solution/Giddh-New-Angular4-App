@@ -1,15 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Store, select } from '@ngrx/store';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ReplaySubject, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap';
 import { FormControl } from '@angular/forms';
-
 
 @Component({
     selector: 'sales-register-expand',
@@ -55,7 +53,6 @@ export class SalesRegisterExpandComponent implements OnInit {
         tax: false
     };
 
-
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
@@ -72,7 +69,6 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = 20;
         this.getDetailedsalesRequestFilter.q = '';
-
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
@@ -96,7 +92,9 @@ export class SalesRegisterExpandComponent implements OnInit {
                     }, 200);
                 }
             }
-            setTimeout(() => { this.detectChange() }, 200);
+            setTimeout(() => {
+                this.detectChange();
+            }, 200);
 
         });
 
@@ -117,9 +115,12 @@ export class SalesRegisterExpandComponent implements OnInit {
     }
 
     public getDetailedSalesReport(SalesDetailedfilter) {
-        setTimeout(() => { this.detectChange() }, 200);
+        setTimeout(() => {
+            this.detectChange();
+        }, 200);
         this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
     }
+
     public pageChanged(ev: any): void {
         if (ev.page === this.getDetailedsalesRequestFilter.page) {
             return;
@@ -127,27 +128,32 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.getDetailedsalesRequestFilter.page = ev.page;
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
+
     public sortbyApi(ord, key) {
         this.getDetailedsalesRequestFilter.sortBy = key;
         this.getDetailedsalesRequestFilter.sort = ord;
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
+
     /**
-    * emitExpand
-    */
+     * emitExpand
+     */
     public emitExpand() {
         this.expand = !this.expand;
     }
+
     public columnFilter(event, column) {
         if (event && column) {
             this.showFieldFilter[column] = event;
         }
     }
+
     public hideListItems() {
         if (this.filterDropDownList.isOpen) {
             this.filterDropDownList.hide();
         }
     }
+
     public goToDashboard(val: boolean) {
         if (val) {
             this.router.navigate(['/pages/reports']);
@@ -167,6 +173,7 @@ export class SalesRegisterExpandComponent implements OnInit {
         }
 
     }
+
     public getCurrentMonthYear() {
         if (this.from && this.to) {
             let currentYearFrom = this.from.split('-')[2];
@@ -182,6 +189,7 @@ export class SalesRegisterExpandComponent implements OnInit {
         }
 
     }
+
     public selectedFilterMonth(monthYridx: string, i) {
         let date = this.getDateFromMonth(i);
         this.getDetailedsalesRequestFilter.from = date.firstDay;
@@ -218,8 +226,9 @@ export class SalesRegisterExpandComponent implements OnInit {
         let firstDay = '01-' + (month) + '-' + year;
         let lastDay = new Date(year, parseInt(month), 0).getDate() + '-' + month + '-' + year;
 
-        return { firstDay, lastDay };
+        return {firstDay, lastDay};
     }
+
     public toggleSearch(fieldName: string) {
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
@@ -229,12 +238,12 @@ export class SalesRegisterExpandComponent implements OnInit {
                 this.invoiceSearch.nativeElement.focus();
             }, 200);
         }
-        // else if (fieldName === 'customerUniqueName') {
-        //   this.showSearchCustomer = true;
-        //   this.showSearchInvoiceNo = false;
-        //   setTimeout(() => {
-        //     this.customerSearch.nativeElement.focus();
-        //   }, 200);
+            // else if (fieldName === 'customerUniqueName') {
+            //   this.showSearchCustomer = true;
+            //   this.showSearchInvoiceNo = false;
+            //   setTimeout(() => {
+            //     this.customerSearch.nativeElement.focus();
+            //   }, 200);
         // }
         else {
             this.showSearchInvoiceNo = false;
@@ -242,11 +251,13 @@ export class SalesRegisterExpandComponent implements OnInit {
         }
         this.detectChange();
     }
+
     public clickedOutsideEvent() {
 
         this.showSearchInvoiceNo = false;
 
     }
+
     detectChange() {
         if (!this._cd['destroyed']) {
             this._cd.detectChanges();

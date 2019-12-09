@@ -1,47 +1,47 @@
 table {
-  table-layout: fixed;
+    table-layout: fixed;
 }
 
 .basic > thead > tr > th {
-  // overflow: hidden;
-  width: 140px;
-  white-space: inherit;
+    // overflow: hidden;
+    width: 140px;
+    white-space: inherit;
 }
 
 .basic > thead > tr > th > .heads div:first-child {
-  max-width: 75%;
-  float: left;
+    max-width: 75%;
+    float: left;
 }
 
 .data_overview {
-  width: 100%;
-  overflow-x: scroll;
-  min-height: 300px;
-  position: relative;
+    width: 100%;
+    overflow-x: scroll;
+    min-height: 300px;
+    position: relative;
 }
 
 .dropdown-menu {
-  max-height: 200px;
-  overflow-y: scroll;
+    max-height: 200px;
+    overflow-y: scroll;
 }
 
 .dropdown-menu li a {
-  padding: 6px 10px;
-  color: rgba(0, 0, 0, 0.8);
+    padding: 6px 10px;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .action_btn {
-  right: 15px;
+    right: 15px;
 }
 
 .edit_column {
-  opacity: 0.3;
+    opacity: 0.3;
 }
 
 .basic > thead > tr > th:hover .edit_column {
-  opacity: 1;
+    opacity: 1;
 }
 
 .basic > thead > tr > th {
-  border: 1px solid #ccc;
+    border: 1px solid #ccc;
 }

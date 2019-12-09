@@ -11,84 +11,83 @@ import { HistoryChartComponent } from './components/history/history-chart.compon
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartModule } from 'angular2-highcharts';
-import { TooltipModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, BsDropdownModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { RatioAnalysisChartComponent } from './components/ratio-analysis/ratio-analysis-chart.component';
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
-import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
-import {Daterangepicker} from "../theme/ng2-daterangepicker/daterangepicker.module";
-import {DatepickeroptionsComponent} from './components/datepickeroptions/datepickeroptions.component';
-import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.module";
-import {GiddhCurrencyPipe} from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
+import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
+import { DatepickeroptionsComponent } from './components/datepickeroptions/datepickeroptions.component';
+import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 
 export function highchartsFactory() {
-  // @ts-ignore
-  const hc = require('highcharts');
-  // @ts-ignore
-  const dd = require('highcharts/modules/drilldown');
-  dd(hc);
+    // @ts-ignore
+    const hc = require('highcharts');
+    // @ts-ignore
+    const dd = require('highcharts/modules/drilldown');
+    dd(hc);
 
-  return hc;
+    return hc;
 }
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: false,
-  suppressScrollY: true
+    suppressScrollX: false,
+    suppressScrollY: true
 };
 
 @NgModule({
-  declarations: [
-    // Components / Directives/ Pipes
-    HomeComponent,
-    LiveAccountsComponent,
-    ExpensesChartComponent,
-    RevenueChartComponent,
-    ComparisionChartComponent,
-    HistoryChartComponent,
-    NetworthChartComponent,
-    RatioAnalysisChartComponent,
-    TotalOverduesChartComponent,
-    ProfitLossComponent,
-    gstComponent,
-    BankAccountsComponent,
-    CrDrComponent,
-    TotalSalesComponent,
-    DatepickeroptionsComponent
-  ],
-  exports: [HomeComponent],
-  providers: [
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
-    {
-      provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    },
-    GiddhCurrencyPipe
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HomeRoutingModule,
-    ModalModule,
-    ChartModule,
-    LaddaModule,
-    PerfectScrollbarModule,
-    BsDropdownModule,
-    TabsModule,
-    BsDatepickerModule,
-    TooltipModule.forRoot(),
-    Daterangepicker,
-    CurrencyModule
-  ],
+    declarations: [
+        // Components / Directives/ Pipes
+        HomeComponent,
+        LiveAccountsComponent,
+        ExpensesChartComponent,
+        RevenueChartComponent,
+        ComparisionChartComponent,
+        HistoryChartComponent,
+        NetworthChartComponent,
+        RatioAnalysisChartComponent,
+        TotalOverduesChartComponent,
+        ProfitLossComponent,
+        gstComponent,
+        BankAccountsComponent,
+        CrDrComponent,
+        TotalSalesComponent,
+        DatepickeroptionsComponent
+    ],
+    exports: [HomeComponent],
+    providers: [
+        {
+            provide: HighchartsStatic,
+            useFactory: highchartsFactory
+        },
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        },
+        GiddhCurrencyPipe
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        HomeRoutingModule,
+        ModalModule,
+        ChartModule,
+        LaddaModule,
+        PerfectScrollbarModule,
+        BsDropdownModule,
+        TabsModule,
+        BsDatepickerModule,
+        TooltipModule.forRoot(),
+        Daterangepicker,
+        CurrencyModule
+    ],
 })
 export class HomeModule {
 }

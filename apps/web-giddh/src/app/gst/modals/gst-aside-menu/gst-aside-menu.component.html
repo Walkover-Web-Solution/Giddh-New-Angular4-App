@@ -1,359 +1,377 @@
 <div class="aside-pane">
 
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
 
-  <div class="form_header">
-    <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
-      Provider (GSP)</h2>
-    <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit your
-      GST return:</h2>
-    <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
-    <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
-  </div>
+    <div class="form_header">
+        <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
+            Provider (GSP)</h2>
+        <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit
+            your
+            GST return:</h2>
+        <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
+        <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
+    </div>
 
-  <div class="form_body witBg clearfix mrBChldLbl">
+    <div class="form_body witBg clearfix mrBChldLbl">
 
-    <div class="form_bg clearfix">
+        <div class="form_bg clearfix">
 
-      <!-- region not gst authenticated and before otp verified -->
-      <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
-        <!-- Choose Provider -->
-        <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
+            <!-- region not gst authenticated and before otp verified -->
+            <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
+                <!-- Choose Provider -->
+                <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
 
-          <div class="row">
-            <div class="col-xs-6">
+                    <div class="row">
+                        <div class="col-xs-6">
 
-              <div class="form-group">
+                            <div class="form-group">
 
-                <label for="tax_pro_otp">Select Platform</label>
+                                <label for="tax_pro_otp">Select Platform</label>
 
-                <select class="form-control" (click)="changeProvider()" [(ngModel)]="selectedService"
-                        [disabled]="otpSentSuccessFully">
-                  <option value="VAYANA">Giddh Provider 1</option>
-                  <option value="TAXPRO">Giddh Provider 2</option>
-                </select>
+                                <select class="form-control" (click)="changeProvider()" [(ngModel)]="selectedService"
+                                        [disabled]="otpSentSuccessFully">
+                                    <option value="VAYANA">Giddh Provider 1</option>
+                                    <option value="TAXPRO">Giddh Provider 2</option>
+                                </select>
 
-              </div>
+                            </div>
 
-            </div>
-          </div>
-
-        </div>
-
-        <!-- TAX PRO || VYANA-->
-        <form class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
-
-          <div class="row">
-
-            <div class="col-xs-6">
-
-              <div class="form-group">
-                <label for="tax_pro_username">Username:</label>
-                <input autocomplete="off" type="text" name="username" class="form-control" id="tax_pro_username"
-                       [(ngModel)]="taxProForm.userName" required [disabled]="otpSentSuccessFully">
-              </div>
-
-            </div>
-
-            <div class="col-xs-6">
-
-              <div class="form-group">
-                <label for="tax_pro_gst_number">GSTIN:</label>
-                <input autocomplete="off" type="text" name="gstin" class="form-control" id="tax_pro_gst_number"
-                       [(ngModel)]="taxProForm.gstin" required [disabled]="otpSentSuccessFully">
-              </div>
-
-            </div>
-
-            <div class="col-xs-12" *ngIf="otpSentSuccessFully">
-
-              <div class="d-flex">
-
-                <div>
-                  <label for="tax_pro_otp">Enter OTP:</label>
-                  <input autocomplete="off" type="text" name="otp" class="form-control" id="tax_pro_otp"
-                         [(ngModel)]="taxProForm.otp">
-                </div>
-
-                <div style="align-self: flex-end;">
-                  <a class="btn btn-link" (click)="resendOtp()" href="javascript:void 0">Resend Otp</a>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-          <div class="row">
-
-            <div class="col-xs-12 mrT1">
-              <button class="btn btn-success" [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
-                      (click)="save()"
-                      [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
-              </button>
-              <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
-            </div>
-
-          </div>
-
-        </form>
-
-        <!--reconcile-->
-        <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
-          <div class="row">
-
-            <ng-container>
-
-              <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
-
-                <div class="col-xs-6">
-
-                  <div class="form-group">
-                    <label for="tax_pro_username">Username:</label>
-                    <input autocomplete="off" type="text" name="username" class="form-control" id="reconcile_username"
-                           [(ngModel)]="reconcileForm.uid">
-                  </div>
+                        </div>
+                    </div>
 
                 </div>
-              </ng-container>
 
-              <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
+                <!-- TAX PRO || VYANA-->
+                <form class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
 
-                <div class="col-xs-6" *ngIf="(reconcileOtpSuccess$ | async)">
-                  <div class="form-group">
-                    <label for="reconcile_otp">OTP:</label>
-                    <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_otp"
-                           [(ngModel)]="reconcileForm.otp">
-                  </div>
-                </div>
+                    <div class="row">
 
-              </ng-container>
+                        <div class="col-xs-6">
 
-              <ng-container>
+                            <div class="form-group">
+                                <label for="tax_pro_username">Username:</label>
+                                <input autocomplete="off" type="text" name="username" class="form-control"
+                                       id="tax_pro_username"
+                                       [(ngModel)]="taxProForm.userName" required [disabled]="otpSentSuccessFully">
+                            </div>
 
-                <div class="col-xs-6" *ngIf="activeCompanyGstNumber">
-                  <div class="form-group">
-                    <label for="reconcile_otp">GSTN:</label>
-                    <input autocomplete="off" type="text" name="otp" class="form-control" id="reconcile_gstn"
-                           [value]="(companyGst$ | async)" [disabled]="true">
-                  </div>
-                </div>
+                        </div>
 
-              </ng-container>
-            </ng-container>
+                        <div class="col-xs-6">
 
-            <ng-container>
+                            <div class="form-group">
+                                <label for="tax_pro_gst_number">GSTIN:</label>
+                                <input autocomplete="off" type="text" name="gstin" class="form-control"
+                                       id="tax_pro_gst_number"
+                                       [(ngModel)]="taxProForm.gstin" required [disabled]="otpSentSuccessFully">
+                            </div>
 
-              <div class="col-xs-12">
+                        </div>
+
+                        <div class="col-xs-12" *ngIf="otpSentSuccessFully">
+
+                            <div class="d-flex">
+
+                                <div>
+                                    <label for="tax_pro_otp">Enter OTP:</label>
+                                    <input autocomplete="off" type="text" name="otp" class="form-control"
+                                           id="tax_pro_otp"
+                                           [(ngModel)]="taxProForm.otp">
+                                </div>
+
+                                <div style="align-self: flex-end;">
+                                    <a class="btn btn-link" (click)="resendOtp()" href="javascript:void 0">Resend
+                                        Otp</a>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-12 mrT1">
+                            <button class="btn btn-success"
+                                    [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
+                                    (click)="save()"
+                                    [disabled]="(!taxProForm.gstin || !taxProForm.userName)">{{ !otpSentSuccessFully ? 'Get Otp' : 'Verify Otp'}}
+                            </button>
+                            <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+                <!--reconcile-->
+                <form class="form-group" #reconcileFormVM="ngForm" *ngIf="selectedService === 'RECONCILE'">
+                    <div class="row">
+
+                        <ng-container>
+
+                            <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
+
+                                <div class="col-xs-6">
+
+                                    <div class="form-group">
+                                        <label for="tax_pro_username">Username:</label>
+                                        <input autocomplete="off" type="text" name="username" class="form-control"
+                                               id="reconcile_username"
+                                               [(ngModel)]="reconcileForm.uid">
+                                    </div>
+
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
+
+                                <div class="col-xs-6" *ngIf="(reconcileOtpSuccess$ | async)">
+                                    <div class="form-group">
+                                        <label for="reconcile_otp">OTP:</label>
+                                        <input autocomplete="off" type="text" name="otp" class="form-control"
+                                               id="reconcile_otp"
+                                               [(ngModel)]="reconcileForm.otp">
+                                    </div>
+                                </div>
+
+                            </ng-container>
+
+                            <ng-container>
+
+                                <div class="col-xs-6" *ngIf="activeCompanyGstNumber">
+                                    <div class="form-group">
+                                        <label for="reconcile_otp">GSTN:</label>
+                                        <input autocomplete="off" type="text" name="otp" class="form-control"
+                                               id="reconcile_gstn"
+                                               [value]="(companyGst$ | async)" [disabled]="true">
+                                    </div>
+                                </div>
+
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container>
+
+                            <div class="col-xs-12">
                             <span>
                 Gst No - {{ (companyGst$ | async) }} Verified Successfully
               </span>
-              </div>
+                            </div>
 
-            </ng-container>
-          </div>
+                        </ng-container>
+                    </div>
 
-          <div class="row">
+                    <div class="row">
 
-            <div class="col-xs-12 mrT1">
+                        <div class="col-xs-12 mrT1">
 
-              <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
-                      *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
-                      [disabled]="!reconcileForm.uid">Submit
-              </button>
+                            <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
+                                    *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
+                                    [disabled]="!reconcileForm.uid">Submit
+                            </button>
 
-              <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
-                      *ngIf="(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpVerifyInProcess$ | async"
-                      [disabled]="!reconcileForm.otp">Submit
-              </button>
+                            <button class="btn btn-success" (click)="sendReconcileOtp(reconcileForm)"
+                                    *ngIf="(reconcileOtpSuccess$ | async)"
+                                    [ladda]="reconcileOtpVerifyInProcess$ | async"
+                                    [disabled]="!reconcileForm.otp">Submit
+                            </button>
 
-              <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel</button>
+                            <button class="btn btn-default" (click)="toggleCancelModel();resetLocalFlags()">Cancel
+                            </button>
 
+                        </div>
+
+                    </div>
+                </form>
+                <!--reconcile-->
             </div>
+            <!-- endregion -->
 
-          </div>
-        </form>
-        <!--reconcile-->
-      </div>
-      <!-- endregion -->
+            <!-- region gst authenticated -->
 
-      <!-- region gst authenticated -->
-
-      <div *ngIf="gstAuthenticated">
+            <div *ngIf="gstAuthenticated">
 
         <span style="border-bottom: 1px solid #3a3939;" class="d-flex">
           <p>You Are Already Authenticated with Giddh Provider {{ isVayanaAuthenticated ? '1' : '2'}}</p>
         </span>
 
-        <!-- region note point before submitting -->
-        <div *ngIf="!pointsAcceptedSubmitted">
-          <div class="container" style="width: 100%;">
+                <!-- region note point before submitting -->
+                <div *ngIf="!pointsAcceptedSubmitted">
+                    <div class="container" style="width: 100%;">
 
-            <div class="row mt-1">
+                        <div class="row mt-1">
 
-              <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 mb-2">
+                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 mb-2">
 
-                <ul>
+                                <ul>
 
-                  <li> The transactions under the Transaction Summary tab will be pushed to the GSTN as individual
-                    transactions.
-                  </li>
-                  <li style="padding-top: 10px"> Along with the documents issued, the transactions under HSL, NiL, and
-                    B2CS category will be pushed to the GSTN as summaries.
-                  </li>
-                  <li style="padding-top: 10px"> When you Submit and File data to the GSTN, the email updates will be
-                    sent to xyz@abc.com.
-                    This can be easily edited and changed in the Profile tab under Settings.
-                  </li>
+                                    <li> The transactions under the Transaction Summary tab will be pushed to the GSTN
+                                        as individual
+                                        transactions.
+                                    </li>
+                                    <li style="padding-top: 10px"> Along with the documents issued, the transactions
+                                        under HSL, NiL, and
+                                        B2CS category will be pushed to the GSTN as summaries.
+                                    </li>
+                                    <li style="padding-top: 10px"> When you Submit and File data to the GSTN, the email
+                                        updates will be
+                                        sent to xyz@abc.com.
+                                        This can be easily edited and changed in the Profile tab under Settings.
+                                    </li>
 
-                </ul>
-              </div>
+                                </ul>
+                            </div>
 
-            </div>
+                        </div>
 
-            <hr>
+                        <hr>
 
-            <div class="row mt-2">
+                        <div class="row mt-2">
 
-              <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
+                            <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
                 <span class="mr-1">
                   <input type="checkbox" [(ngModel)]="pointsAccepted" id="pointsAccepted"/>
                 </span>
-                <label for="pointsAccepted">
-                  <em>
-                    Make sure that you have entered the number of Documents Issued(current period) in the Documents
-                    Issued tab.
-                  </em>
-                </label>
-              </div>
+                                <label for="pointsAccepted">
+                                    <em>
+                                        Make sure that you have entered the number of Documents Issued(current period)
+                                        in the Documents
+                                        Issued tab.
+                                    </em>
+                                </label>
+                            </div>
 
-            </div>
-            <hr>
+                        </div>
+                        <hr>
 
-          </div>
+                    </div>
 
-          <div>
+                    <div>
 
-            <button class="btn btn-default" [disabled]="!pointsAccepted" (click)="pointsAcceptedSubmitted = true">Next
-            </button>
+                        <button class="btn btn-default" [disabled]="!pointsAccepted"
+                                (click)="pointsAcceptedSubmitted = true">Next
+                        </button>
 
-          </div>
-        </div>
-        <!-- endregion -->
+                    </div>
+                </div>
+                <!-- endregion -->
 
-        <!-- region submit gst -->
-        <div *ngIf="pointsAcceptedSubmitted">
+                <!-- region submit gst -->
+                <div *ngIf="pointsAcceptedSubmitted">
 
-          <div class="gst-body" style="padding: 15px">
+                    <div class="gst-body" style="padding: 15px">
 
-            <div class="row">
+                        <div class="row">
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <label class="text-muted">
-                  GSTN Username
-                </label>
-              </div>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <label class="text-muted">
+                                    GSTN Username
+                                </label>
+                            </div>
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
 
-                <span>{{taxProForm.userName}}</span>
-              </div>
+                                <span>{{taxProForm.userName}}</span>
+                            </div>
 
-            </div>
+                        </div>
 
-            <div class="row mt-1">
+                        <div class="row mt-1">
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <label class="text-muted">
-                  GSTIN
-                </label>
-              </div>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <label class="text-muted">
+                                    GSTIN
+                                </label>
+                            </div>
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <span>{{taxProForm.gstin}}</span>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <span>{{taxProForm.gstin}}</span>
 
-              </div>
-            </div>
+                            </div>
+                        </div>
 
-            <div class="row mt-1">
+                        <div class="row mt-1">
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <label class="text-muted">
-                  Filing Period
-                </label>
-              </div>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <label class="text-muted">
+                                    Filing Period
+                                </label>
+                            </div>
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
 
-                <span>{{ getCurrentPeriod?.from }}</span> - <span>{{ getCurrentPeriod?.to }}</span>
+                                <span>{{ getCurrentPeriod?.from }}</span> - <span>{{ getCurrentPeriod?.to }}</span>
 
-              </div>
-            </div>
+                            </div>
+                        </div>
 
-            <div class="row mt-1">
+                        <div class="row mt-1">
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <label class="text-muted">
-                  GST Return Type
-                </label>
-              </div>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <label class="text-muted">
+                                    GST Return Type
+                                </label>
+                            </div>
 
-              <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
-                <span *ngIf="returnType === 'gstr2'">GSTR-2</span>
-                <span *ngIf="returnType === 'gstr1'">GSTR-1</span>
-                <span *ngIf="returnType === 'gstr3b'">GSTR-3B</span>
-              </div>
-            </div>
-          </div>
+                            <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
+                                <span *ngIf="returnType === 'gstr2'">GSTR-2</span>
+                                <span *ngIf="returnType === 'gstr1'">GSTR-1</span>
+                                <span *ngIf="returnType === 'gstr3b'">GSTR-3B</span>
+                            </div>
+                        </div>
+                    </div>
 
-          <div style="padding: 15px;background-color: white">
+                    <div style="padding: 15px;background-color: white">
 
-            <div class="row mt-1">
+                        <div class="row mt-1">
 
-              <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                <label>
-                  Type <strong>SUBMIT</strong> in the text box<span class="text-danger">*</span>
-                </label>
-              </div>
+                            <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                                <label>
+                                    Type <strong>SUBMIT</strong> in the text box<span class="text-danger">*</span>
+                                </label>
+                            </div>
 
-              <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                <input type="text" class="form-control" [(ngModel)]="submitGstForm.txtVal">
-              </div>
+                            <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                                <input type="text" class="form-control" [(ngModel)]="submitGstForm.txtVal">
+                            </div>
 
-            </div>
+                        </div>
 
-            <div class="row mt-2">
+                        <div class="row mt-2">
 
-              <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
+                            <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 d-flex">
                 <span class="mr-1">
                   <input type="checkbox" [(ngModel)]="submitGstForm.isAccepted" id="submitGstFormIsAccepted"/>
                 </span>
-                <label for="submitGstFormIsAccepted">
-                  <em>
-                    I accept that on clicking proceed, the return will be locked.
-                    I can’t undo this or make changes to the return either via Giddh or the GSTN portal.
-                  </em>
-                </label>
-              </div>
+                                <label for="submitGstFormIsAccepted">
+                                    <em>
+                                        I accept that on clicking proceed, the return will be locked.
+                                        I can’t undo this or make changes to the return either via Giddh or the GSTN
+                                        portal.
+                                    </em>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-1">
+
+                        <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
+                                [disabled]="!submitGstForm.isAccepted">Proceed
+                        </button>
+                        <button class="btn btn-default" (click)="toggleCancelModel()">Cancel</button>
+
+                    </div>
+                </div>
+                <!-- endregion -->
 
             </div>
-          </div>
+            <!-- endregion -->
 
-          <div class="mt-1">
-
-            <button class="btn btn-success" [ladda]="gstReturnInProcess" (click)="submitGstReturn()"
-                    [disabled]="!submitGstForm.isAccepted">Proceed
-            </button>
-            <button class="btn btn-default" (click)="toggleCancelModel()">Cancel</button>
-
-          </div>
         </div>
-        <!-- endregion -->
-
-      </div>
-      <!-- endregion -->
 
     </div>
-
-  </div>
 </div>

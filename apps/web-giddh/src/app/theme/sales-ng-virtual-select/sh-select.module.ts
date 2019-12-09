@@ -7,23 +7,23 @@ import { SalesShSelectComponent } from './sh-select.component';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    VirtualScrollModule,
-    ClickOutsideModule
-  ],
-  declarations: [
-    SalesShSelectComponent,
-    SalesShSelectMenuComponent
-  ],
-  exports: [SalesShSelectComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        VirtualScrollModule,
+        ClickOutsideModule
+    ],
+    declarations: [
+        SalesShSelectComponent,
+        SalesShSelectMenuComponent
+    ],
+    exports: [SalesShSelectComponent]
 })
 
 export class SalesShSelectModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SalesShSelectModule
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: SalesShSelectModule
+        };
+    }
 }

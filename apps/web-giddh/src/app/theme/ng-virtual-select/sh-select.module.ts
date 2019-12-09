@@ -7,23 +7,23 @@ import { CommonModule } from '@angular/common';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    VirtualScrollModule,
-    ClickOutsideModule
-  ],
-  declarations: [
-    ShSelectComponent,
-    ShSelectMenuComponent
-  ],
-  exports: [ShSelectComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        VirtualScrollModule,
+        ClickOutsideModule
+    ],
+    declarations: [
+        ShSelectComponent,
+        ShSelectMenuComponent
+    ],
+    exports: [ShSelectComponent]
 })
 
 export class ShSelectModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ShSelectModule
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: ShSelectModule
+        };
+    }
 }

@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
@@ -68,17 +68,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-        private _toasty: ToasterService,
-        private _loginAction: LoginActions,
-        private _loginService: AuthenticationService,
-        private loginAction: LoginActions,
-        private _subscriptionsActions: SubscriptionsActions,
-        private _companyService: CompanyService,
-        private companyActions: CompanyActions,
-        private router: Router,
-        private _sessionAction: SessionActions,
-        public _route: ActivatedRoute,
-        private generalActions: GeneralActions) {
+                private _toasty: ToasterService,
+                private _loginAction: LoginActions,
+                private _loginService: AuthenticationService,
+                private loginAction: LoginActions,
+                private _subscriptionsActions: SubscriptionsActions,
+                private _companyService: CompanyService,
+                private companyActions: CompanyActions,
+                private router: Router,
+                private _sessionAction: SessionActions,
+                public _route: ActivatedRoute,
+                private generalActions: GeneralActions) {
         this.contactNo$ = this.store.select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
@@ -217,7 +217,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     // }
 
     public changeTwoWayAuth() {
-        this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).subscribe(res => {
+        this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
             if (res.status === 'success') {
                 this._toasty.successToast(res.body);
             } else {
@@ -264,7 +264,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
                 }
             } else {
                 this._toasty.errorToast(res.message, res.status);
-                this.payAlert.push({ msg: res.message, type: 'warning' });
+                this.payAlert.push({msg: res.message, type: 'warning'});
             }
         });
     }
@@ -274,36 +274,36 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         switch (type) {
             case 'cashback_discount':
                 this.disableRazorPay = false;
-                return this.payAlert.push({ msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {$scope.cbDiscount}` });
+                return this.payAlert.push({msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {$scope.cbDiscount}`});
             case 'cashback':
                 if (this.amount < this.coupRes.value) {
                     this.disableRazorPay = true;
-                    return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
+                    return this.payAlert.push({msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}`});
                 } else {
                     this.disableRazorPay = false;
-                    return this.payAlert.push({ type: 'success', msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. ${this.coupRes.value}` });
+                    return this.payAlert.push({type: 'success', msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. ${this.coupRes.value}`});
                 }
 
             case 'discount':
                 let diff = this.amount - this.discount;
                 if (diff < 100) {
                     this.disableRazorPay = true;
-                    return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
+                    return this.payAlert.push({msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}`});
                 } else {
                     this.disableRazorPay = false;
-                    return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
+                    return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
                 }
             case 'discount_amount':
                 diff = this.amount - this.discount;
                 if (diff < 100) {
                     this.disableRazorPay = true;
-                    return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
+                    return this.payAlert.push({msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}`});
                 } else if (this.amount < this.coupRes.value) {
                     this.disableRazorPay = true;
-                    return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
+                    return this.payAlert.push({msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}`});
                 } else {
                     this.disableRazorPay = false;
-                    return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
+                    return this.payAlert.push({type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}`});
                 }
         }
     }
@@ -381,7 +381,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     public onTabChanged(tabName: string): void {
         this.setStateDetails(tabName);
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
-        this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
+        this.router.navigate(['pages/user-details/', tabName], {replaceUrl: true});
     }
 
     /**

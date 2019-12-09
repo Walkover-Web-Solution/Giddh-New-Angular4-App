@@ -32,39 +32,39 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 
 @NgModule({
-  declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
-    GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
-    ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
-    OverviewSummaryComponent, TransactionSummaryComponent,
-    PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-    DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
-  imports: [
-    GstRoutingModule,
-    CollapseModule,
-    PaginationModule,
-    DatepickerModule,
-    BsDropdownModule,
-    Daterangepicker,
-    LaddaModule,
-    HighlightModule,
-    TooltipModule,
-    ClickOutsideModule,
-    TabsModule,
-    ElementViewChildModule,
-    AlertModule,
-    DecimalDigitsModule,
-    ModalModule,
-    PurchaseModule,
-    InvoiceModule,
-    PerfectScrollbarModule,
-    CurrencyModule,
-    ConfirmModalModule
-  ],
-  providers: [],
-  entryComponents: [
-    PaginationComponent
-  ],
-  exports: [ViewTransactionsComponent]
+    declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
+        GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
+        ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
+        OverviewSummaryComponent, TransactionSummaryComponent,
+        PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
+    imports: [
+        GstRoutingModule,
+        CollapseModule,
+        PaginationModule,
+        DatepickerModule,
+        BsDropdownModule,
+        Daterangepicker,
+        LaddaModule,
+        HighlightModule,
+        TooltipModule,
+        ClickOutsideModule,
+        TabsModule,
+        ElementViewChildModule,
+        AlertModule,
+        DecimalDigitsModule,
+        ModalModule,
+        PurchaseModule,
+        InvoiceModule,
+        PerfectScrollbarModule,
+        CurrencyModule,
+        ConfirmModalModule
+    ],
+    providers: [],
+    entryComponents: [
+        PaginationComponent
+    ],
+    exports: [ViewTransactionsComponent]
 })
 export class GstModule {
 }

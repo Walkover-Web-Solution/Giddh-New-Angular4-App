@@ -9,12 +9,12 @@ import { IGroupsWithStocksFlattenItem, IGroupsWithStocksHierarchyMinItem } from 
  * its response will be hash as GroupsWithStocksFlatten
  */
 export class GroupsWithStocksFlatten implements IPaginatedResponse {
-  public count: number;
-  public page: number;
-  public results: IGroupsWithStocksFlattenItem[];
-  public size: number;
-  public totalItems: number;
-  public totalPages: number;
+    public count: number;
+    public page: number;
+    public results: IGroupsWithStocksFlattenItem[];
+    public size: number;
+    public totalItems: number;
+    public totalPages: number;
 }
 
 /*
@@ -24,10 +24,10 @@ export class GroupsWithStocksFlatten implements IPaginatedResponse {
  * its response will be hash as GroupsWithStocksHierarchyMin
  */
 export class GroupsWithStocksHierarchyMin implements IPaginatedResponse {
-  public count: number;
-  public page: number;
-  public results: IGroupsWithStocksHierarchyMinItem[];
-  public size: number;
-  public totalItems: number;
-  public totalPages: number;
+    public count: number;
+    public page: number;
+    public results: IGroupsWithStocksHierarchyMinItem[];
+    public size: number;
+    public totalItems: number;
+    public totalPages: number;
 }

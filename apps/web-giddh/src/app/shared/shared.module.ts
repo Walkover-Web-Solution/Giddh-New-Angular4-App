@@ -22,12 +22,7 @@ import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDisco
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import {
-    AuthServiceConfig,
-    GoogleLoginProvider,
-    LinkedinLoginProvider,
-    SocialLoginModule,
-} from '../theme/ng-social-login-module';
+import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule, } from '../theme/ng-social-login-module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
@@ -39,20 +34,9 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header';
-import {
-    AccountOperationsComponent,
-    AccountsSideBarComponent,
-    CompanyAddComponent,
-    CompanyAddNewUiComponent,
-    GroupsAccountSidebarComponent,
-    ManageGroupsAccountsComponent,
-} from './header/components';
-import {
-    AccountAddNewDetailsComponent,
-} from './header/components/account-add-new-details/account-add-new-details.component';
-import {
-    AccountUpdateNewDetailsComponent,
-} from './header/components/account-update-new-details/account-update-new-details.component';
+import { AccountOperationsComponent, AccountsSideBarComponent, CompanyAddComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent, } from './header/components';
+import { AccountAddNewDetailsComponent, } from './header/components/account-add-new-details/account-add-new-details.component';
+import { AccountUpdateNewDetailsComponent, } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -99,7 +83,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ], false);
 
 export function provideConfig() {
-    return SOCIAL_CONFIG || { id: null, providers: [] };
+    return SOCIAL_CONFIG || {id: null, providers: []};
 }
 
 @NgModule({

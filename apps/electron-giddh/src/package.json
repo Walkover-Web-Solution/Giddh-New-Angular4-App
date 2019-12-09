@@ -22,10 +22,12 @@
     },
     "build": {
         "appId": "com.giddh.prod",
-        "publish": [{
-            "provider": "s3",
-            "bucket": "giddh-app-builds"
-        }],
+        "publish": [
+            {
+                "provider": "s3",
+                "bucket": "giddh-app-builds"
+            }
+        ],
         "directories": {
             "buildResources": "resources",
             "output": "../electrongiddh-packages"

@@ -2,7 +2,8 @@
 
     <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
         <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
+        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing
+            period which are ready to be pushed to GSTN.</p>
     </div>
 
 
@@ -42,101 +43,106 @@
             <table class="table table-striped transactions-table transactions-summary-table">
 
                 <thead>
-                    <tr class="text-uppercase">
-                        <!-- <th width="20px"></th> -->
-                        <th width="30%"> Description</th>
-                        <th class="text-center">
-                            <div class="rates"> Total Transactions</div>
-                        </th>
-                        <th width="15%" class="text-right">
-                            <div class="rates"> Taxable Amount</div>
-                        </th>
-                        <th class="text-right">
-                            <div class="rates"> IGST</div>
-                        </th>
-                        <th class="text-right">
-                            <div class="rates"> CGST</div>
-                        </th>
-                        <th class="text-right">
-                            <div class="rates"> SGST</div>
-                        </th>
-                        <th class="text-right">
-                            <div class="rates"> Cess</div>
-                        </th>
-                    </tr>
+                <tr class="text-uppercase">
+                    <!-- <th width="20px"></th> -->
+                    <th width="30%"> Description</th>
+                    <th class="text-center">
+                        <div class="rates"> Total Transactions</div>
+                    </th>
+                    <th width="15%" class="text-right">
+                        <div class="rates"> Taxable Amount</div>
+                    </th>
+                    <th class="text-right">
+                        <div class="rates"> IGST</div>
+                    </th>
+                    <th class="text-right">
+                        <div class="rates"> CGST</div>
+                    </th>
+                    <th class="text-right">
+                        <div class="rates"> SGST</div>
+                    </th>
+                    <th class="text-right">
+                        <div class="rates"> Cess</div>
+                    </th>
+                </tr>
                 </thead>
 
                 <tbody>
 
-                    <ng-container *ngFor="let item of gstrOverviewData.summary">
-                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
+                <ng-container *ngFor="let item of gstrOverviewData.summary">
+                    <tr (click)="viewTransactions(item)" class="row-hover"
+                        [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
+                        <!-- <td></td> -->
+                        <td [ngSwitch]="true">
+                            <ng-container
+                                *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
+                                <img src="{{imgPath}}b2b.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container
+                                *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
+                                <img src="{{imgPath}}b2cs.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
+                                <img src="{{imgPath}}export.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
+                                <img src="{{imgPath}}nil.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container
+                                *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
+                                <img src="{{imgPath}}cdn.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'advance-payments'">
+                                <img src="{{imgPath}}adv.svg" class="icon text-bottom"/>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'hsnsac'">
+                                <img src="{{imgPath}}hsnsac.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'taxPaid'">
+                                <img src="{{imgPath}}taxpaid.svg" class="icon text-bottom"/>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
+                                <img src="{{imgPath}}impg.svg" class="icon text-bottom"/>
+                            </ng-container>
+                            <span style="margin-left: 5px;"> {{item?.name}}</span>
+                        </td>
+                        <td class="text-center" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
+                            <a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
+                        </td>
+                        <td class="text-center" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
+                            -
+                        </td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}
+                        </td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}
+                        </td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}
+                        </td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}
+                        </td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}
+                        </td>
+                    </tr>
+
+                    <ng-container *ngFor="let item of item?.transactions">
+                        <tr (click)="viewTransactions(item)" class="row-hover secondary-row">
                             <!-- <td></td> -->
-                            <td [ngSwitch]="true">
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
-                                    <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
-                                    <img src="{{imgPath}}b2cs.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
-                                    <img src="{{imgPath}}export.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
-                                    <img src="{{imgPath}}nil.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
-                                    <img src="{{imgPath}}cdn.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'advance-payments'">
-                                    <img src="{{imgPath}}adv.svg" class="icon text-bottom" />
-                                </ng-container>
-
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'hsnsac'">
-                                    <img src="{{imgPath}}hsnsac.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'taxPaid'">
-                                    <img src="{{imgPath}}taxpaid.svg" class="icon text-bottom" />
-                                </ng-container>
-
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
-                                    <img src="{{imgPath}}impg.svg" class="icon text-bottom" />
-                                </ng-container>
-                                <span style="margin-left: 5px;"> {{item?.name}}</span>
+                            <td>
+                                <div class="secondary-row "> {{item?.name}}</div>
                             </td>
-                            <td class="text-center" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
-                                <a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
+                            <td class="text-center"><a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
                             </td>
-                            <td class="text-center" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
-                                -
+                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}
                             </td>
-                            <td class="text-right"> <i class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}
-                            </td>
-                            <td class="text-right"> <i class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}
-                            </td>
-                            <td class="text-right"> <i class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}
-                            </td>
-                            <td class="text-right"> <i class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}
-                            </td>
-                            <td class="text-right"> <i class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}
-                            </td>
+                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}</td>
+                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}</td>
+                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}</td>
+                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}</td>
                         </tr>
-
-                        <ng-container *ngFor="let item of item?.transactions">
-                            <tr (click)="viewTransactions(item)" class="row-hover secondary-row">
-                                <!-- <td></td> -->
-                                <td>
-                                    <div class="secondary-row "> {{item?.name}}</div>
-                                </td>
-                                <td class="text-center"><a href="javascript:void(0)"> {{item?.totalTransactions}} </a>
-                                </td>
-                                <td class="text-right"> <i class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}</td>
-                                <td class="text-right"> <i class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}</td>
-                                <td class="text-right"> <i class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}</td>
-                                <td class="text-right"> <i class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}</td>
-                                <td class="text-right"> <i class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}</td>
-                            </tr>
-                        </ng-container>
                     </ng-container>
+                </ng-container>
 
                 </tbody>
             </table>
@@ -144,7 +150,7 @@
 
         <div class="" *ngIf="!gstrOverviewData.count">
             <div class="filings-empty-state">
-                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
                 <div class="empty-msg"><span>  No result found.  </span></div>
             </div>
         </div>

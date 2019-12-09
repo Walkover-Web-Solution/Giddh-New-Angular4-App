@@ -34,49 +34,49 @@ import { AsideMenuSalesOtherTaxes } from './aside-menu-sales-other-taxes/aside-m
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
-  declarations: [
-    SalesComponent,
-    SalesInvoiceComponent,
-    SalesAsideMenuAccountComponent,
-    DiscountListComponent,
-    SalesTaxListComponent,
-    AsideMenuSalesOtherTaxes
-  ],
-  imports: [
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    SelectModule.forRoot(),
-    ElementViewChildModule,
-    // Select2Module.forRoot(),
-    TaxControlModule.forRoot(),
-    SalesRoutingModule,
-    ModalModule,
-    TooltipModule,
-    TypeaheadModule,
-    CollapseModule,
-    BsDatepickerModule.forRoot(),
-    SharedModule,
-    LaddaModule,
-    DigitsOnlyModule,
-    DecimalDigitsModule,
-    ShSelectModule,
-    SalesShSelectModule,
-    QuickAccountModule.forRoot(),
-    BsDropdownModule,
-    AsideMenuRecurringEntryModule,
-    ClickOutsideModule,
-    NgxUploaderModule
-  ],
-  exports: [
-    // TooltipModule,
-    DiscountListComponent,
-    // SalesTaxListComponent,
-    // SalesAsideMenuAccountComponent,
-    AsideMenuSalesOtherTaxes
-  ],
-  entryComponents: [],
-  providers: []
+    declarations: [
+        SalesComponent,
+        SalesInvoiceComponent,
+        SalesAsideMenuAccountComponent,
+        DiscountListComponent,
+        SalesTaxListComponent,
+        AsideMenuSalesOtherTaxes
+    ],
+    imports: [
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        SelectModule.forRoot(),
+        ElementViewChildModule,
+        // Select2Module.forRoot(),
+        TaxControlModule.forRoot(),
+        SalesRoutingModule,
+        ModalModule,
+        TooltipModule,
+        TypeaheadModule,
+        CollapseModule,
+        BsDatepickerModule.forRoot(),
+        SharedModule,
+        LaddaModule,
+        DigitsOnlyModule,
+        DecimalDigitsModule,
+        ShSelectModule,
+        SalesShSelectModule,
+        QuickAccountModule.forRoot(),
+        BsDropdownModule,
+        AsideMenuRecurringEntryModule,
+        ClickOutsideModule,
+        NgxUploaderModule
+    ],
+    exports: [
+        // TooltipModule,
+        DiscountListComponent,
+        // SalesTaxListComponent,
+        // SalesAsideMenuAccountComponent,
+        AsideMenuSalesOtherTaxes
+    ],
+    entryComponents: [],
+    providers: []
 })
 export class SalesModule {
 }

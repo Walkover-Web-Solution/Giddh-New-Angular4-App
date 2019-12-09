@@ -10,21 +10,21 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
-  imports: [
-    CompanyImportExportRoutingModule,
-    TabsModule,
-    ShSelectModule,
-    FormsModule,
-    CommonModule,
-    Daterangepicker,
-    LaddaModule
-  ],
-  exports: [],
-  declarations: [
-    CompanyImportExportComponent,
-    CompanyImportExportFormComponent
-  ],
-  providers: [],
+    imports: [
+        CompanyImportExportRoutingModule,
+        TabsModule,
+        ShSelectModule,
+        FormsModule,
+        CommonModule,
+        Daterangepicker,
+        LaddaModule
+    ],
+    exports: [],
+    declarations: [
+        CompanyImportExportComponent,
+        CompanyImportExportFormComponent
+    ],
+    providers: [],
 })
 export class CompanyImportExportModule {
 }

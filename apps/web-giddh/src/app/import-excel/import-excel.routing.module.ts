@@ -10,10 +10,10 @@ import { ImportReportComponent } from './import-report/import-report.component';
         RouterModule.forChild([
             {
                 path: '', component: ImportComponent, children: [
-                    { path: '', redirectTo: 'select' },
-                    { path: 'select', component: ImportTypeSelectComponent },
-                    { path: ':type', component: ImportWizardComponent },
-                    { path: 'import-report', component: ImportReportComponent }
+                    {path: '', redirectTo: 'select'},
+                    {path: 'select', component: ImportTypeSelectComponent},
+                    {path: ':type', component: ImportWizardComponent},
+                    {path: 'import-report', component: ImportReportComponent}
                 ]
             }
         ])

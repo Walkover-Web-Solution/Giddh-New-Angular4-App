@@ -1,15 +1,4 @@
-import {
-    AfterViewInit,
-    Component,
-    ComponentFactoryResolver,
-    EventEmitter,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output,
-    ViewChild,
-    ElementRef,
-} from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -118,7 +107,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public businessType: IOption[] = [];
     public formFields: any[] = [];
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public isTaxNumberSameAsHeadQuarter: number = 0;
     public activeCompany: any;
     public currentTaxList: any[] = [];
@@ -203,10 +192,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._companyService.GetAllBusinessNatureList()
         ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
             _.map(businessTypeResponse.body, (businessType) => {
-                this.businessTypeList.push({ label: businessType, value: businessType });
+                this.businessTypeList.push({label: businessType, value: businessType});
             });
             _.map(businessNatureResponse.body, (businessNature) => {
-                this.businessNatureList.push({ label: businessNature, value: businessNature });
+                this.businessNatureList.push({label: businessNature, value: businessNature});
             });
             this.reFillForm();
         });
@@ -393,7 +382,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.companyProfileObj.taxNumber = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({ status: true });
+            this.forceClear$ = observableOf({status: true});
             this.isTaxNumberSameAsHeadQuarter = 0;
 
             if (this.selectedBusinesstype === 'Unregistered') {
@@ -479,7 +468,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -492,7 +481,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {
@@ -603,7 +592,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 gstNo.value = '';
                 this.companyProfileObj.selectedState = '';
                 this.companyProfileObj.state = '';
-                this.forceClear$ = observableOf({ status: true });
+                this.forceClear$ = observableOf({status: true});
 
                 if (this.selectedBusinesstype === 'Unregistered') {
                     this.isGstValid = true;
@@ -617,7 +606,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             gstNo.value = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
-            this.forceClear$ = observableOf({ status: true });
+            this.forceClear$ = observableOf({status: true});
 
             if (this.selectedBusinesstype === 'Unregistered') {
                 this.isGstValid = true;

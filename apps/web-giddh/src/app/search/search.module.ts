@@ -17,32 +17,32 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-  declarations: [
-    // Components / Directives/ Pipes
-    SearchComponent,
-    SearchSidebarComponent,
-    SearchGridComponent,
-    SearchFilterComponent,
-  ],
-  exports: [
-    SearchComponent,
-    SearchSidebarComponent
-  ],
-  imports: [
-    PaginationModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SearchRoutingModule,
-    DatepickerModule,
-    TypeaheadModule,
-    ModalModule,
-    LaddaModule,
-    DecimalDigitsModule,
-    Daterangepicker,
-    BsDropdownModule,
-    ClickOutsideModule
-  ]
+    declarations: [
+        // Components / Directives/ Pipes
+        SearchComponent,
+        SearchSidebarComponent,
+        SearchGridComponent,
+        SearchFilterComponent,
+    ],
+    exports: [
+        SearchComponent,
+        SearchSidebarComponent
+    ],
+    imports: [
+        PaginationModule,
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SearchRoutingModule,
+        DatepickerModule,
+        TypeaheadModule,
+        ModalModule,
+        LaddaModule,
+        DecimalDigitsModule,
+        Daterangepicker,
+        BsDropdownModule,
+        ClickOutsideModule
+    ]
 })
 export class SearchModule {
 }

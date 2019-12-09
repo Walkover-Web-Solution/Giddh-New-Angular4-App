@@ -1,114 +1,116 @@
 .steps_wizard {
-  padding: 30px 0;
-  background: #fff;
-  text-align: center;
-  display: flex;
-  // justify-content: space-between;
-  justify-content: space-around;
-  li {
-    padding-bottom: 0;
-    // display: inline-block;
-    padding: 0 15px;
+    padding: 30px 0;
+    background: #fff;
+    text-align: center;
     display: flex;
-    flex-direction: column;
-    width: auto;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    > label {
-      width: 30px;
-      height: 30px;
-      border: 2px solid #dcdcdc;
-      border-radius: 100%;
-      transition: background-color 1s;
-      background-color: #ffffff;
-      position: relative;
-      color: #969696;
-      line-height: 100%;
-      align-items: center;
-      display: flex;
-      justify-content: center;
+    // justify-content: space-between;
+    justify-content: space-around;
+
+    li {
+        padding-bottom: 0;
+        // display: inline-block;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+
+        > label {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #dcdcdc;
+            border-radius: 100%;
+            transition: background-color 1s;
+            background-color: #ffffff;
+            position: relative;
+            color: #969696;
+            line-height: 100%;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
     }
-  }
 }
 
 .upload_excel {
-  display: flex;
-  height: 320px;
-  position: relative;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    height: 320px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
 }
 
 .max500 {
-  max-width: 500px;
+    max-width: 500px;
 }
 
 .uploader_label {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  cursor: pointer;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
 }
 
 #csvUploadInput {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .upload_icon {
-  font-size: 62px;
-  float: none;
-  color: #e2e2e2;
+    font-size: 62px;
+    float: none;
+    color: #e2e2e2;
 }
 
 .sample_file-btn {
-  z-index: 9;
-  position: relative;
+    z-index: 9;
+    position: relative;
 }
 
 .dashed_bdr {
-  border: 2px dashed #d9d9d9;
+    border: 2px dashed #d9d9d9;
 }
 
 .import_type {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .import_type li {
-  list-style: none;
-  width: 320px;
-  height: 150px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0 15px;
-  border: 1px solid #d9d9d9;
-  background: #fafafa;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    list-style: none;
+    width: 320px;
+    height: 150px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 15px;
+    border: 1px solid #d9d9d9;
+    background: #fafafa;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .import_type h2 {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .import_type li:hover {
-  border: 1px solid #ff5e01;
-  transform: scale(1.01);
+    border: 1px solid #ff5e01;
+    transform: scale(1.01);
 }
 
 .lead {
-  font-size: 36px;
-  margin-bottom: 10px;
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
 .has-error .form-control {
-  border-color: red !important;
+    border-color: red !important;
 }
 

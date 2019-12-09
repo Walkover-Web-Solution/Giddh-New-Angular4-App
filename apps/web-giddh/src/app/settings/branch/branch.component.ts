@@ -1,15 +1,15 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { Store, select } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { AfterViewInit, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
+import { BranchFilterRequest, CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -19,18 +19,18 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { GeneralService } from "../../services/general.service";
 
 export const IsyncData = [
-    { label: 'Debtors', value: 'debtors' },
-    { label: 'Creditors', value: 'creditors' },
-    { label: 'Inventory', value: 'inventory' },
-    { label: 'Taxes', value: 'taxes' },
-    { label: 'Bank', value: 'bank' }
+    {label: 'Debtors', value: 'debtors'},
+    {label: 'Creditors', value: 'creditors'},
+    {label: 'Inventory', value: 'inventory'},
+    {label: 'Taxes', value: 'taxes'},
+    {label: 'Bank', value: 'bank'}
 ];
 
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
     styleUrls: ['./branch.component.css'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+    providers: [{provide: BsDropdownConfig, useValue: {autoClose: false}}]
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -159,7 +159,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngAfterViewInit() {
         if (this.isBranch) {
-            this.openCreateCompanyModal()
+            this.openCreateCompanyModal();
         }
     }
 
@@ -246,7 +246,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public createBranches() {
-        let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
+        let dataToSend = {childCompanyUniqueNames: this.selectedCompaniesUniquename};
         this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
         this.hideAddBranchModal();
     }

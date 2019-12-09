@@ -13,7 +13,9 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="input-group">
-                            <input autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text" class="form-control" (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required formControlName="bsRangeValue" [bsConfig]="bsConfig">
+                            <input autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text"
+                                   class="form-control" (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker
+                                   required formControlName="bsRangeValue" [bsConfig]="bsConfig">
                             <span class="input-group-addon cursor-pointer" (click)="dp.toggle()">
                   <i class="fa fa-calendar" aria-hidden="true"></i>
                 </span>
@@ -30,7 +32,11 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="form-group">
-                            <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('accountUniqueNames')" (selected)="onDDElementSelect('accountUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
+                            <sh-select [options]="accounts$ | async" name="particulars"
+                                       (onClear)="onDDClear('accountUniqueNames')"
+                                       (selected)="onDDElementSelect('accountUniqueNames', $event)"
+                                       [isFilterEnabled]="true" [multiple]="true"
+                                       [placeholder]="'Select Accounts'"></sh-select>
                         </div>
                     </div>
                 </div>
@@ -44,7 +50,11 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="form-group">
-                            <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear('groupUniqueNames')" (selected)="onDDElementSelect('groupUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Groups'"></sh-select>
+                            <sh-select [options]="groups$ | async" name="groups"
+                                       (onClear)="onDDClear('groupUniqueNames')"
+                                       (selected)="onDDElementSelect('groupUniqueNames', $event)"
+                                       [isFilterEnabled]="true" [multiple]="true"
+                                       [placeholder]="'Select Groups'"></sh-select>
                         </div>
                     </div>
                 </div>
@@ -62,16 +72,23 @@
                         <div class="row">
                             <div class="xs-pr-0 col-sm-3 col-xs-4">
                                 <div class="checkbox square-switch">
-                                    <input type="checkbox" id="includeParticulars" formControlName="includeParticulars" />
+                                    <input type="checkbox" id="includeParticulars"
+                                           formControlName="includeParticulars"/>
                                     <label for="includeParticulars">
-                      <span class="pull-left" *ngIf="advanceSearchForm.get('includeParticulars').value">Include</span>
-                      <span class="pull-right" *ngIf="!advanceSearchForm.get('includeParticulars').value">Exclude</span>
-                    </label>
+                                        <span class="pull-left"
+                                              *ngIf="advanceSearchForm.get('includeParticulars').value">Include</span>
+                                        <span class="pull-right"
+                                              *ngIf="!advanceSearchForm.get('includeParticulars').value">Exclude</span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-sm-9 col-xs-8 col-xs-9">
                                 <div class="form-group">
-                                    <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
+                                    <sh-select [options]="accounts$ | async" name="particulars"
+                                               (onClear)="onDDClear('particulars')"
+                                               (selected)="onDDElementSelect('particulars', $event)"
+                                               [isFilterEnabled]="true" [multiple]="true"
+                                               [placeholder]="'Select Accounts'"></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -91,16 +108,21 @@
                         <div class="row">
                             <div class="xs-pr-0 col-sm-3 col-xs-4">
                                 <div class="checkbox square-switch">
-                                    <input type="checkbox" id="includeVouchers" formControlName="includeVouchers" />
+                                    <input type="checkbox" id="includeVouchers" formControlName="includeVouchers"/>
                                     <label for="includeVouchers">
-                      <span class="pull-left" *ngIf="advanceSearchForm.get('includeVouchers').value">Include</span>
-                      <span class="pull-right" *ngIf="!advanceSearchForm.get('includeVouchers').value">Exclude</span>
-                    </label>
+                                        <span class="pull-left" *ngIf="advanceSearchForm.get('includeVouchers').value">Include</span>
+                                        <span class="pull-right"
+                                              *ngIf="!advanceSearchForm.get('includeVouchers').value">Exclude</span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-sm-9 col-xs-8 col-xs-9">
                                 <div class="form-group">
-                                    <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
+                                    <sh-select [options]="voucherTypeList | async" name="particulars"
+                                               (onClear)="onDDClear('vouchers')"
+                                               (selected)="onDDElementSelect('vouchers', $event)"
+                                               [isFilterEnabled]="true" [multiple]="true"
+                                               [placeholder]="'Select Accounts'"></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -117,12 +139,17 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('amount', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'"></sh-select>
+                                    <sh-select [showClear]="false" [width]="'100%'"
+                                               (selected)="onRangeSelect('amount', $event)"
+                                               [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                               [placeholder]="'Select Range'"></sh-select>
                                 </div>
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
+                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="2"
+                                           formControlName="amount" class="form-control"
+                                           aria-label="Text input with dropdown button">
                                 </div>
                             </div>
                         </div>
@@ -150,10 +177,10 @@
             <div class="clearfix mb-1">
                 <div class="form-group toggle-btn mrB">
                     <label class="cp" (click)="toggleOtherDetails()">
-              <i class="fa cp" aria-hidden="true"
-                 [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
-              Details
-            </label>
+                        <i class="fa cp" aria-hidden="true"
+                           [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
+                        Details
+                    </label>
                 </div>
             </div>
 
@@ -170,40 +197,56 @@
                                     <div class="xs-pr-0 col-sm-3 col-xs-4">
 
                                         <div class="checkbox square-switch">
-                                            <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
+                                            <input type="checkbox" id="includeInventory"
+                                                   formControlName="includeInventory"/>
                                             <label for="includeInventory">
-                          <span class="pull-left" *ngIf="advanceSearchForm.get('inventory.includeInventory').value">Include</span>
-                          <span class="pull-right" *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">Exclude</span>
-                        </label>
+                                                <span class="pull-left"
+                                                      *ngIf="advanceSearchForm.get('inventory.includeInventory').value">Include</span>
+                                                <span class="pull-right"
+                                                      *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">Exclude</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="col-sm-9 col-xs-8">
                                         <div class="form-group">
-                                            <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
+                                            <sh-select [options]="stockListDropDown$ | async" name="inventory"
+                                                       (onClear)="onDDClear('inventory')"
+                                                       (selected)="onDDElementSelect('inventory', $event)"
+                                                       [isFilterEnabled]="true" [multiple]="true"
+                                                       [placeholder]="'Select Accounts'"></sh-select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'"></sh-select>
+                                            <sh-select [showClear]="false" [width]="'100%'"
+                                                       (selected)="onRangeSelect('inventoryQty', $event)"
+                                                       [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                       [placeholder]="'Select Range'"></sh-select>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" placeholder="Quantity">
+                                            <input type="text" class="form-control" decimalDigitsDirective
+                                                   [DecimalPlaces]="4" formControlName="quantity"
+                                                   placeholder="Quantity">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'"></sh-select>
+                                            <sh-select [showClear]="false" [width]="'100%'"
+                                                       (selected)="onRangeSelect('inventoryVal', $event)"
+                                                       [options]="comparisonFilterDropDown$ | async" name="particulars"
+                                                       [placeholder]="'Select Range'"></sh-select>
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="form-group">
-                                            <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" placeholder="Value">
+                                            <input type="text" decimalDigitsDirective [DecimalPlaces]="3"
+                                                   class="form-control" formControlName="itemValue" placeholder="Value">
                                         </div>
                                     </div>
                                 </div>
@@ -218,12 +261,15 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <input type="text" placeholder="Cheque Number" formControlName="chequeNumber" class="form-control">
+                                        <input type="text" placeholder="Cheque Number" formControlName="chequeNumber"
+                                               class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <input type="text" placeholder="Clearance Date" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                                        <input type="text" placeholder="Clearance Date" name="from"
+                                               formControlName="dateOnCheque" bsDatepicker class="form-control"
+                                               [bsConfig]="bsConfig"/>
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +281,8 @@
                         </div>
                         <div class="col-sm-7">
                             <div class="form-group">
-                                <input type="text" formControlName="description" placeholder="Description" class="form-control">
+                                <input type="text" formControlName="description" placeholder="Description"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>

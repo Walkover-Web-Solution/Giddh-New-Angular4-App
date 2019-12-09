@@ -4,7 +4,6 @@ import { ReportsComponent } from './reports.component';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
-import { Options } from 'highcharts';
 import { BsDropdownModule, DatepickerModule, TooltipModule, } from 'ngx-bootstrap';
 
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
@@ -22,45 +21,45 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
-
 @NgModule({
-  declarations: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    ReportsGraphComponent,
-    ReportsTableComponent,
-    SalesRegisterComponent,
-    SalesRegisterExpandComponent,
-    SalesRegisterDetailsComponent,
-    ReportsDashboardComponent
-  ],
-  exports: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    DatepickerModule,
-    BsDropdownModule,
-    Daterangepicker,
-    PaginationModule
-  ],
-  providers: [],
-  imports: [
-    ReportsRoutingModule,
-    // NgMultiSelectDropDownModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    CommonModule,
-    ChartModule,
-    BsDropdownModule,
-    PaginationModule,
-    ShSelectModule,
-    FormsModule,
-    CurrencyModule,
-    AccountDetailModalModule,
-    ReactiveFormsModule,
-    ClickOutsideModule,
-    TooltipModule
-  ]
+    declarations: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        ReportsGraphComponent,
+        ReportsTableComponent,
+        SalesRegisterComponent,
+        SalesRegisterExpandComponent,
+        SalesRegisterDetailsComponent,
+        ReportsDashboardComponent
+    ],
+    exports: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        DatepickerModule,
+        BsDropdownModule,
+        Daterangepicker,
+        PaginationModule
+    ],
+    providers: [],
+    imports: [
+        ReportsRoutingModule,
+        // NgMultiSelectDropDownModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        CommonModule,
+        ChartModule,
+        BsDropdownModule,
+        PaginationModule,
+        ShSelectModule,
+        FormsModule,
+        CurrencyModule,
+        AccountDetailModalModule,
+        ReactiveFormsModule,
+        ClickOutsideModule,
+        TooltipModule
+    ]
 })
 
 export class ReportsModule {

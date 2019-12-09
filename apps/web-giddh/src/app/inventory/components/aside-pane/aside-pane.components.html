@@ -1,7 +1,7 @@
 <div class="aside-pane">
     <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()" *ngIf="!hideFirstScreen">X</button>
     <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="hideFirstScreen"><i
-            class="fa fa-arrow-left"></i></button>
+        class="fa fa-arrow-left"></i></button>
 
     <div class="aside-body flexy-child vmiddle asidePanelLedger " *ngIf="!hideFirstScreen" vr-item>
         <div class="pd1 alC">
@@ -20,7 +20,7 @@
 
     <div class="aside-body flexy-child-1 row" *ngIf="isAddStockOpen">
         <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="true"
-            (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
+                             (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
     </div>
     <div class="aside-body flexy-child-1 row" *ngIf="isAddGroupOpen">
         <inventory-add-group [addGroup]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>

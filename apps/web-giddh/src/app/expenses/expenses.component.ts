@@ -10,7 +10,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService, TabsetComponent } from 'ngx-bootstrap';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -97,14 +97,14 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     public routerSub: any;
 
     constructor(private store: Store<AppState>,
-        private _expenceActions: ExpencesAction,
-        private route: ActivatedRoute,
-        private modalService: BsModalService,
-        private companyActions: CompanyActions,
-        private _cdRf: ChangeDetectorRef,
-        private _generalActions: GeneralActions,
-        private _generalService: GeneralService,
-        private router: Router) {
+                private _expenceActions: ExpencesAction,
+                private route: ActivatedRoute,
+                private modalService: BsModalService,
+                private companyActions: CompanyActions,
+                private _cdRf: ChangeDetectorRef,
+                private _generalActions: GeneralActions,
+                private _generalService: GeneralService,
+                private router: Router) {
 
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
@@ -201,7 +201,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public openModal(filterModal: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+        this.modalRef = this.modalService.show(filterModal, {class: 'modal-md'});
     }
 
     public bsValueChange(event: any) {

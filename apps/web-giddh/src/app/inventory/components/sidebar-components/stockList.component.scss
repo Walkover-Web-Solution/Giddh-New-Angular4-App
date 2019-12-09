@@ -1,22 +1,27 @@
 @import '../../../../assets/css/color.scss';
 
 .stock-items .active {
-  background-color: #EEEFF9;
+    background-color: #EEEFF9;
 }
+
 .stock-items .active a .span {
-  color: $dark-blue01 !important;
+    color: $dark-blue01 !important;
 }
+
 .span {
-  color: black;
-  font-size: 14px;
+    color: black;
+    font-size: 14px;
 }
+
 .in-list {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
-.in-list .btn{
-  line-height: 14px!important;
+
+.in-list .btn {
+    line-height: 14px !important;
 }
-.stock-items .active  .btn-link .fa{
-  color: $dark-blue01;
+
+.stock-items .active .btn-link .fa {
+    color: $dark-blue01;
 }

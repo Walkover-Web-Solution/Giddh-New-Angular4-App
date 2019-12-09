@@ -7,22 +7,22 @@ export * from './wizard.component';
 export * from './wizard-step.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
-    WizardComponent,
-    WizardStepComponent
-  ],
-  exports: [
-    WizardComponent,
-    WizardStepComponent
-  ]
+    imports: [
+        CommonModule
+    ],
+    declarations: [
+        WizardComponent,
+        WizardStepComponent
+    ],
+    exports: [
+        WizardComponent,
+        WizardStepComponent
+    ]
 })
 export class FormWizardModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: FormWizardModule
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: FormWizardModule
+        };
+    }
 }

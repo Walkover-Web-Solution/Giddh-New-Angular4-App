@@ -18,10 +18,7 @@ import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/Se
 import { SETTINGS_DISCOUNT_ACTIONS } from '../../actions/settings/discount/settings.discount.const';
 import { AccountResponse } from '../../models/api-models/Account';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { CommonActions } from "../../actions/common.actions";
-import { OnboardingFormResponse } from "../../models/api-models/Common";
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
-import { AccountsAction } from '../../actions/accounts.actions';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
@@ -142,10 +139,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, initialState);
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD: {
-            return Object.assign({}, state, { refreshCompany: false });
+            return Object.assign({}, state, {refreshCompany: false});
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE: {
-            return Object.assign({}, state, { refreshCompany: true });
+            return Object.assign({}, state, {refreshCompany: true});
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
             let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
@@ -223,7 +220,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 return Object.assign({}, state, newState);
             }
-            return { ...state, updateProfileInProgress: true };
+            return {...state, updateProfileInProgress: true};
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -279,7 +276,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 return Object.assign({}, state, newState);
             }
-            return { ...state, updateProfileInProgress: true };
+            return {...state, updateProfileInProgress: true};
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -381,7 +378,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR: {
-            return Object.assign({}, state, { refreshCompany: false });
+            return Object.assign({}, state, {refreshCompany: false});
         }
         case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
@@ -511,7 +508,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         //  region discount reducer
         case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT: {
             return Object.assign({}, state, {
-                discount: Object.assign({}, state.discount, { isDiscountListInProcess: true })
+                discount: Object.assign({}, state.discount, {isDiscountListInProcess: true})
             });
         }
         case SETTINGS_DISCOUNT_ACTIONS.GET_DISCOUNT_RESPONSE: {
@@ -661,18 +658,18 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
-                return Object.assign({}, state, { isGmailIntegrated: true });
+                return Object.assign({}, state, {isGmailIntegrated: true});
             } else {
-                return Object.assign({}, state, { isGmailIntegrated: false });
+                return Object.assign({}, state, {isGmailIntegrated: false});
             }
         }
 
         case SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
-                return Object.assign({}, state, { isGmailIntegrated: false });
+                return Object.assign({}, state, {isGmailIntegrated: false});
             } else {
-                return Object.assign({}, state, { isGmailIntegrated: true });
+                return Object.assign({}, state, {isGmailIntegrated: true});
             }
         }
         case SETTINGS_INTEGRATION_ACTIONS.RESET_PAYMENT_STATUS_RESPONSE: {
@@ -691,15 +688,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, {});
 
         case SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE: {
-            return { ...state, taxes: null };
+            return {...state, taxes: null};
         }
 
         case SETTINGS_BRANCH_ACTIONS.REMOVED_BRANCH_RESPONSE: {
-            return Object.assign({}, state, { branchRemoved: true });
+            return Object.assign({}, state, {branchRemoved: true});
         }
 
         case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
-            return Object.assign({}, state, { branchRemoved: false });
+            return Object.assign({}, state, {branchRemoved: false});
         }
 
         //  endregion discount reducer

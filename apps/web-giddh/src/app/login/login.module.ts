@@ -8,16 +8,16 @@ import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    LoginRoutingModule,
-    ModalModule,
-    LaddaModule,
-    ShSelectModule
-  ],
-  declarations: [LoginComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        LoginRoutingModule,
+        ModalModule,
+        LaddaModule,
+        ShSelectModule
+    ],
+    declarations: [LoginComponent]
 })
 export class LoginModule {
 }

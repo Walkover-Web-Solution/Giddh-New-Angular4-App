@@ -3,6 +3,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { TallySyncService } from "../../services/tally-sync.service";
 import { TallySyncData } from "../../models/api-models/tally-sync";
 import { saveAs } from "file-saver";
+
 @Component({
     selector: "app-inprogress-preview",
     templateUrl: "./inprogress.component.html",
@@ -30,7 +31,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
     constructor(
         private _toaster: ToasterService,
         private tallysyncService: TallySyncService
-    ) {}
+    ) {
+    }
 
     public ngOnInit() {
         this.isPageLoaded = true;
@@ -86,18 +88,18 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         element.totalTallyEntries;
                     element["groupsErrorPercent"] =
                         (isNaN(tallyErrorGroups)
-                            ? 0
-                            : tallyErrorGroups
+                                ? 0
+                                : tallyErrorGroups
                         ).toFixed(2) + "%";
                     element["accountsErrorPercent"] =
                         (isNaN(tallyErrorAccounts)
-                            ? 0
-                            : tallyErrorAccounts
+                                ? 0
+                                : tallyErrorAccounts
                         ).toFixed(2) + "%";
                     element["entriesErrorPercent"] =
                         (isNaN(tallyErrorEntries)
-                            ? 0
-                            : tallyErrorEntries
+                                ? 0
+                                : tallyErrorEntries
                         ).toFixed(2) + "%";
                 });
             }
@@ -139,7 +141,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
             byteArrays.push(byteArray);
             offset += sliceSize;
         }
-        return new Blob(byteArrays, { type: contentType });
+        return new Blob(byteArrays, {type: contentType});
     }
 
     // download

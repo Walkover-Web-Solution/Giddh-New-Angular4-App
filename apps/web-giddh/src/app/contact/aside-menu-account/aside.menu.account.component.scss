@@ -8,6 +8,7 @@
     width: 100%;
     z-index: 99999;
 }
+
 .aside-pane {
     padding: 0 !important;
 }
@@ -31,9 +32,11 @@
     max-width: 760px;
     width: 100%;
 }
+
 .aside-body {
     padding: 0 15px;
 }
+
 .aside-pane-form {
     background-color: #fff;
     box-shadow: 0px 3px 6px #0000001a;
@@ -52,6 +55,7 @@
         max-width: 370px;
     }
 }
+
 @media (max-width: 375px) {
     :host {
         max-width: 310px;
@@ -60,6 +64,7 @@
         max-width: 310px;
     }
 }
+
 @media (max-width: 320px) {
     :host {
         max-width: 280px;

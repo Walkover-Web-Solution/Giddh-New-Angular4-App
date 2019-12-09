@@ -5,16 +5,16 @@ import { CommonModule } from '@angular/common';
 import { DatepickerModule } from 'ngx-bootstrap';
 
 @NgModule({
-  declarations: [DatePickerComponent],
-  exports: [DatePickerComponent],
-  imports: [CommonModule, FormsModule, DatepickerModule]
+    declarations: [DatePickerComponent],
+    exports: [DatePickerComponent],
+    imports: [CommonModule, FormsModule, DatepickerModule]
 
 })
 export class DatePickerCustomModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: DatePickerCustomModule,
-      providers: []
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: DatePickerCustomModule,
+            providers: []
+        };
+    }
 }

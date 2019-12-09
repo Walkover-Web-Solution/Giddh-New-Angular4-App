@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { InvoiceRoutingModule } from './invoice.routing.module';
-import { SalesModule } from '../sales/sales.module';
 import { AsideMenuRecurringEntryComponent } from './aside.menu.recurringEntry.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -18,9 +16,9 @@ import { LaddaModule } from 'angular2-ladda';
 // import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
-  declarations: [AsideMenuRecurringEntryComponent],
-  imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule],
-  exports: [AsideMenuRecurringEntryComponent]
+    declarations: [AsideMenuRecurringEntryComponent],
+    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule],
+    exports: [AsideMenuRecurringEntryComponent]
 })
 export class AsideMenuRecurringEntryModule {
 }

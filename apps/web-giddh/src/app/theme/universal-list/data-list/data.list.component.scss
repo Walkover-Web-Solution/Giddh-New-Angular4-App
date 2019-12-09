@@ -5,8 +5,9 @@
         flex-direction: row;
         align-items: center;
         background-color: white;
-        flex-wrap: wrap!important;
+        flex-wrap: wrap !important;
         border-bottom: 1px solid #ccc;
+
         .searchEle {
             outline: none;
             border: none;
@@ -14,6 +15,7 @@
             font-weight: normal;
             line-height: initial;
         }
+
         .searh-ico {
             position: absolute;
             left: 0;
@@ -23,9 +25,11 @@
             color: #858484;
         }
     }
+
     .vR {
         margin-right: 2px;
         vertical-align: baseline;
+
         .vN {
             // background-color: white;
             // border: 1px solid #dadce0;
@@ -38,6 +42,7 @@
             box-sizing: border-box;
             text-transform: capitalize;
             font-size: 14px;
+
             .vT {
                 // font-size: .75rem;
                 letter-spacing: .3px;
@@ -50,6 +55,7 @@
                 text-overflow: ellipsis;
                 direction: ltr;
             }
+
             .vM {
                 // height: 16px;
                 // opacity: .54;
@@ -74,9 +80,11 @@
     display: none;
     box-sizing: border-box;
     min-width: max-content;
+
     &.isVisible {
         display: block;
     }
+
     &.isFlying {
         position: absolute;
         z-index: 10;
@@ -84,6 +92,7 @@
         border: 1px solid rgba(34, 36, 38, .15);
         border-radius: 2px;
     }
+
     &:not(.isFlying),
     &.wider {
         .universal-members-list {
@@ -94,87 +103,107 @@
             }
         }
     }
+
     &.isOpenFromBottom {
         bottom: 0
     }
+
     .inner {
         position: relative;
         overflow: auto;
     }
+
     ul {
         list-style: none;
         margin: 0;
         padding: 0;
     }
+
     a,
     a:hover {
         text-decoration: none;
     }
+
     .universal-list-items {
         position: relative;
         overflow: auto;
+
         &:focus {
             outline: none;
         }
+
         .item {
             height: 50px;
             overflow: hidden;
             padding: 0 24px;
+
             a {
                 height: 50px;
             }
+
             .item-icon {
                 // margin-right: 22px;
                 color: #979797;
                 width: 2.7rem;
                 font-size: 14px;
+
                 .icon-group {
                     font-size: 16px;
                 }
             }
+
             .item-details {
-              position: relative;
-              font-size: 14px;
-              color: #333333;
-              text-transform: capitalize;
-              .smlP{
-                margin: 0;
-                width: 320px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-              small {
-                font-size: 12px;
-                color: #858484;
-              }
-              .hvrTxt{
-                color: white;
-                position: absolute;
-                right: 0;
-                top: 10px;
-                text-transform: initial;
-              }
-              .brdcrmb {
-                  max-width: 150px;
-                  overflow: hidden;
-              }
+                position: relative;
+                font-size: 14px;
+                color: #333333;
+                text-transform: capitalize;
+
+                .smlP {
+                    margin: 0;
+                    width: 320px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                small {
+                    font-size: 12px;
+                    color: #858484;
+                }
+
+                .hvrTxt {
+                    color: white;
+                    position: absolute;
+                    right: 0;
+                    top: 10px;
+                    text-transform: initial;
+                }
+
+                .brdcrmb {
+                    max-width: 150px;
+                    overflow: hidden;
+                }
             }
+
             // hover effect
             &.selected {
                 background-color: #5B64C9;
+
                 .item-details {
                     color: white;
+
                     small {
                         color: white;
                     }
                 }
+
                 .item-icon {
                     color: #fff;
                 }
             }
         }
     }
+
     .jumper-results {
         // height: 50px;
         overflow: hidden;
@@ -182,11 +211,12 @@
         // line-height: 50px;
     }
 }
+
 /*responsive*/
-@media(max-width:575px){
+@media(max-width: 575px) {
     :host {
-    .search-wrapper {
+        .search-wrapper {
             padding: 1rem 2rem 1rem 4.2rem;
+        }
     }
-}
 }

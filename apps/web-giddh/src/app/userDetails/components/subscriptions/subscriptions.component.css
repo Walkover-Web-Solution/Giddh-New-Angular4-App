@@ -91,12 +91,15 @@
     top: 40%;
     right: 8px;
 }
-.transaction-list .box, .transaction-list .box2 ,  .transaction-list .campanien-list ul{
+
+.transaction-list .box, .transaction-list .box2, .transaction-list .campanien-list ul {
     height: auto !important;
 }
-.subscription-table{
-    border:1px solid #d1d1d1;
+
+.subscription-table {
+    border: 1px solid #d1d1d1;
 }
+
 @media only screen and (max-width: 767px) {
     .transection-popup {
         position: relative;

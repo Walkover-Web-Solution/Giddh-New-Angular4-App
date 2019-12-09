@@ -9,6 +9,7 @@
     top: 9px !important;
     margin-right: 0;
 }
+
 :host {
     position: fixed;
     left: auto;
@@ -108,6 +109,7 @@
         max-width: 370px;
     }
 }
+
 @media (max-width: 375px) {
     :host {
         max-width: 310px;
@@ -116,6 +118,7 @@
         max-width: 310px;
     }
 }
+
 @media (max-width: 320px) {
     :host {
         max-width: 280px;

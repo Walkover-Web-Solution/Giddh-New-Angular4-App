@@ -132,23 +132,28 @@
     background-color: #ffffff;
     border: 1px solid #cbcbcb;
     margin-right: 10px;
+
     span {
         border-left: 1px solid #cbcbcb;
         padding: 5px;
         height: 30px;
         width: 30px;
+
         &:first-child {
             border-left: none;
         }
+
         a {
             color: #666666;
             display: block;
             text-align: center;
         }
     }
+
     .disabled {
         background: #d9d9d9 !important;
         cursor: not-allowed;
+
         a {
             cursor: not-allowed;
         }
@@ -197,6 +202,7 @@
     background-color: #fff;
     margin-bottom: 35px;
     z-index: -9;
+
     .error {
         display: flex;
         justify-content: center;
@@ -339,6 +345,7 @@ span.close-modal.cp.pull-right {
     height: 100vh;
     overflow-y: auto;
     padding-bottom: 140px;
+
     .invoice-editHeader {
         display: flex;
         justify-content: space-between;
@@ -347,13 +354,16 @@ span.close-modal.cp.pull-right {
         border-top: 1px solid #c6c6c6;
         border-bottom: 1px solid #c6c6c6;
         align-items: center;
+
         span {
             padding: 10px;
+
             p {
                 font-size: 16px;
                 font-weight: bold;
             }
         }
+
         span.close-modal {
             height: 32px;
             width: 32px;
@@ -365,6 +375,7 @@ span.close-modal.cp.pull-right {
             margin-right: 10px;
         }
     }
+
     .invoice-editBody {
         padding-bottom: 0;
     }
@@ -444,30 +455,37 @@ label.labeled {
     z-index: 10;
     right: 0;
     border: 1px solid #c7c7c7;
+
     .sendEmailModalWrapper {
         background-color: #fff;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
+
         .sendEmailModalHeader {
             background-color: #e2e2e2;
             padding: 8px 10px;
             border-bottom: 1px solid #cccccc;
+
             span {
                 width: unset;
             }
         }
     }
+
     .sendEmailModalBody {
         padding: 5px;
     }
+
     .sendEmailModalBody label {
         font-size: 12px;
         margin-bottom: 7px;
     }
+
     .btn-success {
         background: #28ab00;
         color: #fff;
     }
+
     .aquaColor a {
         color: #0c8fe6;
         font-size: 12px;
@@ -518,9 +536,9 @@ label.labeled {
         top: 3px;
     }
     .invoice-sidebar
-        li.activeItem
-        .invoice-number-date
-        span.inoviceDate:before {
+    li.activeItem
+    .invoice-number-date
+    span.inoviceDate:before {
         background-color: #f0f0f0;
     }
 }

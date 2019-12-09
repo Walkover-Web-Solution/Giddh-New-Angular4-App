@@ -15,12 +15,7 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { LoginActions } from '../../actions/login.action';
 import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
-import {
-    CompanyCreateRequest,
-    CompanyResponse,
-    SocketNewCompanyRequest,
-    StateDetailsRequest,
-} from '../../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StateDetailsRequest, } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { AuthenticationService } from '../../services/authentication.service';
 import { CompanyService } from '../../services/companyService.service';
@@ -119,7 +114,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService,
         private _toaster: ToasterService,
         private commonActions: CommonActions
-    ) { }
+    ) {
+    }
 
     public ngOnInit() {
         this.getCountry();
@@ -185,9 +181,9 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         // });
     }
 
-	/**
-	 * createCompany
-	 */
+    /**
+     * createCompany
+     */
     public createCompany(mobileNoEl) {
         this.checkMobileNo(mobileNoEl);
 
@@ -203,7 +199,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit({ isFirstStepCompleted: true });
+            this.closeCompanyModal.emit({isFirstStepCompleted: true});
             // this._route.navigate(['welcome']);
             if (companies) {
                 if (companies.length === 0) {
@@ -373,7 +369,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
-                    this.currencies.push({ label: res[key].code, value: res[key].code });
+                    this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
             } else {
@@ -386,7 +382,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.callingCodes).forEach(key => {
-                    this.countryPhoneCode.push({ label: res.callingCodes[key], value: res.callingCodes[key] });
+                    this.countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
                 });
                 this.callingCodesSource$ = observableOf(this.countryPhoneCode);
             } else {

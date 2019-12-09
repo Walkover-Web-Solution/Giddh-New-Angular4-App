@@ -8,16 +8,16 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SignupRoutingModule } from './signup.routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SignupRoutingModule,
-    ModalModule,
-    LaddaModule,
-    ShSelectModule
-  ],
-  declarations: [SignupComponent]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SignupRoutingModule,
+        ModalModule,
+        LaddaModule,
+        ShSelectModule
+    ],
+    declarations: [SignupComponent]
 })
 export class SignupModule {
 }

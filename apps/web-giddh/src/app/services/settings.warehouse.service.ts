@@ -26,7 +26,8 @@ export class SettingsWarehouseService {
         private errorHandler: ErrorHandler,
         private generalService: GeneralService,
         private http: HttpWrapperService,
-    ) { }
+    ) {
+    }
 
     /**
      * Sends the create warehouse request to server

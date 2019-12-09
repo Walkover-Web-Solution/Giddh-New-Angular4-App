@@ -13,27 +13,27 @@
                         <input type="text" placeholder="search" #searchElement>
 
                         <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
-                            [autoClose]="true">
+                             [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
-                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                                aria-controls="dropdown-basic3">
+                                    class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
+                                    aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
                                 aria-labelledby="button-basic2">
                                 <li role="menuitem">
                                     <a class="dropdown-item" href="javascript: void 0"
-                                        (click)="goToInvoice('cash')">Cash Invoice</a>
+                                       (click)="goToInvoice('cash')">Cash Invoice</a>
                                 </li>
                                 <li role="menuitem">
                                     <a class="dropdown-item" href="javascript: void 0"
-                                        (click)="goToInvoice('sales')">Sales Invoice</a>
+                                       (click)="goToInvoice('sales')">Sales Invoice</a>
                                 </li>
                             </ul>
                         </div>
 
                         <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView"
-                            (click)="goToInvoice()">+ New
+                                (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
 
@@ -100,15 +100,15 @@
 
                                         <!-- region for proforma and estimates -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                            *ngIf="only4ProformaEstimates">
+                                             *ngIf="only4ProformaEstimates">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'invoiced'"
-                                                class="labeled text-capitalize">
+                                                   class="labeled text-capitalize">
                                                 {{ selectedItem.voucherStatus }}</label>
 
                                             <button id="button-basic" dropdownToggle type="button"
-                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic"
-                                                *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
+                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic"
+                                                    *ngIf="selectedItem.voucherStatus === 'submitted'">Change Status
                                                 <span class="caret"></span>
                                             </button>
 
@@ -116,11 +116,11 @@
                                                 aria-labelledby="button-basic">
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('accepted')"><a
-                                                        class="dropdown-item">Accepted</a></li>
+                                                    class="dropdown-item">Accepted</a></li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('decline')"><a
-                                                        class="dropdown-item">Declined</a></li>
+                                                    class="dropdown-item">Declined</a></li>
 
                                                 <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
                                                     *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
@@ -133,7 +133,7 @@
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('expired')"><a
-                                                        class="dropdown-item">Expired</a></li>
+                                                    class="dropdown-item">Expired</a></li>
                                             </ul>
 
                                         </div>
@@ -141,34 +141,35 @@
 
                                         <!-- region for invoice -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                            *ngIf="!only4ProformaEstimates">
+                                             *ngIf="!only4ProformaEstimates">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
-                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
-                                                *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
+                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
+                                                    *ngIf="selectedItem.voucherStatus !== 'cancel'">Change
                                                 Status <span class="caret"></span>
                                             </button>
 
                                             <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
-                                                        class="dropdown-item">Paid</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
+                                                    class="dropdown-item">Paid</a></li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('unpaid')"><a
-                                                        class="dropdown-item">Unpaid</a></li>
+                                                    class="dropdown-item">Unpaid</a></li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('hold')"><a
-                                                        class="dropdown-item">Hold</a></li>
+                                                    class="dropdown-item">Hold</a></li>
 
                                                 <li class="cp" role="menuitem"
                                                     (click)="updateVoucherAction.emit('cancel')"><a
-                                                        class="dropdown-item">Cancel</a></li>
+                                                    class="dropdown-item">Cancel</a></li>
                                             </ul>
 
                                         </div>
@@ -177,31 +178,31 @@
                                         <div class="edit-action-btn-grps pull-right">
                                             <span *ngIf="!isMobileView">
                                                 <a href="javascript:void 0" tooltip="Edit" placement="top"
-                                                    (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                                                   (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                                             </span>
 
                                             <span class="pos-rel">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
-                                                    (click)="showEmailSendModal.toggle()"><i
-                                                        class="fa fa-envelope-o"></i></a>
+                                                   (click)="showEmailSendModal.toggle()"><i
+                                                    class="fa fa-envelope-o"></i></a>
                                             </span>
 
                                             <span
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
                                                 <a href="javascript:void 0" tooltip="Print" placement="top"
-                                                    (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                   (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                             </span>
 
                                             <span
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
-                                                    (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                                                   (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span>
                                                 <a href="javascript:void 0" tooltip="Delete" placement="top"
-                                                    (click)="deleteConfirmationModel.toggle()"><i
-                                                        class="fa fa-trash"></i></a>
+                                                   (click)="deleteConfirmationModel.toggle()"><i
+                                                    class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
 
@@ -216,13 +217,14 @@
                             <div class="clearfix">
 
                                 <div class="col-sm-4 pd0"
-                                    *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                     *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments
                                             manually. </p>
-                                        <a href="javascript: void 0" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
+                                        <a href="javascript: void 0"
+                                           (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
                                             Payment</a>
                                     </div>
                                 </div>
@@ -248,7 +250,7 @@
                                     <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
                                 </div>
                                 <div style="padding: 10px 0 10px 10px;"
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
+                                     *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
                                     <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
                                 </div>
 
@@ -283,11 +285,12 @@
                         </div>
 
                         <div class="fixed-ng2pdfview"
-                            [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                             [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
                             <ng2-pdfjs-viewer viewerId="MyUniqueID"
-                                [hidden]="isVoucherDownloading || isVoucherDownloadError"
-                                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);"
-                                [openFile]="false" [viewBookmark]="false" [download]="false">
+                                              [hidden]="isVoucherDownloading || isVoucherDownloadError"
+                                              [downloadFileName]="'invoice.pdf'"
+                                              (onDocumentLoad)="testPagesLoaded($event);"
+                                              [openFile]="false" [viewBookmark]="false" [download]="false">
                             </ng2-pdfjs-viewer>
                         </div>
                     </div>
@@ -317,8 +320,8 @@
 
             <div class="invoice-editBody">
                 <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
-                    [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType"
-                    (cancelVoucherUpdate)="toggleEditMode()">
+                                            [invoiceNo]="selectedItem.voucherNumber" [invoiceType]="voucherType"
+                                            (cancelVoucherUpdate)="toggleEditMode()">
                 </proforma-invoice-component>
             </div>
 
@@ -331,7 +334,7 @@
 
 <!-- region send email modal-->
 <div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
-    [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+     [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
 
     <div class="modal-dialog semdMailModal">
 
@@ -398,8 +401,9 @@
             <!-- endregion -->
 
             <app-send-email-invoice-component [voucherType]="voucherType"
-                (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]='selectedItem'
-                (cancelEvent)="showEmailSendModal.hide()">
+                                              (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()"
+                                              [selectedItem]='selectedItem'
+                                              (cancelEvent)="showEmailSendModal.hide()">
             </app-send-email-invoice-component>
 
         </div>
@@ -410,7 +414,7 @@
 
 <!-- region download modal-->
 <div bsModal #downloadVoucherModal="bs-modal" class="modal fade" role="dialog"
-    [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+     [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
 
     <div class="modal-dialog semdMailModal">
 
@@ -427,12 +431,12 @@
 
 <!-- region delete confirmation model -->
 <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-    tabindex="-1">
+     tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal [body]="'Are you sure want to delete this voucher'"
-                (cancelCallBack)="deleteConfirmationModel.toggle()"
-                (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
+                           (cancelCallBack)="deleteConfirmationModel.toggle()"
+                           (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>
     </div>
 </div>
@@ -443,7 +447,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <invoice-payment-model [selectedInvoiceForPayment]="selectedItem"
-                (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
+                                   (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>
     </div>

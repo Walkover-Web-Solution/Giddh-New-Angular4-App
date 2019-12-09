@@ -5,16 +5,16 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    InvoiceRoutingModule,
-    NgbTypeaheadModule.forRoot(),
-    ProformaInvoiceModule,
-    DigitsOnlyModule,
-  ],
-  exports: [
-    InvoiceRoutingModule
-  ]
+    declarations: [],
+    imports: [
+        InvoiceRoutingModule,
+        NgbTypeaheadModule.forRoot(),
+        ProformaInvoiceModule,
+        DigitsOnlyModule,
+    ],
+    exports: [
+        InvoiceRoutingModule
+    ]
 })
 export class InvoiceModule {
 }

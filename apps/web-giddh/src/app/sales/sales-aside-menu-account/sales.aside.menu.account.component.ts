@@ -90,11 +90,13 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
     public ngOnInit() {
         //
     }
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;
         }
     }
+
     public addNewAcSubmit(accRequestObject: AddAccountRequest) {
         this.addEvent.emit(accRequestObject);
     }
@@ -115,7 +117,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
         });
 
         let flatGrps: IOption[] = items.map(m => {
-            return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
+            return {label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups};
         });
 
         this.flatAccountWGroupsList$ = of(flatGrps);

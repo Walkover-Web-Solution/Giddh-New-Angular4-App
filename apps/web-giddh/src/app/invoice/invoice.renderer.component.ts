@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'name',
-  template: `
+    selector: 'name',
+    template: `
     <router-outlet></router-outlet>
   `
 })
 
 export class InvoiceRendererComponent implements OnInit {
-  constructor() {
-    //
-  }
+    constructor() {
+        //
+    }
 
-  public ngOnInit() {
-    //
-  }
+    public ngOnInit() {
+        //
+    }
 }

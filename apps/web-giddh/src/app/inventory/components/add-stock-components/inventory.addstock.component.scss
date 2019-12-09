@@ -15,37 +15,46 @@
     max-height: 168px;
     overflow: auto;
 }
+
 .sku-row {
     label {
         width: 100%;
     }
+
     position: relative;
+
     .label-input {
         background: none;
         border: none;
         max-width: 108px;
         border-bottom: 1px solid #dddddd;
     }
+
     .item-label {
         display: inline-block;
     }
+
     .item-label:first-child {
         max-width: 108px;
     }
+
     .item-label:last-child {
         text-align: right;
     }
+
     i {
         margin-left: 10px;
         padding-bottom: 3px;
         border-bottom: 1px solid #dddddd;
     }
+
     .new-btn {
         font-size: 12px;
         color: #2262d1;
         padding-top: 30px;
         cursor: pointer;
     }
+
     .text-danger {
         color: #f80606;
     }
@@ -54,21 +63,26 @@
 .opacity {
     opacity: 0.5;
 }
+
 .fsstock td {
     padding-right: 10px;
 }
+
 tr.fsstock td {
     padding-bottom: 15px;
 }
+
 .table_label strong {
     color: #484848;
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";
 }
+
 .inputLabelStock {
     display: none;
 }
+
 @media (max-width: 767px) {
     section.form_body table.noHover td {
         width: 100%;

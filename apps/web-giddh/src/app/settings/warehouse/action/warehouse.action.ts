@@ -46,7 +46,7 @@ export class WarehouseActions {
         map((response: BaseResponse<any, any>) => {
             if (response.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }
             this.toast.successToast('New warehouse created successfully', 'Success');
             return this.createWarehouseResponse(response);
@@ -66,7 +66,7 @@ export class WarehouseActions {
         map((response: BaseResponse<any, any>) => {
             if (response.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }
             return this.fetchAllWarehousesResponse(response);
         })
@@ -85,19 +85,20 @@ export class WarehouseActions {
         map((response: BaseResponse<any, any>) => {
             if (response.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }
             this.toast.successToast('Warehouse updated successfully', 'Success');
             return this.updateWarehouseResponse(response);
         })
-    )
+    );
 
     /** @ignore */
     constructor(
         private action$: Actions,
         private settingsWarehouseService: SettingsWarehouseService,
         private toast: ToasterService
-    ) { }
+    ) {
+    }
 
     /**
      * Returns the action to create a warehouse
@@ -107,7 +108,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public createWarehouse(params: any): CustomActions {
-        return { type: WarehouseActions.CREATE_WAREHOUSE, payload: params };
+        return {type: WarehouseActions.CREATE_WAREHOUSE, payload: params};
     }
 
     /**
@@ -119,7 +120,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public createWarehouseResponse(response: BaseResponse<any, any>): CustomActions {
-        return { type: WarehouseActions.CREATE_WAREHOUSE_RESPONSE, payload: response };
+        return {type: WarehouseActions.CREATE_WAREHOUSE_RESPONSE, payload: response};
     }
 
     /**
@@ -129,7 +130,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public resetCreateWarehouse(): CustomActions {
-        return { type: WarehouseActions.RESET_CREATE_WAREHOUSE };
+        return {type: WarehouseActions.RESET_CREATE_WAREHOUSE};
     }
 
     /**
@@ -139,7 +140,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public fetchAllWarehouses(): CustomActions {
-        return { type: WarehouseActions.GET_ALL_WAREHOUSE }
+        return {type: WarehouseActions.GET_ALL_WAREHOUSE};
     }
 
     /**
@@ -149,7 +150,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public fetchAllWarehousesResponse(response: BaseResponse<any, any>): CustomActions {
-        return { type: WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE, payload: response };
+        return {type: WarehouseActions.GET_ALL_WAREHOUSE_RESPONSE, payload: response};
     }
 
     /**
@@ -160,7 +161,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public updateWarehouse(params: any): CustomActions {
-        return { type: WarehouseActions.UPDATE_WAREHOUSE, payload: params };
+        return {type: WarehouseActions.UPDATE_WAREHOUSE, payload: params};
     }
 
     /**
@@ -171,7 +172,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public updateWarehouseResponse(response: BaseResponse<any, any>): CustomActions {
-        return { type: WarehouseActions.UPDATE_WAREHOUSE_RESPONSE, payload: response };
+        return {type: WarehouseActions.UPDATE_WAREHOUSE_RESPONSE, payload: response};
     }
 
     /**
@@ -181,7 +182,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
     public resetUpdateWarehouse(): CustomActions {
-        return { type: WarehouseActions.RESET_UPDATE_WAREHOUSE };
+        return {type: WarehouseActions.RESET_UPDATE_WAREHOUSE};
     }
 
 }

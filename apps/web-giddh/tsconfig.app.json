@@ -1,23 +1,23 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    // "allowJs": true,
-    // "allowSyntheticDefaultImports": true,
-    // "noEmit":true,
-    // "noEmitHelpers":true,
-    // "strictNullChecks":false,
-    // "baseUrl": "./src",
-    "outDir": "../../dist/out-tsc/apps/web-giddh",
-    "types": [],
-    "typeRoots":[
-      "./src/customTypes"
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        // "allowJs": true,
+        // "allowSyntheticDefaultImports": true,
+        // "noEmit":true,
+        // "noEmitHelpers":true,
+        // "strictNullChecks":false,
+        // "baseUrl": "./src",
+        "outDir": "../../dist/out-tsc/apps/web-giddh",
+        "types": [],
+        "typeRoots": [
+            "./src/customTypes"
+        ]
+    },
+    "exclude": [
+        "src/test.ts",
+        "**/*.spec.ts"
+    ],
+    "include": [
+        "**/*.ts"
     ]
-  },
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ],
-  "include": [
-    "**/*.ts"
-  ]
 }

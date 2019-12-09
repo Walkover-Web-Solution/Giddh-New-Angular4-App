@@ -6,7 +6,8 @@ import { SettingsServiceModule } from '../settings-service.module';
 })
 export class SettingsUtilityService {
     /** @ignore */
-    constructor() { }
+    constructor() {
+    }
 
     /**
      * Returns the request object for warehouse create request

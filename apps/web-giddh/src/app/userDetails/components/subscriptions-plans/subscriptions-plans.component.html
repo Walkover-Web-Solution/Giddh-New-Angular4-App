@@ -95,8 +95,9 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
-                                                    [ladda]="this.isUpdateCompanyInProgress$ | async">Select
-                                                    Plan</button>
+                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Select
+                                                    Plan
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -183,7 +184,8 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <button class="btn btn-success mrT1 mrB2"
-                                                    (click)="buyPlanClicked(item)">Buy Plan</button>
+                                                        (click)="buyPlanClicked(item)">Buy Plan
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -275,8 +277,9 @@
                                         <div class="row">
                                             <div class="col-xs-12">
                                                 <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(paidItem)"
-                                                    [ladda]="this.isUpdateCompanyInProgress$ | async">Select
-                                                    Plan</button>
+                                                        [ladda]="this.isUpdateCompanyInProgress$ | async">Select
+                                                    Plan
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -293,31 +296,31 @@
                 <div class="activation-key">
                     <label>Activation Key</label>
                     <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                        class="form-control mrT1" placeholder="Enter activation key">
+                           class="form-control mrT1" placeholder="Enter activation key">
                 </div>
                 <div class="activation-btn">
                     <button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
-                        (click)="createCompanyViaActivationKey()">
-                        Activate</button>
+                            (click)="createCompanyViaActivationKey()">
+                        Activate
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     <div *ngIf="isSwitchPlanInProcess">
-            <div class="no-data mrT2 loader-main">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
+        <div class="no-data mrT2 loader-main">
+            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+            <div class="spinner2">
+                <div class="cube1"></div>
+                <div class="cube2"></div>
             </div>
+        </div>
     </div>
     <!-- <div class="note-wrap">
         <p>Note:</p>
         <p>* revenue more than 12 and less than 20 lacs</p>
     </div> -->
 </div>
-
 
 
 <!-- asid bar start -->

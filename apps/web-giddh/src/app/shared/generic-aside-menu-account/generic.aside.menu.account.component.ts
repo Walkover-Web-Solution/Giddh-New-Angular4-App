@@ -112,7 +112,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public showBankDetail: boolean = false;
     public isDebtorCreditor: boolean = true;
 
-
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -154,13 +153,14 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         });
 
         let flatGrps: IOption[] = items.map(m => {
-            return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
+            return {label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups};
         });
 
         this.flatAccountWGroupsList$ = of(flatGrps);
         this.flatAccountWGroupsList = flatGrps;
         this.activeGroupUniqueName = grpUniqueName;
     }
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;

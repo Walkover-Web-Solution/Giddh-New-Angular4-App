@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
-  styles: [`
+    styles: [`
     .invoice-bg {
       background-color: #f4f5f8;
       padding: 20px;
@@ -32,21 +32,21 @@ import { StateDetailsRequest } from '../models/api-models/Company';
       color: #ff5f00;
     }
   `],
-  templateUrl: './purchase.component.html'
+    templateUrl: './purchase.component.html'
 })
 export class PurchaseComponent implements OnInit {
-  constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
-    // console.log('Hi this is purchase component');
-  }
+    constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
+        // console.log('Hi this is purchase component');
+    }
 
-  public ngOnInit(): void {
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'purchase';
+    public ngOnInit(): void {
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'purchase';
 
-    this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-  }
+        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+    }
 
 }

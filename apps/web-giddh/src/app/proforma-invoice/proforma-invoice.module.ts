@@ -30,55 +30,54 @@ import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
-import {CurrencyModule} from "../shared/helpers/pipes/currencyPipe/currencyType.module";
-import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
-
+import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 
 @NgModule({
-  imports: [
-    ProformaInvoiceRoutingModule,
-    FormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    ShSelectModule,
-    KeyboardShortutModule,
-    SalesShSelectModule,
-    BsDatepickerModule,
-    DecimalDigitsModule,
-    // SalesModule,
-    CollapseModule,
-    NgxUploaderModule,
-    BsDropdownModule,
-    DigitsOnlyModule,
-    SharedModule,
-    AsideMenuRecurringEntryModule,
-    ModalModule,
-    TaxControlModule,
-    DiscountControlModule,
-    GenericAsideMenuAccountModule,
-    LaddaModule,
-    SelectModule.forRoot(),
-    SendEmailInvoiceModule,
-    VoucherTypeToNamePipeModule,
-    PdfJsViewerModule,
-    CurrencyModule,
-    NgxMaskModule.forRoot()
-  ],
-  exports: [ProformaInvoiceComponent],
-  declarations: [
-    ProformaInvoiceRendererComponent,
-    ProformaInvoiceComponent,
-    ProformaAddBulkItemsComponent,
-    ProformaLastInvoicesComponent,
-    ProformaGstTreatmentComponent,
-    SalesAddStockComponent,
-    SalesAddStockGroupComponent,
-    CreateAccountModalComponent,
-    CreateAccountServiceComponent,
-    AsideMenuProductServiceComponent,
-    ProformaPrintInPlaceComponent
-  ],
-  providers: [],
+    imports: [
+        ProformaInvoiceRoutingModule,
+        FormsModule,
+        CommonModule,
+        ReactiveFormsModule,
+        ShSelectModule,
+        KeyboardShortutModule,
+        SalesShSelectModule,
+        BsDatepickerModule,
+        DecimalDigitsModule,
+        // SalesModule,
+        CollapseModule,
+        NgxUploaderModule,
+        BsDropdownModule,
+        DigitsOnlyModule,
+        SharedModule,
+        AsideMenuRecurringEntryModule,
+        ModalModule,
+        TaxControlModule,
+        DiscountControlModule,
+        GenericAsideMenuAccountModule,
+        LaddaModule,
+        SelectModule.forRoot(),
+        SendEmailInvoiceModule,
+        VoucherTypeToNamePipeModule,
+        PdfJsViewerModule,
+        CurrencyModule,
+        NgxMaskModule.forRoot()
+    ],
+    exports: [ProformaInvoiceComponent],
+    declarations: [
+        ProformaInvoiceRendererComponent,
+        ProformaInvoiceComponent,
+        ProformaAddBulkItemsComponent,
+        ProformaLastInvoicesComponent,
+        ProformaGstTreatmentComponent,
+        SalesAddStockComponent,
+        SalesAddStockGroupComponent,
+        CreateAccountModalComponent,
+        CreateAccountServiceComponent,
+        AsideMenuProductServiceComponent,
+        ProformaPrintInPlaceComponent
+    ],
+    providers: [],
 })
 export class ProformaInvoiceModule {
 }

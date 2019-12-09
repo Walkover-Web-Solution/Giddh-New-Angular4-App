@@ -1,12 +1,12 @@
 .add-new-role-modal .open > #pageListDD {
-  display: inline-block;
-  min-width: 200px;
-  max-height: 180px;
-  overflow: auto;
+    display: inline-block;
+    min-width: 200px;
+    max-height: 180px;
+    overflow: auto;
 }
 
 .dropdown-menu li label {
-  padding: 5px 0;
-  display: block;
-  cursor: pointer;
+    padding: 5px 0;
+    display: block;
+    cursor: pointer;
 }

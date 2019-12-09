@@ -5,8 +5,8 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'tb-export-xls',  // <home></home>
-  template: `
+    selector: 'tb-export-xls',  // <home></home>
+    template: `
 
 <div class="btn-group" dropdown>
    <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
@@ -23,29 +23,29 @@ import { Store } from '@ngrx/store';
 })
 
 export class TbExportXlsComponent implements OnInit, OnDestroy {
-  @Input() public trialBalanceRequest: TrialBalanceRequest;
-  public enableDownload: boolean = true;
-  @Output() public tbExportXLSEvent = new EventEmitter<string>();
+    @Input() public trialBalanceRequest: TrialBalanceRequest;
+    public enableDownload: boolean = true;
+    @Output() public tbExportXLSEvent = new EventEmitter<string>();
 
-  public showTbXls: boolean;
-  public imgPath: string = '';
+    public showTbXls: boolean;
+    public imgPath: string = '';
 
-  constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
+    constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
-  }
+    }
 
-  public downloadTbXls(value: string) {
-    // console.log(this.trialBalanceRequest);
-    let request = {...this.trialBalanceRequest, export: value} as TrialBalanceExportExcelRequest;
-    this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
-    return false;
-  }
+    public downloadTbXls(value: string) {
+        // console.log(this.trialBalanceRequest);
+        let request = {...this.trialBalanceRequest, export: value} as TrialBalanceExportExcelRequest;
+        this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
+        return false;
+    }
 
-  public ngOnInit() {
-    this.imgPath = isElectron ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
-  }
+    public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
+    }
 
-  public ngOnDestroy() {
-    //
-  }
+    public ngOnDestroy() {
+        //
+    }
 }

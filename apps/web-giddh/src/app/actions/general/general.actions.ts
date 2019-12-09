@@ -144,14 +144,14 @@ export class GeneralActions {
         return {
             type: GENERAL_ACTIONS.SET_SIDE_MENU_BAR_STATE,
             payload: value
-        }
+        };
     }
 
     public setAppTitle(uniqueName: string, additional?: { tab: string, tabIndex: number }) {
         return {
             type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
-            payload: { uniqueName, additional }
-        }
+            payload: {uniqueName, additional}
+        };
     }
 
     public resetSmartList(): CustomActions {
@@ -169,7 +169,7 @@ export class GeneralActions {
     public setPageTitle(currentPageObj: CurrentPage) {
         return {
             type: GENERAL_ACTIONS.SET_PAGE_HEADER_TITLE,
-            payload: { currentPageObj }
-        }
+            payload: {currentPageObj}
+        };
     }
 }

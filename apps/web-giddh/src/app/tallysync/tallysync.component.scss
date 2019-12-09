@@ -1,9 +1,11 @@
 @import "../../assets/css/color.scss";
+
 .btn-default {
     background: #fff;
     border-color: $border-blue;
     color: $dark-blue00;
 }
+
 .btn-default.active {
     background: $border-blue;
     color: #fff;

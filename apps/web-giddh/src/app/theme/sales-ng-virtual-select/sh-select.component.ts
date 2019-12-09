@@ -146,7 +146,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
 
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-        startsWithArr = filteredArr.filter(function (item) {
+        startsWithArr = filteredArr.filter(function(item) {
             if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
                 return item;
             } else {

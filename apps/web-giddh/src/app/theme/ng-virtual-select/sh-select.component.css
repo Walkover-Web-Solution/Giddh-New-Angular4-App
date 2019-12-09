@@ -93,7 +93,7 @@ i.close.icon.clear:hover::after {
     opacity: .5;
     color: black;
     transform: translateY(-50%);
-  }
+}
 
 .sh-select-disabled {
     background-color: #e3e3e3;
@@ -141,23 +141,26 @@ i.close.icon.clear:hover::after {
     background: #fff !important;
 }
 
-.header.open>input[type="text"] {
+.header.open > input[type="text"] {
     border-color: #d6d6d6;
 }
 
-.header .bdr>input[type="text"] {
+.header .bdr > input[type="text"] {
     border: 0;
 }
+
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]::-moz-placeholder {
+}
+
+.header .bdr > input[type="text"]::-moz-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]:-ms-input-placeholder {
+}
+
+.header .bdr > input[type="text"]:-ms-input-placeholder {
     color: #c1c1c1 !important;
-  }
-  .header .bdr > input[type="text"]:-moz-placeholder {
+}
+
+.header .bdr > input[type="text"]:-moz-placeholder {
     color: #c1c1c1 !important;
-  }
-  
+}

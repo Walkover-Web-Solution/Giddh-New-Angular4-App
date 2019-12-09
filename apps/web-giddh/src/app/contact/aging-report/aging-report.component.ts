@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 
@@ -45,7 +45,7 @@ export class AgingReportComponent implements OnInit {
     public key: string = 'name';
     public order: string = 'asc';
     public filter: string = '';
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
+    public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
     public isMobileScreen: boolean = false;
@@ -56,7 +56,6 @@ export class AgingReportComponent implements OnInit {
         ignoreBackdropClick: true
     };
     public isAdvanceSearchApplied: boolean = false;
-
 
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
@@ -95,7 +94,8 @@ export class AgingReportComponent implements OnInit {
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
-                this.totalFutureDueAmounts = data.overAllFutureDueAmount;;
+                this.totalFutureDueAmounts = data.overAllFutureDueAmount;
+
             }
             this.dueAmountReportData$ = of(data);
             if (data) {
@@ -116,9 +116,11 @@ export class AgingReportComponent implements OnInit {
     public getDueReport() {
         this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
     }
+
     public detetcChanges() {
         this._cdr.detectChanges();
     }
+
     public ngOnInit() {
 
         this.universalDate$.subscribe(a => {
@@ -168,8 +170,6 @@ export class AgingReportComponent implements OnInit {
                 this.getDueAmountreportData();
             });
 
-
-
     }
 
     public openAgingDropDown() {
@@ -210,6 +210,7 @@ export class AgingReportComponent implements OnInit {
             });
         }
     }
+
     public selectedDate(value: any) {
         this.isAdvanceSearchApplied = false;
         this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
