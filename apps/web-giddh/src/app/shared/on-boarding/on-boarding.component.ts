@@ -412,7 +412,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             event.target.value = event.target.value.trim();
             const warehouseName = event.target.value;
             if (!warehouseName) {
-                this.companyForm.form.controls['name'].setErrors({'whitespace': true});
+                this.companyForm.form.controls['name'].setErrors({'required': true});
             }
             if (event.target.value.length > 100) {
                 this.companyForm.form.controls['name'].setErrors({'maxlength': true});
