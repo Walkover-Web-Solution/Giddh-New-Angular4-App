@@ -392,10 +392,9 @@ export class CompanyService {
 	/*
   * get registered sales
   * */
-	public getWarehouseDetails(warehouseUniqueName: string) {
-		this.companyUniqueName = this._generalService.companyUniqueName;
+	public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
 		return this._http.get(this.config.apiUrl + COMPANY_API.GET_WAREHOUSE_DETAILS
-			.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+			.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
 			.replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {
 			let data: BaseResponse<WareHouseResponse, string> = res;
 			return data;

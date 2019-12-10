@@ -106,7 +106,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
-        
+
         this.initFormFields();
         this.getTransportersList();
         this.getStock();
@@ -468,8 +468,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
-            this._companyService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
-                if (res) {
+            this._companyService.getWarehouseDetails(this.branchTransfer[type][index].uniqueName, this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
+                if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
                     this.branchTransfer[type][index].warehouse.address = res.body.address;

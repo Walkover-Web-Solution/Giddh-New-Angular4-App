@@ -117,6 +117,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             } else if (value[0] === "closebranchtransferpopup") {
                 this.branchTransferMode = "";
                 this.hideModal();
+                this.getBranchTransferList(true);
             }
         });
     }
