@@ -58,6 +58,7 @@ span.setAsDefault {
     font-size: 14px;
     border-radius: 13px;
     margin-right: 10px;
+    cursor: pointer;
 }
 .warehouse-details {
     font-size: 14px;
@@ -90,4 +91,11 @@ span.setAsDefault {
     justify-content: center;
     align-items: center;
     display: flex;
+}
+.warehouse-pagination {
+    width: 100%;
+    text-align: center;
+    .pagination .disabled a {
+        cursor: not-allowed;
+    }
 }

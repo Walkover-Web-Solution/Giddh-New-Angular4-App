@@ -228,7 +228,7 @@ export class SettingsComponent implements OnInit {
      */
     private loadModuleData(tabName: string): void {
         if (tabName === 'warehouse') {
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses());
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1 }));
         }
     }
 }

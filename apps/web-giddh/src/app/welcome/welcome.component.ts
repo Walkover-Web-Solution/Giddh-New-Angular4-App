@@ -181,7 +181,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.isItemUpdateInProgress) {
             this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
-            this.company.phoneCode = (this.itemDetails && this.itemDetails.callingCode) ? this.itemDetails.callingCode : '';
+            this.company.phoneCode = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getCallingCode(this.itemDetails.mobileNumber) : '';
             this.company.contactNo = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getFormattedContactNumber(this.itemDetails.mobileNumber) : '';
             this.company.uniqueName = (this.itemDetails && this.itemDetails.uniqueName) ? this.itemDetails.uniqueName : '';
             this.company.country = (this.itemDetails && this.itemDetails.countryCode) ? this.itemDetails.countryCode : '';
@@ -222,7 +222,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public reFillForm() {
         if (this.isOnBoardingInProgress) {
-            this.fillOnBoardingDetails();
+            this.fillOnBoardingDetails('ITEM');
         } else {
             this.companyProfileObj.businessNature = this.createNewCompany.businessNature;
             this.companyProfileObj.businessType = this.createNewCompany.businessType;
@@ -391,6 +391,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.selectedBusinesstype = event.value;
             this.selectedTaxes = [];
             this.companyProfileObj.taxNumber = '';
+            this.companyProfileObj.taxType = '';
             this.companyProfileObj.selectedState = '';
             this.companyProfileObj.state = '';
             this.forceClear$ = observableOf({ status: true });
@@ -590,14 +591,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public sameAsHeadQuarter(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
         if (this.isTaxNumberSameAsHeadQuarter) {
             if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-                this.activeCompany.addresses.forEach(key => {
-                    if (key.isDefault === true) {
-                        this.companyProfileObj.taxNumber = key.taxNumber;
-                        gstNo.value = key.taxNumber;
-                        this.checkGstNumValidation(gstNo);
-                        this.getStateCode(gstNo, statesEle);
-                    }
-                });
+                const defaultCompany = this.getDefaultCompanyDetails();
+                if (defaultCompany.taxNumber) {
+                    this.companyProfileObj.taxNumber = defaultCompany.taxNumber;
+                    gstNo.value = defaultCompany.taxNumber;
+                    this.checkGstNumValidation(gstNo);
+                    this.getStateCode(gstNo, statesEle);
+                }
             } else {
                 this.companyProfileObj.taxNumber = '';
                 gstNo.value = '';
@@ -629,38 +629,66 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Auto fills the on boarding details
+     * GST field change handler
      *
-     * @private
+     * @param {HTMLInputElement} gstNumberField GST field
+     * @param {ShSelectComponent} states States field
      * @memberof WelcomeComponent
      */
-    private fillOnBoardingDetails(): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            // TODO: Add default warehouse logic
-            this.companyProfileObj.businessNature = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessNature : this.activeCompany.businessNature;
-            this.companyProfileObj.businessType = (this.isItemUpdateInProgress && this.itemDetails) ? this.itemDetails.businessType : this.activeCompany.businessType;
-            this.selectedBusinesstype = this.companyProfileObj.businessType;
+    public handleGstChange(gstNumberField: HTMLInputElement, states: ShSelectComponent): void {
+        if (this.isTaxNumberSameAsHeadQuarter) {
+            const defaultCompany = this.getDefaultCompanyDetails();
+            if (this.companyProfileObj.taxNumber !== defaultCompany.taxNumber) {
+                this.isTaxNumberSameAsHeadQuarter = 0;
+            }
+        }
+        this.getStateCode(gstNumberField, states);
+        this.checkGstNumValidation(gstNumberField);
+    }
 
-            let autoFillAddress = '', autoFillTaxNumber = '';
-            if (this.itemOnBoardingDetails.isItemUpdateInProgress && this.itemDetails) {
-                // Autofill GST and Address from warehouse being updated
-                autoFillAddress = this.itemDetails.address;
-                autoFillTaxNumber = this.itemDetails.taxNumber;
-            } else {
-                // Autofill GST and Address from default warehouse and default company
-                if (this.activeCompany && this.activeCompany.addresses) {
-                    this.activeCompany.addresses.forEach((address: any) => {
-                        if (address.isDefault) {
-                            autoFillAddress = address.address;
-                            autoFillTaxNumber = address.taxNumber;
-                        }
-                    });
-                }
+    /**
+     * Auto fills the form details recursively
+     *
+     * @private
+     * @param {string} entity Entity name with which details should be filled
+     * @memberof WelcomeComponent
+     */
+    private fillOnBoardingDetails(entity: string): void {
+        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            /*  For warehouse, if the warehouse item has detais then fill the form
+                with those details else search the default warehouse and fill with
+                default warehouse details. At last, if the details are not found
+                then fill form with default company details */
+            let isFormFilled;
+            switch (entity) {
+                case 'ITEM':
+                    isFormFilled = this.fillFormDetails(this.itemDetails);
+                    if (!isFormFilled) {
+                        // Current warehouse item has no detail, try the default warehouse
+                        this.fillOnBoardingDetails('DEFAULT_WAREHOUSE');
+                    }
+                    break;
+                case 'DEFAULT_WAREHOUSE':
+                    const defaultWarehouse = this.getDefaultWarehouseDetails();
+                    isFormFilled = this.fillFormDetails(defaultWarehouse);
+                    if (!isFormFilled) {
+                        // Default warehouse has no detail, try the default company
+                        this.fillOnBoardingDetails('DEFAULT_COMPANY');
+                    }
+                    break;
+                case 'DEFAULT_COMPANY':
+                    const { address: autoFillAddress = '', taxNumber: autoFillTaxNumber = '' } = this.getDefaultCompanyDetails();
+                    const defaultCompany = {
+                        businessType: this.activeCompany.businessType,
+                        businessNature: this.activeCompany.businessNature,
+                        address: autoFillAddress,
+                        taxNumber: autoFillTaxNumber
+                    };
+                    this.fillFormDetails(defaultCompany);
+                    break;
+                default: break;
             }
-            this.companyProfileObj.address = autoFillAddress;
-            if (this.selectedBusinesstype === 'Registered') {
-                this.companyProfileObj.taxNumber = autoFillTaxNumber;
-            }
+
             setTimeout(() => {
                 // setTimeout is required as 'gstNumberField' viewchild is not present in ngOnInit() lifecycle
                 if (this.gstNumberField) {
@@ -685,5 +713,85 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             return contactNumber.split('-')[1];
         }
         return contactNumber;
+    }
+
+    /**
+     * Retrieves the calling code from a contact number of the format
+     * <calling_code - number>
+     *
+     * @private
+     * @param {string} contactNumber Contact number
+     * @returns {string} Calling code
+     * @memberof WelcomeComponent
+     */
+    private getCallingCode(contactNumber: string): string {
+        if (contactNumber.toString().includes('-')) {
+            return contactNumber.split('-')[0];
+        }
+        return '';
+    }
+
+    /**
+     * Returns the default warehouse data
+     *
+     * @private
+     * @returns {*} Default warehouse data
+     * @memberof WelcomeComponent
+     */
+    private getDefaultWarehouseDetails(): any {
+        let defaultWarehouse: any;
+        this.store.pipe(select(state => state.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                for (let index = 0; index < warehouses.results.length; index++) {
+                    if (warehouses.results[index].isDefault) {
+                        defaultWarehouse = warehouses.results[index];
+                        break;
+                    }
+                }
+            }
+        });
+        return defaultWarehouse;
+    }
+
+    /**
+     * Fills the form details with proovided entity type
+     *
+     * @private
+     * @param {*} entity Entity with which the form details will get filled
+     * @returns {boolean} True, if any one of the form field is filled with the entity details
+     * @memberof WelcomeComponent
+     */
+    private fillFormDetails(entity: any): boolean {
+        if (entity) {
+            this.companyProfileObj.businessNature = entity.businessNature;
+            this.companyProfileObj.businessType = entity.businessType;
+            this.selectedBusinesstype = this.companyProfileObj.businessType;
+            if (this.selectedBusinesstype === 'Registered') {
+                this.companyProfileObj.taxNumber = entity.taxNumber;
+            }
+            this.companyProfileObj.address = entity.address;
+        }
+        return !!(this.companyProfileObj.businessNature || this.companyProfileObj.businessType ||
+            this.companyProfileObj.address || this.companyProfileObj.taxNumber);
+    }
+
+    /**
+     * Returns the default company details such as address and tax number
+     *
+     * @private
+     * @returns {*} Default company details
+     * @memberof WelcomeComponent
+     */
+    private getDefaultCompanyDetails(): any {
+        let defaultCompany = {};
+        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+            this.activeCompany.addresses.forEach((address: any) => {
+                if (address.isDefault) {
+                    defaultCompany = address;
+                    return defaultCompany;
+                }
+            });
+        }
+        return defaultCompany;
     }
 }

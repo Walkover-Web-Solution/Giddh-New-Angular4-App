@@ -45,7 +45,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
-    @Input() public onboardingType: OnBoardingType;
+    @Input() public onBoardingType: OnBoardingType;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -363,7 +363,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
                 let countryRequest = new CountryRequest();
-                countryRequest.formName = (this.onboardingType) ? this.onboardingType.toLowerCase() : 'onboarding';
+                countryRequest.formName = (this.onBoardingType) ? this.onBoardingType.toLowerCase() : 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
@@ -399,5 +399,24 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this._generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    /**
+     * On boarding name change handler
+     *
+     * @param {*} event Change event
+     * @memberof OnBoardingComponent
+     */
+    public handleOnBoardingNameChange(event: any): void {
+        if (this.onBoardingType === OnBoardingType.Warehouse) {
+            event.target.value = event.target.value.trim();
+            const warehouseName = event.target.value;
+            if (!warehouseName) {
+                this.companyForm.form.controls['name'].setErrors({'required': true});
+            }
+            if (event.target.value.length > 100) {
+                this.companyForm.form.controls['name'].setErrors({'maxlength': true});
+            }
+        }
     }
 }

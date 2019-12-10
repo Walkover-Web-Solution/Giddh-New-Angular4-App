@@ -1,23 +1,23 @@
-<ng-container *ngIf="(allWarehouses$ | async) as warehouses">
+<ng-container *ngIf="warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
         <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
         <h2>Create Warehouse</h2>
         <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
-        <button class="btn btn-pink mrT2" (click)="openCreateWarehouseModal()">
+        <button class="btn btn-pink mrT2" (click)="resetOnboardingForm();openCreateWarehouseModal()">
             Create Warehouse
         </button>
     </div>
 
     <div *ngIf="warehouses?.length" class="warehouseCardView">
         <div class="row">
-            <div *ngFor="let warehouse of warehouses" class="col-sm-4 pdR1">
+            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-sm-4 pdR1">
                 <div class="warehouseCard">
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouseOptions">
-                            <span class="setAsDefault">
-                                <i class="icon-no-selected"></i>
-                                <i class="icon-favorite-selected" hidden></i>
+                            <span class="setAsDefault" (click)="setAsDefault(warehouse, warehouseIndex)">
+                                <i *ngIf="warehouse.isDefault" class="icon-favorite-selected"></i>
+                                <i *ngIf="!warehouse.isDefault" class="icon-no-selected"></i>
                                 Set as Default</span>
                             <div class="btn-group" dropdown>
                                 <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
@@ -51,7 +51,7 @@
                             </div>
                         -->
                         <div class="clearfix about-warehaouse">
-                            <label>GSTIN:</label>
+                            <label>{{warehouse.taxName}}</label>
                             <p>
                                 <span [class.gray-text]="!warehouse.taxNumber">{{
                                         warehouse.taxNumber
@@ -77,6 +77,10 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="warehouse-pagination">
+        <pagination #warehousePagination *ngIf="paginationConfig?.totalItems > paginationLimit" [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count" [boundaryLinks]="true" [rotate]="true"
+            (pageChanged)="pageChanged($event)"></pagination>
     </div>
 </ng-container>
 
