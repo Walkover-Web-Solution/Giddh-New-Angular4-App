@@ -1,0 +1,51 @@
+{
+  "_from": "cordova-plugin-filechooser@^1.2.0",
+  "_id": "cordova-plugin-filechooser@1.2.0",
+  "_inBundle": false,
+  "_integrity": "sha512-ycL9ML3wlRQ8wfK7vCG8gobv1f3VIdO52m0LA9mPSzLblbu0AXJs89yCRxZB87+08/V96qBxrmkxMsMmVYu5wA==",
+  "_location": "/cordova-plugin-filechooser",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-filechooser@^1.2.0",
+    "name": "cordova-plugin-filechooser",
+    "escapedName": "cordova-plugin-filechooser",
+    "rawSpec": "^1.2.0",
+    "saveSpec": null,
+    "fetchSpec": "^1.2.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-filechooser/-/cordova-plugin-filechooser-1.2.0.tgz",
+  "_shasum": "3a3a3d9c5bef733076f1f6b59e465f60a0d96577",
+  "_spec": "cordova-plugin-filechooser@^1.2.0",
+  "_where": "/Users/nishagupta/Projects/Giddh-New-Angular4-App/apps/giddh-cordova/giddh",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/ihadeed/cordova-filechooser/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-filechooser",
+    "platforms": [
+      "android",
+      "windows"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova FileChooser Plugin",
+  "homepage": "https://github.com/ihadeed/cordova-filechooser#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "cordova-plugin-filechooser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ihadeed/cordova-filechooser.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.2.0"
+}

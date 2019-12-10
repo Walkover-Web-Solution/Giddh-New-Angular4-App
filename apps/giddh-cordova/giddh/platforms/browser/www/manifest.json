@@ -1,0 +1,17 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Giddh",
+  "short_name": "Giddh",
+  "version": "com.app.Giddh",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "author": "Walkover Team",
+  "icons": [
+    {
+      "src": "resources/icon.png",
+      "type": "image/png",
+      "sizes": "undefinedxundefined"
+    }
+  ],
+  "start_url": "index.html"
+}
