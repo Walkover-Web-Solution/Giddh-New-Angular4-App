@@ -389,9 +389,6 @@ export class CompanyService {
 		}), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
 	}
 
-	/*
-  * get registered sales
-  * */
 	public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
 		return this._http.get(this.config.apiUrl + COMPANY_API.GET_WAREHOUSE_DETAILS
 			.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
