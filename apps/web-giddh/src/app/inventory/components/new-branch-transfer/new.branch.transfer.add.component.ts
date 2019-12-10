@@ -30,6 +30,7 @@ import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { NgForm } from '@angular/forms';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -103,7 +104,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
 
-    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef) {
+    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
+        this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
+        
         this.initFormFields();
         this.getTransportersList();
         this.getStock();
@@ -255,11 +258,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.sources[index].warehouse.taxNumber = "";
                 this.branchTransfer.sources[index].warehouse.address = "";
 
-                this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
-
-                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                    this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                });
+                this.resetSourceWarehouses(index);
             } else {
                 this.branchTransfer.destinations[index].name = event.label;
                 this.branchTransfer.destinations[index].warehouse.name = "";
@@ -267,11 +266,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations[index].warehouse.taxNumber = "";
                 this.branchTransfer.destinations[index].warehouse.address = "";
 
-                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
-
-                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
-                    this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                });
+                this.resetDestinationWarehouses(index);
             }
         }
     }
@@ -458,7 +453,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public selectProduct(event, product): void {
         if (event && event.additional) {
-            console.log(event);
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
@@ -495,7 +489,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public resetSourceWarehouses(index) {
-        if (this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
+        if (this.branchTransfer.destinations && [index] && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
 
@@ -510,11 +504,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+        } else {
+            if (this.allWarehouses && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName]) {
+                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                    this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                });
+            }
         }
     }
 
     public resetDestinationWarehouses(index) {
-        if (this.branchTransfer.sources[index].warehouse.uniqueName !== null) {
+        if (this.branchTransfer.sources && this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse.uniqueName !== null) {
             this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
             let allowWarehouse = true;
 
@@ -529,6 +529,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+        } else {
+            if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[index].uniqueName]) {
+                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
+                    this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                });
+            }
         }
     }
 
@@ -783,8 +789,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.myCurrentCompany = this.activeCompany.name;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = this.activeCompany.uniqueName;
+                this.branchTransfer.sources[0].name = this.activeCompany.name;
             } else if (this.branchTransferMode === "receiptnote") {
                 this.branchTransfer.destinations[0].uniqueName = this.activeCompany.uniqueName;
+                this.branchTransfer.destinations[0].name = this.activeCompany.name;
             }
         }
     }

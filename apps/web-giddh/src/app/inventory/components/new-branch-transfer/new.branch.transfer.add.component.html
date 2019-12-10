@@ -22,7 +22,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<input type="text" placeholder="Date of Supply" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker>
+								<input type="text" placeholder="Date of Supply" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker [bsConfig]="bsConfig">
 							</div>
 						</div>
 	                    <div *ngIf="transferType === 'senders'" class="row mrB2">
@@ -335,7 +335,7 @@
 	                            <td>
 		                            <div *ngIf="activeRow === i">
 		                                <sh-select name="destinationName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="destination.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'destinations', i)"></sh-select>
-		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="destination.uniqueName" [options]="warehouses[destination.uniqueName]" [(ngModel)]="destination.warehouse.uniqueName" name="destinationWarehouse{{i}}" (selected)="getWarehouseDetails('destinations', i)"></sh-select>
+		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="destination.uniqueName" [options]="destinationWarehouses[destination.uniqueName]" [(ngModel)]="destination.warehouse.uniqueName" name="destinationWarehouse{{i}}" (selected)="getWarehouseDetails('destinations', i)"></sh-select>
 		                                <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName" name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField (change)="checkTaxNumberValidation(destinationGstNumberField);" [(ngModel)]="destination.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="destination.warehouse.uniqueName" name="destinationWarehouseAddress{{i}}" [(ngModel)]="destination.warehouse.address"></textarea>
 		                            </div>
@@ -382,7 +382,7 @@
 	                            <td>
 		                            <div *ngIf="activeRow === i">
 		                                <sh-select name="sourceName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="source.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'sources', i)"></sh-select>
-		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="source.uniqueName" [options]="warehouses[source.uniqueName]" [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}" (selected)="getWarehouseDetails('sources', i)"></sh-select>
+		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="source.uniqueName" [options]="senderWarehouses[source.uniqueName]" [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}" (selected)="getWarehouseDetails('sources', i)"></sh-select>
 			                            <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName" name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField (change)="checkTaxNumberValidation(sourceGstNumberField);" [(ngModel)]="source.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="source.warehouse.uniqueName" name="sourceWarehouseAddress{{i}}" [(ngModel)]="source.warehouse.address"></textarea>
 		                            </div>
@@ -434,7 +434,7 @@
 	                                    <h3 class="mrB1">Transportation Details</h3>
 	                                    <div class="row">
 	                                        <div class="col-sm-6 mrB2">
-	                                            <input type="text" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker>
+	                                            <input type="text" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker [bsConfig]="bsConfig">
 	                                        </div>
 	                                        <div class="col-sm-6 mrB2">
 		                                        <sh-select placeholder="Transport Company" name="transporterId" [isFilterEnabled]="true" (keydown)="keydownPressed($event)" [forceClearReactive]="forceClear$ | async" [options]="transporterDropdown$ | async" [(ngModel)]="branchTransfer.transporterDetails.transporterId" [notFoundLink]="true" [multiple]="false" [ItemHeight]="33">
