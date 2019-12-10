@@ -52,7 +52,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<sh-select name="sourceWarehouse" [options]="warehouses[branchTransfer.sources[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0)" required></sh-select>
+								<sh-select name="sourceWarehouse" [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0)" required></sh-select>
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="formFields && formFields['taxName']">
@@ -82,7 +82,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<sh-select name="destinationName" [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="branches$ | async" (selected)="selectCompany($event, branchTransfer.destinations[0])" required></sh-select>
+								<sh-select name="destinationName" [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="branches$ | async" (selected)="selectCompany($event, 'destinations', 0)" required></sh-select>
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -92,7 +92,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<sh-select name="destinationWarehouse" [options]="warehouses[branchTransfer.destinations[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName" (selected)="getWarehouseDetails('destinations', 0)" required></sh-select>
+								<sh-select name="destinationWarehouse" [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName" (selected)="getWarehouseDetails('destinations', 0)" required></sh-select>
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
@@ -144,7 +144,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-	                            <sh-select name="sourceName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, branchTransfer.sources[0])" required></sh-select>
+	                            <sh-select name="sourceName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0)" required></sh-select>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -154,7 +154,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-	                            <sh-select name="sourceWarehouse" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="warehouses[branchTransfer.sources[0].uniqueName]" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0)" required></sh-select>
+	                            <sh-select name="sourceWarehouse" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0)" required></sh-select>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
@@ -194,7 +194,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-	                            <sh-select name="destinationWarehouse" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="warehouses[branchTransfer.destinations[0].uniqueName]" [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName" (selected)="getWarehouseDetails('destinations', 0)" required></sh-select>
+	                            <sh-select name="destinationWarehouse" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]" [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName" (selected)="getWarehouseDetails('destinations', 0)" required></sh-select>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
@@ -272,7 +272,7 @@
 	                                            </div>
 	                                        </div>
 	                                    </div>
-	                                    <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+	                                    <textarea rows="5" cols="5" maxlength="100" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
 	                                </div>
 	                                <div *ngIf="activeRow !== i">
 	                                    <div *ngIf="product.name">{{product.name}}</div>
@@ -334,7 +334,7 @@
 	                            <td>{{i+1}}.</td>
 	                            <td>
 		                            <div *ngIf="activeRow === i">
-		                                <sh-select name="destinationName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="destination.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, destination)"></sh-select>
+		                                <sh-select name="destinationName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="destination.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'destinations', i)"></sh-select>
 		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="destination.uniqueName" [options]="warehouses[destination.uniqueName]" [(ngModel)]="destination.warehouse.uniqueName" name="destinationWarehouse{{i}}" (selected)="getWarehouseDetails('destinations', i)"></sh-select>
 		                                <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && destination.warehouse.uniqueName" name="destinationWarehouseTaxnumber{{i}}" #destinationGstNumberField (change)="checkTaxNumberValidation(destinationGstNumberField);" [(ngModel)]="destination.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="destination.warehouse.uniqueName" name="destinationWarehouseAddress{{i}}" [(ngModel)]="destination.warehouse.address"></textarea>
@@ -381,7 +381,7 @@
 	                            <td>{{i+1}}.</td>
 	                            <td>
 		                            <div *ngIf="activeRow === i">
-		                                <sh-select name="sourceName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="source.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, source)"></sh-select>
+		                                <sh-select name="sourceName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="source.uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'sources', i)"></sh-select>
 		                                <sh-select [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" *ngIf="source.uniqueName" [options]="warehouses[source.uniqueName]" [(ngModel)]="source.warehouse.uniqueName" name="sourceWarehouse{{i}}" (selected)="getWarehouseDetails('sources', i)"></sh-select>
 			                            <input type="text" class="form-control" placeholder="Enter {{formFields['taxName'].label}}" *ngIf="formFields && formFields['taxName'] && source.warehouse.uniqueName" name="sourceWarehouseTaxnumber{{i}}" #sourceGstNumberField (change)="checkTaxNumberValidation(sourceGstNumberField);" [(ngModel)]="source.warehouse.taxNumber" [attr.required]="isTaxNumberRequired">
 		                                <textarea class="form-control" *ngIf="source.warehouse.uniqueName" name="sourceWarehouseAddress{{i}}" [(ngModel)]="source.warehouse.address"></textarea>
@@ -455,7 +455,7 @@
 	                                    <div class="row">
 	                                        <div class="col-sm-12">
 	                                            <h3 class="mrB1">Note</h3>
-	                                            <textarea class="form-control" rows="5" cols="5" name="note" [(ngModel)]="branchTransfer.note"></textarea>
+	                                            <textarea class="form-control" maxlength="100" rows="5" cols="5" name="note" [(ngModel)]="branchTransfer.note"></textarea>
 	                                        </div>
 	                                    </div>
 	                                </div>
