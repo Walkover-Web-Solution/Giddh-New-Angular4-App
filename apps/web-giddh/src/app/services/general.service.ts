@@ -4,117 +4,120 @@ import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
-import {COMPANY_API} from "./apiurls/comapny.api";
-import {catchError, map} from "rxjs/operators";
-import {BaseResponse} from "../models/api-models/BaseResponse";
-import {ReportsDetailedRequestFilter, SalesRegisteDetailedResponse} from "../models/api-models/Reports";
+import { COMPANY_API } from "./apiurls/comapny.api";
+import { catchError, map } from "rxjs/operators";
+import { BaseResponse } from "../models/api-models/BaseResponse";
+import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
 
 @Injectable()
 export class GeneralService {
-  invokeEvent: Subject<any> = new Subject();
-  public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public isCurrencyPipeLoaded: boolean = false;
+    invokeEvent: Subject<any> = new Subject();
+    public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    public isCurrencyPipeLoaded: boolean = false;
 
-  public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
-  public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
-  public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
+    public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
+    public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 
-  get user(): UserDetails {
-    return this._user;
-  }
-
-  set user(userData: UserDetails) {
-    this._user = userData;
-  }
-
-  get companyUniqueName(): string {
-    return this._companyUniqueName;
-  }
-
-  set companyUniqueName(companyUniqueName: string) {
-    this._companyUniqueName = companyUniqueName;
-  }
-
-  get sessionId(): string {
-    return this._sessionId;
-  }
-
-  set sessionId(sessionId: string) {
-    this._sessionId = sessionId;
-  }
-
-  // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000
-  get currencyType(): string {
-    return this._currencyType;
-  }
-
-  set currencyType(currencyType: string) {
-    this._currencyType = currencyType;
-
-  }
-
-  get createNewCompany(): CompanyCreateRequest {
-    return this._createNewCompany;
-  }
-
-  set createNewCompany(newCompanyRequest: CompanyCreateRequest) {
-    this._createNewCompany = newCompanyRequest;
-  }
-
-  public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
-  public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
-  private _user: UserDetails;
-  private _createNewCompany: CompanyCreateRequest;
-
-  private _companyUniqueName: string;
-
-  private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
-
-  private _sessionId: string;
-
-  public resetGeneralServiceState() {
-    this.user = null;
-    this.sessionId = null;
-    this.companyUniqueName = null;
-  }
-
-  public SetIAmLoaded(iAmLoaded: boolean) {
-    this.IAmLoaded.next(iAmLoaded);
-  }
-
-  public createQueryString(str, model) {
-    let url = str;
-    if ((model.from)) {
-      url = url + 'from=' + model.from + '&';
-    }
-    if ((model.to)) {
-      url = url + 'to=' + model.to + '&';
-    }
-    if ((model.page)) {
-      url = url + 'page=' + model.page + '&';
-    }
-    if ((model.count)) {
-      url = url + 'count=' + model.count;
+    get user(): UserDetails {
+        return this._user;
     }
 
-    if ((model.type)) {
-      url = url + '&type=' + model.type;
+    set user(userData: UserDetails) {
+        this._user = userData;
     }
-    if ((model.sort)) {
-      url = url + '&sort=' + model.sort;
-    }
-    if ((model.sortBy)) {
-      url = url + '&sortBy=' + model.sortBy;
-    }
-    if ((model.q)) {
-      url = url + '&q=' + model.q;
-    }
-    return url;
-  }
-  public setIsMobileView(isMobileView: boolean) {
-    this.isMobileSite.next(isMobileView);
-  }
 
+    get companyUniqueName(): string {
+        return this._companyUniqueName;
+    }
+
+    set companyUniqueName(companyUniqueName: string) {
+        this._companyUniqueName = companyUniqueName;
+    }
+
+    get sessionId(): string {
+        return this._sessionId;
+    }
+
+    set sessionId(sessionId: string) {
+        this._sessionId = sessionId;
+    }
+
+    // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000
+    get currencyType(): string {
+        return this._currencyType;
+    }
+
+    set currencyType(currencyType: string) {
+        this._currencyType = currencyType;
+
+    }
+
+    get createNewCompany(): CompanyCreateRequest {
+        return this._createNewCompany;
+    }
+
+    set createNewCompany(newCompanyRequest: CompanyCreateRequest) {
+        this._createNewCompany = newCompanyRequest;
+    }
+
+    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+    public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    private _user: UserDetails;
+    private _createNewCompany: CompanyCreateRequest;
+
+    private _companyUniqueName: string;
+
+    private _currencyType = '1,00,00,000';   // there will be four type of currencyType a.1,00,00,000 (INR),b.10,000,000,c.10\'000\'000,d.10 000 000
+
+    private _sessionId: string;
+
+    public resetGeneralServiceState() {
+        this.user = null;
+        this.sessionId = null;
+        this.companyUniqueName = null;
+    }
+
+    public SetIAmLoaded(iAmLoaded: boolean) {
+        this.IAmLoaded.next(iAmLoaded);
+    }
+
+    public createQueryString(str, model) {
+        let url = str;
+        if ((model.from)) {
+            url = url + 'from=' + model.from + '&';
+        }
+        if ((model.to)) {
+            url = url + 'to=' + model.to + '&';
+        }
+        if ((model.page)) {
+            url = url + 'page=' + model.page + '&';
+        }
+        if ((model.count)) {
+            url = url + 'count=' + model.count;
+        }
+
+        if ((model.type)) {
+            url = url + '&type=' + model.type;
+        }
+        if ((model.sort)) {
+            url = url + '&sort=' + model.sort;
+        }
+        if ((model.sortBy)) {
+            url = url + '&sortBy=' + model.sortBy;
+        }
+        if ((model.q)) {
+            url = url + '&q=' + model.q;
+        }
+        return url;
+    }
+    public setIsMobileView(isMobileView: boolean) {
+        this.isMobileSite.next(isMobileView);
+    }
+
+    public capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 }

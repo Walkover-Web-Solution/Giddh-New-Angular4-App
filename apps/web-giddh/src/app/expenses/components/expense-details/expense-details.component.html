@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="upload-fil cursor-pointer" *ngIf="!isImageZoomView">
+        <div class="upload-fil" *ngIf="!isImageZoomView">
             <ul>
                 <ng-container *ngFor="let item of imageURL let i=index;">
                     <li>
@@ -26,7 +26,7 @@
                 </ng-container>
                 <li>
                     <div class="upload-img add-img">
-                        <label for="signatureImg-edit"><i class="icon-plus"></i></label>
+                        <label for="signatureImg-edit"><i class="icon-add"></i></label>
                         <input type="file" accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect
                                (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
                                [uploadInput]="uploadInput">
@@ -45,7 +45,9 @@
 
     </div>
 
-    <div class="bg-white p-15">
+    <div class="pettycash">
+
+    <div class="bg-white p-15 pb-0">
         <div class="form-group mb-2">
             <label>Description</label>
             <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
@@ -55,7 +57,7 @@
         <div class="row">
             <div class="col-sm-8">
 
-                <div class="mb-2 d-inline-block mr-2">
+                <div class="form-group d-inline-block mr-2">
 
                     <label>
                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
@@ -113,6 +115,7 @@
                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
         ></update-ledger-entry-panel>
     </div>
+ </div>
 </div>
 <div *ngIf="(ispPettycashEntryInprocess$ | async) ">
         <div class="no-data mrT2 loader-main" *ngIf="showLoader">

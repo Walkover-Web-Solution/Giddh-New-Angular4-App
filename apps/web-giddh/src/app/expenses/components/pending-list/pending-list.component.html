@@ -27,7 +27,7 @@
                 </th>
 
                 <th class="pr-2 amount-arrow">
-                    <div class="d-flex align-items-center"><span>Amount</span>
+                    <div class="d-flex align-items-center justify-content-end"><span>Amount</span>
                         <ng-container class="d-inline-block "
                                       *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                     </div>
@@ -65,8 +65,7 @@
                            *ngIf="expenses.entryType==='expense'"></i> {{expenses.particularAccount.name}}
                     </td>
 
-                    <td data-title="Amount"
-                        class="pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
+                    <td data-title="Amount" class="text-right pr-2"> {{expenses.currencySymbol}} {{ expenses.amount | giddhCurrency}}</td>
 
                     <td data-title="Payment/Receipt">
                         <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">A/c</span>

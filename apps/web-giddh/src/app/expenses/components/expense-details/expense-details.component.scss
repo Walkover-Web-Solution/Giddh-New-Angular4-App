@@ -18,8 +18,9 @@
     align-items: center;
     overflow: hidden;
     justify-content: center;
-    font-size: 32px;
+    font-size: 48px;
     cursor: pointer;
+    color: #999999;
 }
 
 .upload-fil ul li .upload-img>a {
@@ -97,4 +98,13 @@ span.close-modal.cp.pull-right {
     display: block;
     opacity: 0;
     visibility: hidden;
+}
+.pettycash {
+    height: 60vh;
+    overflow-y: auto;
+}
+@media only screen and (max-width: 991px) {
+    .pettycash {
+        height: initial;
+    }
 }

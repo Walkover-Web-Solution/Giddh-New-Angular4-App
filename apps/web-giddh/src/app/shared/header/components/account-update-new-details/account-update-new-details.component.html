@@ -352,13 +352,24 @@
             </div>
 
         </tab>
-
     </tabset>
-
+    <div class="row" *ngIf="!isOtherSelectedTab">
+        <div class="col-sm-12 mrT3">
+            <div class="button-group">
+                <!-- <button class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
+                <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
+                Delete
+            </button>
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+            </button>
+            </div>
+        </div>
+    </div>
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
-    <div class="row ">
-        <div class="col-xs-12 mrB2 selectBox">
+    <div class="row pd-1">
+        <!-- <div class="col-xs-12 mrB2 selectBox">
             <div class="form-group ">
                 <label>Default discount <span
                         class="primary_clr"></span></label>
@@ -373,14 +384,14 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div *ngIf="(activeAccount$ | async)" class="form-group">
-        <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
-            <div class="row">
-                <div class=" col-sm-12 ">
-                    <div class="form-group ">
-                        <label>Move to Group</label>
-                        <span>
+    </div> -->
+        <div *ngIf="(activeAccount$ | async)" class="form-group">
+            <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
+                <div class="row">
+                    <div class=" col-sm-12 ">
+                        <div class="form-group ">
+                            <label>Move to Group</label>
+                            <span>
                             <sh-select formControlName="moveto" [placeholder]="'Group name'"
                                 [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter" class="pull-left"
                                 style="width: calc(100% - 93px); ">
@@ -396,122 +407,122 @@
                                 </ng-template>
                             </sh-select>
                         </span>
-                        <span class="pull-right">
+                            <span class="pull-right">
                             <button type="submit" class="btn btn-primary mrgeBtn"
                                 [disabled]="moveAccountForm.invalid">Move</button>
                         </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    <div class="row ">
-        <div class="col-sm-12 ">
-            <div class="form-group ">
-                <label>Select account to merge with <span
+            </form>
+        </div>
+        <div class="row ">
+            <div class="col-sm-12 ">
+                <div class="form-group ">
+                    <label>Select account to merge with <span
                         class="primary_clr">{{(activeAccount$ | async)?.name}}</span></label>
-                <div class="clearfix" #accountSelect2>
-                    <span>
+                    <div class="clearfix" #accountSelect2>
+                        <span>
                         <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true"
                             (viewInitEvent)="loadAccountData()" [multiple]="true" [(ngModel)]="selectedaccountForMerge"
                             [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
                     </span>
-                    <span class="pull-right">
+                        <span class="pull-right">
                         <button type="submit" class="btn btn-primary mrgeBtn" (click)="mergeAccounts()">Merge</button>
                     </span>
-                </div>
-                <small class="clearfix">This option is risky and can not be undone</small>
+                    </div>
+                    <small class="clearfix">This option is risky and can not be undone</small>
 
-                <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
-                    <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
-                        <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
+                    <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                        <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
+                            <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                             {{merged}}
                             <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
                         </a>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+
     </div>
 
-</div>
+    <!-- taxes container -->
+    <ng-container *ngIf="(isTaxableAccount$ | async)">
+        <div class="row" *ngIf="selectedTab === 'others'">
+            <div class="col-sm-12">
+                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                    <div class="tax-label">
+                        <label>Default Taxes</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
 
-<!-- taxes container -->
-<ng-container *ngIf="(isTaxableAccount$ | async)">
-    <div class="row" *ngIf="selectedTab === 'others'">
-        <div class="col-sm-12">
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                <div class="tax-label">
-                    <label>Default Taxes</label>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-
-                        <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
-                        </sh-select>
-                        <span class="input-group-btn ">
+                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
+                            </sh-select>
+                            <span class="input-group-btn ">
                             <button type="submit" class="btn btn-success">Save</button>
                         </span>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
 
-            <!-- *ngIf="showEditTaxSection" -->
-            <div class="edit-tax-section">
-                <div class="form-group">
-                    <div class="tax-label">
-                        <label>All Inherited Taxes</label>
-                    </div>
-                    <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
-                        <ng-template #popTemplate>
-                            <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
-                            </div>
-                        </ng-template>
-                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                <!-- *ngIf="showEditTaxSection" -->
+                <div class="edit-tax-section">
+                    <div class="form-group">
+                        <div class="tax-label">
+                            <label>All Inherited Taxes</label>
+                        </div>
+                        <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
+                            <ng-template #popTemplate>
+                                <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
+                                </div>
+                            </ng-template>
+                            <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
                         </span>
+                        </div>
+                        <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes
+                        </p>
                     </div>
-                    <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes
-                    </p>
                 </div>
             </div>
         </div>
-    </div>
-</ng-container>
-<div class="row">
-    <div class="col-sm-12 mrT3">
-        <div class="button-group">
-            <!-- <button class="btn btn-cancel">Cancel</button>
+    </ng-container>
+    <div class="row" *ngIf="isOtherSelectedTab">
+        <div class="col-sm-12 mrT3">
+            <div class="button-group">
+                <!-- <button class="btn btn-cancel">Cancel</button>
                         <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
-            <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
+                <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                 Delete
             </button>
-            <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
             </button>
+            </div>
         </div>
     </div>
-</div>
-<!--deleteMergedAccount account modal  -->
-<div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody' (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
-            </confirm-modal>
+    <!--deleteMergedAccount account modal  -->
+    <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody' (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
+                </confirm-modal>
+            </div>
         </div>
     </div>
-</div>
-<!--moveMergedAccount account modal  -->
-<div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <confirm-modal [title]="'Move Merged Account'" [body]='moveMergedAccountModalBody' (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
-            </confirm-modal>
+    <!--moveMergedAccount account modal  -->
+    <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <confirm-modal [title]="'Move Merged Account'" [body]='moveMergedAccountModalBody' (cancelCallBack)="hideMoveMergedAccountModal()" (successCallBack)="moveMergeAccountTo()">
+                </confirm-modal>
+            </div>
         </div>
     </div>
-</div>
 
-<!--delete Account modal  -->
-<!-- <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+    <!--delete Account modal  -->
+    <!-- <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
