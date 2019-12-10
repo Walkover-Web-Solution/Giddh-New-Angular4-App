@@ -1,52 +1,13 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <style>
-    body {
-      height: 100vh;
-      background: #f4f5f8;
-    }
-
-    .giddh-spinner {
-      animation: rotate 1.5s infinite linear;
-      background: #221F1F none repeat scroll 0 0;
-      border: 7px solid #C63B13;
-      border-radius: 50%;
-      box-shadow: 0 -10px 0 14px #fff inset;
-      box-sizing: border-box;
-      height: 60px;
-      width: 60px;
-      margin: 0 auto 38%;
-    }
-
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .vertical-center-spinner {
-      width: 60px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
-      top: 38%;
-      transform: translateY(50%);
-    }
-  </style>
 </head>
 
 <body>
-  <div></div>
-        <div id="loader-1"  class="spinner2">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
+    <div id="loader-1"  class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
   <div id="app">
     <section class="bg-f9" id="magicLink">
       <section class="bg-bl">
@@ -429,7 +390,7 @@
       </section>
 
       <section id="web_footer">
-        <section class="cmnPd80 ylwBg homeBtmhalf">
+        <!-- <section class="cmnPd80 ylwBg homeBtmhalf">
           <div class="container">
             <div class="row text-center">
               <div class="col-sm-12">
@@ -446,21 +407,120 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
 
-        <section class="cmnPd80 sub_footer">
-          <div class="container">
-            <div class="row text-center">
-              <div class="col-sm-12">
-                <h3 class="arvo">Giddh is the future of online accounting software (but-obvious GST ready).</h3>
-                <h3 class="arvo">Do you have any question with Giddh?</h3>
-              </div>
+
+        <footer class="style-1">
+            <div class="top-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="d-flex">
+                               <div class="flex-grow-0">
+                                    <div class="clearfix">
+                                        <p class="mb-2">Desktop Apps</p>
+                                        <ul class="inner-logos pre-ul">
+                                        <li id="media_image-4" class="widget widget_media_image"><a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%206.6.8.exe"><img width="1" height="1" src="assets/images/window-icon.svg" class="image wp-image-155  attachment-medium size-medium" alt="" style="max-width: 100%; height: auto;"></a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="">
+                                        <ul class="pre-ul menu-item" id="menu-primary-menu">
+                                            <li><a target="_blank" href="https://giddh.com/make-the-switch/">Make The Switch</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/all-features/">Features</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/pricing/">Pricing</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/gst/">GST+</a></li>
+                                            <li><a href="tel:918818888764">+91-8818888764</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="mt-5" id="custom_html-2">
+                                        <ul class="pre-ul">
+                                            <li>Sales :<a href="mailTo:shubhendra@giddh.com"> shubhendra@giddh.com</a></li>
+                                            <li>Support: <a href="mailTo:support@giddh.com"> support@giddh.com</a></li>
+                                            <li><a href="tel:918818888768">+91-8818888768</a></li>
+                                        </ul>
+                                    </div>
+                               </div>
+
+
+                               <div class="flex-grow-1">
+                                    <div class="clearfix">
+                                        <p class="mb-2">Mobile Apps</p>
+                                        <ul class="inner-logos pre-ul">
+                                                <li id="media_image-6" class="widget widget_media_image"><a href="https://play.google.com/store/apps/details?id=com.app.Giddh" target="_blank"><img width="1" height="1" src="https://giddh.com/wp-content/uploads/2019/10/androide_icon.svg" class="image wp-image-156  attachment-medium size-medium" alt="" style="max-width: 100%; height: auto;"></a></li>
+                                                <li id="media_image-7" class="widget widget_media_image"><a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank"><img width="1" height="1" src="https://giddh.com/wp-content/uploads/2019/10/ios_icon.svg" class="image wp-image-157  attachment-medium size-medium" alt="" style="max-width: 100%; height: auto;"></a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="">
+                                        <ul class="pre-ul menu-item" id="menu-primary-menu">
+                                            <li><a target="_blank" href="https://giddh.com/privacy-policy/">Privacy Policy</a></li>
+                                            <li><a target="_blank" href="https://www.walkover.in/career/">Work With Us</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/affiliate/">Affilliate With Us</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/help">Help</a></li>
+                                            <li><a target="_blank" href="https://giddh.com/blog/">Blog</a></li>
+                                        </ul>
+                                    </div>
+
+                               </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="contact_form" v-show="!formSubmitted">
+                                <h4 class="headerline mrB2">Contact Us</h4>
+                                <p class="mb-5">For complete accounting solution for your business</p>
+                                <form novalidate name="contactForm" action="#">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="name">Full Name *</label>
+                                        <input name="contactForm.name" placeholder="Full Name*" v-model="cForm.name" type="text"
+                                        required class="form-control">
+                                    </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="message">Contact Number *</label>
+                                        <input class="form-control" placeholder="Contact Number *" type="text"
+                                        decimalDigitsDirective name="contactForm.number" v-model="cForm.number" minlength="7"
+                                        maxlength="12" required>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input name="contactForm.email" placeholder="Email Address *" v-model="cForm.email"
+                                        type="email" required class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea name="contactForm.message" placeholder="Message" v-model="cForm.message"
+                                        class="form-control"></textarea>
+                                    </div>
+                                </div>
+                                <button v-on:click="submitForm(cForm, $event)" class="btn btn-default btn-lg btn-outline-primary" type="submit">Submit
+                                </button>
+
+                                </form>
+                            </div>
+                            <h4 class="headerline" v-if="formSubmitted">{{responseMsg}}</h4>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </section>
+        </footer>
 
 
-        <!-- footer start -->
+        <!-- footer start
         <section id="footer">
           <section id="contact">
             <div class="container">
@@ -520,9 +580,6 @@
                   <h4 class="headerline">Contact Us</h4>
 
                   <div class="social">
-                    <!-- <a ng-repeat="list in socialList" href="{{list.url}}">
-                                              <div class="scicn {{list.class}}">{{list.name}}</div>
-                                          </a> -->
                   </div>
                   <div class="inconsolata">
                     <p>405-406, Capt. C. S. Naidu Arcade,</p>
@@ -568,7 +625,8 @@
             </div>
           </section>
         </section>
-        <!-- end of contact -->
+
+
 
         <footer>
           <div>
@@ -600,7 +658,7 @@
           </small>
         </footer>
       </section>
-      <!-- end of footer -->
+       end of footer -->
 
     </section>
   </div>
