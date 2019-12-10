@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -24,11 +24,12 @@ import { IOption } from "../../../theme/ng-select/option.interface";
 import { ToasterService } from "../../../services/toaster.service";
 import { IForceClear } from "../../../models/api-models/Sales";
 import { CompanyService } from "../../../services/companyService.service";
-import { IEwayBillfilter } from "../../../models/api-models/Invoice";
+import { IEwayBillfilter, IEwayBillTransporter, IAllTransporterDetails } from "../../../models/api-models/Invoice";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { transporterModes } from "../../../shared/helpers/transporterModes";
 import { InventoryService } from "../../../services/inventory.service";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -53,6 +54,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @Input() public editBranchTransferUniqueName: string;
     @ViewChild('productSkuCode') productSkuCode;
     @ViewChild('productHsnNumber') productHsnNumber;
+    @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -69,6 +71,21 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public activeRow: number = -1;
     public activeCompany: any = {};
     public inputMaskFormat: any = '';
+    public transportEditMode: boolean = false;
+    public transporterList$: Observable<IEwayBillTransporter[]>;
+    public transporterListDetails$: Observable<IAllTransporterDetails>;
+    public transporterListDetails: IAllTransporterDetails;
+    public isGenarateTransporterInProcess$: Observable<boolean>;
+    public isGenarateTransporterSuccessfully$: Observable<boolean>;
+    public updateTransporterInProcess$: Observable<boolean>;
+    public updateTransporterSuccess$: Observable<boolean>;
+    public generateNewTransporter: IEwayBillTransporter = {
+        transporterId: null,
+        transporterName: null
+    };
+    public keydownClassAdded: boolean = false;
+    public transporterPopupStatus: boolean = false;
+    public currenTransporterId: string;
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public transporterDropdown$: Observable<IOption[]>;
     public transporterMode: IOption[] = [];
@@ -84,7 +101,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
 
-    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService) {
+    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef) {
         this.initFormFields();
         this.getTransportersList();
 
@@ -252,6 +269,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public getTransportersList(): void {
+        this.transporterListDetails$ = this.store.select(p => p.ewaybillstate.TransporterListDetails).pipe(takeUntil(this.destroyed$));
+        this.transporterList$ = this.store.select(p => p.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$));
+
+        this.transporterListDetails$.subscribe(op => {
+            this.transporterListDetails = op;
+        })
+
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
 
         this.store.pipe(select(s => s.ewaybillstate.TransporterList), takeUntil(this.destroyed$)).subscribe(p => {
@@ -263,6 +287,23 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     return { label: trans.transporterName, value: trans.transporterId };
                 });
                 this.transporterDropdown$ = observableOf(transporterArr);
+            }
+        });
+
+        this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
+        this.updateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.updateTransporterInProcess).pipe(takeUntil(this.destroyed$));
+        this.updateTransporterSuccess$ = this.store.select(p => p.ewaybillstate.updateTransporterSuccess).pipe(takeUntil(this.destroyed$));
+        this.isGenarateTransporterSuccessfully$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$));
+
+        this.updateTransporterSuccess$.subscribe(s => {
+            if (s) {
+                this.generateNewTransporterForm.reset();
+            }
+        });
+
+        this.store.select(state => state.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+            if (p) {
+                this.clearTransportForm();
             }
         });
     }
@@ -685,5 +726,78 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    public clearTransportForm(): void {
+        this.generateNewTransporter.transporterId = this.generateNewTransporter.transporterName = null;
+    }
+
+    public keydownPressed(e): void {
+        if (e.code === 'ArrowDown') {
+            this.keydownClassAdded = true;
+        } else if (e.code === 'Enter' && this.keydownClassAdded) {
+            this.keydownClassAdded = true;
+            this.toggleTransporterModel();
+        } else {
+            this.keydownClassAdded = false;
+        }
+    }
+
+    public toggleTransporterModel(): void {
+        this.transporterPopupStatus = !this.transporterPopupStatus;
+        this.generateNewTransporterForm.reset();
+        this.transportEditMode = false;
+    }
+
+    public generateTransporter(generateTransporterForm: NgForm): void {
+        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.detectChanges();
+    }
+
+    public updateTransporter(generateTransporterForm: NgForm): void {
+        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.transportEditMode = false;
+        this.detectChanges();
+    }
+
+    public editTransporter(transporter: any): void {
+        this.seTransporterDetail(transporter);
+        this.transportEditMode = true;
+    }
+
+    public seTransporterDetail(transporter): void {
+        if (transporter !== undefined && transporter) {
+            this.generateNewTransporter.transporterId = transporter.transporterId;
+            this.generateNewTransporter.transporterName = transporter.transporterName;
+            this.currenTransporterId = transporter.transporterId;
+        }
+        this.detectChanges();
+    }
+
+    public deleteTransporter(transporter: IEwayBillTransporter): void {
+        this.store.dispatch(this.invoiceActions.deleteTransporter(transporter.transporterId));
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.toggleTransporterModel();
+        this.detectChanges();
+    }
+
+    public detectChanges(): void {
+        if (!this._cdRef['destroyed']) {
+            this._cdRef.detectChanges();
+        }
+    }
+
+    public pageChanged(event: any): void {
+        this.transporterFilterRequest.page = event.page;
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+        this.detectChanges();
+    }
+
+    public sortButtonClicked(type: 'asc' | 'desc', columnName: string): void {
+        this.transporterFilterRequest.sort = type;
+        this.transporterFilterRequest.sortBy = columnName;
+        this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
     }
 }

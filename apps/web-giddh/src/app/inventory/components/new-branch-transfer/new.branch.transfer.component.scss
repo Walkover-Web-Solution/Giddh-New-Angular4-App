@@ -315,3 +315,60 @@ tfoot td .tableSec.form-group {
     border-radius: 50%;
     text-align: center;
 }
+.aside-pane {
+    overflow: auto;
+    width: 475px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 0px;
+}
+.aside-pane.aside-right.out button#close {
+    right: -60px;
+}
+
+.aside-right {
+    font-size: 14px;
+    background: #fff;
+    right: -530px;
+    transition: .5s all ease;
+    z-index: 999;
+}
+.aside-right .control-label {
+    padding-left: 20px;
+    text-align: left;
+}
+.aside-right .list-icon-group label {
+    margin: 0px !important;
+    vertical-align: middle;
+}
+
+.aside-right .list-icon-group label {
+    padding: 5px 10px;
+    border: 1px solid transparent;
+}
+
+.aside-right .list-icon-group input:checked+label {
+    border: 1px solid #FF5F00;
+    border-radius: 0px;
+}
+
+.aside-pane.aside-right.in {
+    right: 0;
+    z-index: 9999;
+}
+.aside-overlay.out {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.aside-overlay.in {
+    visibility: visible;
+    opacity: .6;
+    z-index: 9999;
+}
+
+.aside-overlay {
+    transition: .5s all ease;
+    z-index: 999;
+}
