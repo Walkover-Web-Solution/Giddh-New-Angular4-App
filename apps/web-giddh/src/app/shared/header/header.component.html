@@ -108,7 +108,8 @@
                                                             <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                         </ng-template>
 
-                                                        <span container="body" [tooltip]="CompanyBranchname" placement="top">
+                                                        <span container="body" [tooltip]="CompanyBranchname"
+                                                            placement="top">
                                                             {{ cmp.name }} <span
                                                                 *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                         </span>
@@ -856,7 +857,7 @@
             (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true"
             [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)"
             (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true"
-            [searchBoxPlaceholder]="'Search'" [isMultiple]="false">
+            [searchBoxPlaceholder]="'Search'" [isMultiple]="false" (closeEmitter)="modelRef.hide()">
         </universal-data-list>
 
         <div class="shortcuts">
