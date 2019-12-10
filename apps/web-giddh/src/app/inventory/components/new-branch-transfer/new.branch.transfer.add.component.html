@@ -134,7 +134,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <sh-select name="productName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="branchTransfer.products[0].uniqueName" (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
+		                        <sh-select name="productName" [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(0)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="branchTransfer.products[0].uniqueName" (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -253,7 +253,7 @@
 	                            <td>{{i+1}}.</td>
 	                            <td>
 	                                <div *ngIf="activeRow === i">
-	                                    <sh-select name="productName{{i}}" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)"></sh-select>
+	                                    <sh-select name="productName{{i}}" [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(i)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product)"></sh-select>
 	                                    <div class="pos-rel">
 	                                        <div class="skuCode" (click)="focusSkuNumber();" *ngIf="activeRow == i && product.uniqueName">
 		                                        <label class="">SKU Number: </label>
@@ -275,7 +275,7 @@
 	                                    <textarea rows="5" cols="5" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
 	                                </div>
 	                                <div *ngIf="activeRow !== i">
-	                                    <div *ngIf="product.uniqueName">{{product.uniqueName}}</div>
+	                                    <div *ngIf="product.name">{{product.name}}</div>
 		                                <div *ngIf="product.stockDetails.skuCode">SKU Number: {{product.stockDetails.skuCode}}</div>
 		                                <div *ngIf="product.hsnNumber">HSN: {{product.hsnNumber}}</div>
 	                                    <div *ngIf="product.description">{{product.description}}</div>
@@ -557,3 +557,5 @@
         </div>
     </div>
 </div>
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-menu-product-service [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="onProductNoResultsClicked(null)"></aside-menu-product-service>

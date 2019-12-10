@@ -44,11 +44,13 @@ import { ManufacturingComponent } from "./manufacturing/manufacturing.component"
 import { NewBranchTransferAddComponent } from "./components/new-branch-transfer/new.branch.transfer.add.component";
 import { AsideSenderReceiverDetailsPaneComponent } from "./components/aside-sender-receiver-details/aside-sender-receiver-details.component";
 import { NewBranchTransferListComponent } from "./components/new-branch-transfer/new.branch.transfer.list.component";
-
+import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { DateFormatterPipe } from "./dateFormatter.pipe";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
+import { SalesAddStockComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
+import { SalesAddStockGroupComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
 
 @NgModule({
     declarations: [
@@ -132,7 +134,8 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         TabsModule,
         ReactiveFormsModule,
         DigitsOnlyModule,
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
+        ProformaInvoiceModule
     ],
     entryComponents: [PaginationComponent]
 })

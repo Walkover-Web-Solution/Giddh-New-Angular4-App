@@ -104,21 +104,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _companyService: CompanyService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef) {
         this.initFormFields();
         this.getTransportersList();
-
-        this.store.dispatch(this.inventoryAction.GetStock());
-
-        this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
-                this.stockList = [];
-                let stockList = _.cloneDeep(o);
-
-                stockList.results.forEach(key => {
-                    this.stockCodeName[key.stockUnit.code] = [];
-                    this.stockCodeName[key.stockUnit.code] = key.stockUnit.name;
-                    this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
-                });
-            }
-        });
+        this.getStock();
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -441,18 +427,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public selectProduct(event, product): void {
-        if (event) {
-            if (event.additional) {
-                product.name = event.additional.name;
-                product.stockDetails.stockUnit = event.additional.stockUnit.code;
-                product.stockDetails.rate = event.additional.rate;
-                product.stockDetails.amount = event.additional.amount;
-                product.stockDetails.quantity = event.additional.openingQuantity;
+        if (event && event.additional) {
+            console.log(event);
+            product.name = event.additional.name;
+            product.stockDetails.stockUnit = event.additional.stockUnit.code;
+            product.stockDetails.rate = event.additional.rate;
+            product.stockDetails.amount = event.additional.amount;
+            product.stockDetails.quantity = event.additional.openingQuantity;
 
-                if (this.transferType === 'senders') {
-                    this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
-                    this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
-                }
+            if (this.transferType === 'senders') {
+                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
             }
         }
     }
@@ -726,6 +711,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+
+        if (!idx) {
+            this.getStock();
+        }
     }
 
     public clearTransportForm(): void {
@@ -763,11 +752,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public editTransporter(transporter: any): void {
-        this.seTransporterDetail(transporter);
+        this.setTransporterDetail(transporter);
         this.transportEditMode = true;
     }
 
-    public seTransporterDetail(transporter): void {
+    public setTransporterDetail(transporter): void {
         if (transporter !== undefined && transporter) {
             this.generateNewTransporter.transporterId = transporter.transporterId;
             this.generateNewTransporter.transporterName = transporter.transporterName;
@@ -799,5 +788,23 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.transporterFilterRequest.sort = type;
         this.transporterFilterRequest.sortBy = columnName;
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
+    }
+
+    public getStock(): void {
+        this.store.dispatch(this.inventoryAction.GetStock());
+
+        this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
+            if (o && !_.isEmpty(o)) {
+                this.stockList = [];
+                this.stockCodeName = [];
+                let stockList = _.cloneDeep(o);
+
+                stockList.results.forEach(key => {
+                    this.stockCodeName[key.stockUnit.code] = [];
+                    this.stockCodeName[key.stockUnit.code] = key.stockUnit.name;
+                    this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
+                });
+            }
+        });
     }
 }
