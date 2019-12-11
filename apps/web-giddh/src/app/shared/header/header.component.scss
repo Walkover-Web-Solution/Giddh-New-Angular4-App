@@ -50,7 +50,7 @@
 }
 
 .account-search {
-    margin: 10px 15px 10px 10px;
+    margin: 10px 15px 10px 15px;
     position: relative;
     height: 36px;
 }
@@ -332,6 +332,7 @@ a[vr-item]:focus {
     border-radius: 2px;
     color: #fff;
     margin-top: 1px;
+    margin-right: 2px;
 }
 
 #other i {
@@ -744,6 +745,17 @@ ul.sub-list {
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    }
+    .calender-addone {
+        height: 36px;
+        vertical-align: middle;
+        align-items: center;
+    }
+    .header-date {
+        height: 36px;
+        vertical-align: top;
+        display: inline-flex !important;
+        align-items: center;
     }
 }
 @media (min-width: 412px) and (max-width: 840px) {

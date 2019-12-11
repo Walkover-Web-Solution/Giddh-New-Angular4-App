@@ -26,13 +26,10 @@
                 <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
 
             </div>
-            <div class="col-sm-4 text-center col-xs-12 daterngoption"
+            <div class="col-sm-4  text-center col-xs-12 daterngoption"
                 [ngClass]="{'col-sm-offset-4' : !isLedgerAccountAllowsMultiCurrency }">
                 <div class="row">
-
-
                     <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-
                     <div class="advanceSearchByDate date-advanceSearch">
                         <!-- <span class="icon-calender "></span> -->
                         <span class="inputWrapper">
@@ -41,8 +38,6 @@
                                 name="daterangeInput" />
                         </span>
                     </div>
-
-
                     <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
                     <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
                     <!--type="text" ng-model="cDate" options="opts" required="">-->
@@ -50,10 +45,10 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-4 col-xs-12 text-right C-flex-end xs-pl-0 xs-pr-0">
+            <div class="col-sm-4 col-xs-12 text-right C-flex-end xs-pl-0 xs-pr-0 search-options">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
-                    <div class="d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
+                    <div class="d-flex search-ledger-field" *ngIf="checkedTrxWhileHovering.length === 0">
 
 
                         <div style="position: relative">
@@ -482,7 +477,7 @@
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
                             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Select All">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
@@ -519,7 +514,7 @@
                             </td>
 
                             <td class="col-xs-6" data-title="Particular">
-                                <div class="d-flex align-items-center" style="justify-content: space-between">
+                                <div class="d-flex align-items-center justify-content-between">
 
                                     <div class="ellp">
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -1072,7 +1067,7 @@
         *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
 
         <div class="row">
-            <div class="col-sm-3 col-xs-6 stat-block">
+            <div class="col-sm-3 col-xs-12 stat-block">
                 <div class="ledger-state-box">
                     <h1>Total Transactions
                         <span class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
@@ -1084,7 +1079,7 @@
                             {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
                 </div>
             </div>
-            <div class="col-sm-3 col-xs-6 stat-block">
+            <div class="col-sm-3 col-xs-12 stat-block">
                 <div class="ledger-state-box">
                     <h1>Opening Balance</h1>
 
@@ -1101,7 +1096,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-3 col-xs-6 stat-block">
+            <div class="col-sm-3 col-xs-12 stat-block">
                 <div class="ledger-state-box">
 
                     <h1 class="">Net Total</h1>
@@ -1164,7 +1159,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-3 col-xs-6 stat-block">
+            <div class="col-sm-3 col-xs-12 stat-block">
 
                 <div class="ledger-state-box">
                     <h1>Closing Balance</h1>
