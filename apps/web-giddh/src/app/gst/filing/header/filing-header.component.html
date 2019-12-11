@@ -17,10 +17,12 @@
                     ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
+                    {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
                 </ng-container>
             </div>
-            <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of outward supplies of goods and services
+            <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of outward supplies of
+                goods and services
             </div>
         </div>
 
@@ -32,11 +34,14 @@
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
                         <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"><i
-              class="icon-download"></i> Download
-            </button>
-                        <ul id="dropdown-menu_gstr1" *dropdownMenu class="dropdown-menu dropdown-menu-right mt-3" role="menu" aria-labelledby="button-triggers-manual">
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">Download sheet</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">Download error sheet</a></li>
+                                class="icon-download"></i> Download
+                        </button>
+                        <ul id="dropdown-menu_gstr1" *dropdownMenu class="dropdown-menu dropdown-menu-right mt-3"
+                            role="menu" aria-labelledby="button-triggers-manual">
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="onDownloadSheetGSTR('main')">Download sheet</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
+                                    (click)="onDownloadSheetGSTR('error')">Download error sheet</a></li>
                         </ul>
                     </div>
                 </li>
@@ -45,8 +50,9 @@
 
                     <div *ngIf="showTaxPro">
 
-                        <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }" (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
-            </button>
+                        <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
+                            (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
+                        </button>
 
                     </div>
 
@@ -73,36 +79,44 @@
                     ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} - {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
+                    {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
                 </ng-container>
 
             </div>
-            <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of inward supplies of goods and services
+            <div style="font-weight: normal;" class="font-xs text-muted text-middle">Details of inward supplies of goods
+                and services
             </div>
         </div>
 
         <div class="pull-right">
 
             <div class="btn-group" style="display: inline-block !important;" dropdown #dropdown="bs-dropdown">
-                <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"><i class="icon-download"></i>
-          Download
-        </button>
-                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual">
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">Download
-            sheet</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">Download
-            error sheet</a></li>
+                <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"><i
+                        class="icon-download"></i>
+                    Download
+                </button>
+                <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                    aria-labelledby="button-triggers-manual">
+                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
+                            (click)="onDownloadSheetGSTR('main')">Download
+                            sheet</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
+                            (click)="onDownloadSheetGSTR('error')">Download
+                            error sheet</a></li>
                 </ul>
             </div>
 
 
-            <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }" (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro">
-        {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
-      </button>
+            <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
+                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro">
+                {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
+            </button>
 
             <!-- <button class="btn btn-primary pull-right" (click)="toggleSettingAsidePane(null, 'RECONCILE')" *ngIf="!(gstAuthenticated$ | async)">GST Reconcile</button> -->
-            <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)" *ngIf="showTaxPro">Pull from GSTIN
-      </button>
+            <button class="btn btn-primary pull-right" [disabled]="!gstAuthenticated" (click)="pullFromGstIn($event)"
+                *ngIf="showTaxPro">Pull from GSTIN
+            </button>
         </div>
 
     </div>
@@ -111,16 +125,20 @@
 </div>
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
-<gst-aside-menu [selectedService]="selectedService" [returnType]="selectedGst" [class]="GstAsidePaneState" [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()" (cancelConfirmationEvent)="cancelConfirmationModel.show()"
-    (fileGstComplete)="closeAsidePane()"></gst-aside-menu>
+<gst-aside-menu [selectedService]="selectedService" [returnType]="selectedGst" [class]="GstAsidePaneState"
+    [@slideInOut]="GstAsidePaneState" (closeAsideEvent)="toggleSettingAsidePane($event)" (fileGst)="fileGstReturnV2()"
+    (cancelConfirmationEvent)="cancelConfirmationModel.show()" (fileGstComplete)="closeAsidePane()"></gst-aside-menu>
 
 
 <!-- region cancel confirmation modal -->
-<div bsModal #cancelConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{ ignoreBackdropClick: true }">
+<div bsModal #cancelConfirmationModel="bs-modal" class="modal zIndexForAside fade" role="dialog"
+    [config]="{ ignoreBackdropClick: true }">
     <div class="modal-dialog modal-md second">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <confirm-modal [body]="'Are you sure you want to cancel it?'" (successCallBack)="cancelConfirmationModel.hide();toggleSettingAsidePane(null);" (cancelCallBack)="cancelConfirmationModel.hide()"></confirm-modal>
+            <confirm-modal [body]="'Are you sure you want to cancel it?'"
+                (successCallBack)="cancelConfirmationModel.hide();toggleSettingAsidePane(null);"
+                (cancelCallBack)="cancelConfirmationModel.hide()"></confirm-modal>
         </div>
     </div>
 </div>

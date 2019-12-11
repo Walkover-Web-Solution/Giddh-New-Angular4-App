@@ -1,5 +1,11 @@
+<div class="form-header" *ngIf="!hideFirstStep">
+    <h3>Add</h3>
+</div>
+<button class="btn btn-primary" *ngIf="hideFirstStep" id="back" (click)="backButtonPressed()"><i class=" fa
+    fa-arrow-left"></i></button>
+
+<button id="close" *ngIf="!hideFirstStep" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
 <div class="aside-pane">
-    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
     <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
         <div class="pd1 alC">
             <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Product</button>
