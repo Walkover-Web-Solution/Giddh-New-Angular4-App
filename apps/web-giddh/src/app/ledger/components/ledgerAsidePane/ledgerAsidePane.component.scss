@@ -25,13 +25,17 @@
 }
 
 :host.in #close {
-    display: block;
-    position: fixed;
-    left: -41px;
-    top: 0;
-    z-index: 5;
+    position: absolute;
+    left: auto;
+    right: 10px !important;
+    z-index: 9999999;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 18px !important;
+    margin-right: 0;
     border: 0;
-    border-radius: 0;
+    display: block;
 }
 
 :host .container-fluid {
