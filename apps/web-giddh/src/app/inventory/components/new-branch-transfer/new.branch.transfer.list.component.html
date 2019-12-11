@@ -64,6 +64,7 @@
                         <td>{{ item.warehouseName }}</td>
                         <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
                         <td>
+                            <span class="text-light-2">Select Action</span>
                             <div class="btn-group pull-right" dropdown [autoClose]="true">
                                 <a id="button-basic" dropdownToggle type="button"
                                     class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
@@ -111,7 +112,7 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select name="voucherType" [(ngModel)]="branchTransferPostRequestParams.voucherType" [options]="voucherTypes"></sh-select>
+                    <sh-select name="voucherType" [(ngModel)]="branchTransferTempPostRequestParams.voucherType" [options]="voucherTypes"></sh-select>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -119,10 +120,10 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select name="amountOperators" [(ngModel)]="branchTransferPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()"></sh-select>
+                            <sh-select name="amountOperators" [(ngModel)]="branchTransferTempPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()"></sh-select>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferPostRequestParams.amount" />
+                            <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferTempPostRequestParams.amount" />
                         </div>
                     </div>
                 </div>
@@ -131,7 +132,7 @@
                 <button class="btn btn-md btn-success mrR1" type="button" (click)="search()">
                     Search
                 </button>
-                <button class="btn btn-md btn-cancel" type="button" (click)="hideModal()">
+                <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal()">
                     Cancel
                 </button>
             </div>

@@ -77,6 +77,11 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         senderReceiver: null,
         warehouseName: null
     };
+    public branchTransferTempPostRequestParams: any = {
+        amountOperator: null,
+        amount: null,
+        voucherType: null
+    };
 
     constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -159,6 +164,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public search(): void {
+        this.branchTransferPostRequestParams.voucherType = this.branchTransferTempPostRequestParams.voucherType;
+        this.branchTransferPostRequestParams.amountOperator = this.branchTransferTempPostRequestParams.amountOperator;
+        this.branchTransferPostRequestParams.amount = this.branchTransferTempPostRequestParams.amount;
         this.getBranchTransferList(true);
         this.modalRef.hide();
     }
@@ -270,9 +278,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public openBranchTransferPopup(event) {
+    public openBranchTransferPopup(event): void {
         this.branchTransferMode = event;
         this.toggleTransferAsidePane();
         this.openModal();
+    }
+
+    public refreshTempPostParams(): void {
+        this.branchTransferTempPostRequestParams.voucherType = this.branchTransferPostRequestParams.voucherType;
+        this.branchTransferTempPostRequestParams.amountOperator = this.branchTransferPostRequestParams.amountOperator;
+        this.branchTransferTempPostRequestParams.amount = this.branchTransferPostRequestParams.amount;
     }
 }
