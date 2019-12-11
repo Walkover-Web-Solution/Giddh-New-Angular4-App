@@ -25,6 +25,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
     public isAddUnitOpen: boolean = false;
     public hideFirstScreen: boolean = false;
     public hideFirstStep: boolean = false;
+    public asideClose: boolean;
     public openGroupAsidePane$: Observable<boolean>;
     public createGroupSuccess$: Observable<boolean>;
     public manageInProcess$: Observable<any>;
@@ -41,7 +42,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         private _router: Router,
     ) {
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(state => state.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.select(states => states.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
         this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
@@ -64,6 +65,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
                 // this.isAddUnitOpen = false;
             }
         });
+        this.asideClose = false;
     }
 
     public toggleStockPane() {
@@ -101,6 +103,10 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         this.hideFirstScreen = false;
         this.addGroup = false;
         this.addStock = false;
+        this.asideClose = true;
+        setTimeout(() => {
+            this.asideClose = false;
+        }, 500);
         if (e) {
             //
         } else {
