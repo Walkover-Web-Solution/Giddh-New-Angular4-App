@@ -1,7 +1,12 @@
 <div class="aside-pane">
 
-    <button id="close" class="btn btn-sm btn-primary" [ngClass]="hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' "
-        (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+    <div class="form-header" *ngIf="!hideFirstScreen">
+        <h3>Add</h3>
+    </div>
+
+
+    <button id="close" [ngClass]="!hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' " (click)="closeAsidePane()"><i
+            class="icon-cross"></i></button>
 
 
 
@@ -17,10 +22,10 @@
         </div>
     </div>
 
-    <div class="aside-body  flexy-child-1 row" *ngIf="isAddAccountOpen">
+    <div class="aside-body  flexy-child-1" *ngIf="isAddAccountOpen">
         <ledger-aside-pane-account></ledger-aside-pane-account>
     </div>
-    <div class="aside-body flexy-child-1 row" *ngIf="isAddStockOpen">
+    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
         <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
     </div>
 </div>

@@ -50,18 +50,18 @@ export class Addresses {
 }
 
 export class CompanyTotals {
-  public sales: {
-    amount: any;
-    type: any;
-  };
-  public expenses: {
-    amount: any;
-    type: any;
-  };
-  public taxes: {
-    amount: any;
-    type: any;
-  };
+    public sales: {
+        amount: any;
+        type: any;
+    };
+    public expenses: {
+        amount: any;
+        type: any;
+    };
+    public taxes: {
+        amount: any;
+        type: any;
+    };
 }
 
 export class CompanyResponse {
@@ -97,7 +97,7 @@ export class CompanyResponse {
     public balanceDisplayFormat?: string;
     public balanceDecimalPlaces?: string;
     public baseCurrencySymbol?: string;
-	public companyTotals: CompanyTotals;
+    public companyTotals: CompanyTotals;
 }
 
 export interface UserEntityRole {
@@ -251,9 +251,9 @@ export interface AddressList {
 export class BillingDetails {
     name: string;
     email: string;
-    mobile: string;
+    contactNo: string;
     gstin: string;
-    state: string;
+    stateCode: string;
     address: string;
     autorenew: any;
 }
@@ -348,6 +348,6 @@ export class StateList {
 }
 
 export class BranchFilterRequest {
-  from: string;
-  to: string;
+    from: string;
+    to: string;
 }
