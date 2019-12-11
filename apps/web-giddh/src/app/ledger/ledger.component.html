@@ -477,7 +477,7 @@
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
                             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
-                            <td class="col-xs-3">
+                            <td class="col-xs-3" data-title="Select All">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">

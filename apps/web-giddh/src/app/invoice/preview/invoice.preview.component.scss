@@ -562,6 +562,9 @@ button.btn.btn-filter span.icon-cross {
     .invoice-preview {
         padding-bottom: 0px;
     }
+    .desktop-view-btn {
+        display: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -621,6 +624,10 @@ button.btn.btn-filter span.icon-cross {
     }
     .smallLoading {
         top: 5px;
+    }
+    .full-width-on-mobile {
+        width: 100%;
+        margin: 5px 0;
     }
 }
 @media (max-width: 320px) {

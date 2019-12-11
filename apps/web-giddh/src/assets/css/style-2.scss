@@ -771,6 +771,8 @@ ul.sub-list {
     padding-bottom: 7px;
     padding-left: 0;
     padding-right: 0;
+    border-bottom: 4px solid transparent;
+
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
@@ -781,20 +783,6 @@ ul.sub-list {
     color: #1c1c1c !important;
 }
 
-.custom-tabs .nav.nav-tabs > li.active a:after {
-    background: var(--dark-blue01);
-    width: 40px;
-    height: 3px;
-    display: block;
-    content: "";
-    position: absolute;
-    border: 0;
-    margin: 0 auto;
-    display: block;
-    right: 0;
-    left: 0;
-    bottom: -1px;
-}
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
@@ -1491,7 +1479,6 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 2px solid #e6e7e8;
 }
 
 /* .fyear {
@@ -6356,8 +6343,6 @@ table td[class*=col-]:last-child {
 }
 
 .custom-tabs {
-    background: #eee;
-    border-bottom: 1px solid #ddd;
     clear: both;
 }
 
@@ -8216,18 +8201,15 @@ ul.dropdown-menu p.lead.pd {
     height: 36px;
 }
 
-/*  .nav.nav-tabs>li>a {
-                    color: $dark-blue00 !important;
-                    border-bottom: 4px solid transparent !important;
-                }
-            */
 .nav-tabs > li.active > a,
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid $activeIconTh !important;
     padding-bottom: 7px !important;
     font-family: "opensans-semibold";
 }
-
+.invoce-controll .nav-tabs > li > a{
+    border-bottom: 4px solid transparent !important;
+}
 .dropdown-menu > li > a:hover {
     color: $border-blue !important;
     background: #eeeff9 !important;
@@ -8235,7 +8217,6 @@ ul.dropdown-menu p.lead.pd {
 
 .debit-blank-row td .form-control,
 .credit-blank-row td .form-control {
-    border: 0;
     position: relative;
     top: 1px;
 }
@@ -9125,6 +9106,16 @@ button {
     }
     .custom-body #settingTab .tab-container .nav.nav-tabs{
             position: inherit;
+    }
+    .aside-pane-form .custom-tabs ul.nav.nav-tabs {
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+    .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child {
+    border-right: none !important;
+    }
+    #content_wrapper{
+        height: 100vh;
     }
 }
 

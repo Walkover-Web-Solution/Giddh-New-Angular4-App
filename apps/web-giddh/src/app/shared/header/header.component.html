@@ -667,7 +667,7 @@
 <header class="clearfix header-container desktopHeader "
     [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
-        <div class="container-fluid  pdT1 pdB1">
+        <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
                 <ul class="nav navbar-nav">
                     <!-- (isOpenChange)="sideBarStateChange($event)" -->
@@ -783,7 +783,7 @@
                             <button class="btn btn-link" (click)="jumpToToday();">Today</button>
                         </li>
                         <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs"></span>
+                            <span class="icon-calender calender-addone pos-abs" (click)="jumpToToday();"></span>
                             <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
                                 [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
                                 class="form-control date-range-picker" />
