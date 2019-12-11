@@ -772,7 +772,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 if (response.body.dateOfSupply) {
                     this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
                 }
-                if (response.body.transporterDetails) {
+                if (response.body.transporterDetails && response.body.transporterDetails.dispatchedDate) {
                     this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
                 }
 
