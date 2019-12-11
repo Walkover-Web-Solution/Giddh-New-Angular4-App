@@ -27,6 +27,5 @@ export const COMPANY_API = {
   GET_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-overview?from=:fromDate&to=:toDate&interval=:interval',
   GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 
-  GET_ALL_TAXES: 'ui/taxes?country=:country',
-  GET_WAREHOUSE_DETAILS: 'company/:companyUniqueName/warehouse/:warehouseUniqueName'
+  GET_ALL_TAXES: 'ui/taxes?country=:country'
 };
