@@ -459,6 +459,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.rate = event.additional.rate;
             product.stockDetails.amount = event.additional.amount;
             product.stockDetails.quantity = event.additional.openingQuantity;
+            product.stockDetails.skuCode = event.additional.skuCode;
+            product.hsnNumber = event.additional.hsnNumber;
 
             if (this.transferType === 'senders') {
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
