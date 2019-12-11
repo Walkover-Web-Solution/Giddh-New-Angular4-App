@@ -790,7 +790,7 @@ tooltip="Invoice sent" placement="left" />-->
                 </div> -->
                                 </div>
                                 <div>
-                                    {{item.grandTotal | giddhCurrency}}
+                                    {{item.grandTotal?.amountForAccount | giddhCurrency}}
                                 </div>
                             </div>
                             <div class="col-xs-6 p-0">
@@ -803,7 +803,7 @@ tooltip="Invoice sent" placement="left" />-->
                     <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'balanceDue')" [ngClass]="{'activeTextColor': invoiceSearchRequest.sortBy === 'balanceDue' && invoiceSearchRequest.sort === 'desc'}"></div>
                 </div> -->
                                 </div>
-                                <div>{{item.balanceDue | giddhCurrency}}</div>
+                                <div>{{item.balanceDue?.amountForAccount | giddhCurrency}}</div>
                             </div>
                         </td>
                     </tr>
