@@ -2,8 +2,8 @@
     left: auto;
     top: 0;
     right: 0;
-    max-width:480px;
-      width: 100%;
+    max-width: 760px;
+    width: 100%;
     z-index: 99999;
     display: block;
     position: fixed;
@@ -18,14 +18,18 @@
 }
 
 :host.in #close {
-    display: block;
-    position: fixed;
+    position: absolute;
     left: auto;
-    right: 472px;
-    top: 0;
-    z-index: 5;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
     border: 0;
     border-radius: 0;
+    display: block;
 }
 
 :host .container-fluid {
@@ -34,8 +38,8 @@
 }
 
 :host .aside-pane {
-  max-width:480px;
-  width: 100%;
+    max-width: 760px;
+    width: 100%;
     background: #fff;
     width: 100%;
     padding: 0px;
@@ -67,27 +71,77 @@
 
 :host.in #back {
     display: block;
-    position: fixed;
-    left: none;
-    right: 472px;
-    top: 0;
+    position: absolute;
+    left: auto;
+    top: 15px;
     z-index: 5;
     border: 0;
     border-radius: 0;
+    right: 58px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 3px 14px;
+    font-size: 14px;
 }
 
 .btn-lg {
     min-width: 155px;
     background: #fff;
-    color: #5B64C9;
+    color: #5b64c9;
     border-radius: 0px;
     box-shadow: none;
 }
 
 .btn-lg:hover {
     background: #e5e5e5;
-    color: #5B64C9;
+    color: #5b64c9;
     box-shadow: 0px 4px 4px -3px #afabab;
     border-radius: 0px;
-    border-color: #5B64C9;
+    border-color: #5b64c9;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0 3px 6px #0000001a;
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: scroll;
+    position: relative;
+    margin-top: 15px;
+}
+.form-header {
+    padding: 20px 15px;
+    background: #1a237e;
+}
+@media (max-width: 768px) {
+    :host.in {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host.in {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host.in {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host.in {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
 }
