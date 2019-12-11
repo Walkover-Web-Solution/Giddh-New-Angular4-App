@@ -4,13 +4,15 @@
             <div class="col-sm-6 form-group d-flex">
                 <div class="input-group ">
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker"
-                            (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
+                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
                     </span>
                 </div>
                 <div class="advance-icon" style="align-items: center" tooltip="Advance Search"
                     (click)="openSearchModal(template)">
                     <span class="icon-advance-serch"></span>
+                </div>
+                <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
+                    <button class="btn btn-filter" (click)="clearFilters();"><span class="icon-cross"></span> Clear Filter </button>
                 </div>
             </div>
             <div class="col-sm-6 form-group">
@@ -109,8 +111,7 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select name="voucherType" [(ngModel)]="branchTransferPostRequestParams.voucherType"
-                        [options]="voucherTypes"></sh-select>
+                    <sh-select name="voucherType" [(ngModel)]="branchTransferPostRequestParams.voucherType" [options]="voucherTypes"></sh-select>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -118,13 +119,10 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select name="amountOperators"
-                                [(ngModel)]="branchTransferPostRequestParams.amountOperators"
-                                [options]="amountOperators"></sh-select>
+                            <sh-select name="amountOperators" [(ngModel)]="branchTransferPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()"></sh-select>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" placeholder="0" name="amount"
-                                [(ngModel)]="branchTransferPostRequestParams.amount" />
+                            <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferPostRequestParams.amount" />
                         </div>
                     </div>
                 </div>

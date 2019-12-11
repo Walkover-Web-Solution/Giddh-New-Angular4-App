@@ -464,6 +464,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
             }
+
+            this.calculateOverallTotal();
         }
     }
 
@@ -490,7 +492,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public resetSourceWarehouses(index) {
-        if (this.branchTransfer.destinations && [index] && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
+        if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
 
@@ -775,6 +777,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
                 if (response.body.transporterDetails && response.body.transporterDetails.dispatchedDate) {
                     this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
+                }
+
+                if (this.isTaxNumberRequired) {
+                    if (!this.branchTransfer.sources[0].warehouse.taxNumber) {
+                        this.isValidSourceTaxNumber = false;
+                    }
+                    if (!this.branchTransfer.destinations[0].warehouse.taxNumber) {
+                        this.isValidDestinationTaxNumber = false;
+                    }
                 }
 
                 this.calculateOverallTotal();

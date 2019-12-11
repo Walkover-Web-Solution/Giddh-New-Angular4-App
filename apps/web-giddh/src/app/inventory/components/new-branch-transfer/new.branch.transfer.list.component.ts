@@ -88,7 +88,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         this.initBranchTransferListResponse();
 
         branchTransferVoucherTypes.map(voucherType => {
@@ -122,16 +122,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public openSearchModal(template: TemplateRef<any>) {
+    public openSearchModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
 
-    public initBranchTransferListResponse() {
+    public initBranchTransferListResponse(): void {
         this.branchTransferResponse = {
             items: null,
             fromDate: null,
@@ -143,7 +143,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         };
     }
 
-    public getBranchTransferList(resetPage: boolean) {
+    public getBranchTransferList(resetPage: boolean): void {
         if (resetPage) {
             this.branchTransferGetRequestParams.page = 1;
         }
@@ -162,7 +162,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.getBranchTransferList(false);
     }
 
-    public changeFilterDate(date) {
+    public changeFilterDate(date): void {
         if (date) {
             this.branchTransferGetRequestParams.from = moment(date[0]).format(GIDDH_DATE_FORMAT);
             this.branchTransferGetRequestParams.to = moment(date[1]).format(GIDDH_DATE_FORMAT);
@@ -170,12 +170,11 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public search() {
+    public search(): void {
         this.getBranchTransferList(true);
         this.modalRef.hide();
     }
 
-    // new transfer aside pane
     public toggleTransferAsidePane(event?): void {
         this.editBranchTransferUniqueName = '';
 
@@ -186,8 +185,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    // region asidemenu toggle
-    public toggleBodyClass() {
+    public toggleBodyClass(): void {
         if (this.asidePaneState === 'in' || this.asideTransferPaneState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
@@ -195,18 +193,18 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public openModal() {
+    public openModal(): void {
         this.modalRef = this.modalService.show(
             this.branchtransfertemplate,
             Object.assign({}, { class: 'modal-lg reciptNoteModal' })
         );
     }
 
-    public hideModal() {
+    public hideModal(): void {
         this.modalRef.hide();
     }
 
-    public columnSearch() {
+    public columnSearch(): void {
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
@@ -216,7 +214,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }, 700);
     }
 
-    public deleteNewBranchTransfer() {
+    public deleteNewBranchTransfer(): void {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).subscribe((response) => {
             if (response.status === "success") {
@@ -228,16 +226,16 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public showBranchTransferModal(branchTransferUniqueName) {
+    public showBranchTransferModal(branchTransferUniqueName): void {
         this.selectedBranchTransfer = branchTransferUniqueName;
         this.deleteBranchTransferModal.show();
     }
 
-    public hideBranchTransferModal() {
+    public hideBranchTransferModal(): void {
         this.deleteBranchTransferModal.hide();
     }
 
-    public sortBranchTransferList(sortBy) {
+    public sortBranchTransferList(sortBy): void {
         let sort = "asc";
 
         if (this.branchTransferGetRequestParams.sortBy === sortBy) {
@@ -252,9 +250,35 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.getBranchTransferList(true);
     }
 
-    public showEditBranchTransferPopup(item) {
+    public showEditBranchTransferPopup(item): void {
         this.branchTransferMode = item.voucherType;
         this.editBranchTransferUniqueName = item.uniqueName;
         this.openModal();
+    }
+
+    public clearFilters(): void {
+        this.branchTransferPostRequestParams.senderReceiver = null;
+        this.branchTransferPostRequestParams.warehouseName = null;
+        this.branchTransferPostRequestParams.voucherType = null;
+        this.branchTransferPostRequestParams.amountOperator = null;
+        this.branchTransferPostRequestParams.amount = null;
+        this.branchTransferGetRequestParams.sort = "";
+        this.branchTransferGetRequestParams.sortBy = "";
+
+        this.getBranchTransferList(true);
+    }
+
+    public checkIfFiltersApplied(): boolean {
+        if (this.branchTransferPostRequestParams.senderReceiver || this.branchTransferPostRequestParams.warehouseName || this.branchTransferPostRequestParams.voucherType || this.branchTransferPostRequestParams.amountOperator || this.branchTransferPostRequestParams.amount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public checkIfAmountEmpty(): void {
+        if(this.branchTransferPostRequestParams.amountOperator && !this.branchTransferPostRequestParams.amount) {
+            this.branchTransferPostRequestParams.amount = 0;
+        }
     }
 }
