@@ -1,11 +1,11 @@
 @import "../../../assets/css/color.scss";
-
 .flex-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     flex-flow: row wrap;
 }
+
 
 /* .table.basic tbody tr td{
   background-color: #fff;
@@ -30,7 +30,7 @@
     color: #ff5f00;
 }
 
-.basic > thead > tr > th {
+.basic>thead>tr>th {
     border-right: 1px solid #c6c4c4;
 }
 
@@ -41,6 +41,7 @@
 .d-flex {
     display: flex;
 }
+
 
 /*td-in-searchbox_style*/
 
@@ -57,16 +58,35 @@
     max-width: 420px !important;
     min-width: 420px !important;
 }
+
+
 /*.td_in_searchBox input {*/
+
+
 /*background-color: whitesmoke;*/
+
+
 /*}*/
 
+
 /*.td_in_searchBox input::placeholder {*/
+
+
 /*color: #262626;*/
+
+
 /*border: 0;*/
+
+
 /*font-family: ''opensans-semibold'';*/
+
+
 /*text-transform: capitalize;*/
+
+
 /*font-size: 14px;*/
+
+
 /*}*/
 
 .td_in_searchBox div i {
@@ -113,7 +133,7 @@
     color: $activeIconTh;
 }
 
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>a:hover {
     color: $border-blue !important;
     background: #eeeff9 !important;
 }
@@ -177,7 +197,9 @@
     outline: none !important;
 }
 
+
 /* my css */
+
 .card {
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -196,8 +218,8 @@
     width: 100%;
 }
 
-.card .basic > tbody > tr > td,
-.card .basic > thead > tr > th {
+.card .basic>tbody>tr>td,
+.card .basic>thead>tr>th {
     padding: 5px 14px;
     border: none !important;
 }
@@ -231,6 +253,7 @@ td.card-header.clearfix {
     display: inline-block;
     padding-right: 20px;
 }
+
 .invoiceNameDownload {
     position: relative;
     text-align: right;
@@ -275,10 +298,18 @@ td.card-header.clearfix {
     justify-content: space-between;
 }
 
+
 /*::ng-deep #dateRangePickerParent .daterangepicker {*/
+
+
 /*  top: 100px !important;*/
+
+
 /*  left: 15px !important;*/
+
+
 /*}*/
+
 .mobileSearch {
     display: none;
     margin-bottom: 15px;
@@ -303,28 +334,35 @@ button.btn.btn-orange.ladda-button {
     padding: 6px 16px;
     overflow: inherit;
 }
+
 ul.selectActionDropdown {
     list-style: none;
 }
+
 .selectActionDropdown a {
     color: #333;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
+
 .selectActionDropdown a:hover {
     color: $border-blue !important;
     background: #eeeff9 !important;
 }
+
 .addInvoice .dropdown-toggle {
     color: #fff;
 }
+
 .invoice-container {
     padding: 0 15px;
 }
+
 .input-group {
     position: relative;
 }
+
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: $border-blue;
@@ -336,10 +374,13 @@ ul.selectActionDropdown {
     position: relative;
     z-index: 99;
     cursor: default;
+    width: 100%;
 }
+
 .input-group input.form-control:focus {
     border-color: $inputBorderColor;
 }
+
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -351,6 +392,7 @@ ul.selectActionDropdown {
     border-right: 1px solid $inputBorderColor;
     color: #999999;
 }
+
 .advance-icon {
     width: 32px;
     height: 32px;
@@ -364,9 +406,11 @@ ul.selectActionDropdown {
     color: $dark-blue00;
     background: #fff;
 }
+
 .advance-icon:hover {
     background: #eaeaea;
 }
+
 .dropdown-toggle.spcl_dropdown {
     color: $border-blueDark !important;
     border: 1px solid $border-blue;
@@ -380,14 +424,17 @@ ul.selectActionDropdown {
     color: $dark-blue00;
     background-color: #fff;
 }
+
 .dropdown-toggle.spcl_dropdown:hover {
     background: $border-blue;
     color: #fff !important;
     border-color: $border-blue;
 }
+
 .dropdown-toggle.spcl_dropdown:hover .caret {
     color: #fff !important;
 }
+
 .dropdown-toggle.spcl_dropdown .caret {
     color: #999999;
 }
@@ -398,6 +445,7 @@ button.btn.btn-default.ladda-button {
     padding: 0;
     height: 36px;
 }
+
 button.btn.btn-filter {
     background: #e4e4e4;
     border: 1px solid #e4e4e4;
@@ -408,12 +456,15 @@ button.btn.btn-filter {
     align-items: center;
     padding: 4px 10px;
 }
+
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
+
 .invoice-table th .d-flex {
     align-items: center;
 }
+
 .btn-link-2 {
     color: #1c1c1c;
 }
@@ -424,6 +475,7 @@ button.btn.btn-filter span.icon-cross {
     position: relative;
     height: 36px !important;
 }
+
 .inputWrapper:before {
     position: absolute;
     content: "";
@@ -435,29 +487,36 @@ button.btn.btn-filter span.icon-cross {
     z-index: 100;
     top: 0;
 }
+
 .invoice-preview {
     padding-bottom: 230px;
 }
+
 .paginationWrapper {
     position: relative;
     top: -150px;
 }
+
 .invoiceFooter h3 {
     font-size: 16px;
     color: #999999;
     display: inline-block;
     margin-right: 10px;
 }
+
 .invoiceFooter h1 {
     font-size: 28px;
     color: #333;
     display: inline-block;
 }
+
 .addInvoice .btn-group.show {
     display: inline-block !important;
 }
 
+
 /* responsive */
+
 @media (max-width: 768px) {
     .card-header .mh18_img {
         margin-right: 5px;
@@ -465,16 +524,13 @@ button.btn.btn-filter span.icon-cross {
     .mobileTable {
         display: block;
     }
-
     .desktopTable {
         display: none;
     }
-
     .mobileViewPagination {
         display: block;
         text-align: center;
     }
-
     .paginationWrapper {
         margin-top: 20px;
         border: none;
@@ -496,7 +552,6 @@ button.btn.btn-filter span.icon-cross {
         bottom: 188px;
         border: none;
     }
-
     .date-advanceSearch .dropdown-menu.show.fixedDropdownPlus:after {
         position: absolute;
         width: 20px;
@@ -512,25 +567,20 @@ button.btn.btn-filter span.icon-cross {
         background-color: #fff;
         z-index: -1;
     }
-
     .displayBlock {
         display: block !important;
     }
-
     .click-dropdwon[_ngcontent-c8] ul[_ngcontent-c8] {
         left: auto;
         right: 0;
     }
-
     .invoiceFooter .font-xxlarge {
         font-size: 20px;
     }
-
     .click-dropdwon ul {
         left: auto;
         right: 0;
     }
-
     .plusMoreBtn {
         font-size: 30px;
         width: 50px;
@@ -547,8 +597,7 @@ button.btn.btn-filter span.icon-cross {
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
-
-    .date-advanceSearch .dropdown-menu > li > a {
+    .date-advanceSearch .dropdown-menu>li>a {
         padding: 8px 10px;
     }
     .paginationWrapper {
@@ -580,7 +629,6 @@ button.btn.btn-filter span.icon-cross {
     .invoiceFooter .font-xxlarge {
         font-size: 16px;
     }
-
     .invoiceFooter h1 {
         font-size: 18px !important;
     }
@@ -612,6 +660,7 @@ button.btn.btn-filter span.icon-cross {
         padding-right: 0;
     }
 }
+
 @media (max-width: 360px) {
     .date-advanceSearch .input-group {
         width: 100%;
@@ -625,6 +674,7 @@ button.btn.btn-filter span.icon-cross {
         top: 5px;
     }
 }
+
 @media (max-width: 320px) {
     .date-advanceSearch .input-group {
         width: 144px;
