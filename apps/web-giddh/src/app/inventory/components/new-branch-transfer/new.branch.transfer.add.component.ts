@@ -511,6 +511,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             });
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName]) {
+                this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+
                 this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
                     this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 });
@@ -536,6 +538,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             });
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[index].uniqueName]) {
+                this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
+                
                 this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
                     this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 });
