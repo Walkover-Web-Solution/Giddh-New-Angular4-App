@@ -82,7 +82,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<sh-select name="destinationName" [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="branches$ | async" (selected)="selectCompany($event, 'destinations', 0)" required></sh-select>
+								<sh-select name="destinationName" [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="branches$ | async" (selected)="selectCompany($event, 'destinations', 0)" required [disabled]="isUpdateMode"></sh-select>
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -144,7 +144,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-	                            <sh-select name="sourceName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0)" required></sh-select>
+	                            <sh-select name="sourceName" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0)" required [disabled]="isUpdateMode"></sh-select>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">

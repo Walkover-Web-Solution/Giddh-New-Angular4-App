@@ -105,6 +105,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isTaxNumberRequired: boolean = false;
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
+    public isUpdateMode: boolean = false;
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -766,6 +767,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public getBranchTransfer(): void {
+        this.isUpdateMode = true;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
@@ -796,6 +798,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
 
                 this.calculateOverallTotal();
+
+                this.resetDestinationWarehouses(0);
+                this.resetSourceWarehouses(0);
             } else {
                 this.closeBranchTransferPopup();
                 this._toasty.errorToast(response.message);
