@@ -98,6 +98,7 @@ export class AsidePaneComponent implements OnInit, OnChanges, OnDestroy {
         this.isAddStockOpen = false;
         this.isAddGroupOpen = false;
         this.isAddUnitOpen = false;
+        this.hideFirstScreen = false;
         this.addGroup = false;
         this.addStock = false;
         if (e) {

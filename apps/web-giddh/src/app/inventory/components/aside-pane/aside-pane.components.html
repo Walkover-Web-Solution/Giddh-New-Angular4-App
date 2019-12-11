@@ -24,13 +24,12 @@
     </div>
 
     <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
-        <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="true"
-            (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
+        <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
     </div>
     <div class="aside-body flexy-child-1 " *ngIf="isAddGroupOpen">
         <inventory-add-group [addGroup]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
     </div>
     <div class="aside-body flexy-child-1 " *ngIf="isAddUnitOpen">
-        <inventory-custom-stock></inventory-custom-stock>
+        <inventory-custom-stock (closeAsideEvent)="closeAsidePane($event)"></inventory-custom-stock>
     </div>
 </div>

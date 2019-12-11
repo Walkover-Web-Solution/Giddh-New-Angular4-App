@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public addGroup: boolean;
+    @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
 
     public sub: Subscription;
     public groupsData$: Observable<IOption[]>;
@@ -312,6 +313,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             let val = uniqueNameInvalidStringReplace(unqName);
             this.addGroupForm.patchValue({ uniqueName: val });
         }
+    }
+
+    // close pane
+    public closeAsidePane() {
+        this.addGroupForm.reset();
+        this.closeAsideEvent.emit();
     }
 
 }
