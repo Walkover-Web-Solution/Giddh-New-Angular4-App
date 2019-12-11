@@ -46,26 +46,20 @@
     </div>
 
     <div class="pettycash">
-
     <div class="bg-white p-15 pb-0">
         <div class="form-group mb-2">
             <label>Description</label>
-            <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
-                      placeholder='Add Description'></textarea>
+            <textarea name="comment" class="textarea form-control" [(ngModel)]="comment" placeholder='Add Description'></textarea>
         </div>
 
         <div class="row">
             <div class="col-sm-8">
-
-                <div class="form-group d-inline-block mr-2">
-
+                <div class="d-inline-block mr-2">
                     <label>
                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                     </label>
-
                     <div class="clearfix">
-
-                        <sh-select class="pull-right text-left" name="depositAccountUniqueName"
+                        <sh-select class="text-left dropdown-arrow" name="depositAccountUniqueName"
                                    #entryAgainstAccountDropDown
                                    [options]="entryAgainstObject.dropDownOption"
                                    [(ngModel)]="entryAgainstObject.model"
@@ -80,7 +74,6 @@
                                 </a>
                             </ng-template>
                         </sh-select>
-
                     </div>
                 </div>
 
