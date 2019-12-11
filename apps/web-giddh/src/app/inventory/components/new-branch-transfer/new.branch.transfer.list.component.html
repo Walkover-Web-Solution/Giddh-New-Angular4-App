@@ -27,8 +27,8 @@
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <th width="10%" class="td_in_searchBox">
-                            <div>
+                        <th width="10%" class="bdrR bdrB td_in_searchBox">
+                            <div [hidden]="inlineSearch == 'senderReceiver'">
                                 <span>Sender/Receiver</span>
                                 <i class="icon-search" (click)="inlineSearch = 'senderReceiver'"></i>
                             </div>
