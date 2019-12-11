@@ -151,6 +151,10 @@ $greyClr: #6d6d6d;
 }
 
 // styles
+
+.other-taxes-input {
+    width: 85% !important;
+}
 .form-group {
     .form-control {
         @include radius(3px);
@@ -492,10 +496,6 @@ textarea:focus {
                     //  border-left: none !important;
                 }
 
-                &:last-child {
-                    // border-right: none !important;
-                    vertical-align: middle !important;
-                }
                 &:nth-child(2) {
                     white-space: normal;
                     width: 350px;
@@ -1641,7 +1641,7 @@ strong {
         width: 100%;
         max-width: 100%;
     }
-    .otherTaxsinput {
+    .other-taxes-input {
         width: 99px;
         background-color: #eee;
         border: 1px solid #eee;

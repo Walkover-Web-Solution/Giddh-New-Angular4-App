@@ -342,7 +342,7 @@ ul.selectActionDropdown {
     position: relative;
     z-index: 99;
     cursor: default;
-
+    width: 100%;
 }
 .input-group input.form-control:focus{
     border-color:$inputBorderColor;
