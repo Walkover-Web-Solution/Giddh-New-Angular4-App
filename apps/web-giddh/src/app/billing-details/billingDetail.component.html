@@ -38,15 +38,15 @@
                         </div>
                         <div class="form-group">
                             <label>Mobile Number</label>
-                            <input type="text" id="mobcontactNoile" class="form-control" name="contactNo" [(ngModel)]="billingDetailsObj.contactNo" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl>
+                            <input type="text" id="contactNo" class="form-control" name="contactNo" [(ngModel)]="billingDetailsObj.contactNo" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl>
                         </div>
 
                         <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                             <label>{{formFields['taxName'].label}}</label>
-                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (keyup)="getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField);" placeholder="">
+                            <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false" maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (keyup)="getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField);">
                         </div>
                         <div class="form-group">
-                            <label>State</label>
+                            <label>State <span class="red-text">*</span></label>
                             <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true" [disabled]="disableState" [defaultValue]="selectedState" [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode" style="width:100%"></sh-select>
                         </div>
                         <div class="form-group">

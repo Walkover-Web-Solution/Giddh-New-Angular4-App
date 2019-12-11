@@ -273,7 +273,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public makeMeCaptialize(companyName: string) {
         if (companyName) {
-            this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
+            companyName = companyName.trim();
+            if (companyName) {
+                this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
+            } else {
+                this.company.name = '';
+            }
         }
     }
 
