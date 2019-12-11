@@ -357,17 +357,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             filterCategoryType: [''],
             filterValueCondition: ['']
         });
-
-        this._generalService.invokeEvent.subscribe(value => {
-            if (value[0] === "openbranchtransferpopup") {
-                this.branchTransferMode = value[1];
-                this.toggleTransferAsidePane();
-                this.openModal();
-            } else if(value[0] === "closebranchtransferpopup") {
-                this.branchTransferMode = "";
-                this.hideModal();
-            }
-        });
     }
 
     @HostListener('document:keyup', ['$event'])
@@ -785,4 +774,9 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
         this.modalRef.hide();
     }
 
+    public openBranchTransferPopup(event) {
+        this.branchTransferMode = event;
+        this.toggleTransferAsidePane();
+        this.openModal();
+    }
 }

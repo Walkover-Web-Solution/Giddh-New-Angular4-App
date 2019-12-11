@@ -108,18 +108,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this.branchTransferGetRequestParams.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
-
-        this._generalService.invokeEvent.subscribe(value => {
-            if (value[0] === "openbranchtransferpopup") {
-                this.branchTransferMode = value[1];
-                this.toggleTransferAsidePane();
-                this.openModal();
-            } else if (value[0] === "closebranchtransferpopup") {
-                this.branchTransferMode = "";
-                this.hideModal();
-                this.getBranchTransferList(true);
-            }
-        });
     }
 
     public ngOnDestroy(): void {
@@ -277,8 +265,14 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public checkIfAmountEmpty(): void {
-        if(this.branchTransferPostRequestParams.amountOperator && !this.branchTransferPostRequestParams.amount) {
+        if (this.branchTransferPostRequestParams.amountOperator && !this.branchTransferPostRequestParams.amount) {
             this.branchTransferPostRequestParams.amount = 0;
         }
+    }
+
+    public openBranchTransferPopup(event) {
+        this.branchTransferMode = event;
+        this.toggleTransferAsidePane();
+        this.openModal();
     }
 }

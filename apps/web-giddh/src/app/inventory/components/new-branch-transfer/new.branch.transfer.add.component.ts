@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -54,6 +54,7 @@ import { SettingsWarehouseService } from '../../../services/settings.warehouse.s
 export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public branchTransferMode: string;
     @Input() public editBranchTransferUniqueName: string;
+    @Output() public hideModal: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('productSkuCode') productSkuCode;
     @ViewChild('productHsnNumber') productHsnNumber;
     @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
@@ -152,7 +153,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public closeBranchTransferPopup(): void {
-        this._generalService.invokeEvent.next(["closebranchtransferpopup"]);
+        this.hideModal.emit();
     }
 
     public toggleBodyClass(): void {
@@ -539,7 +540,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[index].uniqueName]) {
                 this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
-                
+
                 this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
                     this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 });

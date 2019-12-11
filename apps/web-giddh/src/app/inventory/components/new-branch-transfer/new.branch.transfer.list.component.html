@@ -143,14 +143,14 @@
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+    [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
         <div class="modal-body">
-            <new-branch-transfer [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
+            <new-branch-transfer (hideModal)="hideModal()" [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
     </div>
 </ng-template>
