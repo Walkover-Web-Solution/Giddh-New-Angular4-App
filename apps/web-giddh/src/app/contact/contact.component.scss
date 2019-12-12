@@ -344,9 +344,6 @@ span.inputAddon {
     .onDesktopView.btn-group {
         display: none;
     }
-    // .mobilecardwrapper{
-    //   padding: 0 6px;
-    // }
     .custumerRightWrap {
         padding-right: 0;
         position: fixed;
@@ -402,6 +399,13 @@ span.inputAddon {
     }
     .paginationWrapper {
         margin-bottom: 0px !important;
+    }
+    .customerName,
+    .vendorCustomerName {
+        padding-right: 20px !important;
+    }
+    .customerName .icon-ellipse {
+        top: 8px;
     }
 }
 @media (max-width: 652px) {
