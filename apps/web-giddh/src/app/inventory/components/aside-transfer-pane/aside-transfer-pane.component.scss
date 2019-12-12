@@ -77,12 +77,17 @@
     z-index: 5;
     border: 0;
     border-radius: 0;
-    right: 58px;
+    right: 218px;
     background-color: transparent;
     border: 1px solid #fff;
     color: #fff;
     padding: 3px 14px;
     font-size: 14px;
+}
+:host.in #back:hover {
+    color: #1a237e;
+    background-color: #fff;
+    border-color: #fff;
 }
 
 .btn-lg {
