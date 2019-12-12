@@ -66,6 +66,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('transMode') public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber') public vehicleNumber;
     @ViewChild('transCompany') public transCompany: ShSelectComponent;
+    @ViewChild('destinationWarehouses') public destinationWarehouseList: ShSelectComponent;
+    @ViewChild('sourceWarehouses') public sourceWarehouseList: ShSelectComponent;
+    @ViewChild('sourceQuantity') public sourceQuantity;
+    @ViewChild('defaultSource') public defaultSource: ShSelectComponent;
+    @ViewChild('defaultProduct') public defaultProduct: ShSelectComponent;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -114,6 +119,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
     public isUpdateMode: boolean = false;
+    public tabChanged: boolean = false;
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -148,6 +154,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         transporterModes.map(c => {
             this.transporterMode.push({ label: c.label, value: c.value });
         });
+
+        this.focusDefaultSource();
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -182,10 +190,22 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public changeTransferType(): void {
+        this.tabChanged = true;
         this.initFormFields();
-        this.tempDateParams.dateOfSupply = "";
+        this.tempDateParams.dateOfSupply = new Date();
         this.tempDateParams.dispatchedDate = "";
         this.assignCurrentCompany();
+        this.calculateOverallTotal();
+
+        setTimeout(() => {
+            this.tabChanged = false;
+
+            if (this.transferType === "products") {
+                this.focusDefaultSource();
+            } else {
+                this.focusDefaultProduct();
+            }
+        }, 200);
     }
 
     public initFormFields(): void {
@@ -476,7 +496,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
-            product.stockDetails.amount = event.additional.amount;
             product.stockDetails.quantity = event.additional.openingQuantity;
             product.stockDetails.skuCode = event.additional.skuCode;
             product.hsnNumber = event.additional.hsnNumber;
@@ -725,7 +744,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 if (res) {
                     if (res.status === 'success') {
                         this.initFormFields();
-                        this.tempDateParams.dateOfSupply = "";
+                        this.tempDateParams.dateOfSupply = new Date();
                         this.tempDateParams.dispatchedDate = "";
 
                         if (this.branchTransferMode === 'receiptnote') {
@@ -947,39 +966,91 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusSelectDropdown(index: number): void {
-        setTimeout(() => {
-            this.setActiveRow(index);
+        if (!this.tabChanged) {
             setTimeout(() => {
-                this.selectDropdown.show('');
+                this.setActiveRow(index);
+                setTimeout(() => {
+                    this.selectDropdown.show('');
+                }, 100);
             }, 100);
-        }, 100);
+        }
     }
 
-    public focusSourceWarehouse(index: number): void {
-        this.sourceWarehouse.show('');
+    public focusSourceWarehouse(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.sourceWarehouse.show('');
+            }, 100);
+        }
     }
 
-    public focusDestinationWarehouse(index: number): void {
-        this.destinationWarehouse.show('');
+    public focusDestinationWarehouse(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.destinationWarehouse.show('');
+            }, 100);
+        }
     }
 
     public focusTransporterMode(): void {
-        setTimeout(() => {
-            this.transMode.show('');
-        }, 100);
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.transMode.show('');
+            }, 100);
+        }
     }
 
     public focusVehicleNumber(): void {
-        setTimeout(() => {
-            this.vehicleNumber.nativeElement.focus();
-        }, 100);
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.vehicleNumber.nativeElement.focus();
+            }, 100);
+        }
     }
 
     public focusTransportCompany(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                if (this.tempDateParams.dispatchedDate) {
+                    this.transCompany.show('');
+                }
+            }, 100);
+        }
+    }
+
+    public focusDestinationWarehouses(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.destinationWarehouseList.show('');
+            }, 100);
+        }
+    }
+
+    public focusSourceWarehouses(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.sourceWarehouseList.show('');
+            }, 100);
+        }
+    }
+
+    public focusSourceQuantity(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.sourceQuantity.nativeElement.focus();
+            }, 100);
+        }
+    }
+
+    public focusDefaultSource(): void {
         setTimeout(() => {
-            if (this.tempDateParams.dispatchedDate) {
-                this.transCompany.show('');
-            }
+            this.defaultSource.show('');
+        }, 100);
+    }
+
+    public focusDefaultProduct(): void {
+        setTimeout(() => {
+            this.defaultProduct.show('');
         }, 100);
     }
 }
