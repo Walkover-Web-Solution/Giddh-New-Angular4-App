@@ -7,12 +7,11 @@
 		</div>
 	</div>
 	<div class="reciptNoteContent">
-
 	    <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
             <span class="mrR1"><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label for="multipleProducts">Multiple Products</label></span>
             <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
         </div>
-
+        <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
 		<div class="multipleProductsWrapper">
 			<form #newBranchTransferForm="ngForm" novalidate="">
 				<div class="multipleProducts row clearfix pl-15 pr-15">
@@ -320,7 +319,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.amount | giddhCurrency}}</div>
@@ -367,7 +366,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
@@ -406,7 +405,7 @@
 		                        </td>
 		                        <td>
 			                        <div *ngIf="activeRow === i">
-				                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+				                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
@@ -414,7 +413,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
@@ -437,7 +436,7 @@
 	                                    <h3 class="mrB1">Transportation Details</h3>
 	                                    <div class="row">
 	                                        <div class="col-sm-6 mrB2">
-	                                            <input type="text" #dispatchDate="bsDatepicker" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker [bsConfig]="bsConfig" (bsValueChange)="focusTransportCompany()" (focus)="dispatchDate.toggle()">
+	                                            <input type="text" #dispatchDate="bsDatepicker" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker [bsConfig]="bsConfig" (bsValueChange)="focusTransportCompany()">
 	                                        </div>
 	                                        <div class="col-sm-6 mrB2">
 		                                        <sh-select #transCompany placeholder="Transport Company" name="transporterId" [isFilterEnabled]="true" (keydown)="keydownPressed($event)" [forceClearReactive]="forceClear$ | async" [options]="transporterDropdown$ | async" [(ngModel)]="branchTransfer.transporterDetails.transporterId" [notFoundLink]="true" [multiple]="false" [ItemHeight]="33" (selected)="focusTransporterMode()">
