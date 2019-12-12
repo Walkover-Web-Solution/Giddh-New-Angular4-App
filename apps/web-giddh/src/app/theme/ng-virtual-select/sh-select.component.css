@@ -128,8 +128,14 @@ i.close.icon.clear:hover::after {
     color: black;
 }
 
+.header .form-control[readonly] {
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+}
+
 .sh-select-disabled .selectedVal,
-.sh-select-disabled .form-control {
+.sh-select-disabled .form-control,
+.sh-select-disabled .form-control[readonly] {
     background: #eee !important;
     pointer-events: none;
     cursor: not-allowed;
@@ -160,4 +166,3 @@ i.close.icon.clear:hover::after {
   .header .bdr > input[type="text"]:-moz-placeholder {
     color: #c1c1c1 !important;
   }
-  

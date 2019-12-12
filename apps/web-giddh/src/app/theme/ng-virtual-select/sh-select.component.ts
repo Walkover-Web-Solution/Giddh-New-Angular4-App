@@ -49,6 +49,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
   @Input() public defaultValue: string = "";
+  @Input() public readonlyInput: boolean;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
