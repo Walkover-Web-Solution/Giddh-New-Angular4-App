@@ -378,10 +378,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.showLoader = true;
             } else {
                 this.showLoader = false;
-
-                if (this.isCashInvoice) {
-                    this.focusInCustomerName();
-                }
+                // call focus in customer after loader hides because after loader hider ui re-renders it self
+                this.focusInCustomerName();
             }
         });
     }
@@ -389,20 +387,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ngAfterViewInit() {
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
-            // fristElementToFocus to focus on customer search box
-            setTimeout(function () {
-                // tslint:disable-next-line:prefer-for-of
-                let firstElementToFocus = $('.fristElementToFocus');
-                if (firstElementToFocus[0]) {
-                    firstElementToFocus[0].focus();
-                }
-                if (!this.isCashInvoice) {
-                    let cashInvoiceInput = $('.focusClasses');
-                    if (cashInvoiceInput[0]) {
-                        cashInvoiceInput[0].focus();
-                    }
-                }
-            }, 400);
         }
     }
 
@@ -3299,13 +3283,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.inputCustomerName.nativeElement.focus();
                 }
             }, 200);
-        } /*else {
-            setTimeout(() => {
-                if (this.customerNameDropDown) {
-                    this.customerNameDropDown.show('');
-                }
-            }, 200);
-        }*/
+        } else {
+            let firstElementToFocus: any = document.getElementsByClassName('fristElementToFocus');
+            if (firstElementToFocus[0]) {
+                firstElementToFocus[0].focus();
+            }
+        }
+    }
+
+    /**
+     * set current page title as header title
+     * @param invoiceType: VoucherTypeEnum
+     */
+    private setCurrentPageTitle(invoiceType: VoucherTypeEnum) {
+        // find exact item from navigation list by using invoiceType
+        let navItemFromMenuList = NAVIGATION_ITEM_LIST.find(page => page.uniqueName === `/pages/proforma-invoice/invoice/${invoiceType}`);
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = navItemFromMenuList.name;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     /**
