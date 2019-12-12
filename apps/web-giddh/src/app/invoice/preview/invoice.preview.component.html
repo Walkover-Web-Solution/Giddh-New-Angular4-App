@@ -28,7 +28,7 @@
 
             </form>
             <!-- need to add functionality -->
-            <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+            <div class="clear-filter desktop-view-btn" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
                 <button class="btn btn-filter">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
@@ -40,13 +40,13 @@
 
                     <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
 
-                        <button dropdownToggle type="button" class="btn spcl_dropdown  dropdown-toggle"
-                            aria-controls="dropdown-basic" *ngIf="!isMobileView">
+                        <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle"
+                            aria-controls="dropdown-basic">
                             More
                             <span class="caret"></span>
                         </button>
-                        <button dropdownToggle type="button" class="btn  dropdown-toggle plusMoreBtn"
-                            aria-controls="dropdown-basic" *ngIf="isMobileView">
+                        <button dropdownToggle type="button" class="btn desktop-view-btn  dropdown-toggle plusMoreBtn"
+                            aria-controls="dropdown-basic">
                             +
                         </button>
 
@@ -76,7 +76,7 @@
 
                             <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleEwayBillPopup()"
-                                    *ngIf="selectedVoucher === 'sales' && !isMobileView">
+                                    *ngIf="selectedVoucher === 'sales'">
                                     Generate E-way Bill</a>
                             </li>
 
@@ -94,14 +94,14 @@
                 <button class="btn btn-pink">+ New Invoice</button>
               </div> -->
 
-                <button class="btn btn-default mr-1" tooltip="Export" (click)="exportCsvDownload()"
+                <button class="btn btn-default desktop-view-btn mr-1" tooltip="Export" (click)="exportCsvDownload()"
                     [ladda]="exportInvoiceRequestInProcess$ | async"
                     *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
                     data-spinner-size="20px">
                     <span class="icon-export-icon"></span>
                 </button>
-                <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-                    <button id="ddl-newinv" dropdownToggle type="button" *ngIf="!isMobileView"
+                <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+                    <button id="ddl-newinv" dropdownToggle type="button"
                         class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
                         aria-controls="dropdown-ddl-newinv">
                         + New Invoice
@@ -128,13 +128,13 @@
 
 
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                    <button class="btn btn-pink" (click)="goToInvoice('credit note')">+
+                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
                         New Cr. Note
                     </button>
                 </div>
 
                 <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                    <button class="btn btn-pink" (click)="goToInvoice('debit note')">+ New
+                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('debit note')">+ New
                         Dr. Note
                     </button>
                 </div>
@@ -185,8 +185,7 @@
                             <span class="icon-export-icon"></span>
                         </button>
 
-                        <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'"
-                            [autoClose]="true">
+                        <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                             <button id="ddl-newinv" dropdownToggle type="button"
                                 class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
                                 aria-controls="dropdown-ddl-newinv">
@@ -204,6 +203,15 @@
                                         (click)="goToInvoice('sales')">Sales Invoice</a>
                                 </li>
                             </ul>
+
+
+                        </div>
+
+                        <div class="clear-filter" *ngIf="showAdvanceSearchIcon && isMobileView"
+                            (click)="resetAdvanceSearch()">
+                            <button class="btn btn-filter">
+                                <span class="icon-cross"></span> Clear Filter
+                            </button>
                         </div>
 
                         <!--      <div *ngIf="selectedVoucher === 'sales'" class="btn-wrapper">-->
@@ -232,13 +240,13 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6 col-xs-6">
+                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                     <div class="input-container">
                         <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
                             name="voucherNumberInput" [formControl]="voucherNumberInput" />
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-6">
+                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                     <div class="input-container">
                         <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
                             name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
@@ -949,8 +957,9 @@ tooltip="Invoice sent" placement="left" />-->
     </div>
 
     <!--total sale & Total Due-->
-    <div class=" mt-5 invoiceFooter" *ngIf="!selectedInvoiceForDetails">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex">
+    <div class=" mt-5 invoiceFooter row" *ngIf="!selectedInvoiceForDetails">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+
 
             <div class="col-sm-6 totalDueSale">
                 <h3 class="">
@@ -977,9 +986,9 @@ tooltip="Invoice sent" placement="left" />-->
     <div *ngIf="selectedInvoiceForDetails">
         <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
             [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)"
-            (closeEvent)="invoicePreviewClosed()"
-            (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
-            (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+            (closeEvent)="invoicePreviewClosed()" (processPaymentEvent)="closePerformActionPopup($event)"
+            [voucherType]="selectedVoucher" (updateVoucherAction)="onPerformAction(null, $event)"
+            [appSideMenubarIsOpen]="appSideMenubarIsOpen"
             (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
     </div>
     <!-- endregion -->

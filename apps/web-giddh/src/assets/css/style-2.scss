@@ -9140,18 +9140,19 @@ button {
     .custom-body #settingTab .tab-container .nav.nav-tabs{
             position: inherit;
     }
-    
-    .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs{
+    .aside-pane-form .custom-tabs ul.nav.nav-tabs {
         white-space: nowrap;
         display: inline-block;
         overflow-y: hidden;
+
+
     }
-    .aside-pane-form .custom-tabs {
-        background: transparent;
-        border-bottom: none;
-        clear: both;
+    .basic>tbody>tr td:last-child, .basic>thead>tr th:last-child {
+    border-right: none !important;
     }
-    
+    #content_wrapper{
+        height: 100vh;
+    }
 }
 
 @media (max-width: 575px) {
@@ -9200,7 +9201,7 @@ button {
 }
 
 @media (max-width: 375px) {
-  
+
     #settingTab .tab-container .nav.nav-tabs,
     .custom-tabs .nav.nav-tabs {
         top: 78px;
