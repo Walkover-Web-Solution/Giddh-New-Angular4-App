@@ -1,8 +1,8 @@
 <div class="branch-transfer-report">
     <div class="container-fluid">
         <div class="row pdT1">
-            <div class="col-sm-6 form-group d-flex">
-                <div class="input-group ">
+            <div class="col-sm-4 form-group d-flex">
+                <div class="input-group">
                     <span class="inputWrapper">
                         <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
                     </span>
@@ -11,11 +11,13 @@
                     (click)="openSearchModal(template)">
                     <span class="icon-advance-serch"></span>
                 </div>
+            </div>
+            <div class="col-sm-4 text-center">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button class="btn btn-filter" (click)="clearFilters();"><span class="icon-cross"></span> Clear Filter </button>
+                    <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear Filter </button>
                 </div>
             </div>
-            <div class="col-sm-6 form-group">
+            <div class="col-sm-4 form-group">
                 <button class="btn btn-pink pull-right mr-0" (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
@@ -27,7 +29,7 @@
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <th width="10%" class="bdrR bdrB td_in_searchBox">
+                        <th width="17%" class="bdrR bdrB td_in_searchBox">
                             <div [hidden]="inlineSearch == 'senderReceiver'">
                                 <span>Sender/Receiver</span>
                                 <i class="icon-search" (click)="inlineSearch = 'senderReceiver'"></i>

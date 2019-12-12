@@ -21,9 +21,11 @@ section.reciptNote {
     border-bottom: 1px solid #C4C4C4;
 }
 .reciptNoteContent {
-    padding: 15px 0 0;
     font-size: 14px;
+    height: 86vh;
+    overflow-y: auto;
 }
+
 .multipleProducts label {
     vertical-align: middle;
     line-height: 2.5;
@@ -229,7 +231,7 @@ tfoot td .tableSec.form-group {
 }
 
 .td_in_searchBox {
-    padding: 0px !important;
+    padding: 0px 10px 0 0 !important;
     position: relative;
 }
 .td_in_searchBox .input-container {
