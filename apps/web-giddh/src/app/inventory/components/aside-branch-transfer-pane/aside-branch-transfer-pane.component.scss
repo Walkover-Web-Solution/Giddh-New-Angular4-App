@@ -3,7 +3,7 @@
     top: 0;
     right: 0;
     width: 100%;
-    max-width: 580px;
+    max-width: 760px;
     z-index: 99999;
     display: block;
     position: fixed;
@@ -38,7 +38,7 @@
 
 :host .aside-pane {
     width: 100%;
-    max-width: 580px;
+    max-width: 760px;
     background: #fff;
     width: 100%;
     padding: 0px;
@@ -70,13 +70,24 @@
 
 :host.in #back {
     display: block;
-    position: fixed;
-    left: none;
-    right: 572px;
-    top: 0;
+    position: absolute;
+    left: auto;
+    top: 15px;
     z-index: 5;
     border: 0;
     border-radius: 0;
+    right: 58px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 3px 14px;
+    font-size: 14px;
+}
+
+:host.in #back:hover {
+    color: #1a237e;
+    background-color: #fff;
+    border-color: #fff;
 }
 
 .btn-lg {
@@ -115,4 +126,36 @@
     align-items: center;
     height: 100%;
     min-height: 600px;
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
 }

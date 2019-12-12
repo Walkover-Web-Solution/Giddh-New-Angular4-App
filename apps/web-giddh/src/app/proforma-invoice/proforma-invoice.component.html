@@ -884,6 +884,12 @@
                                                 <div class="row">
                                                     <div class="col-xs-6 pdR0">
                                                         <div class="entryDate">
+
+                                                          <input type="text"
+                                                                placeholder="Datepicker"
+                                                                class="form-control"
+                                                                bsDatepicker>
+
                                                             <label>Entry Date: </label>
 
                                                             <span *ngIf="!isUpdateMode">
@@ -908,6 +914,7 @@
                                                     </div>
 
                                                     <div class="col-xs-6 pdL0">
+
                                                         <div class="wrap-hsnBox">
                                                             <div class="hsnCode text-right"
                                                                 (click)="hsnDropdownShow=!hsnDropdownShow">
@@ -1060,7 +1067,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right item-total dlt-abs" style="height:1px;">
+                                    <td class="text-right item-total dlt-abs">
                                         <div class="td_Wrapper">
 
                                             <div style="flex:1;">
@@ -1093,7 +1100,7 @@
                                                                 </a>
                                                             </span>
 
-                                                            <input class="text-right otherTaxsinput" disabled="disabled"
+                                                            <input class="text-right form-control other-taxes-input" disabled="disabled"
                                                                 [(ngModel)]="entry.otherTaxSum"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
@@ -2011,7 +2018,7 @@
                                                                     </a>
                                                                 </span>
 
-                                                                <input class="text-right otherTaxsinput"
+                                                                <input class="text-right form-control other-taxes-input"
                                                                     disabled="disabled" [(ngModel)]="entry.otherTaxSum"
                                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                                     [suffix]="selectedSuffixForCurrency"

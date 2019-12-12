@@ -62,6 +62,7 @@
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
+                                    (blur)="isContactNumberValid()"
                                     [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
                                     placeholder="9998899988" id="contactNo" autocomplete="off"
                                     [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
@@ -75,6 +76,7 @@
                             <div class="custom-select pos-rel">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
                                     (onClear)="onClearBusinessType()" autocomplete="false"
+                                    [disabled]="companyProfileObj.businessType && isOnBoardingInProgress"
                                     (selected)="selectedbusinessType($event)"
                                     [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
                                     [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
@@ -101,11 +103,10 @@
 
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
                                         class="text-danger">*</sup></label>
-                                <input type="text" [ngClass]="{'gstinWidth' : isbranch || isOnBoardingInProgress}" class="form-control"
-                                    autocomplete="false" required
-                                    #gstNumberField
-                                    (change)="handleGstChange(gstNumberField, states)"
-                                    name="gstNumber" [(ngModel)]="companyProfileObj.taxNumber"
+                                <input type="text" [ngClass]="{'gstinWidth' : isbranch || isOnBoardingInProgress}"
+                                    class="form-control" autocomplete="false" required #gstNumberField
+                                    (change)="handleGstChange(gstNumberField, states)" name="gstNumber"
+                                    [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
                                 <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
@@ -127,7 +128,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && itemOnBoardingDetails?.onBoardingType != 'warehouse')" class="col-xs-12 mrB2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && itemOnBoardingDetails?.onBoardingType != 'warehouse')"
+                            class="col-xs-12 mrB2 selectBox">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>

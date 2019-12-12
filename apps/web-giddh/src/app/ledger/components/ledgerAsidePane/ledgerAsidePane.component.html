@@ -1,12 +1,16 @@
 <div class="aside-pane">
 
-    <button id="close" class="btn btn-sm btn-primary" [ngClass]="hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' "
-        (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+    <div class="form-header" *ngIf="!hideFirstScreen">
+        <h3>Add</h3>
+    </div>
+
+
+    <button id="close" [ngClass]="!hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' " (click)="closeAsidePane()"><i
+            class="icon-cross"></i></button>
 
 
 
-    <button id="back" class="btn btn-primary" (click)="backButtonPressed()" *ngIf="hideFirstScreen"><i
-            class="fa fa-arrow-left"></i></button>
+    <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
     <div class="aside-body flexy-child vmiddle asidePanelLedger" *ngIf="!hideFirstScreen" vr-item>
         <div class="pd1 alC">
@@ -17,10 +21,10 @@
         </div>
     </div>
 
-    <div class="aside-body  flexy-child-1 row" *ngIf="isAddAccountOpen">
+    <div class="aside-body  flexy-child-1" *ngIf="isAddAccountOpen">
         <ledger-aside-pane-account></ledger-aside-pane-account>
     </div>
-    <div class="aside-body flexy-child-1 row" *ngIf="isAddStockOpen">
+    <div class="aside-body flexy-child-1" *ngIf="isAddStockOpen">
         <inventory-add-stock [addStock]="true" (closeAsideEvent)="closeAsidePane()"></inventory-add-stock>
     </div>
 </div>

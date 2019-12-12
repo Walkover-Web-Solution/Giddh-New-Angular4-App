@@ -2,7 +2,7 @@
 	<div class="reciptNoteHeader d-flex pl-15 pr-15">
 		<h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
 		<h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Note</h3>
-		<div class="closeRecipt" (click)="closeBranchTransferPopup()">
+		<div class="closeRecipt pointer" (click)="closeBranchTransferPopup()">
 			<span class="icon-cross"></span>
 		</div>
 	</div>
@@ -42,7 +42,9 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<input name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
+								<div class="dropdown-arrow">
+                                    <input name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
+                                </div>
 							</div>
 						</div>
 						<div class="row mrB2">
@@ -226,15 +228,14 @@
 					</div>
 				</div>
 				<div class="col-sm-12">
-					<table class="table  basic" id="table-recipt">
+					<table class="table basic onMobileView" id="table-recipt">
 						<thead *ngIf="transferType === 'products'">
 	                        <tr>
 	                            <th width="2%">#</th>
-	                            <th width="30%">Product Description</th>
-	                            <th width="20%">Qty/Unit</th>
-		                        <th width="20%">Rate</th>
-	                            <th width="20%">Amount</th>
-
+	                            <th data-title="Product Description" width="30%">Product Description</th>
+	                            <th width="20%" data-title="Qty/Unit">Qty/Unit</th>
+		                        <th width="20%" data-title="Rate">Rate</th>
+	                            <th width="20%" data-title="Amount">Amount</th>
 	                        </tr>
 						</thead>
 	                    <thead *ngIf="transferType !== 'products'">
@@ -425,12 +426,12 @@
 	                    <div class="addNewLine mrT1">
 	                        <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add Multiple Receivers</a>
 	                        <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add Multiple Senders</a>
-	                        <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> + Add Multiple Products</a>
+	                        <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i> Add Multiple Products</a>
 	                    </div>
 						<tfoot id="tfoot">
 	                        <tr>
 	                            <td colspan="4">
-	                                <div class="transportation-details pdT3">
+	                                <div class="transportation-details pt-5">
 	                                    <h3 class="mrB1">Transportation Details</h3>
 	                                    <div class="row">
 	                                        <div class="col-sm-6 mrB2">
@@ -496,7 +497,7 @@
         <div class="form_header">
             <h3 class="aside-title pl-2">Manage Transporter</h3>
         </div>
-        <form #generateTransporterForm="ngForm" autocomplete="off">
+        <form #generateTransporterForm="ngForm" class="sadik" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>

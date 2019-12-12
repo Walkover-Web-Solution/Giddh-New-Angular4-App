@@ -8,20 +8,12 @@
     width: 100%;
     z-index: 99999;
 }
-.aside-pane {
-    padding: 0 !important;
-}
-
 :host.in #close {
-    position: absolute;
-    left: auto;
-    right: 10px;
-    z-index: 9999999;
-    background-color: transparent;
-    color: #fff;
-    font-size: 17px;
-    top: 18px;
-    margin-right: 0;
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
     border: 0;
     border-radius: 0;
 }
@@ -35,8 +27,59 @@
     max-width: 760px;
     width: 100%;
 }
-.aside-body {
-    padding: 0 15px;
+.aside-header {
+    background-color: #fff;
+    padding: 20px 10px;
+}
+.aside-pane {
+    padding: 0;
+    background-color: #fff;
+}
+.aside-title {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.creditors_detail {
+    padding: 10px;
+    background-color: #f7f8fa;
+    line-height: 1.6;
+}
+.creditors_detail > p {
+    font-size: 16px;
+    color: #2d3b4b;
+}
+.creditors_detail span.red-text {
+    color: #ff0000;
+}
+.contactDetails p {
+    font-size: 12px;
+    color: #2d3b4b;
+}
+.accountDetils {
+    padding: 10px 0;
+}
+form label {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.accountDetils .btn-default {
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+    border: 1px solid #ccc;
+}
+.accountDetils .btn-group {
+    width: 230px;
+    display: block;
+    text-align: left;
+}
+.accountDetils {
+    padding: 10px;
+}
+.accountDetils span.caret {
+    position: absolute;
+    right: 20px;
+    top: 14px;
 }
 .aside-pane-form {
     background-color: #fff;
