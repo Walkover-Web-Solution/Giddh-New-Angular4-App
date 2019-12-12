@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { ModalOptions } from 'ngx-bootstrap';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil, first } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
