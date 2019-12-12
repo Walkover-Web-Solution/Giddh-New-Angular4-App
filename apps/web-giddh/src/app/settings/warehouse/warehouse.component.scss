@@ -61,6 +61,8 @@
     font-family: "opensans-semibold";
     float: left;
     width: 66%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 span.setAsDefault {
     background-color: #d9d9d9;
