@@ -25,7 +25,7 @@
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required
-                            [disabled]="createNewCompanyPreparedObj.name && !isItemUpdateInProgress" placeholder="Name"
+                            [disabled]="(createNewCompanyPreparedObj.name && !isItemUpdateInProgress) ? 'disabled' : null" placeholder="Name"
                             [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
                     </div>
                     <div class="col-xs-6 mrB2 ">
@@ -33,7 +33,7 @@
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
                                 <sh-select id="country" [options]="countrySource$ | async" required
-                                    [isFilterEnabled]="true" [disabled]="createNewCompanyPreparedObj.country"
+                                    [isFilterEnabled]="true" [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
                                     name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
                                     class="pull-left  select-caret" style="width: 100%"
                                     [defaultValue]="selectedCountry">
@@ -46,7 +46,7 @@
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                [disabled]="createNewCompanyPreparedObj.baseCurrency" [isFilterEnabled]="true"
+                                [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null" [isFilterEnabled]="true"
                                 [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
@@ -56,14 +56,14 @@
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
                                 <sh-select class="pull-left select-caret"
-                                    [disabled]="createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress"
+                                    [disabled]="(createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress) ? 'disabled' : null"
                                     style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
                                     [options]="callingCodesSource$ | async"
                                     [(ngModel)]="createNewCompanyPreparedObj.phoneCode"
                                     [defaultValue]="createNewCompanyPreparedObj.phoneCode"></sh-select>
                                 <input type="number" class="form-control pull-right  select-caret" required
                                     (blur)="isContactNumberValid()"
-                                    [disabled]="createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress"
+                                    [disabled]="(createNewCompanyPreparedObj.contactNo && !isItemUpdateInProgress) ? 'disabled' : null"
                                     placeholder="9998899988" id="contactNo" autocomplete="off"
                                     [(ngModel)]="createNewCompanyPreparedObj.contactNo" name="contactNo" #mobileNoEl />
                             </div>
@@ -75,8 +75,8 @@
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
-                                    (onClear)="onClearBusinessType()" autocomplete="false"
-                                    [disabled]="companyProfileObj.businessType && isOnBoardingInProgress"
+                                    (onClear)="onClearBusinessType()" autocomplete="false" [readonlyInput]="true"
+                                    [disabled]="(companyProfileObj.businessType && isOnBoardingInProgress) ? 'disabled' : null"
                                     (selected)="selectedbusinessType($event)"
                                     [(ngModel)]="companyProfileObj.businessType" [options]="businessTypeList"
                                     [ItemHeight]="33" [defaultValue]="companyProfileObj.businessType">
@@ -89,6 +89,7 @@
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
+                                    [readonlyInput]="true"
                                     (onClear)="onClearBusinessNature()" autocomplete="false" id="businessNature"
                                     [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
                                     [isFilterEnabled]="true" [ItemHeight]="33"
