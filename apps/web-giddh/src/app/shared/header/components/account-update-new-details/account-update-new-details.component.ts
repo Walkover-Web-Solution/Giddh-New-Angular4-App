@@ -126,12 +126,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
-
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
-
-
-
 
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
@@ -1145,7 +1140,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
         } else {
             this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+            if (activeGroup) {
+                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+            }
         }
 
     }
