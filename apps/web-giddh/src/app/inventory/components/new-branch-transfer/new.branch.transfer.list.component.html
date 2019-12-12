@@ -7,7 +7,7 @@
                         <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
                     </span>
                 </div>
-                <div class="advance-icon" style="align-items: center" tooltip="Advance Search"
+                <div class="advance-icon pointer" tooltip="Advance Search"
                     (click)="openSearchModal(template)">
                     <span class="icon-advance-serch"></span>
                 </div>
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="col-sm-6 form-group">
-                <button class="btn btn-pink pull-right" (click)="toggleTransferAsidePane()">+ New Transfer</button>
+                <button class="btn btn-pink pull-right mr-0" (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
         <div class="report-table">
@@ -39,7 +39,7 @@
                             </div>
                         </th>
                         <th width="10%" class="td_in_searchBox">
-                            <div>
+                            <div [hidden]="inlineSearch == 'warehouseName'">
                                 <span>Warehouse</span>
                                 <i class="icon-search" (click)="inlineSearch = 'warehouseName'"></i>
                             </div>
@@ -150,7 +150,7 @@
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
-        <div class="modal-body">
+        <div class="modal-body radius-none pr-0 pl-0 pt-0">
             <new-branch-transfer (hideModal)="hideModal()" [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
     </div>

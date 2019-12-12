@@ -518,7 +518,12 @@ input {
 .mb-5 {
     margin-bottom: 50px;
 }
-
+.mr-0 {
+    margin-right: 0px !important;
+}
+.ml-0 {
+    margin-left: 0px !important;
+}
 .mr-1 {
     margin-right: 10px;
 }
@@ -7660,6 +7665,10 @@ app-header {
 }
 
 /* my css */
+
+.radius-none {
+    border-radius: 0px !important;
+}
 
 #form-place .dropdown-menu {
     height: 392px;

@@ -1,24 +1,24 @@
 <section class="reciptNote" autocomplete="off">
-	<div class="reciptNoteHeader d-flex">
+	<div class="reciptNoteHeader d-flex pl-15 pr-15">
 		<h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
 		<h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Note</h3>
 		<div class="closeRecipt" (click)="closeBranchTransferPopup()">
 			<span class="icon-cross"></span>
 		</div>
 	</div>
-	<div class="reciptNoteRadioBtn" *ngIf="!editBranchTransferUniqueName">
+	<div class="reciptNoteRadioBtn pr-15 pl-15" *ngIf="!editBranchTransferUniqueName">
 		<span class="mrR1"><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}" name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label for="multipleProducts">Multiple Products</label></span>
 		<span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
 	</div>
 	<div class="reciptNoteContent">
 		<div class="multipleProductsWrapper">
 			<form #newBranchTransferForm="ngForm" novalidate="">
-				<div class="multipleProducts row clearfix">
+				<div class="multipleProducts row clearfix pl-15 pr-15">
 					<div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
 						<div class="row mrB2">
 							<div class="col-md-3">
 								<label>
-									Date of Supply<span class="red-text">*</span>
+									Date of Supply <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -28,7 +28,7 @@
 	                    <div *ngIf="transferType === 'senders'" class="row mrB2">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Product's Name<span class="red-text">*</span>
+	                                Product's Name <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -38,7 +38,7 @@
 						<div class="row mrB2">
 							<div class="col-md-3">
 								<label>
-									Sender's Name<span class="red-text">*</span>
+									Sender's Name <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -48,7 +48,7 @@
 						<div class="row mrB2">
 							<div class="col-md-3">
 								<label>
-									Sender's Warehouse<span class="red-text">*</span>
+									Sender's Warehouse <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -58,7 +58,7 @@
 						<div class="row mrB2" *ngIf="formFields && formFields['taxName']">
 							<div class="col-md-3">
 								<label>
-									Sender's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
+									Sender's {{formFields['taxName'].label}} <span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -78,7 +78,7 @@
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
 							<div class="col-md-3">
 								<label>
-									Receiver's Name<span class="red-text">*</span>
+									Receiver's Name <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -88,7 +88,7 @@
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
 							<div class="col-md-3">
 								<label>
-									Receiver's Warehouse<span class="red-text">*</span>
+									Receiver's Warehouse <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -98,7 +98,7 @@
 						<div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
 							<div class="col-md-3">
 								<label>
-									Receiver's {{formFields['taxName'].label}}<span class="red-text" *ngIf="isTaxNumberRequired">*</span>
+									Receiver's {{formFields['taxName'].label}} <span class="red-text" *ngIf="isTaxNumberRequired">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -120,7 +120,7 @@
 						<div class="row mrB2">
 							<div class="col-md-3">
 								<label>
-									Date of Supply<span class="red-text">*</span>
+									Date of Supply <span class="red-text">*</span>
 								</label>
 							</div>
 							<div class="col-md-4">
@@ -130,7 +130,7 @@
 	                    <div *ngIf="transferType === 'senders'" class="row mrB2">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Product's Name<span class="red-text">*</span>
+	                                Product's Name <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -140,7 +140,7 @@
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Sender's Name<span class="red-text">*</span>
+	                                Sender's Name <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -150,7 +150,7 @@
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Sender's Warehouse<span class="red-text">*</span>
+	                                Sender's Warehouse <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -180,7 +180,7 @@
 	                    <div class="row mrB2">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Receiver's Name<span class="red-text">*</span>
+	                                Receiver's Name <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -190,7 +190,7 @@
 	                    <div class="row mrB2">
 	                        <div class="col-md-3">
 	                            <label>
-	                                Receiver's Warehouse<span class="red-text">*</span>
+	                                Receiver's Warehouse <span class="red-text">*</span>
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
@@ -234,7 +234,7 @@
 	                            <th width="20%">Qty/Unit</th>
 		                        <th width="20%">Rate</th>
 	                            <th width="20%">Amount</th>
-	                            
+
 	                        </tr>
 						</thead>
 	                    <thead *ngIf="transferType !== 'products'">
@@ -245,7 +245,7 @@
 	                            <th width="20%">Qty/Unit</th>
 		                        <th width="20%">Rate</th>
 	                            <th width="20%">Amount</th>
-	                           
+
 	                        </tr>
 	                    </thead>
 						<tbody *ngIf="transferType === 'products'">
@@ -326,7 +326,7 @@
                                     <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i class="fa fa-trash"></i></a>
                                     </div>
 		                        </td>
-	                             
+
 	                        </tr>
 						</tbody>
 	                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
@@ -373,7 +373,7 @@
                                       <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">  <i  class="fa fa-trash"></i></a>
                                     </div>
 		                        </td>
-	                             
+
 	                        </tr>
 	                    </tbody>
 	                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
@@ -472,7 +472,7 @@
 	                                    </div>
 	                                </section>
 	                            </td>
-	                             
+
 	                        </tr>
 						</tfoot>
 					</table>
