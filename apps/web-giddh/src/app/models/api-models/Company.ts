@@ -251,9 +251,9 @@ export interface AddressList {
 export class BillingDetails {
     name: string;
     email: string;
-    mobile: string;
+    contactNo: string;
     gstin: string;
-    state: string;
+    stateCode: string;
     address: string;
     autorenew: any;
 }

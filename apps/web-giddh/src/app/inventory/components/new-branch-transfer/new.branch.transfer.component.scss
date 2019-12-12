@@ -383,6 +383,6 @@ tfoot td .tableSec.form-group {
     color: #666666;
     font-size: 24px;
 }
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+.form-control[readonly] {
     background-color: #fff !important;
 }

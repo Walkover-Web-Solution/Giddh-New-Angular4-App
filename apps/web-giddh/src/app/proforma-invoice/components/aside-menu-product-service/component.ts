@@ -54,4 +54,9 @@ export class AsideMenuProductServiceComponent {
     public animateAside(e: any) {
         this.animatePAside.emit(e);
     }
+    public backButtonPressed() {
+        this.hideFirstStep = false;
+        this.isAddStockOpen = false;
+        this.isAddServiceOpen = false;
+    }
 }

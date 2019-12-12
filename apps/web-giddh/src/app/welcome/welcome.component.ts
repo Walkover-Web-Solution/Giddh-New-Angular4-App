@@ -96,9 +96,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         userBillingDetails: {
             name: '',
             email: '',
-            mobile: '',
+            contactNo: '',
             gstin: '',
-            state: '',
+            stateCode: '',
             address: '',
             autorenew: ''
         },
