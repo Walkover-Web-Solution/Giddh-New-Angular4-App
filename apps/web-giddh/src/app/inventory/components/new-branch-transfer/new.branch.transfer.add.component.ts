@@ -66,11 +66,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('transMode') public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber') public vehicleNumber;
     @ViewChild('transCompany') public transCompany: ShSelectComponent;
-    @ViewChild('destinationWarehouses') public destinationWarehouseList: ShSelectComponent;
+    @ViewChild('destinationWarehouseList') public destinationWarehouseList: ShSelectComponent;
     @ViewChild('sourceWarehouses') public sourceWarehouseList: ShSelectComponent;
     @ViewChild('sourceQuantity') public sourceQuantity;
     @ViewChild('defaultSource') public defaultSource: ShSelectComponent;
     @ViewChild('defaultProduct') public defaultProduct: ShSelectComponent;
+    @ViewChild('destinationName') public destinationName: ShSelectComponent;
+    @ViewChild('destinationQuantity') public destinationQuantity;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -503,6 +505,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (this.transferType === 'senders') {
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+
+                this.focusDefaultSource();
             }
 
             this.calculateOverallTotal();
@@ -1044,13 +1048,37 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusDefaultSource(): void {
         setTimeout(() => {
-            this.defaultSource.show('');
+            if (this.defaultSource) {
+                this.defaultSource.show('');
+            }
         }, 100);
     }
 
     public focusDefaultProduct(): void {
         setTimeout(() => {
-            this.defaultProduct.show('');
+            if (this.defaultProduct) {
+                this.defaultProduct.show('');
+            }
         }, 100);
+    }
+
+    public focusDestinationName(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                if(this.destinationName) {
+                    this.destinationName.show('');
+                } else {
+                    this.focusSelectDropdown(0);
+                }
+            }, 100);
+        }
+    }
+
+    public focusDestinationQuantity(): void {
+        if (!this.tabChanged) {
+            setTimeout(() => {
+                this.destinationQuantity.nativeElement.focus();
+            }, 100);
+        }
     }
 }
