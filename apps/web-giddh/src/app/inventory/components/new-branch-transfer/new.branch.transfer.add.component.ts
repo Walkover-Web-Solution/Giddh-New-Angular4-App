@@ -121,7 +121,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
     public isUpdateMode: boolean = false;
-    public tabChanged: boolean = false;
+    public allowAutoFocusInField: boolean = false;
 
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -157,7 +157,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.transporterMode.push({ label: c.label, value: c.value });
         });
 
-        this.focusDefaultSource();
+        if(!this.editBranchTransferUniqueName) {
+            this.allowAutoFocusInField = true;
+            this.focusDefaultSource();
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -192,7 +195,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public changeTransferType(): void {
-        this.tabChanged = true;
+        this.allowAutoFocusInField = false;
         this.initFormFields();
         this.tempDateParams.dateOfSupply = new Date();
         this.tempDateParams.dispatchedDate = "";
@@ -200,7 +203,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.calculateOverallTotal();
 
         setTimeout(() => {
-            this.tabChanged = false;
+            this.allowAutoFocusInField = true;
 
             if (this.transferType === "products") {
                 this.focusDefaultSource();
@@ -988,7 +991,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusSelectDropdown(index: number): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.setActiveRow(index);
                 setTimeout(() => {
@@ -999,7 +1002,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusSourceWarehouse(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.sourceWarehouse.show('');
             }, 100);
@@ -1007,7 +1010,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusDestinationWarehouse(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.destinationWarehouse.show('');
             }, 100);
@@ -1015,7 +1018,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusTransporterMode(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.transMode.show('');
             }, 100);
@@ -1023,7 +1026,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusVehicleNumber(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.vehicleNumber.nativeElement.focus();
             }, 100);
@@ -1031,7 +1034,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusTransportCompany(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.tempDateParams.dispatchedDate) {
                     this.transCompany.show('');
@@ -1041,7 +1044,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusDestinationWarehouses(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.destinationWarehouseList.show('');
             }, 100);
@@ -1049,7 +1052,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusSourceWarehouses(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.sourceWarehouseList.show('');
             }, 100);
@@ -1057,7 +1060,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusSourceQuantity(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.sourceQuantity.nativeElement.focus();
             }, 100);
@@ -1065,23 +1068,27 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusDefaultSource(): void {
-        setTimeout(() => {
-            if (this.defaultSource) {
-                this.defaultSource.show('');
-            }
-        }, 100);
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.defaultSource) {
+                    this.defaultSource.show('');
+                }
+            }, 100);
+        }
     }
 
     public focusDefaultProduct(): void {
-        setTimeout(() => {
-            if (this.defaultProduct) {
-                this.defaultProduct.show('');
-            }
-        }, 100);
+        if (this.allowAutoFocusInField) {
+            setTimeout(() => {
+                if (this.defaultProduct) {
+                    this.defaultProduct.show('');
+                }
+            }, 100);
+        }
     }
 
     public focusDestinationName(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.destinationName) {
                     this.destinationName.show('');
@@ -1093,7 +1100,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public focusDestinationQuantity(): void {
-        if (!this.tabChanged) {
+        if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 this.destinationQuantity.nativeElement.focus();
             }, 100);
