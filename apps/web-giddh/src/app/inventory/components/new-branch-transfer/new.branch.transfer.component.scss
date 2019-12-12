@@ -24,6 +24,7 @@ section.reciptNote {
     font-size: 14px;
     height: 86vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .multipleProducts label {
@@ -44,6 +45,25 @@ section.reciptNote {
     padding-bottom: 7px;
     display: table-cell;
     width: 200px;
+}
+button.btn.btn-filter {
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    font-size: 16px;
+    color: #1a237e;
+    display: -webkit-inline-box;
+    display: inline-flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 4px 10px;
+}
+.date-advanceSearch {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    margin-top: 9px;
 }
 .tableSec .tableRow .figureCell {
     width: 140px;
@@ -231,7 +251,7 @@ tfoot td .tableSec.form-group {
 }
 
 .td_in_searchBox {
-    padding: 0px 10px 0 0 !important;
+    padding: 0 0 0 10px !important;
     position: relative;
 }
 .td_in_searchBox .input-container {
