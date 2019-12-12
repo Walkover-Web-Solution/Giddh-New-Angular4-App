@@ -6367,12 +6367,7 @@ table td[class*=col-]:last-child {
     width: 100% !important;
 }
 
-.custom-tabs {
-    background: #eee;
-    border-bottom: 1px solid #ddd;
-    clear: both;
-}
-
+ 
 /* left bar menu */
 
 .form_body .toggle-btn label {
@@ -7565,10 +7560,11 @@ perfect-scrollbar > .ps > .ps-overlay {
     width: 100%;
     border-bottom: 1px solid #eee;
     padding: 5px 0;
+    margin-bottom: 15px;
 }
 
 .tax-engine .filings-header.header-band .header-info {
-    padding: 15px 35px;
+    padding: 15px;
 }
 
 .content-column.gst-filing-container .dropdown {
