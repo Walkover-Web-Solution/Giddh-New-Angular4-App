@@ -3284,7 +3284,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         } else {
-            let firstElementToFocus = $('.fristElementToFocus');
+            let firstElementToFocus: any = document.getElementsByClassName('fristElementToFocus');
             if (firstElementToFocus[0]) {
                 firstElementToFocus[0].focus();
             }
