@@ -96,9 +96,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         userBillingDetails: {
             name: '',
             email: '',
-            mobile: '',
+            contactNo: '',
             gstin: '',
-            state: '',
+            stateCode: '',
             address: '',
             autorenew: ''
         },
@@ -666,6 +666,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!isFormFilled) {
                         // Current warehouse item has no detail, try the default warehouse
                         this.fillOnBoardingDetails('DEFAULT_WAREHOUSE');
+                    } else {
+                        const { taxNumber: defaultCompanyTaxNumber = '' } = this.getDefaultCompanyDetails();
+                        /* Form is filled is default warehouse details. Check the 'Same as HQ' checkbox
+                            if the tax number of default warehouse is same as default company */
+                        this.isTaxNumberSameAsHeadQuarter = (defaultCompanyTaxNumber === this.itemDetails.taxNumber) ? 1 : 0;
                     }
                     break;
                 case 'DEFAULT_WAREHOUSE':
@@ -674,6 +679,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!isFormFilled) {
                         // Default warehouse has no detail, try the default company
                         this.fillOnBoardingDetails('DEFAULT_COMPANY');
+                    } else {
+                        const { taxNumber: defaultCompanyTaxNumber = '' } = this.getDefaultCompanyDetails();
+                        /* Form is filled is default warehouse details. Check the 'Same as HQ' checkbox
+                            if the tax number of default warehouse is same as default company */
+                        this.isTaxNumberSameAsHeadQuarter = (defaultCompanyTaxNumber === defaultWarehouse.taxNumber) ? 1 : 0;
                     }
                     break;
                 case 'DEFAULT_COMPANY':
@@ -685,6 +695,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         taxNumber: autoFillTaxNumber
                     };
                     this.fillFormDetails(defaultCompany);
+                    // Check the 'Same as HQ' checkbox
+                    this.isTaxNumberSameAsHeadQuarter = 1;
                     break;
                 default: break;
             }
