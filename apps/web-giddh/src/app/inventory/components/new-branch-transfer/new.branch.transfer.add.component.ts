@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -32,6 +32,7 @@ import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -55,9 +56,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @Input() public branchTransferMode: string;
     @Input() public editBranchTransferUniqueName: string;
     @Output() public hideModal: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('productSkuCode') productSkuCode;
-    @ViewChild('productHsnNumber') productHsnNumber;
+    @ViewChild('productSkuCode') public productSkuCode;
+    @ViewChild('productHsnNumber') public productHsnNumber;
     @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
+    @ViewChild('selectDropdown') public selectDropdown: ShSelectComponent;
+    @ViewChild('sourceWarehouse') public sourceWarehouse: ShSelectComponent;
+    @ViewChild('destinationWarehouse') public destinationWarehouse: ShSelectComponent;
+    @ViewChild('productDescription') public productDescription;
+    @ViewChild('transMode') public transMode: ShSelectComponent;
+    @ViewChild('vehicleNumber') public vehicleNumber;
+    @ViewChild('transCompany') public transCompany: ShSelectComponent;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -98,7 +106,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public overallTotal: number = 0;
     public isValidSourceTaxNumber: boolean = true;
     public isValidDestinationTaxNumber: boolean = true;
-    public tempDateParams: any = { dateOfSupply: '', dispatchedDate: '' };
+    public tempDateParams: any = { dateOfSupply: new Date(), dispatchedDate: '' };
     public isLoading: boolean = false;
     public hsnNumber: any = '';
     public skuNumber: any = '';
@@ -332,6 +340,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
             }
         });
+
+        let currentIndex = this.branchTransfer.destinations.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public addSender(): void {
@@ -352,6 +363,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
             }
         });
+
+        let currentIndex = this.branchTransfer.sources.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public addProduct(): void {
@@ -368,6 +382,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             },
             description: null
         });
+
+        let currentIndex = this.branchTransfer.products.length - 1;
+        this.focusSelectDropdown(currentIndex);
     }
 
     public removeProduct(i): void {
@@ -470,6 +487,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
 
             this.calculateOverallTotal();
+
+            setTimeout(() => {
+                if (this.productDescription) {
+                    this.productDescription.nativeElement.focus();
+                }
+            }, 200);
         }
     }
 
@@ -921,5 +944,42 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 });
             }
         });
+    }
+
+    public focusSelectDropdown(index: number): void {
+        setTimeout(() => {
+            this.setActiveRow(index);
+            setTimeout(() => {
+                this.selectDropdown.show('');
+            }, 100);
+        }, 100);
+    }
+
+    public focusSourceWarehouse(index: number): void {
+        this.sourceWarehouse.show('');
+    }
+
+    public focusDestinationWarehouse(index: number): void {
+        this.destinationWarehouse.show('');
+    }
+
+    public focusTransporterMode(): void {
+        setTimeout(() => {
+            this.transMode.show('');
+        }, 100);
+    }
+
+    public focusVehicleNumber(): void {
+        setTimeout(() => {
+            this.vehicleNumber.nativeElement.focus();
+        }, 100);
+    }
+
+    public focusTransportCompany(): void {
+        setTimeout(() => {
+            if (this.tempDateParams.dispatchedDate) {
+                this.transCompany.show('');
+            }
+        }, 100);
     }
 }
