@@ -77,9 +77,9 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         userBillingDetails: {
             name: '',
             email: '',
-            mobile: '',
+            contactNo: '',
             gstin: '',
-            state: '',
+            stateCode: '',
             address: '',
             autorenew: ''
         },
