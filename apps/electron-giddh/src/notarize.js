@@ -31,8 +31,8 @@ module.exports = async function(params) {
         await electronNotarize.notarize({
             appBundleId: appId,
             appPath: appPath,
-            appleId: '', // enter apple id here
-            appleIdPassword: '' // enter app-specific apple password
+            appleId: 'rohit@walkover.in', // enter apple id here
+            appleIdPassword: 'Mac@1234' // enter app-specific apple password
         });
     } catch (error) {
         console.error(error);

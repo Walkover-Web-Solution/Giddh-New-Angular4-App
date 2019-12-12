@@ -1,6 +1,6 @@
 {
     "name": "giddh",
-    "version": "6.1.3",
+    "version": "6.6.8",
     "description": "Accounting Software from Giddh.",
     "main": "index.js",
     "author": "Walkover Technologies<info@walkover.in>",
@@ -22,6 +22,7 @@
     },
     "build": {
         "appId": "com.giddh.prod",
+        "afterSign": "notarize.js",
         "publish": [{
             "provider": "s3",
             "bucket": "giddh-app-builds"
@@ -36,9 +37,12 @@
                 "dmg",
                 "zip"
             ],
+            "hardenedRuntime": true,
+            "gatekeeperAssess": false,
             "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
             "type": "distribution",
             "entitlements": "default.entitlements.mac.plist",
+            "entitlementsInherit": "default.entitlements.mac.plist",
             "provisioningProfile": "embedded.provisionprofile",
             "icon": "icon.png"
         },
@@ -70,13 +74,6 @@
             "perMachine": false
         },
         "asar": true
-    },
-    "afterSign": "notarize.js",
-    "mac": {
-        "hardenedRuntime": true,
-        "gatekeeperAssess": false,
-        "entitlements": "entitlements.mac.plist",
-        "entitlementsInherit": "entitlements.mac.plist"
     },
     "dmg": {
         "sign": false
