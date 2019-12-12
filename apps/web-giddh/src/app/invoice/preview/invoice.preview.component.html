@@ -475,8 +475,8 @@
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                  [voucherType]="selectedVoucher"
-                                [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
-                                [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                                [accountUniqueName]="item.account.uniqueName" [from]="invoiceSearchRequest.from"
+                                [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                             </div>
                         </td>
 
@@ -616,8 +616,8 @@
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                  [voucherType]="selectedVoucher"
-                                 [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
-                                 [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                                 [accountUniqueName]="item.account.uniqueName" [from]="invoiceSearchRequest.from"
+                                 [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                             </div>
                         </td>
                         <td>{{item.voucherDate}}</td>
@@ -724,7 +724,7 @@ tooltip="Invoice sent" placement="left" />-->
                                 {{item.account.name}}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                     [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher"
-                                    [from]="this.invoiceSearchRequest.from" [to]="this.invoiceSearchRequest.to"
+                                    [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
                                     [isModalOpen]="modalUniqueName === item.uniqueName">
                                 </div>
                             </div>
