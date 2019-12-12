@@ -35,7 +35,7 @@
                                 <i class="icon-search" (click)="inlineSearch = 'senderReceiver'"></i>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
-                                <input type="text" placeholder="Search Sender/Receiver" class="w100"
+                                <input type="text" placeholder="Sender/Receiver" class="w100"
                                     name="senderReceiver" [(ngModel)]="branchTransferPostRequestParams.senderReceiver"
                                     (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
@@ -66,11 +66,8 @@
                         <td>{{ item.warehouseName }}</td>
                         <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
                         <td>
-                            <span class="text-light-2">Select Action</span>
-                            <div class="btn-group pull-right" dropdown [autoClose]="true">
-                                <a id="button-basic" dropdownToggle type="button"
-                                    class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
-                                </a>
+                            <div class="btn-group" dropdown [autoClose]="true">
+                                <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span class="text-light-2">Select Action</span> <span class="icon-dots-three-vertical"></span></button>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <!-- <li role="menuitem">
