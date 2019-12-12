@@ -1,7 +1,7 @@
 <div class="branch-transfer-report">
     <div class="container-fluid">
-        <div class="row pdT1">
-            <div class="col-sm-4 form-group d-flex">
+        <div class="d-flex date-advanceSearch">
+            <div class="d-flex">
                 <div class="input-group">
                     <span class="inputWrapper">
                         <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
@@ -12,12 +12,12 @@
                     <span class="icon-advance-serch"></span>
                 </div>
             </div>
-            <div class="col-sm-4 text-center">
+            <div class="text-center">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
                     <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear Filter </button>
                 </div>
             </div>
-            <div class="col-sm-4 form-group">
+            <div class="clearfix">
                 <button class="btn btn-pink pull-right mr-0" (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
