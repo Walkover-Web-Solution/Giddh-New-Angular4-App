@@ -474,6 +474,7 @@
                             (clickOutside)="modalUniqueName = ''">
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                 [voucherType]="selectedVoucher"
                                 [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
                                 [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                             </div>
@@ -608,7 +609,17 @@
                             <a style="cursor: pointer" (click)="onSelectInvoice(item)">
                                 {{item.voucherNumber }}</a>
                         </td>
-                        <td>{{item.account.name}}</td>
+
+                        <!-- open account details on double click on customer name -->
+                        <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                            (clickOutside)="modalUniqueName = ''">
+                            {{item.account.name}}
+                            <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                                 [voucherType]="selectedVoucher"
+                                 [accountUniqueName]="item.account.uniqueName" [from]="this.invoiceSearchRequest.from"
+                                 [to]="this.invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                            </div>
+                        </td>
                         <td>{{item.voucherDate}}</td>
                         <td class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
 
@@ -712,7 +723,7 @@ tooltip="Invoice sent" placement="left" />-->
                                 (clickOutside)="modalUniqueName = ''">
                                 {{item.account.name}}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName"
+                                    [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher"
                                     [from]="this.invoiceSearchRequest.from" [to]="this.invoiceSearchRequest.to"
                                     [isModalOpen]="modalUniqueName === item.uniqueName">
                                 </div>
