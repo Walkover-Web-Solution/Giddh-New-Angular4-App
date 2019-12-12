@@ -16,6 +16,7 @@ import { select, Store } from '@ngrx/store';
 import { ModalOptions } from 'ngx-bootstrap';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import * as googleLibPhoneNumber from 'google-libphonenumber';
 
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -141,8 +142,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('states') statesDropdown: ShSelectComponent;
     /** GST number field */
     @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
+    /** Contact number field */
+    @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Phone utility to check the validity of a contact number */
+    private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -280,6 +285,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public submit(welcomeForm: NgForm) {
+        let isWelcomeFormValid: boolean = true;
         if (!this.isOnBoardingInProgress) {
             this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
             this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
@@ -300,13 +306,21 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
             this._router.navigate(['select-plan']);
-        }
-        this.nextButtonClicked.emit({
-            welcomeForm,
-            otherData: {
-                taxName: this.formFields
+        } else if (this.isItemUpdateInProgress && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            // Check for contact number validity only for update flow of warehouse
+            isWelcomeFormValid = this.isContactNumberValid();
+            if (!isWelcomeFormValid && this.contactNumberField) {
+                this.contactNumberField.nativeElement.focus();
             }
-        });
+        }
+        if (isWelcomeFormValid) {
+            this.nextButtonClicked.emit({
+                welcomeForm,
+                otherData: {
+                    taxName: this.formFields
+                }
+            });
+        }
     }
 
     public prepareGstDetail(obj) {
@@ -644,6 +658,32 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.getStateCode(gstNumberField, states);
         this.checkGstNumValidation(gstNumberField);
+    }
+
+    /**
+     * Returns true, if the contact number is valid
+     *
+     * @private
+     * @returns {boolean} True, if the contact number is valid
+     * @memberof WelcomeComponent
+     */
+    private isContactNumberValid(): boolean {
+        const contactNumberElement = this.contactNumberField.nativeElement;
+        try {
+            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + contactNumberElement.value, this.company.country);
+            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+                contactNumberElement.classList.remove('error-box');
+                return true;
+            } else {
+                this._toasty.errorToast('Invalid Contact number');
+                contactNumberElement.classList.add('error-box');
+                return false;
+            }
+        } catch (error) {
+            this._toasty.errorToast('Invalid Contact number');
+            contactNumberElement.classList.add('error-box');
+            return false;
+        }
     }
 
     /**
