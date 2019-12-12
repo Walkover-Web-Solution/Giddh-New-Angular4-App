@@ -10,6 +10,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
   selector: '[account-detail-modal-component]',
@@ -22,6 +23,10 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   @Input() public accountUniqueName: string;
   @Input() public from: string;
   @Input() public to: string;
+
+  // take voucher type from parent component
+  @Input() public voucherType: VoucherTypeEnum;
+
   @ViewChild('mailModal') public mailModal: ModalDirective;
   @ViewChild('messageBox') public messageBox: ElementRef;
 
@@ -77,7 +82,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
   ];
   public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
   public accInfo: IFlattenAccountsResultItem;
-  public purchaseOrSales: 'sales' | 'purchase';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _companyServices: CompanyService,
@@ -96,8 +100,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
       this.flattenAccountsStream$.pipe(take(1)).subscribe(data => {
         if (data && data.length) {
           this.accInfo = data.find(f => f.uniqueName === changes['accountUniqueName'].currentValue);
-          let creditorsString = 'currentliabilities, sundrycreditors';
-          this.purchaseOrSales = this.accInfo.uNameStr.indexOf(creditorsString) > -1 ? 'purchase' : 'sales';
         }
       });
     }
@@ -114,13 +116,14 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
         this.goToRoute('ledger', `/${this.from}/${this.to}`);
         break;
 
-      case 2: // go to sales or purchase
-        if (this.purchaseOrSales === 'purchase') {
-          this.goToRoute('proforma-invoice/invoice/purchase');
-        } else {
+      case 2: // go to sales/ purchase/ debit note or credit note generate page
+        if (this.voucherType === VoucherTypeEnum.sales){
           // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
           let isCashInvoice = this.accountUniqueName === 'cash';
           this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
+        } else {
+            // for purchase/ debit and credit note
+            this.goToRoute('proforma-invoice/invoice/' + this.voucherType);
         }
         break;
       case 3: // send sms

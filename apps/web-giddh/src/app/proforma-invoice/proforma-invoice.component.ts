@@ -73,6 +73,8 @@ import { GeneralService } from '../services/general.service';
 import { LoaderState } from "../loader/loader";
 import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
+import { CurrentPage } from '../models/api-models/Common';
+import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 
 const THEAD_ARR_READONLY = [
     {
@@ -428,7 +430,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.route.params.pipe(takeUntil(this.destroyed$), delay(0)).subscribe(parmas => {
             if (parmas['invoiceType']) {
                 if (this.invoiceType !== parmas['invoiceType']) {
-                    this.invoiceType = parmas['invoiceType'];
+                    this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
                     this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
@@ -441,7 +443,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
-                this.invoiceType = parmas['invoiceType'];
+                this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
                 this.prepareInvoiceTypeFlags();
                 this.saveStateDetails();
             }
@@ -449,10 +451,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (parmas['invoiceType'] && parmas['accUniqueName']) {
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.isUpdateMode = false;
-                this.invoiceType = parmas['invoiceType'];
+                this.invoiceType = decodeURI(parmas['invoiceType']) as VoucherTypeEnum;
                 this.prepareInvoiceTypeFlags();
                 this.isInvoiceRequestedFromPreviousPage = true;
                 this.getAccountDetails(parmas['accUniqueName']);
+
+                // set current page title manually because we are passing account unique name which will be dynamic so we can't relay on it so we have to do it manually
+                this.setCurrentPageTitle(this.invoiceType);
             }
 
             if (parmas['invoiceNo'] && parmas['accUniqueName'] && parmas['invoiceType']) {
@@ -3301,5 +3306,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }, 200);
         }*/
+    }
+
+    /**
+     * set current page title as header title
+     * @param invoiceType: VoucherTypeEnum
+     */
+    private setCurrentPageTitle(invoiceType: VoucherTypeEnum) {
+        // find exact item from navigation list by using invoiceType
+        let navItemFromMenuList = NAVIGATION_ITEM_LIST.find(page => page.uniqueName === `/pages/proforma-invoice/invoice/${invoiceType}`);
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = navItemFromMenuList.name;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }
