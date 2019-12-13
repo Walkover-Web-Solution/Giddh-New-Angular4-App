@@ -74,7 +74,7 @@
     position: absolute;
     left: auto;
     top: 15px;
-    z-index: 5;
+    z-index: 6;
     border: 0;
     border-radius: 0;
     right: 218px;
@@ -110,7 +110,8 @@
     box-shadow: 0 3px 6px #0000001a;
     padding: 15px;
     height: calc(100vh - 90px);
-    overflow: scroll;
+    overflow: auto;
+    scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
 }

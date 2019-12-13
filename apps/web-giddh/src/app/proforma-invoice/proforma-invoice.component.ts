@@ -3289,6 +3289,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 firstElementToFocus[0].focus();
             }
         }
+
     }
 
     /**
@@ -3305,19 +3306,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }
         this.hsnDropdownShow = !this.hsnDropdownShow;
-    }
-
-    /**
-     * set current page title as header title
-     * @param invoiceType: VoucherTypeEnum
-     */
-    private setCurrentPageTitle(invoiceType: VoucherTypeEnum) {
-        // find exact item from navigation list by using invoiceType
-        let navItemFromMenuList = NAVIGATION_ITEM_LIST.find(page => page.uniqueName === `/pages/proforma-invoice/invoice/${invoiceType}`);
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = navItemFromMenuList.name;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     /**
