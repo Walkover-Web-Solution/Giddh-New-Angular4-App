@@ -8,6 +8,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { WareHouseResponse } from '../models/api-models/Warehouse';
 
 /**
  * Provider to carry out warehouse related operations
@@ -102,5 +103,14 @@ export class SettingsWarehouseService {
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
     }
+
+	public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
+		return this.http.get(this.config.apiUrl + WAREHOUSE_API.GET_WAREHOUSE_DETAILS
+			.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+			.replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {
+			let data: BaseResponse<WareHouseResponse, string> = res;
+			return data;
+		}), catchError((e) => this.errorHandler.HandleCatch<WareHouseResponse, string>(e, WareHouseResponse)));
+	}
 
 }
