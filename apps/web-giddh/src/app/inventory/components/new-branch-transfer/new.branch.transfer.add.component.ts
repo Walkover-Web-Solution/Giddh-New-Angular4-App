@@ -119,7 +119,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isLoading: boolean = false;
     public hsnNumber: any = '';
     public skuNumber: any = '';
-    public isTaxNumberRequired: boolean = false;
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
     public isUpdateMode: boolean = false;
@@ -138,15 +137,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
                 this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
-
-                if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-                    this.activeCompany.addresses.forEach(key => {
-                        if (key.taxNumber) {
-                            this.isTaxNumberRequired = true;
-                        }
-                    });
-                }
-
                 this.assignCurrentCompany();
             }
         });
@@ -531,44 +521,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
                     this.branchTransfer[type][index].warehouse.address = res.body.address;
-
-                    if (this.isTaxNumberRequired) {
-                        if (!this.branchTransfer[type][index].warehouse.taxNumber) {
-                            if (type === "sources") {
-                                this.isValidSourceTaxNumber = false;
-                            } else {
-                                this.isValidDestinationTaxNumber = false;
-                            }
-                        } else {
-                            if (type === "sources") {
-                                this.isValidSourceTaxNumber = true;
-                            } else {
-                                this.isValidDestinationTaxNumber = true;
-                            }
-                        }
-                    }
                 }
             });
         } else {
             this.branchTransfer[type][index].warehouse.name = "";
             this.branchTransfer[type][index].warehouse.taxNumber = "";
             this.branchTransfer[type][index].warehouse.address = "";
-
-            if (this.isTaxNumberRequired) {
-                if (!this.branchTransfer[type][index].warehouse.taxNumber) {
-                    if (type === "sources") {
-                        this.isValidSourceTaxNumber = false;
-                    } else {
-                        this.isValidDestinationTaxNumber = false;
-                    }
-                } else {
-                    if (type === "sources") {
-                        this.isValidSourceTaxNumber = true;
-                    } else {
-                        this.isValidDestinationTaxNumber = true;
-                    }
-                }
-            }
         }
 
         if (type === "sources") {
@@ -887,15 +845,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
                 if (response.body.transporterDetails && response.body.transporterDetails.dispatchedDate) {
                     this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
-                }
-
-                if (this.isTaxNumberRequired) {
-                    if (!this.branchTransfer.sources[0].warehouse.taxNumber) {
-                        this.isValidSourceTaxNumber = false;
-                    }
-                    if (!this.branchTransfer.destinations[0].warehouse.taxNumber) {
-                        this.isValidDestinationTaxNumber = false;
-                    }
                 }
 
                 this.calculateOverallTotal();
