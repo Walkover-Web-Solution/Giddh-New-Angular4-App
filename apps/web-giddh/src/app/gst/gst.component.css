@@ -1,4 +1,4 @@
-@import '../../assets/css/color.scss';
+@import "../../assets/css/color.scss";
 .return-body .main-wrapper {
     background-color: #f5f5f5;
     padding: 0;
@@ -6,12 +6,12 @@
 }
 
 .return-content {
-    padding: 31px 4% 15px;
+    padding: 15px;
     background-color: #fff;
 }
 
 .btn-primary {
-    border-color:#5B64C9 !important;
+    border-color: #5b64c9 !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -36,10 +36,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    border-color: #5B64C9 !important;
-    background: #5B64C9;
+    border-color: #5b64c9 !important;
+    background: #5b64c9;
     color: #ffffff;
-
 }
 
 .btn,
@@ -81,7 +80,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .return-content .return-filed {
-    background-color: #00B177;
+    background-color: #00b177;
 }
 
 .text-uppercase {
@@ -121,7 +120,7 @@ svg.icon.gstr-icon {
 }
 
 .return-content .line::before {
-    content: '';
+    content: "";
     display: block;
     width: 9px;
     height: 9px;
@@ -140,11 +139,9 @@ svg.icon.gstr-icon {
     font-size: 24px;
 }
 
-
-
 .bottom-action,
 .tax-engine a,
-.tax-engine a>.dropdown {
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
 
@@ -174,7 +171,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .content-disabled {
-    opacity: .5;
+    opacity: 0.5;
     position: relative;
     cursor: not-allowed;
     pointer-events: none;
@@ -206,7 +203,7 @@ svg.icon.icon-xxlg-md {
     display: inline-block;
 }
 
-.filing-demo-video .video-thumbnail>svg {
+.filing-demo-video .video-thumbnail > svg {
     width: 60px;
     height: 40px;
 }
@@ -240,17 +237,17 @@ hr {
     border-radius: 4px;
 }
 
-.filing-due-date .return-details>table {
+.filing-due-date .return-details > table {
     width: 100%;
     font-size: 13px;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:first-child {
+.filing-due-date .return-details > table > tbody > tr > td:first-child {
     padding: 10px 15px;
     vertical-align: top;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:first-child:before {
+.filing-due-date .return-details > table > tbody > tr > td:first-child:before {
     content: " ";
     width: 4px;
     height: 4px;
@@ -261,7 +258,7 @@ hr {
     background-color: #41aaff;
 }
 
-.filing-due-date .return-details>table>tbody>tr>td:last-child {
+.filing-due-date .return-details > table > tbody > tr > td:last-child {
     padding: 10px 15px;
     text-align: right;
 }
@@ -285,7 +282,7 @@ hr {
 }
 
 .return-body .notification .activity-graph .notify:not(:last-child)::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 14px;
     left: 4px;
@@ -298,7 +295,7 @@ hr {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: #2A85FB;
+    background-color: #2a85fb;
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -336,12 +333,12 @@ hr {
 }
 
 .return-body .notification .faq-list li a:hover {
-    color: #005BD0;
+    color: #005bd0;
 }
 
-#c-tab ::ng-deep .nav-tabs>li.active>a,
-.nav-tabs>li.active>a:focus,
-.nav-tabs>li.active>a:hover {
+#c-tab ::ng-deep .nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover {
     color: #555;
     cursor: default;
     background-color: #fff;
@@ -383,7 +380,7 @@ hr {
     outline: none !important;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu > li > a:hover {
     color: #ff5e01;
     background: #f4f5f8;
 }
@@ -398,11 +395,11 @@ hr {
     font-weight: 600;
 }
 
-.header-info .btn-group>.dropdown-menu {
+.header-info .btn-group > .dropdown-menu {
     margin-top: 40px;
 }
 
-::ng-deep #monthPicker .btn-info>.text-success {
+::ng-deep #monthPicker .btn-info > .text-success {
     color: #333333 !important;
 }
 
@@ -452,5 +449,23 @@ hr {
     }
     to {
         left: 100%;
+    }
+}
+/*responsive*/
+@media (max-width: 767px) {
+    .view-summary-btn {
+        float: none !important;
+        display: block;
+        margin-top: 10px;
+    }
+    .return-content {
+        padding: 15px 0 0;
+        background-color: #fff;
+    }
+    .filing-steps .font-large {
+        font-size: 14px;
+    }
+    .return-content .content-graph {
+        padding: 15px 0;
     }
 }

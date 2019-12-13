@@ -59,7 +59,7 @@
                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                     </label>
                     <div class="clearfix">
-                        <sh-select class="text-left dropdown-arrow" name="depositAccountUniqueName"
+                        <sh-select class="text-left multi-select" name="depositAccountUniqueName"
                                    #entryAgainstAccountDropDown
                                    [options]="entryAgainstObject.dropDownOption"
                                    [(ngModel)]="entryAgainstObject.model"
