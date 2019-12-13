@@ -131,7 +131,7 @@
                 <button class="btn btn-md btn-success mrR1" type="button" (click)="search()">
                     Search
                 </button>
-                <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal()">
+                <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal(false)">
                     Cancel
                 </button>
             </div>
@@ -150,7 +150,7 @@
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
         <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
-            <new-branch-transfer (hideModal)="hideModal()" [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
+            <new-branch-transfer (hideModal)="hideModal(true)" [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
     </div>
 </ng-template>
