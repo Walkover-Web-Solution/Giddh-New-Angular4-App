@@ -71,7 +71,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
 		pageNumber = pageNumber ? pageNumber : 1;
 		refresh = refresh ? refresh : 'false';
 
-		this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
+		this._contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).subscribe((res) => {
 			if (res.status === 'success') {
 				if (groupUniqueName === "sundrydebtors") {
 					this.drAccounts = res.body.results;

@@ -338,12 +338,15 @@ body {
       -webkit-animation-delay: -0.16s;
       animation-delay: -0.16s;
   }
+  /* added display flex to loader-1 */
+  #loader-1 {
+      display: flex;
+  }
   .spinner2 {
       margin: 0 auto;
       width: 40px;
       height: 100vh;
       position: relative;
-      display: flex !important;
       align-items: center;
   }
   .cube1,
