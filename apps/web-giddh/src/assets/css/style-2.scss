@@ -3495,7 +3495,6 @@ a.btn.btn-xs.btn-link.pull-right {
     background-repeat: no-repeat !important;
     background-color: #fff !important;
     padding-right: 24px !important;
-    text-align: right;
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -6003,6 +6002,7 @@ typeahead-container .dropdown-menu li.active > a > a {
     margin: 0;
     position: relative;
     border-radius: 2px !important;
+    overflow: hidden;
 }
 
 .square-switch > label {
@@ -6013,8 +6013,11 @@ typeahead-container .dropdown-menu li.active > a > a {
     border-radius: 2px;
     color: #666;
     padding: 0 7px;
+    height: 34px;
 }
-
+.square-switch > label > span {
+    height: 34px;
+}
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
     color: #fff;
