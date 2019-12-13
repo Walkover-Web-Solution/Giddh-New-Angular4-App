@@ -1,11 +1,11 @@
 <form #formDiv name="addEditStockForm" [formGroup]="addStockForm" novalidate="" autocomplete="off">
 
-    <section class="col-xs-12 col-md-12 col-lg-12">
-        <div class="">
-            <div class="">
+    <section>
+        <div>
+            <div>
                 <div class="form-header row">
-                    <h2 *ngIf="!isUpdatingStockForm">Create Stock</h2>
-                    <h2 *ngIf="isUpdatingStockForm">Update Stock</h2>
+                    <h3 *ngIf="!isUpdatingStockForm">Create Stock</h3>
+                    <h3 *ngIf="isUpdatingStockForm">Update Stock</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
@@ -35,6 +35,10 @@
                                     <label>Stock Name <sup>*</sup></label>
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()"
                                         formControlName="name" #stockName />
+
+                                    <div class="error-msg" *ngIf="addStockForm.get('name').hasError('minlength')">
+                                        Minimum 2 characters required
+                                    </div>
                                 </div>
                                 <div class="form-group col-xs-5">
                                     <label>Stock Unit <sup>*</sup></label>
@@ -239,7 +243,7 @@
                             </ng-container>
                         </div>
 
-                        <div class="pdL pdR pdT">
+                        <div class="pdL pdR pdT row">
                             <div class="col-xs-6">
                                 <div class="checkbox">
                                     <label class="" for="enablePurchase">
@@ -359,7 +363,7 @@
                         </div>
 
 
-                        <div class="mrT1 pdL pdR">
+                        <div class="mrT1 pdL pdR row">
                             <div class="col-xs-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
@@ -372,7 +376,7 @@
                         </div>
 
 
-                        <section class="mrT2 mrB3 col-xs-12" *ngIf="addStockForm.value.isFsStock">
+                        <section class="mrT2 mrB3 col-xs-12 row" *ngIf="addStockForm.value.isFsStock">
                             <div class="pdL pdR">
                                 <h1 class="section_head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
                                         with)</strong></h1>
@@ -451,7 +455,7 @@
                         </section>
 
                         <div class="col-xs-12 text-left">
-                            <div class="mrT1 pdL pdR">
+                            <div class="mrT1 pdL pdR row">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"
