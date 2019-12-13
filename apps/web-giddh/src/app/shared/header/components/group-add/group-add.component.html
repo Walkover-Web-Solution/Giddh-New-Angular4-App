@@ -17,7 +17,7 @@
     <div class="row">
       <div class="form-group col-xs-12 col-sm-6">
         <label for="">Balance for Trigger</label>
-        <div class="" [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
+        <div class="input-group width-100" [ngClass]="{'clearfix': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
           <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount"
             placeholder="00.00" />
           <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="

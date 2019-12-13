@@ -627,14 +627,11 @@
                     </ng-container>
                     <table class="table table-custom-invoice  basic">
                         <thead>
-
                             <tr>
-
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
                                     {{item.label}}
                                 </th>
-
                             </tr>
                         </thead>
                         <tbody
@@ -884,14 +881,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-6 pdR0">
                                                         <div class="entryDate">
-
-                                                          <input type="text"
-                                                                placeholder="Datepicker"
-                                                                class="form-control"
-                                                                bsDatepicker>
-
                                                             <label>Entry Date: </label>
-
                                                             <span *ngIf="!isUpdateMode">
                                                                 <input type="text" [placeholder]="giddhDateFormat"
                                                                     bsDatepicker name="transaction.date_{{entryIdx}}"
