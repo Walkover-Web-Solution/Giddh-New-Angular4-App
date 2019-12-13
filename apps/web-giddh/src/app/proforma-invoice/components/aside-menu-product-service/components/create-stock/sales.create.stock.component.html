@@ -1,11 +1,11 @@
 <form #formDiv name="addEditStockForm" [formGroup]="addStockForm" novalidate="" autocomplete="off">
 
-    <section class="col-xs-12 col-md-12 col-lg-12">
-        <div class="">
-            <div class="">
+    <section>
+        <div>
+            <div>
                 <div class="form-header row">
-                    <h2 *ngIf="!isUpdatingStockForm">Create Stock</h2>
-                    <h2 *ngIf="isUpdatingStockForm">Update Stock</h2>
+                    <h3 *ngIf="!isUpdatingStockForm">Create Stock</h3>
+                    <h3 *ngIf="isUpdatingStockForm">Update Stock</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
@@ -35,6 +35,10 @@
                                     <label>Stock Name <sup>*</sup></label>
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()"
                                         formControlName="name" #stockName />
+
+                                    <div class="error-msg" *ngIf="addStockForm.get('name').errors?.minLength">At
+                                        least 2
+                                        charachters</div>
                                 </div>
                                 <div class="form-group col-xs-5">
                                     <label>Stock Unit <sup>*</sup></label>
