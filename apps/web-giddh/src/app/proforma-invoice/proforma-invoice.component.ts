@@ -3291,6 +3291,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * toggle hsn/sac dropdown
+     * and hide all open date-pickers because it's overlapping
+     * hsn/sac dropdown
+     */
     public toggleHsnSacDropDown() {
         if (this.datePickers && this.datePickers.length) {
             this.datePickers.forEach(datePicker => {
