@@ -530,6 +530,9 @@ input {
 .mb-5 {
     margin-bottom: 50px;
 }
+.mb-15 {
+    margin-bottom: 15px;
+}
 
 .mr-1 {
     margin-right: 10px;
@@ -783,6 +786,7 @@ ul.sub-list {
     padding-bottom: 7px;
     padding-left: 0;
     padding-right: 0;
+    border-bottom: 4px solid transparent;
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
@@ -793,25 +797,11 @@ ul.sub-list {
     color: #1c1c1c !important;
 }
 
-.custom-tabs .nav.nav-tabs > li.active a:after {
-    background: var(--dark-blue01);
-    width: 40px;
-    height: 3px;
-    display: block;
-    content: "";
-    position: absolute;
-    border: 0;
-    margin: 0 auto;
-    display: block;
-    right: 0;
-    left: 0;
-    bottom: -1px;
-}
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
     padding: 0px 0px 0 15px !important;
-    background-color: #f7f8fd;
+    background-color:#f7f8fa;
     z-index: 9;
     position: relative;
     top: -4px;
@@ -1503,7 +1493,6 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 2px solid #e6e7e8;
 }
 
 /* .fyear {
@@ -3509,7 +3498,6 @@ a.btn.btn-xs.btn-link.pull-right {
     background-repeat: no-repeat !important;
     background-color: #fff !important;
     padding-right: 24px !important;
-    text-align: right;
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -6017,6 +6005,7 @@ typeahead-container .dropdown-menu li.active > a > a {
     margin: 0;
     position: relative;
     border-radius: 2px !important;
+    overflow: hidden;
 }
 
 .square-switch > label {
@@ -6027,8 +6016,11 @@ typeahead-container .dropdown-menu li.active > a > a {
     border-radius: 2px;
     color: #666;
     padding: 0 7px;
+    height: 34px;
 }
-
+.square-switch > label > span {
+    height: 34px;
+}
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
     color: #fff;
@@ -6367,11 +6359,6 @@ table td[class*=col-]:last-child {
     width: 100% !important;
 }
 
-.custom-tabs {
-    background: #eee;
-    border-bottom: 1px solid #ddd;
-    clear: both;
-}
 
 /* left bar menu */
 
@@ -6773,9 +6760,6 @@ GST filing
     float: none;
 }
 
-.list-header .list-filter .btn {
-    padding: 2px 9px;
-}
 
 .tax-engine .btn .caret,
 .tax-engine .btn-group > .btn:first-child {
@@ -6840,7 +6824,9 @@ GST filing
     position: relative;
     top: 1px;
 }
-
+.list-style ul.list-inline.list-middle.download-drop-down {
+    text-align: right;
+}
 .menu_open {
     padding-left: 215px;
 }
@@ -6943,16 +6929,6 @@ perfect-scrollbar > .ps > .ps-overlay {
     margin-top: 10px;
 }
 
-.tax-engine .nav-band .nav-tabs > li.active > a::before {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background-color: #ff5f00;
-    border-radius: 50%;
-    margin-right: 5px;
-    vertical-align: middle;
-}
 
 .tax-engine .nav > li,
 .tax-engine .nav > li > a {
@@ -7004,7 +6980,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
-    padding: 15px 35px;
+    padding: 15px 15px;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary .title {
@@ -7083,6 +7059,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     vertical-align: middle;
 }
 
+
+
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
     background-color: #f9f9f9;
@@ -7148,7 +7126,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
-    background-color: #f7f7f7;
+    padding-top: 15px !important;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li,
@@ -7165,14 +7143,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     background: none !important;
 }
 
-.tax-engine .sub-filter-nav-band > ul > li.active:after,
-.tax-engine .sub-filter-nav-bandnew ul > li.active:after {
-    content: "";
-    display: block;
-    border-bottom: 2px solid #ff5f00;
-    width: 55%;
-    margin: auto;
-}
+
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
@@ -7395,13 +7366,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border: 0;
 }
 
-.tax-engine .sub-filter-nav-band > ul > li.active:after {
-    content: "";
-    display: block;
-    border-bottom: 2px solid #ff5f00;
-    width: 55%;
-    margin: auto;
-}
+
 
 .tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
     float: right;
@@ -7565,10 +7530,11 @@ perfect-scrollbar > .ps > .ps-overlay {
     width: 100%;
     border-bottom: 1px solid #eee;
     padding: 5px 0;
+    margin-bottom: 15px;
 }
 
 .tax-engine .filings-header.header-band .header-info {
-    padding: 15px 35px;
+    padding: 15px;
 }
 
 .content-column.gst-filing-container .dropdown {
@@ -8239,6 +8205,9 @@ ul.dropdown-menu p.lead.pd {
     padding-bottom: 7px !important;
     font-family: "opensans-semibold";
 }
+.invoce-controll .nav-tabs > li > a{
+    border-bottom: 4px solid transparent !important;
+}
 
 .dropdown-menu > li > a:hover {
     color: $border-blue !important;
@@ -8247,7 +8216,7 @@ ul.dropdown-menu p.lead.pd {
 
 .debit-blank-row td .form-control,
 .credit-blank-row td .form-control {
-    border: 0;
+
     position: relative;
     top: 1px;
 }
@@ -8872,16 +8841,6 @@ button {
     .onMobileView table thead {
         display: none;
     }
-    /*
-  .onMobileView table {
-    max-width: 100%;
-    width: 99%;
-    margin: 0 auto 0;
-    max-height: 500px;
-    overflow-y: scroll;
-    position: relative;
-    transition: all 0.2s ease-out;
-  } */
     .onMobileView tbody > tr > td {
         border: 0 !important;
         display: block;
@@ -8931,6 +8890,9 @@ button {
     .onMobileView .basic > tbody > tr:hover td {
         background: transparent;
     }
+    .tax-engine .table.transactions-table.onMobileView tbody > tr > td {
+    max-width: 100% !important;
+}
 
     .nav-tabs > li {
         float: left;
@@ -8984,6 +8946,18 @@ button {
         margin-bottom: 28px;
         padding: 10px 0px 0 15px !important;
     }
+    overview-summary .transactions-overview {
+    background: transparent;
+}
+.tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
+    border: none;
+}
+.tax-engine .table-striped > tbody > tr:nth-child(odd) > td, .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #fff;
+}
+.tax-engine .table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #fff;
+}
 }
 
 @media (max-width: 1280px) {
@@ -9153,6 +9127,24 @@ button {
     #content_wrapper{
         height: 100vh;
     }
+ .tax-engine .nav-band .nav-tabs {
+    white-space: nowrap;
+    padding-top: 0 !important;
+}
+.gst-filing-container {
+    padding-top: 38px;
+}
+.tax-engine .transactions-overview .gstr-transactions-summary .title {
+    padding: 0;
+}
+.tax-engine .list-filter {
+    padding: 15px !important;
+    border-bottom: 1px solid #ddd !important;
+    height: auto;
+}
+.list-style ul.list-inline.list-middle.download-drop-down {
+    text-align: left;
+}
 }
 
 @media (max-width: 575px) {

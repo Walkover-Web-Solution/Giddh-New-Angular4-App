@@ -4,21 +4,23 @@
     top: 0;
     right: 0;
     bottom: 0;
-    max-width: 760px;
     width: 100%;
+    max-width: 760px;
     z-index: 99999;
+}
+
+#close {
+    display: none;
 }
 
 :host.in #close {
     display: block;
-    position: absolute;
-    right: 10px;
-    top: 16px;
+    position: fixed;
+    left: -41px;
+    top: 0;
     z-index: 5;
     border: 0;
     border-radius: 0;
-    background: 0 0;
-    color: #fff;
 }
 
 :host .container-fluid {
@@ -27,35 +29,36 @@
 }
 
 :host .aside-pane {
+    width: 100%;
     max-width: 760px;
+}
+
+.aside-pane {
     width: 100%;
 }
 
-.custom-tags {
+.flexy-child {
+    flex-grow: 1;
     display: flex;
-    padding: 0;
-    margin: 0;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+}
 
-    span {
-        border: 1px solid #ddd;
-        padding: 5px 8px;
-        margin: 10px 10px 12px 0px;
-        background-color: #ddd;
-    }
+.flexy-child-1 {
+    flex-grow: 1;
 }
-.input-group {
+
+.vmiddle {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    display: table;
     width: 100%;
-}
-.aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0px 3px 6px #0000001a;
-    padding: 15px 15px;
-    height: calc(100vh - 90px);
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-    margin-top: 15px;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    margin: 0 auto;
 }
 @media (max-width: 768px) {
     :host {

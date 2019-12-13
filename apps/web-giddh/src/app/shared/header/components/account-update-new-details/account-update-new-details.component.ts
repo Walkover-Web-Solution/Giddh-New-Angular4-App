@@ -205,7 +205,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
 
-                for (let i = 0; i <= 20; i++) {
+                for (let i = 0; i <= 10; i++) {
                     this.removeGstDetailsForm(0);
                 }
 
@@ -432,9 +432,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.taxHierarchy();
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
-        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
-            this.isShowBankDetails(this.activeGroupUniqueName);
-            this.isDebtorCreditor = true;
+        let selectedGroupDetails;
+
+        this.flatGroupsOptions.forEach(res => {
+            if (res.value === activegroupName) {
+                selectedGroupDetails = res;
+            }
+        })
+        if (selectedGroupDetails) {
+            if (selectedGroupDetails.additional) {
+                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                if (parentGroup) {
+                    this.isParentDebtorCreditor(parentGroup.uniqueName);
+                }
+            }
         }
         this.prepareTaxDropdown();
     }
@@ -1219,7 +1230,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
                 }).map(m => {
                     return {
-                        value: m.groupUniqueName, label: m.groupName
+                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
                     }
                 });
                 this.flatGroupsOptions = items;
@@ -1229,7 +1240,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      *
-     *This is for apply discount for an account
+     *NOTE:---This is for apply discount for an account don't remove this commented code pending due to API Team is working on it
      * @memberof AccountUpdateNewDetailsComponent
      */
     // public applyDiscount(): void {
