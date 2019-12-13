@@ -5465,7 +5465,7 @@ form#groupDetailForm {
     display: block;
     position: fixed !important;
     top: 0;
-    z-index: 99;
+    z-index: 101;
   }
   .desktopHeader {
     display: none;

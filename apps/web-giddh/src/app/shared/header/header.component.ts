@@ -1371,6 +1371,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             case 'inventory-in-out':
                 name = 'Inventory In/Out';
                 break;
+            case 'import/select': 
+                name = 'Import Data';
+                break;    
             default:
                 name = url;
         }

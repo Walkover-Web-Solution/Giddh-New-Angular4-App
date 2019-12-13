@@ -1,21 +1,43 @@
 .square-switch input[type="checkbox"]:checked ~ label {
-  background: initial;
-  color: initial;
+    background: initial;
+    color: initial;
 }
 .square-switch img {
-  top: -1px;
-  position: relative;
+    top: -1px;
+    position: relative;
 }
 .division {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 .division > div {
-  display: inline-block;
-  width: auto;
-  padding: 0 7px;
+    display: inline-block;
+    width: auto;
+    padding: 0 7px;
 }
 .hr {
-  border-bottom: 2px solid #ddd;
-  margin: 3px 0;
+    border-bottom: 2px solid #ddd;
+    margin: 3px 0;
+}
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0 3px 6px #0000001a;
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
 }

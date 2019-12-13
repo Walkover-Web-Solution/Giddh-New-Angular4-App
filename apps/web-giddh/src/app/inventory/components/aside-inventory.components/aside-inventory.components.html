@@ -1,7 +1,5 @@
 <div class="aside-pane">
-
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
-  <!-- <div class="aside-header" *ngIf="!hideFirstStep">
+    <!-- <div class="aside-header" *ngIf="!hideFirstStep">
       <h1 class="mrB2">Product/Service Information</h1>
       <h3 class="aside-title">Select a type:</h3>
   </div>
@@ -15,10 +13,11 @@
       </div>
   </div> -->
 
-  <div class="aside-body flexy-child-1 row" *ngIf="isAddGroupOpen">
-    <inventory-add-group [addGroup]="addGroup" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
-  </div>
-  <div class="aside-body flexy-child-1 row" *ngIf="!isAddGroupOpen">
-    <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="addStock" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
-  </div>
+    <div class="aside-body flexy-child-1 " *ngIf="isAddGroupOpen">
+        <inventory-add-group [addGroup]="addGroup" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
+    </div>
+    <div class="aside-body flexy-child-1 " *ngIf="!isAddGroupOpen">
+        <inventory-add-stock [autoFocusInChild]="autoFocusOnChild" [addStock]="addStock"
+            (closeAsideEvent)="closeAsidePane($event)"></inventory-add-stock>
+    </div>
 </div>

@@ -5,7 +5,7 @@
                 <div class="col-sm-4">
                     <div class="ng-select-wrap liq selectGroup">
                         <label>Select Group<span class="red-text">*</span> </label>
-                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
+                        <ng-select placeholder="Select Group" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item fs12">{{option?.value}}</div>
@@ -352,9 +352,20 @@
             </div>
 
         </tab>
-
     </tabset>
-
+    <div class="row" *ngIf="!isOtherSelectedTab">
+        <div class="col-sm-12 mrT3">
+            <div class="button-group">
+                <!-- <button class="btn btn-cancel">Cancel</button>
+                        <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
+                <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
+                Delete
+            </button>
+                <button (click)="submit()" class="btn btn-primary mrL1 updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update
+            </button>
+            </div>
+        </div>
+    </div>
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
     <div class="row pd-1">
@@ -466,6 +477,12 @@
                         <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
                             <ng-template #popTemplate>
                                 <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
+                                    <div class="popover-content">
+                                        <label>Tax being inherited from:</label>
+                                        <ul>
+                                            <li>{{inTax.name}}</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </ng-template>
                             <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
@@ -478,7 +495,7 @@
             </div>
         </div>
     </ng-container>
-    <div class="row">
+    <div class="row" *ngIf="isOtherSelectedTab">
         <div class="col-sm-12 mrT3">
             <div class="button-group">
                 <!-- <button class="btn btn-cancel">Cancel</button>

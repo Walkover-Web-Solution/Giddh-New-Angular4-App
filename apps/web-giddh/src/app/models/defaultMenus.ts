@@ -166,7 +166,8 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: { tab: 'estimates', tabIndex: 0 } },
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding' },
-    { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' }
+    { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook' },
+
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 

@@ -2,7 +2,10 @@
     font-weight: 600;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu > li > a:hover {
     color: #ff5e01;
     background: #f4f5f8;
+}
+.zIndexForAside {
+    z-index: 99999;
 }

@@ -49,7 +49,7 @@
                 </thead>
             </table>
 
-            <div class="custom-tabs mt-2 mb-2">
+            <div class="custom-tabs mb-2">
                 <ul class="nav nav-tabs pt-0">
                     <li role="presentation" [className]="condition ? 'active' : ''">
                         <a href="javascript:void(0)" (click)="toggleShow()">Debit</a>
@@ -268,7 +268,8 @@
                                             bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                                     </td>
 
-                                    <td data-title="Particular" id="crdIDTd" class="pos-rel col-xs-6 select2-parent select2-ledger"
+                                    <td data-title="Particular" id="crdIDTd"
+                                        class="pos-rel col-xs-6 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
@@ -597,14 +598,20 @@
             <div class="row d-flex d-sm-block">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
+<<<<<<< HEAD
                         <div class="row mrB2">
                             <!-- <div class="col-sm-6 pdR1">
+=======
+                    <div class="row mrB1">
+                        <!-- <div class="col-sm-6 pdR1">
+>>>>>>> staging
                                 <div class="selectWarehouse">
                                     <label class="font-12">Select Warehouse</label>
                                     <sh-select [options]="selectWarehouse">
                                     </sh-select>
                                 </div>
                             </div> -->
+<<<<<<< HEAD
 
                             <ng-template [ngIf]="vm.stockTrxEntry">
                                 <div class="col-sm-3 pdL1 pdR1">
@@ -616,32 +623,54 @@
                                                (change)="vm.inventoryQuantityChanged($event.target.value)"/>
                                     </div>
                                 </div>
+=======
+>>>>>>> staging
 
-                                <div class="col-sm-3 pdL1">
-                                    <div class="text-right table-amount">
-                                        <label class="font-12">Unit</label>
-                                        <select class="form-control text-right no-padding"
-                                                [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                                (change)="vm.unitChanged($event.target.value)">
-                                            <option *ngFor="let item of vm.stockTrxEntry.unitRate"
-                                                    [value]="item.stockUnitCode">
-                                                {{item.stockUnitCode}}
-                                            </option>
-                                        </select>
-                                    </div>
+                        <ng-template [ngIf]="vm.stockTrxEntry">
+                            <div class="col-sm-3 pdL1 pdR1">
+                                <div class="table-amount text-right ">
+                                    <label class="font-12">Quantity</label>
+                                    <input type="text" name="" class="form-control text-right"
+                                        [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
+                                        [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
+                                        (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                 </div>
-                            </ng-template>
+                            </div>
 
+<<<<<<< HEAD
                         </div>
 
                         <div class="row">
                             <div class="col-xs-12">
                                 <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description"></textarea>
                                 </div>
+=======
+                            <div class="col-sm-3 pdL1">
+                                <div class="text-right table-amount">
+                                    <label class="font-12">Unit</label>
+                                    <select class="form-control text-right no-padding"
+                                        [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                                        (change)="vm.unitChanged($event.target.value)">
+                                        <option *ngFor="let item of vm.stockTrxEntry.unitRate"
+                                            [value]="item.stockUnitCode">
+                                            {{item.stockUnitCode}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                                placeholder="Description"></textarea>
+>>>>>>> staging
                         </div>
                 </div>
 
-                <div class="col-md-6 font-14 pt-1 bl-1">
+                <div class="col-md-6 font-14 pt-1 bl-1 remove-border-left-onmo">
                     <table class="width100">
                         <tbody>
                             <tr>
@@ -803,7 +832,7 @@
 
                             <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
 
-                                <ul class="list-inline font-14">
+                                <ul class="list-inline font-14 currency-convertor">
 
                                     <li>
                                         1
