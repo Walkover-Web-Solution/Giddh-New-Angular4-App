@@ -579,7 +579,7 @@
                 <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0"
                     *ngIf="!isMobileView">
 
-                    <ng-container *ngIf="isSalesInvoice || isCashInvoice">
+                    <ng-container *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote">
                         <!-- switch currency on click, remaining functional work , UI is completed -->
                         <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
                             <span class="left-currency">1 {{companyCurrencyName}}</span>
@@ -2577,7 +2577,7 @@
 <!-- endregion -->
 
 <!-- region bulk items -->
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" style=""
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
     [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
     <ng-container *ngIf="showBulkItemModal">
