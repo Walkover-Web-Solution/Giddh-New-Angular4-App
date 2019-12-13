@@ -308,7 +308,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** True, if the invoice generation request is received from previous page's modal */
     private isInvoiceRequestedFromPreviousPage: boolean;
     // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
-    private doWeReallyNeedToShowLoader: boolean = true;
+    private shouldShowLoader: boolean = true;
     public selectedCompany: any;
 
     constructor(
@@ -377,7 +377,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
             // check if we really need to show a loader
-            if (!this.doWeReallyNeedToShowLoader) {
+            if (!this.shouldShowLoader) {
                 return;
             }
             if (stateLoader.show) {
@@ -1478,11 +1478,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
 
             // don't show loader when aside menu is opened
-            this.doWeReallyNeedToShowLoader = false;
+            this.shouldShowLoader = false;
             document.querySelector('body').classList.add('fixed');
         } else {
             // reset show loader variable because no aside pane is open
-            this.doWeReallyNeedToShowLoader = true;
+            this.shouldShowLoader = true;
             document.querySelector('body').classList.remove('fixed');
         }
     }
