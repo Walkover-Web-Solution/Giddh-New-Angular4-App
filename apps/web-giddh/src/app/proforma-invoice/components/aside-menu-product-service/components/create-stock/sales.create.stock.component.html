@@ -36,9 +36,9 @@
                                     <input type="text" name="name" class="form-control" (change)="generateUniqueName()"
                                         formControlName="name" #stockName />
 
-                                    <div class="error-msg" *ngIf="addStockForm.get('name').errors?.minLength">At
-                                        least 2
-                                        charachters</div>
+                                    <div class="error-msg" *ngIf="addStockForm.get('name').hasError('minlength')">
+                                        minimum 2 characters required
+                                    </div>
                                 </div>
                                 <div class="form-group col-xs-5">
                                     <label>Stock Unit <sup>*</sup></label>
