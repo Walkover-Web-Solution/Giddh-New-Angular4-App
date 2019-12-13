@@ -1,11 +1,9 @@
 <ng-container *ngIf="warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">
-        <img src="{{imgPath}}warehouse-vector.svg" alt="warehouse image" />
-        <h2>Create Warehouse</h2>
-        <p>under <span class="">ABC Pvt. Ltd.</span> headquarter</p>
-        <button class="btn btn-pink mrT2" (click)="resetOnboardingForm();openCreateWarehouseModal()">
-            Create Warehouse
-        </button>
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
     </div>
 
     <div *ngIf="warehouses?.length" class="warehouseCardView">
