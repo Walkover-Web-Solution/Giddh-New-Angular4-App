@@ -663,11 +663,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Returns true, if the contact number is valid
      *
-     * @private
      * @returns {boolean} True, if the contact number is valid
      * @memberof WelcomeComponent
      */
-    private isContactNumberValid(): boolean {
+    public isContactNumberValid(): boolean {
         const contactNumberElement = this.contactNumberField.nativeElement;
         try {
             let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + contactNumberElement.value, this.company.country);

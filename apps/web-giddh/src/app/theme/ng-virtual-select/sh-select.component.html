@@ -19,7 +19,7 @@
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-        <input type="text" class="form-control " #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)" style="padding-right: 14px !important;">
+        <input type="text" [attr.readonly]="readonlyInput" class="form-control " #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)" style="padding-right: 14px !important;">
 
         <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
             <ng-container *ngIf="selectedValues?.length">
@@ -28,7 +28,7 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input class="form-control focused" (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled" [value]="filter" style="padding-right: 13px !important;" />
+                <input [attr.readonly]="readonlyInput" class="form-control focused" (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled" [value]="filter" style="padding-right: 13px !important;" />
             </ng-container>
         </div>
         <!--endregion-->

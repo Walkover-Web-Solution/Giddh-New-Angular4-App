@@ -3,13 +3,13 @@
     <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
     <div class="form-header">
-        <h2 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
-            Provider (GSP)</h2>
-        <h2 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit
+        <h3 *ngIf="selectedService === 'TAXPRO' || 'VAYANA' && (!gstAuthenticated && !gspSessionOtpAuthorized)">Choose
+            Provider (GSP)</h3>
+        <h3 *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">Please take a note of the following before you submit
             your
-            GST return:</h2>
-        <h2 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h2>
-        <h2 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h2>
+            GST return:</h3>
+        <h3 *ngIf="gstAuthenticated && pointsAcceptedSubmitted">Submit GST Return:</h3>
+        <h3 *ngIf="selectedService === 'RECONCILE'">Gst Reconcile</h3>
     </div>
 
     <div class="aside-body">
