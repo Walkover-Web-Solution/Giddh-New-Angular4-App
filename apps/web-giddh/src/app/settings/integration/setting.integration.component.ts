@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -62,7 +62,7 @@ display: none;
 }
 `]
 })
-export class SettingIntegrationComponent implements OnInit {
+export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public auth2: any;
 
@@ -223,6 +223,11 @@ export class SettingIntegrationComponent implements OnInit {
                 }
             }
         });
+    }
+    public ngAfterViewInit() {
+        if (this.selectedTabParent) {
+            this.selectTab(this.selectedTabParent);
+        }
     }
 
     public getInitialData() {
