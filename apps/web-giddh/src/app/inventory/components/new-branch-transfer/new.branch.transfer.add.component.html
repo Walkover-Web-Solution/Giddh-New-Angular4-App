@@ -319,7 +319,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
+			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.amount | giddhCurrency}}</div>
@@ -366,7 +366,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
+			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
@@ -413,7 +413,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show()">
+				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>

@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import {
@@ -73,6 +73,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('defaultProduct') public defaultProduct: ShSelectComponent;
     @ViewChild('destinationName') public destinationName: ShSelectComponent;
     @ViewChild('destinationQuantity') public destinationQuantity;
+    @ViewChild('senderGstNumberField') public senderGstNumberField: HTMLInputElement;
+    @ViewChild('receiverGstNumberField') public receiverGstNumberField: HTMLInputElement;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -157,7 +159,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.transporterMode.push({ label: c.label, value: c.value });
         });
 
-        if(!this.editBranchTransferUniqueName) {
+        if (!this.editBranchTransferUniqueName) {
             this.allowAutoFocusInField = true;
             this.focusDefaultSource();
         }
@@ -529,12 +531,44 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
                     this.branchTransfer[type][index].warehouse.address = res.body.address;
+
+                    if (this.isTaxNumberRequired) {
+                        if (!this.branchTransfer[type][index].warehouse.taxNumber) {
+                            if (type === "sources") {
+                                this.isValidSourceTaxNumber = false;
+                            } else {
+                                this.isValidDestinationTaxNumber = false;
+                            }
+                        } else {
+                            if (type === "sources") {
+                                this.isValidSourceTaxNumber = true;
+                            } else {
+                                this.isValidDestinationTaxNumber = true;
+                            }
+                        }
+                    }
                 }
             });
         } else {
             this.branchTransfer[type][index].warehouse.name = "";
             this.branchTransfer[type][index].warehouse.taxNumber = "";
             this.branchTransfer[type][index].warehouse.address = "";
+
+            if (this.isTaxNumberRequired) {
+                if (!this.branchTransfer[type][index].warehouse.taxNumber) {
+                    if (type === "sources") {
+                        this.isValidSourceTaxNumber = false;
+                    } else {
+                        this.isValidDestinationTaxNumber = false;
+                    }
+                } else {
+                    if (type === "sources") {
+                        this.isValidSourceTaxNumber = true;
+                    } else {
+                        this.isValidDestinationTaxNumber = true;
+                    }
+                }
+            }
         }
 
         if (type === "sources") {
