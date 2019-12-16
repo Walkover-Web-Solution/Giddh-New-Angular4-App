@@ -29,6 +29,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
     { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },
     { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing' },
+    { type: 'MENU', name: 'Inventory > Report', uniqueName: '/pages/inventory/report' },
 
     { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report' },
     { type: 'MENU', name: 'Search', uniqueName: '/pages/search' },

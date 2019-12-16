@@ -535,11 +535,6 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
         return linkedStocks;
     }
 
-    public redirectToReciptNote() {
-        this.invViewService.setActiveView('receipt', null);
-        this._router.navigate(['/pages/inventory/receipt-note']);
-    }
-
     public openBranchTransferPopup(transferType) {
         this._generalService.invokeEvent.next(["openbranchtransferpopup", transferType]);
     }

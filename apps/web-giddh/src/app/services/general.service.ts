@@ -120,4 +120,25 @@ export class GeneralService {
     public capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    public base64ToBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
+        let offset = 0;
+        while (offset < byteCharacters.length) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
+            let byteNumbers = new Array(slice.length);
+            let i = 0;
+            while (i < slice.length) {
+                byteNumbers[i] = slice.charCodeAt(i);
+                i++;
+            }
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+            offset += sliceSize;
+        }
+        return new Blob(byteArrays, { type: contentType });
+    }
 }
