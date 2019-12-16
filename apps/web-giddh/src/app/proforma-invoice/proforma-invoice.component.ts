@@ -309,6 +309,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private useCustomInvoiceNumber: boolean;
     /** True, if the invoice generation request is received from previous page's modal */
     private isInvoiceRequestedFromPreviousPage: boolean;
+    // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
+    private shouldShowLoader: boolean = true;
     public selectedCompany: any;
 
     constructor(
@@ -376,6 +378,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+            // check if we really need to show a loader
+            if (!this.shouldShowLoader) {
+                return;
+            }
             if (stateLoader.show) {
                 this.showLoader = true;
             } else {
@@ -1465,9 +1471,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public toggleBodyClass() {
-        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in') {
+        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in'
+            || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+
+            // don't show loader when aside menu is opened
+            this.shouldShowLoader = false;
             document.querySelector('body').classList.add('fixed');
         } else {
+            // reset show loader variable because no aside pane is open
+            this.shouldShowLoader = true;
             document.querySelector('body').classList.remove('fixed');
         }
     }

@@ -43,6 +43,7 @@ export class SettingsComponent implements OnInit {
     //variable to hold sub tab value inside any tab e.g. integration -> payment
     public selectedChildTab: number;
     public activeTab: string;
+    public integrationtab: string;
 
     public get shortcutEnabled() {
         return document.activeElement === document.body;
@@ -71,11 +72,22 @@ export class SettingsComponent implements OnInit {
     public ngOnInit() {
 
         this._route.params.subscribe(params => {
-            if (params['type'] && this.activeTab !== params['type']) {
+            if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
+                if (!this.activeTab) {
+                    this.setStateDetails(params['type'], params['referrer']);
+                }
+                if (params['type'] === 'integration' && params['referrer']) {
+                    this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
+                }
+                this.integrationtab = params['referrer'];
+                this.activeTab = params['type'];
+            } else if (params['type'] && this.activeTab !== params['type']) {
                 // if active tab is null or undefined then it means component initialized for the first time
                 if (!this.activeTab) {
-                    this.setStateDetails(params['type']);
+                    this.setStateDetails(params['type'], params['referrer']);
                 }
+                this.selectedChildTab = 0;
+                this.integrationtab = '';
                 this.activeTab = params['type'];
             }
         });
@@ -110,7 +122,16 @@ export class SettingsComponent implements OnInit {
     public selectTab(id: number) {
         this.staticTabs.tabs[id].active = true;
     }
-
+    public assignChildtabForIntegration(childTab: string): number {
+        switch (childTab) {
+            case 'payment':
+                return 4;
+            case 'email':
+                return 1;
+            default:
+                return 0;
+        }
+    }
     public disableEnable() {
         this.staticTabs.tabs[2].disabled = !this.staticTabs.tabs[2].disabled;
     }
@@ -153,10 +174,18 @@ export class SettingsComponent implements OnInit {
     }
 
     public tabChanged(tab: string) {
-        this.setStateDetails(tab);
-        this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
-        this.loadModuleData(tab);
-        this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
+        if (tab === 'integration') {
+            this.setStateDetails(tab, this.integrationtab);
+            this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
+            this.loadModuleData(tab);
+            this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+        } else {
+            this.setStateDetails(tab, '');
+            this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
+            this.loadModuleData(tab);
+            this.router.navigate(['pages/settings/', tab], { replaceUrl: true });
+        }
+
     }
 
     private saveGmailAuthCode(authCode: string) {
@@ -208,12 +237,17 @@ export class SettingsComponent implements OnInit {
         }
     }
 
-    private setStateDetails(type) {
+    private setStateDetails(type, referer?: string) {
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'pages/settings/' + type;
+        if (referer) {
+            stateDetailsRequest.lastState = 'pages/settings/' + type + '/' + referer;
+        } else {
+            stateDetailsRequest.lastState = 'pages/settings/' + type;
+        }
+
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
