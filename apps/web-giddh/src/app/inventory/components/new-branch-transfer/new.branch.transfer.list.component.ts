@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { takeUntil, take } from 'rxjs/operators';
@@ -20,6 +20,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -60,6 +61,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public selectedBranchTransfer: any = '';
     public editBranchTransferUniqueName: string = '';
     public isLoading: boolean = false;
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public clearFilter: boolean = false;
 
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
@@ -123,6 +126,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public openSearchModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
+
+        setTimeout(() => {
+            if (this.clearFilter) {
+                this.forceClear$ = observableOf({ status: true });
+                this.clearFilter = false;
+            }
+        }, 100);
     }
 
     public initBranchTransferListResponse(): void {
@@ -208,7 +218,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public hideModal(refreshList: boolean): void {
-        if(refreshList) {
+        if (refreshList) {
             this.getBranchTransferList(true);
         }
         this.modalRef.hide();
@@ -272,9 +282,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.branchTransferPostRequestParams.voucherType = null;
         this.branchTransferPostRequestParams.amountOperator = null;
         this.branchTransferPostRequestParams.amount = null;
+        this.branchTransferTempPostRequestParams.voucherType = null;
+        this.branchTransferTempPostRequestParams.amountOperator = null;
+        this.branchTransferTempPostRequestParams.amount = null;
         this.branchTransferGetRequestParams.sort = "";
         this.branchTransferGetRequestParams.sortBy = "";
 
+        this.clearFilter = true;
         this.getBranchTransferList(true);
     }
 
