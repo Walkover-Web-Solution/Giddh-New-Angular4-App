@@ -15,7 +15,7 @@
         </div>
 
         <div class="row">
-            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-sm-4 pdR1">
+            <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6 pdR1">
                 <div class="warehouseCard">
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
@@ -56,7 +56,7 @@
                             </div>
                         -->
                         <div class="clearfix about-warehaouse">
-                            <label>{{warehouse.taxName}}</label>
+                            <label>{{warehouse.taxName}}:</label>
                             <p>
                                 <span [class.gray-text]="!warehouse.taxNumber">{{
                                         warehouse.taxNumber

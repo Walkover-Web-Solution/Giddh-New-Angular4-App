@@ -135,7 +135,10 @@ span.sameAsHead {
     font-size: 14px;
     position: relative;
     top: 8px;
+    display: flex;
+    align-items: center;
 }
+
 .gstinWidth {
     width: 50%;
     margin-right: 10px;
