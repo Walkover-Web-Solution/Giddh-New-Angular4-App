@@ -75,7 +75,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<textarea class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+								<textarea class="form-control" name="sourceAddress" maxlength="100" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -115,7 +115,7 @@
 								</label>
 							</div>
 							<div class="col-md-4">
-								<textarea class="form-control" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
+								<textarea class="form-control" name="destinationAddress" maxlength="100" [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
 							</div>
 						</div>
 					</div>
@@ -177,7 +177,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-								<textarea class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+								<textarea class="form-control" name="sourceAddress" maxlength="100" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2">
@@ -217,7 +217,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-								<textarea class="form-control" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address" (blur)="focusSelectDropdown(0);"></textarea>
+								<textarea class="form-control" name="destinationAddress" maxlength="100" [(ngModel)]="branchTransfer.destinations[0].warehouse.address" (blur)="focusSelectDropdown(0);"></textarea>
 	                        </div>
 	                    </div>
 					</div>

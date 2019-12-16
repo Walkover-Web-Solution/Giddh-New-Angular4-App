@@ -49,7 +49,7 @@
             </tab>
 
             <tab heading="Report" (select)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
-                <ng-container>
+                <ng-container *ngIf="activeTabIndex === 3">
                     <new-branch-transfer-list></new-branch-transfer-list>
                 </ng-container>
             </tab>
