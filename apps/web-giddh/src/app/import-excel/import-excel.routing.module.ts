@@ -13,7 +13,7 @@ import { ImportReportComponent } from './import-report/import-report.component';
                     { path: '', redirectTo: 'select' },
                     { path: 'select', component: ImportTypeSelectComponent },
                     { path: ':type', component: ImportWizardComponent },
-                    { path: 'import-report', component: ImportReportComponent }
+                    { path: 'report/import-report', component: ImportReportComponent }
                 ]
             }
         ])
