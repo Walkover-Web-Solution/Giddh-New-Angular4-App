@@ -60,6 +60,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public inlineSearch: any = '';
     public timeout: any;
     public selectedBranchTransfer: any = '';
+    public selectedBranchTransferType: any = '';
     public editBranchTransferUniqueName: string = '';
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -247,8 +248,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public showBranchTransferModal(branchTransferUniqueName): void {
-        this.selectedBranchTransfer = branchTransferUniqueName;
+    public showDeleteBranchTransferModal(item): void {
+        this.selectedBranchTransfer = item.uniqueName;
+        this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
         this.deleteBranchTransferModal.show();
     }
 
