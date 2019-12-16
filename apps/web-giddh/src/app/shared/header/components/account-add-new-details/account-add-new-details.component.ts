@@ -100,6 +100,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+            this.showBankDetail = false;
+            this.isDebtorCreditor = false;
         } if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
@@ -626,6 +628,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
+            this.addAccountForm.get('addresses').reset();
+            this.addAccountForm.get('accountBankDetails').reset();
         }
     }
 
