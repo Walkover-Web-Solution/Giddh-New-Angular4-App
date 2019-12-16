@@ -69,7 +69,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this.IAmLoaded = s;
         });
 
-
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
         this.breakpointObserver.observe([
@@ -100,7 +99,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public sideBarStateChange(event: boolean) {
         this.sideMenu.isopen = event;
-
     }
 
     private changeOnMobileView(isMobile) {
