@@ -52,8 +52,9 @@
 						<tbody>
                             <tr *ngFor="let account of crAccounts">
                                 <td>{{account.name}}</td>
-                                <td>{{account.latestInvoiceDate}}</td>
-                                <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.debitTotal | giddhCurrency }}</td>
+                                <td><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
+                                <td class="text-right" *ngIf="account.latestBillAmount">{{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount | giddhCurrency}}</td>
+                                <td class="text-right" *ngIf="!account.latestBillAmount">-</td>
                                 <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
                             </tr>
 						</tbody>
