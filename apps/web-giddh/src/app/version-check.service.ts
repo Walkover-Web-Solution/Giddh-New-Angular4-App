@@ -35,7 +35,7 @@ export class VersionCheckService {
      * Will do the call and check if the hash has changed or not
      * @param url
      */
-    public checkVersion(url) {
+    private checkVersion(url) {
         // timestamp these requests to invalidate caches
         this.http.get(url + '?t=' + new Date().getTime())
             .subscribe(
