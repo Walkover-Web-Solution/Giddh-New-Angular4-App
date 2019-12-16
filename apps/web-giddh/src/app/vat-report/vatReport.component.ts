@@ -45,7 +45,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 	public currentPeriod: any = {};
 	public showCalendar: boolean = false;
 
-	constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private _generalActions: GeneralActions, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
+	constructor(private store: Store<AppState>, private vatService: VatService, private _router: Router, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions) {
 		this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
 		this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), (takeUntil(this.destroyed$)));
 	}
@@ -118,34 +118,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
 		this.vatService.DownloadVatReport(vatReportRequest).subscribe((res) => {
 			if (res.status === "success") {
-				let blob = this.base64ToBlob(res.body, 'application/xls', 512);
+				let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
 				return saveAs(blob, `VatReport.xlsx`);
 			} else {
 				this._toasty.clearAllToaster();
 				this._toasty.errorToast(res.message);
 			}
 		});
-	}
-
-	public base64ToBlob(b64Data, contentType, sliceSize) {
-		contentType = contentType || '';
-		sliceSize = sliceSize || 512;
-		let byteCharacters = atob(b64Data);
-		let byteArrays = [];
-		let offset = 0;
-		while (offset < byteCharacters.length) {
-			let slice = byteCharacters.slice(offset, offset + sliceSize);
-			let byteNumbers = new Array(slice.length);
-			let i = 0;
-			while (i < slice.length) {
-				byteNumbers[i] = slice.charCodeAt(i);
-				i++;
-			}
-			let byteArray = new Uint8Array(byteNumbers);
-			byteArrays.push(byteArray);
-			offset += sliceSize;
-		}
-		return new Blob(byteArrays, {type: contentType});
 	}
 
 	public saveLastState(companyUniqueName) {
