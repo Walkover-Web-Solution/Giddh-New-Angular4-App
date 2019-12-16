@@ -851,6 +851,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                 this.resetDestinationWarehouses(0);
                 this.resetSourceWarehouses(0);
+
+                setTimeout(() => {
+                    this.allowAutoFocusInField = true;
+                }, 200);
             } else {
                 this.closeBranchTransferPopup();
                 this._toasty.errorToast(response.message);
