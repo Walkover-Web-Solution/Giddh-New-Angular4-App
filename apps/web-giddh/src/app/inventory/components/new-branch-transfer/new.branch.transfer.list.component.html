@@ -61,7 +61,7 @@
                         <td>{{ item.dateOfSupply | date: 'M/d/y' }}</td>
                         <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Note</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td>{{ item.voucherNo }}</td>
+                        <td><a class="dropdown-item" href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
                         <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
@@ -76,6 +76,10 @@
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Delivered</a>
                                     </li> -->
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:;"
+                                            (click)="downloadBranchTransfer(item)">Download</a>
+                                    </li>
                                     <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;"
                                             (click)="showEditBranchTransferPopup(item)">Edit</a>
