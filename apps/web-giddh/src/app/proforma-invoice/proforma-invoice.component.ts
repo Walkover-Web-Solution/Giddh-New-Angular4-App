@@ -1422,7 +1422,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             let updatedData = obj;
             let isVoucherV4 = false;
-            if (this.isSalesInvoice || this.isCashInvoice) {
+            if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 updatedData = this.updateData(obj, data);
                 isVoucherV4 = true;
                 if (this.useCustomInvoiceNumber) {
