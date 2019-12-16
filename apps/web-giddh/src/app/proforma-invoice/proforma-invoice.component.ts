@@ -178,6 +178,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isCashInvoice: boolean = false;
     public isProformaInvoice: boolean = false;
     public isEstimateInvoice: boolean = false;
+    public isCreditNote: boolean = false;
+    public isDebitNote: boolean = false;
     public isUpdateMode = false;
     public isLastInvoiceCopied: boolean = false;
 
@@ -307,6 +309,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private useCustomInvoiceNumber: boolean;
     /** True, if the invoice generation request is received from previous page's modal */
     private isInvoiceRequestedFromPreviousPage: boolean;
+    // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
+    private shouldShowLoader: boolean = true;
     public selectedCompany: any;
 
     constructor(
@@ -374,6 +378,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+            // check if we really need to show a loader
+            if (!this.shouldShowLoader) {
+                return;
+            }
             if (stateLoader.show) {
                 this.showLoader = true;
             } else {
@@ -706,18 +714,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         obj = this.invFormData;
                     } else {
                         if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType)) {
-                            let convertedRes1 = results[1];
-
                             // parse normal response to multi currency response
-                            // only in sales and cash invoice
-                            if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
-                                convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-
-                                if (results[1].account.currency) {
-                                    this.companyCurrencyName = results[1].account.currency.code;
-                                }
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            if (results[1].account.currency) {
+                                this.companyCurrencyName = results[1].account.currency.code;
                             }
-
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 obj.accountDetails.currencySymbol = acc.currencySymbol || '';
@@ -1068,6 +1069,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public prepareInvoiceTypeFlags() {
         this.isSalesInvoice = this.invoiceType === VoucherTypeEnum.sales;
         this.isCashInvoice = this.invoiceType === VoucherTypeEnum.cash;
+        this.isCreditNote = this.invoiceType === VoucherTypeEnum.creditNote;
+        this.isDebitNote = this.invoiceType === VoucherTypeEnum.debitNote;
         this.isPurchaseInvoice = this.invoiceType === VoucherTypeEnum.purchase;
         this.isProformaInvoice = this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma;
         this.isEstimateInvoice = this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate;
@@ -1468,9 +1471,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public toggleBodyClass() {
-        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in') {
+        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in'
+            || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+
+            // don't show loader when aside menu is opened
+            this.shouldShowLoader = false;
             document.querySelector('body').classList.add('fixed');
         } else {
+            // reset show loader variable because no aside pane is open
+            this.shouldShowLoader = true;
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -2632,7 +2641,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleFieldForSales = (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.creditNote));
 
         if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-            if (this.isSalesInvoice || this.isCashInvoice) {
+            if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 this.store.dispatch(this.invoiceReceiptActions.GetVoucherDetailsV4(this.accountUniqueName, {
                     invoiceNumber: this.invoiceNo,
                     voucherType: this.parseVoucherType(this.invoiceType)
@@ -3290,22 +3299,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         }
 
-    }
-
-    /**
-     * toggle hsn/sac dropdown
-     * and hide all open date-pickers because it's overlapping
-     * hsn/sac dropdown
-     */
-    public toggleHsnSacDropDown() {
-        if (this.datePickers && this.datePickers.length) {
-            this.datePickers.forEach(datePicker => {
-                if (datePicker.isOpen) {
-                    datePicker.hide();
-                }
-            });
-        }
-        this.hsnDropdownShow = !this.hsnDropdownShow;
     }
 
     /**

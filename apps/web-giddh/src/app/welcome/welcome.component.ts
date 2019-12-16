@@ -144,6 +144,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
     /** Contact number field */
     @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
+    /** Form instance */
+    @ViewChild('welcomeForm') welcomeForm: NgForm;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Phone utility to check the validity of a contact number */
@@ -682,6 +684,42 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._toasty.errorToast('Invalid Contact number');
             contactNumberElement.classList.add('error-box');
             return false;
+        }
+    }
+
+    /**
+     * On boarding name change handler
+     *
+     * @param {string} itemName Change event
+     * @memberof WelcomeComponent
+     */
+    public handleNameChange(itemName: string = ''): void {
+        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            if (itemName.length > 100) {
+                this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
+            }
+        }
+    }
+
+    /**
+     * Validates onboarding item name
+     *
+     * @param {string} itemName Name of the item to be validated
+     * @memberof WelcomeComponent
+     */
+    public validateName(itemName: string = ''): void {
+        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            setTimeout(() => {
+                if (itemName) {
+                    itemName = itemName.trim();
+                    if (!itemName) {
+                        this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
+                    }
+                    if (itemName.length > 100) {
+                        this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
+                    }
+                }
+            });
         }
     }
 
