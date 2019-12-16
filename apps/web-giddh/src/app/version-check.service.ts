@@ -20,16 +20,18 @@ export class VersionCheckService {
      * @param {number} frequency - in milliseconds, defaults to 30 minutes
      */
     public initVersionCheck(url, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
-        //setInterval(() => {
+        this.checkVersion(url);
+        
+        setInterval(() => {
             this.checkVersion(url);
-        //}, frequency);
+        }, frequency);
     }
 
     /**
      * Will do the call and check if the hash has changed or not
      * @param url
      */
-    private checkVersion(url) {
+    public checkVersion(url) {
         // timestamp these requests to invalidate caches
         this.http.get(url + '?t=' + new Date().getTime())
             .subscribe(
