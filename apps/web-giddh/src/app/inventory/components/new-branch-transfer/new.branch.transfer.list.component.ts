@@ -59,6 +59,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public timeout: any;
     public selectedBranchTransfer: any = '';
     public editBranchTransferUniqueName: string = '';
+    public isLoading: boolean = false;
 
     public branchTransferGetRequestParams: NewBranchTransferListGetRequestParams = {
         from: '',
@@ -137,6 +138,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public getBranchTransferList(resetPage: boolean): void {
+        this.isLoading = true;
+
         if (resetPage) {
             this.branchTransferGetRequestParams.page = 1;
         }
@@ -153,10 +156,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             } else {
                 this.initBranchTransferListResponse();
             }
+            this.isLoading = false;
         });
     }
 
     public pageChanged(event: any): void {
+        this.branchTransferResponse.items = [];
         this.branchTransferGetRequestParams.page = event.page;
         this.getBranchTransferList(false);
     }

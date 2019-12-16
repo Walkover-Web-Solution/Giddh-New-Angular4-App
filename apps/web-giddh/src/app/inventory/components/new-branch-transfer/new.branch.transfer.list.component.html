@@ -55,9 +55,9 @@
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
-                        <td>{{ i+1 }}</td>
+                        <td>{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}</td>
                         <td>{{ item.dateOfSupply | date: 'M/d/y' }}</td>
                         <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Note</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
@@ -86,6 +86,14 @@
                                     </li>
                                 </ul>
                             </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                    <tr>
+                        <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
+                        <td *ngIf="isLoading">
+                            
                         </td>
                     </tr>
                 </tbody>
