@@ -80,17 +80,16 @@ span.setAsDefault {
 }
 .warehouse-details label {
     font-family: "opensans-semibold";
-    float: left;
-    width: 160px;
+    width: 140px;
 }
 .warehouse-details p {
-    float: left;
-    width: 68%;
     word-break: break-all;
     white-space: initial;
+    width: 100%;
 }
 .about-warehaouse {
     margin: 15px 0;
+    display: flex;
 }
 .gray-text {
     color: #8f9091;
