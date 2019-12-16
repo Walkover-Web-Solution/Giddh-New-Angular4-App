@@ -809,7 +809,7 @@ ul.sub-list {
     position: relative;
     top: -4px;
 }
-
+ 
 .btn-pink {
     background: $primaryBtncolror;
     border: 1px solid $primaryBtncolror;
@@ -5265,7 +5265,6 @@ label {
     height: 50px;
     float: left;
     background: #fff url("../images/designTool.svg") no-repeat;
-    background-size: 65px;
 }
 
 .ico-template {
@@ -5535,17 +5534,31 @@ input[type="checkbox"][disabled] {
     padding-right: 0;
 } */
 
+
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
     background: none;
 }
-
+datepicker-inner .well table tbody tr td .btn-default:hover{
+    background: $border-blue !important;
+    color: #fff;
+}
+datepicker-inner .well table tbody tr td .btn-default:hover span{
+    text-decoration: none;
+}
 datepicker-inner .well {
     background-color: #ffffff;
     border-top: 0;
     box-shadow: none;
     margin: 0;
+}
+datepicker-inner  .well table button.btn.btn-default.btn-sm {
+    line-height: 1;
+    background-color: transparent !important;
+    font-size: 20px;
+    color: #333 !important;
+    box-shadow: none !important;
 }
 
 datepicker-inner .well table tbody:focus,
@@ -8645,6 +8658,12 @@ button {
 .aside-pane-form label {
     font-size: 14px;
 }
+
+.tax-engine .header-info .dropdown-menu > li > a:hover {
+    color: inherit !important;
+    background: inherit !important;
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
