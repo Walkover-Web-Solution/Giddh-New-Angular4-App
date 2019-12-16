@@ -25,15 +25,21 @@
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required
-                            [disabled]="(createNewCompanyPreparedObj.name && !isItemUpdateInProgress) ? 'disabled' : null" placeholder="Name"
-                            [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                            (input)="handleNameChange($event?.target?.value)"
+                            (blur)="validateName($event?.target?.value)"
+                            [disabled]="(createNewCompanyPreparedObj.name && !isItemUpdateInProgress) ? 'disabled' : null"
+                            placeholder="Name" [(ngModel)]="createNewCompanyPreparedObj.name" class="form-control bold">
+                        <span class="name-error" *ngIf="welcomeForm?.form?.controls['name']?.errors?.maxlength">Maximum
+                            characters limit:
+                            100</span>
                     </div>
                     <div class="col-xs-6 mrB2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
                                 <sh-select id="country" [options]="countrySource$ | async" required
-                                    [isFilterEnabled]="true" [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
+                                    [isFilterEnabled]="true"
+                                    [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
                                     name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
                                     class="pull-left  select-caret" style="width: 100%"
                                     [defaultValue]="selectedCountry">
@@ -46,8 +52,8 @@
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null" [isFilterEnabled]="true"
-                                [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
+                                [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
+                                [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
@@ -89,10 +95,9 @@
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
-                                    [readonlyInput]="true"
-                                    (onClear)="onClearBusinessNature()" autocomplete="false" id="businessNature"
-                                    [(ngModel)]="companyProfileObj.businessNature" [options]="businessNatureList"
-                                    [isFilterEnabled]="true" [ItemHeight]="33"
+                                    [readonlyInput]="true" (onClear)="onClearBusinessNature()" autocomplete="false"
+                                    id="businessNature" [(ngModel)]="companyProfileObj.businessNature"
+                                    [options]="businessNatureList" [isFilterEnabled]="true" [ItemHeight]="33"
                                     [defaultValue]="companyProfileObj.businessNature">
                                 </sh-select>
                             </div>
