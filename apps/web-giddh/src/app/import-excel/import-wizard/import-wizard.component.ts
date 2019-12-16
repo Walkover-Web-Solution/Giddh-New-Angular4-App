@@ -105,7 +105,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
   }
 
   public showReport() {
-    this._router.navigate(['/pages', 'import', 'import-report']);
+    this._router.navigate(['/pages', 'import', 'report', 'import-report']);
   }
 
   public onSubmit(data: ImportExcelRequestData) {
