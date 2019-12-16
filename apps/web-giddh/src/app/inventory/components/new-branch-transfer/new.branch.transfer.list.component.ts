@@ -326,7 +326,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 		this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).subscribe((res) => {
 			if (res.status === "success") {
 				let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
-				return saveAs(blob, item.voucherType + `.pdf`);
+				return saveAs(blob, item.voucherNo + `.pdf`);
 			} else {
 				this._toasty.clearAllToaster();
 				this._toasty.errorToast(res.message);
