@@ -1,0 +1,16 @@
+@import "../../../../assets/css/color.scss";
+
+.icon-download {
+    font-weight: 600;
+}
+
+.dropdown-menu > li > a:hover {
+    color: $border-blue;
+    background: #e5e5e5;
+}
+.zIndexForAside {
+    z-index: 99999;
+}
+.authenticate-btn {
+    border: 1px solid $border-blue;
+}

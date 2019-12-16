@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .font-xlarge {
     font-size: 18px;
 }
@@ -18,7 +20,7 @@ svg.icon.icon-lg {
 
 .tax-engine .bottom-action,
 .tax-engine a,
-.tax-engine a>.dropdown {
+.tax-engine a > .dropdown {
     cursor: pointer;
 }
 
@@ -106,7 +108,7 @@ input.gsc-input {
 }
 
 .content-disabled {
-    opacity: .5;
+    opacity: 0.5;
     position: relative;
 }
 
@@ -129,7 +131,7 @@ input.gsc-input {
 }
 
 .content-disabled::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -141,7 +143,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: #ff6205;
+    background-color: $lightTextBlue;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
@@ -153,7 +155,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid #ff6205;
+    border-left: 23px solid $lightTextBlue;
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
@@ -218,7 +220,8 @@ svg.icon.icon-xxlg {
 .tax-engine .summary-content {
     max-width: 930px;
     margin: 0 auto 30px;
-    font-family: ProximaNovaLight, ProximaNovaRegular, 'Source Sans Pro', Arial, sans-serif;
+    font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial,
+        sans-serif;
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -234,22 +237,27 @@ address {
     margin-bottom: 20px;
 }
 
-.tax-engine .summary-content .gstr-3b-user.table>tbody>tr>td {
+.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
     border: 1px solid #adb4c3;
     padding: 10px 30px 10px 10px;
 }
 
-.tax-engine .summary-content .gstr-3b-user.table>tbody>tr>td:first-child {
+.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td:first-child {
     padding: 10px 0;
     border: none;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>thead>tr>td:first-child {
+.tax-engine
+    .summary-content
+    .gstr-3b-report.table
+    > thead
+    > tr
+    > td:first-child {
     padding-left: 14px;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>thead>tr>td {
-    border: 1px solid #adb4c3!important;
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
+    border: 1px solid #adb4c3 !important;
     padding: 6px;
     font-size: 13px;
 }
@@ -270,14 +278,14 @@ table {
     background-color: #f5f4f3;
 }
 
-.tax-engine .summary-content .gstr-3b-report.table>tbody>tr>td {
+.tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid #adb4c3!important;
+    border: 1px solid #adb4c3 !important;
     padding: 6px;
 }
 
 .gstr3-subheading,
-.vat-summary thead>tr {
+.vat-summary thead > tr {
     background-color: #f5f4f3;
 }
 
@@ -288,8 +296,8 @@ table {
 }
 
 *,
- :after,
- :before {
+:after,
+:before {
     box-sizing: border-box;
 }
 
@@ -316,7 +324,8 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: ProximaNovaRegular, 'Source Sans Pro', Helvetica, Arial, sans-serif;
+    font-family: ProximaNovaRegular, "Source Sans Pro", Helvetica, Arial,
+        sans-serif;
     font-weight: 500;
     line-height: 1.1;
 }
@@ -326,7 +335,7 @@ h6 {
     top: 0;
     z-index: 1030;
     background-color: #fff;
-    transition: all .3s;
+    transition: all 0.3s;
 }
 
 .modal-sm {
@@ -334,7 +343,7 @@ h6 {
 }
 
 .modal-content {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header {
@@ -349,7 +358,7 @@ h6 {
 }
 
 .highlight-info {
-    background-color: #F4F8FF;
+    background-color: #f4f8ff;
 }
 
 .alert {
@@ -454,7 +463,7 @@ tax-engine .caret-right {
     color: #bbb;
 }
 
-.gstr3-filing-procedure>div {
+.gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
     box-shadow: 1px 1px 11px #ccc;
@@ -481,15 +490,16 @@ dropdown-menu-right {
 }
 
 .btn-2 {
-    background: #e5e5e5;
-    color: #ff5f00;
+    background: #fff;
+    color: $lightTextBlue;
     border: 0px;
     border-radius: 4px;
+    border: 1px solid $lightTextBlue;
 }
 
 .btn-2:hover {
     color: #ffffff;
-    background: #ff5f00;
+    background: $lightTextBlue;
 }
 
 ul#dropdown-menu {
