@@ -15,8 +15,13 @@
             <div class="btn-group proformaSalesTime" dropdown>
 
                 <button id="button1-basic" dropdownToggle type="button" class="btn spcl_dropdown dropdown-toggle"
-                    aria-controls="dropdown-basic">
-                    {{invoiceType | titlecase}} <small *ngIf="invoiceType==='estimates'">(Beta)</small>
+                        aria-controls="dropdown-basic">
+
+                    <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                        Cash
+                    </span>
+
+                    <small *ngIf="invoiceType==='estimates'">(Beta)</small>
                     <span class="caret" *ngIf="!isUpdateMode"></span>
                 </button>
 
@@ -942,7 +947,7 @@
 
                                                             </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
 
@@ -2427,16 +2432,21 @@
                                 *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
                                 <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                                    class="btn btn-default" *ngIf="isCustomerSelected">Generate
-                                    {{invoiceType | titlecase}}
+                                        class="btn btn-default" *ngIf="isCustomerSelected">Generate
+                                    <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                     Cash
+                                    </span>
                                     &amp; Update A/c
                                 </button>
 
                                 <div class="btn-group" dropdown [dropup]="true">
 
                                     <button type="button"
-                                        (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default generateInvoie">Generate {{invoiceType | titlecase}}
+                                            (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                            class="btn btn-default generateInvoie">Generate
+                                        <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                         Cash
+                                        </span>
                                     </button>
 
                                     <button id="button-split" type="button" dropdownToggle
@@ -2525,7 +2535,11 @@
                             </button>
 
                             <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)">
-                                <span>Update {{invoiceType | titlecase}}</span>
+                                Update
+                                <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                     Cash
+                                </span>
+
                             </button>
                         </div>
                         <!-- endregion -->
@@ -2657,3 +2671,9 @@
     </div>
 
 </div>
+
+
+<!-- common template ref for displaying invoice type with first letter capital -->
+<ng-template #invoiceTypeDisplayRef>
+    {{invoiceType | titlecase}}
+</ng-template>
