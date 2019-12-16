@@ -74,5 +74,6 @@ export const INVENTORY_API = {
     GET_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
     GET_BRANCH_TRANSFER_LIST: 'company/:companyUniqueName/branch-transfer/all?from=:from&to=:to&page=:page&count=:count&sort=:sort&sortBy=:sortBy',
     DELETE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
-    UPDATE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName'
+    UPDATE_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/:branchTransferUniqueName',
+    DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
 };
