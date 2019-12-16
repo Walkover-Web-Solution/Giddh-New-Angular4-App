@@ -10,7 +10,7 @@ export interface BranchTransferAmountOperators {
 
 export const branchTransferVoucherTypes: BranchTransferVoucherTypes[] = [
     { label: 'Receipt Note', value: 'receiptnote' },
-    { label: 'Delivery Note', value: 'deliverynote' }
+    { label: 'Delivery Challan', value: 'deliverynote' }
 ];
 
 export const branchTransferAmountOperators: BranchTransferAmountOperators[] = [

@@ -744,7 +744,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         if (this.branchTransferMode === 'receiptnote') {
                             this._toasty.successToast("Receipt Note has been updated successfully.", "Success");
                         } else {
-                            this._toasty.successToast("Delivery Note has been updated successfully.", "Success");
+                            this._toasty.successToast("Delivery Challan has been updated successfully.", "Success");
                         }
                         this.closeBranchTransferPopup();
                         this._router.navigate(['/pages', 'inventory', 'report']);
@@ -767,7 +767,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         if (this.branchTransferMode === 'receiptnote') {
                             this._toasty.successToast("Receipt Note has been saved successfully.", "Success");
                         } else {
-                            this._toasty.successToast("Delivery Note has been saved successfully.", "Success");
+                            this._toasty.successToast("Delivery Challan has been saved successfully.", "Success");
                         }
                         this.closeBranchTransferPopup();
                         this._router.navigate(['/pages', 'inventory', 'report']);
