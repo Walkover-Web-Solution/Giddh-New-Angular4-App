@@ -172,3 +172,7 @@ export class NewBranchTransferListResponse {
     public totalPages: number;
     public totalItems: number;
 }
+
+export class NewBranchTransferDownloadRequest {
+    public branchTransferUniqueName: string;
+}

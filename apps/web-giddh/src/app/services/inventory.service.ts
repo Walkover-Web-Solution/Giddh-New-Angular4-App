@@ -33,7 +33,7 @@ import {
     LinkedStocksResponse,
     TransferDestinationRequest,
     TransferProductsRequest,
-    NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams
+    NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
 
 declare var _: any;
@@ -1104,5 +1104,18 @@ export class InventoryService {
             data.request = branchTransfer;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, NewBranchTransferRequest>(e, branchTransfer)));
+    }
+
+    public downloadBranchTransfer(companyUniqueName: string, postParams: NewBranchTransferDownloadRequest): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_NEW_BRANCH_TRANSFER;
+        url = url.replace(":companyUniqueName", companyUniqueName);
+
+        return this._http.post(url, postParams)
+            .pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
 }

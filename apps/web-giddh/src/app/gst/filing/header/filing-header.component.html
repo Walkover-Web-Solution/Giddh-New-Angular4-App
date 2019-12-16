@@ -56,7 +56,8 @@
 
                     <div *ngIf="showTaxPro">
 
-                        <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
+                        <button class="btn btn-primary authenticate-btn pull-right"
+                            [ngClass]="{'btn-success': gstAuthenticated }"
                             (click)="toggleSettingAsidePane($event, 'VAYANA')">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
                         </button>
 
