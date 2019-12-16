@@ -85,7 +85,7 @@
                 <button class="btn btn-pink" *ngIf="branchAvailable" data-toggle="tooltip" tooltip="Alt+P"
                     (click)="toggleTransferAsidePane()" hidden>New Transfer
                 </button>
-                <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
+                <button class="btn btn-pink mr-0" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
                     New
                 </button>
             </div>
@@ -537,7 +537,7 @@
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+    [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 
@@ -620,21 +620,11 @@
 </div>
 <!-- Advance  search popup -->
 
-
-<!-- recipt note modal -->
+<!-- branch transfer modal -->
 <ng-template #template>
-
     <div class="recept-modal">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">Modal</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
         <div class="modal-body">
-            <receipt-note></receipt-note>
+            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
         </div>
-
     </div>
-
 </ng-template>
