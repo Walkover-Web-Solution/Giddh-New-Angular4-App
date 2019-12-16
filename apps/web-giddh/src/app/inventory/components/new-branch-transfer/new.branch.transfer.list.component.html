@@ -92,8 +92,8 @@
                 <tbody *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
                         <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
-                        <td *ngIf="isLoading">
-                            
+                        <td *ngIf="isLoading" colspan="8">
+
                         </td>
                     </tr>
                 </tbody>
@@ -119,7 +119,7 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select name="voucherType" [(ngModel)]="branchTransferTempPostRequestParams.voucherType" [options]="voucherTypes"></sh-select>
+                    <sh-select name="voucherType" [(ngModel)]="branchTransferTempPostRequestParams.voucherType" [options]="voucherTypes" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -127,7 +127,7 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select name="amountOperators" [(ngModel)]="branchTransferTempPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()"></sh-select>
+                            <sh-select name="amountOperators" [(ngModel)]="branchTransferTempPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()" [forceClearReactive]="forceClear$ | async"></sh-select>
                         </div>
                         <div class="col-sm-4">
                             <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferTempPostRequestParams.amount" />
