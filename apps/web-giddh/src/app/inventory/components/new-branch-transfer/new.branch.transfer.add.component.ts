@@ -124,7 +124,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isUpdateMode: boolean = false;
     public allowAutoFocusInField: boolean = false;
 
-    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
+    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.initFormFields();
@@ -851,6 +851,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                 this.resetDestinationWarehouses(0);
                 this.resetSourceWarehouses(0);
+
+                setTimeout(() => {
+                    this.allowAutoFocusInField = true;
+                }, 200);
             } else {
                 this.closeBranchTransferPopup();
                 this._toasty.errorToast(response.message);
