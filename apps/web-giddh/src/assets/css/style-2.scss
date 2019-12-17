@@ -996,13 +996,13 @@ ul.sub-list {
 .pagination > li > a {
     background: #fff !important;
     color: #484848 !important;
-    border: 1px solid $dark-blue01 !important;
+    border: 1px solid $JacksonsPurple !important;
 }
 
 .pagination > li.active > a {
-    background: $dark-blue01 !important;
+    background: $JacksonsPurple !important;
     color: #fff !important;
-    border: 1px solid $dark-blue01 !important;
+    border: 1px solid $JacksonsPurple !important;
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
@@ -5820,7 +5820,7 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $dark-blue01;
+    color: $JacksonsPurple;
     /* color: #2262D1; */
 }
 
