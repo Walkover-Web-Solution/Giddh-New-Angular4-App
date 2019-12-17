@@ -406,6 +406,12 @@ hr {
 ::ng-deep #monthPicker .btn-info:hover .text-success {
     color: #fff !important;
 }
+::ng-deep #monthPicker .btn-default > .text-success {
+    color: #333;
+}
+::ng-deep #monthPicker .btn-default:hover > .text-success {
+    color: #fff !important;
+}
 .parent {
     position: relative;
 }
