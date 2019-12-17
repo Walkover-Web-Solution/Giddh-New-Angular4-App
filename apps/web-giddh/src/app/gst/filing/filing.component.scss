@@ -1,0 +1,22 @@
+@import "../../../../../web-giddh/src/assets/css/color.scss";
+
+:host ::ng-deep .dropdown-menu > li > a:hover {
+    color: $border-blue;
+    background: #e5e5e5;
+}
+/* my css */
+.successful-fileDetail h3,
+.gstReturnDate h3 {
+    color: #333333;
+    font-size: 24px;
+    margin: 20px 0 7px;
+}
+.gstr-transactions-summary .successful-fileDetail p,
+.gstr-transactions-summary .gstReturnDate p {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.file-your-return {
+    border: 1px solid $border-blue;
+    border-radius: 2px;
+}

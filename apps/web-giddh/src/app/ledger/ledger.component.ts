@@ -582,7 +582,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
 
-                // Después del éxito de la entrada. llamar para transacciones bancarias
+                // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.subscribe((data: AccountResponse) => {
                     this._loaderService.show();
                     if (data && data.yodleeAdded) {

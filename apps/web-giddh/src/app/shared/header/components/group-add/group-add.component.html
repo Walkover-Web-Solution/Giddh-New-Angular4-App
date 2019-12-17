@@ -22,13 +22,11 @@
             placeholder="00.00" />
           <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-            [hidden]="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">DR.
           </div>
           <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-            [hidden]="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">CR.
           </div>
         </div>
       </div>

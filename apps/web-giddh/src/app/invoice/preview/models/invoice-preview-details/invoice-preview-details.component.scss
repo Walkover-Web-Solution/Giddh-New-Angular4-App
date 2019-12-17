@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .invoice-modal-content:after {
     position: fixed;
     content: "";
@@ -298,8 +300,8 @@ span.close-modal.cp.pull-right {
 }
 
 .dropdown-menu > li > a:hover {
-    color: #ff5e01;
-    background: #f4f5f8;
+    color: $border-blue;
+    background: #e5e5e5;
 }
 
 .invoice-search-box input {

@@ -12,7 +12,7 @@ import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { takeUntil, take } from 'rxjs/operators';
-import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams } from '../../../models/api-models/BranchTransfer';
+import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
 import { IOption } from '../../../theme/ng-select/ng-select';
 import * as moment from 'moment/moment';
@@ -21,6 +21,7 @@ import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
+import {saveAs} from "file-saver";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -59,6 +60,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public inlineSearch: any = '';
     public timeout: any;
     public selectedBranchTransfer: any = '';
+    public selectedBranchTransferType: any = '';
     public editBranchTransferUniqueName: string = '';
     public isLoading: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -246,8 +248,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public showBranchTransferModal(branchTransferUniqueName): void {
-        this.selectedBranchTransfer = branchTransferUniqueName;
+    public showDeleteBranchTransferModal(item): void {
+        this.selectedBranchTransfer = item.uniqueName;
+        this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
         this.deleteBranchTransferModal.show();
     }
 
@@ -317,4 +320,19 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.branchTransferTempPostRequestParams.amountOperator = this.branchTransferPostRequestParams.amountOperator;
         this.branchTransferTempPostRequestParams.amount = this.branchTransferPostRequestParams.amount;
     }
+
+    public downloadBranchTransfer(item): void {
+		let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
+		downloadBranchTransferRequest.branchTransferUniqueName = item.uniqueName;
+
+		this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).subscribe((res) => {
+			if (res.status === "success") {
+				let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
+				return saveAs(blob, item.voucherNo + `.pdf`);
+			} else {
+				this._toasty.clearAllToaster();
+				this._toasty.errorToast(res.message);
+			}
+		});
+	}
 }
