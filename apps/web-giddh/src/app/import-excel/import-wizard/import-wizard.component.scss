@@ -1,51 +1,50 @@
 .steps_wizard {
-  padding: 30px 70px;
-  background: #fff;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  overflow: hidden;
-  position: relative;
-  // justify-content: space-around;
-  li {
-    padding-bottom: 0;
-    // display: inline-block;
-    padding: 0;
+    padding: 30px 70px;
+    background: #fff;
+    text-align: center;
     display: flex;
-    flex-direction: column;
-    width: auto;
+    justify-content: space-between;
+    overflow: hidden;
     position: relative;
-    justify-content: center;
-    align-items: center;
-    > label {
-      width: 30px;
-      height: 30px;
-      border: 2px solid #dcdcdc;
-      border-radius: 100%;
-      transition: background-color 1s;
-      background-color: #ffffff;
-      position: relative;
-      color: #969696;
-      line-height: 100%;
-      align-items: center;
-      display: flex;
-      justify-content: center;
+    // justify-content: space-around;
+    li {
+        padding-bottom: 0;
+        // display: inline-block;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        > label {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #dcdcdc;
+            border-radius: 100%;
+            transition: background-color 1s;
+            background-color: #ffffff;
+            position: relative;
+            color: #969696;
+            line-height: 100%;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
     }
-  }
 }
 
 .steps_wizard li.active > label {
-  background: #ff5e01;
-  color: #fff;
+    color: #fff;
 }
 
 .steps_wizard:before {
-  content: ' ';
-  position: absolute;
-  border-top: 2px solid #ddd;
-  right: 0;
-  left: 0;
-  top: 40%;
-  width: calc(100% - 172px);
-  margin: 0 auto;
+    content: " ";
+    position: absolute;
+    border-top: 2px solid #ddd;
+    right: 0;
+    left: 0;
+    top: 40%;
+    width: calc(100% - 172px);
+    margin: 0 auto;
 }

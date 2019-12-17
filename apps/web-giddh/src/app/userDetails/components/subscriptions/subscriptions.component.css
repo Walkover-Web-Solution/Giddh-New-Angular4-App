@@ -15,7 +15,7 @@
 
 .subscription-table th {
     padding: 15px !important;
-    font-family: 'opensans-regular' !important;
+    font-family: "opensans-regular" !important;
 }
 
 .subscription-table tbody tr td,
@@ -30,11 +30,11 @@
     position: absolute;
     right: 0;
     top: -60px;
-    background: #FFF7F7;
+    background: #fff7f7;
     font-size: 14px;
     padding: 12px;
     border-radius: 3px;
-    border: 1px solid #E01B1B;
+    border: 1px solid #e01b1b;
 }
 
 .subscription-dropdown {
@@ -45,7 +45,7 @@
 }
 
 .subscription-dropdown .btn {
-    border: 1px solid #C4C0C0;
+    border: 1px solid #c4c0c0;
     width: 342px;
     text-align: left;
     background: white;
@@ -66,7 +66,7 @@
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
     border-bottom: 1px solid #e6e6e6;
-    transition: .5s all ease;
+    transition: 0.5s all ease;
 }
 
 .subscription-dropdown li a {
@@ -79,11 +79,6 @@
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
     background: #f1f1f1;
-    color: #FF5F00;
-}
-
-.subscription-dropdown li:hover a strong {
-    color: #FF5F00;
 }
 
 .subscription-dropdown .dropdown-menu li a span {
@@ -91,11 +86,13 @@
     top: 40%;
     right: 8px;
 }
-.transaction-list .box, .transaction-list .box2 ,  .transaction-list .campanien-list ul{
+.transaction-list .box,
+.transaction-list .box2,
+.transaction-list .campanien-list ul {
     height: auto !important;
 }
-.subscription-table{
-    border:1px solid #d1d1d1;
+.subscription-table {
+    border: 1px solid #d1d1d1;
 }
 @media only screen and (max-width: 767px) {
     .transection-popup {

@@ -188,25 +188,31 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.go(this.searchFilterData);
     }
 
-    public loadPaginationComponent(s) {
-        let transactionData = null;
+    /**
+     * Loads the pagination component based on data received from the service
+     *
+     * @param {*} data Data received from the service
+     * @memberof DaybookComponent
+     */
+    public loadPaginationComponent(data: any): void {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         if (this.paginationChild && this.paginationChild.viewContainerRef) {
             let viewContainerRef = this.paginationChild.viewContainerRef;
             viewContainerRef.remove();
+            if (data && data.totalItems > 20) { // Show pagination only if total number of items are more than 20
+                let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+                viewContainerRef.insert(componentInstanceView.hostView);
 
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-            viewContainerRef.insert(componentInstanceView.hostView);
-
-            let componentInstance = componentInstanceView.instance as PaginationComponent;
-            componentInstance.totalItems = s.count * s.totalPages;
-            componentInstance.itemsPerPage = s.count;
-            componentInstance.maxSize = 5;
-            componentInstance.writeValue(s.page);
-            componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
-                this.pageChanged(e);
-            });
+                let componentInstance = componentInstanceView.instance as PaginationComponent;
+                componentInstance.totalItems = data.count * data.totalPages;
+                componentInstance.itemsPerPage = data.count;
+                componentInstance.maxSize = 5;
+                componentInstance.writeValue(data.page);
+                componentInstance.boundaryLinks = true;
+                componentInstance.pageChanged.subscribe(e => {
+                    this.pageChanged(e);
+                });
+            }
         }
     }
 

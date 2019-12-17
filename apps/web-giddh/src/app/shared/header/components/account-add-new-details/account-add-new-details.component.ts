@@ -100,6 +100,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+            this.showBankDetail = false;
+            this.isDebtorCreditor = false;
         } if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
@@ -261,10 +263,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
                 }).map(m => {
                     return {
-                        value: m.groupUniqueName, label: m.groupName
+                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
                     }
                 });
                 this.flatGroupsOptions = items;
+                if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
+                    let selectedGroupDetails;
+
+                    this.flatGroupsOptions.forEach(res => {
+                        if (res.value === this.activeGroupUniqueName) {
+                            selectedGroupDetails = res;
+                        }
+                    })
+                    if (selectedGroupDetails) {
+                        if (selectedGroupDetails.additional) {
+                            let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                            if (parentGroup) {
+                                this.isParentDebtorCreditor(parentGroup.uniqueName);
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -454,6 +473,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetAddAccountForm() {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const countries = this.addAccountForm.get('country') as FormGroup;
+        addresses.reset();
+        countries.reset();
         this.addAccountForm.reset();
     }
     public isValidMobileNumber(ele: HTMLInputElement) {
@@ -605,6 +628,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
+            this.addAccountForm.get('addresses').reset();
+            this.addAccountForm.get('accountBankDetails').reset();
         }
     }
 

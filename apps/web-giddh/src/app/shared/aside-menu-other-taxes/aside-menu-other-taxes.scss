@@ -1,58 +1,85 @@
 :host {
-  position: fixed;
-  left: auto;
-  top: 60px;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  max-width: 480px;
-  z-index: 99999;
+    position: fixed;
+    left: auto;
+    top: 60px;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 760px;
+    z-index: 99999;
 }
 
 :host.in #close {
-  display: block;
-  position: fixed;
-  left: -41px;
-  top: 0;
-  z-index: 5;
-  border: 0;
-  border-radius: 0;
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
 }
 
 :host .container-fluid {
-  padding-left: 0;
-  padding-right: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
-// :host .aside-pane {
-//   width: 480px;
-// }
+:host .aside-pane {
+    width: 100%;
+    max-width: 760px;
+}
 
 .aside-pane-other-tax label {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0 3px 6px #0000001a;
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+.form-header {
+    padding: 20px 15px;
+    background: #1a237e;
+    color: #fff;
 }
 
-
-:host ::ng-deep .selectTaxDropdown .dropdown-menu {
-  //position:  static !important;
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
 }
-@media(max-width:767px){
-  button.btn.btn-success {
-    margin-top: 20px;
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
 }
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
 }
-@media(max-width:575px){
- :host {
-   max-width: 370px;
- }
-}
-@media(max-width:375px){
- :host {
-   max-width: 310px;
- }
-}
-@media(max-width:320px){
- :host {
-   max-width: 280px;
- }
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
 }
