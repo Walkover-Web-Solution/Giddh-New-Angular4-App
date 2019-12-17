@@ -43,7 +43,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input name="productSkuCode" class="form-control" [(ngModel)]="branchTransfer.products[0].stockDetails.skuCode">
+		                        <input name="productSkuCode" class="form-control" maxlength="50" [(ngModel)]="branchTransfer.products[0].stockDetails.skuCode">
 	                        </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mrB2">
@@ -53,7 +53,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input name="productHsnCode" class="form-control" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+		                        <input name="productHsnCode" class="form-control" maxlength="8" [(ngModel)]="branchTransfer.products[0].hsnNumber">
 	                        </div>
 	                    </div>
 						<div class="row mrB2">
@@ -167,7 +167,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input name="productSkuCode" class="form-control" [(ngModel)]="branchTransfer.products[0].stockDetails.skuCode">
+		                        <input name="productSkuCode" maxlength="50" class="form-control" [(ngModel)]="branchTransfer.products[0].stockDetails.skuCode">
 	                        </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mrB2">
@@ -177,7 +177,7 @@
 	                            </label>
 	                        </div>
 	                        <div class="col-md-4">
-		                        <input name="productHsnCode" class="form-control" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+		                        <input name="productHsnCode" maxlength="8" class="form-control" [(ngModel)]="branchTransfer.products[0].hsnNumber">
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
@@ -306,7 +306,7 @@
 	                                        </div>
 	                                        <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
 	                                            <label>SKU Code:</label>
-	                                            <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" (paste)="checkSkuLength()" />
+	                                            <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" />
 	                                            <div class="btngroup m-t-10">
 	                                                <button class="btn btn-sm btn-success" type="button" (click)="saveSkuNumberPopup(product)">Save</button>
 	                                                <button class="btn btn-sm btn-primary" type="button" (click)="hideSkuNumberPopup()">Cancel</button>
@@ -332,7 +332,7 @@
 	                                    </div>
 	                                    <div class="hsnCodeDropdown" *ngIf="hsnPopupShow && activeRow == i">
 	                                        <label>HSN Code</label>
-	                                        <input type="text" maxlength="8" placeholder="HSN Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" (paste)="checkHsnLength()" />
+	                                        <input type="text" maxlength="8" placeholder="HSN Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
 	                                        <div class="btngroup m-t-10">
 	                                            <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
 	                                            <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>

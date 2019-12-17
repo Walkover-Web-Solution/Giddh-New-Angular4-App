@@ -1094,18 +1094,4 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }, 100);
         }
     }
-
-    public checkSkuLength() {
-        if (this.skuNumber && this.skuNumber.length > 50) {
-            this.skuNumber = this.skuNumber.substring(0, 50);
-            this._toasty.errorToast("SKU code value should not more than 50 characters.");
-        }
-    }
-
-    public checkHsnLength() {
-        if (this.hsnNumber && this.hsnNumber.length > 8) {
-            this.hsnNumber = this.hsnNumber.substring(0, 8);
-            this._toasty.errorToast("HSN code value should not more than 8 characters.");
-        }
-    }
 }
