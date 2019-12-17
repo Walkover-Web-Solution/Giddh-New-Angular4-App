@@ -1,40 +1,39 @@
-@import '../../../assets/css/color.scss';
+@import "../../../assets/css/color.scss";
 
 .btn-group.open.show {
-  display: inline-block!important;
+    display: inline-block !important;
 }
 .bdrT {
-  border-color: #ccc;
+    border-color: #ccc;
 }
 
 :host ::ng-deep .fb__1-container {
-  justify-content: flex-start;
+    justify-content: flex-start;
 }
 
 :host ::ng-deep .fb__1-container .form-group {
-  margin-right: 10px;
-  margin-bottom: 0;
+    margin-right: 10px;
+    margin-bottom: 0;
 }
 
 :host ::ng-deep .fb__1-container .date-range-picker {
-  min-width: 140px;
-  font-weight: bolder;
-  border-bottom: 1px dotted #707070;
-  padding-bottom: 2px !important;
+    min-width: 140px;
+    font-weight: bolder;
+    border-bottom: 1px dotted #707070;
+    padding-bottom: 2px !important;
 }
 .flex-fill {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 .td_in_searchBox div {
-  display: flex;
+    display: flex;
 }
 .td_in_searchBox div span {
-
-  padding-left: 13px;
+    padding-left: 13px;
 }
 .td_in_searchBox div i {
     margin-top: 1px;
-    color: #757BB9;
+    color: #757bb9;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -42,8 +41,8 @@
     padding-left: 8px;
 }
 .td_in_searchBox {
-  padding: 0px !important;
-  position: relative;
+    padding: 0px !important;
+    position: relative;
 }
 .td_in_searchBox .input-container input {
     height: 50px;
@@ -55,133 +54,128 @@
     background-color: #f2f2f2;
 }
 .td_in_searchBox .input-container i {
-  position: absolute;
-  right: 0px;
-  top: 10px;
+    position: absolute;
+    right: 0px;
+    top: 10px;
 }
 .table-border {
-  border: 1px solid #c6c6c6;
+    border: 1px solid #c6c6c6;
 }
 .basic > thead > tr > th {
-  border-right: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
 }
 .icon-pointer .glyphicon {
-  cursor: pointer;
+    cursor: pointer;
 }
 .icon-pointer .glyphicon:hover {
-  color: #ff5f00;
 }
 .td_in_searchBox div i:hover {
-  color: #999;
+    color: #999;
 }
 
 /* class name same as what we are getting data */
 
 .Inward.Note {
-  color: #229e2b;
+    color: #229e2b;
 }
 .Outward.Note {
-  color: #0C8FE6;
+    color: #0c8fe6;
 }
 .Transfer.Note {
-  color: #666666;
+    color: #666666;
 }
-
-
 
 /* voucher type DDL */
 .c-3 {
-  color: #fff;
+    color: #fff;
 }
 .btn-group-voucher-type {
-  width: 100%;
-  button {
-    text-align: left;
     width: 100%;
-    color: #1c1c1c;
-    &:focus,
-    &:hover {
-      text-decoration: none;
+    button {
+        text-align: left;
+        width: 100%;
+        color: #1c1c1c;
+        &:focus,
+        &:hover {
+            text-decoration: none;
+        }
     }
-  }
-  .pull-right {
-    margin-top: 5px;
-  }
+    .pull-right {
+        margin-top: 5px;
+    }
 }
 .btn-group-voucher-type {
-  button {
-    i.fa.fa-ellipsis-v {
-      position: absolute;
-      right: 0;
+    button {
+        i.fa.fa-ellipsis-v {
+            position: absolute;
+            right: 0;
+        }
     }
-  }
 }
 .voucher-type {
-  width: 115%;
-  right: -7.5% !important;
-  top: 118% !important;
-  border-radius: 0px;
-  padding: 0px;
-  input[type="checkbox"]:after {
-    border: 1px solid #cccccc;
-    width: 15px;
-    height: 15px;
-    top: 2px;
-  }
-  input[type="checkbox"]:before {
-    top: 5px;
-    width: 9px;
-    height: 5px;
-    border: 2px solid #fff;
-    border-top-style: none;
-    border-right-style: none;
-  }
-  li {
-    color: #333333;
-    padding: 3px 7px !important;
-    font-size: 12px;
-  }
-  li:last-child {
-    border: none;
-    padding-bottom: 6px !important;
-  }
+    width: 115%;
+    right: -7.5% !important;
+    top: 118% !important;
+    border-radius: 0px;
+    padding: 0px;
+    input[type="checkbox"]:after {
+        border: 1px solid #cccccc;
+        width: 15px;
+        height: 15px;
+        top: 2px;
+    }
+    input[type="checkbox"]:before {
+        top: 5px;
+        width: 9px;
+        height: 5px;
+        border: 2px solid #fff;
+        border-top-style: none;
+        border-right-style: none;
+    }
+    li {
+        color: #333333;
+        padding: 3px 7px !important;
+        font-size: 12px;
+    }
+    li:last-child {
+        border: none;
+        padding-bottom: 6px !important;
+    }
 }
 button[aria-expanded="true"] i {
-  color: #adadad;
+    color: #adadad;
 }
 .stockDiscription {
     white-space: normal;
 }
 /* voucher type DDL */
 
-
 .modal-content {
-  border-radius: 0px;
-  margin-top: 200px;
+    border-radius: 0px;
+    margin-top: 200px;
 }
 .rightBar {
-  width: calc(100% - 260px);
+    width: calc(100% - 260px);
 }
 .unit-badge {
-  display: inline-block;
-  min-width: 40px;
-  text-align: left;
-  padding-left: 3px;
-  text-transform: lowercase;
+    display: inline-block;
+    min-width: 40px;
+    text-align: left;
+    padding-left: 3px;
+    text-transform: lowercase;
 }
 .icon-pointer .icon-sort-asc,
 .icon-pointer .icon-sort-asc {
-  line-height: 20px;
-  width: 15px;
-  color: #757BB9;
+    line-height: 20px;
+    width: 15px;
+    color: #757bb9;
 }
 .icon-pointer .activeTextColor {
-  color: $activeIconTh;
+    color: $activeIconTh;
 }
 
-.dropdown-menu > li > a:hover{
-  cursor: pointer;
-  color: #ff5f00;
+.dropdown-menu > li > a:hover {
+    cursor: pointer;
 }
 .advance-icon {
     width: 32px;
@@ -191,22 +185,22 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid #5B64C9;
+    border: 1px solid #5b64c9;
     border-radius: 2px;
-    color: #1A237E;
+    color: #1a237e;
     background: #fff;
 }
-.table-border .d-flex{
-  align-items: center;
+.table-border .d-flex {
+    align-items: center;
 }
 .icon-pointer {
     padding-left: 5px;
 }
 button.btn.btn-filter {
-    background: #E4E4E4;
-    border: 1px solid #E4E4E4;
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
     font-size: 16px;
-    color: #1A237E;
+    color: #1a237e;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
