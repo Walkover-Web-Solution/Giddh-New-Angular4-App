@@ -519,7 +519,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (lt.closingBalance) {
                     this.closingBalanceBeforeReconcile = lt.closingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
-                    ;
                 }
                 if (lt.closingBalanceForBank) {
                     this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
