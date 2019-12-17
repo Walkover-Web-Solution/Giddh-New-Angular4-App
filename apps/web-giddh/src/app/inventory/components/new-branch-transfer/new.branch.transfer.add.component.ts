@@ -490,7 +490,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public selectProduct(event, product): void {
         if (event && event.additional) {
-            console.log(event.additional);
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
