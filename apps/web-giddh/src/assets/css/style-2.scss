@@ -411,13 +411,13 @@ input {
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-    background-color: #ff5f00;
+    
     color: #fff;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a.active {
     background-color: #fff;
-    color: #ff5f00;
+  
 }
 
 .navbar {
@@ -1000,7 +1000,7 @@ ul.sub-list {
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
-    color: #ff5f00 !important;
+ 
     background: #e5e5e5 !important;
 }
 
@@ -1026,7 +1026,7 @@ ul.sub-list {
 }
 
 .sorting-box a.active {
-    color: #ff5f00;
+  
     background: none;
 }
 
@@ -1762,7 +1762,6 @@ fieldset[disabled] .btn-primary:hover {
     padding: 8px 10px;
     display: block;
     background: #f5f5f5;
-    color: #ff5e01 !important;
     margin: 20px 0px;
 }
 
@@ -1877,11 +1876,11 @@ fieldset[disabled] .btn-primary:hover {
 .childTab > .nav-tabs > li.active > a,
 .childTab > .nav-tabs > li.active > a:focus,
 .childTab > .nav-tabs > li.active > a:hover {
-    color: #ff5e01;
+ 
     border: 0;
     cursor: pointer;
     background: none;
-    border-bottom: 2px solid #ff5e01;
+    
 }
 
 /*.childTab >.nav.nav-tabs {
@@ -1913,7 +1912,7 @@ fieldset[disabled] .btn-primary:hover {
 .childTab .nav-tabs>li.active>a, .childTab .nav-tabs>li.active>a:focus, .childTab .nav-tabs>li.active>a:hover {
     padding: 13px 18px;
     background: white;
-    color: #ff5e01;
+     
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }*/
@@ -1924,7 +1923,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .danger-btn {
-    background-color: #ff5e01;
+
     color: #fff;
     text-shadow: none;
     background-image: none;
@@ -1959,11 +1958,7 @@ fieldset[disabled] .btn-primary:hover {
     text-transform: capitalize;
 }
 
-#companyList li.selected-company,
-#companyList li.selected-company:hover {
-    color: #ff5e01;
-}
-
+ 
 #companyList li.selected-company span {
     color: var(--dark-blue01) !important;
 }
@@ -2024,9 +2019,6 @@ p.table-email {
     color: #333333;
 }
 
-.table tr:hover .professional-name {
-    color: #ff5f00;
-}
 
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
@@ -2056,11 +2048,7 @@ p.table-email {
 .top-five-cr-dr-table .basic > thead > tr th:first-child {
     border-left: none !important;
 }
-
-/*
-.basic>tbody>tr>td a {
-    color: #ff5e01;
-} */
+ 
 
 .delt {
     text-align: center;
@@ -2258,7 +2246,7 @@ input[type="checkbox"]:checked:after {
 .thumbnail.active {
     background: #ffffff;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
-    border-color: #ff5e01 !important;
+    
 }
 
 .thumbnail {
@@ -2700,11 +2688,7 @@ input[type="checkbox"]:checked:after {
     padding: 10px 0;
     border: 0 !important;
 }
-
-/* #companyList .glyphicon-trash {
-    color: #ff5e01;
-} */
-
+ 
 .proforma-list > .filters > div {
     margin-right: 0;
 }
@@ -2752,7 +2736,6 @@ input[type="checkbox"]:checked:after {
     height: 49px;
     border: 0;
     width: 200px;
-    color: #ff5e01;
     background: #dddddd;
     left: 0;
     padding-left: 16px;
@@ -3109,10 +3092,7 @@ footer small a {
     border-radius: 0px !important;
 }
 
-.required {
-    color: #ff5e01;
-}
-
+ 
 .form-theme {
     background: #f4f5f8;
     padding: 20px;
@@ -3232,10 +3212,7 @@ a.btn.btn-xs.btn-link.pull-right {
     margin-left: 5px;
 }
 
-.action a:hover {
-    color: #ff5e01;
-}
-
+ 
 .action .btn {
     border-color: transparent;
     padding: 4px 14px;
@@ -3305,15 +3282,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .ReportInfo {
     text-transform: capitalize;
 }
-
-/*.stock-grp-list >li:hover {
-    background: #ff5e01;
-    border-radius: 3px;
-    color: #fff;
-}
-.stock-grp-list >li:hover a {
-    color: #fff;
-}*/
+ 
 
 .linkstock {
     min-height: 200px;
@@ -4055,12 +4024,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    color: #ff5f00 !important;
+  
 }
 
 .btn-add:hover,
 .btn-add:focus {
-    background: #ff5f00;
+  
     color: #fff !important;
 }
 
@@ -4133,7 +4102,7 @@ label {
 
 .col_wrapper:nth-child(1) .isParent {
     background: #e1ebf0 !important;
-    color: #ff5f00 !important;
+  
 }
 
 .col_wrapper:last-child ul li a.isParent {
@@ -4158,7 +4127,7 @@ label {
 }
 
 .isParent {
-    color: #ff5f00 !important;
+   
     background: #f0f0f0;
 }
 
@@ -4257,12 +4226,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    color: #ff5f00 !important;
+    
 }
 
 .btn-add:hover,
 .btn-add:focus {
-    background: #ff5f00;
+  
     color: #fff !important;
 }
 
@@ -4388,7 +4357,7 @@ label {
 }
 
 .accmerge li a.isActive {
-    background: #ff5f00;
+  
     color: #808080;
 }
 
@@ -4517,9 +4486,7 @@ label {
     padding-right: 15px;
 }
 
-.gst_row .fa-plus {
-    color: #ff5f00;
-}
+
 
 .manageModal .modal-dialog {
     height: 100%;
@@ -4863,8 +4830,7 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    background: #ff5e01;
-    border-color: #ff5e01;
+
     color: #fff;
 }
 
@@ -4874,7 +4840,7 @@ label {
 .pagination > li > span:hover {
     background-color: #d9d9d9 !important;
     border-color: #ddd;
-    color: #ff5e01;
+
 }
 
 #manufacture .section_title {
@@ -4905,7 +4871,7 @@ label {
 
 .select2-container--default
     .select2-results__option--highlighted[aria-selected] {
-    background-color: #ff5e01 !important;
+    background-color: #333 !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -5150,7 +5116,7 @@ label {
 
 #customInvoice .templateEditor .btn-group-lg > .btn:hover {
     background: #fff;
-    color: #ff5f00;
+  
 }
 
 #customInvoice {
@@ -5177,7 +5143,7 @@ label {
 }
 
 #customInvoice .templateEditor h3 {
-    color: #ff5f00;
+ 
     margin: 15px 0;
     font-size: 18px;
 }
@@ -5558,13 +5524,10 @@ datepicker-inner .well table thead tr th button {
 
 datepicker-inner .well table tbody .btn.active,
 datepicker-inner .well table tbody .btn:active {
-    background: #ff5f00 !important;
+  
     box-shadow: none;
 }
 
-datepicker-inner .well table tbody .btn-default .text-info {
-    color: #ff5f00;
-}
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
@@ -5854,11 +5817,11 @@ typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: rgb(244, 245, 248);
-    color: #ff5f00;
+  
 }
 
 typeahead-container .dropdown-menu li.active > a > a {
-    color: #ff5f00;
+  
 }
 
 .has-item {
@@ -6643,7 +6606,7 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-option li a:hover {
-    color: #ff5e01;
+  
     background: #f4f5f8;
 }
 
@@ -6669,7 +6632,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li:hover a {
-    color: #ff5e01;
+   
     background: #f4f5f8;
 }
 
@@ -6859,10 +6822,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: $border-blue;
     background: #eeeff9;
 }
-
-.user_dropdown > li.open > a {
-    /* color: #ff5e01; */
-}
+ 
 
 .hamburger_menu button,
 .hamburger_menu button:hover,
@@ -7667,7 +7627,7 @@ app-header {
 
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
-    color: #ff5f00;
+   
 }
 
 /* sticky footer css merged */
@@ -7689,7 +7649,7 @@ app-header {
 
 .stickyFooterSaleAmount .total-due h3 {
     font-size: 20px;
-    color: #ff5f00;
+   
     padding-right: 13px;
 }
 
