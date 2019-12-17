@@ -104,6 +104,11 @@ span.close-modal.cp.pull-right {
     overflow-y: auto;
     background: #fff;
 }
+@media only screen and (max-width: 1440px) {
+    .pettycash {
+        height: 52vh;
+    }
+}
 @media only screen and (max-width: 991px) {
     .pettycash {
         height: initial;
