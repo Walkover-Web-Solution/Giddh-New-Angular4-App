@@ -174,5 +174,5 @@ export class NewBranchTransferListResponse {
 }
 
 export class NewBranchTransferDownloadRequest {
-    public branchTransferUniqueName: string;
+    public uniqueName: string;
 }
