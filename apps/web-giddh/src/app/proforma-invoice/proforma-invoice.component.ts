@@ -2292,7 +2292,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
-            if (this.isSalesInvoice || this.isCashInvoice) {
+            if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 result = {
                     account: data.accountDetails,
                     updateAccountDetails: this.updateAccount,
