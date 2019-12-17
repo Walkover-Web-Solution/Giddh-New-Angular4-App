@@ -9,29 +9,7 @@ import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
-    styles: [`
-    .invoice-bg {
-      background-color: #f4f5f8;
-      padding: 20px;
-    }
-
-    .invoice-nav.navbar-nav > li > a {
-      padding: 6px 30px;
-      font-size: 14px;
-      color: #333;
-      background-color: #e6e6e6
-    }
-
-    .invoice-nav.navbar-nav > li > a:hover {
-
-      color: #fff;
-    }
-
-    .invoice-nav.navbar-nav > li > a.active {
-      background-color: #fff;
-
-    }
-  `],
+    styleUrls: [`./purchase.component.scss`],
     templateUrl: './purchase.component.html'
 })
 export class PurchaseComponent implements OnInit {
