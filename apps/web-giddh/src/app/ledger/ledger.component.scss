@@ -1,10 +1,3 @@
-// $dark-blue:#000857;
-// $dark-blue01:#313a96;
-// $light-blue:#5b63b9;
-// $light-blue01:#868ee0;
-// $light-blue02:#bdc3ff;
-// $light-gray:#e6e7e8;
-
 @import "../../assets/css/color.scss";
 
 .form-control,
@@ -112,7 +105,7 @@ input {
     bottom: 0;
 }
 .ledger-head th {
-    color: $dark-blue01;
+    color: $JacksonsPurple;
     padding-left: 0;
 
     padding-bottom: 10px;
@@ -398,7 +391,7 @@ sh-select:focus {
     border-bottom: 8px solid $dark-blue00;
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid $dark-blue01;
+    border-bottom: 8px solid $JacksonsPurple;
 }
 .stat-block:nth-child(3) {
     border-bottom: 8px solid $border-blue;
