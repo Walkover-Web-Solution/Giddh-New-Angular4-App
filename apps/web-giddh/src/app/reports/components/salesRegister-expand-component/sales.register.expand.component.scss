@@ -4,7 +4,7 @@
 }
 
 .basic > tbody > tr:hover td > a {
-    color: #ff5f00;
+    
 }
 
 .basic > tbody > tr > td,
@@ -228,7 +228,7 @@ ul#dropdown-nested li .caret {
 
 .customeMnthSelect li:hover a.dropdown-item {
     background-color: #e5e5e5;
-    color: #ff5f00;
+    
 }
 
 .customeMnthSelect button.btn {
@@ -245,9 +245,6 @@ ul#dropdown-nested li .caret {
     outline: none !important;
 }
 
-.icon-pointer .glyphicon:hover {
-    color: #ff5f00 !important;
-}
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
     line-height: 0.5;

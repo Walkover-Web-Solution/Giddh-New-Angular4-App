@@ -136,7 +136,7 @@
 }
 
 .aside-right .list-icon-group input:checked+label {
-    border: 1px solid #FF5F00;
+
     border-radius: 0px;
 }
 
@@ -188,10 +188,3 @@
     z-index: 999;
 }
 
-.icon-pointer .glyphicon:hover {
-    color: #FF5F00 !important;
-}
-
-.icon-pointer .activeTextColor {
-    color: #FF5F00 !important;
-}

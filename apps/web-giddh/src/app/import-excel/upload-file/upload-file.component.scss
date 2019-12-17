@@ -52,7 +52,6 @@
 }
 
 .import_type li:hover {
-    border: 1px solid #ff5e01;
     transform: scale(1.01);
 }
 
@@ -92,28 +91,25 @@
     font-size: 14px;
     width: calc(100% - 95px);
 }
-.select-file{
-  color: #089328;
+.select-file {
+    color: #089328;
 }
-.file-uplod-penal{
-width: 100%;
-text-align: left;
-border: 1px solid gainsboro;
-padding: 8px;
-border-radius: 4px;
-color: #CCCCCC;
-
-}
-.upload_excel:hover .file-uplod-penal{
-  border-color: #FF5F00 !important;
-}
-@media(max-width:767px){
-  .center-block .btn-sm {
-    float: none !important;
-    text-align: center !important;
-    display: block;
-    margin: 0 !important;
+.file-uplod-penal {
     width: 100%;
-    padding: 4px 0;
+    text-align: left;
+    border: 1px solid gainsboro;
+    padding: 8px;
+    border-radius: 4px;
+    color: #cccccc;
 }
+
+@media (max-width: 767px) {
+    .center-block .btn-sm {
+        float: none !important;
+        text-align: center !important;
+        display: block;
+        margin: 0 !important;
+        width: 100%;
+        padding: 4px 0;
+    }
 }

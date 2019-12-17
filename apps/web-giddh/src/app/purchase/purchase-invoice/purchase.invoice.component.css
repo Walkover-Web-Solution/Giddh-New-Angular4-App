@@ -15,11 +15,11 @@
 .btn-generate {
     margin-top: 4px;
     color: #fff;
-    background: #ff5f00;
+
 }
 
 .btn-generate:disabled {
-    color: #ff5f00;
+    
     background: #e5e5e5;
 }
 
@@ -59,19 +59,6 @@
 .tr-td-div>td div {
     padding: 4px 0px;
 }
-
-
-/* #settingTab .nav-tabs>li.active>a {
-    color: #ff5f00;
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid #ff5f00;
-} */
-
-
-/*.ranges:nth-of-type(2) {
-    display: none !important;
-}*/
 
 .return-body .main-wrapper {
     background-color: #f5f5f5;
