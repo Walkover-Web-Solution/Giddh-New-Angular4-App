@@ -274,7 +274,7 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
 
     public setCurrentPageTitle(title) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
+        currentPageObj.name = "Petty Cash Management > " + title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }

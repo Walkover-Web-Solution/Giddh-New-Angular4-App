@@ -145,12 +145,12 @@
         -->
 
         <div class="form-group" style="margin-right: 10px;">
-            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
-                title="Expand All" *ngIf="!expand">
+            <a class="cp" style="" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All"
+                *ngIf="!expand">
                 <img src="{{imgPath}}expand.png" style="margin-top: 3px !important;" />
             </a>
 
-            <a class="cp" style="color: #FF5F00;" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
+            <a class="cp" style="" (click)="emitExpand()" data-toggle="tooltip" data-placement="top"
                 title="Collapse All" *ngIf="expand">
                 <img src="{{imgPath}}collapse.png" style="margin-top: 3px !important;" />
             </a>
@@ -480,13 +480,13 @@
 </ng-container>
 
 <div *ngIf="(isGetSalesDetailsInProcess$ | async)">
-        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
-            </div>
+    <div class="no-data mrT2 loader-main" *ngIf="showLoader">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
 </div>
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>

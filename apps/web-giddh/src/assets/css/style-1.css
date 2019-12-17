@@ -1056,9 +1056,7 @@ position: relative; */
   border-radius: 0;
 }
 
-.themeBg {
-  background-color: #ff5e01;
-}
+
 
 .modal-liq80 {
   width: 80%;
@@ -1970,7 +1968,6 @@ v-pane-header.show-pseudo {
   left: 8px;
   width: 10px;
   height: 2px;
-  background-color: #ff5e01;
   -webkit-transform-origin: 50% 50%;
   -ms-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
@@ -2520,7 +2517,7 @@ padding: 0;
 .account-card:hover {
   background: #fff;
   box-shadow: 0 5px 5px 0 rgba(58, 58, 58, .18);
-  border-color: #ff5e01;
+ 
 }
 
 .account-card > h1 {
@@ -2569,7 +2566,7 @@ padding: 0;
 }
 
 .account-card .account-date > label {
-  color: #ff5f00;
+
   text-decoration: underline;
 }
 
@@ -2598,14 +2595,12 @@ padding: 0;
   border-bottom: 2px solid #337ab7;
 }
 
-.linked-accounts:nth-child(odd) .account-card > h1 {
-  border-bottom: 1px solid #ff5e01;
-}
+ 
 
 .linked-accounts > .title {
   margin-bottom: 5px;
   padding-bottom: 1px;
-  border-bottom: 2px solid #ff5e01;
+  
   font-size: 18px;
 }
 
@@ -2723,10 +2718,7 @@ background: #f9f9f9;
 }
 
 
-/*.audit-log:nth-child(even) {
-background: #ff5e01;
-}
-*/
+ 
 
 .audit-log > h1 {
   font-size: 16px;
@@ -2941,11 +2933,7 @@ background: #ff5e01;
   background: #ffccb4;
 }
 
-
-/*.uncEntry > td {
-border: 1px solid #ff5e01 !important;
-}*/
-
+ 
 .isNotEditable {
   background: 0 0;
   border: 0;
@@ -3125,9 +3113,6 @@ ul.pills li {
   border: 1px solid #ddd;
 }
 
-ul.pills li:hover {
-  color: #ff5f00;
-}
 
 .load-more {
   margin-top: 10px;
@@ -4024,13 +4009,11 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .background-color-giddh {
-  background: #ff5e01;
+ 
   height: 50px;
 }
 
-.color-giddh {
-  color: #ff5e01;
-}
+ 
 
 .flying-div {
   right: 0px;
@@ -4510,9 +4493,7 @@ display:none;
   top: -25px;
 }
 
-.glyphicon-filter.open {
-  color: #ff5e01;
-}
+ 
 
 .create-proforma {
   padding: 30px 20px;
@@ -4710,12 +4691,7 @@ border-bottom: 1px solid #e0e0e0;
   color: #616161;
 }
 
-.stock-items > li > a.active,
-.sub-grp > li > a.active,
-.stock-grp-list > li > a.active {
-  color: #ff5e01 !important;
-}
-
+ 
 .stock-grp.list {
   height: calc(100% - 200px);
   overflow-y: auto;
@@ -5090,7 +5066,7 @@ border-bottom: 1px solid #e0e0e0;
 
   background: transparent;
   border: 0;
-  border-bottom: 2px solid #ff5f00;
+
 }
 
 .select2-parent .select2-container--default .select2-selection--single {
@@ -5137,7 +5113,7 @@ border-bottom: 1px solid #e0e0e0;
 /*color:white;*/
 
 
-/*background-color: #ff5f00;*/
+/**/
 
 
 /*}*/
@@ -5149,7 +5125,7 @@ border-bottom: 1px solid #e0e0e0;
 .dropdown-menu > .active > a > a:focus,
 .dropdown-menu > .active > a > a:hover {
   color: white;
-  background-color: #ff5f00;
+  
 }
 
 .dropdown-menu > li > a,
@@ -5184,11 +5160,7 @@ strong {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.subAccBox li a.active strong,
-.subAccBox li a:hover strong {
-  color: #ff5e01 !important;
-}
-
+ 
 .hamburger_menu a:hover {
   color: #fff !important;
 }
@@ -5465,7 +5437,7 @@ form#groupDetailForm {
     display: block;
     position: fixed !important;
     top: 0;
-    z-index: 99;
+    z-index: 101;
   }
   .desktopHeader {
     display: none;

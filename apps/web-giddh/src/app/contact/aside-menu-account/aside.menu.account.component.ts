@@ -13,6 +13,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { AccountAddNewDetailsComponent } from '../../shared/header/components';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
@@ -30,6 +31,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
     @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+    @ViewChild('addAccountNewComponent') public addAccountNewComponent: AccountAddNewDetailsComponent
 
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other

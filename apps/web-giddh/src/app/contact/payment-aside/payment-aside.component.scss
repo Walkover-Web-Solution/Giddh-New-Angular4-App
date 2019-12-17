@@ -1,0 +1,125 @@
+:host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
+}
+:host.in #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: 0;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+}
+
+:host .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+:host .aside-pane {
+    max-width: 760px;
+    width: 100%;
+}
+.aside-header {
+    background-color: #fff;
+    padding: 20px 10px;
+}
+.aside-pane {
+    padding: 0;
+    background-color: #fff;
+}
+.aside-title {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.creditors_detail {
+    padding: 10px;
+    background-color: #f7f8fa;
+    line-height: 1.6;
+}
+.creditors_detail > p {
+    font-size: 16px;
+    color: #2d3b4b;
+}
+.creditors_detail span.red-text {
+    color: #ff0000;
+}
+.contactDetails p {
+    font-size: 12px;
+    color: #2d3b4b;
+}
+.accountDetils {
+    padding: 10px 0;
+}
+form label {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+.accountDetils .btn-default {
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+    border: 1px solid #ccc;
+}
+.accountDetils .btn-group {
+    width: 230px;
+    display: block;
+    text-align: left;
+}
+.accountDetils {
+    padding: 10px;
+}
+.accountDetils span.caret {
+    position: absolute;
+    right: 20px;
+    top: 14px;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0px 3px 6px #0000001a;
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
+}
