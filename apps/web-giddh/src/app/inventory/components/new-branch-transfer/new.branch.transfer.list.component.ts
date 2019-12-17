@@ -22,7 +22,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import {saveAs} from "file-saver";
-import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: "new-branch-transfer-list",
