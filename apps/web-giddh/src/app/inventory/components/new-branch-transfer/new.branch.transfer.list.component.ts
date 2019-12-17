@@ -159,12 +159,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransferResponse = response.body;
-
-                let loop = 0;
-                this.branchTransferResponse.items.forEach(key => {
-                    this.branchTransferResponse.items[loop].dateOfSupply = key.dateOfSupply.split("-").reverse().join("-");
-                    loop++;
-                });
             } else {
                 this.initBranchTransferListResponse();
             }
