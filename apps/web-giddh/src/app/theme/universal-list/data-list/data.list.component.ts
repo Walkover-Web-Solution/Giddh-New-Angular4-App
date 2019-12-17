@@ -85,6 +85,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     public rows: any[] = null;
     public rowsClone: any[] = [];
     public viewPortItems: any[];
+    public defaultViewPortItems: any[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private rawSmartComboList: IUlist[] = [];
     private smartList: IUlist[];
@@ -220,6 +221,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // getting data from vscroll and assigning data to local var.
     public checkItems(event: { items: any[]; idx: number; }) {
         this.viewPortItems = event.items;
+        this.defaultViewPortItems = event.items;
+        console.log(this.defaultViewPortItems);
     }
 
     /**
@@ -359,19 +362,22 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
             if (this.isOpen && key === BACKSPACE) {
                 e.preventDefault();
                 e.stopPropagation();
+
+                this.viewPortItems = this.defaultViewPortItems;
+                console.log(this.viewPortItems);
                 // remove item one by one on pressing backspace like gmail
-                if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
-                    if (!LOCAL_MEMORY.charCount) {
-                        this.removeItemFromSelectedGroups();
-                    }
-                    if (LOCAL_MEMORY.charCount === 1) {
-                        LOCAL_MEMORY.charCount = null;
-                    }
-                    // logic search
-                    this.doConditionalSearch();
-                } else {
-                    this.updateRowsViaSearch(cloneDeep(this.smartList));
-                }
+                // if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+                //     if (!LOCAL_MEMORY.charCount) {
+                //         this.removeItemFromSelectedGroups();
+                //     }
+                //     if (LOCAL_MEMORY.charCount === 1) {
+                //         LOCAL_MEMORY.charCount = null;
+                //     }
+                //     // logic search
+                //     this.doConditionalSearch();
+                // } else {
+                //     this.updateRowsViaSearch(cloneDeep(this.smartList));
+                // }
             }
         }
     }
