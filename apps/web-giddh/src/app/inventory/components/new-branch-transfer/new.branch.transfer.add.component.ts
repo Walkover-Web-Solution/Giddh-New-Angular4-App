@@ -127,6 +127,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
+        this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
+
         this.initFormFields();
         this.getTransportersList();
         this.getStock();
