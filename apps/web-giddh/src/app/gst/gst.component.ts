@@ -22,7 +22,7 @@ import {createSelector} from 'reselect';
 
 @Component({
     templateUrl: './gst.component.html',
-    styleUrls: ['./gst.component.css'],
+    styleUrls: ['./gst.component.scss'],
     providers: [
         {
             provide: AlertConfig, useValue: {}
@@ -71,17 +71,17 @@ export class GstComponent implements OnInit {
     public currentPeriod: any = {};
     public selectedMonth: any = null;
     public userEmail: string = '';
-    public returnGstr3B: {} = {via: null};
+    public returnGstr3B: {} = { via: null };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-                private _companyActions: CompanyActions,
-                private _route: Router,
-                private _gstAction: GstReconcileActions,
-                private _invoicePurchaseActions: InvoicePurchaseActions,
-                private _toasty: ToasterService,
-                private _cdRf: ChangeDetectorRef) {
+        private _companyActions: CompanyActions,
+        private _route: Router,
+        private _gstAction: GstReconcileActions,
+        private _invoicePurchaseActions: InvoicePurchaseActions,
+        private _toasty: ToasterService,
+        private _cdRf: ChangeDetectorRef) {
         this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
         this.gstr2TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr2OverViewData.count), takeUntil(this.destroyed$));
@@ -164,7 +164,7 @@ export class GstComponent implements OnInit {
             this.store.dispatch(this._gstAction.GetOverView('gstr2', request));
             this.store.dispatch(this._gstAction.GetOverView('gstr3b', request));
         }
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
     }
 
@@ -216,27 +216,14 @@ export class GstComponent implements OnInit {
      * navigateToOverview
      */
     public navigateToOverview(type) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], {
-            queryParams: {
-                return_type: type,
-                from: this.currentPeriod.from,
-                to: this.currentPeriod.to,
-                tab: 0
-            }
-        });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0 } });
     }
 
     /**
-     * navigateToOverview
-     */
+    * navigateToOverview
+    */
     public navigateTogstR3B(type) {
-        this._route.navigate(['pages', 'gstfiling', 'gstR3'], {
-            queryParams: {
-                return_type: type,
-                from: this.currentPeriod.from,
-                to: this.currentPeriod.to
-            }
-        });
+        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to } });
     }
 
     public emailSheet(isDownloadDetailSheet: boolean) {
@@ -268,16 +255,8 @@ export class GstComponent implements OnInit {
     }
 
     public navigateToTab(tab, returnType) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], {
-            queryParams: {
-                return_type: returnType,
-                from: this.currentPeriod.from,
-                to: this.currentPeriod.to,
-                tab
-            }
-        });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab } });
     }
-
     public onOpenChange(data: boolean) {
         this.openMonthWiseCalendar(data);
     }
