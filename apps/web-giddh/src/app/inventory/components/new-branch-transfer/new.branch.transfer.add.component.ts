@@ -842,6 +842,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
 
+                if(!this.branchTransfer.transporterDetails) {
+                    this.branchTransfer.transporterDetails = {
+                        dispatchedDate: null,
+                        transporterName: null,
+                        transporterId: null,
+                        transportMode: null,
+                        vehicleNumber: null
+                    };
+                }
+
                 if (response.body.dateOfSupply) {
                     this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
                 }
