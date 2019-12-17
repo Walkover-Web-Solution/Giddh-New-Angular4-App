@@ -89,7 +89,6 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
-
       let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
       if (data) {
         data.dates = _.cloneDeep(state.pl.data.dates);
@@ -475,7 +474,7 @@ const operatingExpParentGrp = (data: ParentGrp, statement) => {
 };
 const otherExpParentGrp = (data: ParentGrp, statement) => {
   data.groupName = 'Less: Other Expenses';
-  data.uniqueName = 'otherexpenses';
+  data.uniqueName = 'lessotherexpenses';
   data.category = 'expenses';
   data.closingBalance = statement;
   data.isVisible = true;
