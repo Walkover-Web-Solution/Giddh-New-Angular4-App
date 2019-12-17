@@ -3,10 +3,6 @@
     flex: 1 1 auto;
 }
 
-.basic > tbody > tr:hover td > a {
-    
-}
-
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
@@ -228,7 +224,6 @@ ul#dropdown-nested li .caret {
 
 .customeMnthSelect li:hover a.dropdown-item {
     background-color: #e5e5e5;
-    
 }
 
 .customeMnthSelect button.btn {
@@ -245,7 +240,6 @@ ul#dropdown-nested li .caret {
     outline: none !important;
 }
 
-
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
@@ -259,11 +253,6 @@ table th {
     position: relative;
 }
 
-// .icon-pointer {
-//     position: absolute;
-//     right: 10px;
-//     top: 33%;
-// }
 .vertcleAlignTop {
     vertical-align: top !important;
 }
@@ -281,6 +270,43 @@ table th {
 .sales-register-table {
     padding-bottom: 170px;
 }
+.expan-collapse-btn a {
+    display: flex;
+    width: 36px;
+    height: 36px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    background-color: #fff;
+    font-size: 18px;
+    color: $pageTitleColor;
+    border: 1px solid #d9d9d9;
+}
+.top_bar {
+    .icon-options {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #d9d9d9;
+        background-color: #fff;
+        color: #999;
+        font-size: 20px;
+        position: relative;
+        padding: 7px;
+    }
+    .btn-group.d-flex.open.show {
+        display: flex !important;
+    }
+}
+
+.vertcleAlignTop a {
+    color: $lightTextBlue;
+
+    &:hover {
+        color: $activeIconTh;
+    }
+}
+
 @media (max-width: 1366px) {
     .main-sale-register-box {
         padding-right: 70px;

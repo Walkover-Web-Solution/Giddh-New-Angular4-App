@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 .account-detail-modal-header {
     position: absolute;
     top: 20px;
@@ -25,12 +26,12 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #ffece094;
-        white-space: initial;
+    background: #efefef;
+    white-space: initial;
 }
 
 .account-detail-custom-title {
-    font-family: 'opensans-semibold' !important;
+    font-family: "opensans-semibold" !important;
     font-size: 16px !important;
 }
 
@@ -48,7 +49,7 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid #C7C7C7;
+    border-top: 1px solid #c7c7c7;
 }
 
 ul.list-unstyled li {
@@ -78,10 +79,9 @@ ul.list-unstyled li a {
 .li-link {
     margin-top: 15px !important;
     a:hover {
-        color: #ff4700 !important;
+        color: $Jacksons-purple !important;
     }
 }
 ul.pills {
-
     white-space: initial;
 }
