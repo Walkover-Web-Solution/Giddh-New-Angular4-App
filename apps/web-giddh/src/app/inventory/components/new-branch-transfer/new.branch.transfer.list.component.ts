@@ -22,6 +22,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import {saveAs} from "file-saver";
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -159,12 +160,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransferResponse = response.body;
-
-                let loop = 0;
-                this.branchTransferResponse.items.forEach(key => {
-                    this.branchTransferResponse.items[loop].dateOfSupply = key.dateOfSupply.split("-").reverse().join("-");
-                    loop++;
-                });
             } else {
                 this.initBranchTransferListResponse();
             }
