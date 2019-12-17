@@ -490,6 +490,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public selectProduct(event, product): void {
         if (event && event.additional) {
+            console.log(event.additional);
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
@@ -1091,6 +1092,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             setTimeout(() => {
                 this.destinationQuantity.nativeElement.focus();
             }, 100);
+        }
+    }
+
+    public checkSkuLength() {
+        if (this.skuNumber && this.skuNumber.length > 50) {
+            this.skuNumber = this.skuNumber.substring(0, 50);
+            this._toasty.errorToast("SKU code value should not more than 50 characters.");
+        }
+    }
+
+    public checkHsnLength() {
+        if (this.hsnNumber && this.hsnNumber.length > 8) {
+            this.hsnNumber = this.hsnNumber.substring(0, 8);
+            this._toasty.errorToast("HSN code value should not more than 8 characters.");
         }
     }
 }
