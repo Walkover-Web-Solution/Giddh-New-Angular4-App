@@ -7,7 +7,6 @@
     flex-flow: row wrap;
 }
 
-
 /* .table.basic tbody tr td{
   background-color: #fff;
 }
@@ -20,8 +19,7 @@
     cursor: pointer;
 }
 
-
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     border-right: 1px solid #c6c4c4;
 }
 
@@ -32,7 +30,6 @@
 .d-flex {
     display: flex;
 }
-
 
 /*td-in-searchbox_style*/
 
@@ -50,33 +47,23 @@
     min-width: 420px !important;
 }
 
-
 /*.td_in_searchBox input {*/
-
 
 /*background-color: whitesmoke;*/
 
-
 /*}*/
-
 
 /*.td_in_searchBox input::placeholder {*/
 
-
 /*color: #262626;*/
-
 
 /*border: 0;*/
 
-
 /*font-family: ''opensans-semibold'';*/
-
 
 /*text-transform: capitalize;*/
 
-
 /*font-size: 14px;*/
-
 
 /*}*/
 
@@ -188,7 +175,6 @@
     outline: none !important;
 }
 
-
 /* my css */
 
 .card {
@@ -288,15 +274,11 @@ td.card-header.clearfix {
     justify-content: space-between;
 }
 
-
 /*::ng-deep #dateRangePickerParent .daterangepicker {*/
-
 
 /*  top: 100px !important;*/
 
-
 /*  left: 15px !important;*/
-
 
 /*}*/
 .mobileSearch {
@@ -422,7 +404,10 @@ ul.selectActionDropdown {
 button.btn.btn-default.ladda-button {
     margin-right: 15px;
     width: 36px;
-    padding: 0;
+    height: 36px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     height: 36px;
 }
 
@@ -473,7 +458,7 @@ button.btn.btn-filter span.icon-cross {
 
 .paginationWrapper {
     position: relative;
-    top: -150px;
+    top: -220px;
 }
 
 .invoiceFooter h3 {
@@ -492,7 +477,6 @@ button.btn.btn-filter span.icon-cross {
 .addInvoice .btn-group.show {
     display: inline-block !important;
 }
-
 
 /* responsive */
 
