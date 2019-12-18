@@ -225,8 +225,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
@@ -242,21 +241,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
             products: [{
                 name: null,
                 hsnNumber: null,
+                skuCode: null,
                 uniqueName: null,
                 stockDetails: {
                     stockUnit: null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 },
                 description: null
             }],
@@ -354,8 +352,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -377,8 +374,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -391,13 +387,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.products.push({
             name: null,
             hsnNumber: null,
+            skuCode: null,
             uniqueName: null,
             stockDetails: {
                 stockUnit: null,
                 amount: null,
                 rate: null,
-                quantity: null,
-                skuCode: null
+                quantity: null
             },
             description: null
         });
@@ -496,7 +492,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
             product.stockDetails.quantity = event.additional.openingQuantity;
-            product.stockDetails.skuCode = event.additional.skuCode;
+            product.skuCode = event.additional.skuCode;
             product.hsnNumber = event.additional.hsnNumber;
 
             if (this.transferType === 'senders') {
@@ -794,7 +790,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusSkuNumber(): void {
         this.hideHsnNumberPopup();
-        this.skuNumber = (this.branchTransfer.products[this.activeRow].stockDetails.skuCode) ? this.branchTransfer.products[this.activeRow].stockDetails.skuCode : "";
+        this.skuNumber = (this.branchTransfer.products[this.activeRow].skuCode) ? this.branchTransfer.products[this.activeRow].skuCode : "";
         this.skuNumberPopupShow = true;
         setTimeout(() => {
             this.productSkuCode.nativeElement.focus();
@@ -823,7 +819,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public saveSkuNumberPopup(product): void {
-        product.stockDetails.skuCode = this.skuNumber;
+        product.skuCode = this.skuNumber;
         this.skuNumberPopupShow = false;
     }
 
