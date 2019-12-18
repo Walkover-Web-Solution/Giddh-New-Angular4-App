@@ -107,7 +107,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
     public performActions(type: number, event?: any) {
         switch (type) {
             case 0: // go to add and manage
-                this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.accInfo.name));
                 this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(this.accInfo.name));
                 break;
 
