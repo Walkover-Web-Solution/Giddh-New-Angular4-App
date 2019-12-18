@@ -40,7 +40,7 @@
                             <span class="dr-label active">DR</span>
                             <span class="cr-label">CR</span> -->
                         <div class="input-group">
-                            <input type="text" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
+                            <input type="text" min="0" class="form-control text-right" decimalDigitsDirective formControlName="openingBalance" placeholder="00.00" />
                             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}" *ngIf="addAccountForm.get('openingBalance').value > 0">DR.
