@@ -520,7 +520,7 @@ a[vr-item]:focus {
     border: 1px solid $headerBtnColor;
     padding: 8px 8px;
 }
-#AddManage.btn-gray {
+#add-manage.btn-gray {
     background: $headerBtnColor;
     color: #fff;
     position: relative;
@@ -530,7 +530,7 @@ a[vr-item]:focus {
     padding-right: 12px;
     border: 1px solid $headerBtnColor;
 }
-#AddManage .icon-edit-ico {
+#add-manage .icon-edit-ico {
     position: absolute;
     left: 0px;
     background-color: $headerBtnColor;
@@ -647,7 +647,7 @@ ul.sub-list {
         margin-left: 0;
     }
     .primary-header ul.nav.universal_date.mr-2,
-    .primary-header #AddManage.btn-gray {
+    .primary-header #add-manage.btn-gray {
         margin-right: 5px;
     }
     .primary-header .row .col-sm-5:nth-child(3) {
@@ -665,9 +665,7 @@ ul.sub-list {
     span.icon-support.dropdown-toggle {
         top: 7px;
     }
-    .lowerLayerHeader {
-        padding-top: 10px;
-    }
+
     .hamburger_menu button {
         padding-top: 0;
         padding-bottom: 0;
@@ -701,12 +699,20 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .upper-layer-header li.hamburger_menu {
+        display: flex;
+        align-items: center;
+        width: 80%;
+    }
+    .mobileHeader .upper-layer-header .navbar-nav {
+        width: 80%;
+    }
     .nav-left-bar {
         width: 270px;
         left: -270px;
     }
-    .upperLayerHeader {
-        padding-top: 5px;
+    .upper-layer-header {
+        justify-content: space-between;
     }
     .paddingTopFixed {
         display: none;
@@ -734,10 +740,10 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .paddingTopFixed-mobile {
+    .padding-top-fixed-mobile {
         padding-top: 86px;
     }
-    .upperLayerHeader .open .dropdown-menu {
+    .upper-layer-header .open .dropdown-menu {
         background-color: #fff;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
@@ -746,16 +752,54 @@ ul.sub-list {
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
-    .calender-addone {
-        height: 36px;
-        vertical-align: middle;
+    .universal_date li {
+        display: inline-flex;
+        position: relative;
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
         align-items: center;
+        justify-content: center;
+    }
+    .calender-addone {
+        height: 100%;
+        vertical-align: middle;
+        -webkit-box-align: center;
+        align-items: center;
+        border-radius: 2px;
     }
     .header-date {
         height: 36px;
         vertical-align: top;
         display: inline-flex !important;
         align-items: center;
+    }
+    #add-manage.btn-gray {
+        background: #47509d;
+        color: #fff;
+        position: relative;
+        border: 1px solid #47509d;
+        padding: 0 !important;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 2px;
+    }
+    #add-manage .icon-edit-ico {
+        position: static;
+        padding: 0;
+        color: #fff;
+        font-size: 18px;
+        align-items: center;
+        display: inline-flex;
+        vertical-align: middle;
+    }
+    .header-icons {
+        display: flex;
+        align-items: center;
+        padding-right: 15px;
     }
 }
 @media (min-width: 412px) and (max-width: 840px) {
@@ -787,7 +831,7 @@ ul.sub-list {
         display: inline-block;
     }
 
-    button#AddManage {
+    button#add-manage {
         position: absolute;
         right: 0;
         bottom: 0;
@@ -801,8 +845,5 @@ ul.sub-list {
         text-align: left;
         height: 24px !important;
         display: none;
-    }
-    .lowerLayerHeader {
-        padding-top: 5px;
     }
 }

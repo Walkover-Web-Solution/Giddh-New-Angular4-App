@@ -245,7 +245,7 @@
                     </ul>
 
 
-                    <button id="AddManage" type="button" class="btn btn-gray btn-sm"
+                    <button id="add-manage" type="button" class="btn btn-gray btn-sm"
                         [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"> <span
                             class="icon-edit-ico"></span>Accounts
                     </button>
@@ -720,11 +720,13 @@
 </header>
 
 
-<div class="paddingTopFixed-mobile">
+<div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
-            <div class="container-fluid  mrB1 ">
-                <div class="upperLayerHeader">
+            <div>
+                <div class="upper-layer-header d-flex">
+
+
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left"
@@ -735,7 +737,8 @@
                                 <i class="icon-bar"></i>
                             </button>
 
-                            <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">
+                                <span tooltip="{{selectedPage}}" placement="bottom">{{selectedPage}}</span>
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                     class="txtLwc">c</span></h4>
 
@@ -775,32 +778,37 @@
 
 
                     </ul>
+
+                    <div class="header-icons">
+                        <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
+                            <li [hidden]="isTodaysDateSelected">
+                                <!-- <button class="btn btn-link" (click)="jumpToToday();">Today</button> -->
+                            </li>
+                            <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
+                                <span class="icon-calender calender-addone"
+                                    (click)="dateRangePickerCmp?.datePicker.toggle()"></span>
+                                <!-- <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
+                                    [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
+                                    class="form-control date-range-picker" /> -->
+                            </li>
+                            <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
+                                <label class="btn btn-link">&nbsp;</label>
+                                <span class="icon-calender calender-addone "></span>
+                                <!-- <label
+                                    class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label> -->
+                            </li>
+                        </ul>
+                        <button id="add-manage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
+                            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
+                                class="icon-edit-ico"></span>
+
+                        </button>
+                    </div>
+
+
                 </div>
 
-                <div class="lowerLayerHeader clearfix">
-                    <ul class="nav universal_date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected">
-                            <button class="btn btn-link" (click)="jumpToToday();">Today</button>
-                        </li>
-                        <li [hidden]="isTodaysDateSelected" class="dateRangPicker">
-                            <span class="icon-calender calender-addone pos-abs" (click)="jumpToToday();"></span>
-                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker
-                                [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)"
-                                class="form-control date-range-picker" />
-                        </li>
-                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <label class="btn btn-link">&nbsp;</label>
-                            <span class="icon-calender calender-addone "></span>
-                            <label
-                                class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li>
-                    </ul>
-                    <button id="AddManage" type="button" class="btn btn-gray btn-xs btn-sm pull-right mrR0 "
-                        [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()"><span
-                            class="icon-edit-ico"></span>
-                        Accounts
-                    </button>
-                </div>
+
             </div>
         </nav>
     </header>
