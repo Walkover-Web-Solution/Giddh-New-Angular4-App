@@ -24,6 +24,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { saveAs } from "file-saver";
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -90,6 +91,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         amount: null,
         voucherType: null
     };
+    public bsConfig: Partial<BsDaterangepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
 
     constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
