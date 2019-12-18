@@ -72,7 +72,7 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
 const getGoogleCredentials = (baseHref: string) => {
-    if (baseHref === 'https://app.giddh.com/' || isElectron) {
+    if (baseHref === 'https://giddh.com/' || isElectron) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
