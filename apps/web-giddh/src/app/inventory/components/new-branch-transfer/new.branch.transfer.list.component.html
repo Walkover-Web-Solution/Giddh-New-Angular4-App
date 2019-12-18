@@ -61,7 +61,7 @@
                         <td>{{ item.dateOfSupply }}</td>
                         <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td><a class="dropdown-item" href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
+                        <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
                         <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
