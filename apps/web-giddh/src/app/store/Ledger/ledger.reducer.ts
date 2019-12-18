@@ -101,9 +101,15 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     closingBalance: transaction.body.closingBalance,
                     convertedClosingBalance: transaction.body.convertedClosingBalance,
                     creditTotal: transaction.body.creditTotal,
+                    convertedCreditTotal: transaction.body.convertedCreditTotal,
                     debitTotal: transaction.body.debitTotal,
+                    convertedDebitTotal: transaction.body.convertedDebitTotal,
                     forwardedBalance: transaction.body.forwardedBalance,
                     convertedForwardedBalance: transaction.body.convertedForwardedBalance,
+                    currencySymbol: transaction.body.currencySymbol,
+                    currencyCode: transaction.body.currencyCode,
+                    convertedCurrencySymbol: transaction.body.convertedCurrencySymbol,
+                    convertedCurrencyCode: transaction.body.convertedCurrencyCode
                 };
                 return Object.assign({}, state, {
                     transactionInprogress: false,

@@ -680,26 +680,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 }
             });
             let a = [];
-            // console.log(data);
             data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
-        } else {
-            // let data: ApplyTaxRequest = new ApplyTaxRequest();
-            // data.isAccount = false;
-            // data.taxes = [];
-            // this.activeGroupTaxHierarchy$.take(1).subscribe((t) => {
-            //   if (t) {
-            //     t.inheritedTaxes.forEach(tt => {
-            //       tt.applicableTaxes.forEach(ttt => {
-            //         data.taxes.push(ttt.uniqueName);
-            //       });
-            //     });
-            //   }
-            // });
-            // data.taxes.push(...(this.applyTaxSelect2.value as string[]));
-            // data.uniqueName = activeGroup.uniqueName;
-            // this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         }
 
     }
