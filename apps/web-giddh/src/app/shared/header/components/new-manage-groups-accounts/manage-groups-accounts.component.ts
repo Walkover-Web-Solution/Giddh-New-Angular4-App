@@ -16,7 +16,7 @@ import { GeneralService } from "../../../../services/general.service";
     templateUrl: './manage-groups-accounts.component.html',
     styleUrls: ['./manage-groups-accounts.component.css']
 })
-export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit, AfterViewChecked {
+export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('header') public header: ElementRef;
     @ViewChild('grpSrch') public groupSrch: ElementRef;
@@ -84,16 +84,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
     }
 
-    public ngAfterViewInit() {
-        //
-    }
-
     public ngAfterViewChecked() {
         this.cdRef.detectChanges();
-    }
-
-    public ngAfterContentInit() {
-        //
     }
 
     public searchGroups(term: string): void {
@@ -130,10 +122,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (this.directiveScroll) {
             this.directiveScroll.directiveRef.scrollToRight();
         }
-    }
-
-    public ShowRightForm(e) {
-        //
     }
 
     public breadcrumbPathChanged(obj) {

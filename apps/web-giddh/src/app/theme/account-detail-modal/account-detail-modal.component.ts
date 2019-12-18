@@ -18,7 +18,7 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
     styleUrls: ['./account-detail-modal.component.scss']
 })
 
-export class AccountDetailModalComponent implements OnInit, OnChanges {
+export class AccountDetailModalComponent implements OnChanges {
     @Input() public isModalOpen: boolean = false;
     @Input() public accountUniqueName: string;
     @Input() public from: string;
@@ -87,10 +87,6 @@ export class AccountDetailModalComponent implements OnInit, OnChanges {
                 private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction,
                 private _router: Router) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
-        //
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
