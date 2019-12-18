@@ -141,4 +141,15 @@ export class GeneralService {
         }
         return new Blob(byteArrays, { type: contentType });
     }
+
+    convertExponentialToNumber(n) {
+        var [lead, decimal, pow] = n.toString().split(/e|\./);
+        if (decimal) {
+            return +pow <= 0
+                ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
+                : lead + (+pow >= decimal.length ? (decimal + "0".repeat(+pow - decimal.length)) : (decimal.slice(0, +pow) + "." + decimal.slice(+pow)))
+        } else {
+            return n;
+        }
+    }
 }
