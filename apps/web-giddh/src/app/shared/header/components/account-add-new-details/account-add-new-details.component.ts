@@ -495,6 +495,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
+
+        if (!this.addAccountForm.get('openingBalance').value) {
+            this.addAccountForm.get('openingBalance').setValue('0');
+        }
+        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -536,17 +543,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        if (!this.addAccountForm.get('openingBalance').value) {
-            this.addAccountForm.get('openingBalance').setValue('0');
-        }
-        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
-            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
-        }
+
         // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
         //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
         //   return;
         // }
-        console.log(accountRequest);
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest: this.addAccountForm.value
