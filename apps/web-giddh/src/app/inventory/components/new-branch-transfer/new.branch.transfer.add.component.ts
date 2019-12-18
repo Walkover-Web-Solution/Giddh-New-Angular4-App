@@ -111,7 +111,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public transporterDropdown$: Observable<IOption[]>;
     public transporterMode: IOption[] = [];
-    public stockCodeName: any[] = [];
     public overallTotal: number = 0;
     public isValidSourceTaxNumber: boolean = true;
     public isValidDestinationTaxNumber: boolean = true;
@@ -973,12 +972,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 this.stockList = [];
-                this.stockCodeName = [];
                 let stockList = _.cloneDeep(o);
 
                 stockList.results.forEach(key => {
-                    this.stockCodeName[key.stockUnit.code] = [];
-                    this.stockCodeName[key.stockUnit.code] = key.stockUnit.name;
                     this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
                 });
             }

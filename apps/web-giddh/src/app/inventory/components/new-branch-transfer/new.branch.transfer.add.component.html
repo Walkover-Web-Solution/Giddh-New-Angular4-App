@@ -342,10 +342,10 @@
 	                            </td>
 		                        <td>
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="productQty{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.quantity"> {{stockCodeName[product.stockDetails.stockUnit]}}
+			                            <input type="text" class="form-control text-right" name="productQty{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.quantity"> {{product.stockDetails.stockUnit}}
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
-				                        <div class="text-right">{{product.stockDetails.quantity}} {{stockCodeName[product.stockDetails.stockUnit]}}</div>
+				                        <div class="text-right">{{product.stockDetails.quantity}} {{product.stockDetails.stockUnit}}</div>
 			                        </div>
 		                        </td>
 		                        <td>
