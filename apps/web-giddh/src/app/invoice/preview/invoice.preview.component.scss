@@ -7,13 +7,6 @@
     flex-flow: row wrap;
 }
 
-/* .table.basic tbody tr td{
-  background-color: #fff;
-}
-.table.basic .table tbody tr td{
-  border: none;
-} */
-
 .mh18_img img {
     max-height: 20px;
     cursor: pointer;
@@ -31,8 +24,6 @@
     display: flex;
 }
 
-/*td-in-searchbox_style*/
-
 .td_in_searchBox div {
     display: flex;
 }
@@ -46,26 +37,6 @@
     max-width: 420px !important;
     min-width: 420px !important;
 }
-
-/*.td_in_searchBox input {*/
-
-/*background-color: whitesmoke;*/
-
-/*}*/
-
-/*.td_in_searchBox input::placeholder {*/
-
-/*color: #262626;*/
-
-/*border: 0;*/
-
-/*font-family: ''opensans-semibold'';*/
-
-/*text-transform: capitalize;*/
-
-/*font-size: 14px;*/
-
-/*}*/
 
 .td_in_searchBox div i {
     margin-top: 1px;
@@ -274,13 +245,6 @@ td.card-header.clearfix {
     justify-content: space-between;
 }
 
-/*::ng-deep #dateRangePickerParent .daterangepicker {*/
-
-/*  top: 100px !important;*/
-
-/*  left: 15px !important;*/
-
-/*}*/
 .mobileSearch {
     display: none;
     margin-bottom: 15px;
