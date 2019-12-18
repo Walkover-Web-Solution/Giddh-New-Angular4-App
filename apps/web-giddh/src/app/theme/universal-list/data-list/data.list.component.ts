@@ -141,6 +141,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
                     if (this.firstTime) {
                         // init rows
+                        this.defaultViewPortItems = DEFAULT_MENUS;
                         this.setValueInRow(DEFAULT_MENUS);
                     }
                     this.firstTime = false;
@@ -221,8 +222,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // getting data from vscroll and assigning data to local var.
     public checkItems(event: { items: any[]; idx: number; }) {
         this.viewPortItems = event.items;
-        this.defaultViewPortItems = event.items;
-        console.log(this.defaultViewPortItems);
     }
 
     /**
@@ -364,7 +363,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
                 e.stopPropagation();
 
                 this.viewPortItems = this.defaultViewPortItems;
-                console.log(this.viewPortItems);
                 // remove item one by one on pressing backspace like gmail
                 // if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
                 //     if (!LOCAL_MEMORY.charCount) {
