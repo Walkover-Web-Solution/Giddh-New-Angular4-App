@@ -158,7 +158,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.branchTransferMode.firstChange) {
+        if (changes.branchTransferMode && changes.branchTransferMode.firstChange) {
             this.assignCurrentCompany();
         }
     }
