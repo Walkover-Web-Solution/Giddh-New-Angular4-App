@@ -158,7 +158,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.branchTransferMode.firstChange) {
+        if (changes.branchTransferMode && changes.branchTransferMode.firstChange) {
             this.assignCurrentCompany();
         }
     }
@@ -225,8 +225,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
@@ -242,21 +241,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
             products: [{
                 name: null,
                 hsnNumber: null,
+                skuCode: null,
                 uniqueName: null,
                 stockDetails: {
                     stockUnit: null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 },
                 description: null
             }],
@@ -354,8 +352,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -377,8 +374,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -391,13 +387,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.products.push({
             name: null,
             hsnNumber: null,
+            skuCode: null,
             uniqueName: null,
             stockDetails: {
                 stockUnit: null,
                 amount: null,
                 rate: null,
-                quantity: null,
-                skuCode: null
+                quantity: null
             },
             description: null
         });
@@ -496,7 +492,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
             product.stockDetails.quantity = event.additional.openingQuantity;
-            product.stockDetails.skuCode = event.additional.skuCode;
+            product.skuCode = event.additional.skuCode;
             product.hsnNumber = event.additional.hsnNumber;
 
             if (this.transferType === 'senders') {
@@ -657,7 +653,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = parseFloat(product.stockDetails.amount).toFixed(2);
+                product.stockDetails.amount = this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {
@@ -687,7 +683,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
             this.branchTransfer.destinations.forEach(product => {
@@ -701,7 +697,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
             this.branchTransfer.sources.forEach(product => {
@@ -715,7 +711,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         }
     }
@@ -794,7 +790,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusSkuNumber(): void {
         this.hideHsnNumberPopup();
-        this.skuNumber = (this.branchTransfer.products[this.activeRow].stockDetails.skuCode) ? this.branchTransfer.products[this.activeRow].stockDetails.skuCode : "";
+        this.skuNumber = (this.branchTransfer.products[this.activeRow].skuCode) ? this.branchTransfer.products[this.activeRow].skuCode : "";
         this.skuNumberPopupShow = true;
         setTimeout(() => {
             this.productSkuCode.nativeElement.focus();
@@ -823,7 +819,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public saveSkuNumberPopup(product): void {
-        product.stockDetails.skuCode = this.skuNumber;
+        product.skuCode = this.skuNumber;
         this.skuNumberPopupShow = false;
     }
 
@@ -841,6 +837,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
+
+                if (!this.branchTransfer.transporterDetails) {
+                    this.branchTransfer.transporterDetails = {
+                        dispatchedDate: null,
+                        transporterName: null,
+                        transporterId: null,
+                        transportMode: null,
+                        vehicleNumber: null
+                    };
+                }
 
                 if (response.body.dateOfSupply) {
                     this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));

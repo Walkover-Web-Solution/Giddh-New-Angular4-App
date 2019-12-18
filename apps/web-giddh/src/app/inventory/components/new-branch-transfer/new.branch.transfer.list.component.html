@@ -4,7 +4,7 @@
             <div class="d-flex">
                 <div class="input-group">
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" />
+                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" [bsConfig]="bsConfig" />
                     </span>
                 </div>
                 <div class="advance-icon pointer" tooltip="Advance Search"
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button class="btn btn-pink pull-right mr-0" (click)="toggleTransferAsidePane()">+ New Transfer</button>
+                <button class="btn btn-pink pull-right mr-0" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
         <div class="report-table">
@@ -61,7 +61,7 @@
                         <td>{{ item.dateOfSupply }}</td>
                         <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td><a class="dropdown-item" href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
+                        <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
                         <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>

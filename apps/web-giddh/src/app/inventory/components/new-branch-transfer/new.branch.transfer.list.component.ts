@@ -4,7 +4,8 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
-    ElementRef
+    ElementRef,
+    HostListener
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
 import { InventoryService } from '../../../services/inventory.service';
@@ -21,7 +22,9 @@ import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
-import {saveAs} from "file-saver";
+import { saveAs } from "file-saver";
+import { ESCAPE } from '@angular/cdk/keycodes';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -88,6 +91,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         amount: null,
         voucherType: null
     };
+    public bsConfig: Partial<BsDaterangepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY'};
 
     constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -316,17 +320,30 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public downloadBranchTransfer(item): void {
-		let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
-		downloadBranchTransferRequest.branchTransferUniqueName = item.uniqueName;
+        let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
+        downloadBranchTransferRequest.uniqueName = item.uniqueName;
 
-		this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).subscribe((res) => {
-			if (res.status === "success") {
-				let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
-				return saveAs(blob, item.voucherNo + `.pdf`);
-			} else {
-				this._toasty.clearAllToaster();
-				this._toasty.errorToast(res.message);
-			}
-		});
-	}
+        this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).subscribe((res) => {
+            if (res.status === "success") {
+                let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
+                return saveAs(blob, item.voucherNo + `.pdf`);
+            } else {
+                this._toasty.clearAllToaster();
+                this._toasty.errorToast(res.message);
+            }
+        });
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.altKey && event.which === 78) { // Alt + N
+            event.preventDefault();
+            event.stopPropagation();
+            this.toggleTransferAsidePane();
+        }
+
+        if (event.which === ESCAPE) {
+            this.toggleTransferAsidePane();
+        }
+    }
 }
