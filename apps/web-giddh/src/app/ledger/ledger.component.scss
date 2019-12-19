@@ -63,8 +63,7 @@ input {
 }
 .ledgHead input[type="search"] {
     min-width: auto;
-    background: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    padding-left: 27px !important;
 }
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
@@ -403,6 +402,7 @@ sh-select:focus {
 .advnceSearchFilter {
     justify-content: center;
     align-items: center;
+    margin-left: 10px;
 }
 .subTotal {
     font-size: 14px !important;
@@ -413,6 +413,7 @@ sh-select:focus {
     vertical-align: middle;
     display: flex;
     align-items: center;
+    margin-right: 10px;
 }
 .modal-ledger {
     width: 70%;
