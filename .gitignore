@@ -168,3 +168,5 @@ xplat/**/*.ngsummary.json
 /apps/giddh-cordova/giddh/www/
 /giddh-cordova-prod/dist/apps/giddh-cordova-prod/www/app-cordova/
 /apps/giddh-cordova/giddh/package-lock.json
+
+package-lock.json
