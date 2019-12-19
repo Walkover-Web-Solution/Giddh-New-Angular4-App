@@ -37,7 +37,6 @@ export class AgingReportComponent implements OnInit {
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
-    public datePickerOptions: any;
     public universalDate$: Observable<any>;
     public toDate: string;
     public fromDate: string;
@@ -80,11 +79,6 @@ export class AgingReportComponent implements OnInit {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
         this.getDueAmountreportData();
-        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
-            if (a) {
-                this.datePickerOptions = a;
-            }
-        });
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
@@ -123,8 +117,6 @@ export class AgingReportComponent implements OnInit {
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions.startDate = a[0];
-                this.datePickerOptions.endDate = a[1];
                 this.fromDate = moment(a[0]).format('DD-MM-YYYY');
                 this.toDate = moment(a[1]).format('DD-MM-YYYY');
             }
@@ -168,8 +160,6 @@ export class AgingReportComponent implements OnInit {
                 this.getDueAmountreportData();
             });
 
-
-
     }
 
     public openAgingDropDown() {
@@ -209,14 +199,6 @@ export class AgingReportComponent implements OnInit {
                 this.pageChangedDueReport(e);
             });
         }
-    }
-    public selectedDate(value: any) {
-        this.isAdvanceSearchApplied = false;
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-        this.dueAmountReportRequest.from = this.fromDate;
-        this.dueAmountReportRequest.to = this.toDate;
-        this.resetAdvanceSearch();
     }
 
     public resetAdvanceSearch() {
