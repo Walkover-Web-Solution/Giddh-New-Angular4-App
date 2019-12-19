@@ -285,10 +285,10 @@ sh-select:focus {
     display: none;
 }
 .ledgHead .icomoon_ico {
-    color: $dark-blue00;
+    color: #999;
     width: 36px;
     height: 36px;
-    border: 1px solid $border-blue;
+    border: 1px solid #d9d9d9;
     padding: 3px;
     display: flex;
     justify-content: center;
@@ -402,7 +402,7 @@ sh-select:focus {
 .advnceSearchFilter {
     justify-content: center;
     align-items: center;
-    margin-left: 10px;
+    margin-right: 7px;
 }
 .subTotal {
     font-size: 14px !important;
@@ -422,7 +422,15 @@ sh-select:focus {
     justify-content: space-between;
 }
 .d-flex.search-ledger-field {
+    align-items: center;
     margin-right: 8px;
+}
+.clear-filter-btn{
+    color: #1a237e;
+    font-size: 14px;
+}
+.clear-filter-btn i{
+    font-size: 12px;
 }
 // reponsive
 @media only screen and (max-width: 1366px) {

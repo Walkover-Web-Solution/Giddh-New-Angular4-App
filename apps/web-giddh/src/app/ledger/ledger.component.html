@@ -4,7 +4,7 @@
     <div class="ledgHead some transactions-page mrT3 pos-rel">
 
         <!-- region ledger header -->
-        <div class="clearfix">
+        <div class="clearfix row">
             <!-- region currency toggle -->
             <div class="col-sm-4 col-xs-12 xs-pl-0 xs-pr-0">
 
@@ -17,34 +17,36 @@
                     </div>
 
                     <span class="d-flex advance-icon advnceSearchFilter" [tooltip]="'Advance Search'"
-                          [placement]="'top'">
+                          [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <i class="icon-advance-serch" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
                     </span>
 
-                   <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
+                   <a class="cp mrL1 clear-filter-btn" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
                    tooltip="Reset Advance Search">
-                       <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"></i>
+                       <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
+                       Clear Filter
                    </a>
 
+                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
+
+                        <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
+                                tooltip="Delete" [placement]="'top'">Delete
+                        </button>
+
+                        <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
+                                tooltip="Generate Invoice" [placement]="'top'">Generate Invoice
+                        </button>
+
+                        <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
+                                container="body" tooltip="Attach File" [placement]="'top'">Attach File
+                        </button>
+                        <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                               id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
+                               [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                    </div>
+
                 </div>
 
-                <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
-
-                    <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
-                            tooltip="Delete" [placement]="'top'">Delete
-                    </button>
-
-                    <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
-                            tooltip="Generate Invoice" [placement]="'top'">Generate Invoice
-                    </button>
-
-                    <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
-                            container="body" tooltip="Attach File" [placement]="'top'">Attach File
-                    </button>
-                    <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
-                           id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                           [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
-                </div>
 
             </div>
             <div class="col-sm-4  text-center col-xs-12 daterngoption"
