@@ -1,22 +1,14 @@
+@import "../../assets/css/color.scss";
 
-// $dark-blue:#000857;
-// $dark-blue01:#313a96;
-// $light-blue:#5b63b9;
-// $light-blue01:#868ee0;
-// $light-blue02:#bdc3ff;
-// $light-gray:#e6e7e8;
-
-
-@import '../../assets/css/color.scss';
-
-.form-control, input {
+.form-control,
+input {
     color: #1c1c1c;
 }
 .notfound-option {
     display: flex;
     justify-content: space-between;
 }
-.ledgHead table td[class*=col-],
+.ledgHead table td[class*="col-"],
 .ledgHead table td .select2-container {
     padding: 8px 10px !important;
     border-bottom: 1px solid #ccc;
@@ -31,14 +23,14 @@
     padding-right: 25px !important;
 }
 
-.ledgHead table td[class*=col-], .ledgHead table td .select2-container {
-  min-height: 49px;
-  height: 49px;
-  max-height: initial;
+.ledgHead table td[class*="col-"],
+.ledgHead table td .select2-container {
+    min-height: 49px;
+    height: 49px;
+    max-height: initial;
 }
 
-
-.ledgHead.entry-popup table td[class*=col-] {
+.ledgHead.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid #ccc;
@@ -52,7 +44,7 @@
 .ledgHead.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.ledgHead .ledger-main td[class*=col-] {
+.ledgHead .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
 // table th[class*=col-]:last-child,
@@ -69,13 +61,13 @@
 .t-h-bg1 th {
     border-left: 0;
 }
-.ledgHead input[type=search] {
+.ledgHead input[type="search"] {
     min-width: auto;
-        background: #E6E7E8 !important;
-    border-color: #E6E7E8 !important
+    background: #e6e7e8 !important;
+    border-color: #e6e7e8 !important;
 }
 .ledger-head-top i.icon-search.pos-abs {
-    background-color: #5B64C9;
+    background-color: #5b64c9;
     color: #fff;
     width: 32px;
     height: 36px;
@@ -88,23 +80,24 @@
     border-radius: 2px;
 }
 .ledger-stat {
-     padding: 10px 15px 0;
+    padding: 10px 15px 0;
     background: #fff;
     color: #808080;
     font-size: 18px;
     margin: 0px 0 0;
-    box-shadow: 0px 2px 6px #0000001A;
+    box-shadow: 0px 2px 6px #0000001a;
 }
 .ledger-stat .row {
     display: flex;
     flex-wrap: wrap;
 }
 .icomoon_ico {
-    margin-left: 8px;
+    margin-left: 0;
+    margin-right: 8px;
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: ''opensans-semibold'';
+    font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
 .ledger-footer-1 {
@@ -112,8 +105,8 @@
     bottom: 0;
 }
 .ledger-head th {
-    color:$dark-blue01;
-        padding-left: 0;
+    color: $JacksonsPurple;
+    padding-left: 0;
 
     padding-bottom: 10px;
 }
@@ -139,16 +132,16 @@
     width: 100%;
     text-align: center;
 }
-.pagination>li>a {
+.pagination > li > a {
     color: #4d4d4d;
 }
-.pagination>.active>a {
+.pagination > .active > a {
     background: #d35f29 !important;
     color: #fff !important;
-    border-color: #bd501d !important
+    border-color: #bd501d !important;
 }
-.pagination>li>a:hover {
-    color: #d35f29
+.pagination > li > a:hover {
+    color: #d35f29;
 }
 .grey {
     color: #4d4d4d;
@@ -169,18 +162,19 @@
     padding-right: 25px !important;
 }
 .t-h-bg1 th {
-      background: #fff;
+    background: #fff;
     color: #000000;
-    border-right: 1px solid #D1D1D1;
+    border-right: 1px solid #d1d1d1;
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #D1D1D1;
+    border-bottom: 1px solid #d1d1d1;
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid #D1D1D1;
+    border-top: 1px solid #d1d1d1;
 }
-.ledger-main .form-control, .ledger-main input {
-    color: #1C1C1C;
+.ledger-main .form-control,
+.ledger-main input {
+    color: #1c1c1c;
 }
 
 .ledger_book {
@@ -191,8 +185,7 @@
     width: 100%;
     margin-bottom: 16px;
     background: #fff;
-    box-shadow: 0 0 6px rgba(0,0,0,0.1);
-
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
 .Width600 {
     position: absolute;
@@ -205,24 +198,23 @@
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender.svg) !important;
-        background-size: 17px !important;
+    background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
     cursor: default;
-
 }
 .inputWrapper {
-      display: block !important;
+    display: block !important;
     width: 100% !important;
     position: relative;
     height: 36px !important;
 }
 .inputWrapper:before {
-       position: absolute;
-    content: '';
+    position: absolute;
+    content: "";
     display: block;
     height: 36px;
     width: 1px;
@@ -251,8 +243,8 @@
     height: 41px;
     line-height: 1;
 }
-input[type=date]::-webkit-inner-spin-button,
-input[type=date]::-webkit-outer-spin-button {
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 ::-webkit-calendar-picker-indicator {
@@ -263,7 +255,7 @@ input[type=date]::-webkit-outer-spin-button {
     border: unset !important;
 }
 tr[vr-item]:focus {
-    background-color: #F7F8FA;
+    background-color: #f7f8fa;
     outline: 0;
 }
 sh-select:focus {
@@ -278,51 +270,54 @@ sh-select:focus {
     color: #999999;
     padding-left: 5px;
 }
-.ledger_book .left-col-new, .ledger_book .right-col-new {
+.ledger_book .left-col-new,
+.ledger_book .right-col-new {
     background: #fff;
 }
-.left-col-new table.width100.h-table tbody tr td:last-child, .left-col-new table.width100.h-table thead tr th:last-child {
+.left-col-new table.width100.h-table tbody tr td:last-child,
+.left-col-new table.width100.h-table thead tr th:last-child {
     border-right: 0px !important;
 }
-.left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
+.left-col-new table.width100.h-table tbody tr td:first-child,
+.left-col-new table.width100.h-table thead tr th:first-child {
     border-left: 1px solid #ccc !important;
 }
 .custom-tabs {
     display: none;
 }
-.ledgHead .icomoon_ico{
-  color: $dark-blue00;
-      width: 36px;
+.ledgHead .icomoon_ico {
+    color: $dark-blue00;
+    width: 36px;
     height: 36px;
-    border:1px solid $border-blue;
-        padding: 3px;
+    border: 1px solid $border-blue;
+    padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
     background-color: #fff;
 }
- .advancSearchBlock  input{
-   background: $lightGray !important;
-   height: 28px;
-   border-color: $lightGray !important;
- }
- .advancSearchBlock  input::placeholder{
-   color: #666666;
- }
+.advancSearchBlock input {
+    background: $lightGray !important;
+    height: 28px;
+    border-color: $lightGray !important;
+}
+.advancSearchBlock input::placeholder {
+    color: #666666;
+}
 
-.left-col-new, .right-col-new {
-  height: initial;
-  width: 100%;
+.left-col-new,
+.right-col-new {
+    height: initial;
+    width: 100%;
 }
 .ledger-section {
-  display: flex;
+    display: flex;
 }
 .ledger-section {
-  display: flex;
+    display: flex;
 }
 
-
- .advancSearchBlock   .icon-search{
+.advancSearchBlock .icon-search {
     right: 0;
     top: 0;
     background-color: $border-blue;
@@ -336,16 +331,16 @@ sh-select:focus {
     margin-right: 15px;
 }
 .ledger_book .ledger-footer-1 .total_col .border-top {
-    border-top: 1px solid #D9D9D9 !important;
+    border-top: 1px solid #d9d9d9 !important;
 }
-.ledger_book .ledger-footer-1 .total_col .bdrT{
- border: none;
+.ledger_book .ledger-footer-1 .total_col .bdrT {
+    border: none;
 }
 
 .advanceSearchByDate {
     display: inline-flex;
     border: 1px solid $inputBorderColor;
-    border-radius:2px;
+    border-radius: 2px;
     position: relative;
 }
 .advanceSearchByDate:before {
@@ -353,7 +348,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: #C4C4C4;
+    background-color: #c4c4c4;
     left: -33%;
     top: 17px;
 }
@@ -362,19 +357,11 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: #C4C4C4;
+    background-color: #c4c4c4;
     right: -33%;
     top: 17px;
 }
-// .advanceSearchByDate span{
-//   width: 45px;
-//     height: 34px;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     background-color: #fff;
-//     border-right: 1px solid $border-blue;
-// }
+
 .ledger-head {
     margin-top: 46px;
 }
@@ -383,44 +370,42 @@ sh-select:focus {
     font-size: 16px;
     margin-bottom: 10px;
 }
-.digitBlue{
-  color: $dark-blue00;
+.digitBlue {
+    color: $dark-blue00;
 }
-.greyTextClr{
-  color: #666 !important;
-  font-size: 14px;
+.greyTextClr {
+    color: #666 !important;
+    font-size: 14px;
 }
 
 .ledger-stat h3 {
     font-size: 16px;
-
 }
 .stat-block {
-    border-right: 1px solid #D9D9D9;
+    border-right: 1px solid #d9d9d9;
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
-
 }
-.stat-block:first-child{
-  border-bottom:8px solid $dark-blue00;
+.stat-block:first-child {
+    border-bottom: 8px solid $dark-blue00;
 }
-.stat-block:nth-child(2){
-  border-bottom:8px solid $dark-blue01;
+.stat-block:nth-child(2) {
+    border-bottom: 8px solid $JacksonsPurple;
 }
-.stat-block:nth-child(3){
-  border-bottom:8px solid $border-blue;
+.stat-block:nth-child(3) {
+    border-bottom: 8px solid $border-blue;
 }
-.stat-block:last-child{
-  border-right: none;
-    border-bottom:8px solid $light-blue02;
+.stat-block:last-child {
+    border-right: none;
+    border-bottom: 8px solid $light-blue02;
 }
 .advnceSearchFilter {
     justify-content: center;
     align-items: center;
 }
 .subTotal {
-  font-size: 14px !important;
+    font-size: 14px !important;
 }
 
 .ledgHead .advancSearchBlock {
@@ -430,17 +415,22 @@ sh-select:focus {
     align-items: center;
 }
 .modal-ledger {
-  width: 70%;
+    width: 70%;
 }
-
-
+.justify-content-between {
+    justify-content: space-between;
+}
+.d-flex.search-ledger-field {
+    margin-right: 8px;
+}
 // reponsive
 @media only screen and (max-width: 1366px) {
-  .modal-ledger {
-    width: 90%;
-  }
+    .modal-ledger {
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+    }
 }
-
 
 @media (min-width: 1200px) {
     .container {
@@ -456,30 +446,46 @@ sh-select:focus {
     .custom-tabs {
         display: block;
     }
-    .ledgHead table td[class*=col-], .ledgHead table td .select2-container {
-      min-height: initial;
-      height:  initial;
-      max-height: initial;
+    .ledgHead table td[class*="col-"],
+    .ledgHead table td .select2-container {
+        min-height: initial;
+        height: initial;
+        max-height: initial;
     }
-
-
+}
+@media (max-width: 991px) {
+    .daterngoption {
+        margin-bottom: 10px;
+        text-align: left !important;
+        z-index: 1;
+        margin-left: 0;
+    }
+    .advanceSearchByDate:before,
+    .advanceSearchByDate:after {
+        display: none;
+    }
+    .ledger-head-top,
+    .daterngoption {
+        width: 100% !important;
+    }
+    .search-options {
+        padding: 0;
+    }
+    .advancSearchBlock {
+        padding: 0;
+    }
+    .ledgHead input[type="search"] {
+        min-width: 200px;
+    }
 }
 @media only screen and (max-width: 767px) {
-  .daterngoption{
-    margin-bottom: 10px;
-    text-align:left !important;
-    z-index:1;
-  }
-  .advanceSearchByDate:before, .advanceSearchByDate:after{
-    display:none;
-  }
-    .ledgHead table td[class*=col-],
+    .ledgHead table td[class*="col-"],
     .ledgHead table td .select2-container {
         border-bottom: 0px solid #ccc;
         border-right: 0px solid #ccc;
     }
     .ledger-state-box {
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
     .amount-total {
         background: #efefef;
@@ -527,7 +533,7 @@ sh-select:focus {
         flex-wrap: wrap;
     }
     .xs-mb-1 {
-      margin-bottom: 10px;
+        margin-bottom: 10px;
     }
     .ledger-btn .btn {
         font-size: 12px !important;
@@ -537,40 +543,56 @@ sh-select:focus {
         font-size: 12px !important;
         padding: 6px;
     }
-    .left-col-new table.width100.h-table tbody tr td:first-child, .left-col-new table.width100.h-table thead tr th:first-child {
+    .left-col-new table.width100.h-table tbody tr td:first-child,
+    .left-col-new table.width100.h-table thead tr th:first-child {
         border-left: 0px solid #ccc !important;
     }
     .ledgHead.some.transactions-page {
-    margin-top: 50px;
-}
-.ledger-head {
-    margin-top: 0;
-}
+        margin-top: 50px;
+    }
+    .ledger-head {
+        margin-top: 0;
+    }
+    .justify-content-between {
+        justify-content: inherit;
+    }
+    .download-invoice-ledger {
+        padding-left: 6px;
+    }
 }
 
-@media(min-width:991px){
-  .ledger_book:before{
-        content: ' ';
-    height: calc(100% - 220px);
-    position: absolute;
-    width: 0;
-    border-left: 1px solid #ccc;
-    top: 0px;
-    bottom: 0;
-    z-index: 1;
-    margin: 0 auto;
-    left: 0px;
-    right: 0;
-  }
-  table.ledger-footer-1:first-child {
-    border-right: 1px solid #d1d1d1;
+@media (min-width: 991px) {
+    .ledger_book:before {
+        content: " ";
+        height: calc(100% - 220px);
+        position: absolute;
+        width: 0;
+        border-left: 1px solid #ccc;
+        top: 0px;
+        bottom: 0;
+        z-index: 1;
+        margin: 0 auto;
+        left: 0px;
+        right: 0;
+    }
+    table.ledger-footer-1:first-child {
+        border-right: 1px solid #d1d1d1;
+    }
 }
-}
-@media(max-width:575px){
+@media (max-width: 575px) {
     .debitCreditAmount {
-    display: block !important;
-}
-.stat-block{
+        display: block !important;
+    }
+    .stat-block {
         padding-left: 15px;
+    }
 }
+@media (max-width: 360px) {
+    .search-ledger-field {
+        display: block;
+        min-width: 200px;
+    }
+    .icomoon_ico {
+        margin-top: 7px;
+    }
 }

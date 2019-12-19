@@ -28,7 +28,7 @@ import {DOCUMENT} from "@angular/platform-browser";
 import {ToasterService} from "../services/toaster.service";
 import {userLoginStateEnum} from "../models/user-login-state";
 import {isIOSCordova} from "@giddh-workspaces/utils";
-
+declare var cordova:any;
 @Component({
     selector: "signup",
     templateUrl: "./signup.component.html",

@@ -126,12 +126,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public GSTIN_OR_TRN: string;
     public selectedCompanyCountryName: string;
     public selectedCurrency: string;
-
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
-
-
-
-
 
     // private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
@@ -210,7 +205,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     address.stateCodeName = address.state.code + " - " + address.state.name;
                 });
 
-                for (let i = 0; i <= 20; i++) {
+                for (let i = 0; i <= 10; i++) {
                     this.removeGstDetailsForm(0);
                 }
 
@@ -319,17 +314,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            } else if (!a) {
-                this.addAccountForm.get('openingBalance').setValue('0');
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
-        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
-            if (!a) {
-                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            }
-        });
+        // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+        //     if (!a) {
+        //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        //         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+        //     }
+        // });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
@@ -435,10 +427,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
+        this.taxHierarchy();
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
-        if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
-            this.isShowBankDetails(this.activeGroupUniqueName);
-            this.isDebtorCreditor = true;
+        let selectedGroupDetails;
+
+        this.flatGroupsOptions.forEach(res => {
+            if (res.value === activegroupName) {
+                selectedGroupDetails = res;
+            }
+        })
+        if (selectedGroupDetails) {
+            if (selectedGroupDetails.additional) {
+                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                if (parentGroup) {
+                    this.isParentDebtorCreditor(parentGroup.uniqueName);
+                }
+            }
         }
         this.prepareTaxDropdown();
     }
@@ -563,8 +567,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
-            foreignOpeningBalance: [0],
-            openingBalance: [0],
+            foreignOpeningBalance: [''],
+            openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
             email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -717,12 +721,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceClick() {
-        if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
-            this.addAccountForm.get('openingBalance').setValue(undefined);
-        }
-    }
-
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
             this.addAccountForm.get('openingBalanceType').patchValue(type);
@@ -768,6 +766,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public submit() {
+        if (!this.addAccountForm.get('openingBalance').value) {
+            this.addAccountForm.get('openingBalance').setValue('0');
+        }
+        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -831,6 +835,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (!this.showBankDetail) {
             delete accountRequest['accountBankDetails'];
         }
+
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest: this.addAccountForm.value
@@ -1144,7 +1149,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
         } else {
             this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+            if (activeGroup) {
+                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+            }
         }
 
     }
@@ -1221,7 +1228,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
                 }).map(m => {
                     return {
-                        value: m.groupUniqueName, label: m.groupName
+                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
                     }
                 });
                 this.flatGroupsOptions = items;
@@ -1231,7 +1238,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      *
-     *This is for apply discount for an account
+     *NOTE:---This is for apply discount for an account don't remove this commented code pending due to API Team is working on it
      * @memberof AccountUpdateNewDetailsComponent
      */
     // public applyDiscount(): void {

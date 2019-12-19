@@ -1,0 +1,32 @@
+.form-group label {
+    margin-bottom: 5px;
+}
+.aside-pane-form {
+    background-color: #fff;
+    box-shadow: 0 3px 6px #0000001a;
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+.form-header {
+    padding: 20px 15px;
+    background: #1a237e;
+    color: #fff;
+}
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: #fff;
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: 0;
+    display: block;
+}

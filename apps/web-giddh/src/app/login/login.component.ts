@@ -30,7 +30,7 @@ import {ToasterService} from "../services/toaster.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {userLoginStateEnum} from "../models/user-login-state";
 import {isCordova, isIOSCordova} from "@giddh-workspaces/utils";
-
+declare var cordova:any;
 @Component({
     selector: "login",
     templateUrl: "./login.component.html",

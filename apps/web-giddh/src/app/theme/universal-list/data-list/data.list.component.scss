@@ -5,7 +5,7 @@
         flex-direction: row;
         align-items: center;
         background-color: white;
-        flex-wrap: wrap!important;
+        flex-wrap: wrap !important;
         border-bottom: 1px solid #ccc;
         .searchEle {
             outline: none;
@@ -40,7 +40,7 @@
             font-size: 14px;
             .vT {
                 // font-size: .75rem;
-                letter-spacing: .3px;
+                letter-spacing: 0.3px;
                 display: inline-block;
                 // color: #222;
                 max-width: 325px;
@@ -74,14 +74,15 @@
     display: none;
     box-sizing: border-box;
     min-width: max-content;
+    position: relative;
     &.isVisible {
         display: block;
     }
     &.isFlying {
         position: absolute;
         z-index: 10;
-        box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15);
-        border: 1px solid rgba(34, 36, 38, .15);
+        box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+        border: 1px solid rgba(34, 36, 38, 0.15);
         border-radius: 2px;
     }
     &:not(.isFlying),
@@ -95,7 +96,7 @@
         }
     }
     &.isOpenFromBottom {
-        bottom: 0
+        bottom: 0;
     }
     .inner {
         position: relative;
@@ -133,36 +134,36 @@
                 }
             }
             .item-details {
-              position: relative;
-              font-size: 14px;
-              color: #333333;
-              text-transform: capitalize;
-              .smlP{
-                margin: 0;
-                width: 320px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
-              small {
-                font-size: 12px;
-                color: #858484;
-              }
-              .hvrTxt{
-                color: white;
-                position: absolute;
-                right: 0;
-                top: 10px;
-                text-transform: initial;
-              }
-              .brdcrmb {
-                  max-width: 150px;
-                  overflow: hidden;
-              }
+                position: relative;
+                font-size: 14px;
+                color: #333333;
+                text-transform: capitalize;
+                .smlP {
+                    margin: 0;
+                    width: 320px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                small {
+                    font-size: 12px;
+                    color: #858484;
+                }
+                .hvrTxt {
+                    color: white;
+                    position: absolute;
+                    right: 0;
+                    top: 10px;
+                    text-transform: initial;
+                }
+                .brdcrmb {
+                    max-width: 150px;
+                    overflow: hidden;
+                }
             }
             // hover effect
             &.selected {
-                background-color: #5B64C9;
+                background-color: #5b64c9;
                 .item-details {
                     color: white;
                     small {
@@ -182,11 +183,22 @@
         // line-height: 50px;
     }
 }
-/*responsive*/
-@media(max-width:575px){
-    :host {
-    .search-wrapper {
-            padding: 1rem 2rem 1rem 4.2rem;
-    }
+.close-navigation {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
 }
+/*responsive*/
+@media (max-width: 575px) {
+    :host {
+        .search-wrapper {
+            padding: 1rem 2rem 1rem 4.2rem;
+        }
+    }
+    .close-navigation {
+        top: 5px;
+    }
 }

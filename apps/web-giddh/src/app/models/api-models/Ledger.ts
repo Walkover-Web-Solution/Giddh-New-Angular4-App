@@ -13,22 +13,22 @@ import { PettyCashEntryStatus } from './Expences';
  * its response wil be array of LedgerResponse
  */
 export class LedgerRequest implements ILedger {
-  public applyApplicableTaxes?: boolean;
-  public attachedFile?: string;
-  public attachedFileName?: string;
-  public compoundTotal?: number;
-  public chequeNumber?: string;
-  public chequeClearanceDate?: string;
-  public description?: string;
-  public entryDate: string;
-  public generateInvoice?: boolean;
-  public isInclusiveTax?: boolean;
-  public tag?: string;
-  public taxes?: string[];
-  public transactions: ILedgerTransactionItem[];
-  public unconfirmedEntry?: boolean;
-  public voucher: IVoucherItem;
-  public voucherType?: string;
+    public applyApplicableTaxes?: boolean;
+    public attachedFile?: string;
+    public attachedFileName?: string;
+    public compoundTotal?: number;
+    public chequeNumber?: string;
+    public chequeClearanceDate?: string;
+    public description?: string;
+    public entryDate: string;
+    public generateInvoice?: boolean;
+    public isInclusiveTax?: boolean;
+    public tag?: string;
+    public taxes?: string[];
+    public transactions: ILedgerTransactionItem[];
+    public unconfirmedEntry?: boolean;
+    public voucher: IVoucherItem;
+    public voucherType?: string;
 }
 
 /*
@@ -38,25 +38,25 @@ export class LedgerRequest implements ILedger {
  * its response will be success message in body in single object of LedgerResponse
  */
 export class LedgerUpdateRequest extends LedgerRequest {
-  public invoiceNumber: string;
-  public invoiceGenerated: boolean;
-  public total: ITotalItem;
-  public voucherNo: string;
+    public invoiceNumber: string;
+    public invoiceGenerated: boolean;
+    public total: ITotalItem;
+    public voucherNo: string;
 }
 
 export class LedgerResponseDiscountClass {
-  public account: {
-    accountType: string;
-    uniqueName: string;
-    name: string;
-  };
-  public amount: number;
-  public discount: {
-    uniqueName: string;
-    name: string;
-    discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
-    discountValue: number;
-  };
+    public account: {
+        accountType: string;
+        uniqueName: string;
+        name: string;
+    };
+    public amount: number;
+    public discount: {
+        uniqueName: string;
+        name: string;
+        discountType: 'FIX_AMOUNT' | 'PERCENTAGE';
+        discountValue: number;
+    };
 }
 
 /*
@@ -68,56 +68,56 @@ export class LedgerResponseDiscountClass {
  * API:: ( Get single transaction detail in ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
  */
 export class LedgerResponse {
-  public attachedFile?: string;
-  public attachedFileName?: string;
-  public chequeClearanceDate?: string;
-  public chequeNumber?: string;
-  public description?: string;
-  public entryDate: string;
-  public generateInvoice: boolean;
-  public invoiceGenerated: boolean;
-  public invoiceNumber: string;
-  public invoiceNumberAgainstVoucher: string;
-  public tag?: string;
-  public taxes: string[];
-  public total: IClosingBalance;
-  public convertedTotal: IClosingBalance;
-  public transactions: ILedgerTransactionItem[];
-  public unconfirmedEntry: boolean;
-  public uniqueName: string;
-  public voucher: IVoucherItem = { name: '', shortCode: '' };
-  public voucherNo: string;
-  public voucherType?: string;
-  public voucherNumber?: string;
-  public tagNames?: string[];
-  public voucherGenerated?: boolean;
-  public voucherName?: string;
-  public voucherGeneratedType?: string;
-  public particular?: INameUniqueName;
-  public particularType?: string;
-  public actualAmount?: number;
-  public invoicesToBePaid?: string[];
-  public linkedInvoices?: string[];
-  public warning?: string;
-  public availItc?: boolean;
-  public sendToGstr2?: boolean;
-  public discounts?: LedgerResponseDiscountClass[];
-  public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
-  public isOtherTaxesApplicable?: boolean;
-  public otherTaxModal?: SalesOtherTaxesModal;
-  public otherTaxesSum?: number;
-  public tdsTcsTaxesSum?: number;
-  public cessSum?: number;
-  public tcsTaxes?: string[];
-  public tdsTaxes?: string[];
-  public otherTaxType?: 'tcs' | 'tds';
-  public exchangeRate?: number = 1;
-  public exchangeRateForDisplay?: number = 1;
-  public valuesInAccountCurrency?: boolean = false;
-  public discountResources?: any[];
+    public attachedFile?: string;
+    public attachedFileName?: string;
+    public chequeClearanceDate?: string;
+    public chequeNumber?: string;
+    public description?: string;
+    public entryDate: string;
+    public generateInvoice: boolean;
+    public invoiceGenerated: boolean;
+    public invoiceNumber: string;
+    public invoiceNumberAgainstVoucher: string;
+    public tag?: string;
+    public taxes: string[];
+    public total: IClosingBalance;
+    public convertedTotal: IClosingBalance;
+    public transactions: ILedgerTransactionItem[];
+    public unconfirmedEntry: boolean;
+    public uniqueName: string;
+    public voucher: IVoucherItem = { name: '', shortCode: '' };
+    public voucherNo: string;
+    public voucherType?: string;
+    public voucherNumber?: string;
+    public tagNames?: string[];
+    public voucherGenerated?: boolean;
+    public voucherName?: string;
+    public voucherGeneratedType?: string;
+    public particular?: INameUniqueName;
+    public particularType?: string;
+    public actualAmount?: number;
+    public invoicesToBePaid?: string[];
+    public linkedInvoices?: string[];
+    public warning?: string;
+    public availItc?: boolean;
+    public sendToGstr2?: boolean;
+    public discounts?: LedgerResponseDiscountClass[];
+    public tcsCalculationMethod?: SalesOtherTaxesCalculationMethodEnum;
+    public isOtherTaxesApplicable?: boolean;
+    public otherTaxModal?: SalesOtherTaxesModal;
+    public otherTaxesSum?: number;
+    public tdsTcsTaxesSum?: number;
+    public cessSum?: number;
+    public tcsTaxes?: string[];
+    public tdsTaxes?: string[];
+    public otherTaxType?: 'tcs' | 'tds';
+    public exchangeRate?: number = 1;
+    public exchangeRateForDisplay?: number = 1;
+    public valuesInAccountCurrency?: boolean = false;
+    public discountResources?: any[];
 
-  public pettyCashEntryStatus?: PettyCashEntryStatus;
-  public attachedFileUniqueNames?: string[];
+    public pettyCashEntryStatus?: PettyCashEntryStatus;
+    public attachedFileUniqueNames?: string[];
 
 }
 
@@ -128,7 +128,7 @@ export class LedgerResponse {
  * its response will be success message in body
  */
 export class MailLedgerRequest {
-  public recipients: string[] = [];
+    public recipients: string[] = [];
 }
 
 /*
@@ -138,15 +138,15 @@ export class MailLedgerRequest {
  * its response will be success message in body
  */
 export class DownloadLedgerRequest {
-  public invoiceNumber: string[];
-  public voucherType: string;
+    public invoiceNumber: string[];
+    public voucherType: string;
 }
 
 export interface DownloadLedgerAttachmentResponse {
-  fileType: string;
-  name: string;
-  uniqueName: string;
-  uploadedFile: any;
+    fileType: string;
+    name: string;
+    uniqueName: string;
+    uploadedFile: any;
 }
 
 /*
@@ -176,90 +176,97 @@ export interface DownloadLedgerAttachmentResponse {
  */
 
 export class TransactionsResponse implements ITransactions {
-  public closingBalance: IClosingBalance;
-  public convertedClosingBalance?: IClosingBalance;
-  public count: number;
-  public creditTotal: number;
-  public creditTransactions: ITransactionItem[];
-  public creditTransactionsCount: number;
-  public debitTotal: number;
-  public debitTransactions: ITransactionItem[];
-  public debitTransactionsCount: number;
-  public forwardedBalance: IForwardBalance;
-  public convertedForwardedBalance?: IForwardBalance;
-  public page: number;
-  public totalItems: number;
-  public totalPages: number;
+    public closingBalance: IClosingBalance;
+    public convertedClosingBalance?: IClosingBalance;
+    public count: number;
+    public creditTotal: number;
+    public convertedCreditTotal?: number;
+    public creditTransactions: ITransactionItem[];
+    public creditTransactionsCount: number;
+    public debitTotal: number;
+    public convertedDebitTotal?: number;
+    public debitTransactions: ITransactionItem[];
+    public debitTransactionsCount: number;
+    public forwardedBalance: IForwardBalance;
+    public convertedForwardedBalance?: IForwardBalance;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public currencySymbol?: string;
+    public currencyCode?: string;
+    public convertedCurrencySymbol?: string;
+    public convertedCurrencyCode?: string;
 }
 
 export class TransactionsRequest {
-  public q: string = '';
-  public page: number = 0;
-  public count: number = 50;
-  public accountUniqueName: string = '';
-  public from: string = '';
-  public to: string = '';
-  public sort: string = 'asc';
-  public reversePage: boolean = false;
-  public accountCurrency: boolean = false;
+    public q: string = '';
+    public page: number = 0;
+    public count: number = 50;
+    public accountUniqueName: string = '';
+    public from: string = '';
+    public to: string = '';
+    public sort: string = 'asc';
+    public reversePage: boolean = false;
+    public accountCurrency: boolean = false;
 }
 
 export interface ReconcileRequest {
-  accountUniqueName?: string;
-  from?: string;
-  to?: string;
-  chequeNumber?: string;
+    accountUniqueName?: string;
+    from?: string;
+    to?: string;
+    chequeNumber?: string;
 }
 
 export interface IReconcileTotal {
-  amount: number;
-  type: string;
+    amount: number;
+    type: string;
 }
 
 export interface IReconcileVoucher {
-  name: string;
-  shortCode: string;
+    name: string;
+    shortCode: string;
 }
 
 export class ReconcileResponse {
-  public transactions: ILedgerTransactionItem[];
-  public total: IReconcileTotal;
-  public attachedFile: string;
-  public invoiceGenerated: boolean;
-  public attachedFileName?: string;
-  public chequeNumber: string;
-  public invoiceNumber: string;
-  public entryDate: string;
-  public taxes: string[];
-  public uniqueName: string;
-  public unconfirmedEntry: boolean;
-  public purchaseInvoiceNumber: string;
-  public sendToGstr2: boolean;
-  public availItc: boolean;
-  public invoiceNumberAgainstVoucher?: any;
-  public warning?: any;
-  public voucher: IReconcileVoucher;
-  public voucherNo: number;
-  public chequeClearanceDate: string;
-  public tag?: any;
-  public description: string;
+    public transactions: ILedgerTransactionItem[];
+    public total: IReconcileTotal;
+    public attachedFile: string;
+    public invoiceGenerated: boolean;
+    public attachedFileName?: string;
+    public chequeNumber: string;
+    public invoiceNumber: string;
+    public entryDate: string;
+    public taxes: string[];
+    public uniqueName: string;
+    public unconfirmedEntry: boolean;
+    public purchaseInvoiceNumber: string;
+    public sendToGstr2: boolean;
+    public availItc: boolean;
+    public invoiceNumberAgainstVoucher?: any;
+    public warning?: any;
+    public voucher: IReconcileVoucher;
+    public voucherNo: number;
+    public chequeClearanceDate: string;
+    public tag?: any;
+    public description: string;
 }
 
 export class MagicLinkRequest {
-  public from: string = '';
-  public to: string = '';
+    public from: string = '';
+    public to: string = '';
 }
 
 export class MagicLinkResponse {
-  public magicLink: string;
+    public magicLink: string;
 }
 
 export class ExportLedgerRequest {
-  public from: string = '';
-  public to: string = '';
-  public type: string = '';
-  public format?: string = 'excel';
-  public sort?: string = 'asc';
+    public from: string = '';
+    public to: string = '';
+    public type: string = '';
+    public format?: string = 'excel';
+    public sort?: string = 'asc';
+    public withInvoice?: boolean = false;
 }
 
 /**
@@ -267,23 +274,23 @@ export class ExportLedgerRequest {
  */
 
 export interface IELedgerResponse {
-  transactions: IELedgerTransaction[];
-  transactionId: string;
-  date: string;
+    transactions: IELedgerTransaction[];
+    transactionId: string;
+    date: string;
 }
 
 export interface IELedgerTransaction {
-  remarks: IELedgerRemarks;
-  amount: number;
-  type: string;
+    remarks: IELedgerRemarks;
+    amount: number;
+    type: string;
 }
 
 export interface IELedgerRemarks {
-  description: string;
-  method: string;
-  email?: any;
-  name?: any;
-  chequeNumber?: any;
+    description: string;
+    method: string;
+    email?: any;
+    name?: any;
+    chequeNumber?: any;
 }
 
 /**
@@ -291,100 +298,100 @@ export interface IELedgerRemarks {
  */
 
 export interface ILedgerAdvanceSearchRequest {
-  uniqueNames: string[];
-  includeAmount: boolean;
-  amount?: any;
-  amountLessThan: boolean;
-  amountEqualTo: boolean;
-  amountGreaterThan: boolean;
-  includeDescription?: any;
-  description: string;
-  isInvoiceGenerated: boolean;
-  includeTag?: any;
-  tags: string[];
-  includeParticulars?: any;
-  particulars: string[];
-  chequeNumber: string;
-  dateOnCheque: string;
-  inventory: Inventory;
+    uniqueNames: string[];
+    includeAmount: boolean;
+    amount?: any;
+    amountLessThan: boolean;
+    amountEqualTo: boolean;
+    amountGreaterThan: boolean;
+    includeDescription?: any;
+    description: string;
+    isInvoiceGenerated: boolean;
+    includeTag?: any;
+    tags: string[];
+    includeParticulars?: any;
+    particulars: string[];
+    chequeNumber: string;
+    dateOnCheque: string;
+    inventory: Inventory;
 }
 
 export interface ILedgerAdvanceSearchResponse {
-  page: number;
-  count: number;
-  totalPages: number;
-  totalItems: number;
-  debitTransactionsCount: number;
-  creditTransactionsCount: number;
-  forwardedBalance: IForwardedBalance;
-  closingBalance: IClosingBalance;
-  debitTotal: number;
-  creditTotal: number;
-  debitTransactions: DebitTransaction[];
-  creditTransactions: any[];
+    page: number;
+    count: number;
+    totalPages: number;
+    totalItems: number;
+    debitTransactionsCount: number;
+    creditTransactionsCount: number;
+    forwardedBalance: IForwardedBalance;
+    closingBalance: IClosingBalance;
+    debitTotal: number;
+    creditTotal: number;
+    debitTransactions: DebitTransaction[];
+    creditTransactions: any[];
 }
 
 export interface Inventory {
-  includeInventory?: any;
-  inventories: string[];
-  quantity?: any;
-  includeQuantity: boolean;
-  quantityLessThan: boolean;
-  quantityEqualTo: boolean;
-  quantityGreaterThan: boolean;
-  includeItemValue: boolean;
-  itemValue: number;
-  includeItemLessThan: boolean;
-  includeItemEqualTo: boolean;
-  includeItemGreaterThan: boolean;
+    includeInventory?: any;
+    inventories: string[];
+    quantity?: any;
+    includeQuantity: boolean;
+    quantityLessThan: boolean;
+    quantityEqualTo: boolean;
+    quantityGreaterThan: boolean;
+    includeItemValue: boolean;
+    itemValue: number;
+    includeItemLessThan: boolean;
+    includeItemEqualTo: boolean;
+    includeItemGreaterThan: boolean;
 }
 
 export interface IForwardedBalance {
-  amount: number;
-  type: string;
-  description: string;
+    amount: number;
+    type: string;
+    description: string;
 }
 
 export interface IClosingBalance {
-  amount: number;
-  type: string;
+    amount: number;
+    type: string;
 }
 
 export interface IParticular {
-  name: string;
-  uniqueName: string;
+    name: string;
+    uniqueName: string;
 }
 
 export interface DebitTransaction {
-  particular: IParticular;
-  amount: number;
-  type: string;
-  inventory?: any;
-  isTax: boolean;
-  entryUniqueName: string;
-  entryDate: string;
-  isInvoiceGenerated: boolean;
-  invoiceNumber: string;
-  unconfirmedEntry: boolean;
-  attachedFileName: string;
-  attachedFileUniqueName: string;
-  chequeNumber: string;
-  chequeClearanceDate: string;
-  entryCreatedAt: string;
-  isBaseAccount: boolean;
-  isCompoundEntry: boolean;
-  description: string;
-  voucherName: string;
-  tag: string;
-  convertedAmount?: string;
+    particular: IParticular;
+    amount: number;
+    type: string;
+    inventory?: any;
+    isTax: boolean;
+    entryUniqueName: string;
+    entryDate: string;
+    isInvoiceGenerated: boolean;
+    invoiceNumber: string;
+    unconfirmedEntry: boolean;
+    attachedFileName: string;
+    attachedFileUniqueName: string;
+    chequeNumber: string;
+    chequeClearanceDate: string;
+    entryCreatedAt: string;
+    isBaseAccount: boolean;
+    isCompoundEntry: boolean;
+    description: string;
+    voucherName: string;
+    tag: string;
+    convertedAmount?: string;
 }
 
 export interface InvoiceList {
-  invoiceNumber: string;
-  status: string;
+    invoiceNumber: string;
+    status: string;
 }
 
 export interface IUnpaidInvoiceListResponse {
-  invoiceList: InvoiceList[];
-  size: number;
+    invoiceList: InvoiceList[];
+    size: number;
 }

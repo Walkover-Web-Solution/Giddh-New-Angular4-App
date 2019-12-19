@@ -100,6 +100,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
+            this.showBankDetail = false;
+            this.isDebtorCreditor = false;
         } if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
@@ -152,15 +154,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            } else if (!a) {
-                this.addAccountForm.get('openingBalance').patchValue('0');
             }
         });
-        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
-            if (!a) {
-                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
-            }
-        });
+        // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+        //     if (!a) {
+        //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        //     }
+        // });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
@@ -261,10 +261,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
                 }).map(m => {
                     return {
-                        value: m.groupUniqueName, label: m.groupName
+                        value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
                     }
                 });
                 this.flatGroupsOptions = items;
+                if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
+                    let selectedGroupDetails;
+
+                    this.flatGroupsOptions.forEach(res => {
+                        if (res.value === this.activeGroupUniqueName) {
+                            selectedGroupDetails = res;
+                        }
+                    })
+                    if (selectedGroupDetails) {
+                        if (selectedGroupDetails.additional) {
+                            let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                            if (parentGroup) {
+                                this.isParentDebtorCreditor(parentGroup.uniqueName);
+                            }
+                        }
+                    }
+                }
             }
         });
     }
@@ -297,8 +314,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
-            foreignOpeningBalance: [0],
-            openingBalance: [0],
+            foreignOpeningBalance: [''],
+            openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
             email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -436,12 +453,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceClick() {
-        if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
-            this.addAccountForm.get('openingBalance').setValue('0');
-        }
-    }
-
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
             this.addAccountForm.get('openingBalanceType').patchValue(type);
@@ -454,6 +465,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public resetAddAccountForm() {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        const countries = this.addAccountForm.get('country') as FormGroup;
+        addresses.reset();
+        countries.reset();
         this.addAccountForm.reset();
     }
     public isValidMobileNumber(ele: HTMLInputElement) {
@@ -480,6 +495,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
+
+        if (!this.addAccountForm.get('openingBalance').value) {
+            this.addAccountForm.get('openingBalance').setValue('0');
+        }
+        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -512,6 +534,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         } else {
             delete accountRequest['accountBankDetails'];
+            delete this.addAccountForm['accountBankDetails'];
         }
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
@@ -520,17 +543,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
+
         // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
         //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
         //   return;
         // }
-
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest: this.addAccountForm.value
         });
     }
-
     public closingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType').patchValue(type);
@@ -542,11 +564,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public ngOnChanges(s) {
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
-            // console.log(s['showVirtualAccount'].currentValue);
             this.showOtherDetails = true;
         }
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
-            // console.log(s['showVirtualAccount'].currentValue);
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
     }
@@ -605,6 +625,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         } else {
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
+            this.addAccountForm.get('addresses').reset();
         }
     }
 
