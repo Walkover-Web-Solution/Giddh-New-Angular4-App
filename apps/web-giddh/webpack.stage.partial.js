@@ -10,7 +10,7 @@ module.exports = {
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://stage.giddh.com/'),
             'ApiUrl': JSON.stringify('http://apitest.giddh.com/'),
-            'APP_FOLDER': JSON.stringify('app/'),
+            'APP_FOLDER': JSON.stringify(''),
             'process.env.ENV': 'production',
             'process.env.NODE_ENV': 'production',
             'process.env.isElectron': JSON.stringify(false),
@@ -18,7 +18,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://stage.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('http://apitest.giddh.com/'),
-            'process.env.APP_FOLDER': JSON.stringify('app/')
+            'process.env.APP_FOLDER': JSON.stringify('')
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]
