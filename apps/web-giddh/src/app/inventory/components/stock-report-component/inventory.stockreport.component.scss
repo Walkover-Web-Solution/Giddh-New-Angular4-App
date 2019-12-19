@@ -1,31 +1,30 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 .bdrT {
-  border-color: #ccc;
+    border-color: #ccc;
 }
 
 .flex-fill {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .d-flex {
-  display: flex;
+    display: flex;
 }
 
 /*td-in-searchbox_style*/
 
 .td_in_searchBox div {
-  display: flex;
+    display: flex;
 }
 
 .td_in_searchBox div span {
-
-  padding-left: 8px;
+    padding-left: 8px;
 }
 
 .td_in_searchBox div i {
-   margin-top: 1px;
-    color: #757BB9;
+    margin-top: 1px;
+    color: #757bb9;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -34,14 +33,14 @@
 }
 
 .td_in_searchBox {
-  padding: 0px !important;
-  position: relative;
+    padding: 0px !important;
+    position: relative;
 }
 .td_in_searchBox .input-container {
-  position: relative;
+    position: relative;
 }
 .td_in_searchBox .input-container input {
-  height: 50px;
+    height: 50px;
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
@@ -51,33 +50,29 @@
 }
 
 .td_in_searchBox .input-container i {
-  position: absolute;
-  right: 0px;
-  top: 9px;
+    position: absolute;
+    right: 0px;
+    top: 9px;
 }
 
 .basic > thead > tr > th {
-  border-right: 1px solid #cdcdcd;
+    border-right: 1px solid #cdcdcd;
 }
 
 .icon-pointer .glyphicon {
-  cursor: pointer;
-}
-
-.icon-pointer .glyphicon:hover {
-  color: #ff5f00;
+    cursor: pointer;
 }
 
 .td_in_searchBox div i:hover {
-  color: #999;
+    color: #999;
 }
 
 .dropdown-menu > li > a:hover {
-  color: #ff5e01;
-  background: #f4f5f8;
+    color: $border-blue;
+    background: #e5e5e5;
 }
 .stock-input {
-background-color: transparent !important;
+    background-color: transparent !important;
     border-bottom: 1px dotted #fff !important;
     border: none;
     width: auto;
@@ -88,215 +83,211 @@ background-color: transparent !important;
     color: #fff;
 }
 .inventoryStockTable input.form-control.stock-input {
-    color: #1c1c1c;    text-align: left;
+    color: #1c1c1c;
+    text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: #1c1c1c;    text-align: left;
+    color: #1c1c1c;
+    text-align: left;
 }
 .footer-tr td {
-  background-color: #e5e5e5;
+    background-color: #e5e5e5;
 }
 .total-footer {
-  background-color: white;
-  display: flex;
-  .footitem {
-    padding: 41px;
-    h2 {
-      color: #8f9091;
-      font-size: 20px;
-      margin-bottom: 10px;
+    background-color: white;
+    display: flex;
+    .footitem {
+        padding: 41px;
+        h2 {
+            color: #8f9091;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 32px;
+        }
     }
-    h1 {
-      font-size: 32px;
-    }
-  }
 }
 
 .Journal_Voucher {
-  color: #c4c0c0;
+    color: #c4c0c0;
 }
-.Transfer {
-  color: #ff5f00;
-}
+
 .Purchase {
-  color: #0c8fe6;
+    color: #0c8fe6;
 }
 .Sales {
-  color: #229e2b;
+    color: #229e2b;
 }
 
 .Journal_Voucher {
-  color: #c4c0c0;
+    color: #c4c0c0;
 }
 /* class name same as what we are getting data */
-.TRANSFER {
-  color: #ff5f00;
-}
+
 .PURCHASE {
-  color: #0c8fe6;
+    color: #0c8fe6;
 }
 .SALES {
-  color: #229e2b;
+    color: #229e2b;
 }
-.MANUFACTURE {
-  color: #ff5f00;
-}
+
 .JOURNAL {
-  color: #19c2d0;
+    color: #19c2d0;
 }
 .CREDIT {
-  color: #0467a8;
+    color: #0467a8;
 }
 .DEBIT {
-  color: #f6b232;
+    color: #f6b232;
 }
 .modal-content {
-  border-radius: 0px;
-  margin-top: 200px;
+    border-radius: 0px;
+    margin-top: 200px;
 }
 .btn-download {
-  font-size: 14px;
+    font-size: 14px;
 }
 .btn-group.open.show {
-  display: inline-block !important;
+    display: inline-block !important;
 }
 .dropdown-menu.dropdown-menu-download {
-  min-width: 110px;
-  border-radius: 0px;
+    min-width: 110px;
+    border-radius: 0px;
 }
 .dropdown-menu-download li {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 /* voucher type DDL */
 .c-3 {
-  color: #fff;
+    color: #fff;
 }
 .btn-group-voucher-type {
-  width: 100%;
-  color: #1c1c1c;
-  button {
-    text-align: left;
     width: 100%;
     color: #1c1c1c;
-    &:focus,
-    &:hover {
-      text-decoration: none;
+    button {
+        text-align: left;
+        width: 100%;
+        color: #1c1c1c;
+        &:focus,
+        &:hover {
+            text-decoration: none;
+        }
     }
-  }
-  .pull-right {
-    margin-top: 5px;
-  }
+    .pull-right {
+        margin-top: 5px;
+    }
 }
 .voucher-type {
-  width: 115%;
-  right: -7.5% !important;
-  top: 118% !important;
-  border-radius: 0px;
-  padding: 0px;
-  input[type="checkbox"]:after {
-    border: 1px solid #cccccc;
-    width: 15px;
-    height: 15px;
-    top: 2px;
-  }
-  input[type="checkbox"]:before {
-    top: 6px;
-    width: 9px;
-    height: 5px;
-    border: 2px solid #fff;
-    border-top-style: none;
-    border-right-style: none;
-  }
-  li {
-    color: #333333;
-    padding: 3px 7px !important;
-    font-size: 12px;
-  }
-  li:last-child {
-    border: none;
-    padding-bottom: 6px !important;
-  }
+    width: 115%;
+    right: -7.5% !important;
+    top: 118% !important;
+    border-radius: 0px;
+    padding: 0px;
+    input[type="checkbox"]:after {
+        border: 1px solid #cccccc;
+        width: 15px;
+        height: 15px;
+        top: 2px;
+    }
+    input[type="checkbox"]:before {
+        top: 6px;
+        width: 9px;
+        height: 5px;
+        border: 2px solid #fff;
+        border-top-style: none;
+        border-right-style: none;
+    }
+    li {
+        color: #333333;
+        padding: 3px 7px !important;
+        font-size: 12px;
+    }
+    li:last-child {
+        border: none;
+        padding-bottom: 6px !important;
+    }
 }
 button[aria-expanded="true"] i {
-  color: #adadad;
+    color: #adadad;
 }
 /* voucher type DDL */
 
 .capitalize {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 .table-border {
-  border: 1px solid #c6c6c6;
+    border: 1px solid #c6c6c6;
 }
 .bdrN {
-  border: none !important;
+    border: none !important;
 }
 .unit-badge {
-  display: inline-block;
-  min-width: 30px;
-  text-align: left;
-  padding-left: 3px;
-  text-transform: lowercase;
+    display: inline-block;
+    min-width: 30px;
+    text-align: left;
+    padding-left: 3px;
+    text-transform: lowercase;
 }
 .icon-pointer .icon-sort-asc,
 .icon-pointer .icon-sort-dsc {
-  line-height: 20px;
-  width: 15px;
-  color: #757BB9;
+    line-height: 20px;
+    width: 15px;
+    color: #757bb9;
 }
 .icon-pointer .activeTextColor {
-  color: $activeIconTh;
+    color: $activeIconTh;
 }
 .stickyFooterSaleAmount {
-  .innerContentFooter {
-    padding-left: 260px;
-    padding-right: 80px;
-    min-height: 60px;
-    .flex-col {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      vertical-align: middle;
+    .innerContentFooter {
+        padding-left: 260px;
+        padding-right: 80px;
+        min-height: 60px;
+        .flex-col {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .flex-col:nth-child(odd) {
+            min-width: 120px;
+        }
+        .flex-col:nth-child(even) {
+            min-width: 50px;
+        }
+        .operators {
+            font-size: 39px;
+            color: #8f9091;
+        }
+        h2 {
+            font-size: 18px;
+            line-height: 20px;
+        }
+        h3 {
+            font-size: 14px;
+            line-height: 20px;
+        }
+        h4 {
+            font-size: 14px;
+            line-height: 20px;
+        }
     }
-    .flex-col:nth-child(odd) {
-      min-width: 120px;
-    }
-    .flex-col:nth-child(even) {
-      min-width: 50px;
-    }
-    .operators {
-      font-size: 39px;
-      color: #8f9091;
-    }
-    h2 {
-      font-size: 18px;
-      line-height: 20px;
-    }
-    h3 {
-      font-size: 14px;
-      line-height: 20px;
-    }
-    h4 {
-      font-size: 14px;
-      line-height: 20px;
-    }
-  }
 }
 .select-style select {
-  width: 100% !important;
+    width: 100% !important;
 }
 .text-orange {
-  color: #5B64C9;
+    color: #5b64c9;
 }
 .bg-white {
-  background: white;
+    background: white;
 }
 .btn-link-2 {
-  color: #0c8fe6;
+    color: #0c8fe6;
 }
-.mB100{
-  margin-bottom: 100px;
+.mB100 {
+    margin-bottom: 100px;
 }
 .advance-icon {
     width: 32px;
@@ -306,22 +297,22 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid #5B64C9;
+    border: 1px solid #5b64c9;
     border-radius: 2px;
-    color: #1A237E;
+    color: #1a237e;
     background: #fff;
 }
-.inventoryStockTable .d-flex{
-  align-items: center;
+.inventoryStockTable .d-flex {
+    align-items: center;
 }
 .icon-pointer {
     padding-left: 5px;
 }
 button.btn.btn-filter {
-    background: #E4E4E4;
-    border: 1px solid #E4E4E4;
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
     font-size: 16px;
-    color: #1A237E;
+    color: #1a237e;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;

@@ -111,7 +111,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
     public transporterDropdown$: Observable<IOption[]>;
     public transporterMode: IOption[] = [];
-    public stockCodeName: any[] = [];
     public overallTotal: number = 0;
     public isValidSourceTaxNumber: boolean = true;
     public isValidDestinationTaxNumber: boolean = true;
@@ -124,8 +123,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isUpdateMode: boolean = false;
     public allowAutoFocusInField: boolean = false;
 
-    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, private bsConfig: BsDatepickerConfig) {
+    constructor(private _router: Router, private store: Store<AppState>, private settingsBranchActions: SettingsBranchActions, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
+
+        this.store.dispatch(this.invoiceActions.resetTransporterListResponse());
 
         this.initFormFields();
         this.getTransportersList();
@@ -156,7 +157,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.branchTransferMode.firstChange) {
+        if (changes.branchTransferMode && changes.branchTransferMode.firstChange) {
             this.assignCurrentCompany();
         }
     }
@@ -223,8 +224,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
@@ -240,21 +240,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         stockUnit: null,
                         amount: null,
                         rate: null,
-                        quantity: null,
-                        skuCode: null
+                        quantity: null
                     }
                 }
             }],
             products: [{
                 name: null,
                 hsnNumber: null,
+                skuCode: null,
                 uniqueName: null,
                 stockDetails: {
                     stockUnit: null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 },
                 description: null
             }],
@@ -352,8 +351,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -375,8 +373,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
-                    quantity: null,
-                    skuCode: null
+                    quantity: null
                 }
             }
         });
@@ -389,13 +386,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.products.push({
             name: null,
             hsnNumber: null,
+            skuCode: null,
             uniqueName: null,
             stockDetails: {
                 stockUnit: null,
                 amount: null,
                 rate: null,
-                quantity: null,
-                skuCode: null
+                quantity: null
             },
             description: null
         });
@@ -494,7 +491,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
             product.stockDetails.quantity = event.additional.openingQuantity;
-            product.stockDetails.skuCode = event.additional.skuCode;
+            product.skuCode = event.additional.skuCode;
             product.hsnNumber = event.additional.hsnNumber;
 
             if (this.transferType === 'senders') {
@@ -655,7 +652,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = parseFloat(product.stockDetails.amount).toFixed(2);
+                product.stockDetails.amount = this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {
@@ -685,7 +682,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
             this.branchTransfer.destinations.forEach(product => {
@@ -699,7 +696,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
             this.branchTransfer.sources.forEach(product => {
@@ -713,7 +710,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += overallTotal;
+                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
             });
         }
     }
@@ -744,7 +741,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         if (this.branchTransferMode === 'receiptnote') {
                             this._toasty.successToast("Receipt Note has been updated successfully.", "Success");
                         } else {
-                            this._toasty.successToast("Delivery Note has been updated successfully.", "Success");
+                            this._toasty.successToast("Delivery Challan has been updated successfully.", "Success");
                         }
                         this.closeBranchTransferPopup();
                         this._router.navigate(['/pages', 'inventory', 'report']);
@@ -767,7 +764,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         if (this.branchTransferMode === 'receiptnote') {
                             this._toasty.successToast("Receipt Note has been saved successfully.", "Success");
                         } else {
-                            this._toasty.successToast("Delivery Note has been saved successfully.", "Success");
+                            this._toasty.successToast("Delivery Challan has been saved successfully.", "Success");
                         }
                         this.closeBranchTransferPopup();
                         this._router.navigate(['/pages', 'inventory', 'report']);
@@ -792,7 +789,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusSkuNumber(): void {
         this.hideHsnNumberPopup();
-        this.skuNumber = (this.branchTransfer.products[this.activeRow].stockDetails.skuCode) ? this.branchTransfer.products[this.activeRow].stockDetails.skuCode : "";
+        this.skuNumber = (this.branchTransfer.products[this.activeRow].skuCode) ? this.branchTransfer.products[this.activeRow].skuCode : "";
         this.skuNumberPopupShow = true;
         setTimeout(() => {
             this.productSkuCode.nativeElement.focus();
@@ -821,7 +818,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public saveSkuNumberPopup(product): void {
-        product.stockDetails.skuCode = this.skuNumber;
+        product.skuCode = this.skuNumber;
         this.skuNumberPopupShow = false;
     }
 
@@ -840,6 +837,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
 
+                if (!this.branchTransfer.transporterDetails) {
+                    this.branchTransfer.transporterDetails = {
+                        dispatchedDate: null,
+                        transporterName: null,
+                        transporterId: null,
+                        transportMode: null,
+                        vehicleNumber: null
+                    };
+                }
+
                 if (response.body.dateOfSupply) {
                     this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
                 }
@@ -851,6 +858,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                 this.resetDestinationWarehouses(0);
                 this.resetSourceWarehouses(0);
+
+                setTimeout(() => {
+                    this.allowAutoFocusInField = true;
+                }, 200);
             } else {
                 this.closeBranchTransferPopup();
                 this._toasty.errorToast(response.message);
@@ -961,12 +972,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(p => p.inventory.stocksList), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 this.stockList = [];
-                this.stockCodeName = [];
                 let stockList = _.cloneDeep(o);
 
                 stockList.results.forEach(key => {
-                    this.stockCodeName[key.stockUnit.code] = [];
-                    this.stockCodeName[key.stockUnit.code] = key.stockUnit.name;
                     this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
                 });
             }

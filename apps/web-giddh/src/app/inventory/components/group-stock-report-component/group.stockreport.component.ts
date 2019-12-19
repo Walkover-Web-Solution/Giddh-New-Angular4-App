@@ -27,6 +27,7 @@ import { InvViewService } from '../../inv.view.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { isInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 import { GeneralService } from '../../../services/general.service';
+import { ESCAPE } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -366,20 +367,19 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             event.stopPropagation();
             this.toggleAsidePane();
         }
-        if (event.altKey && event.which === 80 && this.branchAvailable) { // Alt + P
+        if (event.altKey && event.which === 78 && this.branchAvailable) { // Alt + N
             event.preventDefault();
             event.stopPropagation();
             this.toggleTransferAsidePane();
         }
+        if (event.which === ESCAPE) {
+            this.asidePaneState = 'out';
+            this.asideTransferPaneState = 'out';
+            this.toggleBodyClass();
+        }
     }
 
     public initReport() {
-        // this.fromDate = moment().subtract(1, 'month').format(this._DDMMYYYY);
-        // this.toDate = moment().format(this._DDMMYYYY);
-        // this.GroupStockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-        // this.GroupStockReportRequest.to = moment().format(this._DDMMYYYY);
-        // this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-        // this.datePickerOptions.endDate = moment().toDate();
         this.GroupStockReportRequest.page = 1;
         this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
         this.GroupStockReportRequest.stockUniqueName = '';

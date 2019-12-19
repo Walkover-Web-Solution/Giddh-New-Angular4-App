@@ -41,7 +41,7 @@
 
 .menu_list li a:hover {
   background: #333;
-  color: #ff5f00;
+  
 }
 
 .menu_list li a.isHidden {
@@ -57,9 +57,7 @@
   margin-right: 2px;
 }
 
-.activeparent {
-  color: #ff5f00 !important;
-}
+
 
 .dblUnderlined {
   border-bottom: 3px double;

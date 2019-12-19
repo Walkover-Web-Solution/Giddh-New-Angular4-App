@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
   styles: [`
     .active {
       background: #fff !important;
-      color: #ff5f00 !important;
+     
     }
   `]
 })

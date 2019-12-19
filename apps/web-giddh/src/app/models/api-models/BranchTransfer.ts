@@ -89,12 +89,12 @@ export class NewBranchTransferProductStockDetails {
     public amount: any;
     public rate: any;
     public quantity: any;
-    public skuCode: any;
 }
 
 export class NewBranchTransferProduct {
     public name: string;
     public hsnNumber: any;
+    public skuCode: any;
     public uniqueName: any;
     public stockDetails: NewBranchTransferProductStockDetails;
     public description: string;
@@ -171,4 +171,8 @@ export class NewBranchTransferListResponse {
     public count: number;
     public totalPages: number;
     public totalItems: number;
+}
+
+export class NewBranchTransferDownloadRequest {
+    public uniqueName: string;
 }

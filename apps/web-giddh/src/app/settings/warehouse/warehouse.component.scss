@@ -23,8 +23,12 @@
 .warehouseCard {
     background-color: #ebecee;
     padding: 15px;
-    min-height: 270px;
+    min-height: 300px;
     margin-bottom: 15px;
+}
+.warehouseOptions {
+    min-width: 180px;
+    text-align: right;
 }
 .warehouseOptions {
     .warehouse-options {
@@ -76,15 +80,16 @@ span.setAsDefault {
 }
 .warehouse-details label {
     font-family: "opensans-semibold";
-    float: left;
-    width: 160px;
+    width: 140px;
 }
 .warehouse-details p {
-    float: left;
-    width: 68%;
+    word-break: break-all;
+    white-space: initial;
+    width: 100%;
 }
 .about-warehaouse {
     margin: 15px 0;
+    display: flex;
 }
 .gray-text {
     color: #8f9091;
@@ -103,5 +108,17 @@ span.setAsDefault {
     text-align: center;
     .pagination .disabled a {
         cursor: not-allowed;
+    }
+}
+
+
+@media only screen and (max-width: 767px) {
+    .warehouseCard .d-flex {
+        display: block;
+    }
+    .warehouseCard h3 {
+        float: none;
+        width: 100%;
+        margin-bottom: 15px;
     }
 }
