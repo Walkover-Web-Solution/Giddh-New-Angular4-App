@@ -116,8 +116,14 @@ export class ExportLedgerComponent implements OnInit {
             }
             let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
             let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-
-            this._ledgerService.MailLedger(sendData, this.accountUniqueName, from, to, this.exportAs, this.emailTypeSelected, this.order).subscribe(sent => {
+            let emailRequestParams = new ExportLedgerRequest();
+            emailRequestParams.from = from;
+            emailRequestParams.to = to;
+            emailRequestParams.type = this.emailTypeSelected;
+            emailRequestParams.format = this.exportAs;
+            emailRequestParams.sort = this.order;
+            emailRequestParams.withInvoice = this.withInvoiceNumber;
+            this._ledgerService.MailLedger(sendData, this.accountUniqueName, emailRequestParams).subscribe(sent => {
                 if (sent.status === 'success') {
                     this._toaster.successToast(sent.body, sent.status);
                     this.emailData = '';
