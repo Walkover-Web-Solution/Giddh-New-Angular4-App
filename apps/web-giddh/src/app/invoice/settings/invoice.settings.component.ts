@@ -438,7 +438,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     } else if (baseHref.indexOf('test.giddh.com') > -1) {
       return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-      return 'http://stage.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'http://stage.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
       return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     } else {
@@ -446,12 +446,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         addition of unsecured URIs therefore show Gmail integration text only
         for PROD. This flag need to be removed once all the above URIs become secure */
       this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
-      return 'https://giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+      return 'https://app.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
     }
   }
 
   private getGoogleCredentials(baseHref: string) {
-    if (baseHref === 'https://giddh.com/' || isElectron) {
+    if (baseHref === 'https://app.giddh.com/' || isElectron) {
       return {
         GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
       };
