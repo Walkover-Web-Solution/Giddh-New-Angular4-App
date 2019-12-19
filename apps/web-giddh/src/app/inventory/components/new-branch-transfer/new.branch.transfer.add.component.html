@@ -489,7 +489,7 @@
 		                                        <sh-select #transMode placeholder="Transport Mode" name="transportMode" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="transporterMode" [(ngModel)]="branchTransfer.transporterDetails.transportMode" (selected)="focusVehicleNumber();"></sh-select>
 	                                        </div>
 	                                        <div class="col-sm-6 mrB2">
-	                                            <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber" maxlength="50">
+	                                            <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber" maxlength="20">
 	                                        </div>
 	                                    </div>
 	                                    <div class="row">
