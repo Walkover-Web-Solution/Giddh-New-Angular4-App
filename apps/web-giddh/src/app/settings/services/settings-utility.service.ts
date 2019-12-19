@@ -19,20 +19,25 @@ export class SettingsUtilityService {
      */
     public getCreateWarehouseRequestObject(formControls: any, taxDetails: Array<any>): any {
         let taxType = '';
-        if (taxDetails) {
+        if (formControls.businessType && formControls.businessType.value === 'Registered' && taxDetails) {
             taxType = taxDetails['taxName'] ? taxDetails['taxName'].label : '';
         }
         return {
             name: (formControls.name) ? formControls.name.value : '',
-            address: (formControls.address) ? formControls.address.value : '',
+            addresses: [{
+                address: (formControls.address) ? formControls.address.value : '',
+                taxNumber: (formControls.gstNumber) ? formControls.gstNumber.value : '',
+                stateCode: (formControls.state) ? formControls.state.value : '',
+                isDefault: true
+            }],
+            isDefault: false,
             countryCode: (formControls.country) ? formControls.country.value : '',
             currencyCode: (formControls.baseCurrency) ? formControls.baseCurrency.value : '',
             callingCode: (formControls.phoneCode) ? formControls.phoneCode.value : '',
             mobileNumber: (formControls.contactNo) ? formControls.contactNo.value : '',
             businessNature: (formControls.businessNature) ? formControls.businessNature.value : '',
-            taxType,
-            taxNumber: (formControls.gstNumber) ? formControls.gstNumber.value : '',
-            stateCode: (formControls.state) ? formControls.state.value : ''
+            businessType: (formControls.businessType) ? formControls.businessType.value : '',
+            taxType
         };
     }
 }

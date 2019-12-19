@@ -13,8 +13,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { COMMON_ACTIONS } from './common.const';
 import { IRegistration } from "../models/interfaces/registration.interface";
 
-// import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-
 @Injectable()
 
 export class CompanyActions {
@@ -58,6 +56,10 @@ export class CompanyActions {
   public static SET_ACTIVE_FINANCIAL_YEAR = 'SET_ACTIVE_FINANCIAL_YEAR';
 
   public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
+
+  public static GET_WAREHOUSE_DETAILS = 'GET_WAREHOUSE_DETAILS';
+  public static GET_WAREHOUSE_DETAILS_RESPONSE = 'GET_WAREHOUSE_DETAILS_RESPONSE';
+  public static RESET_WAREHOUSE_DETAILS_RESPONSE = 'RESET_WAREHOUSE_DETAILS_RESPONSE';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -580,6 +582,7 @@ export class CompanyActions {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT
     };
   }
+
   public getAllRegistrationsResponse(value: BaseResponse<IRegistration, string>): CustomActions {
     return {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
