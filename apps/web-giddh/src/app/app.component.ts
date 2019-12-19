@@ -107,7 +107,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
             this.dbServices.clearAllData();
-            this.router.navigate(['/pages/settings']);
+            //this.router.navigate(['/pages/settings']);
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
