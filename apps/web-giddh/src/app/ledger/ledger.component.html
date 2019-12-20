@@ -4,30 +4,52 @@
     <div class="ledgHead some transactions-page mrT3 pos-rel">
 
         <!-- region ledger header -->
-        <div class="clearfix">
+        <div class="clearfix row">
             <!-- region currency toggle -->
-            <div class="col-sm-4 col-xs-12 advancSearchBlock  xs-pl-0 xs-pr-0"
-                *ngIf="isLedgerAccountAllowsMultiCurrency">
+            <div class="col-sm-4 col-xs-12 xs-pl-0 xs-pr-0">
 
-                <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                <div class="d-flex search-ledger-field">
 
-                <div class="toggle d-inline-block currencyToggler" data-key="disabled">
+                    <div style="position: relative" *ngIf="checkedTrxWhileHovering.length === 0">
+                        <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
+                               (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
+                        <i class="icon-search pos-abs" style="left:5px;top:10px;"></i>
+                    </div>
 
-                    <input type="checkbox" class="toggle-checkbox" id="disabled" [(ngModel)]="currencyTogglerModel"
-                        (click)="toggleCurrency($event)">
+                    <span class="d-flex advance-icon advnceSearchFilter pointer" [tooltip]="'Advance Search'"
+                          [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
+                        <i class="icon-advance-serch" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
+                    </span>
 
-                    <label class="toggle-label" for="disabled">
-                        <span class="toggle-inner"></span>
-                        <span class="toggle-switch"></span>
-                    </label>
+                   <a class="cp mrL1 clear-filter-btn" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
+                   tooltip="Reset Advance Search">
+                       <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
+                       Clear Filter
+                   </a>
+
+                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
+
+                        <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
+                                tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                        </button>
+
+                        <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
+                                tooltip="Generate Invoice" [placement]="'top'"><i class="icon-generate-invoice"></i>
+                        </button>
+
+                        <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
+                                container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
+                        </button>
+                        <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                               id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
+                               [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                    </div>
 
                 </div>
 
-                <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
 
             </div>
-            <div class="col-sm-4  text-center col-xs-12 daterngoption"
-                [ngClass]="{'col-sm-offset-4' : !isLedgerAccountAllowsMultiCurrency }">
+            <div class="col-sm-4  text-center col-xs-12 daterngoption">
                 <div class="row">
                     <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                     <div class="advanceSearchByDate date-advanceSearch">
@@ -48,45 +70,27 @@
             <div class="col-sm-4 col-xs-12 text-right C-flex-end xs-pl-0 xs-pr-0 search-options">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
-                    <div class="d-flex search-ledger-field" *ngIf="checkedTrxWhileHovering.length === 0">
+                    <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advancSearchBlock">
+                        <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
+                        <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
-                        <div style="position: relative">
-                            <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
-                                (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
-                            <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
+                            <input type="checkbox" class="toggle-checkbox" id="disabled"
+                                   [(ngModel)]="currencyTogglerModel"
+                                   (click)="toggleCurrency($event)">
+
+                            <label class="toggle-label" for="disabled">
+                                <span class="toggle-inner"></span>
+                                <span class="toggle-switch"></span>
+                            </label>
+
                         </div>
 
-                    </div>
-
-                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
-
-                        <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
-                            tooltip="Delete" [placement]="'top'">Delete
-                        </button>
-
-                        <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
-                            tooltip="Generate Invoice" [placement]="'top'">Generate Invoice
-                        </button>
-
-                        <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
-                            container="body" tooltip="Attach File" [placement]="'top'">Attach File
-                        </button>
-                        <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
-                            id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                            [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                        <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
 
                     <div class="d-flex">
-                        <span class="d-flex icomoon_ico advnceSearchFilter" [tooltip]="'Reset Filter'"
-                            [placement]="'top'">
 
-                            <i class="fa fa-filter" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
-                            <!-- <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
-                style="margin-right: 7px;">
-                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="font-size: 15px;"></i>
-              </a> -->
-                        </span>
                         <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="fa icon-ledger-path" style="line-height: 0px"></i>

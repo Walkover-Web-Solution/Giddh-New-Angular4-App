@@ -292,13 +292,14 @@ input {
     display: block;
     width: 18px;
     height: 18px;
-    background: #bbbbbb;
     position: absolute;
     top: -2px;
     bottom: 0;
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
+    background-color: #5b64c9;
+    border-color: #5b64c9;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -411,13 +412,13 @@ input {
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a:hover {
-    
+
     color: #fff;
 }
 
 .invoce-controll .invoice-nav.navbar-nav > li > a.active {
     background-color: #fff;
-  
+
 }
 
 .navbar {
@@ -803,7 +804,7 @@ ul.sub-list {
     position: relative;
     top: -4px;
 }
- 
+
 .btn-pink {
     background: $primaryBtncolror;
     border: 1px solid $primaryBtncolror;
@@ -1000,7 +1001,7 @@ ul.sub-list {
 }
 
 .custom-dropdown .dropdown-menu > li > a:hover {
- 
+
     background: #e5e5e5 !important;
 }
 
@@ -1026,7 +1027,7 @@ ul.sub-list {
 }
 
 .sorting-box a.active {
-  
+
     background: none;
 }
 
@@ -1876,11 +1877,11 @@ fieldset[disabled] .btn-primary:hover {
 .childTab > .nav-tabs > li.active > a,
 .childTab > .nav-tabs > li.active > a:focus,
 .childTab > .nav-tabs > li.active > a:hover {
- 
+
     border: 0;
     cursor: pointer;
     background: none;
-    
+
 }
 
 /*.childTab >.nav.nav-tabs {
@@ -1912,7 +1913,7 @@ fieldset[disabled] .btn-primary:hover {
 .childTab .nav-tabs>li.active>a, .childTab .nav-tabs>li.active>a:focus, .childTab .nav-tabs>li.active>a:hover {
     padding: 13px 18px;
     background: white;
-     
+
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }*/
@@ -1958,7 +1959,7 @@ fieldset[disabled] .btn-primary:hover {
     text-transform: capitalize;
 }
 
- 
+
 #companyList li.selected-company span {
     color: var(--dark-blue01) !important;
 }
@@ -2048,7 +2049,7 @@ p.table-email {
 .top-five-cr-dr-table .basic > thead > tr th:first-child {
     border-left: none !important;
 }
- 
+
 
 .delt {
     text-align: center;
@@ -2246,7 +2247,7 @@ input[type="checkbox"]:checked:after {
 .thumbnail.active {
     background: #ffffff;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
-    
+
 }
 
 .thumbnail {
@@ -2688,7 +2689,7 @@ input[type="checkbox"]:checked:after {
     padding: 10px 0;
     border: 0 !important;
 }
- 
+
 .proforma-list > .filters > div {
     margin-right: 0;
 }
@@ -3092,7 +3093,7 @@ footer small a {
     border-radius: 0px !important;
 }
 
- 
+
 .form-theme {
     background: #f4f5f8;
     padding: 20px;
@@ -3212,7 +3213,7 @@ a.btn.btn-xs.btn-link.pull-right {
     margin-left: 5px;
 }
 
- 
+
 .action .btn {
     border-color: transparent;
     padding: 4px 14px;
@@ -3282,7 +3283,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .ReportInfo {
     text-transform: capitalize;
 }
- 
+
 
 .linkstock {
     min-height: 200px;
@@ -4024,12 +4025,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-  
+
 }
 
 .btn-add:hover,
 .btn-add:focus {
-  
+
     color: #fff !important;
 }
 
@@ -4102,7 +4103,7 @@ label {
 
 .col_wrapper:nth-child(1) .isParent {
     background: #e1ebf0 !important;
-  
+
 }
 
 .col_wrapper:last-child ul li a.isParent {
@@ -4127,7 +4128,7 @@ label {
 }
 
 .isParent {
-   
+
     background: #f0f0f0;
 }
 
@@ -4226,12 +4227,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    
+
 }
 
 .btn-add:hover,
 .btn-add:focus {
-  
+
     color: #fff !important;
 }
 
@@ -4357,7 +4358,7 @@ label {
 }
 
 .accmerge li a.isActive {
-  
+
     color: #808080;
 }
 
@@ -5116,7 +5117,7 @@ label {
 
 #customInvoice .templateEditor .btn-group-lg > .btn:hover {
     background: #fff;
-  
+
 }
 
 #customInvoice {
@@ -5143,7 +5144,7 @@ label {
 }
 
 #customInvoice .templateEditor h3 {
- 
+
     margin: 15px 0;
     font-size: 18px;
 }
@@ -5524,7 +5525,7 @@ datepicker-inner .well table thead tr th button {
 
 datepicker-inner .well table tbody .btn.active,
 datepicker-inner .well table tbody .btn:active {
-  
+
     box-shadow: none;
 }
 
@@ -5817,11 +5818,11 @@ typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: rgb(244, 245, 248);
-  
+
 }
 
 typeahead-container .dropdown-menu li.active > a > a {
-  
+
 }
 
 .has-item {
@@ -6606,7 +6607,7 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-option li a:hover {
-  
+
     background: #f4f5f8;
 }
 
@@ -6632,7 +6633,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li:hover a {
-   
+
     background: #f4f5f8;
 }
 
@@ -6822,7 +6823,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: $border-blue;
     background: #eeeff9;
 }
- 
+
 
 .hamburger_menu button,
 .hamburger_menu button:hover,
@@ -7627,7 +7628,7 @@ app-header {
 
 #form-place .dropdown-menu .dropdown-item:hover {
     background-color: rgb(244, 245, 248);
-   
+
 }
 
 /* sticky footer css merged */
@@ -7649,7 +7650,7 @@ app-header {
 
 .stickyFooterSaleAmount .total-due h3 {
     font-size: 20px;
-   
+
     padding-right: 13px;
 }
 
