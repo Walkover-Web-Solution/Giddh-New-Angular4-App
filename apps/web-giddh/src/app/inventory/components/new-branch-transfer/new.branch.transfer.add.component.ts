@@ -715,8 +715,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public selectDateOfSupply(date): void {
-        if (date && this.branchTransfer.transporterDetails.dispatchedDate && date > this.branchTransfer.transporterDetails.dispatchedDate) {
-            this.branchTransfer.transporterDetails.dispatchedDate = date;
+        if (date && this.tempDateParams.dispatchedDate && date > this.tempDateParams.dispatchedDate) {
+            this.tempDateParams.dispatchedDate = date;
         }
     }
 
