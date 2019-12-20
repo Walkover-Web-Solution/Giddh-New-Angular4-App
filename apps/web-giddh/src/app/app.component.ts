@@ -171,6 +171,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 return url;
             }
         }
+
         return 'home';
     }
 
