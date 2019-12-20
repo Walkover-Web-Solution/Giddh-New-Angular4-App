@@ -345,7 +345,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
 
         if (event.which === ESCAPE) {
-            this.toggleTransferAsidePane();
+            this.editBranchTransferUniqueName = '';
+            this.asideTransferPaneState = 'out';
+            this.toggleBodyClass();
         }
     }
 
