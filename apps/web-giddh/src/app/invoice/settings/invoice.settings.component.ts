@@ -436,7 +436,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (baseHref.indexOf('dev.giddh.com') > -1) {
             return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            return 'http://test.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         } else if (baseHref.indexOf('stage.giddh.com') > -1) {
             return 'http://stage.giddh.com/pages/invoice/preview/settings/email';
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
