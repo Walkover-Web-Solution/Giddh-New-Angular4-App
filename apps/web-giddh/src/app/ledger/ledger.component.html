@@ -16,7 +16,7 @@
                         <i class="icon-search pos-abs" style="left:5px;top:10px;"></i>
                     </div>
 
-                    <span class="d-flex advance-icon advnceSearchFilter" [tooltip]="'Advance Search'"
+                    <span class="d-flex advance-icon advnceSearchFilter pointer" [tooltip]="'Advance Search'"
                           [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <i class="icon-advance-serch" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
                     </span>
@@ -34,11 +34,11 @@
                         </button>
 
                         <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
-                                tooltip="Generate Invoice" [placement]="'top'">Generate Invoice
+                                tooltip="Generate Invoice" [placement]="'top'"><i class="icon-generate-invoice"></i>
                         </button>
 
                         <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
-                                container="body" tooltip="Attach File" [placement]="'top'"><i class="fa fa-paperclip"></i>
+                                container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                         </button>
                         <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
                                id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
@@ -49,8 +49,7 @@
 
 
             </div>
-            <div class="col-sm-4  text-center col-xs-12 daterngoption"
-                [ngClass]="{'col-sm-offset-4' : !isLedgerAccountAllowsMultiCurrency }">
+            <div class="col-sm-4  text-center col-xs-12 daterngoption">
                 <div class="row">
                     <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                     <div class="advanceSearchByDate date-advanceSearch">
