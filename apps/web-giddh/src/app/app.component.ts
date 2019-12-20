@@ -128,7 +128,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
-        if (!AppUrl.includes('localapp.giddh.com') && (!isElectron || !isCordova)) {
+        if (!AppUrl.includes('localapp.giddh.com') && !(isElectron || isCordova)) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
@@ -145,7 +145,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._cdr.detectChanges();
         this.router.events.subscribe((evt) => {
 
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && (!isElectron || !isCordova)) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova)) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -167,7 +167,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (location.href.includes('returnUrl')) {
             let tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
-                if (!isElectron || !isCordova) {
+                if (!(isElectron || isCordova)) {
                     this.router.navigate(['pages/' + tUrl[1]]);
                 }
             }
