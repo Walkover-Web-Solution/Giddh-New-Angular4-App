@@ -15,7 +15,7 @@ export class SettingsUtilityService {
      * @param {*} formControls Form controls received from Welcome page
      * @param {Array<any>} taxDetails Tax details for warehouse creation
      * @returns {*} Request object for warehouse create request
-     * @memberof WarehouseComponent
+     * @memberof SettingsUtilityService
      */
     public getCreateWarehouseRequestObject(formControls: any, taxDetails: Array<any>): any {
         let taxType = '';

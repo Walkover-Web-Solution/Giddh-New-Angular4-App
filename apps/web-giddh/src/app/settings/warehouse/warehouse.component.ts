@@ -1,4 +1,3 @@
-import { Location, LocationStrategy } from '@angular/common';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import {
@@ -10,7 +9,7 @@ import {
     PageChangedEvent,
     PaginationComponent,
 } from 'ngx-bootstrap';
-import { Observable, Subject, SubscriptionLike } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../../actions/common.actions';
@@ -71,12 +70,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
     private welcomePageModalInstance: BsModalRef;
-    /** Subscription to listen URL changes */
-    private locationChangeSubscription: SubscriptionLike;
-    /** True, if the welcome page has been added to browser history state */
-    private isWelcomePageAdded: boolean = false;
-    /** Location state to maintain */
-    private locationState: any = {show: 1};
 
     /** @ignore */
     constructor(
@@ -87,8 +80,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private generalService: GeneralService,
         private itemOnBoardingActions: ItemOnBoardingActions,
-        private location: Location,
-        private locationStrategy: LocationStrategy,
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions
@@ -112,7 +103,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public async ngOnDestroy(): Promise<any> {
         this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
-        this.locationChangeSubscription.unsubscribe();
         await this.hideAddCompanyModal();
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -138,15 +128,12 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     public hideWelcomePage(): Promise<any> {
         return new Promise((resolve) => {
-            // Restore the state to settings warehouse URL
-            // this.locationStrategy.replaceState(this.locationState, '', '/pages/settings/warehouse', '');
             if (this.welcomePageModalInstance) {
                 this.welcomePageModalInstance.hide();
                 setTimeout(() => {
                     resolve();
                 }, 500);
             }
-            console.log('State: ', window.history.state);
         });
     }
 
@@ -156,12 +143,9 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @returns {Promise<any>} Promise to carry out further operation
      * @memberof WarehouseComponent
      */
-    public async handleBackButtonClick(isBrowserBackButtonClicked: boolean): Promise<any> {
+    public async handleBackButtonClick(): Promise<any> {
         await this.hideWelcomePage();
         this.resetWelcomeForm();
-        if (!isBrowserBackButtonClicked) {
-            this.location.back();
-        }
         if (this.itemOnBoardingDetails) {
             if (!this.itemOnBoardingDetails.isItemUpdateInProgress) {
                 this.openCreateWarehouseModal();
@@ -271,12 +255,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      */
     private initSubscribers(): void {
         this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
-        this.locationChangeSubscription = this.location.subscribe(() => { // Subscribe to browser back button click
-            if (this.itemOnBoardingDetails.isOnBoardingInProgress) {
-                this.handleBackButtonClick(true);
-            }
-            console.log('Length ', window.history.state.length);
-        });
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
             this.itemOnBoardingDetails = itemOnBoardingDetails;
         });
@@ -394,16 +372,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
             };
             this.welcomePageModalInstance = this.bsModalService.show(this.welcomeComponentTemplate, modalConfig);
         }
-        /* Push welcome page state without navigating to the page through router
-            as for warehouse the onboarding is done through modals.
-        */
-        if (!this.isWelcomePageAdded) {
-            this.locationStrategy.pushState(this.locationState, '', '/pages/settings/warehouse', '');
-            this.isWelcomePageAdded = true;
-        } else {
-            this.locationStrategy.forward();
-        }
-        console.log('State: ', window.history.state);
     }
 
     /**
