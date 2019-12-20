@@ -21,12 +21,12 @@ import {reassignNavigationalArray} from './models/defaultMenus'
  * Top Level Component
  */
 @Component({
-  selector: 'body',
-  encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    './app.component.css'
-  ],
-  template: `
+    selector: 'body',
+    encapsulation: ViewEncapsulation.None,
+    styleUrls: [
+        './app.component.css'
+    ],
+    template: `
       <noscript *ngIf="isProdMode && !isElectron">
           <iframe [src]="tagManagerUrl"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -34,30 +34,9 @@ import {reassignNavigationalArray} from './models/defaultMenus'
       <div id="loader-1" *ngIf="!IAmLoaded"><div class="spinner2"><div class="cube1"></div><div class="cube2"></div></div></div>
       <router-outlet></router-outlet>
   `,
-  // changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-    // tslint:disable-next-line:no-empty
-
-    public sideMenu: { isopen: boolean } = {isopen: true};
-    public companyMenu: { isopen: boolean } = {isopen: false};
-    public isProdMode: boolean = false;
-    public isElectron: boolean = false;
-    public isCordova: boolean = false;
-    public tagManagerUrl: SafeUrl;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    public sidebarStatusChange(event) {
-        this.sideMenu.isopen = event;
-    }
-
-    public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
-
-    }
-
-    public IAmLoaded: boolean = false;
-    private newVersionAvailableForWebApp: boolean = false;
 
     constructor(private store: Store<AppState>,
                 private router: Router,
@@ -92,6 +71,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this.IAmLoaded = s;
         });
 
+        this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
+
         if (isCordova()) {
             document.addEventListener("deviceready", function () {
                 (window as any).StatusBar.overlaysWebView(false);
@@ -110,6 +91,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
     }
+    // tslint:disable-next-line:no-empty
+    public sideMenu: { isopen: boolean } = { isopen: true };
+    public companyMenu: { isopen: boolean } = { isopen: false };
+    public isProdMode: boolean = false;
+    public isElectron: boolean = false;
+    public tagManagerUrl: SafeUrl;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    public IAmLoaded: boolean = false;
+    private newVersionAvailableForWebApp: boolean = false;
+
+    public sidebarStatusChange(event) {
+        this.sideMenu.isopen = event;
+    }
+
+    public sideBarStateChange(event: boolean) {
+        this.sideMenu.isopen = event;
+    }
 
     private changeOnMobileView(isMobile) {
         if (isMobile) {
@@ -117,7 +116,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
             this.dbServices.clearAllData();
-            this.router.navigate(['/pages/settings']);
+            //this.router.navigate(['/pages/settings']);
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
@@ -129,7 +128,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
         if (!AppUrl.includes('localapp.giddh.com') && (!isElectron || !isCordova)) {
-            this._versionCheckService.initVersionCheck(AppUrl + 'app/version.json');
+            this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
                 if (isChanged) {

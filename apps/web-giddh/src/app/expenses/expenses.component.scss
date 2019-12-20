@@ -6,6 +6,8 @@
 }
 .main-expense-details {
   width: 100%;
+  height: calc(100vh - 230px);
+  overflow-y: auto;
 }
 .main-edit-expense {
   display: flex;

@@ -1,5 +1,4 @@
 @import "../../../assets/css/color.scss";
-
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -12,7 +11,7 @@
     cursor: pointer;
 }
 
-.basic > thead > tr > th {
+.basic>thead>tr>th {
     border-right: 1px solid #c6c4c4;
 }
 
@@ -82,7 +81,7 @@
     color: $activeIconTh;
 }
 
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>a:hover {
     color: $border-blue !important;
     background: #eeeff9 !important;
 }
@@ -146,6 +145,7 @@
     outline: none !important;
 }
 
+
 /* my css */
 
 .card {
@@ -166,8 +166,8 @@
     width: 100%;
 }
 
-.card .basic > tbody > tr > td,
-.card .basic > thead > tr > th {
+.card .basic>tbody>tr>td,
+.card .basic>thead>tr>th {
     padding: 5px 14px;
     border: none !important;
 }
@@ -201,6 +201,7 @@ td.card-header.clearfix {
     display: inline-block;
     padding-right: 20px;
 }
+
 .invoiceNameDownload {
     position: relative;
     text-align: right;
@@ -280,6 +281,7 @@ ul.selectActionDropdown {
     padding: 5px 10px;
     display: block;
 }
+
 .selectActionDropdown a:hover {
     color: $border-blue !important;
     background: #eeeff9 !important;
@@ -288,6 +290,7 @@ ul.selectActionDropdown {
 .addInvoice .dropdown-toggle {
     color: #fff;
 }
+
 .invoice-container {
     padding: 0 15px;
 }
@@ -309,9 +312,11 @@ ul.selectActionDropdown {
     cursor: default;
     width: 100%;
 }
+
 .input-group input.form-control:focus {
     border-color: $inputBorderColor;
 }
+
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -337,9 +342,11 @@ ul.selectActionDropdown {
     color: $dark-blue00;
     background: #fff;
 }
+
 .advance-icon:hover {
     background: #eaeaea;
 }
+
 .dropdown-toggle.spcl_dropdown {
     color: $border-blueDark !important;
     border: 1px solid $border-blue;
@@ -353,14 +360,17 @@ ul.selectActionDropdown {
     color: $dark-blue00;
     background-color: #fff;
 }
+
 .dropdown-toggle.spcl_dropdown:hover {
     background: $border-blue;
     color: #fff !important;
     border-color: $border-blue;
 }
+
 .dropdown-toggle.spcl_dropdown:hover .caret {
     color: #fff !important;
 }
+
 .dropdown-toggle.spcl_dropdown .caret {
     color: #999999;
 }
@@ -393,6 +403,7 @@ button.btn.btn-filter span.icon-cross {
 .invoice-table th .d-flex {
     align-items: center;
 }
+
 .btn-link-2 {
     color: #1c1c1c;
 }
@@ -442,6 +453,7 @@ button.btn.btn-filter span.icon-cross {
     display: inline-block !important;
 }
 
+
 /* responsive */
 
 @media (max-width: 768px) {
@@ -451,16 +463,13 @@ button.btn.btn-filter span.icon-cross {
     .mobileTable {
         display: block;
     }
-
     .desktopTable {
         display: none;
     }
-
     .mobileViewPagination {
         display: block;
         text-align: center;
     }
-
     .paginationWrapper {
         margin-top: 20px;
         border: none;
@@ -479,7 +488,6 @@ button.btn.btn-filter span.icon-cross {
         bottom: 188px;
         border: none;
     }
-
     .date-advanceSearch .dropdown-menu.show.fixedDropdownPlus:after {
         position: absolute;
         width: 20px;
@@ -495,25 +503,20 @@ button.btn.btn-filter span.icon-cross {
         background-color: #fff;
         z-index: -1;
     }
-
     .displayBlock {
         display: block !important;
     }
-
     .click-dropdwon ul {
         left: auto;
         right: 0;
     }
-
     .invoiceFooter .font-xxlarge {
         font-size: 20px;
     }
-
     .click-dropdwon ul {
         left: auto;
         right: 0;
     }
-
     .plusMoreBtn {
         font-size: 30px;
         width: 50px;
@@ -530,8 +533,7 @@ button.btn.btn-filter span.icon-cross {
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
-
-    .date-advanceSearch .dropdown-menu > li > a {
+    .date-advanceSearch .dropdown-menu>li>a {
         padding: 8px 10px;
     }
     .paginationWrapper {
@@ -563,7 +565,6 @@ button.btn.btn-filter span.icon-cross {
     .invoiceFooter .font-xxlarge {
         font-size: 16px;
     }
-
     .invoiceFooter h1 {
         font-size: 18px !important;
     }
@@ -601,6 +602,7 @@ button.btn.btn-filter span.icon-cross {
         padding-right: 0;
     }
 }
+
 @media (max-width: 360px) {
     .date-advanceSearch .input-group {
         width: 100%;
