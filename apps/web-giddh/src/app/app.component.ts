@@ -36,7 +36,6 @@ import { reassignNavigationalArray } from './models/defaultMenus'
     // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-    // tslint:disable-next-line:no-empty
 
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
@@ -44,16 +43,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public isElectron: boolean = false;
     public tagManagerUrl: SafeUrl;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    public sidebarStatusChange(event) {
-        this.sideMenu.isopen = event;
-    }
-
-    public sideBarStateChange(event: boolean) {
-        this.sideMenu.isopen = event;
-
-    }
-
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
 
@@ -65,11 +54,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService
-        // private comapnyActions: CompanyActions,
-        // private activatedRoute: ActivatedRoute,
-        // private location: Location
     ) {
-        this.isProdMode = AppUrl === 'https://giddh.com/';
+        this.isProdMode = AppUrl === 'https://app.giddh.com/';
         this.isElectron = isElectron;
         this.store.select(s => s.session).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
@@ -89,7 +75,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this.IAmLoaded = s;
         });
 
-
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
         this.breakpointObserver.observe([
@@ -97,16 +82,24 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+    }
+
+    public sidebarStatusChange(event) {
+        this.sideMenu.isopen = event;
+    }
+
+    public sideBarStateChange(event: boolean) {
+        this.sideMenu.isopen = event;
 
     }
 
     private changeOnMobileView(isMobile) {
         if (isMobile) {
-              if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
+            if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
-              }
+            }
             this.dbServices.clearAllData();
-            //this.router.navigate(['/pages/settings']);
+            // this.router.navigate(['/pages/settings']);
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
@@ -129,7 +122,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.subscribe((evt) => {

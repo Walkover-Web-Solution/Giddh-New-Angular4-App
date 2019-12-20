@@ -176,26 +176,26 @@ export interface DownloadLedgerAttachmentResponse {
  */
 
 export class TransactionsResponse implements ITransactions {
-  public closingBalance: IClosingBalance;
-  public convertedClosingBalance?: IClosingBalance;
-  public count: number;
-  public creditTotal: number;
-  public convertedCreditTotal?: number;
-  public creditTransactions: ITransactionItem[];
-  public creditTransactionsCount: number;
-  public debitTotal: number;
-  public convertedDebitTotal?: number;
-  public debitTransactions: ITransactionItem[];
-  public debitTransactionsCount: number;
-  public forwardedBalance: IForwardBalance;
-  public convertedForwardedBalance?: IForwardBalance;
-  public page: number;
-  public totalItems: number;
-  public totalPages: number;
-  public currencySymbol?: string;
-  public currencyCode?: string;
-  public convertedCurrencySymbol?: string;
-  public convertedCurrencyCode?: string;
+    public closingBalance: IClosingBalance;
+    public convertedClosingBalance?: IClosingBalance;
+    public count: number;
+    public creditTotal: number;
+    public convertedCreditTotal?: number;
+    public creditTransactions: ITransactionItem[];
+    public creditTransactionsCount: number;
+    public debitTotal: number;
+    public convertedDebitTotal?: number;
+    public debitTransactions: ITransactionItem[];
+    public debitTransactionsCount: number;
+    public forwardedBalance: IForwardBalance;
+    public convertedForwardedBalance?: IForwardBalance;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public currencySymbol?: string;
+    public currencyCode?: string;
+    public convertedCurrencySymbol?: string;
+    public convertedCurrencyCode?: string;
 }
 
 export class TransactionsRequest {

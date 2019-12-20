@@ -1,6 +1,14 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownConfig, BsModalRef, BsModalService, ModalDirective, ModalOptions, PageChangedEvent, PaginationComponent } from 'ngx-bootstrap';
+import {
+    BsDropdownConfig,
+    BsModalRef,
+    BsModalService,
+    ModalDirective,
+    ModalOptions,
+    PageChangedEvent,
+    PaginationComponent,
+} from 'ngx-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -8,7 +16,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
-import { OnBoardingType } from '../../app.constant';
+import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
@@ -17,8 +25,6 @@ import { AppState } from '../../store/roots';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
-
-import { PAGINATION_LIMIT } from '../../app.constant';
 
 /**
  * Warehouse component
@@ -95,8 +101,9 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      *
      * @memberof WarehouseComponent
      */
-    public ngOnDestroy(): void {
+    public async ngOnDestroy(): Promise<any> {
         this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
+        await this.hideAddCompanyModal();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -307,10 +314,21 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * Hides the create company modal
      *
      * @private
+     * @returns {Promise<any>} Promise to carry out further operation
      * @memberof WarehouseComponent
      */
-    private hideAddCompanyModal(): void {
-        this.warehouseOnBoardingModal.hide();
+    private hideAddCompanyModal(): Promise<any> {
+        return new Promise((resolve) => {
+            if (this.warehouseOnBoardingModal) {
+                this.warehouseOnBoardingModal.hide();
+            }
+            setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach((backdrop: HTMLElement) => {
+                    backdrop.style.setProperty('display', 'none', 'important');
+                });
+                resolve();
+            }, 1000);
+        });
     }
 
     /**
