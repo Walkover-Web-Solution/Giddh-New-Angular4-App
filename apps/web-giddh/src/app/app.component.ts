@@ -92,6 +92,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this.IAmLoaded = s;
         });
 
+        if (isCordova()) {
+            document.addEventListener("deviceready", function () {
+                (window as any).StatusBar.overlaysWebView(false);
+                (window as any).StatusBar.backgroundColorByName("#1a237e");
+                (window as any).StatusBar.styleLightContent();
+            }, false);
+        }
+
 
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 

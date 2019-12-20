@@ -119,6 +119,13 @@
         <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
             <string>$Privacy_Camera_Usage_Description</string>
         </config-file>
+        <config-file target="*-Info.plist" parent="UIUserInterfaceStyle">
+  <string>Light</string>
+</config-file>
+
+<config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
+  <true />
+</config-file>
     </platform>
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-contacts" spec="^3.0.1" />
@@ -126,10 +133,17 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <plugin name="cordova-plugin-inappbrowser-popup-bridge" spec="^1.0.22" />
+    <plugin name="cordova-plugin-statusbar" spec="2.4.3" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="git+https://github.com/apache/cordova-plugin-wkwebview-engine.git" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="28" />
     <preference name="android-compileSdkVersion" value="26" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <engine name="ios" spec="^5.0.1" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#1a237e" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+     <feature name="StatusBar">
+            <param name="ios-package" value="CDVStatusBar" onload="true" />
+        </feature>
 </widget>
