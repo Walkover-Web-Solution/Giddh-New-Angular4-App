@@ -29,7 +29,7 @@ export class SettingsDeactivateGuard implements CanDeactivate<SettingsComponent>
         currentRoute: ActivatedRouteSnapshot,
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot): boolean {
-        return document.querySelectorAll('.modal-dialog').length === 0;
+        return document.querySelectorAll('.modal.show').length === 0;
     }
 
 }
