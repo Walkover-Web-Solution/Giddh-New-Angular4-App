@@ -35,10 +35,6 @@
                             More
                             <span class="caret"></span>
                         </button>
-                        <button dropdownToggle type="button" class="btn desktop-view-btn  dropdown-toggle plusMoreBtn"
-                            aria-controls="dropdown-basic">
-                            +
-                        </button>
                         <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
                             aria-labelledby="button-basic">
                             <li role="menuitem">
@@ -378,9 +374,9 @@
                             (clickOutside)="modalUniqueName = ''">
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                 [voucherType]="selectedVoucher"
-                                [accountUniqueName]="item.account.uniqueName" [from]="invoiceSearchRequest.from"
-                                [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                                [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
+                                [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
+                                [isModalOpen]="modalUniqueName === item.uniqueName">
                             </div>
                         </td>
 
@@ -489,9 +485,9 @@
                             <!-- Customer -->
                             {{item.account.name}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
-                                 [voucherType]="selectedVoucher"
-                                 [accountUniqueName]="item.account.uniqueName" [from]="invoiceSearchRequest.from"
-                                 [to]="invoiceSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                                [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
+                                [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
+                                [isModalOpen]="modalUniqueName === item.uniqueName">
                             </div>
                         </td>
                         <!-- Date -->
