@@ -1,8 +1,19 @@
 <div id="" class="Advance-Search">
     <div class="modal-header themeBg clearfix">
+
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-        <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i> -->
+
+        <div class="clear-filter-close">
+            <a class="cp mrR1" href="javascript: void 0" (click)="resetAdvanceSearchModal()"
+               tooltip="Reset Advance Search">
+                <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
+            </a>
+
+            <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+        </div>
+
+
+
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form action="" [formGroup]="advanceSearchForm">

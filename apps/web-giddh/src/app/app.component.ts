@@ -37,6 +37,15 @@ import { reassignNavigationalArray } from './models/defaultMenus'
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
+    public sideMenu: { isopen: boolean } = { isopen: true };
+    public companyMenu: { isopen: boolean } = { isopen: false };
+    public isProdMode: boolean = false;
+    public isElectron: boolean = false;
+    public tagManagerUrl: SafeUrl;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public IAmLoaded: boolean = false;
+    private newVersionAvailableForWebApp: boolean = false;
+
     constructor(private store: Store<AppState>,
         private router: Router,
         private _generalService: GeneralService,
@@ -45,9 +54,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService
-        // private comapnyActions: CompanyActions,
-        // private activatedRoute: ActivatedRoute,
-        // private location: Location
     ) {
         this.isProdMode = AppUrl === 'https://app.giddh.com/';
         this.isElectron = isElectron;
@@ -76,18 +82,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
-
     }
-    // tslint:disable-next-line:no-empty
-    public sideMenu: { isopen: boolean } = { isopen: true };
-    public companyMenu: { isopen: boolean } = { isopen: false };
-    public isProdMode: boolean = false;
-    public isElectron: boolean = false;
-    public tagManagerUrl: SafeUrl;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    public IAmLoaded: boolean = false;
-    private newVersionAvailableForWebApp: boolean = false;
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -103,7 +98,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
             this.dbServices.clearAllData();
-            //this.router.navigate(['/pages/settings']);
+            // this.router.navigate(['/pages/settings']);
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
@@ -126,7 +121,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.subscribe((evt) => {
