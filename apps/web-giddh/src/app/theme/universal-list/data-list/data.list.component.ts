@@ -362,20 +362,20 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
                 e.preventDefault();
                 e.stopPropagation();
 
-                this.viewPortItems = this.defaultViewPortItems;
                 // remove item one by one on pressing backspace like gmail
-                // if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
-                //     if (!LOCAL_MEMORY.charCount) {
-                //         this.removeItemFromSelectedGroups();
-                //     }
-                //     if (LOCAL_MEMORY.charCount === 1) {
-                //         LOCAL_MEMORY.charCount = null;
-                //     }
-                //     // logic search
-                //     this.doConditionalSearch();
-                // } else {
-                //     this.updateRowsViaSearch(cloneDeep(this.smartList));
-                // }
+                if (this.listOfSelectedGroups && this.listOfSelectedGroups.length) {
+                    if (!LOCAL_MEMORY.charCount) {
+                        this.removeItemFromSelectedGroups();
+                    }
+                    if (LOCAL_MEMORY.charCount === 1) {
+                        LOCAL_MEMORY.charCount = null;
+                    }
+                    // logic search
+                    this.doConditionalSearch();
+                } else {
+                    this.viewPortItems = this.defaultViewPortItems;
+                    //this.updateRowsViaSearch(cloneDeep(this.smartList));
+                }
             }
         }
     }

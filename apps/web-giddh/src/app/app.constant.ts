@@ -43,3 +43,6 @@ export enum OnBoardingType {
     Company = 'Company',
     Branch = 'Branch'
 }
+
+/** Pagination limit for every module */
+export const PAGINATION_LIMIT = 20;
