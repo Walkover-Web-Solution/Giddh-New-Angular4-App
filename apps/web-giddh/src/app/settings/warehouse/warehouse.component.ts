@@ -114,7 +114,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.itemOnBoardingActions.getOnBoardingResetAction());
         this.locationChangeSubscription.unsubscribe();
         await this.hideAddCompanyModal();
-        this.bsModalService.hide(1);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -140,7 +139,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public hideWelcomePage(): Promise<any> {
         return new Promise((resolve) => {
             // Restore the state to settings warehouse URL
-            this.locationStrategy.replaceState(this.locationState, '', '/pages/settings/warehouse', '');
+            // this.locationStrategy.replaceState(this.locationState, '', '/pages/settings/warehouse', '');
             if (this.welcomePageModalInstance) {
                 this.welcomePageModalInstance.hide();
                 setTimeout(() => {
@@ -157,9 +156,12 @@ export class WarehouseComponent implements OnInit, OnDestroy {
      * @returns {Promise<any>} Promise to carry out further operation
      * @memberof WarehouseComponent
      */
-    public async handleBackButtonClick(): Promise<any> {
+    public async handleBackButtonClick(isBrowserBackButtonClicked: boolean): Promise<any> {
         await this.hideWelcomePage();
         this.resetWelcomeForm();
+        if (!isBrowserBackButtonClicked) {
+            this.location.back();
+        }
         if (this.itemOnBoardingDetails) {
             if (!this.itemOnBoardingDetails.isItemUpdateInProgress) {
                 this.openCreateWarehouseModal();
@@ -270,10 +272,10 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private initSubscribers(): void {
         this.allWarehouses$ = this.store.pipe(select(store => store.warehouse.warehouses), takeUntil(this.destroyed$));
         this.locationChangeSubscription = this.location.subscribe(() => { // Subscribe to browser back button click
-            this.isWelcomePageAdded = false;
             if (this.itemOnBoardingDetails.isOnBoardingInProgress) {
-                this.handleBackButtonClick();
+                this.handleBackButtonClick(true);
             }
+            console.log('Length ', window.history.state.length);
         });
         this.store.pipe(select(state => state.itemOnboarding), takeUntil(this.destroyed$)).subscribe((itemOnBoardingDetails: ItemOnBoardingState) => {
             this.itemOnBoardingDetails = itemOnBoardingDetails;
@@ -343,8 +345,11 @@ export class WarehouseComponent implements OnInit, OnDestroy {
                 this.warehouseOnBoardingModal.hide();
             }
             setTimeout(() => {
+                document.querySelectorAll('.modal-backdrop').forEach((backdrop: HTMLElement) => {
+                    backdrop.style.setProperty('display', 'none', 'important');
+                });
                 resolve();
-            }, 500);
+            }, 1000);
         });
     }
 
@@ -396,7 +401,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
             this.locationStrategy.pushState(this.locationState, '', '/pages/settings/warehouse', '');
             this.isWelcomePageAdded = true;
         } else {
-            this.locationStrategy.replaceState(this.locationState, '', '', '');
+            this.locationStrategy.forward();
         }
         console.log('State: ', window.history.state);
     }

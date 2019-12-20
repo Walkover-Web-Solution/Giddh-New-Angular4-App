@@ -82,7 +82,7 @@
     </ng-container>
 
     <!-- Warehouse on boarding modal (Step 1) -->
-    <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ backdrop: 'static', keyboard: 'true' }" tabindex="-1"
+    <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}" tabindex="-1"
         class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -94,7 +94,7 @@
 
     <!-- Welcome component (Step 2) -->
     <ng-template #welcomeComponent>
-        <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick()"
+        <welcome-component [itemDetails]="selectedWarehouse" (backButtonClicked)="handleBackButtonClick(false)"
             (nextButtonClicked)="handleFormSubmit($event)">
         </welcome-component>
     </ng-template>
