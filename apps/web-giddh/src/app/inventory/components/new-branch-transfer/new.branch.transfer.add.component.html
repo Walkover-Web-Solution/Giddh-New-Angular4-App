@@ -313,7 +313,7 @@
 	                                            </div>
 	                                        </div>
 	                                    </div>
-	                                    <textarea #productDescription rows="5" cols="5" maxlength="100" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+	                                    <textarea #productDescription rows="3" cols="5" maxlength="100" class="form-control" name="productDescription{{i}}" *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
 	                                </div>
 	                                <div *ngIf="activeRow !== i">
 	                                    <div *ngIf="product.name">{{product.name}}</div>
@@ -350,7 +350,7 @@
 		                        </td>
 		                        <td>
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="productRate{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat">
+			                            <input type="text" class="form-control text-right" name="productRate{{i}}" (change)="calculateRowTotal(product)" decimalDigitsDirective [(ngModel)]="product.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.rate | giddhCurrency}}</div>
@@ -358,7 +358,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+			                            <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.amount | giddhCurrency}}</div>
@@ -397,7 +397,7 @@
 		                        </td>
 		                        <td>
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="destinationRate{{i}}" (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol"  [mask]="inputMaskFormat">
+			                            <input type="text" class="form-control text-right" name="destinationRate{{i}}" (change)="calculateRowTotal(destination.warehouse)" decimalDigitsDirective [(ngModel)]="destination.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
@@ -405,7 +405,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+			                            <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
@@ -443,7 +443,7 @@
 		                        </td>
 		                        <td>
 			                        <div *ngIf="activeRow === i">
-				                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat">
+				                        <input type="text" class="form-control text-right" name="sourceRate{{i}}" decimalDigitsDirective (change)="calculateRowTotal(source.warehouse)" [(ngModel)]="source.warehouse.stockDetails.rate" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
@@ -451,7 +451,7 @@
 		                        </td>
 		                        <td class="pos-rel">
 			                        <div *ngIf="activeRow === i">
-				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+				                        <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
 			                        </div>
 			                        <div *ngIf="activeRow !== i">
 				                        <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
@@ -489,7 +489,7 @@
 		                                        <sh-select #transMode placeholder="Transport Mode" name="transportMode" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="transporterMode" [(ngModel)]="branchTransfer.transporterDetails.transportMode" (selected)="focusVehicleNumber();"></sh-select>
 	                                        </div>
 	                                        <div class="col-sm-6 mrB2">
-	                                            <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber" maxlength="50">
+	                                            <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber" maxlength="20">
 	                                        </div>
 	                                    </div>
 	                                    <div class="row">

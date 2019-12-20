@@ -3,13 +3,13 @@
     display: flex;
     justify-content: space-between;
     background-color: #fff;
-    border-bottom: 1px solid #C4C4C4;
+    border-bottom: 1px solid #c4c4c4;
     font-size: 18px;
     font-family: "opensans-bold";
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: #1A237E;
+    color: #1a237e;
 }
 section.reciptNote {
     background-color: #fff;
@@ -18,7 +18,7 @@ section.reciptNote {
     padding-top: 15px;
     padding-bottom: 15px;
     color: #1c1c1c;
-    border-bottom: 1px solid #C4C4C4;
+    border-bottom: 1px solid #c4c4c4;
 }
 .reciptNoteContent {
     font-size: 14px;
@@ -30,7 +30,7 @@ section.reciptNote {
 .multipleProducts label {
     vertical-align: middle;
     line-height: 2.5;
-    color: #1C1C1C;
+    color: #1c1c1c;
 }
 #table-recipt th,
 #table-recipt td {
@@ -328,14 +328,14 @@ tfoot td .tableSec.form-group {
     color: #fff;
 }
 .transfertype-checked:before {
-    border: 1px solid #5B64C9;
+    border: 1px solid #5b64c9;
 }
 .transfertype-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: #5B64C9;
+    background: #5b64c9;
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -357,7 +357,7 @@ tfoot td .tableSec.form-group {
     font-size: 14px;
     background: #fff;
     right: -530px;
-    transition: .5s all ease;
+    transition: 0.5s all ease;
     z-index: 999;
 }
 .aside-right .control-label {
@@ -374,8 +374,8 @@ tfoot td .tableSec.form-group {
     border: 1px solid transparent;
 }
 
-.aside-right .list-icon-group input:checked+label {
-    border: 1px solid #FF5F00;
+.aside-right .list-icon-group input:checked + label {
+    border: 1px solid #ff5f00;
     border-radius: 0px;
 }
 
@@ -390,16 +390,16 @@ tfoot td .tableSec.form-group {
 
 .aside-overlay.in {
     visibility: visible;
-    opacity: .6;
+    opacity: 0.6;
     z-index: 9999;
 }
 
 .aside-overlay {
-    transition: .5s all ease;
+    transition: 0.5s all ease;
     z-index: 999;
 }
 .icon-pointer.activeTextColor {
-    color: #01A9F4;
+    color: #01a9f4;
 }
 .closeRecipt {
     color: #666666;
