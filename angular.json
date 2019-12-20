@@ -208,7 +208,7 @@
                         "test": {
                             "outputPath": "dist/apps/web-giddh-test",
                             "extraWebpackConfig": "./webpack.test.partial.js",
-                            "baseHref": "http://test.giddh.com/app/",
+                            "baseHref": "http://test.giddh.com/",
                             "baseUrl": "test.giddh.com",
                             "fileReplacements": [{
                                     "replace": "apps/web-giddh/src/index.html",

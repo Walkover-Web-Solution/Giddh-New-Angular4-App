@@ -49,6 +49,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public useInBuiltFilterForIOptionTypeItems: boolean = false;
   @Input() public doNotReset: boolean = false;
   @Input() public defaultValue: string = "";
+  @Input() public readonlyInput: boolean;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -340,6 +341,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public hide(event?) {
+    if (this.disabled) {
+        return;
+    }
     if (event) {
       if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
         this.isOpen = false;

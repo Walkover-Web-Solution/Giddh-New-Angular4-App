@@ -13,8 +13,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { COMMON_ACTIONS } from './common.const';
 import { IRegistration } from "../models/interfaces/registration.interface";
 
-// import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-
 @Injectable()
 
 export class CompanyActions {
@@ -580,6 +578,7 @@ export class CompanyActions {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT
     };
   }
+
   public getAllRegistrationsResponse(value: BaseResponse<IRegistration, string>): CustomActions {
     return {
       type: CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE,
