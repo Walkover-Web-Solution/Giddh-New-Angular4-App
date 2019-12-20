@@ -4,7 +4,7 @@
             <div class="d-flex">
                 <div class="input-group">
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Filter by Date" [bsValue]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" [bsConfig]="bsConfig" />
+                        <input class="form-control" placeholder="Filter by Date" [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" [bsConfig]="bsConfig" />
                     </span>
                 </div>
                 <div class="advance-icon pointer" tooltip="Advance Search"
