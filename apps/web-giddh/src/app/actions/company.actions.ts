@@ -57,10 +57,6 @@ export class CompanyActions {
 
   public static USER_REMOVE_COMPANY_CREATE_SESSION = "USER_REMOVE_COMPANY_CREATE_SESSION";
 
-  public static GET_WAREHOUSE_DETAILS = 'GET_WAREHOUSE_DETAILS';
-  public static GET_WAREHOUSE_DETAILS_RESPONSE = 'GET_WAREHOUSE_DETAILS_RESPONSE';
-  public static RESET_WAREHOUSE_DETAILS_RESPONSE = 'RESET_WAREHOUSE_DETAILS_RESPONSE';
-
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY).pipe(
