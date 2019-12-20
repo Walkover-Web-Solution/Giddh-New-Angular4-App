@@ -390,6 +390,9 @@ input {
 }
 
 /**/
+.dropdown-arrow {
+    position: relative;
+}
 .dropdown-arrow:after {
     width: 0px;
     height: 0px;
@@ -530,6 +533,9 @@ input {
 
 .mb-5 {
     margin-bottom: 50px;
+}
+.mb-15 {
+    margin-bottom: 15px;
 }
 
 .mr-1 {
@@ -1396,6 +1402,12 @@ modal-container.modal {
 
 .dot-success {
     background: #2daa4a;
+}
+.pt-85 {
+    padding-top: 85px !important;
+}
+.mb-0 {
+    margin-bottom: 0px;
 }
 
 /* my css end */
@@ -7609,6 +7621,10 @@ app-header {
 }
 
 /* my css */
+
+.radius-none {
+    border-radius: 0px !important;
+}
 
 #form-place .dropdown-menu {
     height: 392px;

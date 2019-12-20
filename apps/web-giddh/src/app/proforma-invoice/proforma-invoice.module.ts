@@ -64,7 +64,7 @@ import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
     CurrencyModule,
     NgxMaskModule.forRoot()
   ],
-  exports: [ProformaInvoiceComponent],
+  exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
   declarations: [
     ProformaInvoiceRendererComponent,
     ProformaInvoiceComponent,

@@ -120,4 +120,36 @@ export class GeneralService {
     public capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    public base64ToBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        let byteCharacters = atob(b64Data);
+        let byteArrays = [];
+        let offset = 0;
+        while (offset < byteCharacters.length) {
+            let slice = byteCharacters.slice(offset, offset + sliceSize);
+            let byteNumbers = new Array(slice.length);
+            let i = 0;
+            while (i < slice.length) {
+                byteNumbers[i] = slice.charCodeAt(i);
+                i++;
+            }
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+            offset += sliceSize;
+        }
+        return new Blob(byteArrays, { type: contentType });
+    }
+
+    convertExponentialToNumber(n) {
+        var [lead, decimal, pow] = n.toString().split(/e|\./);
+        if (decimal) {
+            return +pow <= 0
+                ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
+                : lead + (+pow >= decimal.length ? (decimal + "0".repeat(+pow - decimal.length)) : (decimal.slice(0, +pow) + "." + decimal.slice(+pow)))
+        } else {
+            return n;
+        }
+    }
 }
