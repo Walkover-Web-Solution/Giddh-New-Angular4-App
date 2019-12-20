@@ -490,7 +490,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
             product.stockDetails.rate = event.additional.rate;
-            product.stockDetails.quantity = event.additional.openingQuantity;
             product.skuCode = event.additional.skuCode;
             product.hsnNumber = event.additional.hsnNumber;
 
