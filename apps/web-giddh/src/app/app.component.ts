@@ -79,10 +79,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     }
     // tslint:disable-next-line:no-empty
-    // <noscript * ngIf="isProdMode && !isElectron" >
-    //   <iframe[src]="tagManagerUrl"
-    // height = "0" width = "0" style = "display:none;visibility:hidden" > </iframe>
-    //   < /noscript>
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;

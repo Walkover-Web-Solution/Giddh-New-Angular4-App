@@ -314,17 +314,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            } else if (!a) {
-                this.addAccountForm.get('openingBalance').setValue('0');
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
-        this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
-            if (!a) {
-                this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
-                this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-            }
-        });
+        // this.addAccountForm.get('foreignOpeningBalance').valueChanges.subscribe(a => {
+        //     if (!a) {
+        //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        //         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+        //     }
+        // });
         this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
@@ -570,8 +567,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
-            foreignOpeningBalance: [0],
-            openingBalance: [0],
+            foreignOpeningBalance: [''],
+            openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
             email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -724,12 +721,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceClick() {
-        if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
-            this.addAccountForm.get('openingBalance').setValue(undefined);
-        }
-    }
-
     public openingBalanceTypeChnaged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
             this.addAccountForm.get('openingBalanceType').patchValue(type);
@@ -775,6 +766,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public submit() {
+        if (!this.addAccountForm.get('openingBalance').value) {
+            this.addAccountForm.get('openingBalance').setValue('0');
+        }
+        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+            this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
+        }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -838,6 +835,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (!this.showBankDetail) {
             delete accountRequest['accountBankDetails'];
         }
+
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest: this.addAccountForm.value

@@ -434,19 +434,21 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     private getRedirectUrl(baseHref: string) {
         if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            return 'http://test.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            return 'http://stage.giddh.com/pages/invoice/preview/settings/email';
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            return 'http://localapp.giddh.com:3000/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            //return 'https://app.giddh.com/pages/invoice/preview/settings/email';
+            return 'http://localapp.giddh.com:3000/pages/invoice/preview/settings/email';
         } else {
             /* All the above URIs are not secured and Google has blocked
               addition of unsecured URIs therefore show Gmail integration text only
               for PROD. This flag need to be removed once all the above URIs become secure */
             this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
-            return 'https://app.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
+            return 'https://app.giddh.com/pages/invoice/preview/settings/email';
+            // return 'https://app.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         }
     }
 
