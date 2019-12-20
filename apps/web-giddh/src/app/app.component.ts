@@ -96,6 +96,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
+    public isCordova: boolean = false;
     public tagManagerUrl: SafeUrl;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
