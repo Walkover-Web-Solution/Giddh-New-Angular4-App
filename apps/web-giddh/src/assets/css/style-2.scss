@@ -292,13 +292,14 @@ input {
     display: block;
     width: 18px;
     height: 18px;
-    background: #bbbbbb;
     position: absolute;
     top: -2px;
     bottom: 0;
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
+    background-color: #5b64c9;
+    border-color: #5b64c9;
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
