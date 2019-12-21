@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.app.Giddh" version="2.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.app.giddh" version="2.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Giddh</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -48,17 +48,15 @@
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         </config-file>
         <preference name="server-path" value="/app2/mobile" />
-        <provider android:name="io.github.pwlin.cordova.plugins.fileopener2.FileProvider" android:authorities="${applicationId}.opener.provider" android:exported="false" android:grantUriPermissions="true">
+        <provider android:authorities="${applicationId}.opener.provider" android:exported="false" android:grantUriPermissions="true" android:name="io.github.pwlin.cordova.plugins.fileopener2.FileProvider">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/opener_paths" />
         </provider>
-
         <preference name="AndroidPersistentFileLocation" value="Internal" />
-
         <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
             <application android:networkSecurityConfig="@xml/network_security_config">
                 <provider android:authorities="${applicationId}.opener.provider" android:exported="false" android:grantUriPermissions="true" android:name="io.github.pwlin.cordova.plugins.fileopener2.FileProvider">
-                    <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/opener_paths"  />
+                    <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/opener_paths" />
                 </provider>
             </application>
         </edit-config>
@@ -119,13 +117,12 @@
         <config-file parent="NSCameraUsageDescription" target="*-Info.plist">
             <string>$Privacy_Camera_Usage_Description</string>
         </config-file>
-        <config-file target="*-Info.plist" parent="UIUserInterfaceStyle">
-  <string>Light</string>
-</config-file>
-
-<config-file target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
-  <true />
-</config-file>
+        <config-file parent="UIUserInterfaceStyle" target="*-Info.plist">
+            <string>Light</string>
+        </config-file>
+        <config-file parent="UIViewControllerBasedStatusBarAppearance" target="*-Info.plist">
+            <true />
+        </config-file>
     </platform>
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-contacts" spec="^3.0.1" />
@@ -139,11 +136,10 @@
     <preference name="android-targetSdkVersion" value="28" />
     <preference name="android-compileSdkVersion" value="26" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-    <engine name="ios" spec="^5.0.1" />
     <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarBackgroundColor" value="#1a237e" />
     <preference name="StatusBarStyle" value="lightcontent" />
-     <feature name="StatusBar">
-            <param name="ios-package" value="CDVStatusBar" onload="true" />
-        </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" onload="true" value="CDVStatusBar" />
+    </feature>
 </widget>
