@@ -18,7 +18,7 @@ export class NeedsAuthentication implements CanActivate {
         this._router.navigate(['/new-user']);
       }
       if (p === userLoginStateEnum.notLoggedIn) {
-        if (isElectron) {
+        if (isElectron || isCordova) {
             this._router.navigate(['/login']);
         } else {
             window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;

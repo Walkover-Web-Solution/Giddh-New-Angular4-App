@@ -30,6 +30,7 @@ import {ToasterService} from "../services/toaster.service";
 import {AuthenticationService} from "../services/authentication.service";
 import {userLoginStateEnum} from "../models/user-login-state";
 import {isCordova, isIOSCordova} from "@giddh-workspaces/utils";
+import { GeneralService } from '../services/general.service';
 declare var cordova:any;
 @Component({
     selector: "login",
@@ -96,7 +97,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                 private authService: AuthService,
                 @Inject(DOCUMENT) private document: Document,
                 private _toaster: ToasterService,
-                private _authService: AuthenticationService
+                private _authService: AuthenticationService,
+                private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -420,7 +422,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }).join('&');
 
             let iab = (cordova as any).InAppBrowser.open(url, '_blank', iabOpts);
-​
+
             iab.addEventListener('loadstart', (e) => {
                 if (e.url && e.url.startsWith('http://localhost')) {
                     let parsedUrl = e.url.slice(e.url.lastIndexOf('code='), e.url.lastIndexOf('&scope'));
