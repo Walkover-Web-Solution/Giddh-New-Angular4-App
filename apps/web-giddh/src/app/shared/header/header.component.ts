@@ -627,7 +627,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                if (isElectron) {
+                if (isElectron || isCordova) {
                     this.router.navigate(['/login']);
                 } else {
                     window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
