@@ -1396,7 +1396,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
             if (acc) {
                 this.isLedgerAccSelected = true;
-                this.selectedLedgerName = this.currentState.substr(this.currentState.indexOf('/') + 1);
+                this.selectedLedgerName = acc.uniqueName;
                 this.selectedPage = 'ledger - ' + acc.name;
                 return this.navigateToUser = false;
             }
