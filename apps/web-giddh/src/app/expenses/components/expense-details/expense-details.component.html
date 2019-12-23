@@ -10,8 +10,8 @@
                 </button>
                 <button type="button" class="mb-05 btn btn-danger" (click)="openModal(RejectionReason)">Reject</button>
                 <span class="close-modal cp" (click)="closeDetailsMode()">
-          <img src="assets/images/multiply.svg">
-        </span>
+                    <img src="assets/images/multiply.svg">
+                </span>
             </div>
         </div>
 
@@ -20,7 +20,7 @@
                 <ng-container *ngFor="let item of imageURL let i=index;">
                     <li>
                         <div class="upload-img">
-                            <img [src]="item" alt="test" (click)="clickZoomImageView(i)" id="signatureImage"/>
+                            <img [src]="item" alt="test" (click)="clickZoomImageView(i)" id="signatureImage" />
                         </div>
                     </li>
                 </ng-container>
@@ -28,8 +28,8 @@
                     <div class="upload-img add-img">
                         <label for="signatureImg-edit"><i class="icon-add"></i></label>
                         <input type="file" accept="image/png, image/jpeg" id="signatureImg-edit" ngFileSelect
-                               (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
-                               [uploadInput]="uploadInput">
+                            (uploadOutput)="onUploadFileOutput($event)" [options]="fileUploadOptions"
+                            [uploadInput]="uploadInput">
                     </div>
                 </li>
             </ul>
@@ -46,38 +46,38 @@
     </div>
 
     <div class="pettycash">
-    <div class="bg-white p-15 pb-0">
-        <div class="form-group mb-2">
-            <label>Description</label>
-            <textarea name="comment" class="textarea form-control" [(ngModel)]="comment" placeholder='Add Description'></textarea>
-        </div>
+        <div class="bg-white p-15 pb-0">
+            <div class="form-group mb-2">
+                <label>Description</label>
+                <textarea name="comment" class="textarea form-control" [(ngModel)]="comment"
+                    placeholder='Add Description'></textarea>
+            </div>
 
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="d-inline-block mr-2">
-                    <label>
-                        {{ entryAgainstObject.base }}<span class="text-danger">*</span>
-                    </label>
-                    <div class="clearfix">
-                        <sh-select class="text-left multi-select" name="depositAccountUniqueName"
-                                   #entryAgainstAccountDropDown
-                                   [options]="entryAgainstObject.dropDownOption"
-                                   [(ngModel)]="entryAgainstObject.model"
-                                   (selected)="onSelectEntryAgainstAccount($event)"
-                                   [placeholder]="'Select Account'" [notFoundLink]="false"
-                                   [forceClearReactive]="forceClear$ | async"
-                                   [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
-                            <ng-template #optionTemplate1 let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                    <div class="item">{{ option.label }}</div>
-                                    <div class="item_unq">{{ option.value }}</div>
-                                </a>
-                            </ng-template>
-                        </sh-select>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="d-inline-block mr-2">
+                        <label>
+                            {{ entryAgainstObject.base }}<span class="text-danger">*</span>
+                        </label>
+                        <div class="clearfix">
+                            <sh-select class="text-left multi-select" name="depositAccountUniqueName"
+                                #entryAgainstAccountDropDown [options]="entryAgainstObject.dropDownOption"
+                                [(ngModel)]="entryAgainstObject.model" (selected)="onSelectEntryAgainstAccount($event)"
+                                [placeholder]="'Select Account'" [notFoundLink]="false"
+                                [forceClearReactive]="forceClear$ | async" [multiple]="false" [ItemHeight]="33"
+                                [useInBuiltFilterForIOptionTypeItems]="true">
+                                <ng-template #optionTemplate1 let-option="option">
+                                    <a href="javascript:void(0)" class="list-item"
+                                        style="border-bottom: 1px solid #ccc;">
+                                        <div class="item">{{ option.label }}</div>
+                                        <div class="item_unq">{{ option.value }}</div>
+                                    </a>
+                                </ng-template>
+                            </sh-select>
+                        </div>
                     </div>
-                </div>
 
-                <!-- <div class="d-inline-block">
+                    <!-- <div class="d-inline-block">
                 <span class="mr-1 d-inilne-block font-14">USD</span>
                 <div class="toggle d-inline-block" data-key="disabled">
                     <input type="checkbox" class="toggle-checkbox" id="disabled">
@@ -89,35 +89,34 @@
                 <span class="ml-1 d-inline-block font-14">INR</span>
             </div> -->
 
-            </div>
+                </div>
 
-            <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()" *ngIf="entryAgainstObject.against">
-                <a href="javascript:void(0)" class="d-inline-block pt-3">
-                    {{entryAgainstObject.against}}
-                </a>
-            </div>
+                <div class="col-sm-4 text-right xs-left" (click)="toggleEntryAgainst()"
+                    *ngIf="entryAgainstObject.against">
+                    <a href="javascript:void(0)" class="d-inline-block pt-3">
+                        {{entryAgainstObject.against}}
+                    </a>
+                </div>
 
+            </div>
+        </div>
+
+        <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
+            <update-ledger-entry-panel [isPettyCash]="true" [pettyCashEntry]="accountEntryPettyCash"
+                [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"></update-ledger-entry-panel>
         </div>
     </div>
-
-    <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
-        <update-ledger-entry-panel [isPettyCash]="true"
-                                   [pettyCashEntry]="accountEntryPettyCash"
-                                   [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                                   [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                                   (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
-        ></update-ledger-entry-panel>
-    </div>
- </div>
 </div>
 <div *ngIf="(ispPettycashEntryInprocess$ | async) ">
-        <div class="no-data mrT2 loader-main" *ngIf="showLoader">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
+    <div class="no-data mrT2 loader-main" *ngIf="showLoader">
+        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
         </div>
+    </div>
 
 </div>
 
@@ -166,7 +165,7 @@
         <div class="form-group">
             <label for="rejectReason">Reason</label> <sup>*</sup>
             <textarea name="rejectReason" required id="rejectReason" [formControl]="rejectReason"
-                      class="textarea form-control" placeholder="Add Reason"></textarea>
+                class="textarea form-control" placeholder="Add Reason"></textarea>
         </div>
 
         <input type="submit" class="btn btn-success" [disabled]="!rejectReason.value" (click)="submitReject()">
@@ -177,21 +176,17 @@
 
 <!-- region approve entry confirm -->
 <ng-template #ApproveConfirm>
-    <petty-cash-approve-confirm-dialog
-        [selectedEntryForApprove]="selectedEntryForApprove"
-        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
-        (approveEntry)="hideApproveConfirmPopup($event)"
-    ></petty-cash-approve-confirm-dialog>
+    <petty-cash-approve-confirm-dialog [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess" (approveEntry)="hideApproveConfirmPopup($event)">
+    </petty-cash-approve-confirm-dialog>
 </ng-template>
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'"
-                                  [class]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
-                                  [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-                                  [@slideInOut]="asideMenuStateForOtherTaxes"
-                                  (closeModal)="toggleOtherTaxesAsidePane(null)"
-                                  (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
+<app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
+    [taxes]="companyTaxesList" [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+    [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane(null)"
+    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
 </app-aside-menu-sales-other-taxes>
 <!-- endregion -->

@@ -1,72 +1,72 @@
 <section autocomplete="off" class="row">
-    <div>
-        <section class="clearfix">
-            <div class="form-header">
-                <h3 *ngIf="addGroup">Create Group</h3>
-                <h3 *ngIf="!addGroup">Update Group</h3>
-            </div>
-            <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+	<div>
+		<section class="clearfix">
+			<div class="form-header">
+				<h3 *ngIf="addGroup">Create Group</h3>
+				<h3 *ngIf="!addGroup">Update Group</h3>
+			</div>
+			<button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
 
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-                <div class="aside-pane-form">
-                    <form name="updateStockGroup" class="form_body" [formGroup]="addGroupForm" novalidate="">
-                        <div class="form_bg clearfix">
-                            <div class="row">
-                                <div class="form-group col-xs-6">
-                                    <label>Name <sup>*</sup></label>
-                                    <input type="text" name="name" (change)="generateUniqueName()" class="form-control"
-                                        formControlName="name" />
-                                </div>
-                                <div class="form-group col-xs-6">
-                                    <label>Unique Name <sup>*</sup></label>
-                                    <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
-                                        [control]="addGroupForm.get('uniqueName')"
-                                        (blur)="validateUniqueName($event?.target?.value)" formControlName="uniqueName"
-                                        class="form-control">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="pdB1" [hidden]="defaultGrpActive">
-                                        <label for="isSelfParentUpdt">
-                                            <input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt"
-                                                name="parentStockGroup">Is
-                                            it a sub group?</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Parent Group</label>
-                                        <sh-select [options]="groupsData$ | async"
-                                            formControlName="parentStockGroupUniqueName"
-                                            [disabled]="!addGroupForm.get('isSubGroup').value"
-                                            [placeholder]="'Select Parent Group'" [multiple]="false"
-                                            (selected)="groupSelected($event)" [ItemHeight]="33"
-                                            [forceClearReactive]="forceClear$ | async"></sh-select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix text-left mrB">
-                                <div *ngIf="addGroup">
-                                    <button type="submit" class="btn btn-success"
-                                        [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()"
-                                        [disabled]="addGroupForm.invalid">Save
-                                    </button>
-                                    <button type="reset" class="btn btn-primary">Cancel</button>
-                                </div>
-                                <div *ngIf="!addGroup">
-                                    <button type="submit" [disabled]="addGroupForm.invalid || defaultGrpActive"
-                                        [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-success"
-                                        (click)="updateGroup()">Update
-                                    </button>
-                                    <button type="submit" class="btn btn-danger"
-                                        [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()"
-                                        *ngIf="canDeleteGroup" [disabled]="defaultGrpActive">Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </div>
+			<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+				<div class="aside-pane-form">
+					<form name="updateStockGroup" class="form_body" [formGroup]="addGroupForm" novalidate="">
+						<div class="form_bg clearfix">
+							<div class="row">
+								<div class="form-group col-xs-6">
+									<label>Name <sup>*</sup></label>
+									<input type="text" name="name" (change)="generateUniqueName()" class="form-control"
+										formControlName="name" />
+								</div>
+								<div class="form-group col-xs-6">
+									<label>Unique Name <sup>*</sup></label>
+									<input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
+										[control]="addGroupForm.get('uniqueName')"
+										(blur)="validateUniqueName($event?.target?.value)" formControlName="uniqueName"
+										class="form-control">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6">
+									<div class="pdB1" [hidden]="defaultGrpActive">
+										<label for="isSelfParentUpdt">
+											<input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt"
+												name="parentStockGroup">Is
+											it a sub group?</label>
+									</div>
+									<div class="form-group">
+										<label>Parent Group</label>
+										<sh-select [options]="groupsData$ | async"
+											formControlName="parentStockGroupUniqueName"
+											[disabled]="!addGroupForm.get('isSubGroup').value"
+											[placeholder]="'Select Parent Group'" [multiple]="false"
+											(selected)="groupSelected($event)" [ItemHeight]="33"
+											[forceClearReactive]="forceClear$ | async"></sh-select>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix text-left mrB">
+								<div *ngIf="addGroup">
+									<button type="submit" class="btn btn-success"
+										[ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()"
+										[disabled]="addGroupForm.invalid">Save
+									</button>
+									<button type="reset" class="btn btn-primary">Cancel</button>
+								</div>
+								<div *ngIf="!addGroup">
+									<button type="submit" [disabled]="addGroupForm.invalid || defaultGrpActive"
+										[ladda]="isUpdateGroupInProcess$ | async" class="btn btn-success"
+										(click)="updateGroup()">Update
+									</button>
+									<button type="submit" class="btn btn-danger"
+										[ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()"
+										*ngIf="canDeleteGroup" [disabled]="defaultGrpActive">Delete
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
 </section>

@@ -139,4 +139,4 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
     ],
     entryComponents: [PaginationComponent]
 })
-export class InventoryModule {}
+export class InventoryModule { }

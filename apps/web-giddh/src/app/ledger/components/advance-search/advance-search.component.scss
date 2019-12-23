@@ -1,4 +1,4 @@
-.clear-filter-close{
+.clear-filter-close {
     display: flex;
     flex: 1;
     justify-content: flex-end;
@@ -12,7 +12,7 @@
     display: flex;
     justify-content: space-around;
 }
-.modal-header .close{
+.modal-header .close {
     color: #fff;
     opacity: 1;
     font-weight: 100;
@@ -31,7 +31,6 @@
     }
 }
 @media only screen and (max-width: 767px) {
-
     .ledger-state-box {
         margin-bottom: 20px;
     }

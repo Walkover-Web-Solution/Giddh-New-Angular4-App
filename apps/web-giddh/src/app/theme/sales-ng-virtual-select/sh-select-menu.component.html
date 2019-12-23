@@ -1,39 +1,40 @@
 <div class="menu" *ngIf="isOpen && _rows" style="background-color: white" [style.min-height.px]="dropdownMinHeight"
-     [style.max-height.px]="viewPortItems?.length !== 0? ItemHeight*(viewPortItems ? viewPortItems.length : 5)+10 : ItemHeight">
+    [style.max-height.px]="viewPortItems?.length !== 0? ItemHeight*(viewPortItems ? viewPortItems.length : 5)+10 : ItemHeight">
 
-  <!-- *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled" -->
-  <div *ngIf="noResultLinkEnabled && !showLabelOnly" class="item no-result-link"
-       [style.height.px]="NoFoundLinkHeight">
-    <a class="btn-link item" href="javascript:void(0);" (click)="$event.stopPropagation();noResultClicked.emit()">
-      <ng-container [ngTemplateOutlet]="noResultLinkTemplate? noResultLinkTemplate: defaultTemplate"></ng-container>
-      <ng-template #defaultTemplate>
-        {{notFoundLinkText}}
-      </ng-template>
-    </a>
-  </div>
-
-  <!--virtual-->
-  <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
-                  [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
-                  [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
-                  [noResultLinkEnabled]="noResultLinkEnabled" [salesShSelectPading]="salesShSelectPading">
-
-
-    <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
-         [class.hilighted]="row.isHilighted" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
-      <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
-      <ng-container *ngIf="!optionTemplate">
-        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-          <div class="item">{{row.label}}</div>
+    <!-- *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled" -->
+    <div *ngIf="noResultLinkEnabled && !showLabelOnly" class="item no-result-link"
+        [style.height.px]="NoFoundLinkHeight">
+        <a class="btn-link item" href="javascript:void(0);" (click)="$event.stopPropagation();noResultClicked.emit()">
+            <ng-container [ngTemplateOutlet]="noResultLinkTemplate? noResultLinkTemplate: defaultTemplate">
+            </ng-container>
+            <ng-template #defaultTemplate>
+                {{notFoundLinkText}}
+            </ng-template>
         </a>
-      </ng-container>
     </div>
 
-    <div id="noresult" *ngIf="viewPortItems?.length === 0" class="item"
-         [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
-      <a href="javascript:void(0);">{{notFoundMsg}}</a>
-    </div>
+    <!--virtual-->
+    <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
+        [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
+        [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
+        [noResultLinkEnabled]="noResultLinkEnabled" [salesShSelectPading]="salesShSelectPading">
 
-  </virtual-scroll>
+
+        <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+            [class.hilighted]="row.isHilighted" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
+            <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+            <ng-container *ngIf="!optionTemplate">
+                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                    <div class="item">{{row.label}}</div>
+                </a>
+            </ng-container>
+        </div>
+
+        <div id="noresult" *ngIf="viewPortItems?.length === 0" class="item"
+            [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
+            <a href="javascript:void(0);">{{notFoundMsg}}</a>
+        </div>
+
+    </virtual-scroll>
 
 </div>

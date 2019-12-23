@@ -1,8 +1,8 @@
 <div id="net-worth" ng-init="getNetWorthData()">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <strong>Net worth</strong>
-      <!-- <div class="pull-right dashboard-filter">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Net worth</strong>
+            <!-- <div class="pull-right dashboard-filter">
           <label>
   <input type="radio" name="chart" class="radio_theme"  (click)="togle('Monthly')" checked />Monthly
 </label>
@@ -11,27 +11,27 @@
 </label>
           <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="refreshChart()"></i>
       </div> -->
-    </div>
-    <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div ng-if="errorMessage == ''" class="no-data mrT2 loader-main">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
+        </div>
+        <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                <div ng-if="errorMessage == ''" class="no-data mrT2 loader-main">
+                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                    <div class="spinner2">
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                    </div>
                 </div>
+                <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
             </div>
-        <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
-      </div>
-      <!-- <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a> -->
-      <div class="chart-div" google-chart chart="myChartData">
-        <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="options"></chart>
-        </perfect-scrollbar>
-      </div>
-      <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->
-      <!--chart-labels="labels" chart-legend="true" chart-series="series" chart-options="chartOptions">-->
-      <!--</canvas>-->
+            <!-- <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a> -->
+            <div class="chart-div" google-chart chart="myChartData">
+                <perfect-scrollbar [scrollIndicators]="true">
+                    <chart [options]="options"></chart>
+                </perfect-scrollbar>
+            </div>
+            <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->
+            <!--chart-labels="labels" chart-legend="true" chart-series="series" chart-options="chartOptions">-->
+            <!--</canvas>-->
+        </div>
     </div>
-  </div>
 </div>

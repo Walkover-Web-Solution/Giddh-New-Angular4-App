@@ -1805,7 +1805,7 @@ export class InvoiceActions {
             }
         }
         return successAction;
-    
+
     }
 
     public resetTransporterListResponse(): CustomActions {

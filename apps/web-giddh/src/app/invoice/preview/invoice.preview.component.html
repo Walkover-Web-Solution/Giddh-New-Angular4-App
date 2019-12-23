@@ -771,15 +771,13 @@
                 <h3 class="">
                     {{ !(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? 'Total Sale:' : 'Total:' }}
                 </h3>
-                <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span
-                        *ngIf="baseCurrency==='INR'">/-</span>
+                <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>
             </div>
             <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
                 class="col-sm-6 totalDueSale">
                 <h3>Total Due:</h3>
-                <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span
-                        *ngIf="baseCurrency==='INR'">/-</span>
+                <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>
             </div>
         </div>

@@ -1,100 +1,99 @@
 .date-range-picker {
     padding-left: 35px !important;
-   // border-color:$border-blue;
-   background-image: url('../../assets/images/calender.svg') !important;
-   background-size: 17px !important;
-   background-position: 9px 8px !important;
-   background-repeat: no-repeat !important;
-       padding-left: 45px !important;
-   position: relative;
-   z-index: 1;
-   cursor: default;
-   border: 1px solid #d9d9d9;
-   text-align: left;
+    // border-color:$border-blue;
+    background-image: url("../../assets/images/calender.svg") !important;
+    background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    padding-left: 45px !important;
+    position: relative;
+    z-index: 1;
+    cursor: default;
+    border: 1px solid #d9d9d9;
+    text-align: left;
 }
 
 .date-range-picker:focus {
-   border-color: #d9d9d9 !important;
+    border-color: #d9d9d9 !important;
 }
-.inputWrapper{
-   position: relative;
-   display: block;
-   background-color: #fff;
+.inputWrapper {
+    position: relative;
+    display: block;
+    background-color: #fff;
 }
 .inputWrapper:before {
-   position: absolute;
-   content: '';
-   display: block;
-   height: 36px;
-   width: 1px;
-   background-color: #d9d9d9;
-   left: 37px!important;
-   z-index: 2;
-   top: 0;
+    position: absolute;
+    content: "";
+    display: block;
+    height: 36px;
+    width: 1px;
+    background-color: #d9d9d9;
+    left: 37px !important;
+    z-index: 2;
+    top: 0;
 }
 .transactions-page .form-group label {
-   padding-bottom: 5px;
+    padding-bottom: 5px;
 }
-.advance-icon{
-   width: 36px;
-   height: 36px;
-   display: -webkit-inline-box;
-   display: inline-flex;
-   -webkit-box-pack: center;
-   justify-content: center;
-   -webkit-box-align: center;
-   align-items: center;
-   font-size: 18px;
-   margin-left: 7px;
-   border: 1px solid #d9d9d9;
-   border-radius: 2px;
-   color: #1a237e;
-   margin-right: 7px;
-   background: #fff;
+.advance-icon {
+    width: 36px;
+    height: 36px;
+    display: -webkit-inline-box;
+    display: inline-flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    font-size: 18px;
+    margin-left: 7px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    color: #1a237e;
+    margin-right: 7px;
+    background: #fff;
 }
-.table>tbody+tbody {
-   border-top: none;
+.table > tbody + tbody {
+    border-top: none;
 }
-.expandBtnHideDesktop{
-   display: none;
+.expandBtnHideDesktop {
+    display: none;
 }
 .expand-export {
-   float: right;
+    float: right;
 }
 /*responsive */
-@media (max-width: 768px){
-.onMobileView th {
-   display: none !important;
+@media (max-width: 768px) {
+    .onMobileView th {
+        display: none !important;
+    }
+    .hideTD {
+        display: none;
+    }
+    .transctionReport {
+        margin-bottom: 0;
+    }
+    td.text-right.hideTd {
+        display: none;
+    }
 }
-.hideTD{
-   display: none;
+@media (max-width: 575px) {
+    .expand-collapse-btn.form-group {
+        display: none !important;
+    }
+    .expandBtnHideDesktop {
+        display: inline-block;
+    }
+    .expand-export {
+        margin-top: 10px;
+    }
+    .expand-export {
+        float: none;
+    }
 }
-.transctionReport{
-   margin-bottom: 0;
-}
-td.text-right.hideTd {
-   display: none;
-}
-}
-@media (max-width:575px){
-  .expand-collapse-btn.form-group{
-      display: none !important;
-  }
-  .expandBtnHideDesktop{
-      display: inline-block;
-  }
-  .expand-export{
-      margin-top: 10px;
-  }
-.expand-export {
-   float: none;
-}
-
-}
-@media (min-width: 320px){
-.form-inline .form-group {
-   display: inline-block;
-   margin-bottom: 0;
-   vertical-align: middle;
-}
+@media (min-width: 320px) {
+    .form-inline .form-group {
+        display: inline-block;
+        margin-bottom: 0;
+        vertical-align: middle;
+    }
 }

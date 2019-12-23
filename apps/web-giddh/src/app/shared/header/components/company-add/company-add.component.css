@@ -49,7 +49,6 @@
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    
     background: #f4f5f8;
 }
 
@@ -62,7 +61,6 @@
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    
     background: #f4f5f8;
 }
 
@@ -72,7 +70,7 @@
 
 #createCompForm p {
     font-size: 14px;
-    color: #B3B3B3;
+    color: #b3b3b3;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -101,6 +99,6 @@
 #shareModal .btn.btn-pink {
     width: 100%;
 }
-.add-companyDetail{
-      background-color: #F7F8FA;
+.add-companyDetail {
+    background-color: #f7f8fa;
 }

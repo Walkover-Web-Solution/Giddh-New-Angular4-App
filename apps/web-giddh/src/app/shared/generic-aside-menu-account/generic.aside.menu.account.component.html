@@ -32,14 +32,25 @@
 
 
             <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName">
-                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName" (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-                    [isDebtorCreditor]="isDebtorCreditor" [flatGroupsOptions]="flatAccountWGroupsList" (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showBankDetail]="showBankDetail">
+                <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                    (isGroupSelected)="isGroupSelected($event)" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                    [isAccountNameAvailable$]="isAccountNameAvailable$"
+                    [createAccountInProcess$]="createAccountInProcess$" [isDebtorCreditor]="isDebtorCreditor"
+                    [flatGroupsOptions]="flatAccountWGroupsList" (submitClicked)="addNewAcSubmit($event)"
+                    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                    [showBankDetail]="showBankDetail">
                 </account-add-new-details>
             </ng-container>
 
             <ng-container *ngIf="selectedAccountUniqueName && activeGroupUniqueName">
-                <account-update-new-details [activeGroupUniqueName]="activeGroupUniqueName" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [createAccountInProcess$]="createAccountInProcess$" [updateAccountInProcess$]="updateAccountInProcess$" [isGstEnabledAcc]="isGstEnabledAcc"
-                    [isDebtorCreditor]="isDebtorCreditor" [flatGroupsOptions]="flatAccountWGroupsList" (isGroupSelected)="isGroupSelected($event)" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [showDeleteButton]="false" [showBankDetail]="showBankDetail" (submitClicked)="updateAccount($event)">
+                <account-update-new-details [activeGroupUniqueName]="activeGroupUniqueName"
+                    [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                    [createAccountInProcess$]="createAccountInProcess$"
+                    [updateAccountInProcess$]="updateAccountInProcess$" [isGstEnabledAcc]="isGstEnabledAcc"
+                    [isDebtorCreditor]="isDebtorCreditor" [flatGroupsOptions]="flatAccountWGroupsList"
+                    (isGroupSelected)="isGroupSelected($event)" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                    [showDeleteButton]="false" [showBankDetail]="showBankDetail"
+                    (submitClicked)="updateAccount($event)">
                 </account-update-new-details>
             </ng-container>
 

@@ -8,7 +8,8 @@
         <div class="form-group col-xs-12">
             <label class="mrB1">Select Group</label>
             <div class="ng-select-wrap liq">
-                <ng-select placeholder="Sales Group" filterPlaceholder="Type to search..." name="flatAccountWGroupsList" [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
+                <ng-select placeholder="Sales Group" filterPlaceholder="Type to search..." name="flatAccountWGroupsList"
+                    [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
                     <ng-template #optionTemplate let-option="option">
                         <div class="account-list-item">{{option?.label}}</div>
                         <div class="account-list-item fs12">{{option?.value}}</div>
@@ -25,21 +26,25 @@
                 <label>Name
                     <span class="required">*</span>
                 </label>
-                <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
+                <input type="text" name="name" (change)="generateUniqueName()" class="form-control"
+                    formControlName="name"
+                    style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
             </div>
 
             <div class="form-group col-xs-6">
                 <label>Unique Name
                     <span class="required">*</span>
                 </label>
-                <input type="text" name="uniqueName" UniqueNameDirective formControlName="uniqueName" class="form-control">
+                <input type="text" name="uniqueName" UniqueNameDirective formControlName="uniqueName"
+                    class="form-control">
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-xs-6">
                 <label>Opening Balance</label>
-                <input type="text" maxLength="21" class="form-control" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance">
+                <input type="text" maxLength="21" class="form-control" decimalDigitsDirective [DecimalPlaces]="2"
+                    formControlName="openingBalance">
             </div>
             <div class="form-group col-xs-6">
                 <label>Opening Balance Type</label>
@@ -63,7 +68,8 @@
     </div> -->
             <div class="col-xs-6 form-group">
                 <label class="d-block">SAC</label>
-                <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+                <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control "
+                    name="sacNumber" maxLength="10">
                 <!-- <div class="input-group">
         <span class="input-group-addon">
           <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
@@ -74,7 +80,8 @@
 
         <div class="row">
             <div class="form-group col-xs-12 text-right mrT2">
-                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="createAccountInProcess$ | async" (click)="addAcFormSubmit()" [disabled]="addAcForm.invalid">Save
+                <button type="submit" class="btn btn-md btn-success mrR" [ladda]="createAccountInProcess$ | async"
+                    (click)="addAcFormSubmit()" [disabled]="addAcForm.invalid">Save
                 </button>
                 <button (click)="closeCreateAcModal()" class="btn btn-md btn-primary">Cancel</button>
             </div>

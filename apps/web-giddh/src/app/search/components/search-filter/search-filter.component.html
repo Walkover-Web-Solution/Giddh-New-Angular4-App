@@ -1,97 +1,111 @@
 <section class="mrT1">
-    <div class="">
-        <div class="btn-group" #filterDropdown="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="filterDropdown.hide()">
-            <button type="button" class="btn btn-default" dropdownToggle>Filter by account <span class="caret"></span>
-      </button>
-            <div id="dropdown-basic1" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="button-basic1" [style.width.px]="550" (click)="toggleFilters = false;">
-                <form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm" class="form-inline pd1">
-                    <!-- repeater -->
-                    <div class="pos-rel query_list form-inline" [ngClass]="{'mrT2': i !== 0}" formArrayName="searchQuery" *ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
-                        <div [formGroupName]="i">
-                            <!-- <label *ngIf="i === 0"> whose</label> -->
-                            <label>whose</label>
-                            <span class="custom-select pos-rel form-group">
-                  <select class="form-control" formControlName="queryType" required>
-                     <option value="">Select Type</option>
-                     <option *ngFor="let queryType of queryTypes"
-                             value="{{queryType.uniqueName}}">{{queryType.name}}</option>
-                  </select>
-                  <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                            </span>
-                            <!-- <label *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' || !item.value.queryType ">balance
+	<div class="">
+		<div class="btn-group" #filterDropdown="bs-dropdown" dropdown [autoClose]="false"
+			(clickOutside)="filterDropdown.hide()">
+			<button type="button" class="btn btn-default" dropdownToggle>Filter by account <span class="caret"></span>
+			</button>
+			<div id="dropdown-basic1" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
+				aria-labelledby="button-basic1" [style.width.px]="550" (click)="toggleFilters = false;">
+				<form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm"
+					class="form-inline pd1">
+					<!-- repeater -->
+					<div class="pos-rel query_list form-inline" [ngClass]="{'mrT2': i !== 0}"
+						formArrayName="searchQuery"
+						*ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
+						<div [formGroupName]="i">
+							<!-- <label *ngIf="i === 0"> whose</label> -->
+							<label>whose</label>
+							<span class="custom-select pos-rel form-group">
+								<select class="form-control" formControlName="queryType" required>
+									<option value="">Select Type</option>
+									<option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">
+										{{queryType.name}}</option>
+								</select>
+								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+							</span>
+							<!-- <label *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' || !item.value.queryType ">balance
     &nbsp;</label> -->
-                            <label>is</label>
-                            <span class="custom-select pos-rel form-group">
-                  <select class="form-control" formControlName="queryDiffer" required>
-                     <option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}"
-                             selected>{{queryDiffer}}</option>
-                  </select>
-                  <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                            </span>
-                            <label *ngIf="item.value.queryDiffer === 'Less' || item.value.queryDiffer === 'Greater' || !item.value.queryDiffer ">than</label>
-                            <label *ngIf="item.value.queryDiffer === 'Equals' " [style.margin-right.px]="15">to</label>
-                            <span class="form-group">
-               <input required [style.width.px]="70" class="form-control" formControlName="amount" type="text"
-                      placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2"/>
-               </span>
-                            <!--By and To: Not required in paginated API -->
-                            <span class="custom-select pos-rel form-group" *ngIf="item.value.queryType === 'openingBalance'">
-                <select class="form-control" formControlName="openingBalanceType">
-                  <option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}</option>
-                </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                            </span>
+							<label>is</label>
+							<span class="custom-select pos-rel form-group">
+								<select class="form-control" formControlName="queryDiffer" required>
+									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}" selected>
+										{{queryDiffer}}</option>
+								</select>
+								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+							</span>
+							<label
+								*ngIf="item.value.queryDiffer === 'Less' || item.value.queryDiffer === 'Greater' || !item.value.queryDiffer ">than</label>
+							<label *ngIf="item.value.queryDiffer === 'Equals' " [style.margin-right.px]="15">to</label>
+							<span class="form-group">
+								<input required [style.width.px]="70" class="form-control" formControlName="amount"
+									type="text" placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2" />
+							</span>
+							<!--By and To: Not required in paginated API -->
+							<span class="custom-select pos-rel form-group"
+								*ngIf="item.value.queryType === 'openingBalance'">
+								<select class="form-control" formControlName="openingBalanceType">
+									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
+									</option>
+								</select>
+								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+							</span>
 
-                            <span class="custom-select pos-rel form-group" *ngIf="item.value.queryType === 'closingBalance'">
-                <select class="form-control" formControlName="closingBalanceType">
-                  <option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}</option>
-                </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                            </span>
-                            <label *ngIf="searchDataSet.controls.length > 1 && !l" class="condition_tag">and</label>
-                            <!-- <label *ngIf="i === 1 && searchDataSet.controls.length > 2" class="condition_tag">and</label>
+							<span class="custom-select pos-rel form-group"
+								*ngIf="item.value.queryType === 'closingBalance'">
+								<select class="form-control" formControlName="closingBalanceType">
+									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
+									</option>
+								</select>
+								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+							</span>
+							<label *ngIf="searchDataSet.controls.length > 1 && !l" class="condition_tag">and</label>
+							<!-- <label *ngIf="i === 1 && searchDataSet.controls.length > 2" class="condition_tag">and</label>
               <label *ngIf="i === 2 && searchDataSet.controls.length > 3" class="condition_tag">and</label> -->
-                        </div>
-                    </div>
-                    <!--end of clearfix first row -->
-                    <!-- end repeater -->
-                    <div class="clearfix mrT4">
-                        <button [disabled]="searchQueryForm.invalid" class="btn btn-success pull-right" (click)="filterData();filterDropdown.hide()">Search
-            </button>
-                        <button [disabled]="searchDataSet.controls.length > 3 || searchQueryForm.invalid" class="btn btn-default" (click)="addSearchRow()">Add New Query
-            </button>
-                        <button *ngIf="searchDataSet.controls.length > 1" class="btn btn-default mrR1" (click)="removeSearchRow()">
-              Delete
-              Row
-            </button>
-                        <!-- <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button> -->
-                        <!-- <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog.emit()">Send as Email</button>
+						</div>
+					</div>
+					<!--end of clearfix first row -->
+					<!-- end repeater -->
+					<div class="clearfix mrT4">
+						<button [disabled]="searchQueryForm.invalid" class="btn btn-success pull-right"
+							(click)="filterData();filterDropdown.hide()">Search
+						</button>
+						<button [disabled]="searchDataSet.controls.length > 3 || searchQueryForm.invalid"
+							class="btn btn-default" (click)="addSearchRow()">Add New Query
+						</button>
+						<button *ngIf="searchDataSet.controls.length > 1" class="btn btn-default mrR1"
+							(click)="removeSearchRow()">
+							Delete
+							Row
+						</button>
+						<!-- <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button> -->
+						<!-- <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog.emit()">Send as Email</button>
 <button type="button" class="btn btn-success mrL1" (click)="openSmsDialog.emit()">Send as Sms</button> -->
-                    </div>
-                    <!-- end of second row -->
-                </form>
-            </div>
-        </div>
-        <button *ngIf="isFiltered | async" (click)="resetQuery()" class="btn btn-default"><i
-      class="glyphicon glyphicon-refresh"></i> Reset
-    </button>
-        <div class="pull-right">
-            <div class="btn-group" dropdown>
-                <button type="button" class="btn btn-default" dropdownToggle>Send as
-          <span class="caret"></span>
-        </button>
-                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic" [style.min-width.px]="90">
-                    <li role="menuitem">
-                        <a class="dropdown-item cp" (click)="openEmailDialog.emit()">Email</a>
-                    </li>
-                    <li role="menuitem" (click)="openSmsDialog.emit()">
-                        <a class="dropdown-item cp">Sms</a>
-                    </li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-success" (click)="createCSV();">Download CSV</button>
-        </div>
+					</div>
+					<!-- end of second row -->
+				</form>
+			</div>
+		</div>
+		<button *ngIf="isFiltered | async" (click)="resetQuery()" class="btn btn-default"><i
+				class="glyphicon glyphicon-refresh"></i> Reset
+		</button>
+		<div class="pull-right">
+			<div class="btn-group" dropdown>
+				<button type="button" class="btn btn-default" dropdownToggle>Send as
+					<span class="caret"></span>
+				</button>
+				<ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+					aria-labelledby="button-basic" [style.min-width.px]="90">
+					<li role="menuitem">
+						<a class="dropdown-item cp" (click)="openEmailDialog.emit()">Email</a>
+					</li>
+					<li role="menuitem" (click)="openSmsDialog.emit()">
+						<a class="dropdown-item cp">Sms</a>
+					</li>
+				</ul>
+			</div>
+			<button type="button" class="btn btn-success" (click)="createCSV();">Download CSV</button>
+		</div>
 
-    </div>
-    <!--end of query section grey bg-->
+	</div>
+	<!--end of query section grey bg-->
 </section>
