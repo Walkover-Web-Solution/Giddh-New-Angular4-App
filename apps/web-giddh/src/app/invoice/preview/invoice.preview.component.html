@@ -29,7 +29,7 @@
             <div class="d-flex addInvoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                 <div *ngIf="selectedItems.length === 1">
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
+                    <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle"
                             aria-controls="dropdown-basic">
                             More
