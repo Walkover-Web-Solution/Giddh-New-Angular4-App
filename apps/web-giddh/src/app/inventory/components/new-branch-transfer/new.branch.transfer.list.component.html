@@ -51,7 +51,7 @@
                                     (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
                         </th>
-                        <th width="10%" (click)="sortBranchTransferList('totalAmount')">Total Amount <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
+                        <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
@@ -64,7 +64,7 @@
                         <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
-                        <td>{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
                         <td>
                             <div class="btn-group" dropdown [autoClose]="true">
                                 <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span class="text-light-2">Select Action</span> <span class="icon-dots-three-vertical"></span></button>

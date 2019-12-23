@@ -12,7 +12,7 @@
             <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}" name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio" (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label></span>
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-		<div class="multipleProductsWrapper">
+		<div class="multipleProductsWrapper ">
 			<form #newBranchTransferForm="ngForm" novalidate="">
 				<div class="multipleProducts row clearfix pl-15 pr-15">
 					<div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
@@ -70,7 +70,7 @@
 						</div>
 						<div class="row mrB2">
 							<div class="col-md-3">
-								<label>
+								<label class="nowrap">
 									Sender's Warehouse <span class="red-text">*</span>
 								</label>
 							</div>
@@ -109,8 +109,8 @@
 							</div>
 						</div>
 						<div class="row mrB2" *ngIf="transferType !== 'senders'">
-							<div class="col-md-3">
-								<label>
+							<div class="col-md-3 nowrap">
+								<label class="nowrap">
 									Receiver's Warehouse <span class="red-text">*</span>
 								</label>
 							</div>
@@ -192,7 +192,7 @@
 	                    </div>
 	                    <div class="row mrB2" *ngIf="transferType !== 'senders'">
 	                        <div class="col-md-3">
-	                            <label>
+	                            <label class="nowrap">
 	                                Sender's Warehouse <span class="red-text">*</span>
 	                            </label>
 	                        </div>
@@ -231,8 +231,8 @@
 	                        </div>
 	                    </div>
 	                    <div class="row mrB2">
-	                        <div class="col-md-3">
-	                            <label>
+	                        <div class="col-md-3 nowrap">
+	                            <label class="nowrap">
 	                                Receiver's Warehouse <span class="red-text">*</span>
 	                            </label>
 	                        </div>
@@ -367,7 +367,6 @@
                                     <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i class="fa fa-trash"></i></a>
                                     </div>
 		                        </td>
-
 	                        </tr>
 						</tbody>
 	                    <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
