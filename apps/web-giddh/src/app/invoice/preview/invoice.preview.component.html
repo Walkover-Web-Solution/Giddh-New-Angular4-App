@@ -29,7 +29,7 @@
             <div class="d-flex addInvoice">
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                 <div *ngIf="selectedItems.length === 1">
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
+                    <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button" class="btn spcl_dropdown desktop-view-btn dropdown-toggle"
                             aria-controls="dropdown-basic">
                             More
@@ -771,15 +771,13 @@
                 <h3 class="">
                     {{ !(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? 'Total Sale:' : 'Total:' }}
                 </h3>
-                <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span
-                        *ngIf="baseCurrency==='INR'">/-</span>
+                <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>
             </div>
             <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
                 class="col-sm-6 totalDueSale">
                 <h3>Total Due:</h3>
-                <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span
-                        *ngIf="baseCurrency==='INR'">/-</span>
+                <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                 </h1>
             </div>
         </div>

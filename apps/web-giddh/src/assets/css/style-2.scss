@@ -8624,6 +8624,9 @@ button {
     color: inherit !important;
     background: inherit !important;
 }
+.disable-select-group .toggle {
+    display: none;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
