@@ -117,9 +117,11 @@ export class NetworthChartComponent implements OnInit {
   public fetchChartData() {
     this.requestInFlight = true;
     this.networthData = [];
-    this.store.dispatch(this._homeActions.getNetworthChartDataOfActiveYear(
-      this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, this.refresh));
+    if (this.activeFinancialYear) {
+        this.store.dispatch(this._homeActions.getNetworthChartDataOfActiveYear(
+          this.activeFinancialYear.financialYearStarts,
+          this.activeFinancialYear.financialYearEnds, this.refresh));
+    }
     this.refresh = false;
   }
 

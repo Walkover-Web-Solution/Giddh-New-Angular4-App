@@ -186,17 +186,19 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         }
         case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
             let res = action.payload;
-            let newState = _.cloneDeep(state);
-            let dateRangePickerConfig = _.cloneDeep(newState.dateRangePickerConfig);
-            dateRangePickerConfig.ranges['This Financial Year to Date'][0] = moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-            dateRangePickerConfig.ranges['Last Financial Year'] = [
-                moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year'),
-                moment(_.clone(res.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year')
-            ];
-            return Object.assign({}, state, {
-                dateRangePickerConfig
-            });
-
+            if (res) {
+                let newState = _.cloneDeep(state);
+                let dateRangePickerConfig = _.cloneDeep(newState.dateRangePickerConfig);
+                dateRangePickerConfig.ranges['This Financial Year to Date'][0] = moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+                dateRangePickerConfig.ranges['Last Financial Year'] = [
+                    moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year'),
+                    moment(_.clone(res.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year')
+                ];
+                return Object.assign({}, state, {
+                    dateRangePickerConfig
+                });
+            }
+            break;
         }
         case CompanyActions.DELETE_COMPANY: {
             return {

@@ -149,7 +149,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public getPayAmountForRazorPay(amt: any) {
-        console.log('after before', amt * 100, amt);
         return amt * 100;
     }
 
@@ -239,7 +238,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.orderId = res.body.id;
                     this.store.dispatch(this.companyActions.selectedPlan(plan));
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.ChangePaidPlanAMT);
-                    console.log(this.razorpayAmount);
                     this.ngAfterViewInit();
                 } else {
                     this._toasty.errorToast(res.message);
@@ -277,7 +275,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public createPaidPlanCompany(razorPay_response: any) {
-        console.log('razorPay_response', razorPay_response);
         if (razorPay_response) {
             if (!this.fromSubscription) {
                 this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
@@ -327,7 +324,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.razorpay = new (window as any).Razorpay(this.options);
         }, 1000);
         this.reFillForm();
-        console.log('afetr razorpay', this.razorpayAmount)
     }
 
     public reFillForm() {
