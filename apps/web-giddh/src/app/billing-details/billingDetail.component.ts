@@ -324,7 +324,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.razorpay = new (window as any).Razorpay(this.options);
         }, 1000);
         this.reFillForm();
-        console.log('afetr razorpay', this.razorpayAmount)
     }
 
     public reFillForm() {
