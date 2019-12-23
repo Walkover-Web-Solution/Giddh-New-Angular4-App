@@ -119,8 +119,9 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
 
   public fetchChartData() {
     this.requestInFlight = true;
-    this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
-
+    if (this.activeFinancialYear) {
+        this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
+    }
     if (this.lastFinancialYear) {
       this.store.dispatch(this._homeActions.getExpensesChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, this.refresh));
     }

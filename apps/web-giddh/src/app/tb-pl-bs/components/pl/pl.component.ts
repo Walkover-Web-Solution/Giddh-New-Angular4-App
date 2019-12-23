@@ -68,7 +68,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value && !this.isDateSelected) {
+    if (value && value.activeFinancialYear && !this.isDateSelected) {
 
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {

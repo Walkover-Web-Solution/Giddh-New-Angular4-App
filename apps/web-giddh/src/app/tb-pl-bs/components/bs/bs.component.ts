@@ -64,7 +64,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value && !this.isDateSelected) {
+    if (value && value.activeFinancialYear && value.financialYears && !this.isDateSelected) {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
