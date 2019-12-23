@@ -84,7 +84,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
   @Input()
   public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
-    if (value && !this.isDateSelected) {
+    if (value && value.activeFinancialYear && !this.isDateSelected) {
       this.request = {
         refresh: false,
         from: value.activeFinancialYear.financialYearStarts,

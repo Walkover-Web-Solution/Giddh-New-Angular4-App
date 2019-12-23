@@ -21,16 +21,16 @@
               <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
                 <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
                   <td data-title="#">{{i+1}}</td>
-                  <td data-title="From">{{financialYear.financialYearStarts}}</td>
-                  <td data-title="#To">{{financialYear.financialYearEnds}}</td>
-                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName"
+                  <td data-title="From">{{financialYear?.financialYearStarts}}</td>
+                  <td data-title="#To">{{financialYear?.financialYearEnds}}</td>
+                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN != financialYear?.uniqueName"
                     class="status">
-                    <span *ngIf="financialYear.isLocked"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"
+                    <span *ngIf="financialYear?.isLocked"><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"
                         (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Locked</label></span>
-                    <span *ngIf="!financialYear.isLocked"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"
+                    <span *ngIf="!financialYear?.isLocked"><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"
                         (click)="lockUnlockFinancialYear(financialYear);"></i> <label>Unlocked</label></span>
                   </td>
-                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear.uniqueName">
+                  <td data-title="Lock Status" *ngIf="currentCompanyFinancialYearUN == financialYear?.uniqueName">
                     Current Financial Year (can not be locked)
                   </td>
                 </tr>
