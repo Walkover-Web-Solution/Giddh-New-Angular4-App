@@ -1,5 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild,
+    ElementRef,
+} from '@angular/core';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -13,6 +16,7 @@ import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
+
 @Component({
     selector: 'aside-transfer-pane',
     templateUrl: './aside-transfer-pane.component.html',
@@ -20,6 +24,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 
 export class AsideTransferPaneComponent implements OnInit, OnChanges {
+    @ViewChild('receiptnotetemplate') public receiptnotetemplate: ElementRef;
     public stockList$: Observable<IStocksItem[]>;
     public stockUnits$: Observable<StockUnitRequest[]>;
     public userList$: Observable<InventoryUser[]>;
@@ -28,7 +33,7 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
     public isLoading: boolean;
     public createStockSuccess$: Observable<boolean>;
     public entrySuccess$: Observable<boolean>;
-
+    @Output() public transferType: EventEmitter<boolean> = new EventEmitter(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -38,6 +43,7 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
         private _generalService: GeneralService,
         private _inventoryUserAction: InventoryUsersActions,
         private _customStockActions: CustomStockUnitAction,
+
     ) {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
@@ -105,4 +111,9 @@ export class AsideTransferPaneComponent implements OnInit, OnChanges {
     public createAccount(value) {
         this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
     }
+    public openBranchTransferPopup(transferType) {
+        this.transferType.emit(transferType);
+    }
+
+
 }

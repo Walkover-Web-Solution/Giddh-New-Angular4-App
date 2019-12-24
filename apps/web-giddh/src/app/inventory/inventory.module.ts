@@ -51,6 +51,7 @@ import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digits
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { SalesAddStockComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { SalesAddStockGroupComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
+import { JobworkReceiptNote } from './jobwork/jobwork-receipt-note-component/jobwork-receipt-note.component';
 
 @NgModule({
     declarations: [
@@ -87,7 +88,8 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         AsideSenderReceiverDetailsPaneComponent,
-        DateFormatterPipe
+        DateFormatterPipe,
+        JobworkReceiptNote
     ],
     exports: [
         InventoryComponent,
@@ -119,7 +121,8 @@ import { SalesAddStockGroupComponent } from '../proforma-invoice/components/asid
         JobworkSidebarComponent,
         ManufacturingComponent,
         NewBranchTransferAddComponent,
-        NewBranchTransferListComponent
+        NewBranchTransferListComponent,
+        JobworkReceiptNote
     ],
     providers: [],
     imports: [

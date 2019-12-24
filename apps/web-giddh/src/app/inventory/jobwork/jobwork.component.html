@@ -250,8 +250,22 @@
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
-    (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+    (closeAsideEvent)="toggleTransferAsidePane()" (transferType)="openBranchTransferPopup($event);">
+</aside-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
+
+<!-- branch transfer modal -->
+<ng-template #receiptnotetemplate>
+    <div class="recept-modal">
+        <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
+            <job-work-receipt-note>
+            </job-work-receipt-note>
+        </div>
+    </div>
+</ng-template>
+
+
+
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
@@ -298,3 +312,7 @@
     </div>
 </div>
 <!-- Advance  search popup -->
+
+
+
+<!-- aside inwards/outwards/transfer pane -->

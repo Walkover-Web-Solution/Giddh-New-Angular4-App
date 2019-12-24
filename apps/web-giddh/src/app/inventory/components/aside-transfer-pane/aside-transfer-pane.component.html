@@ -34,22 +34,21 @@
         </ng-container>
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vmiddle asidePanelLedger" vr-item>
-                <div class="pd1 alC">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward
+                <div>
+                    <button type="button" class="btn  btn-light-gray"
+                        (click)="openBranchTransferPopup('outward')">Receipt Note</button>
+                </div>
+                <div>
+                    <button type=" button" class="btn  btn-light-gray"
+                        (click)="openBranchTransferPopup('outward')">Delivery
+                        Challan</button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-light-gray"
+                        (click)="openBranchTransferPopup('createStock')">Transfer
                         Note</button>
                 </div>
-                <div class="pd1 alC">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward
-                        Note</button>
-                </div>
-                <div class="pd1 alC">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
-                        Stock</button>
-                </div>
-                <div class="pd1 alC">
-                    <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
-                        Account</button>
-                </div>
+
             </div>
         </ng-container>
     </div>
