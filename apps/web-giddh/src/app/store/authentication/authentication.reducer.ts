@@ -537,10 +537,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             if (dateResponse.status === 'success') {
                 let latestState = _.cloneDeep(state);
                 let data: any = dateResponse.body;
-                // let fromDate: any = moment(data.fromDate, GIDDH_DATE_FORMAT);
-                // let toDate: any = moment(data.toDate, GIDDH_DATE_FORMAT);
-                // console.log('fromDate', fromDate);
-                // console.log('toDate', toDate);
                 if (!data.fromDate) {
                     latestState.todaySelected = true;
                 } else {

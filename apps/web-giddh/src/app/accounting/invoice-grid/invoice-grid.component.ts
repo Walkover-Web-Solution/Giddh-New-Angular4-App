@@ -756,32 +756,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			});
 		}
 
-		// if (data.voucherType === 'Sales') {
-		//   _.forEach(data.transactions, (element: any) => {
-		//     if (!element.particular) {
-		//       element.particular = 'sales';
-		//     }
-		//   });
-		// }
-
 		this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
-		// data.transactions = this.validateTransaction(data.transactions, 'stock');
-		// let accountsTransaction = this.validateTransaction(this.accountsTransaction, 'account');
-
-		// if (!data.transactions.length) {
-		//   return this._toaster.errorToast('Atleast 1 stock entry required.');
-		// }
-
-		// let transactions = _.concat(data.transactions, accountsTransaction);
-		// console.log(transactions);
-
-		// if (this.totalCreditAmount === this.totalDebitAmount) {
-		//   let accUniqueName: string = this.creditorAcc.uniqueName;
-		//   this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
-		//   this.showStockList.next(false);
-		// } else {
-		//   this._toaster.errorToast('Total credit amount and Total debit amount should be equal.', 'Error');
-		// }
 	}
 
 	public prepareDataForInvoice(data) {
@@ -823,7 +798,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				obj.inventory = inventoryArr;
 			}
 		});
-		//  console.log(transactions);
 		return transactions;
 	}
 
@@ -905,31 +879,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// });
 	}
 
-	/**
-	 * sortStockItems
-	 */
-	// public sortStockItems(ItemArr) {
-	//   let stockAccountArr: IOption[] = [];
-	//   _.forEach(ItemArr, (obj: any) => {
-	//     if (obj.stocks) {
-	//       _.forEach(obj.stocks, (stock: any) => {
-	//         stock.accountStockDetails.name = obj.name;
-	//         stockAccountArr.push({
-	//           label: `${stock.name} (${stock.uniqueName})`,
-	//           value: stock.uniqueName,
-	//           additional: stock
-	//         });
-	//       });
-	//     }
-	//   });
-	//   // console.log(stockAccountArr, 'stocks');
-	//   this.stockList = stockAccountArr;
-	//   this.inputForList = _.cloneDeep(this.stockList);
-	//   setTimeout(() => {
-	//     this.showLedgerAccountList = true;
-	//   }, 200);
-	// }
-
 	public sortStockItems(ItemArr) {
 		let stockAccountArr: IOption[] = [];
 		_.forEach(ItemArr, (obj: any) => {
@@ -939,7 +888,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				additional: obj
 			});
 		});
-		// console.log(stockAccountArr, 'stocks');
 		this.stockList = stockAccountArr;
 		this.inputForList = _.cloneDeep(this.stockList);
 		setTimeout(() => {
@@ -1004,12 +952,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 							});
 						});
 					}
-
-					// this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
-					//   console.log('TaxResponse areee :', taxes);
-					//   taxes.find((tax) => tax.uniqueName === );
-					//   this.taxesToRemember.push({ stockUniqueName, taxValue:   });
-					// });
 				});
 			}
 

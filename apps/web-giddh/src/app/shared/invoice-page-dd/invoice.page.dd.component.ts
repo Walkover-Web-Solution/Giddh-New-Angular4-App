@@ -102,7 +102,6 @@ export class InvoicePageDDComponent implements OnInit {
     }
 
     private onShown(): void {
-        // console.log('Dropdown is shown');
     }
 
     private setUrl(mainUrl: string) {

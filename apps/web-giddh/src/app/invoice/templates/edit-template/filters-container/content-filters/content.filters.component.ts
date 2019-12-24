@@ -193,7 +193,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         //   template.sections[0].content[17].display = false;
         //   template.sections[0].content[18].display = false;
         // }
-        // console.log('onChangeFieldVisibility...', template);
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 

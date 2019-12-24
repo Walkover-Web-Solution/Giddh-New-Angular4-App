@@ -145,7 +145,6 @@ export class OnReturnDirective {
                     if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle.value.trim() === '') {
                         e.preventDefault();
                         if (target.disabled) {
-                            // console.log('yes if');
                             target = allElements[indx - 2];
                             if (target.disabled) {
                                 target = allElements[indx - 3];

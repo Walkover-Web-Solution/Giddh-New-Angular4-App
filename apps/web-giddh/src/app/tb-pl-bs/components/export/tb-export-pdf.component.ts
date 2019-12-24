@@ -33,7 +33,6 @@ class FormatPdf implements IFormatable {
     }
 
     public setHeader(selectedCompany: CompanyResponse) {
-        // console.log(selectedCompany.address);
         this.pdf.setFontSize(16);
         this.pdf.text(10, this.colY, selectedCompany.name);
         this.pdf.setFontSize(10);
@@ -199,9 +198,6 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                 pdf.setFontSize(8);
                 if (!isNaN(cell.raw) || cell.raw.indexOf('Cr.') > -1 || cell.raw.indexOf('Dr.') > -1) {
                     cell.text = cell.text[0] ? String(cell.raw) : [String(cell.text)];
-                }
-                if (data.column.name === 'name') {
-                    // console.log(cell, data);
                 }
             },
             addPageContent: () => {

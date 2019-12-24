@@ -32,7 +32,6 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-		console.log('CreateInvoiceTemplateComponent loaded');
 		// check if route params exist else redirect to dashboard
 		this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
 			if (params['templateId'] && (_.indexOf(TEMPLATES_ID, params['templateId']) !== -1)) {
@@ -64,16 +63,7 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 	private loadComponents() {
 		switch (this.templateId) {
 			case TEMPLATES_ID[0]: {
-				console.log(`loading template ${TEMPLATES[0]} with template Id ${TEMPLATES_ID[0]}`);
 				this.loadLetterTemplateComponent();
-				break;
-			}
-			case TEMPLATES_ID[2]: {
-				console.log(`Hurry ${TEMPLATES_ID[1]}`);
-				break;
-			}
-			case TEMPLATES_ID[3]: {
-				console.log(`Hurry ${TEMPLATES_ID[2]}`);
 				break;
 			}
 			default:

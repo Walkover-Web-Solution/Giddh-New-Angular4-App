@@ -284,7 +284,6 @@ export class SettingsIntegrationActions {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    // console.log(data);
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
@@ -337,7 +336,6 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    // console.log(data);
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
@@ -357,7 +355,6 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    // console.log(data);
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
@@ -377,7 +374,6 @@ export class SettingsIntegrationActions {
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
-                    // console.log(data);
                     // this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
@@ -435,7 +431,6 @@ export class SettingsIntegrationActions {
             if (data.status === 'error') {
                 this.toasty.errorToast(data.message, data.code);
             } else {
-                // console.log(data);
                 this.toasty.successToast(data.body, '');
             }
             return { type: 'EmptyAction' };

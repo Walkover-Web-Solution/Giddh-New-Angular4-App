@@ -728,7 +728,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onSelectStock(item) {
         if (item) {
-            // console.log(item);
             let idx = this.selectedStockIdx;
             let entryItem = _.cloneDeep(item);
             this.prepareEntry(entryItem, this.selectedIdx);

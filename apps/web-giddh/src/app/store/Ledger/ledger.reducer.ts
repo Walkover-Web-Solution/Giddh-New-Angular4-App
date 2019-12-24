@@ -311,9 +311,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
             let res = action.payload;
-            if (res.status === 'success') {
-                console.log('res:', res.rates);
-            }
             return state;
         }
         case LEDGER.SELECT_DESELECT_ALL_ENTRIES: {

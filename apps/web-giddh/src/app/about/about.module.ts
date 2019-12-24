@@ -5,8 +5,6 @@ import { NgModule } from '@angular/core';
 import { AboutRoutingModule } from './about.routing.module';
 import { AboutComponent } from './about.component';
 
-// console.log('`About` bundle loaded asynchronously');
-
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
