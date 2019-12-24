@@ -5,8 +5,8 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
-  selector: 'aside-custom-stock',
-  styles: [`
+    selector: 'aside-custom-stock',
+    styles: [`
     :host {
       position: fixed;
       left: auto;
@@ -43,37 +43,37 @@ import { Observable, ReplaySubject } from 'rxjs';
       background: #fff;
     }
   `],
-  templateUrl: './aside-custom-stock.component.html'
+    templateUrl: './aside-custom-stock.component.html'
 })
 export class AsideCustomStockComponent implements OnInit, OnDestroy {
 
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-  public asideClose: boolean;
-  public createCustomStockSuccess$: Observable<boolean>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public asideClose: boolean;
+    public createCustomStockSuccess$: Observable<boolean>;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private store: Store<AppState>
-  ) {
-    this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
-  }
+    constructor(
+        private store: Store<AppState>
+    ) {
+        this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
+    }
 
-  public ngOnInit() {
-    this.asideClose = false;
-  }
+    public ngOnInit() {
+        this.asideClose = false;
+    }
 
-  public closeAsidePane(event?) {
-    this.closeAsideEvent.emit();
-    this.asideClose = true;
-    setTimeout(() => {
-      this.asideClose = false;
-    }, 500);
-  }
+    public closeAsidePane(event?) {
+        this.closeAsideEvent.emit();
+        this.asideClose = true;
+        setTimeout(() => {
+            this.asideClose = false;
+        }, 500);
+    }
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 }

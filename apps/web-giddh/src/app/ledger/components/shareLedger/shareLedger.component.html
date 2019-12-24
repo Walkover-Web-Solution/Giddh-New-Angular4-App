@@ -1,74 +1,77 @@
 <div id="shareModal">
-  <div id="share-modal" class="" ng-if="ledgerCtrl.toggleShare">
-    <div class="modal-header">
-      <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeShareLedgerModal.emit()"
-            aria-label="Close">×</span>
-      <h3>Share Ledger</h3>
-    </div>
+	<div id="share-modal" class="" ng-if="ledgerCtrl.toggleShare">
+		<div class="modal-header">
+			<span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeShareLedgerModal.emit()"
+				aria-label="Close">×</span>
+			<h3>Share Ledger</h3>
+		</div>
 
-    <div class="modal-body mrB4" id="SharePop">
-      <div class="row">
-        <div class="col-md-10">
+		<div class="modal-body mrB4" id="SharePop">
+			<div class="row">
+				<div class="col-md-10">
 
-      <div class="modal_wrap">
-        <!-- <h3 class="pdB1">Share with</h3> -->
-        <div class="form-group add-mailer">
-          <label>Share with</label>
-          <!--share account from-->
-          <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
-            <div class="input-group">
-              <input name="userEmail" class="form-control" type="email" [(ngModel)]="email" required placeholder="Email ID"
-                     class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-                <span class="input-group-btn">
-                <button class="btn btn-success btn-md" type="submit" [disabled]="shareAccountForm.invalid"
-                        (click)="shareAccount()">Share
-                </button>
-              </span>
-              <!-- /btn-account -->
-            </div>
-          </form>
-          <!--shared with array-->
-          <div class="col-xs-8 mrB2" *ngIf="activeAccountSharedWith?.length > 0">
-            <div class="row">
-              <ul class="shared_list">
-                <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
-                                    <span class="pull-left">
-                            <small class="Useremail">{{ val.emailId }}</small>
-                            </span>
-                  <span class="form-inline">
-                            <span class="delIcon pull-right">
-                            <i (click)="unShareAccount(val.uniqueName, val.emailId)" class="fa fa-times"
-                               aria-hidden="true"></i>
-                            </span>
-                                    </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <h3 class="pdB2 clearfix"></h3> -->
-      <div class="modal_wrap clearfix">
-        <div class="clearfix">
-          <span>Or</span>
-          <button class="btn-link" (click)="getMagicLink()">Get shareable link</button>
-          <!-- <span class="l8grey">Get shareable link</span> -->
-          <span class="success" *ngIf="isCopied">Copied..</span>
-        </div>
-        <div class="input-group">
-          <input #magicLinkInput class="form-control dashed" [readonly]="true" type="text" [(ngModel)]="magicLink"/>
-          <span class="input-group-btn">
-            <button class="btn btn-success" (click)="toggleIsCopied()" [ngxClipboard]="magicLinkInput">Copy</button>
-          </span                                                                       >
-          <!-- /btn-group -->
-        </div>
-        <!-- /input-group -->
-        <small class="mrT1 l8grey">Anyone can see the ledger who gets this URL.</small>
-      </div>
+					<div class="modal_wrap">
+						<!-- <h3 class="pdB1">Share with</h3> -->
+						<div class="form-group add-mailer">
+							<label>Share with</label>
+							<!--share account from-->
+							<form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" autocomplete="off">
+								<div class="input-group">
+									<input name="userEmail" class="form-control" type="email" [(ngModel)]="email"
+										required placeholder="Email ID" class="form-control"
+										pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+									<span class="input-group-btn">
+										<button class="btn btn-success btn-md" type="submit"
+											[disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
+										</button>
+									</span>
+									<!-- /btn-account -->
+								</div>
+							</form>
+							<!--shared with array-->
+							<div class="col-xs-8 mrB2" *ngIf="activeAccountSharedWith?.length > 0">
+								<div class="row">
+									<ul class="shared_list">
+										<li *ngFor="let val of activeAccountSharedWith" class="clearfix">
+											<span class="pull-left">
+												<small class="Useremail">{{ val.emailId }}</small>
+											</span>
+											<span class="form-inline">
+												<span class="delIcon pull-right">
+													<i (click)="unShareAccount(val.uniqueName, val.emailId)"
+														class="fa fa-times" aria-hidden="true"></i>
+												</span>
+											</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <h3 class="pdB2 clearfix"></h3> -->
+					<div class="modal_wrap clearfix">
+						<div class="clearfix">
+							<span>Or</span>
+							<button class="btn-link" (click)="getMagicLink()">Get shareable link</button>
+							<!-- <span class="l8grey">Get shareable link</span> -->
+							<span class="success" *ngIf="isCopied">Copied..</span>
+						</div>
+						<div class="input-group">
+							<input #magicLinkInput class="form-control dashed" [readonly]="true" type="text"
+								[(ngModel)]="magicLink" />
+							<span class="input-group-btn">
+								<button class="btn btn-success" (click)="toggleIsCopied()"
+									[ngxClipboard]="magicLinkInput">Copy</button>
+							</span>
+							<!-- /btn-group -->
+						</div>
+						<!-- /input-group -->
+						<small class="mrT1 l8grey">Anyone can see the ledger who gets this URL.</small>
+					</div>
 
-    </div>
-  </div>
+				</div>
+			</div>
 
-    </div>
-  </div>
+		</div>
+	</div>
 </div>

@@ -2,7 +2,8 @@
     <div class="form-header" *ngIf="selectedAsideView=='mainview'">
         <h3>Create</h3>
     </div>
-    <button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView=='mainview'"><i class="icon-cross"></i></button>
+    <button id="close" (click)="closeAsidePane($event)" *ngIf="selectedAsideView=='mainview'"><i
+            class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView!='mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
         <ng-container *ngSwitchCase="'inward'">

@@ -14,24 +14,24 @@ import { SalesRegisterDetailsComponent } from './components/sales-register-detai
 
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      {
-        path: '',
-        canActivate: [NeedsAuthentication],
-        component: ReportsComponent,
-        children: [
-          { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
-          { path: 'reports-details', component: ReportsDetailsComponent }, // working
-          { path: 'sales-detailed', component: SalesRegisterDetailsComponent },
-          { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
-          { path: 'reports-dashboard', component: ReportsDashboardComponent }
+    imports: [
+        RouterModule.forChild([
+            {
+                path: '',
+                canActivate: [NeedsAuthentication],
+                component: ReportsComponent,
+                children: [
+                    { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
+                    { path: 'reports-details', component: ReportsDetailsComponent }, // working
+                    { path: 'sales-detailed', component: SalesRegisterDetailsComponent },
+                    { path: 'sales-detailed-expand', component: SalesRegisterExpandComponent },
+                    { path: 'reports-dashboard', component: ReportsDashboardComponent }
 
-        ]
-      }
-    ]),
-  ],
-  exports: [RouterModule]
+                ]
+            }
+        ]),
+    ],
+    exports: [RouterModule]
 })
 export class ReportsRoutingModule {
 

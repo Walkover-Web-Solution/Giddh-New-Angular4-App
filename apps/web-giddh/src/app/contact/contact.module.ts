@@ -31,56 +31,56 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 //   suppressScrollX: true
 // };
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: false,
-  suppressScrollY: true
+    suppressScrollX: false,
+    suppressScrollY: true
 };
 
 @NgModule({
-  declarations: [
-    ContactComponent,
-    AsideMenuAccountInContactComponent,
-    ContactAdvanceSearchComponent,
-    AgingReportComponent,
-    AgingDropdownComponent,
-    PaymentAsideComponent
-  ],
-  exports: [
-    AsideMenuAccountInContactComponent, CurrencyModule
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ContactRoutingModule,
-    LaddaModule,
-    ShSelectModule,
-    TabsModule,
-    BsDropdownModule,
-    TooltipModule,
-    SharedModule,
-    SelectModule.forRoot(),
-    TabsModule.forRoot(),
-    ModalModule,
-    PaginationModule,
-    ClickOutsideModule,
-    DigitsOnlyModule,
-    ElementViewChildModule,
-    CurrencyModule,
-    Daterangepicker,
-    Ng2OrderModule,
-    PerfectScrollbarModule,
-    GhSortByPipeModule,
-    GenericAsideMenuAccountModule,
-  ],
-  entryComponents: [
-    PaginationComponent
-  ],
-  providers: [
-    {
-      provide: PERFECT_SCROLLBAR_CONFIG,
-      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }
-  ]
+    declarations: [
+        ContactComponent,
+        AsideMenuAccountInContactComponent,
+        ContactAdvanceSearchComponent,
+        AgingReportComponent,
+        AgingDropdownComponent,
+        PaymentAsideComponent
+    ],
+    exports: [
+        AsideMenuAccountInContactComponent, CurrencyModule
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ContactRoutingModule,
+        LaddaModule,
+        ShSelectModule,
+        TabsModule,
+        BsDropdownModule,
+        TooltipModule,
+        SharedModule,
+        SelectModule.forRoot(),
+        TabsModule.forRoot(),
+        ModalModule,
+        PaginationModule,
+        ClickOutsideModule,
+        DigitsOnlyModule,
+        ElementViewChildModule,
+        CurrencyModule,
+        Daterangepicker,
+        Ng2OrderModule,
+        PerfectScrollbarModule,
+        GhSortByPipeModule,
+        GenericAsideMenuAccountModule,
+    ],
+    entryComponents: [
+        PaginationComponent
+    ],
+    providers: [
+        {
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        }
+    ]
 })
 export class ContactModule {
 }

@@ -4,21 +4,24 @@
             <div class="d-flex">
                 <div class="input-group">
                     <span class="inputWrapper">
-                        <input class="form-control" placeholder="Filter by Date" [(ngModel)]="datePicker" (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker" [bsConfig]="bsConfig" />
+                        <input class="form-control" placeholder="Filter by Date" [(ngModel)]="datePicker"
+                            (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker"
+                            [bsConfig]="bsConfig" />
                     </span>
                 </div>
-                <div class="advance-icon pointer" tooltip="Advance Search"
-                    (click)="openSearchModal(template)">
+                <div class="advance-icon pointer" tooltip="Advance Search" (click)="openSearchModal(template)">
                     <span class="icon-advance-serch"></span>
                 </div>
             </div>
             <div class="text-center">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear Filter </button>
+                    <button class="btn btn-filter mr-0" (click)="clearFilters();"><span class="icon-cross"></span> Clear
+                        Filter </button>
                 </div>
             </div>
             <div class="clearfix">
-                <button class="btn btn-pink pull-right mr-0" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">+ New Transfer</button>
+                <button class="btn btn-pink pull-right mr-0" data-toggle="tooltip" tooltip="Alt+N"
+                    (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
         <div class="report-table">
@@ -26,7 +29,9 @@
                 <thead>
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
-                        <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
+                        <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span>
+                        </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
                         <th width="17%" class="bdrR bdrB td_in_searchBox">
@@ -46,28 +51,37 @@
                                 <i class="icon-search" (click)="focusOnColumnSearch('warehouseName');"></i>
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'warehouseName'">
-                                <input type="text" placeholder="Warehouse" class="w100" #warehouseNameField name="warehouseName"
-                                    [(ngModel)]="branchTransferPostRequestParams.warehouseName"
+                                <input type="text" placeholder="Warehouse" class="w100" #warehouseNameField
+                                    name="warehouseName" [(ngModel)]="branchTransferPostRequestParams.warehouseName"
                                     (keypress)="columnSearch()" (keydown)="columnSearch()" />
                             </div>
                         </th>
-                        <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount <span [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span></th>
+                        <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
+                            <span
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span>
+                        </th>
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
-                        <td>{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}</td>
+                        <td>{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
+                        </td>
                         <td>{{ item.dateOfSupply }}</td>
                         <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a></td>
+                        <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
+                        </td>
                         <td>{{ item.senderReceiver }}</td>
                         <td>{{ item.warehouseName }}</td>
-                        <td class="text-right">{{activeCompany.baseCurrencySymbol}} {{ item.totalAmount | giddhCurrency }}</td>
+                        <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                            {{ item.totalAmount | giddhCurrency }}</td>
                         <td>
                             <div class="btn-group" dropdown [autoClose]="true">
-                                <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span class="text-light-2">Select Action</span> <span class="icon-dots-three-vertical"></span></button>
+                                <button id="button-basic" dropdownToggle type="button"
+                                    class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span
+                                        class="text-light-2">Select Action</span> <span
+                                        class="icon-dots-three-vertical"></span></button>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <!-- <li role="menuitem">
@@ -123,7 +137,8 @@
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
                 <div class="col-sm-8">
-                    <sh-select name="voucherType" [(ngModel)]="branchTransferTempPostRequestParams.voucherType" [options]="voucherTypes" [forceClearReactive]="forceClear$ | async"></sh-select>
+                    <sh-select name="voucherType" [(ngModel)]="branchTransferTempPostRequestParams.voucherType"
+                        [options]="voucherTypes" [forceClearReactive]="forceClear$ | async"></sh-select>
                 </div>
             </div>
             <div class="row mt-2 mb-2">
@@ -131,10 +146,14 @@
                 <div class="col-sm-8">
                     <div class="row">
                         <div class="col-sm-8">
-                            <sh-select name="amountOperators" [(ngModel)]="branchTransferTempPostRequestParams.amountOperator" [options]="amountOperators" (selected)="checkIfAmountEmpty()" [forceClearReactive]="forceClear$ | async"></sh-select>
+                            <sh-select name="amountOperators"
+                                [(ngModel)]="branchTransferTempPostRequestParams.amountOperator"
+                                [options]="amountOperators" (selected)="checkIfAmountEmpty()"
+                                [forceClearReactive]="forceClear$ | async"></sh-select>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" placeholder="0" name="amount" [(ngModel)]="branchTransferTempPostRequestParams.amount" />
+                            <input type="text" class="form-control" placeholder="0" name="amount"
+                                [(ngModel)]="branchTransferTempPostRequestParams.amount" />
                         </div>
                     </div>
                 </div>
@@ -155,14 +174,17 @@
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState"
-    [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+    [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);"
+    (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->
 
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
         <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
-            <new-branch-transfer (hideModal)="hideModal(true)" [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode"></new-branch-transfer>
+            <new-branch-transfer (hideModal)="hideModal(true)"
+                [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode">
+            </new-branch-transfer>
         </div>
     </div>
 </ng-template>

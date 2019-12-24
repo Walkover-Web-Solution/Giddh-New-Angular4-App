@@ -1,43 +1,46 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-  novalidate [formGroup]="groupDetailForm" (submit)="addNewGroup()">
-  <div class="container-fluid mrT1">
+    novalidate [formGroup]="groupDetailForm" (submit)="addNewGroup()">
+    <div class="container-fluid mrT1">
 
-    <div class="row">
-      <div class="form-group col-xs-12 col-sm-6">
-        <label>Group Name</label>
-        <!-- (change)="generateUniqueName()" -->
-        <input type="text" class="form-control"  #autoFocused placeholder="Enter Group Name" formControlName="name">
-      </div>
-      <div class="form-group col-xs-12 col-sm-6">
-        <label>Unique Name</label>
-        <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')" UniqueNameDirective
-          textCaseChangeDirective placeholder="Enter Unique Name" formControlName="uniqueName">
-      </div>
-    </div>
-    <div class="row">
-      <div class="form-group col-xs-12 col-sm-6">
-        <label for="">Balance for Trigger</label>
-        <div class="input-group width-100" [ngClass]="{'clearfix': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
-          <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount"
-            placeholder="00.00" />
-          <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-6">
+                <label>Group Name</label>
+                <!-- (change)="generateUniqueName()" -->
+                <input type="text" class="form-control" #autoFocused placeholder="Enter Group Name"
+                    formControlName="name">
+            </div>
+            <div class="form-group col-xs-12 col-sm-6">
+                <label>Unique Name</label>
+                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')"
+                    UniqueNameDirective textCaseChangeDirective placeholder="Enter Unique Name"
+                    formControlName="uniqueName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12 col-sm-6">
+                <label for="">Balance for Trigger</label>
+                <div class="input-group width-100"
+                    [ngClass]="{'clearfix': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
+                    <input type="number" min="0" class="form-control text-right"
+                        formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                    <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
             'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">DR.
-          </div>
-          <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
+                    </div>
+                    <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
             'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">CR.
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="form-group clearfix">
+            <label>Description</label>
+            <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
+                formControlName="description"></textarea>
+        </div>
+        <button class="btn btn-success pull-right" [ladda]="isCreateGroupInProcess$ | async"
+            [disabled]="!groupDetailForm.valid">Add
+        </button>
     </div>
-    <div class="form-group clearfix">
-      <label>Description</label>
-      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-        formControlName="description"></textarea>
-    </div>
-    <button class="btn btn-success pull-right" [ladda]="isCreateGroupInProcess$ | async"
-      [disabled]="!groupDetailForm.valid">Add
-    </button>
-  </div>
 </form>

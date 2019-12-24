@@ -1,10 +1,10 @@
 <div id="live">
-  <div class="panel panel-default">
+    <div class="panel panel-default">
 
-    <div class="panel-heading">
-      <strong>Financial Year</strong>
-      <div class="pull-right dashboard-filter">
-        <!-- <label>
+        <div class="panel-heading">
+            <strong>Financial Year</strong>
+            <div class="pull-right dashboard-filter">
+                <!-- <label>
   <input type="checkbox" [checked]="showLastYear" (click)="LyToggle()" />LY
 </label>
 <label>
@@ -16,14 +16,14 @@
 <label>
   <input type="checkbox" [checked]="showProfitLoss" (click)="toggle('Profit/Loss')" />Profit / Loss
 </label> -->
-        <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
-      </div>
-    </div>
+                <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
+            </div>
+        </div>
 
-    <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+        <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
 
-            <div ng-if="errorMessage == ''">
+                <div ng-if="errorMessage == ''">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>
@@ -32,34 +32,35 @@
                 </div>
 
 
-        <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
-      </div>
-      <div class="chart-div" google-chart chart="chartData">
-        <perfect-scrollbar [scrollIndicators]="true">
-          <chart [options]="options"></chart>
-        </perfect-scrollbar>
+                <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+            </div>
+            <div class="chart-div" google-chart chart="chartData">
+                <perfect-scrollbar [scrollIndicators]="true">
+                    <chart [options]="options"></chart>
+                </perfect-scrollbar>
 
-        <ul class="dashboard-option">
-          <li class="primaryDarkBg">
-            <input type="checkbox" [checked]="showExpense" (change)="toggle('Expense')"/>Expenses
-          </li>
-          <li class="primarylightBg">
-            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
-          </li>
-          <li class="secondryDarkbg">
-            <input type="checkbox" [checked]="showRevenue" (change)="toggle('Revenue')"/>Revenue
-          </li>
-          <li class="secondrylightbg">
-            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
-          </li>
-          <li class="defaultDarkBg">
-            <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')"/>Profit / Loss
-          </li>
-          <li class="defaultLightBg">
-            <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()"/>Last Year
-          </li>
-        </ul>
-      </div>
+                <ul class="dashboard-option">
+                    <li class="primaryDarkBg">
+                        <input type="checkbox" [checked]="showExpense" (change)="toggle('Expense')" />Expenses
+                    </li>
+                    <li class="primarylightBg">
+                        <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()" />Last Year
+                    </li>
+                    <li class="secondryDarkbg">
+                        <input type="checkbox" [checked]="showRevenue" (change)="toggle('Revenue')" />Revenue
+                    </li>
+                    <li class="secondrylightbg">
+                        <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()" />Last Year
+                    </li>
+                    <li class="defaultDarkBg">
+                        <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')" />Profit /
+                        Loss
+                    </li>
+                    <li class="defaultLightBg">
+                        <input type="checkbox" [checked]="showLastYear" (change)="LyToggle()" />Last Year
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

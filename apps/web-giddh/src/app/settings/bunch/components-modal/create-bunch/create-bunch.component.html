@@ -1,33 +1,33 @@
 <div id="" class="">
-  <div class="modal-header">
-    <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'create' || !mode">Create Group </h3>
-    <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'update'">Update Group </h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-  </div>
-  <div class="modal-body clearfix" id="export-body">
-    <form name="newRole" [formGroup]="addBunchForm" novalidate class="" autocomplete="off">
-      <div class="row">
-        <div class="col-xs-6 form-group">
-          <label>Name <sup>*</sup></label>
-          <input type="text" class="form-control" formControlName="name" (blur)="generateUniqueName()"/>
-        </div>
+    <div class="modal-header">
+        <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'create' || !mode">Create Group </h3>
+        <h3 class="modal-title bg" id="modal-title" *ngIf="mode === 'update'">Update Group </h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    </div>
+    <div class="modal-body clearfix" id="export-body">
+        <form name="newRole" [formGroup]="addBunchForm" novalidate class="" autocomplete="off">
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label>Name <sup>*</sup></label>
+                    <input type="text" class="form-control" formControlName="name" (blur)="generateUniqueName()" />
+                </div>
 
-        <div class="col-xs-6 form-group">
-          <label>UniqueName <sup>*</sup></label>
-          <input type="text" class="form-control" formControlName="uniqueName"/>
-        </div>
-      </div>
+                <div class="col-xs-6 form-group">
+                    <label>UniqueName <sup>*</sup></label>
+                    <input type="text" class="form-control" formControlName="uniqueName" />
+                </div>
+            </div>
 
-      <div class="row">
-        <div class="col-xs-12 form-group">
-          <label>Description</label>
-          <textarea class="form-control" formControlName="description"></textarea>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-success" (click)="createBunch()">Save</button>
-    <button type="reset" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-  </div>
+            <div class="row">
+                <div class="col-xs-12 form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" formControlName="description"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success" (click)="createBunch()">Save</button>
+        <button type="reset" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+    </div>
 </div>

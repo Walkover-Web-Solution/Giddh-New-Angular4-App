@@ -1,3 +1,3 @@
 export const LOGS_API = {
-  AUDIT_LOGS: 'company/:companyUniqueName/logs?page=:page', // post call
+    AUDIT_LOGS: 'company/:companyUniqueName/logs?page=:page', // post call
 };

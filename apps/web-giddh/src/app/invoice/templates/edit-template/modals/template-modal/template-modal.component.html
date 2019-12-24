@@ -2,9 +2,11 @@
     <div class="panel-body" id="customInvoice">
         <ng-container>
             <div style="width: 100%">
-                <edit-template-filters class="templateEditor" [editMode]="editMode" (selectTab)="selectedTab($event)"></edit-template-filters>
+                <edit-template-filters class="templateEditor" [editMode]="editMode" (selectTab)="selectedTab($event)">
+                </edit-template-filters>
                 <!--[templateSections]="templateSections" [templateId]="templateId"-->
-                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scrollAuto" [isPreviewMode]="isPreviewMode">this is pre</invoice-template>
+                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scrollAuto"
+                    [isPreviewMode]="isPreviewMode">this is pre</invoice-template>
                 <div class="invoice-preview scrollAuto" [hidden]="!isEmailTabSelected" PageHeight>
                     <!--{{ emailObject | json}}-->
                     <!--<div id="email-template" class="clearfix">

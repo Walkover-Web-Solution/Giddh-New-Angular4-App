@@ -1,15 +1,15 @@
 <div class="col-xs-6 col-xs-offset-3  text-center">
     <div class="illustration_box">
-      <img src="assets/images/new/Inventory_welcome.svg"/>
-      <h3 class="mrT1 fs18"><strong>Job Work</strong></h3>
-      <p class="mrT1">Add & Manage product in the inventory</p>
-      <button class="btn btn-pink mrT2" (click)="toggleTransferAsidePane()">Start</button>
+        <img src="assets/images/new/Inventory_welcome.svg" />
+        <h3 class="mrT1 fs18"><strong>Job Work</strong></h3>
+        <p class="mrT1">Add & Manage product in the inventory</p>
+        <button class="btn btn-pink mrT2" (click)="toggleTransferAsidePane()">Start</button>
     </div>
-  </div>
-  
+</div>
+
 
 <!-- aside inwards/outwards/transfer pane -->
 <div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
 <aside-transfer-pane [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState"
-  (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
+    (closeAsideEvent)="toggleTransferAsidePane()"></aside-transfer-pane>
 <!-- aside inwards/outwards/transfer pane -->

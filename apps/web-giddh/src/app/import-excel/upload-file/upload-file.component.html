@@ -1,43 +1,49 @@
 <!-- upload And Map Content start-->
 <div class="uploadAndMapContent">
-  <h2 class="text-center" style="font-size: 32px"> Import {{ title | titlecase}}</h2>
-  <div class="upload_excel max500 center-block box mrT2 dashed_bdr">
-    <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file"
-           (change)="onFileChange($event.target.files)" droppable="true" class="form-control"/>
-    <div class="clearfix pos-rel width100">
-      <div class="fileInputWrapper text-center">
-        <div class="clearfix mrB2">
-          <img src="assets/images/new/import_icon.svg" [style.width.px]="100"/>
-          <!-- <i class="fa fa-upload upload_icon" aria-hidden="true"></i> -->
+    <h2 class="text-center" style="font-size: 32px"> Import {{ title | titlecase}}</h2>
+    <div class="upload_excel max500 center-block box mrT2 dashed_bdr">
+        <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file"
+            (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
+        <div class="clearfix pos-rel width100">
+            <div class="fileInputWrapper text-center">
+                <div class="clearfix mrB2">
+                    <img src="assets/images/new/import_icon.svg" [style.width.px]="100" />
+                    <!-- <i class="fa fa-upload upload_icon" aria-hidden="true"></i> -->
+                </div>
+                <div class="clearfix pdR2 pdL2">
+                    <label class="clearfix text-light-2" style="font-size: 14px">Drop CSV or Excel file to
+                        upload</label>
+
+                    <div class="mrT3">
+                        <label class="file-uplod-penal" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse
+                                file</span>
+                            <span *ngIf="selectedFileName" class="select-file">{{selectedFileName}}</span> <span
+                                class="pull-right select-file"><i class="fa fa-check"
+                                    *ngIf="selectedFileName"></i></span></label>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="clearfix pdR2 pdL2">
-          <label class="clearfix text-light-2" style="font-size: 14px">Drop CSV or Excel file to upload</label>
+    </div>
+    <div class="max500 center-block mrT clearfix">
+        <!-- <a  href="assets/sample-files/{{entity}}-sample.xlsx">Download a sample file</a> -->
 
-          <div class="mrT3">
-            <label class="file-uplod-penal" for="csvUploadInput"> <span *ngIf="!selectedFileName">Browse file</span>
-              <span *ngIf="selectedFileName" class="select-file">{{selectedFileName}}</span> <span
-                class="pull-right select-file"><i class="fa fa-check" *ngIf="selectedFileName"></i></span></label>
-          </div>
+        <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">Download a sample Excel
+            file
+        </button>
+        <button class="btn btn-sm btn-link pull-right" type="button" (click)="downloadSampleFile(entity, true)">Download
+            a sample Csv
+            file
+        </button>
+
+        <div class="pull-right mrT2">
+            <button class="btn btn-default" [routerLink]="['/pages/import']">Back</button>
+            <button class="btn btn-success" [ladda]="isLoading" [disabled]="file === null"
+                (click)="onFileUpload.emit(file)">
+                Next
+            </button>
         </div>
-
-      </div>
     </div>
-  </div>
-  <div class="max500 center-block mrT clearfix">
-    <!-- <a  href="assets/sample-files/{{entity}}-sample.xlsx">Download a sample file</a> -->
-
-    <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">Download a sample Excel file
-    </button>
-    <button class="btn btn-sm btn-link pull-right" type="button" (click)="downloadSampleFile(entity, true)">Download a sample Csv
-      file
-    </button>
-
-    <div class="pull-right mrT2">
-      <button class="btn btn-default" [routerLink]="['/pages/import']">Back</button>
-      <button class="btn btn-success" [ladda]="isLoading" [disabled]="file === null" (click)="onFileUpload.emit(file)">
-        Next
-      </button>
-    </div>
-  </div>
 </div>
 <!-- upload And Map Content end-->

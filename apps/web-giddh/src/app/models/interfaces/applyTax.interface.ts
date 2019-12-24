@@ -1,5 +1,5 @@
 export interface IApplyTax {
-  uniqueName: string;
-  taxes: string[];
-  isAccount: boolean;
+    uniqueName: string;
+    taxes: string[];
+    isAccount: boolean;
 }

@@ -1,27 +1,27 @@
 <div id="" class="">
-  <div class="modal-header">
-    <h3 class="modal-title bg" id="modal-title"> List of {{ activeBunch.name }} group companies</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-  </div>
-  <div class="modal-body clearfix" id="export-body">
-    <ng-container *ngIf="selectedBunch.companies && selectedBunch.companies.length">
-      <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
-                         [scrollIndicators]="true">
-        <ul class="list-unstyled bunch_list">
-          <li *ngFor="let item of selectedBunch.companies; let i = index">
-            <div>
-              {{item.name}}
-            </div>
-            <span class="company_action pos-abs">
+    <div class="modal-header">
+        <h3 class="modal-title bg" id="modal-title"> List of {{ activeBunch.name }} group companies</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    </div>
+    <div class="modal-body clearfix" id="export-body">
+        <ng-container *ngIf="selectedBunch.companies && selectedBunch.companies.length">
+            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
+                [scrollIndicators]="true">
+                <ul class="list-unstyled bunch_list">
+                    <li *ngFor="let item of selectedBunch.companies; let i = index">
+                        <div>
+                            {{item.name}}
+                        </div>
+                        <span class="company_action pos-abs">
                             <button type="button" class="btn btn-xs" (click)="deleteCompany(item.uniqueName)"><i
-                              class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
+                                    class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                         </span>
-          </li>
-        </ul>
-      </perfect-scrollbar>
-    </ng-container>
-  </div>
-  <!-- <div class="modal-footer">
+                    </li>
+                </ul>
+            </perfect-scrollbar>
+        </ng-container>
+    </div>
+    <!-- <div class="modal-footer">
       <button type="submit" class="btn btn-success" (click)="createBunch()">Save</button>
       <button type="reset" class="btn btn-danger" (click)="onCancel()">Cancel</button>
   </div> -->

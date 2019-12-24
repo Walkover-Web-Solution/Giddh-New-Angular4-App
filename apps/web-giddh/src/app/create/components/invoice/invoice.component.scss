@@ -1,67 +1,65 @@
-
 .inv_header {
-  background: #FFF8EB;
-  h1 {
-    font-size: 20px;
-    color: #333333;
-    font-family: 'opensans-regular';
-    padding: 0;
-    border-bottom: 1px solid #333333;
-    display: inline-block;
-    margin: 28px 0;
-  }
-  span {
-    color: #E14D26;
-    border-bottom: 1px solid #E14D26;
-    display: inline-block;
-    font-family: 'opensans-regular';
-    font-size: 20px;
-    line-height: 21px;
-    padding: 0;
-    margin: 28px 0;
-
-  }
+    background: #fff8eb;
+    h1 {
+        font-size: 20px;
+        color: #333333;
+        font-family: "opensans-regular";
+        padding: 0;
+        border-bottom: 1px solid #333333;
+        display: inline-block;
+        margin: 28px 0;
+    }
+    span {
+        color: #e14d26;
+        border-bottom: 1px solid #e14d26;
+        display: inline-block;
+        font-family: "opensans-regular";
+        font-size: 20px;
+        line-height: 21px;
+        padding: 0;
+        margin: 28px 0;
+    }
 }
 
 .inv_content {
-  background: #fff;
-  padding-bottom: 20px;
+    background: #fff;
+    padding-bottom: 20px;
 }
 
 .template-options {
-  margin-top: 26px;
-  position: relative;
-  overflow: hidden;
-  figure {
+    margin-top: 26px;
     position: relative;
-    .template_img {
-      width: 100%;
+    overflow: hidden;
+    figure {
+        position: relative;
+        .template_img {
+            width: 100%;
+        }
     }
-  }
-  h4 {
-    margin-bottom: 7px;
-  }
-  .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    display: none;
-    background: rgba(0, 0, 0, 0.85);
-    .btn-select {
-      position: relative;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #E6E6E6;
-      color: #F26122;
-      font-size: 16px;
+    h4 {
+        margin-bottom: 7px;
     }
-  }
-  &:hover {
     .overlay {
-      display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: none;
+        background: rgba(0, 0, 0, 0.85);
+        .btn-select {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e6e6e6;
+            color: #f26122;
+            font-size: 16px;
+        }
     }
-  }
+    &:hover {
+        .overlay {
+            display: block;
+        }
+    }
 }
