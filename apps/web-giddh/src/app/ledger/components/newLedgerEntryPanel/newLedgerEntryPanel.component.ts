@@ -39,7 +39,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 @Component({
     selector: 'new-ledger-entry-panel',
     templateUrl: 'newLedgerEntryPanel.component.html',
-    styleUrls: ['./newLedgerEntryPanel.component.css'],
+    styleUrls: ['./newLedgerEntryPanel.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('slideInOut', [
@@ -90,6 +90,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount') public discountControl: LedgerDiscountComponent;
     @ViewChild('tax') public taxControll: TaxControlComponent;
 
+    public sourceOptions = [
+        { label: 'Vijay Nagar', value: 'Vijay Nagar' },
+        { label: 'Palasia Square', value: 'Palasia Square' }
+    ]
+    public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
     public discountAccountsList$: Observable<IDiscountList[]>;

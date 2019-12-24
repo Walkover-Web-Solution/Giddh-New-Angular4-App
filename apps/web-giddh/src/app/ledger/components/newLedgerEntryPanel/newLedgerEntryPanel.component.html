@@ -150,35 +150,47 @@
             </table>
 
         </div>
-
-        <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
-
-            <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
-                *ngIf="!blankLedger.isOtherTaxesApplicable"
-                (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
-
-            <p *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</p>
-
-            <div class="clearfix">
-                <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1 pull-right"
-                    [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
-                    <label>Other Tax</label>
-                    <span class="d-flex">
-                        <span class="d-flex align-item-center">
-                            <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true)">
-                                <img src="assets/images/edit-pencilicon.svg">
-                            </a>
-                        </span>
-
-                        <input class="text-right form-control mrL1" disabled="disabled"
-                            [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"
-                            [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
-                            [mask]="inputMaskFormat" />
-                    </span>
+        <div class="row warehouse-tax-field">
+            <div class="col-sm-4 col-xs-12" *ngIf="sourceWarehouse">
+                <div class="source-warehouse">
+                    <label>Soucre</label>
+                    <sh-select [options]="sourceOptions"></sh-select>
                 </div>
             </div>
+            <div class="col-sm-8 col-xs-12" [ngClass]="{'col-sm-offset-4' : !sourceWarehouse}">
+                <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
+                    <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
+                        *ngIf="!blankLedger.isOtherTaxesApplicable"
+                        (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
+
+                    <span *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</span>
+
+                    <div class="clearfix">
+                        <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mrT1 pull-right"
+                            [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
+                            <label>Other Tax</label>
+                            <span class="d-flex">
+                                <span class="d-flex align-item-center">
+                                    <a href="javascript: void 0" (click)="toggleOtherTaxesAsidePane(true)">
+                                        <img src="assets/images/edit-pencilicon.svg">
+                                    </a>
+                                </span>
+
+                                <input class="text-right form-control mrL1" disabled="disabled"
+                                    [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"
+                                    [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                                    [mask]="inputMaskFormat" />
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+
+
+
 
         <div class="pdB1 inWords" *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
