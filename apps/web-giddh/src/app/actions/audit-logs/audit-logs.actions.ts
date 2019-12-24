@@ -16,65 +16,65 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class AuditLogsActions {
-  @Effect() private GET_LOGS$: Observable<Action> = this.action$
-    .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS).pipe(
-      switchMap((action: CustomActions) => {
-        return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
-          map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
-            type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
-            payload: r
-          }, true, {
-              type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
-              payload: r
-            })));
-      }));
+    @Effect() private GET_LOGS$: Observable<Action> = this.action$
+        .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS).pipe(
+            switchMap((action: CustomActions) => {
+                return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
+                    map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
+                        type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
+                        payload: r
+                    }, true, {
+                        type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
+                        payload: r
+                    })));
+            }));
 
-  @Effect() private LoadMore$: Observable<Action> = this.action$
-    .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS).pipe(
-      switchMap((action: CustomActions) => {
-        return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
-          map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
-            type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
-            payload: r
-          }, true, {
-              type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
-              payload: r
-            })));
-      }));
+    @Effect() private LoadMore$: Observable<Action> = this.action$
+        .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS).pipe(
+            switchMap((action: CustomActions) => {
+                return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
+                    map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
+                        type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
+                        payload: r
+                    }, true, {
+                        type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
+                        payload: r
+                    })));
+            }));
 
-  constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _logService: LogsService) {
-  }
-
-  public GetLogs(request: LogsRequest, page: number): CustomActions {
-    return {
-      type: AUDIT_LOGS_ACTIONS.GET_LOGS,
-      payload: { request, page }
-    };
-  }
-
-  public LoadMoreLogs(request: LogsRequest, page: number): CustomActions {
-    return {
-      type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS,
-      payload: { request, page }
-    };
-  }
-
-  public ResetLogs(): CustomActions {
-    return {
-      type: AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET
-    };
-  }
-
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-    if (response.status === 'error') {
-      if (showToast) {
-        this._toasty.errorToast(response.message);
-      }
-      return errorAction;
+    constructor(private action$: Actions,
+        private _toasty: ToasterService,
+        private store: Store<AppState>,
+        private _logService: LogsService) {
     }
-    return successAction;
-  }
+
+    public GetLogs(request: LogsRequest, page: number): CustomActions {
+        return {
+            type: AUDIT_LOGS_ACTIONS.GET_LOGS,
+            payload: { request, page }
+        };
+    }
+
+    public LoadMoreLogs(request: LogsRequest, page: number): CustomActions {
+        return {
+            type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS,
+            payload: { request, page }
+        };
+    }
+
+    public ResetLogs(): CustomActions {
+        return {
+            type: AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET
+        };
+    }
+
+    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        if (response.status === 'error') {
+            if (showToast) {
+                this._toasty.errorToast(response.message);
+            }
+            return errorAction;
+        }
+        return successAction;
+    }
 }

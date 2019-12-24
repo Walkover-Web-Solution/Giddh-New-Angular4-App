@@ -1,7 +1,12 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "types": ["jasmine"]
-  },
-  "include": ["**/*.ts", "hook.js"]
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "types": [
+            "jasmine"
+        ]
+    },
+    "include": [
+        "**/*.ts",
+        "hook.js"
+    ]
 }

@@ -8,17 +8,17 @@ import { SelectModule } from '../../theme/ng-select/ng-select';
 import { SharedModule } from '../shared.module';
 
 @NgModule({
-  declarations: [GenericAsideMenuAccountComponent],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    BsDatepickerModule.forRoot(),
-    CommonModule,
-    LaddaModule,
-    SelectModule,
-    SharedModule
-  ],
-  exports: [GenericAsideMenuAccountComponent]
+    declarations: [GenericAsideMenuAccountComponent],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        BsDatepickerModule.forRoot(),
+        CommonModule,
+        LaddaModule,
+        SelectModule,
+        SharedModule
+    ],
+    exports: [GenericAsideMenuAccountComponent]
 })
 export class GenericAsideMenuAccountModule {
 }

@@ -1,121 +1,125 @@
 <div class="addBulkItemmodal">
 
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Add bulk items</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-
-        <div class="row">
-
-          <!-- region left side -->
-          <div class="col-md-6 col-sm-6">
-            <div class="leftContent">
-
-              <div class="searchBox">
-                <input type="text" placeholder="Search stock" #searchElement>
-              </div>
-
-              <div class="productList">
-
-                <perfect-scrollbar>
-
-                  <div class="singleProductWrapper cp" *ngFor="let item of filteredData"
-                       (click)="addItemToSelectedArr(item)">
-                    <h5>{{ item.name }}</h5>
-                    <p>
-                      <span class="stockSku"><label>SKU: </label>Number</span>
-                      <span class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
-                    </p>
-                  </div>
-
-                </perfect-scrollbar>
-
-              </div>
-
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Add bulk items</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-          </div>
-          <!-- endregion-->
 
-          <!-- region right side -->
-          <div class="col-md-6 pl-0 col-sm-6">
+            <div class="modal-body">
 
-            <div class="rightContent">
+                <div class="row">
 
-              <h4>Selected Stocks <span class="selectdStockNumber">({{ selectedItems.length }})</span></h4>
-              <hr>
+                    <!-- region left side -->
+                    <div class="col-md-6 col-sm-6">
+                        <div class="leftContent">
 
-              <div class="rightSideWrapper">
-                <perfect-scrollbar>
-                  <div class="wrapSelectedStocks" *ngFor="let item of selectedItems">
-                    <div class="singleSelectdStock clearfix d-flex">
+                            <div class="searchBox">
+                                <input type="text" placeholder="Search stock" #searchElement>
+                            </div>
 
-                      <div class="" style="flex: 1">
-                        <div class="stockName">
-                          <p>{{ item.name }}</p>
-                        </div>
-                      </div>
+                            <div class="productList">
 
-                      <div class="d-flex" style="align-items: center">
+                                <perfect-scrollbar>
 
-                        <div class="input-group">
+                                    <div class="singleProductWrapper cp" *ngFor="let item of filteredData"
+                                        (click)="addItemToSelectedArr(item)">
+                                        <h5>{{ item.name }}</h5>
+                                        <p>
+                                            <span class="stockSku"><label>SKU: </label>Number</span>
+                                            <span class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
+                                        </p>
+                                    </div>
 
-                      <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-number" (click)="alterQuantity(item, 'minus')">
-                          <span class="fa fa-minus"></span>
-                        </button>
-                      </span>
+                                </perfect-scrollbar>
 
-                          <input type="number" name="quantity" class="form-control input-number" value="1" min="1"
-                                 [(ngModel)]="item.quantity">
-
-                          <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-number" (click)="alterQuantity(item)">
-                          <span class="fa fa-plus"></span>
-                        </button>
-                      </span>
+                            </div>
 
                         </div>
-
-                        <span (click)="removeSelectedItem(item.uniqueName)">
-                      <i class="fa fa-times"></i>
-                    </span>
-                      </div>
-
                     </div>
-                  </div>
-                </perfect-scrollbar>
-              </div>
+                    <!-- endregion-->
 
-              <div class="temapletFooter">
+                    <!-- region right side -->
+                    <div class="col-md-6 pl-0 col-sm-6">
 
-                <hr>
+                        <div class="rightContent">
 
-                <div class="btn-group bulkItemBtnGroup">
-                  <button class="btn btn-sm btn-success" type="button"
-                          (click)="saveItemsEvent.emit(selectedItems);closeEvent.emit()">
-                    Add
-                  </button>
-                  <button class="btn btn-sm btn-primary" type="button"
-                          (click)="closeEvent.emit()">Cancel
-                  </button>
+                            <h4>Selected Stocks <span class="selectdStockNumber">({{ selectedItems.length }})</span>
+                            </h4>
+                            <hr>
+
+                            <div class="rightSideWrapper">
+                                <perfect-scrollbar>
+                                    <div class="wrapSelectedStocks" *ngFor="let item of selectedItems">
+                                        <div class="singleSelectdStock clearfix d-flex">
+
+                                            <div class="" style="flex: 1">
+                                                <div class="stockName">
+                                                    <p>{{ item.name }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex" style="align-items: center">
+
+                                                <div class="input-group">
+
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number"
+                                                            (click)="alterQuantity(item, 'minus')">
+                                                            <span class="fa fa-minus"></span>
+                                                        </button>
+                                                    </span>
+
+                                                    <input type="number" name="quantity"
+                                                        class="form-control input-number" value="1" min="1"
+                                                        [(ngModel)]="item.quantity">
+
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-number"
+                                                            (click)="alterQuantity(item)">
+                                                            <span class="fa fa-plus"></span>
+                                                        </button>
+                                                    </span>
+
+                                                </div>
+
+                                                <span (click)="removeSelectedItem(item.uniqueName)">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </perfect-scrollbar>
+                            </div>
+
+                            <div class="temapletFooter">
+
+                                <hr>
+
+                                <div class="btn-group bulkItemBtnGroup">
+                                    <button class="btn btn-sm btn-success" type="button"
+                                        (click)="saveItemsEvent.emit(selectedItems);closeEvent.emit()">
+                                        Add
+                                    </button>
+                                    <button class="btn btn-sm btn-primary" type="button"
+                                        (click)="closeEvent.emit()">Cancel
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- endregion-->
+
                 </div>
-
-              </div>
-
             </div>
-          </div>
-          <!-- endregion-->
-
         </div>
-      </div>
     </div>
-  </div>
 
 </div>

@@ -1,50 +1,50 @@
 <div id="live">
-  <div class="panel panel-default">
+    <div class="panel panel-default">
 
-    <div class="panel-heading">
-      <strong>Ratio Analysis</strong>
-      <div class="pull-right dashboard-filter">
-        <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
-      </div>
-    </div>
-
-    <div class="panel-body pos-rel ratioAnalysisPanelBody">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div class="no-data mrT2 loader-main" ng-if="errorMessage == ''">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
+        <div class="panel-heading">
+            <strong>Ratio Analysis</strong>
+            <div class="pull-right dashboard-filter">
+                <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
             </div>
+        </div>
 
-        <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
-      </div>
-      <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-        <perfect-scrollbar [scrollIndicators]="true">
-          <div class="col-xs-3 text-center ratio-chart-block">
-            <chart [options]="currentRatioOption" #currentRatio></chart>
-            <h1 class="mrB1">Current Ratio</h1>
-            <small>Current Assets /<br /> Current Liabilities</small>
-          </div>
-          <div class="col-xs-3 text-center ratio-chart-block">
-            <chart [options]="debtOptions" #debtRatio></chart>
-            <h1 class="mrB1">Debt Equity Ratio</h1>
-            <small>Current Liab. + <br /> NonCurrent Liab. /<br /> Shareholder's fund</small>
-          </div>
-          <div class="col-xs-3 text-center ratio-chart-block">
-            <chart [options]="proprietaryOption" #propreitaryRatio></chart>
-            <h1 class="mrB1">Proprietary Ratio</h1>
-            <small>Shareholder's fund /<br /> Total Assets</small>
-          </div>
-          <div class="col-xs-3 text-center ratio-chart-block">
-            <chart [options]="fixedAssetOption" #fixedAsset></chart>
-            <h1 class="mrB1">Fixed Assets Ratio</h1>
-            <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
-          </div>
+        <div class="panel-body pos-rel ratioAnalysisPanelBody">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                <div class="no-data mrT2 loader-main" ng-if="errorMessage == ''">
+                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                    <div class="spinner2">
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                    </div>
+                </div>
 
-        </perfect-scrollbar>
-      </div>
+                <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+            </div>
+            <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
+                <perfect-scrollbar [scrollIndicators]="true">
+                    <div class="col-xs-3 text-center ratio-chart-block">
+                        <chart [options]="currentRatioOption" #currentRatio></chart>
+                        <h1 class="mrB1">Current Ratio</h1>
+                        <small>Current Assets /<br /> Current Liabilities</small>
+                    </div>
+                    <div class="col-xs-3 text-center ratio-chart-block">
+                        <chart [options]="debtOptions" #debtRatio></chart>
+                        <h1 class="mrB1">Debt Equity Ratio</h1>
+                        <small>Current Liab. + <br /> NonCurrent Liab. /<br /> Shareholder's fund</small>
+                    </div>
+                    <div class="col-xs-3 text-center ratio-chart-block">
+                        <chart [options]="proprietaryOption" #propreitaryRatio></chart>
+                        <h1 class="mrB1">Proprietary Ratio</h1>
+                        <small>Shareholder's fund /<br /> Total Assets</small>
+                    </div>
+                    <div class="col-xs-3 text-center ratio-chart-block">
+                        <chart [options]="fixedAssetOption" #fixedAsset></chart>
+                        <h1 class="mrB1">Fixed Assets Ratio</h1>
+                        <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
+                    </div>
+
+                </perfect-scrollbar>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

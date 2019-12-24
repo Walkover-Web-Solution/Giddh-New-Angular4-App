@@ -1,114 +1,123 @@
 <section>
-  <nav class="navbar">
-    <div class="invoce-controll">
-      <div class="row" style="margin: 0 !important;">
+    <nav class="navbar">
+        <div class="invoce-controll">
+            <div class="row" style="margin: 0 !important;">
 
-        <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
-        <div class="" id="settingTab">
+                <!--<invoice-page-dd (pageChanged)="goToRoute($event)" (selectVoucher)="voucherChange($event)"></invoice-page-dd>-->
+                <div class="" id="settingTab">
 
-          <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
+                    <ng-template [ngIf]="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'">
 
-            <tabset #staticTabs>
+                        <tabset #staticTabs>
 
-              <tab heading="Estimates (Beta)" (select)="tabChanged('estimates', $event);
+                            <tab heading="Estimates (Beta)" (select)="tabChanged('estimates', $event);
                    voucherChanged('generateEstimate')" [active]="activeTab === 'estimates'">
-                <div *ngIf="activeTab === 'estimates'">
-                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
+                                <div *ngIf="activeTab === 'estimates'">
+                                    <app-proforma-list-component [voucherType]="selectedVoucherType">
+                                    </app-proforma-list-component>
+                                </div>
+                            </tab>
+
+                            <tab heading="Proformas"
+                                (select)="tabChanged('proformas', $event);voucherChanged('generateProforma')"
+                                [active]="activeTab === 'proformas'">
+                                <div *ngIf="activeTab === 'proformas'">
+                                    <app-proforma-list-component [voucherType]="selectedVoucherType">
+                                    </app-proforma-list-component>
+                                </div>
+                            </tab>
+
+                            <tab heading="Invoices" (select)="tabChanged('sales', $event);voucherChanged('sales')"
+                                [active]="activeTab === 'sales'">
+                                <div *ngIf="activeTab === 'sales'">
+                                    <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                                </div>
+                            </tab>
+
+                            <tab heading="Recurring" (select)="tabChanged('recurring', $event)"
+                                [active]="activeTab === 'recurring'">
+                                <div *ngIf="activeTab === 'recurring'">
+                                    <app-recurring></app-recurring>
+                                </div>
+                            </tab>
+
+                            <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')"
+                                [active]="activeTab === 'pending'">
+                                <div *ngIf="activeTab === 'pending'">
+                                    <app-invoice-generate [selectedVoucher]="selectedVoucherType">
+                                    </app-invoice-generate>
+                                </div>
+                            </tab>
+
+                            <tab heading="Templates" *ngIf="!isMobileView" (select)="tabChanged('templates', $event);"
+                                [active]="activeTab === 'templates'">
+                                <div *ngIf="activeTab === 'templates'">
+                                    <edit-invoice></edit-invoice>
+                                </div>
+                            </tab>
+
+                            <tab heading="Settings" (select)="tabChanged('settings', $event)"
+                                [active]="activeTab === 'settings'">
+                                <div *ngIf="activeTab === 'settings'">
+                                    <app-invoice-setting></app-invoice-setting>
+                                </div>
+                            </tab>
+
+                        </tabset>
+
+                    </ng-template>
+
+                    <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
+
+                        <tabset #staticTabs>
+
+                            <tab heading="Debit Note" [active]="activeTab === 'debit note'"
+                                (select)="tabChanged('debit note', $event);voucherChanged('debitNote')">
+                                <div *ngIf="activeTab === 'debit note'" class="debit-note">
+                                    <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                                </div>
+                            </tab>
+
+                            <tab heading="Credit Note" [active]="activeTab === 'credit note'"
+                                (select)="tabChanged('credit note', $event);voucherChanged('creditNote')">
+                                <div *ngIf="activeTab === 'credit note'">
+                                    <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
+                                </div>
+                            </tab>
+
+                            <tab heading="Pending" (select)="tabChanged('pending', $event);"
+                                [active]="activeTab === 'pending'">
+                                <div *ngIf="activeTab === 'pending'">
+                                    <app-invoice-generate [selectedVoucher]="selectedVoucherType">
+                                    </app-invoice-generate>
+                                </div>
+                            </tab>
+
+                            <tab *ngIf="!isMobileView" heading="Templates" (select)="tabChanged('templates', $event);"
+                                [active]="activeTab === 'templates'">
+                                <div *ngIf="activeTab === 'templates'">
+                                    <edit-invoice></edit-invoice>
+                                </div>
+                            </tab>
+
+                            <tab heading="Setting" (select)="tabChanged('settings', $event)"
+                                [active]="activeTab === 'settings'">
+                                <div *ngIf="activeTab === 'settings'">
+                                    <app-invoice-setting></app-invoice-setting>
+                                </div>
+                            </tab>
+
+                        </tabset>
+
+                    </ng-template>
+
                 </div>
-              </tab>
 
-              <tab heading="Proformas" (select)="tabChanged('proformas', $event);voucherChanged('generateProforma')"
-                [active]="activeTab === 'proformas'">
-                <div *ngIf="activeTab === 'proformas'">
-                  <app-proforma-list-component [voucherType]="selectedVoucherType"></app-proforma-list-component>
-                </div>
-              </tab>
-
-              <tab heading="Invoices" (select)="tabChanged('sales', $event);voucherChanged('sales')"
-                [active]="activeTab === 'sales'">
-                <div *ngIf="activeTab === 'sales'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
-                </div>
-              </tab>
-
-              <tab heading="Recurring" (select)="tabChanged('recurring', $event)" [active]="activeTab === 'recurring'">
-                <div *ngIf="activeTab === 'recurring'">
-                  <app-recurring></app-recurring>
-                </div>
-              </tab>
-
-              <tab heading="Pending" (select)="tabChanged('pending');voucherChanged('sales')"
-                [active]="activeTab === 'pending'">
-                <div *ngIf="activeTab === 'pending'">
-                  <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
-                </div>
-              </tab>
-
-              <tab heading="Templates" *ngIf="!isMobileView" (select)="tabChanged('templates', $event);"
-                [active]="activeTab === 'templates'">
-                <div *ngIf="activeTab === 'templates'">
-                  <edit-invoice></edit-invoice>
-                </div>
-              </tab>
-
-              <tab heading="Settings" (select)="tabChanged('settings', $event)" [active]="activeTab === 'settings'">
-                <div *ngIf="activeTab === 'settings'">
-                  <app-invoice-setting></app-invoice-setting>
-                </div>
-              </tab>
-
-            </tabset>
-
-          </ng-template>
-
-          <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
-
-            <tabset #staticTabs>
-
-              <tab heading="Debit Note" [active]="activeTab === 'debit note'"
-                (select)="tabChanged('debit note', $event);voucherChanged('debitNote')">
-                <div *ngIf="activeTab === 'debit note'" class="debit-note">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
-                </div>
-              </tab>
-
-              <tab heading="Credit Note" [active]="activeTab === 'credit note'"
-                (select)="tabChanged('credit note', $event);voucherChanged('creditNote')">
-                <div *ngIf="activeTab === 'credit note'">
-                  <app-invoice-preview [selectedVoucher]="selectedVoucherType"></app-invoice-preview>
-                </div>
-              </tab>
-
-              <tab heading="Pending" (select)="tabChanged('pending', $event);" [active]="activeTab === 'pending'">
-                <div *ngIf="activeTab === 'pending'">
-                  <app-invoice-generate [selectedVoucher]="selectedVoucherType"></app-invoice-generate>
-                </div>
-              </tab>
-
-              <tab *ngIf="!isMobileView" heading="Templates" (select)="tabChanged('templates', $event);"
-                [active]="activeTab === 'templates'">
-                <div *ngIf="activeTab === 'templates'">
-                  <edit-invoice></edit-invoice>
-                </div>
-              </tab>
-
-              <tab heading="Setting" (select)="tabChanged('settings', $event)" [active]="activeTab === 'settings'">
-                <div *ngIf="activeTab === 'settings'">
-                  <app-invoice-setting></app-invoice-setting>
-                </div>
-              </tab>
-
-            </tabset>
-
-          </ng-template>
-
+            </div>
         </div>
-
-      </div>
-    </div>
-  </nav>
+    </nav>
 
 
-  <!--<router-outlet></router-outlet>-->
+    <!--<router-outlet></router-outlet>-->
 
 </section>

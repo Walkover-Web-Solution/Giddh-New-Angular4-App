@@ -19,7 +19,7 @@ export class ExpenseService {
     private user: UserDetails;
 
     constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-                private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+        private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public getPettycashReports(request: CommonPaginatedRequest): Observable<BaseResponse<PettyCashReportResponse, any>> {
@@ -59,12 +59,12 @@ export class ExpenseService {
             .replace(':uniqueName', requestObj.uniqueName)
             .replace(':accountUniqueName', requestObj.accountUniqueName)
             .replace(':actionType', requestObj.actionType), model).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = requestObj;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = requestObj;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {
@@ -72,11 +72,11 @@ export class ExpenseService {
         return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry
             .replace(':companyUniqueName', this.companyUniqueName)
             .replace(':accountUniqueName', uniqueName)).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     private createQueryString(str, model) {

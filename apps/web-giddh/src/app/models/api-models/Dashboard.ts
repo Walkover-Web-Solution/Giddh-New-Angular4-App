@@ -12,8 +12,8 @@ import { IClosingBalance, IForwardBalance } from '../interfaces/ledger.interface
  * NOTE:: its response will be a hash containing a key logs
  */
 export class DashboardResponse {
-  public networth: IPeriodBalances[];
-  public profitLoss: IPeriodBalances[];
+	public networth: IPeriodBalances[];
+	public profitLoss: IPeriodBalances[];
 }
 
 /**
@@ -28,17 +28,17 @@ export class DashboardResponse {
  */
 
 export class GroupHistoryRequest {
-  public groups?: string[];
-  public accounts?: string[];
-  public category?: string[];
+	public groups?: string[];
+	public accounts?: string[];
+	public category?: string[];
 }
 
 /**
  * NOTE:: as discussed accounts will be null always
  */
 export class GroupHistoryResponse {
-  public accounts?: any;
-  public groups: IGroupHistoryGroups[];
+	public accounts?: any;
+	public groups: IGroupHistoryGroups[];
 }
 
 /*
@@ -47,121 +47,121 @@ export class GroupHistoryResponse {
 */
 
 export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroups {
-  public forwardedBalance: IForwardBalance;
-  public creditTotal: number;
-  public debitTotal: number;
-  public closingBalance: IClosingBalance;
-  public childGroups: IChildGroups[];
-  public accounts: ICbAccount[];
-  public uniqueName: string;
-  public category: string;
-  public groupName: string;
+	public forwardedBalance: IForwardBalance;
+	public creditTotal: number;
+	public debitTotal: number;
+	public closingBalance: IClosingBalance;
+	public childGroups: IChildGroups[];
+	public accounts: ICbAccount[];
+	public uniqueName: string;
+	public category: string;
+	public groupName: string;
 }
 
 export class BankAccountsResponse {
-  public yodleeAccounts: IBankAccount[];
-  public siteName: string;
-  public siteId: number;
-  public status: string;
-  public reason: string;
-  public isRefreshWithCredentials: boolean;
+	public yodleeAccounts: IBankAccount[];
+	public siteName: string;
+	public siteId: number;
+	public status: string;
+	public reason: string;
+	public isRefreshWithCredentials: boolean;
 }
 
 export class RefreshBankAccountResponse {
-  public token: string;
-  public connectUrl: string;
-  // tslint:disable-next-line:variable-name
-  public token_URL: string;
+	public token: string;
+	public connectUrl: string;
+	// tslint:disable-next-line:variable-name
+	public token_URL: string;
 }
 
 export class GraphTypesResponse {
-  public uniqueName?: any;
-  public type: string;
+	public uniqueName?: any;
+	public type: string;
 }
 
 export class RevenueGraphDataRequest {
-  public currentFrom?: string;
-  public currentTo: string;
-  public previousFrom: string;
-  public previousTo: string;
-  public interval: string;
-  public type: string;
-  public uniqueName: string;
-  public refresh: any;
+	public currentFrom?: string;
+	public currentTo: string;
+	public previousFrom: string;
+	public previousTo: string;
+	public interval: string;
+	public type: string;
+	public uniqueName: string;
+	public refresh: any;
 }
 
 export class RevenueGraphDataResponse {
-  public currentClosingBalance: {
-    amount: any;
-    type: any;
-  };
+	public currentClosingBalance: {
+		amount: any;
+		type: any;
+	};
 
-  public currentHighestClosingBalance: {
-    amount: string;
-    type: string;
-  };
+	public currentHighestClosingBalance: {
+		amount: string;
+		type: string;
+	};
 
-  public currentLowestClosingBalance: {
-    amount: string;
-    type: string;
-  };
+	public currentLowestClosingBalance: {
+		amount: string;
+		type: string;
+	};
 
-  public previousClosingBalance: {
-    amount: string;
-    type: string;
-  };
+	public previousClosingBalance: {
+		amount: string;
+		type: string;
+	};
 
-  public previousHighestClosingBalance: {
-    amount: string;
-    type: string;
-  };
+	public previousHighestClosingBalance: {
+		amount: string;
+		type: string;
+	};
 
-  public previousLowestClosingBalance: {
-    amount: string;
-    type: string;
-  };
+	public previousLowestClosingBalance: {
+		amount: string;
+		type: string;
+	};
 
-  public balances: [{
-    current: {
-      openingBalance: {
-        amount: string;
-        type: string;
-      };
-      creditTotal: any;
-      debitTotal: any;
-      closingBalance: {
-        amount: string;
-        type: string;
-      };
-      dateLabel: string;
-      balance: {
-        amount: string;
-        type: string;
-      };
-      from: string;
-      to: string;
-    };
+	public balances: [{
+		current: {
+			openingBalance: {
+				amount: string;
+				type: string;
+			};
+			creditTotal: any;
+			debitTotal: any;
+			closingBalance: {
+				amount: string;
+				type: string;
+			};
+			dateLabel: string;
+			balance: {
+				amount: string;
+				type: string;
+			};
+			from: string;
+			to: string;
+		};
 
-    previous: {
-      openingBalance: {
-        amount: string;
-        type: string;
-      };
-      creditTotal: any;
-      debitTotal: any;
-      closingBalance: {
-        amount: string;
-        type: string;
-      };
-      dateLabel: string;
-      balance: {
-        amount: string;
-        type: string;
-      };
-      from: string;
-      to: string;
-    };
+		previous: {
+			openingBalance: {
+				amount: string;
+				type: string;
+			};
+			creditTotal: any;
+			debitTotal: any;
+			closingBalance: {
+				amount: string;
+				type: string;
+			};
+			dateLabel: string;
+			balance: {
+				amount: string;
+				type: string;
+			};
+			from: string;
+			to: string;
+		};
 
-    percentageChange: any;
-  }];
+		percentageChange: any;
+	}];
 }

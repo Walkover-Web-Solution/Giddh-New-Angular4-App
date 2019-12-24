@@ -2,16 +2,16 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'dummy',
-  styles: [`
+    selector: 'dummy',
+    styles: [`
   `],
-  template: `
+    template: `
   `
 })
 export class DummyComponent {
 
-  public localState: any;
+    public localState: any;
 
-  constructor(public route: ActivatedRoute) {
-  }
+    constructor(public route: ActivatedRoute) {
+    }
 }

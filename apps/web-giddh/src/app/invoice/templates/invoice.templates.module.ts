@@ -17,30 +17,30 @@ import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst
 import { NgxUploaderModule } from 'ngx-uploader';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CollapseModule,
-    NgxUploaderModule
-  ],
-  declarations: [
-    OutTemplateComponent,
-    ContentFilterComponent,
-    GstTemplateAComponent,
-    GstTemplateEComponent,
-    GstTemplateDComponent,
-    GstTemplateFComponent,
-    GstTemplateBComponent,
-    GstTemplateCComponent,
-    GstTemplateGComponent,
-    GstTemplateHComponent,
-    GstTemplateIComponent
-  ],
-  exports: [
-    OutTemplateComponent,
-    ContentFilterComponent,
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CollapseModule,
+        NgxUploaderModule
+    ],
+    declarations: [
+        OutTemplateComponent,
+        ContentFilterComponent,
+        GstTemplateAComponent,
+        GstTemplateEComponent,
+        GstTemplateDComponent,
+        GstTemplateFComponent,
+        GstTemplateBComponent,
+        GstTemplateCComponent,
+        GstTemplateGComponent,
+        GstTemplateHComponent,
+        GstTemplateIComponent
+    ],
+    exports: [
+        OutTemplateComponent,
+        ContentFilterComponent,
+    ]
 })
 export class InvoiceTemplatesModule {
 }

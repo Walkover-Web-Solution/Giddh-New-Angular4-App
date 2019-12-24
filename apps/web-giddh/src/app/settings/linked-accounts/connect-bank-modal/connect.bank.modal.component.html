@@ -1,90 +1,96 @@
 <div class="modal-header">
-  <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-  <!-- <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
-  <h3 class="">Connect Banks</h3>
+    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    <!-- <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
+    <h3 class="">Connect Banks</h3>
 </div>
 <div id="myFrame" class="modal-body clearfix">
-  <div class="" *ngIf="step === 1">
-    <div class="form-group">
-      <label>Search Provider <sup>*</sup></label>
-      <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
-        [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off" required
-        maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$">
+    <div class="" *ngIf="step === 1">
+        <div class="form-group">
+            <label>Search Provider <sup>*</sup></label>
+            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
+                [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
+                required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$">
 
-      <ng-template #rt let-r="result" let-t="term">
-        <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img src="{{r.favicon}}" /></span>
-          {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
-      </ng-template>
-    </div>
-    <button class="btn btn-success btn-sm" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">Next</button>
-  </div>
-
-  <div class="" *ngIf="step === 2">
-    <h4 class="lead grey_clr">{{ selectedProvider.name }}</h4>
-    <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
-      (ngSubmit)="onSubmitLoginForm()">
-      <div formArrayName="row" class="row">
-        <div class="col-xs-12"
-          *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
-          <div [formGroupName]="i" class="form-group">
-            <ng-container formArrayName="field">
-              <ng-container *ngFor="let fields of item.get('field').controls; let idx=index;">
-                <ng-container [formGroupName]="idx">
-                  <label> {{item.get('label').value}} <sup
-                      *ngIf="fields.get('isOptional').value === 'false'">*</sup></label>
-                  <input [type]="fields.get('type').value" [required]="fields.get('isOptional').value === 'false'"
-                    [disabled]="fields.get('valueEditable').value === 'false'" class="form-control"
-                    formControlName="value"
-                    *ngIf="fields.get('type').value !== 'option' && fields.get('id').value !== 'image' && fields.get('type').value !== 'checkbox' && fields.get('type').value !== 'radio'" />
-                  <select class="form-control" *ngIf="fields.get('type').value === 'option'" formControlName="value">
-                    <option [ngValue]="null" [selected]="true">Select Type</option>
-                    <option *ngFor="let list of fields.get('option')?.value" [ngValue]="list.optionValue">
-                      {{list.displayText}}
-                    </option>
-                  </select>
-                  <ng-container *ngIf="fields.get('id').value === 'image'">
-                    <img class="img-responsive max150" [src]="base64StringForModel" />
-                    <label>Enter above text</label>
-                    <input [type]="fields.get('type').value" formControlName="value"
-                      [required]="fields.get('isOptional').value === 'false'" class="form-control" />
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </div>
+            <ng-template #rt let-r="result" let-t="term">
+                <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img
+                            src="{{r.favicon}}" /></span>
+                    {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
+            </ng-template>
         </div>
-      </div>
+        <button class="btn btn-success btn-sm" (click)="onSelectProvider()"
+            [disabled]="!selectedProvider.id">Next</button>
+    </div>
 
-      <button class="btn btn-default btn-sm" type="button" (click)="resetBankForm()" [disabled]="bankSyncInProgress"
-        *ngIf="isRefreshWithCredentials">
-        Back
-      </button>
-      <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials"
-        [disabled]="bankSyncInProgress">Submit</button>
-      <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
-        (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
-      <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span
-          class="primary_clr">Authenticating..</span>
-        <!-- <p>You can wait or check again in 15-20 min</p> -->
-      </small>
-    </form>
-  </div>
-  <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
+    <div class="" *ngIf="step === 2">
+        <h4 class="lead grey_clr">{{ selectedProvider.name }}</h4>
+        <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
+            (ngSubmit)="onSubmitLoginForm()">
+            <div formArrayName="row" class="row">
+                <div class="col-xs-12"
+                    *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
+                    <div [formGroupName]="i" class="form-group">
+                        <ng-container formArrayName="field">
+                            <ng-container *ngFor="let fields of item.get('field').controls; let idx=index;">
+                                <ng-container [formGroupName]="idx">
+                                    <label> {{item.get('label').value}} <sup
+                                            *ngIf="fields.get('isOptional').value === 'false'">*</sup></label>
+                                    <input [type]="fields.get('type').value"
+                                        [required]="fields.get('isOptional').value === 'false'"
+                                        [disabled]="fields.get('valueEditable').value === 'false'" class="form-control"
+                                        formControlName="value"
+                                        *ngIf="fields.get('type').value !== 'option' && fields.get('id').value !== 'image' && fields.get('type').value !== 'checkbox' && fields.get('type').value !== 'radio'" />
+                                    <select class="form-control" *ngIf="fields.get('type').value === 'option'"
+                                        formControlName="value">
+                                        <option [ngValue]="null" [selected]="true">Select Type</option>
+                                        <option *ngFor="let list of fields.get('option')?.value"
+                                            [ngValue]="list.optionValue">
+                                            {{list.displayText}}
+                                        </option>
+                                    </select>
+                                    <ng-container *ngIf="fields.get('id').value === 'image'">
+                                        <img class="img-responsive max150" [src]="base64StringForModel" />
+                                        <label>Enter above text</label>
+                                        <input [type]="fields.get('type').value" formControlName="value"
+                                            [required]="fields.get('isOptional').value === 'false'"
+                                            class="form-control" />
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-default btn-sm" type="button" (click)="resetBankForm()"
+                [disabled]="bankSyncInProgress" *ngIf="isRefreshWithCredentials">
+                Back
+            </button>
+            <button class="btn btn-success btn-sm" type="submit" *ngIf="isRefreshWithCredentials"
+                [disabled]="bankSyncInProgress">Submit</button>
+            <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
+                (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
+            <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span
+                    class="primary_clr">Authenticating..</span>
+                <!-- <p>You can wait or check again in 15-20 min</p> -->
+            </small>
+        </form>
+    </div>
+    <!-- <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
   <ng-template #frame>
       <iframe id="player" *ngIf="url" class="embed-responsive-item" [src]="url" frameborder="0"></iframe>
   </ng-template> -->
 </div>
 
 <div class="modal-footer text-center">
-  <div class="row">
-    <div class="text-left col-xs-12 col-sm-8">
-      <small><i class="fa fa-lock"></i> At giddh, the privacy and security of your information are top priorites.
-      </small>
+    <div class="row">
+        <div class="text-left col-xs-12 col-sm-8">
+            <small><i class="fa fa-lock"></i> At giddh, the privacy and security of your information are top priorites.
+            </small>
+        </div>
+        <div class="text-right col-xs-12 col-sm-4">
+            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113"
+                height="59" style="border: 0px;">
+        </div>
     </div>
-    <div class="text-right col-xs-12 col-sm-4">
-      <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113"
-        height="59" style="border: 0px;">
-    </div>
-  </div>
-  <!-- <br> <span style="font-weight:bold; font-size:7pt"><a href="https://ssl.comodo.com">SSL Certificate</a></span><br> -->
+    <!-- <br> <span style="font-weight:bold; font-size:7pt"><a href="https://ssl.comodo.com">SSL Certificate</a></span><br> -->
 </div>

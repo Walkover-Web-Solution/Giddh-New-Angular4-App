@@ -1,4 +1,5 @@
-<div class="load-bar-wrap" [hidden]="!showLoader && !(accountInProgress$ | async) && (navigationEnd$ | async) && !(transactionInprogress$ | async)">
+<div class="load-bar-wrap"
+    [hidden]="!showLoader && !(accountInProgress$ | async) && (navigationEnd$ | async) && !(transactionInprogress$ | async)">
     <div class="load-bar">
         <div class="bar"></div>
         <div class="bar"></div>

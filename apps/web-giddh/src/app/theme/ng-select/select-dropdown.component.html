@@ -1,27 +1,28 @@
 <div [ngStyle]="{'top.px': top, 'left.px': left, 'width.px': width}">
 
-  <div class="filter" *ngIf="(!multiple && !isTypeAheadMode) && filterEnabled ">
-    <input #filterInput autocomplete="off" [placeholder]="placeholder" (click)="onSingleFilterClick()"
-           (input)="onSingleFilterInput($event)"
-           (keydown)="onSingleFilterKeydown($event)" (focus)="onSingleFilterFocus()"/>
-  </div>
+    <div class="filter" *ngIf="(!multiple && !isTypeAheadMode) && filterEnabled ">
+        <input #filterInput autocomplete="off" [placeholder]="placeholder" (click)="onSingleFilterClick()"
+            (input)="onSingleFilterInput($event)" (keydown)="onSingleFilterKeydown($event)"
+            (focus)="onSingleFilterFocus()" />
+    </div>
 
-  <div class="options" (click)="onOptionsListClick()" #optionsList>
-    <ul (wheel)="onOptionsWheel($event)">
-      <li *ngFor="let option of optionList.filtered"
-          [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled}"
-          [ngStyle]="getOptionStyle(option)" (click)="onOptionClick(option)" (mouseover)="onOptionMouseover(option)">
-        <ng-template [ngTemplateOutletContext]="{option: option.wrappedOption}"
-                     [ngTemplateOutlet]="optionTemplate"></ng-template>
-        <span *ngIf="!optionTemplate">{{option.label}}</span>
-      </li>
-      <li *ngIf="!optionList.hasShown" class="message">
-        <span *ngIf="noResultLinkEnabled">{{notFoundMsg}}
-          <br>
-          <a class="noResultLink" href="javascript:void(0)" (click)="onNoResultClick()">Click to add new</a>
-        </span>
-        <span *ngIf="!noResultLinkEnabled">{{notFoundMsg}}</span>
-      </li>
-    </ul>
-  </div>
+    <div class="options" (click)="onOptionsListClick()" #optionsList>
+        <ul (wheel)="onOptionsWheel($event)">
+            <li *ngFor="let option of optionList.filtered"
+                [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled}"
+                [ngStyle]="getOptionStyle(option)" (click)="onOptionClick(option)"
+                (mouseover)="onOptionMouseover(option)">
+                <ng-template [ngTemplateOutletContext]="{option: option.wrappedOption}"
+                    [ngTemplateOutlet]="optionTemplate"></ng-template>
+                <span *ngIf="!optionTemplate">{{option.label}}</span>
+            </li>
+            <li *ngIf="!optionList.hasShown" class="message">
+                <span *ngIf="noResultLinkEnabled">{{notFoundMsg}}
+                    <br>
+                    <a class="noResultLink" href="javascript:void(0)" (click)="onNoResultClick()">Click to add new</a>
+                </span>
+                <span *ngIf="!noResultLinkEnabled">{{notFoundMsg}}</span>
+            </li>
+        </ul>
+    </div>
 </div>

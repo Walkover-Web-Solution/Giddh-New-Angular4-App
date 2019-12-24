@@ -1,38 +1,29 @@
 <div class="aside-pane">
-  <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
-  <div [ngSwitch]="selectedAsideView">
-    <ng-container *ngSwitchCase="'inward'">
-      <inward-note [stockList]="stockList$ | async"
-                   [userList]="userList$ | async"
-                   [stockUnits]="stockUnits$ | async"
-                   [isLoading]="isLoading" (onSave)="onSave($event)"
-                   (onCancel)="onCancel()"></inward-note>
-    </ng-container>
-    <ng-container *ngSwitchCase="'outward'">
-      <outward-note [stockList]="stockList$ | async"
-                    [userList]="userList$ | async"
-                    [isLoading]="isLoading"
-                    [stockUnits]="stockUnits$ | async"
-                    (onSave)="onSave($event)"
-                    (onCancel)="onCancel()"></outward-note>
-    </ng-container>
-    <ng-container *ngSwitchCase="'transfer'">
-      <transfer-note [stockList]="stockList$ | async"
-                     [userList]="userList$ | async"
-                     [stockUnits]="stockUnits$ | async"
-                     [isLoading]="isLoading"
-                     (onSave)="onSave($event.entry,$event.user)"
-                     (onCancel)="onCancel()"></transfer-note>
-    </ng-container>
-    <ng-container *ngSwitchCase="'createStock'">
-      <div class="pdT1">
-        <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
-      </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="'createAccount'">
-      <inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></inventory-user>
-    </ng-container>
-    <!-- <ng-container *ngSwitchDefault>
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane($event)">X</button>
+    <div [ngSwitch]="selectedAsideView">
+        <ng-container *ngSwitchCase="'inward'">
+            <inward-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event)"
+                (onCancel)="onCancel()"></inward-note>
+        </ng-container>
+        <ng-container *ngSwitchCase="'outward'">
+            <outward-note [stockList]="stockList$ | async" [userList]="userList$ | async" [isLoading]="isLoading"
+                [stockUnits]="stockUnits$ | async" (onSave)="onSave($event)" (onCancel)="onCancel()"></outward-note>
+        </ng-container>
+        <ng-container *ngSwitchCase="'transfer'">
+            <transfer-note [stockList]="stockList$ | async" [userList]="userList$ | async"
+                [stockUnits]="stockUnits$ | async" [isLoading]="isLoading" (onSave)="onSave($event.entry,$event.user)"
+                (onCancel)="onCancel()"></transfer-note>
+        </ng-container>
+        <ng-container *ngSwitchCase="'createStock'">
+            <div class="pdT1">
+                <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'createAccount'">
+            <inventory-user (onSave)="createAccount($event)" (onCancel)="onCancel()"></inventory-user>
+        </ng-container>
+        <!-- <ng-container *ngSwitchDefault>
 
         <div class="aside-header">
             <h3 class="aside-title">Select Type</h3>
@@ -47,5 +38,5 @@
             </div>
         </div>
     </ng-container> -->
-  </div>
+    </div>
 </div>

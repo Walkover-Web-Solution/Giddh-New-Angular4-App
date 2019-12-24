@@ -1,44 +1,42 @@
 .templateEditor h3 i {
-  margin-right: 9px;
-  font-size: 22px;
+    margin-right: 9px;
+    font-size: 22px;
 }
 .upload-button {
- 
-  background: #fff;
-  display: table-cell;
-  text-align: center;
- ;
-  vertical-align: middle;
-  border: 1px  #969696;
-  cursor: pointer;
+    background: #fff;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px #969696;
+    cursor: pointer;
 }
 
 .logo-preview {
-  float: left
+    float: left;
 }
 
 .logo-preview img,
 .swatch-preview {
-  width: 100px;
-  height: 100px;
-  float: left;
-  background: #fff;
-  object-fit: contain
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: #fff;
+    object-fit: contain;
 }
 label.upload-button {
-  display: block;
-  padding: 15px 10px;
-  margin-top: 7px;
+    display: block;
+    padding: 15px 10px;
+    margin-top: 7px;
 }
-.upload-button input[type=file] {
-  display: none;
+.upload-button input[type="file"] {
+    display: none;
 }
 .mb-4px {
-  margin-bottom: 4px;
+    margin-bottom: 4px;
 }
-.thanks-input-group{
-  display: flex;
+.thanks-input-group {
+    display: flex;
 }
-.thanks-input-inline{
-  margin: -6px 0px 7px 7px!important;
+.thanks-input-inline {
+    margin: -6px 0px 7px 7px !important;
 }
