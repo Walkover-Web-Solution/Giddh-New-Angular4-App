@@ -48,8 +48,6 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-        //
-        console.log('temp-e vtype:- ' + this.voucherType);
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = _.cloneDeep(a.address);

@@ -192,8 +192,6 @@ export class InvoiceUiDataService {
                     width: null
                 };
 
-                // selectedTemplate = this.BRToNewLine(selectedTemplate);
-                // console.log('THe selected template is :', selectedTemplate);
                 this.BRToNewLine(selectedTemplate);
                 this.customTemplate.next(_.cloneDeep(selectedTemplate));
             }
@@ -204,9 +202,6 @@ export class InvoiceUiDataService {
                 field: 'attentionTo',
                 width: null
             };
-
-            // selectedTemplate = this.BRToNewLine(selectedTemplate);
-            // console.log('THe selected template is :', selectedTemplate);
 
             this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }

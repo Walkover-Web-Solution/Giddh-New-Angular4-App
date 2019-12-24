@@ -439,7 +439,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     //////// ControlValueAccessor imp //////////
 
     public writeValue(value: any) {
-        // console.log(value);
         this.selectedValues = value;
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();

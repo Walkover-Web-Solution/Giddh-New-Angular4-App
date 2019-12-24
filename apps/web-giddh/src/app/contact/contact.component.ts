@@ -448,13 +448,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    // public openUpdatemodel(account: any) {
-    //   console.log(' open', this.fromDate, this.toDate);
-    //   this.modalUniqueName = account.uniqueName;
-    // }
-    // public closeModel(account: any) {
-    //     this.modalUniqueName = '';
-    // }
     public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
         this.searchStr = '';
         this.selectedCheckedContacts = [];
@@ -945,7 +938,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.advanceSearchRequestModal[category + 'NotEqual'] = true;
                 break;
         }
-        console.log('advanceSearchRequestModal', this.advanceSearchRequestModal);
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
             null, 'true', 20, '');
@@ -1047,7 +1039,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
-                    //  console.log('res.body.results', res.body.results);
 
                 } else {
                     this.Totalcontacts = res.body.totalItems;

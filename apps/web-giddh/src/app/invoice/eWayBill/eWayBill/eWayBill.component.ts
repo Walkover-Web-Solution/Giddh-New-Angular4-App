@@ -200,7 +200,6 @@ export class EWayBillComponent implements OnInit {
                 this.EwaybillLists = _.cloneDeep(o);
                 this.EwaybillLists.results = o.results;
                 this.detectChange();
-                //    console.log('EwaybillLists', this.EwaybillLists); // totalItems
             }
         });
 

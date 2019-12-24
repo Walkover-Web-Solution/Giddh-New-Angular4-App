@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { Font } from 'ngx-font-picker/dist';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -31,7 +31,7 @@ export class TemplateDesignUISectionVisibility {
     styleUrls: ['design.filters.component.css']
 })
 
-export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnChanges {
+export class DesignFiltersContainerComponent implements OnInit {
     @Input() public design: boolean;
     @Input() public mode: string = 'create';
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -421,13 +421,4 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy, OnCha
         }
     }
 
-    public ngOnDestroy() {
-        // this._invoiceUiDataService.customTemplate.unsubscribe();
-        // this.destroyed$.next(true);
-        // this.destroyed$.complete();
-    }
-
-    public ngOnChanges(s) {
-        // console.log(s);
-    }
 }

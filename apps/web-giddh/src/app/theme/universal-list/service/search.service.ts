@@ -111,7 +111,6 @@ export class UniversalSearchService {
 				includesArr.push(item);
 			}
 		});
-		// console.log ('startsWith:', startsWithArr.length);
 		// startsWith(item['uniqueName'].toLocaleLowerCase(), term);
 		// startsWithArr = CustomSorting.getSortedUsers(startsWithArr, 'name');
 		// includesArr = CustomSorting.getSortedUsers(includesArr, key);

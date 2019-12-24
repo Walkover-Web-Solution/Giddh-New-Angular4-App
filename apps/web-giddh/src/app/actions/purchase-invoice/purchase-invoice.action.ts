@@ -34,7 +34,6 @@ export class InvoicePurchaseActions {
     public UpdatePurchaseInvoice$: Observable<Action> = this.action$
         .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE).pipe(
             switchMap((action: CustomActions) => {
-                console.log('Effect CAlled');
                 return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName).pipe(
                     map(response => this.UpdatePurchaseInvoiceResponse(response)));
             }));

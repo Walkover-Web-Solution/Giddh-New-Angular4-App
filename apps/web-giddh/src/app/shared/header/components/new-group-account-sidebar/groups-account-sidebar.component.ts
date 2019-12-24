@@ -291,9 +291,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
 
-        // item.groups=_.sortBy(item.groups,['uniqueName', 'name']);
-        // item.accounts=_.sortBy(item.accounts,['uniqueName', 'name']);
-        // console.log('items.. '+JSON.stringify(item.groups));
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
         this.store.dispatch(this.accountsAction.resetActiveAccount());

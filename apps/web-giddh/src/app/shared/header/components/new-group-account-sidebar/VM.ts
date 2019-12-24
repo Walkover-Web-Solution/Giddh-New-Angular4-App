@@ -30,8 +30,6 @@ export class GroupAccountSidebarVM {
 
         item.groups = _.sortBy(item.groups, ['uniqueName', 'name']);
         item.accounts = _.sortBy(item.accounts, ['uniqueName', 'name']);
-
-        // console.log("sorted..   ", item);
         this.columns.push(new ColumnGroupsAccountVM(item));
 
         if (isSearching) {

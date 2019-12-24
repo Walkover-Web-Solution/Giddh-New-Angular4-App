@@ -164,7 +164,6 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public downloadInvoice(invoiceNumber) {
-        console.log('invoiceNumber is :', invoiceNumber);
         this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).subscribe((response: BaseResponse<any, any>) => {
             if (response.status === 'success') {
                 let blobData;
@@ -241,7 +240,6 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public submitForm(formObj) {
-        // console.log(formObj);
         let form = _.cloneDeep(formObj);
         if (!(this.validateEmail(form.email))) {
             this._toaster.warningToast('Enter valid Email ID', 'Warning');

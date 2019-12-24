@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from 'ng2-ui-auth';
 
 @Component({
@@ -7,13 +7,8 @@ import { AuthService } from 'ng2-ui-auth';
     in social callback
   `
 })
-export class SocialLoginCallbackComponent implements OnInit {
+export class SocialLoginCallbackComponent {
     constructor(private auth: AuthService) {
-        //
-    }
-
-    public ngOnInit() {
-        // console.log(this.auth.getPayload());
     }
 
 }

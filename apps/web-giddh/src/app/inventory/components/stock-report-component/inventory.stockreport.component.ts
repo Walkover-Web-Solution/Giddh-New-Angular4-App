@@ -345,9 +345,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
 			if (!selectedCmp) {
 				return;
 			}
-			if (selectedCmp) {
-				// console.log(selectedCmp);
-			}
 			this.getAllBranch();
 			return selectedCmp;
 		})).pipe(takeUntil(this.destroyed$));

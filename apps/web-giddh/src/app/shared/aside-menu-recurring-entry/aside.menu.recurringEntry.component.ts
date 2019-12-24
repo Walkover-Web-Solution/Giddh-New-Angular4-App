@@ -57,7 +57,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public ngOnChanges(changes: SimpleChanges): void {
-		// console.log(changes);
 		if (changes.voucherNumber) {
 			this.form.controls.voucherNumber.patchValue(this.voucherNumber);
 		}
@@ -121,7 +120,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public saveRecurringInvoice() {
-		// console.log(this.form.value);
 		if (this.mode === 'update') {
 			if (this.form.controls.cronEndDate.invalid) {
 				this._toaster.errorToast('Date should be greater than today');

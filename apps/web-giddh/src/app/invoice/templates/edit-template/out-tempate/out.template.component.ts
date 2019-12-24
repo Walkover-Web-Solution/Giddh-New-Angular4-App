@@ -106,7 +106,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 				this.inputTemplate.fontMedium = this.inputTemplate.fontSize - 2;
 				this.inputTemplate.fontLarge = this.inputTemplate.fontSize - 1 + 4;
 			}
-			// console.log('inputTemplate..', this.inputTemplate);
 		});
 
 		this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {

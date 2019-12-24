@@ -691,20 +691,6 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<string, UpdateEwayVehicle>(e, model)));
     }
 
-    //  public DeleteInvoice(model: object, accountUniqueName): Observable<BaseResponse<string, string>> {
-    //   this.user = this._generalService.user;
-    //   this.companyUniqueName = this._generalService.companyUniqueName;
-    //   return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API_2.DELETE_VOUCHER.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), {body: model, headers: args.headers}).pipe(
-    //     map((res) => {
-    //       // let data: BaseResponse<string, string> = res;
-    //       let data: any = res;
-    //       console.log('the data is :', data);
-    //       data.request = model;
-    //       data.queryString = {model};
-    //       return data;
-    //     }),
-    //     catchError((e) => this.errorHandler.HandleCatch<string, string>(e, model)));
-    // }
     public deleteTransporterById(transporterId: string): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

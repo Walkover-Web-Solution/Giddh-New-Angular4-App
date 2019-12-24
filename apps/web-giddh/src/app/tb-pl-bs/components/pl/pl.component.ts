@@ -99,7 +99,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        // console.log('hello Tb Component');
         this.store.pipe(select(p => p.tlPl.pl.data), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
                 let data = _.cloneDeep(p) as ProfitLossData;

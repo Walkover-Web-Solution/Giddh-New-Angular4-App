@@ -610,7 +610,6 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 return o.entryDate;
             }
         });
-        // console.log(maxDateEnrty);
         if (maxDateEnrty && maxDateEnrty.entryDate) {
             this.maxDueDate = moment(maxDateEnrty.entryDate, 'DD-MM-YYYY').toDate();
         }

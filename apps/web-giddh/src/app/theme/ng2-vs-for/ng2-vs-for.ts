@@ -209,7 +209,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        // console.log(this.vsSize, this.vsOffsetBefore, this.vsOffsetAfter, this.vsExcess,
         // this.vsScrollParent, this.vsAutoresize, this.tagName, this.__horizontal);
         this.view = this._viewContainer.createEmbeddedView(this._templateRef);
         this.parent = nextElementSibling(this._element.nativeElement);
@@ -454,8 +453,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
                     this.endIndex !== this._prevEndIndex;
             }
         }
-
-        // console.warn(this.startIndex, this.endIndex);
 
         if (digestRequired) {
             this.slicedCollection = this.originalCollection.slice(this.startIndex, this.endIndex);

@@ -66,7 +66,6 @@ export class ShareLedgerComponent implements OnInit {
 				this.magicLink = resp.body.magicLink;
 			} else {
 				this.magicLink = '';
-				console.log(resp);
 			}
 		});
 	}
