@@ -47,8 +47,7 @@
 
 
 <!--add bunch modal  -->
-<div bsModal #bunchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
-    (onHidden)="onHide()">
+<div bsModal #bunchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <create-bunch-component [mode]="mode" [formData]="selectedBunch" (closeModalEvent)="hideBunchModal()"
@@ -59,7 +58,7 @@
 
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-    role="dialog" (onHidden)="onHide()">
+    role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <add-bunch-company [companiesList]="companies$ | async" [activeBunch]="selectedBunch"
@@ -70,7 +69,7 @@
 
 <!--get bunch company modal  -->
 <div bsModal #getBunchCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-    role="dialog" (onHidden)="onHide()">
+    role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <get-companies [activeBunch]="selectedBunch" [selectedBunch]="selectedBunchCompany"
