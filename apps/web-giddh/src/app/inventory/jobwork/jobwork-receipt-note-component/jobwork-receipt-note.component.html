@@ -2,12 +2,13 @@
     <div class="reciptNoteHeader d-flex pl-15 pr-15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
+        <h3 *ngIf="branchTransferMode === 'transfernote'">Transfer Note</h3>
         <div class="closeRecipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
     </div>
     <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
+        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName && transfernote">
             <span class="mrR1"><input
                     [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
                     name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
@@ -193,6 +194,17 @@
                                     (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker>
                             </div>
                         </div>
+                        <!-- receipt note developer end start -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>Receipt Note #</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <!-- receipt note developer end finish -->
+
                         <div *ngIf="transferType === 'senders'" class="row mrB2">
                             <div class="col-md-3">
                                 <label>
@@ -244,25 +256,11 @@
                                     (selected)="focusSourceWarehouse()"></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
-                            <div class="col-md-3">
-                                <label class="nowrap">
-                                    Sender's Warehouse <span class="red-text">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <sh-select #sourceWarehouse name="sourceWarehouse" [isFilterEnabled]="true"
-                                    [forceClearReactive]="forceClear$ | async"
-                                    [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]"
-                                    [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
-                                    (selected)="focusDestinationWarehouse(); getWarehouseDetails('sources', 0)"
-                                    required></sh-select>
-                            </div>
-                        </div>
+
                         <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
                             <div class="col-md-3">
                                 <label>
-                                    Sender's {{formFields['taxName'].label}}
+                                    Sender's {{formFields['taxName'].label}} <span class="red-text">*</span>
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -294,25 +292,25 @@
                                     required disabled>
                             </div>
                         </div>
+                        <!-- developer end start -->
                         <div class="row mrB2">
-                            <div class="col-md-3 nowrap">
-                                <label class="nowrap">
-                                    Receiver's Warehouse <span class="red-text">*</span>
-                                </label>
+                            <div class="col-md-3">
+                                <label>Reference Docs <span class="text-light-2">(Optional)</span></label>
                             </div>
                             <div class="col-md-4">
-                                <sh-select #destinationWarehouse name="destinationWarehouse" [isFilterEnabled]="true"
-                                    [forceClearReactive]="forceClear$ | async"
-                                    [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]"
-                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0);"
-                                    required></sh-select>
+                                <sh-select [options]="selectNote">
+
+                                </sh-select>
+
                             </div>
                         </div>
+
+                        <!-- developer end finish -->
+
                         <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
                             <div class="col-md-3">
                                 <label>
-                                    Receiver's {{formFields['taxName'].label}}
+                                    Receiver's {{formFields['taxName'].label}} <span class="red-text">*</span>
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -322,6 +320,102 @@
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
                             </div>
                         </div>
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's Address
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea class="form-control" name="destinationAddress"
+                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.address"
+                                    (blur)="focusSelectDropdown(0);"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6" *ngIf="branchTransferMode === 'transfernote'">
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>
+                                    Date of Supply <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Date of Supply" class="form-control" name="dateOfSupply"
+                                    [(ngModel)]="tempDateParams.dateOfSupply"
+                                    (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker>
+                            </div>
+                        </div>
+                        <!-- receipt note developer end start -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>Transfer Note #</label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <!-- receipt note developer end finish -->
+
+
+
+
+                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                            <div class="col-md-3">
+                                <label>
+                                    Sender's Name <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <sh-select #defaultSource name="sourceName" [isFilterEnabled]="true"
+                                    [forceClearReactive]="forceClear$ | async"
+                                    [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async"
+                                    (selected)="selectCompany($event, 'sources', 0)" required [disabled]="isUpdateMode"
+                                    (selected)="focusSourceWarehouse()"></sh-select>
+                            </div>
+                        </div>
+
+
+                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                            <div class="col-md-3">
+                                <label>
+                                    Sender's Address
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea class="form-control" name="sourceAddress"
+                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                            </div>
+                        </div>
+                        <!-- developer end start -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>Against Note <span class="text-light-2">(Optional)</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <sh-select [options]="selectNote">
+
+                                </sh-select>
+
+                            </div>
+                        </div>
+
+                        <!-- developer end finish -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's Name <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany"
+                                    required disabled>
+                            </div>
+                        </div>
+
+
+
                         <div class="row mrB2">
                             <div class="col-md-3">
                                 <label>
