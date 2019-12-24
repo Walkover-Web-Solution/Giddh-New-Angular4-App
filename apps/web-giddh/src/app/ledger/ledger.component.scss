@@ -204,12 +204,13 @@ input {
     position: relative;
     z-index: 99;
     cursor: default;
+    top: 1px;
 }
 .inputWrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
-    height: 36px !important;
+    height: 37px !important;
 }
 .inputWrapper:before {
     position: absolute;
