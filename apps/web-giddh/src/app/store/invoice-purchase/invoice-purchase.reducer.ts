@@ -86,7 +86,6 @@ export function InvoicePurchaseReducer(state = initialState, action: CustomActio
                     newState.purchaseInvoices.items[indx].sendToGstr2 = response.body.sendToGstr2;
                     newState.purchaseInvoices.items[indx].availItc = response.body.availItc;
                 }
-                console.log(response.body);
                 return Object.assign({}, state, newState);
             }
             return state;

@@ -55,7 +55,6 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
-        // console.log(this.sidebarRect);
     }
 
     @HostListener('window:resize')

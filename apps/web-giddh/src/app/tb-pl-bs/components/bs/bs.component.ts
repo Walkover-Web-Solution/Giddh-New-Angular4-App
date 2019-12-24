@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -54,7 +54,7 @@ import { ToasterService } from '../../../services/toaster.service';
   `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
@@ -122,10 +122,6 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
                 this.data = null;
             }
         });
-    }
-
-    public ngOnInit() {
-        // console.log('hello Tb Component');
     }
 
     public InitData(d: ChildGroup[]) {

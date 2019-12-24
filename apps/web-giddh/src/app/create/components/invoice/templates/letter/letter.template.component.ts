@@ -155,7 +155,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 	/////// Taken from Sales ////////
 	public onSubmitInvoiceForm(f?: NgForm) {
 		let data: any = _.cloneDeep(this.CreateInvoiceForm.value);
-		// console.log('data is :', data.invoiceDetails.dueDate);
 		data.invoiceDetails.dueDate = data.invoiceDetails.dueDate ? moment(data.invoiceDetails.dueDate).format(GIDDH_DATE_FORMAT) : '';
 		data.invoiceDetails.invoiceDate = data.invoiceDetails.invoiceDate ? moment(data.invoiceDetails.invoiceDate).format(GIDDH_DATE_FORMAT) : '';
 		data.other.shippingDate = data.other.shippingDate ? moment(data.other.shippingDate).format(GIDDH_DATE_FORMAT) : '';
@@ -168,7 +167,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		data.companyDetails.address = data.companyDetails.address ? [data.companyDetails.address] : null;
 		data.companyDetails.companyGstDetails.address = data.companyDetails.companyGstDetails.address ? [data.companyDetails.companyGstDetails.address] : null;
 
-		// console.log('data after conversion is :', data);
 		this.emitTemplateData(data);
 	}
 

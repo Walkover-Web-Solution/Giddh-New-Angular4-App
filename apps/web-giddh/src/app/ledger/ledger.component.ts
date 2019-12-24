@@ -789,7 +789,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectBankTxn(txn);
         this.lc.currentBankEntry = item;
         this.lc.showBankLedgerPanel = true;
-        // console.log('txn selected');
     }
 
     public hideBankLedgerPopup(e?: boolean) {
@@ -833,7 +832,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getselectedInvoice(event: string[]) {
         this.selectedInvoiceList = event;
-        // console.log('parent list is..', this.selectedInvoiceList);
     }
 
     public getTransactionData() {
@@ -1378,8 +1376,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let itemIndx = this.entryUniqueNamesForBulkAction.findIndex((item) => item === entryUniqueName);
                 this.entryUniqueNamesForBulkAction.splice(itemIndx, 1);
             }
-        } else {
-            // console.log('entryUniqueName not found');
         }
     }
 

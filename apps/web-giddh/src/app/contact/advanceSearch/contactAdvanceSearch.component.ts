@@ -46,7 +46,6 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        console.log(this.advanceSearch4);
         this.categoryOptions = this.advanceSearch4 === 'customer' ? CATEGORY_OPTIONS_FOR_CUSTOMER : CATEGORY_OPTIONS_FOR_AGING_REPORT;
     }
 

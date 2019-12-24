@@ -164,7 +164,6 @@ const removeZeroAmountAccount = (grpList: ChildGroup[]) => {
             return removeZeroAmountAccount(grp.childGroups);
         }
     });
-    // console.log(grpList);
 
     return grpList;
 };

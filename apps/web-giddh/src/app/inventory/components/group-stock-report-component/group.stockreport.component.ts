@@ -312,9 +312,6 @@ export class InventoryGroupStockReportComponent implements OnInit, OnDestroy {
             if (!selectedCmp) {
                 return;
             }
-            if (selectedCmp) {
-                //console.log(selectedCmp);
-            }
             this.selectedCmp = selectedCmp;
 
             this.getAllBranch();

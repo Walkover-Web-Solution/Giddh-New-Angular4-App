@@ -226,9 +226,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        // this.universalDate$.subscribe(s => {
-        //   console.log('original u date', s);
-        // });
     }
 
     public setCurrentFY() {

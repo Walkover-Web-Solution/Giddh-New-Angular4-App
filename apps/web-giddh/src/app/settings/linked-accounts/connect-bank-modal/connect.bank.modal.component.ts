@@ -262,7 +262,6 @@ export class ConnectBankModalComponent implements OnChanges {
             if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
                 this.bankSyncInProgress = true;
                 validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
-                console.log('getBankSyncStatus...', validateProvider, this.cancelRequest);
                 if (!validateProvider && !this.cancelRequest) {
                     setTimeout(() => {
                         this.getBankSyncStatus(providerId);
@@ -343,7 +342,6 @@ export class ConnectBankModalComponent implements OnChanges {
      */
     public bypassSecurityTrustResourceUrl(val) {
         let str = 'data:application/pdf;base64,' + val;
-        // console.log('chala');
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 

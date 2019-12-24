@@ -40,12 +40,4 @@ xdescribe(`App`, () => {
     //   expect(comp.name).toEqual('Angular Electron Dream Starter');
     // });
 
-    it('should log ngOnInit', () => {
-        spyOn(console, 'log');
-        expect(console.log).not.toHaveBeenCalled();
-
-        comp.ngOnInit();
-        expect(console.log).toHaveBeenCalled();
-    });
-
 });

@@ -17,7 +17,6 @@ if (ENV === 'development') {
 		const userDataPath = app.getPath('userData');
 		extensions.forEach((ext) => {
 			installExtension(ext.id).then(() => {
-				// console.log(ext.name + ' installed in ' + userDataPath);
 			}).catch((err) => {
 				console.error('Failed to install ' + ext.name, err);
 			});

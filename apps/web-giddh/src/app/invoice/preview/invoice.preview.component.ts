@@ -365,7 +365,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
 					let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
 					if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
-						//console.log('universal not change');
 						if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
 							let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
 							this.showAdvanceSearchIcon = true;
@@ -388,7 +387,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 							this.isUniversalDateApplicable = true;
 						}
 					} else {
-						//console.log('universal has  changed');
 						this.datePickerOptions = {
 							...this.datePickerOptions, startDate: moment(a[0], 'DD-MM-YYYY').toDate(),
 							endDate: moment(a[1], 'DD-MM-YYYY').toDate()

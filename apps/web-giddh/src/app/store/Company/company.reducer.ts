@@ -94,7 +94,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
     switch (action.type) {
         case 'CATCH_ERROR':
-            // console.log(action.payload);
             return;
         case CompanyActions.GET_TAX:
             return Object.assign({}, state, {
@@ -114,7 +113,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 isTaxesLoading: false
             });
         case CompanyActions.SET_ACTIVE_COMPANY:
-            // console.log(action.payload);
             return state;
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX: {

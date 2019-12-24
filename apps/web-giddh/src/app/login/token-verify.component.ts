@@ -48,7 +48,6 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public verifyUser() {
-        console.log('verifyUser');
         this.store.dispatch(this._loginAction.userAutoLoginResponse(JSON.parse(this.request)));
     }
 }

@@ -132,7 +132,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-        console.log(this.flatGroupsOptions);
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -554,7 +553,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
      */
     public ngOnChanges(s) {
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
-            // console.log(s['showVirtualAccount'].currentValue);
             this.showOtherDetails = true;
         }
     }

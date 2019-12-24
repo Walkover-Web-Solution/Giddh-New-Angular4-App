@@ -130,7 +130,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
                 }
             });
         //  this.getSubscriptionList();     // commented due todesign and API get changed
-        // console.log(RazorPay);
         this.contactNo$.subscribe(s => this.phoneNumber = s);
         this.countryCode$.subscribe(s => this.countryCode = s);
         this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);

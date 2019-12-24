@@ -85,10 +85,7 @@ export class MfEditComponent implements OnInit {
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     // delete manufacturingObj.manufacturingQuantity;
                     manufacturingObj.linkedStocks.forEach((item) => {
-                        // console.log('the manufacturingObj.manufacturingMultipleOf is:', manufacturingObj.manufacturingMultipleOf);
                         item.quantity = (item.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
-                        // console.log('item.qu is :', item.quantity);
-                        // // delete item.manufacturingQuantity;
                     });
                     if (!this.initialQuantityObj.length) {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
