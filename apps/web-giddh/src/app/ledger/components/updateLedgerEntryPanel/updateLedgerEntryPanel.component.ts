@@ -873,7 +873,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (transaction.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 } else {
-                    transaction.inventory['warehouse'].uniqueName = this.selectedWarehouse;
+                    transaction.inventory.warehouse = { name: '', uniqueName: '' };
+                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 }
             }
         });
