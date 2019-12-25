@@ -34,7 +34,6 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges {
             })
     }
     public hideListItems() {
-        console.log("hideListItems");
         this.saveTaxes();
     }
 

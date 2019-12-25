@@ -88,7 +88,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             skipWhile(p => (isNullOrUndefined(p))))
             .subscribe(p => {
                 this.ratioObj = p;
-                // console.log(p);
                 this.generateCharts();
                 this.requestInFlight = false;
             });

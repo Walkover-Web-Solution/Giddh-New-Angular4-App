@@ -157,7 +157,6 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 		if (!this.element.select2) {
 			if (!this.check) {
 				this.check = true;
-				// console.log('Please add Select2 library (js file) to the project. You can download it from https://github.com/select2/select2/tree/master/dist/js.');
 			}
 
 			return;

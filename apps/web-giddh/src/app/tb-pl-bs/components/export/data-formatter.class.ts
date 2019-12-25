@@ -121,9 +121,6 @@ export class DataFormatter {
                     data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
-                    if (group.accounts === void 0) {
-                        // console.log(group);
-                    }
                     if (group.accounts.length > 0) {
                         group.accounts.forEach(acc => {
                             if (true) {

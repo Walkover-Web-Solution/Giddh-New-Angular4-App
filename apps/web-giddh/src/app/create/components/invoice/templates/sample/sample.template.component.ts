@@ -12,7 +12,6 @@ export class SampleTemplateComponent implements OnInit, OnDestroy {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor() {
-        console.log(`hello from sampleTemplateComponent`);
     }
 
     public ngOnInit() {

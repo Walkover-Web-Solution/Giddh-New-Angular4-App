@@ -403,8 +403,6 @@ export class MaskApplierService {
         if (stepBack) {
             actualShift--;
         }
-        // console.log('position:- ', position);
-        // console.log('actualShift:- ', actualShift);
         cb(actualShift, backspaceShift);
         if (shift < 0) {
             this._shift.clear();

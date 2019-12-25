@@ -38,7 +38,6 @@ export class AuthenticationService {
         return this._http.post(this.config.apiUrl + LOGIN_API.VerifyEmail, model).pipe(map((res) => {
             let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res;
             data.request = model;
-            // console.log(data);
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model)));
     }
@@ -60,7 +59,6 @@ export class AuthenticationService {
         return this._http.post(this.config.apiUrl + LOGIN_API.VerifyOTP, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = res;
             data.request = modele;
-            // console.log(data);
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele)));
     }
@@ -69,7 +67,6 @@ export class AuthenticationService {
         return this._http.post(this.config.apiUrl + LOGIN_API.SignupWithPassword, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, SignUpWithPassword> = res;
             data.request = modele;
-            // console.log(data);
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, SignUpWithPassword>(e, modele)));
     }
@@ -78,7 +75,6 @@ export class AuthenticationService {
         return this._http.post(this.config.apiUrl + LOGIN_API.LoginWithPassword, modele).pipe(map((res) => {
             let data: BaseResponse<VerifyMobileResponseModel, LoginWithPassword> = res;
             data.request = modele;
-            // console.log(data);
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, LoginWithPassword>(e, modele)));
     }

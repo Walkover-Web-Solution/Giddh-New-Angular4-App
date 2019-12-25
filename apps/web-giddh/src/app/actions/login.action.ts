@@ -1055,7 +1055,6 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any) {
-        // console.log('finalThingTodo');
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));

@@ -1352,7 +1352,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                                 //   txn.sacNumber = null;
                                 // }
                                 if (o.stocks || (selectedAcc.additional && selectedAcc.additional.stock)) {
-                                    // console.log('stockUnit..',selectedAcc.additional);
                                     // set rate auto
                                     txn.rate = null;
                                     let obj: IStockUnit = {
@@ -1781,7 +1780,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     }
 
     public resetCustomerName(event) {
-        // console.log(event);
         if (event) {
             if (!event.target.value) {
                 // this.forceClear$ = observableOf({status: true});

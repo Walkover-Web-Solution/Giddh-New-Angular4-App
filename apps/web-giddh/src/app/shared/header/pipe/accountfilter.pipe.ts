@@ -35,7 +35,6 @@ export class AccountFilterPipe implements PipeTransform {
 
     public performSearch(input) {
         return _.each(input, (grp: any) => {
-            // console.log(input);
             // grp = Object.assign( grp, { isVisible: false });
             let grpName;
             let grpUnq;

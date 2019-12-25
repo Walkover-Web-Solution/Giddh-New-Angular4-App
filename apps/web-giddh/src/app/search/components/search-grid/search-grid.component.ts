@@ -110,13 +110,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
         this.searchResponse$ = this.store.select(p => p.search.value);
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-        // this.searchResponseFiltered$ = this.searchResponse$.pipe(map(p => {
-        //   console.log('the p iss now :', p);
-        //   return _.cloneDeep(p).map(j => {
-        //     j.isSelected = false;
-        //     return j;
-        //   }).sort((a, b) => a['name'].toString().localeCompare(b['name']));
-        // }));
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.search$ = this.store.select(p => p.search.search);
         this.searchRequest$ = this.store.select(p => p.search.searchRequest);

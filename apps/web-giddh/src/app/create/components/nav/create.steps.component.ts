@@ -26,7 +26,6 @@ export class CreateInvoiceStepsComponent implements OnInit, OnDestroy {
             return;
         }
         this.stage = id;
-        console.log('setStep:', id, this.stage);
         if (id === 'one') {
             this._router.navigate(['/create-invoice/invoice']);
         }

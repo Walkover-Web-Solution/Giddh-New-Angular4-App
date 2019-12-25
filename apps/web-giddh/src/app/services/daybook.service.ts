@@ -41,9 +41,6 @@ export class DaybookService {
     }
 
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
-
-        console.log('queryRequest is :', queryRequest);
-
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT

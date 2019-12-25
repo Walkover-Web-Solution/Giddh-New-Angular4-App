@@ -115,7 +115,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
         this.data$.subscribe(p => {
             this.cd.markForCheck();
         });
-        // console.log('hello Tb Component');
     }
 
     public InitData(d: ChildGroup[]) {

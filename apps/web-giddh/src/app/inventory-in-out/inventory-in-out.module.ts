@@ -55,7 +55,6 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 })
 export class InventoryInOutModule {
     constructor() {
-        console.log('InventoryInOutModule');
     }
 
 }
