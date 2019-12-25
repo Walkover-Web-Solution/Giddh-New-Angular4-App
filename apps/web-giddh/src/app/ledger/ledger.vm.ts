@@ -380,3 +380,14 @@ export interface IInventoryUnit {
     code: string;
     rate: number;
 }
+
+/**
+ * Warehouse details in a ledger
+ *
+ * @export
+ * @interface WarehouseDetails
+ */
+export interface WarehouseDetails {
+    name: string;
+    uniqueName: string;
+}
