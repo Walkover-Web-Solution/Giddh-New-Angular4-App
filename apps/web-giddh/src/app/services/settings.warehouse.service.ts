@@ -55,10 +55,13 @@ export class SettingsWarehouseService {
      */
     public fetchAllWarehouse(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName: string = this.generalService.companyUniqueName;
-        const contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
+        let contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':page', params.page)
             }`;
+        if (Number.isInteger(params.count)) {
+            contextPath = contextPath.concat(`&count=${params.count}`);
+        }
         return this.http.get(contextPath).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;
