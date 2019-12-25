@@ -36,7 +36,8 @@ import {
     VOUCHER_TYPE_LIST,
     VoucherClass,
     VoucherDetailsClass,
-    VoucherTypeEnum
+    VoucherTypeEnum,
+    TemplateDetailsClass
 } from '../models/api-models/Sales';
 import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -709,10 +710,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0] && results[1]) {
                     let obj;
 
-                    if (this.isLastInvoiceCopied) {
-                        // if last invoice is copied then create new Voucher and copy only needed things not all things
-                        obj = this.invFormData;
-                    } else {
+                    //if (this.isLastInvoiceCopied) {
+                        //if last invoice is copied then create new Voucher and copy only needed things not all things
+                        //obj = this.invFormData;
+                    //} else {
                         if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType)) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
@@ -727,7 +728,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
-                    }
+                    //}
 
                     if (obj.voucherDetails) {
 
@@ -743,20 +744,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                         if (this.isLastInvoiceCopied) {
-                            // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
-                            let result: VoucherClass | GenericRequestForGenerateSCD;
+                        //     // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
+                        //     let result: VoucherClass | GenericRequestForGenerateSCD;
 
-                            if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-                                result = ((results[1]) as VoucherClass);
-                            } else {
-                                result = ((results[1]) as GenericRequestForGenerateSCD).voucher;
-                            }
+                        //     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
+                        //         result = ((results[1]) as VoucherClass);
+                        //     } else {
+                        //         result = ((results[1]) as GenericRequestForGenerateSCD).voucher;
+                        //     }
 
-                            obj.entries = result.entries;
-                            obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
-                            obj.templateDetails = result.templateDetails;
+                        //     obj.entries = result.entries;
+                        //     //obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
+                            obj.accountDetails = this.invFormData.accountDetails;
+                            obj.templateDetails = new TemplateDetailsClass();
+                            obj.voucherDetails.voucherNumber = "";
                         }
-
                         //added update mode as causing trouble in multicurrency
                         if (obj.entries.length) {
                             obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
@@ -769,10 +771,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                          * so we can get how much amount of money is paid
                          * only applicable in sales invoice
                          */
-                        if (this.isSalesInvoice) {
-                            this.depositAmountAfterUpdate = obj.voucherDetails.deposit;
-                        } else {
-                            this.depositAmountAfterUpdate = 0;
+                        if (!this.isLastInvoiceCopied) {
+                            if (this.isSalesInvoice) {
+                                this.depositAmountAfterUpdate = obj.voucherDetails.deposit;
+                            } else {
+                                this.depositAmountAfterUpdate = 0;
+                            }
                         }
 
                         // Getting from api old data "depositEntry" so here updating key with "depositEntryToBeUpdated"
@@ -1523,11 +1527,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         let perFromAmount = ((percentageListTotal * trx.amount) / 100);
         entry.discountSum = perFromAmount + fixedListTotal;
+        if(isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
 
         if (calculateEntryTotal) {
             this.calculateEntryTotal(entry, trx);
         }
         trx.taxableValue = Number(trx.amount) - entry.discountSum;
+        if(isNaN(trx.taxableValue)) {
+            trx.taxableValue = 0;
+        }
     }
 
     public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
@@ -1543,6 +1553,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         entry.taxSum = ((taxPercentage * (trx.amount - entry.discountSum)) / 100);
         entry.cessSum = ((cessPercentage * (trx.amount - entry.discountSum)) / 100);
+
+        if(isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if(isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
 
         if (calculateEntryTotal) {
             this.calculateEntryTotal(entry, trx);
@@ -1625,6 +1643,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return pv + cv.total;
             }, 0);
         });
+
+        if(isNaN(count)) {
+            count = 0;
+        }
+
         this.invFormData.voucherDetails.balanceDue =
             ((count + this.invFormData.voucherDetails.tcsTotal) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate);
         this.invFormData.voucherDetails.balanceDue = this.invFormData.voucherDetails.balanceDue + this.calculatedRoundOff;
@@ -1637,6 +1660,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return pv + Number(cv.amount);
             }, 0);
         });
+
+        if(isNaN(count)) {
+            count = 0;
+        }
         this.invFormData.voucherDetails.subTotal = count;
     }
 
@@ -1646,6 +1673,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         calculatedGrandTotal = this.invFormData.voucherDetails.grandTotal = this.invFormData.entries.reduce((pv, cv) => {
             return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
         }, 0);
+
+        if(isNaN(calculatedGrandTotal)) {
+            calculatedGrandTotal = 0;
+        }
 
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
@@ -2668,7 +2699,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return entries.map((entry, index) => {
             this.activeIndx = index;
             entry.otherTaxModal = new SalesOtherTaxesModal();
-            entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate();
+            entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -2789,33 +2820,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private parseDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
         let discountArray: LedgerDiscountClass[] = [];
-        let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
 
-        // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
-        if (!isDefaultDiscountThere) {
-            discountArray.push({
-                discountType: 'FIX_AMOUNT',
-                amount: 0,
-                name: '',
-                particular: '',
-                isActive: true,
-                discountValue: 0
+        if (entry.tradeDiscounts) {
+            let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
+
+            // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
+            if (!isDefaultDiscountThere) {
+                discountArray.push({
+                    discountType: 'FIX_AMOUNT',
+                    amount: 0,
+                    name: '',
+                    particular: '',
+                    isActive: true,
+                    discountValue: 0
+                });
             }
-            );
-        }
 
-        entry.tradeDiscounts.forEach((f) => {
-            discountArray.push({
-                discountType: f.discount.discountType,
-                amount: f.discount.discountValue,
-                name: f.discount.name,
-                particular: f.account.uniqueName,
-                isActive: true,
-                discountValue: f.discount.discountValue,
-                discountUniqueName: f.discount.uniqueName
+            entry.tradeDiscounts.forEach((f) => {
+                discountArray.push({
+                    discountType: f.discount.discountType,
+                    amount: f.discount.discountValue,
+                    name: f.discount.name,
+                    particular: f.account.uniqueName,
+                    isActive: true,
+                    discountValue: f.discount.discountValue,
+                    discountUniqueName: f.discount.uniqueName
+                });
+
             });
-
-        });
+        }
 
         return discountArray;
     }
