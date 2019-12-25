@@ -1428,6 +1428,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.useCustomInvoiceNumber) {
                     updatedData['number'] = this.invFormData.voucherDetails.voucherNumber;
                 }
+                if (this.isCreditNote || this.isDebitNote) {
+                    updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
             }
             this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                 if (response.status === 'success') {
@@ -2305,6 +2308,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     number: this.invoiceNo,
                     uniqueName: unqName
                 };
+                if (this.isCreditNote || this.isDebitNote) {
+                    result['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
 
                 this.salesService.updateVoucherV4(this.updateData(result, result.voucher)).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
@@ -3085,7 +3091,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherDetails.customerUniquename = result.account.uniqueName;
         voucherDetails.grandTotal = result.grandTotal.amountForAccount;
-        voucherDetails.voucherNumber = result.number;
+        if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
+            // Credit note and Debit note
+            voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || '';
+        } else {
+            voucherDetails.voucherNumber = result.number;
+        }
         voucherDetails.subTotal = result.subTotal.amountForAccount;
         voucherDetails.taxesTotal = result.taxTotal.cumulativeAmountForAccount;
         voucherDetails.totalAsWords = result.totalAsWords.amountForAccount;
