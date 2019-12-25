@@ -469,9 +469,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }];
                             }
                             t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                            // Show warehouse drop only for stock items
                             const warehouseDetails = t.inventory.warehouse;
                             if (warehouseDetails) {
-                                this.selectedWarehouse = { label: warehouseDetails.name, value: warehouseDetails.uniqueName };
+                                this.selectedWarehouse = warehouseDetails.uniqueName;
                             }
                         }
                     });
@@ -524,11 +525,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // this.closeUpdateLedgerModal.emit(true);
             }
         });
-    }
-
-    public selectWarehouse(warehouse) {
-        console.log('Warehouse selected ', warehouse);
-        this.selectedWarehouse = { label: warehouse.name, value: warehouse.uniqueName };
     }
 
     private prepareMultiCurrencyObject(accountUniqueName) {
@@ -873,11 +869,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         requestObj.transactions.map((transaction) => {
             if (transaction.inventory) {
+                // Update the warehouse details in update ledger flow
                 if (transaction.inventory.warehouse) {
-                    transaction.inventory.warehouse.name = this.selectedWarehouse.label;
-                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse.value;
+                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 } else {
-                    transaction.inventory['warehouse'] = { name: this.selectedWarehouse.label, uniqueName: this.selectedWarehouse.value };
+                    transaction.inventory['warehouse'].uniqueName = this.selectedWarehouse;
                 }
             }
         });
@@ -904,6 +900,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this._ledgerAction.resetLedgerTrxDetails());
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
