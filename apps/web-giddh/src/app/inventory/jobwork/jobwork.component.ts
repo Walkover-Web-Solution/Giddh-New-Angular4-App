@@ -38,6 +38,7 @@ import { BsModalService, BsModalRef } from "ngx-bootstrap/modal";
 })
 export class JobworkComponent implements OnInit, OnDestroy {
     public asideTransferPaneState: string = 'out';
+    public senderDetailAccountAsidePane: string = 'out';
     @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
     @ViewChild('senderName') public senderName: ElementRef;
     @ViewChild('receiverName') public receiverName: ElementRef;
@@ -446,8 +447,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
+
+
     public toggleBodyClass() {
-        if (this.asideTransferPaneState === 'in') {
+        if (this.asideTransferPaneState === 'in' || this.senderDetailAccountAsidePane === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');

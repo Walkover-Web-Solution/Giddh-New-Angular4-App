@@ -8,21 +8,24 @@
         </div>
     </div>
     <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName && transfernote">
-            <span class="mrR1"><input
-                    [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
+        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2"
+            *ngIf="!editBranchTransferUniqueName && branchTransferMode !== 'transfernote'">
+            <span class="mrR1">
+                <input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
                     name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
                     (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                    for="multipleProducts">Multiple Products</label></span>
-            <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+                    for="multipleProducts">Multiple Products</label>
+            </span>
+            <span>
+                <input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
                     name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio"
                     (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label><label
-                    for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple
-                    Receivers</label></span>
+                    for="multipleSenders" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>
+                <label for="multipleSenders" *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</label>
+            </span>
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multipleProductsWrapper ">
+        <div class="multipleProductsWrapper " [ngClass]="{ 'mrT1' : branchTransferMode === 'transfernote' }">
             <form #newBranchTransferForm="ngForm" novalidate="">
                 <div class="multipleProducts row clearfix pl-15 pr-15">
                     <div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
@@ -185,7 +188,7 @@
                         <div class="row mrB2">
                             <div class="col-md-3">
                                 <label>
-                                    Date of Supply <span class="red-text">*</span>
+                                    Date of Reciept <span class="red-text">*</span>
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -254,6 +257,9 @@
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async"
                                     (selected)="selectCompany($event, 'sources', 0)" required [disabled]="isUpdateMode"
                                     (selected)="focusSourceWarehouse()"></sh-select>
+                                <span class="sender-detail-link"
+                                    (click)="toggleSenderDetailAccountAsidePane($event)">Sender’s
+                                    Details</span>
                             </div>
                         </div>
 
@@ -442,9 +448,11 @@
                             <tr>
                                 <th width="2%">#</th>
                                 <th data-title="Product Description" width="30%">Product Description</th>
-                                <th width="20%" class="text-right">Qty/Unit</th>
-                                <th width="20%" class="text-right">Rate</th>
+                                <th width="10%" class="text-right">Qty/Unit</th>
+                                <th width="10%" class="text-right">Rate</th>
                                 <th width="20%" class="text-right">Amount</th>
+                                <th width="20%" class="text-right">Tax</th>
+                                <th width="30%" class="text-right">Total</th>
                             </tr>
                         </thead>
                         <thead *ngIf="transferType !== 'products'">
@@ -551,6 +559,25 @@
                                             {{product.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
+                                <td>
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                </td>
+
                                 <td class="pos-rel">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="productAmount{{i}}"
@@ -567,6 +594,8 @@
                                                 class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
+
+
                             </tr>
                         </tbody>
                         <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'">
@@ -924,3 +953,7 @@
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 <aside-menu-product-service *ngIf="asideMenuState === 'in'" [class]="asideMenuState" [@slideInOut]="asideMenuState"
     (closeAsideEvent)="onProductNoResultsClicked(null)"></aside-menu-product-service>
+<!--  -->
+<div class="aside-overlay" *ngIf="senderDetailAccountAsidePane === 'in'"></div>
+<job-work-sender-aside *ngIf="senderDetailAccountAsidePane === 'in'" [class]="senderDetailAccountAsidePane"
+    [@slideInOut]="senderDetailAccountAsidePane"></job-work-sender-aside>

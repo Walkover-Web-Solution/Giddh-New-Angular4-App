@@ -39,8 +39,22 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
     templateUrl: './jobwork-receipt-note.component.html',
     styleUrls: ['./jobwork-receipt-note.component.scss'],
 
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
+
 })
 export class JobworkReceiptNote implements OnInit {
+    public senderDetailAccountAsidePane: string = 'out';
     @Input() public branchTransferMode: string;
     @Input() public editBranchTransferUniqueName: string;
     @Output() public hideModal: EventEmitter<boolean> = new EventEmitter(true);
@@ -64,6 +78,7 @@ export class JobworkReceiptNote implements OnInit {
     @ViewChild('senderGstNumberField') public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField') public receiverGstNumberField: HTMLInputElement;
 
+    public hideTransferNoteRadioBtn: boolean = false;
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
     public asideMenuState: string = 'out';
@@ -160,7 +175,7 @@ export class JobworkReceiptNote implements OnInit {
     }
 
     public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in') {
+        if (this.asideMenuState === 'in' || this.senderDetailAccountAsidePane === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -172,6 +187,15 @@ export class JobworkReceiptNote implements OnInit {
             event.preventDefault();
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    // new transfer aside pane
+    public toggleSenderDetailAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.senderDetailAccountAsidePane = this.senderDetailAccountAsidePane === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 

@@ -52,6 +52,7 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { SalesAddStockComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { SalesAddStockGroupComponent } from '../proforma-invoice/components/aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
 import { JobworkReceiptNote } from './jobwork/jobwork-receipt-note-component/jobwork-receipt-note.component';
+import { JobWorkSenderAsidePane } from './jobwork/jobwork-sender-aside-component/jobwork-sender-aside.component';
 
 @NgModule({
     declarations: [
@@ -89,7 +90,8 @@ import { JobworkReceiptNote } from './jobwork/jobwork-receipt-note-component/job
         NewBranchTransferListComponent,
         AsideSenderReceiverDetailsPaneComponent,
         DateFormatterPipe,
-        JobworkReceiptNote
+        JobworkReceiptNote,
+        JobWorkSenderAsidePane
     ],
     exports: [
         InventoryComponent,
