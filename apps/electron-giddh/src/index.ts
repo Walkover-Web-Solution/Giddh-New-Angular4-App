@@ -54,6 +54,7 @@ ipcMain.on("authenticate", async function (event, arg) {
             event.returnValue = token.access_token;
             // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
         }
+        event.sender.send('authenticate-token', event.returnValue);
     } catch (e) {
         //
     }

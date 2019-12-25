@@ -17,12 +17,14 @@ export class PublicPageHandlerComponent {
             this.router.navigate(['/create-invoice']);
         } else if (this.router.routerState.snapshot.url.includes('signup')) {
             this.router.navigateByUrl('signup');
-        } else if (this.router.routerState.snapshot.url.includes('app/pages/settings')) {
-            let url = this.router.routerState.snapshot.url;
-            url = url.replace('/app', '');
-            this.router.navigateByUrl(url);
+        } else if (this.router.routerState.snapshot.url.includes('pages/settings')) {
+            this.router.navigateByUrl('pages/setting');
         } else {
-            this.router.navigate(['login']);
+            if (isElectron) {
+                this.router.navigate(['/login']);
+            } else {
+                this.router.navigate(['login']);
+            }
         }
     }
 }

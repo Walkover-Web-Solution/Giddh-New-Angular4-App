@@ -344,14 +344,20 @@ export class LoginComponent implements OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.signupWithGoogle(t));
+                ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once("authenticate-token", (event, res) => {
+                    console.log('google', res);
+                    this.store.dispatch(this.loginAction.signupWithGoogle(res));
+                });
+                // this.store.dispatch(this.loginAction.signupWithGoogle(t));
             } else {
                 // linked in
-                const t = ipcRenderer.sendSync("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once("authenticate-token", (event, res) => {
+                    // debugger;
+                    this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+                });
             }
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
