@@ -896,10 +896,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Unsubscribe to all the listeners to avoid memory leaks
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public ngOnDestroy(): void {
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        // Remove the transaction details for ledger once the component is destroyed
         this.store.dispatch(this._ledgerAction.resetLedgerTrxDetails());
     }
 
