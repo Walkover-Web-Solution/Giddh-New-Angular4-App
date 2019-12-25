@@ -1,7 +1,7 @@
 import { INameUniqueName } from '../api-models/Inventory';
 import { IPagination } from './paginatedResponse.interface';
 import { IFlattenAccountsResultItem } from './flattenAccountsResultItem.interface';
-import { IInventoryUnit } from '../../ledger/ledger.vm';
+import { IInventoryUnit, WarehouseDetails } from '../../ledger/ledger.vm';
 
 /**
  * interface used in transaction item everywhere
@@ -33,6 +33,7 @@ export interface IInventory {
     rate: number;
     stock?: INameUniqueName;
     unit: IInventoryUnit;
+    warehouse?: WarehouseDetails;
 }
 
 export interface IUnit {
