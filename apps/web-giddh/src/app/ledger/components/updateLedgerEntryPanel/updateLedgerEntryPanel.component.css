@@ -162,7 +162,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     min-width: 80px;
 }
 .download-invoice-ledger > i {
-    top: 25px;
+    top: 15px;
     position: relative;
 }
 
