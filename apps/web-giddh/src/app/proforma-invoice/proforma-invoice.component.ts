@@ -842,7 +842,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
-                        console.log(this.invFormData);
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -2572,7 +2571,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string }) {
-        console.log(this.invFormData);
         this.accountUniqueName = obj.accountUniqueName;
         this.invoiceNo = obj.invoiceNo;
         this.isLastInvoiceCopied = true;
