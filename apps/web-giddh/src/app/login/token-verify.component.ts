@@ -31,6 +31,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        // http://test.giddh.com/app/login/verify-token?token=lkajf93809438lajf09803&returnUrl=dashboard
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
             this.verifyToken();

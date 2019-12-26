@@ -1,19 +1,21 @@
 <section class="m-l-20 m-r-20 m-t-15">
-  <div class="m-t-15">
-    <button class="btn btn-default" [ngClass]="{'active': activeTab === 'inprogress'}" (click)="tabChanged('inprogress')">
-      In-Progress
-    </button>
-    <button class="btn btn-default" [ngClass]="{'active': activeTab === 'completed'}" (click)="tabChanged('completed')">
-      Completed
-    </button>
-  </div>
-  <div class="m-t-15" id="Tab">
-    <ng-container *ngIf="activeTab === 'inprogress'">
-      <app-inprogress-preview></app-inprogress-preview>
-    </ng-container>
+    <div class="m-t-15">
+        <button class="btn btn-default" [ngClass]="{'active': activeTab === 'inprogress'}"
+            (click)="tabChanged('inprogress')">
+            In-Progress
+        </button>
+        <button class="btn btn-default" [ngClass]="{'active': activeTab === 'completed'}"
+            (click)="tabChanged('completed')">
+            Completed
+        </button>
+    </div>
+    <div class="m-t-15" id="Tab">
+        <ng-container *ngIf="activeTab === 'inprogress'">
+            <app-inprogress-preview></app-inprogress-preview>
+        </ng-container>
 
-    <ng-container *ngIf="activeTab === 'completed'">
-      <app-completed-preview></app-completed-preview>
-    </ng-container>
-  </div>
+        <ng-container *ngIf="activeTab === 'completed'">
+            <app-completed-preview></app-completed-preview>
+        </ng-container>
+    </div>
 </section>

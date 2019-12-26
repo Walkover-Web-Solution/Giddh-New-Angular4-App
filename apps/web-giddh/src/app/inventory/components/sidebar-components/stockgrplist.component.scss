@@ -1,63 +1,63 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 .active {
-  color: $JacksonsPurple !important;
+    color: $JacksonsPurple !important;
 }
 
 .stock-grp-list li > i:focus {
-  outline: 0;
+    outline: 0;
 }
 
 .grp_open {
-  background: rgb(255, 255, 255);
+    background: rgb(255, 255, 255);
 }
 
 .grp_open li {
-  border: 0;
+    border: 0;
 }
 
 .btn-link {
-  padding-top: 0 !important;
+    padding-top: 0 !important;
 }
 
 .stock-grp-list .active a,
-s.tock-grp-list .active i , .stock-grp-list .active  .btn-link i{
-  color: $JacksonsPurple !important;
+s.tock-grp-list .active i,
+.stock-grp-list .active .btn-link i {
+    color: $JacksonsPurple !important;
 }
 
 .stock-grp-list .active {
-  background-color: #EEEFF9;
+    background-color: #eeeff9;
 }
 
 .item-group {
-  padding: 12px 15px;
-  padding-right: 0;
-  display: flex;
-  align-items: center;
-  max-height: 41px;
+    padding: 12px 15px;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    max-height: 41px;
 }
 
 .main-group div > stockgrp-list .item-group {
-  padding: 8px 0 8px 35px !important;
+    padding: 8px 0 8px 35px !important;
 }
 
 .main-group div > stock-list ::ng-deep.in-list {
-  padding: 8px 0 8px 15px;
+    padding: 8px 0 8px 15px;
 }
 
 stock-list ::ng-deep.in-list a div {
-  color: black !important;
+    color: black !important;
 }
-.text-black{
-  color: #000000;
+.text-black {
+    color: #000000;
 }
 
 .item-group {
-  text-transform: unset !important;
+    text-transform: unset !important;
 }
 .no-data-box {
-  border-top: 1px solid #e0e0e0!important;
+    border-top: 1px solid #e0e0e0 !important;
 }
-.stock-grp-list li .btn{
-  line-height: 14px;
+.stock-grp-list li .btn {
+    line-height: 14px;
 }
-

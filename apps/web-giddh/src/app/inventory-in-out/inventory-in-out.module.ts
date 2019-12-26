@@ -24,38 +24,37 @@ import { InventoryModule } from '../inventory/inventory.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
-  declarations: [
-    InventoryInOutComponent,
-    InventoryInOutSidebarComponent,
-    PersonListComponent,
-    InOutStockListComponent,
-    InventoryHeaderComponent,
-    InventoryInOutReportComponent,
-    AsideMenuComponent,
-    TransferNoteComponent,
-    InwardNoteComponent,
-    OutwardNoteComponent,
-    InventoryUserComponent
-  ],
-  exports: [],
-  providers: [],
-  imports: [InventoryInOutRoutingModule,
-    CommonModule,
-    ShSelectModule,
-    PaginationModule,
-    Daterangepicker,
-    ReactiveFormsModule,
-    FormsModule,
-    BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
-    BsDropdownModule,
-    InventoryModule,
-    TabsModule,
-    DecimalDigitsModule
-  ],
+    declarations: [
+        InventoryInOutComponent,
+        InventoryInOutSidebarComponent,
+        PersonListComponent,
+        InOutStockListComponent,
+        InventoryHeaderComponent,
+        InventoryInOutReportComponent,
+        AsideMenuComponent,
+        TransferNoteComponent,
+        InwardNoteComponent,
+        OutwardNoteComponent,
+        InventoryUserComponent
+    ],
+    exports: [],
+    providers: [],
+    imports: [InventoryInOutRoutingModule,
+        CommonModule,
+        ShSelectModule,
+        PaginationModule,
+        Daterangepicker,
+        ReactiveFormsModule,
+        FormsModule,
+        BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
+        BsDropdownModule,
+        InventoryModule,
+        TabsModule,
+        DecimalDigitsModule
+    ],
 })
 export class InventoryInOutModule {
-  constructor() {
-    console.log('InventoryInOutModule');
-  }
+    constructor() {
+    }
 
 }

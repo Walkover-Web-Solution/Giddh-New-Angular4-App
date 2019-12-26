@@ -1,6 +1,6 @@
 :host {
-  display: block;
-  position: relative;
+    display: block;
+    position: relative;
 }
 
 /* .header {
@@ -17,28 +17,28 @@
 } */
 
 .header:hover {
-  cursor: text;
+    cursor: text;
 }
 
 .header.inline {
-  background-color: transparent;
-  width: max-content;
-  border: none;
+    background-color: transparent;
+    width: max-content;
+    border: none;
 }
 
 .header.open {
-  border-radius: 2px 2px 0 0;
-  /* box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15); */
-  border-bottom: none;
-  line-height: auto;
+    border-radius: 2px 2px 0 0;
+    /* box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15); */
+    border-bottom: none;
+    line-height: auto;
 }
 
 .header:focus {
-  outline: 0;
+    outline: 0;
 }
 
 div {
-  display: block;
+    display: block;
 }
 
 /* input[type="text"] {
@@ -61,26 +61,26 @@ div {
 } */
 
 input[type="text"] {
-  outline: none;
-  width: 100%;
+    outline: none;
+    width: 100%;
 }
 
 [hidden] {
-  display: none;
+    display: none;
 }
 
 i.close.icon.clear::after {
-  content: "✕";
-  padding-right: 8px;
-  font-weight: 800;
-  color: gray;
+    content: "✕";
+    padding-right: 8px;
+    font-weight: 800;
+    color: gray;
 }
 
 i.close.icon.clear:hover::after {
-  color: red;
+    color: red;
 }
 
-  .clear {
+.clear {
     position: absolute;
     right: 2px;
     padding-left: 2px;
@@ -90,123 +90,122 @@ i.close.icon.clear:hover::after {
     font-size: 25px;
     font-weight: 500;
     line-height: 100%;
-    opacity: .5;
+    opacity: 0.5;
     color: black;
     transform: translateY(-50%);
-  }
+}
 
 .sh-select-disabled {
-  background-color: #e3e3e3;
-  color: darkgray;
-  cursor: not-allowed;
+    background-color: #e3e3e3;
+    color: darkgray;
+    cursor: not-allowed;
 }
 
 .chip {
-  display: inline-block;
-  padding: 0 7px;
-  height: 30px;
-  font-size: 14px;
-  line-height: 30px;
-  border-radius: 4px;
-  background-color: #f4f5f8;
-  margin: 0px 0 4px 4px;
-  /* color: white; */
+    display: inline-block;
+    padding: 0 7px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    border-radius: 4px;
+    background-color: #f4f5f8;
+    margin: 0px 0 4px 4px;
+    /* color: white; */
 }
 
 .chipClosebtn {
-  padding-left: 10px;
-  font-weight: 500;
-  float: right;
-  font-size: 20px;
-  cursor: pointer;
-  opacity: .6;
+    padding-left: 10px;
+    font-weight: 500;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.6;
 }
 
 .chipClosebtn:hover {
-  font-weight: 700;
-  opacity: .5;
-  color: black;
+    font-weight: 700;
+    opacity: 0.5;
+    color: black;
 }
 
 .sh-select-disabled .selectedVal,
 .sh-select-disabled .form-control {
-  background: #eee !important;
-  pointer-events: none;
-  cursor: not-allowed;
+    background: #eee !important;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 .selectedVal {
-  border: 1px solid #d6d6d6 !important;
-  padding-right: 5px !important;
-  background: #fff !important;
+    border: 1px solid #d6d6d6 !important;
+    padding-right: 5px !important;
+    background: #fff !important;
 }
 
 .header.open > input[type="text"] {
-  border-color: #d6d6d6;
+    border-color: #d6d6d6;
 }
 
 .header .bdr > input[type="text"] {
-  border: 0;
+    border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-  color: #c1c1c1 !important;
+    color: #c1c1c1 !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-  color: #c1c1c1 !important;
+    color: #c1c1c1 !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-  color: #c1c1c1 !important;
+    color: #c1c1c1 !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-  color: #c1c1c1 !important;
+    color: #c1c1c1 !important;
 }
 
 .toggle {
-  position: absolute;
-  right: 0;
-  border: 1px solid #ddd;
-  height: 100%;
-  width: 28px;
-  text-align: center;
-  line-height: 32px;
-  vertical-align: middle;
-  top: 0;
-  bottom: 0;
-  cursor: pointer;
-  background: #f4f5f8;
-  color: #686868;
-  font-size: 16px;
+    position: absolute;
+    right: 0;
+    border: 1px solid #ddd;
+    height: 100%;
+    width: 28px;
+    text-align: center;
+    line-height: 32px;
+    vertical-align: middle;
+    top: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: #f4f5f8;
+    color: #686868;
+    font-size: 16px;
 }
 
 button.form-control:focus {
-  border-color: #ddd !important;
+    border-color: #ddd !important;
 }
 
 .label-btn {
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  font-size: 20px;
-  color: #393a3d;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 20px;
+    color: #393a3d;
 }
 
 .toggle:hover {
-  background: #eee;
+    background: #eee;
 }
 
 .label-toggle {
-  border: 0 !important;
-  background: transparent !important;
-  border-radius: 0;
+    border: 0 !important;
+    background: transparent !important;
+    border-radius: 0;
 }
 
 .bottom-border-only {
-  border: none !important;
-  border-bottom: 1px solid #d6d6d6 !important;
-  border-radius: 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #d6d6d6 !important;
+    border-radius: 0 !important;
 }
 .Advance-Search .header {
-  position: relative;
+    position: relative;
 }
- 

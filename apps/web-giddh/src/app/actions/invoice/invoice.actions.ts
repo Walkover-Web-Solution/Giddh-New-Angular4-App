@@ -1447,14 +1447,6 @@ export class InvoiceActions {
         };
     }
 
-    // public setDivVisible(div: IsDivVisible): CustomActions {
-    //   // console.log(div);
-    //   return {
-    //     type: INVOICE.TEMPLATE.SET_VISIBLE,
-    //     payload: { div }
-    //   };
-    // }
-
     public getInvoiceSetting(): CustomActions {
         return {
             type: INVOICE.SETTING.GET_INVOICE_SETTING
@@ -1805,7 +1797,7 @@ export class InvoiceActions {
             }
         }
         return successAction;
-    
+
     }
 
     public resetTransporterListResponse(): CustomActions {

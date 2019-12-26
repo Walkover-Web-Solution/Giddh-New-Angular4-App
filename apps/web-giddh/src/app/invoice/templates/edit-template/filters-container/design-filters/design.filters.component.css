@@ -1,125 +1,125 @@
 .swatch ul {
-  max-width: 260px;
+    max-width: 260px;
 }
 
 .swatch ul li,
 .templateView li {
-  cursor: pointer
+    cursor: pointer;
 }
 
 .swatch ul li:nth-child(1) {
-  background: #bdbdbd;
+    background: #bdbdbd;
 }
 
 .swatch ul li:nth-child(2) {
-  background: #636363;
+    background: #636363;
 }
 
 .swatch ul li:nth-child(3) {
-  background: #000000;
+    background: #000000;
 }
 
 .swatch ul li:nth-child(4) {
-  background: #e34818;
+    background: #e34818;
 }
 
 .swatch ul li:nth-child(5) {
-  background: #7889a1;
+    background: #7889a1;
 }
 
 .swatch ul li:nth-child(6) {
-  background: #48565f;
+    background: #48565f;
 }
 
 .swatch ul li:nth-child(7) {
-  background: #79bd58;
+    background: #79bd58;
 }
 
 .swatch ul li:nth-child(8) {
-  background: #0e909a;
+    background: #0e909a;
 }
 
 .swatch ul li:nth-child(9) {
-  background: #202e5a;
+    background: #202e5a;
 }
 
 .swatch ul li:nth-child(10) {
-  background: #96bc2d;
+    background: #96bc2d;
 }
 
 .swatch ul li:nth-child(11) {
-  background: #2a651d;
+    background: #2a651d;
 }
 
 .swatch ul li:nth-child(12) {
-  background: #004254;
+    background: #004254;
 }
 
 .swatch ul li:nth-child(13) {
-  background: #ff8c00;
+    background: #ff8c00;
 }
 
 .swatch ul li:nth-child(14) {
-  background: #82001d;
+    background: #82001d;
 }
 
 .swatch ul li:nth-child(15) {
-  background: #6b1438;
+    background: #6b1438;
 }
 
 .swatch ul li:nth-child(16) {
-  background: #f4749b;
+    background: #f4749b;
 }
 
 .swatch ul li:nth-child(17) {
-  background: #950069;
+    background: #950069;
 }
 
 .swatch ul li:nth-child(18) {
-  background: #542852;
+    background: #542852;
 }
 
 .upload-button {
-  width: 100px !important;
-  background: #fff;
-  display: table-cell;
-  text-align: center;
-  height: 100px;
-  vertical-align: middle;
-  border: 4px dashed #969696;
-  cursor: pointer;
+    width: 100px !important;
+    background: #fff;
+    display: table-cell;
+    text-align: center;
+    height: 100px;
+    vertical-align: middle;
+    border: 4px dashed #969696;
+    cursor: pointer;
 }
 
 .upload-button input[type="file"] {
-  display: none;
+    display: none;
 }
 
 .start-upload-btn {
-  float: right;
-  position: relative;
-  transform: translateY(100%);
-  margin-left: 20px;
+    float: right;
+    position: relative;
+    transform: translateY(100%);
+    margin-left: 20px;
 }
 
 .logoTool {
-  float: left
+    float: left;
 }
 
 .logoTool ul li {
-  margin-right: 5px;
-  cursor: pointer;
-  transition: all 0.5s ease;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
 }
 
 .swatch {
-  float: left;
-  margin-bottom: 20px;
+    float: left;
+    margin-bottom: 20px;
 }
 
 .font-selector .form-control {
-  margin: 0 !important;
+    margin: 0 !important;
 }
 
 #logoImage {
-  padding: 4px;
+    padding: 4px;
 }

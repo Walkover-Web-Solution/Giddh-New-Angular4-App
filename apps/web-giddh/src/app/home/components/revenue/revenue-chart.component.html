@@ -27,13 +27,13 @@
                     </div>
                     <div class="panel-body pos-rel">
                         <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                                <div class="no-data mrT2 loader-main">
-                                        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                                        <div class="spinner2">
-                                            <div class="cube1"></div>
-                                            <div class="cube2"></div>
-                                        </div>
-                                    </div>
+                            <div class="no-data mrT2 loader-main">
+                                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                <div class="spinner2">
+                                    <div class="cube1"></div>
+                                    <div class="cube2"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="chart-div" google-chart chart="myChartObject">
                             <perfect-scrollbar [scrollIndicators]="true">
@@ -80,9 +80,9 @@
                             <label>Date Range</label>
                             <div class="dateRangeInput">
                                 <span class="icon-calender" (click)="dp1.toggle()"></span>
-                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp1="bsDaterangepicker"
-                                    [bsValue]="previousDateRangePickerValue" (bsValueChange)="setPreviousDate($event)"
-                                    bsDaterangepicker>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control"
+                                    #dp1="bsDaterangepicker" [bsValue]="previousDateRangePickerValue"
+                                    (bsValueChange)="setPreviousDate($event)" bsDaterangepicker>
                             </div>
                         </div>
                     </div>
@@ -91,9 +91,9 @@
                             <label>Compare to</label>
                             <div class="dateRangeInput">
                                 <span class="icon-calender" (click)="dp2.toggle()"></span>
-                                <input type="text" readonly placeholder="Select Dates" class="form-control" #dp2="bsDaterangepicker"
-                                    [bsValue]="currentDateRangePickerValue" (bsValueChange)="setCurrentDate($event)"
-                                    bsDaterangepicker>
+                                <input type="text" readonly placeholder="Select Dates" class="form-control"
+                                    #dp2="bsDaterangepicker" [bsValue]="currentDateRangePickerValue"
+                                    (bsValueChange)="setCurrentDate($event)" bsDaterangepicker>
                             </div>
                         </div>
                     </div>

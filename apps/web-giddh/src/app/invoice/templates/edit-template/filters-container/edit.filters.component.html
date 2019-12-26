@@ -1,70 +1,72 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
-  <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')" id="defaultOpen">Design
-  </button>
-  <button type="button" class="btn btn-default" [ngClass]="{'active': ifContentSelected}" (click)="openTab('content')">
-    Content
-  </button>
-  <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
+    <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')"
+        id="defaultOpen">Design
+    </button>
+    <button type="button" class="btn btn-default" [ngClass]="{'active': ifContentSelected}"
+        (click)="openTab('content')">
+        Content
+    </button>
+    <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
 </div>
 
 
 <div class="tab">
-  <design-filters [hidden]="!ifDesignSelected" [design]="ifDesignSelected" [mode]="editMode"></design-filters>
-  <content-selector [hidden]="!ifContentSelected" [content]="ifContentSelected"></content-selector>
-  <invoice-email-filter-component *ngIf="ifEmailSelected"></invoice-email-filter-component>
+    <design-filters [hidden]="!ifDesignSelected" [design]="ifDesignSelected" [mode]="editMode"></design-filters>
+    <content-selector [hidden]="!ifContentSelected" [content]="ifContentSelected"></content-selector>
+    <invoice-email-filter-component *ngIf="ifEmailSelected"></invoice-email-filter-component>
 
-  <div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
+    <div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
 
-    <div class="clearfix mrT2">
-      <h2 style="margin-bottom: 0;">Standard email</h2>
-      <small>Edit the email content your customer gets</small>
-    </div>
-    <div class="clearfix mrT2">
-      <div class="form-group">
-        Subject
-        <input class="form-control" placeholder="Invoice AB4123 from Walkover " />
-      </div>
-    </div>
-
-    <div class="clearfix mrT2">
-      <div class="form-group">
-        <div class="">
-          <input type="checkbox" /> Use greeting
+        <div class="clearfix mrT2">
+            <h2 style="margin-bottom: 0;">Standard email</h2>
+            <small>Edit the email content your customer gets</small>
         </div>
-        <div class="col-xs-4 pdL0">
-          <div class="custom-select pos-rel">
-            <select class="form-control">
-              <option value="dear">dear</option>
-            </select>
-            <span class="select_drop">
-              <i class="fa fa-caret-down"></i>
-            </span>
-          </div>
-        </div>
-        <div class="col-xs-8">
-          <div class="row">
-            <div class="custom-select pos-rel">
-              <select class="form-control">
-                <option value="dear">Customer name</option>
-              </select>
-              <span class="select_drop">
-                <i class="fa fa-caret-down"></i>
-              </span>
+        <div class="clearfix mrT2">
+            <div class="form-group">
+                Subject
+                <input class="form-control" placeholder="Invoice AB4123 from Walkover " />
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="clearfix mrT2">
-      <div class="form-group">
-        Message to customer
-        <div class="">
-          <textarea class="form-control" rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private
+        <div class="clearfix mrT2">
+            <div class="form-group">
+                <div class="">
+                    <input type="checkbox" /> Use greeting
+                </div>
+                <div class="col-xs-4 pdL0">
+                    <div class="custom-select pos-rel">
+                        <select class="form-control">
+                            <option value="dear">dear</option>
+                        </select>
+                        <span class="select_drop">
+                            <i class="fa fa-caret-down"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="row">
+                        <div class="custom-select pos-rel">
+                            <select class="form-control">
+                                <option value="dear">Customer name</option>
+                            </select>
+                            <span class="select_drop">
+                                <i class="fa fa-caret-down"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix mrT2">
+            <div class="form-group">
+                Message to customer
+                <div class="">
+                    <textarea class="form-control" rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private
             Limited
           </textarea>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

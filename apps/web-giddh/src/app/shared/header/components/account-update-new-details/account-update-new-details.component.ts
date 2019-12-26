@@ -418,7 +418,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
             }
         }, (err: any) => {
-            // console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
         });
     }
 

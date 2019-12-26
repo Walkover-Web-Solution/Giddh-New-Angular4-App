@@ -1,95 +1,110 @@
 <div class="clearfix mrT2">
-  <div class="col-md-9">
-    <div class="row">
-      <div class="pull-left">
-        <form class="form-inline">
-          <div class="form-group mrR1">
-            <label class="d-block">Filter Type</label>
-            <div class="form-group closebtn">
-              <input type="text" readonly value="Financial year" class="form-control selectedVal">
-              <span class="clear">×</span> </div>
-          </div>
-          <div class="form-group mrR1">
-            <label class="d-block">Select Year</label>
-            <div class="form-group closebtn">
-              <input type="text" readonly value="FY-APR2018-MAR2019" class="form-control selectedVal">
-              <span class="clear">×</span> </div>
-          </div>
-          <div class="form-group mrR1"><br>
-            <button class="btn btn-success" type="submit"> Apply </button>
-          </div>
-          <div class="form-group mrR1"><br>
-            <input type="checkbox" class="checkboxbtn" name="showOpening" [(ngModel)]="showOpening">
-            openingcheck
-          </div>
-          <div class="form-group mrR1"><br>
-            <input type="checkbox" class="checkboxbtn" name="showTransactions" [(ngModel)]="showTransactions">
-            Transactions
-          </div>
-          <div class="form-group mrR1"><br>
-            <input type="checkbox" class="checkboxbtn" name="showClosing" [(ngModel)]="showClosing">
-            Closing
-          </div>
-        </form>
-      </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="pull-left">
+                <form class="form-inline">
+                    <div class="form-group mrR1">
+                        <label class="d-block">Filter Type</label>
+                        <div class="form-group closebtn">
+                            <input type="text" readonly value="Financial year" class="form-control selectedVal">
+                            <span class="clear">×</span> </div>
+                    </div>
+                    <div class="form-group mrR1">
+                        <label class="d-block">Select Year</label>
+                        <div class="form-group closebtn">
+                            <input type="text" readonly value="FY-APR2018-MAR2019" class="form-control selectedVal">
+                            <span class="clear">×</span> </div>
+                    </div>
+                    <div class="form-group mrR1"><br>
+                        <button class="btn btn-success" type="submit"> Apply </button>
+                    </div>
+                    <div class="form-group mrR1"><br>
+                        <input type="checkbox" class="checkboxbtn" name="showOpening" [(ngModel)]="showOpening">
+                        openingcheck
+                    </div>
+                    <div class="form-group mrR1"><br>
+                        <input type="checkbox" class="checkboxbtn" name="showTransactions"
+                            [(ngModel)]="showTransactions">
+                        Transactions
+                    </div>
+                    <div class="form-group mrR1"><br>
+                        <input type="checkbox" class="checkboxbtn" name="showClosing" [(ngModel)]="showClosing">
+                        Closing
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-xs-3">
-  <div class="pull-right"><br>
-    <button class="btn isActive btn-sm" type="button">Download</button>
-  </div>
-  </div>
-  
+    <div class="col-xs-3">
+        <div class="pull-right"><br>
+            <button class="btn isActive btn-sm" type="button">Download</button>
+        </div>
+    </div>
+
 </div>
 <div class="max-980">
 
-<div class="mrT2 clearfix pull-right">
-<div class="pull-left">
-<span *ngIf="!isExpanded" class="expand exp" (click)="isExpanded = true"><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
-<span *ngIf="isExpanded" class="expand exp" (click)="isExpanded = false"><i class="fa fa-compress" aria-hidden="true"></i></span>
+    <div class="mrT2 clearfix pull-right">
+        <div class="pull-left">
+            <span *ngIf="!isExpanded" class="expand exp" (click)="isExpanded = true"><i class="fa fa-arrows-alt"
+                    aria-hidden="true"></i></span>
+            <span *ngIf="isExpanded" class="expand exp" (click)="isExpanded = false"><i class="fa fa-compress"
+                    aria-hidden="true"></i></span>
 
-</div>
+        </div>
 
-<div class="col-xs-4">
-<div class="form-group mrB">
-<div class="input-group input-group-md">
-<input class="form-control" placeholder="Search" type="search"><!---->
-<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span><!----></div></div>
-</div>
+        <div class="col-xs-4">
+            <div class="form-group mrB">
+                <div class="input-group input-group-md">
+                    <input class="form-control" placeholder="Search" type="search">
+                    <!---->
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    <!---->
+                </div>
+            </div>
+        </div>
 
-<div class="pull-right">
-<select class="form-control">
-<option>Account View</option>
-</select>
-</div>
-</div>
+        <div class="pull-right">
+            <select class="form-control">
+                <option>Account View</option>
+            </select>
+        </div>
+    </div>
 
-<div class="mrT2 clearfix">
-<div class="table-responsive">
-        <table class="table table-striped table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Particular</th>
-              <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;" class="openingcheck">Opening Dr.</th>
-              <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;" class="openingcheck">Opening Cr.</th>
-              <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Dr. Trans</th>
-              <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Cr. Trans</th>
-              <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Dr.</th>
-              <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Cr.</th>
-            </tr>
-          </thead>
-          <tbody *ngIf="data$ | async">
-            <ng-container *ngFor="let grp of (data$ | async).groupDetails; let i = index">
-              <tr>
-                <td>{{grp.groupName}}</td>
-                <td *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;" class="openingcheck">{{ grp.closingBalance.amount }}</td>
-                <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
-                <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
-                <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-                <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-              </tr>
-              <!-- <tr class="exp11" *ngIf="isExpanded">
+    <div class="mrT2 clearfix">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Particular</th>
+                        <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
+                            class="openingcheck">Opening Dr.</th>
+                        <th *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
+                            class="openingcheck">Opening Cr.</th>
+                        <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Dr.
+                            Trans</th>
+                        <th *ngIf="showTransactions" align="right" style="text-align:right;" class="transcheck">Cr.
+                            Trans</th>
+                        <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Dr.
+                        </th>
+                        <th *ngIf="showClosing" align="right" style="text-align:right;" class="closingcheck">Closing Cr.
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="data$ | async">
+                    <ng-container *ngFor="let grp of (data$ | async).groupDetails; let i = index">
+                        <tr>
+                            <td>{{grp.groupName}}</td>
+                            <td *ngIf="showOpening" align="right" style="text-align:right; display:table-cell;"
+                                class="openingcheck">{{ grp.closingBalance.amount }}</td>
+                            <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table
+                                cell</td>
+                            <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
+                            <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
+                            <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
+                            <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
+                        </tr>
+                        <!-- <tr class="exp11" *ngIf="isExpanded">
                 <td align="center">Another group</td>
                 <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
                 <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
@@ -98,18 +113,18 @@
                 <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
                 <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
               </tr> -->
-            </ng-container>
-            
-            <!-- <tr>
+                    </ng-container>
+
+                    <!-- <tr>
               <td>3</td>
-              
+
               <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
               <td *ngIf="showOpening" align="right" style="display:table-cell;" class="openingcheck">Table cell</td>
               <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
               <td *ngIf="showTransactions" align="right" class="transcheck">Table cell</td>
               <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
               <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
-             
+
             </tr>
             <tr class="exp11" *ngIf="isExpanded">
               <td align="center">expand</td>
@@ -165,8 +180,8 @@
               <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
               <td *ngIf="showClosing" align="right" class="closingcheck">Table cell</td>
             </tr> -->
-          </tbody>
-        </table>
-  </div>
-</div>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

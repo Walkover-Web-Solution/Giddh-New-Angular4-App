@@ -14,55 +14,55 @@ import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
 
 const PERMISSION_ROUTES: Routes = [
-  {path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication]},
-  {
-    path: '',
-    component: PermissionComponent,
-    children: [
-      {path: '', pathMatch: 'full', redirectTo: 'list'},
-      {
-        path: 'list',
-        component: PermissionListComponent,
-        canActivate: [NeedsAuthentication]
-      },
-      {
-        path: 'details',
-        component: PermissionDetailsComponent,
-        canActivate: [NeedsAuthentication]
-      },
-      // {
-      //   path: 'details/:id',
-      //   component: PermissionDetailsComponent,
-      //   canActivate: [NeedsAuthentication]
-      // },
-      // { path: '*', redirectTo: 'list' }
-    ]
-  }
+    { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+    {
+        path: '',
+        component: PermissionComponent,
+        children: [
+            { path: '', pathMatch: 'full', redirectTo: 'list' },
+            {
+                path: 'list',
+                component: PermissionListComponent,
+                canActivate: [NeedsAuthentication]
+            },
+            {
+                path: 'details',
+                component: PermissionDetailsComponent,
+                canActivate: [NeedsAuthentication]
+            },
+            // {
+            //   path: 'details/:id',
+            //   component: PermissionDetailsComponent,
+            //   canActivate: [NeedsAuthentication]
+            // },
+            // { path: '*', redirectTo: 'list' }
+        ]
+    }
 ];
 
 @NgModule({
-  declarations: [
-    PermissionComponent,
-    PermissionListComponent,
-    PermissionDetailsComponent,
-    PermissionModelComponent,
-    DeleteRoleConfirmationModelComponent,
-    SortByPipe,
-    CapitalizePipe
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild(PERMISSION_ROUTES),
-    LaddaModule,
-    ModalModule,
-    BsDropdownModule
-  ],
-  exports: [
-    RouterModule,
-    CapitalizePipe
-  ],
-  providers: []
+    declarations: [
+        PermissionComponent,
+        PermissionListComponent,
+        PermissionDetailsComponent,
+        PermissionModelComponent,
+        DeleteRoleConfirmationModelComponent,
+        SortByPipe,
+        CapitalizePipe
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild(PERMISSION_ROUTES),
+        LaddaModule,
+        ModalModule,
+        BsDropdownModule
+    ],
+    exports: [
+        RouterModule,
+        CapitalizePipe
+    ],
+    providers: []
 })
 export class PermissionRoutingModule {
 }

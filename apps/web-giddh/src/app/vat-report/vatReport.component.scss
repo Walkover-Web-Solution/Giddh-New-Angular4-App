@@ -1,34 +1,35 @@
 .invoce-controll {
-  .nav.nav-tabs {
-    margin-bottom: 20px;
-    padding: 12px 0px 0 15px !important;
-    background-color: #F7F8FD;
-    z-index: 9;
-    position: relative;
-    top: -4px;
-  }
+    .nav.nav-tabs {
+        margin-bottom: 20px;
+        padding: 12px 0px 0 15px !important;
+        background-color: #f7f8fd;
+        z-index: 9;
+        position: relative;
+        top: -4px;
+    }
 }
 
 .table-border-bottom {
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
-.table-border-bottom tbody tr td, .table-border-bottom thead tr th {
-  border-right: 0px !important;
-  border-left: 0px !important;
-  border-bottom: 0px !important;
-  border-top: 1px solid #ddd;
-  white-space: normal;
+.table-border-bottom tbody tr td,
+.table-border-bottom thead tr th {
+    border-right: 0px !important;
+    border-left: 0px !important;
+    border-bottom: 0px !important;
+    border-top: 1px solid #ddd;
+    white-space: normal;
 }
 
 .table-border-bottom .last-row td {
-  background: #F2F2F2;
-  padding: 14px 10px;
-  font-weight: bold;
+    background: #f2f2f2;
+    padding: 14px 10px;
+    font-weight: bold;
 }
 
 .table-border-bottom thead tr th {
-  font-family: 'opensans-regular';
+    font-family: "opensans-regular";
 }
 
 .return-sel {
@@ -54,15 +55,14 @@
     width: 280px;
 }
 
-
 @media only screen and (max-width: 767px) {
-  .navbar_header.mb-2 {
-    margin-top: 60px;
-  }
-  .onMobileView.table-hide-title tr td {
-    padding-left: 15px !important;
-  }
+    .navbar_header.mb-2 {
+        margin-top: 60px;
+    }
+    .onMobileView.table-hide-title tr td {
+        padding-left: 15px !important;
+    }
 }
-.vat-report .dropdown-menu li label{
-  padding-left: 0px !important;
+.vat-report .dropdown-menu li label {
+    padding-left: 0px !important;
 }

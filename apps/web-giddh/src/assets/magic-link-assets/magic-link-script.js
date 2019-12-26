@@ -1,27 +1,43 @@
 Vue.use(VToaster, {
     timeout: 5000
 });
+<<<<<<< HEAD
 Vue.directive('tooltip', function(el, binding) {
+=======
+Vue.directive('tooltip', function (el, binding) {
+>>>>>>> staging
     $(el).tooltip({
         title: binding.value,
         placement: binding.arg,
         trigger: 'hover'
     });
 });
+<<<<<<< HEAD
 Vue.filter('currency', function(value) {
+=======
+Vue.filter('currency', function (value) {
+>>>>>>> staging
     return parseFloat(value).toFixed(2);
 });
 Vue.component('date-range-picker', {
     props: ['id', 'range'],
     template: '<div class="input-group"><input type="text" :id="id" :name="id" class="form-control" /><span class="input-group-addon"><span class="fa fa-calendar"></span></span></div>',
     watch: {
+<<<<<<< HEAD
         range: function(val, oldVal) {
+=======
+        range: function (val, oldVal) {
+>>>>>>> staging
             var input = $('input[name="' + this.id + '"]');
             input.data('daterangepicker').setStartDate(val.startDate);
             input.data('daterangepicker').setEndDate(val.endDate);
         }
     },
+<<<<<<< HEAD
     mounted: function() {
+=======
+    mounted: function () {
+>>>>>>> staging
         var self = this;
         var input = $('input[name="' + this.id + '"]');
         input.daterangepicker({
@@ -53,7 +69,11 @@ Vue.component('date-range-picker', {
                 format: 'D-MMM-YY'
             },
         });
+<<<<<<< HEAD
         input.on('apply.daterangepicker', function(ev, picker) {
+=======
+        input.on('apply.daterangepicker', function (ev, picker) {
+>>>>>>> staging
             var dateObj = {
                 startDate: picker.startDate,
                 endDate: picker.endDate,
@@ -94,7 +114,7 @@ var app = new Vue({
         folderPath: '',
         isSmall: false
     },
-    mounted: function() {
+    mounted: function () {
         this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
@@ -204,9 +224,14 @@ var app = new Vue({
                 endDate: moment(picker.endDate).format('DD-MM-YYYY')
             };
             var id = this.getParameterByName('id');
+
+            // show loader when date changes
+            document.getElementById("loader-1").style.display = 'flex';
+            document.getElementById("app").style.display = 'none';
+
             this.getMagicLinkData(id, dates.startDate, dates.endDate);
         },
-        handleResize: function(ev) {
+        handleResize: function (ev) {
             var width = ev.currentTarget.innerWidth;
             if (width > 992) {
                 this.selectedTab = '';

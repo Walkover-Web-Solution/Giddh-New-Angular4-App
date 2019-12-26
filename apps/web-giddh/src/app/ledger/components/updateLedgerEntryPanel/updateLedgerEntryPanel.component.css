@@ -161,6 +161,10 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     width: 80px !important;
     min-width: 80px;
 }
+.download-invoice-ledger > i {
+    top: 15px;
+    position: relative;
+}
 
 @media only screen and (max-width: 1024px) {
     .ledger_book {

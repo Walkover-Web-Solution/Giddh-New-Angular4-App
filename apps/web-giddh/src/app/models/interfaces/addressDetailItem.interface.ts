@@ -1,4 +1,4 @@
 export interface IAddressListItem {
-  address: string;
-  stateCode: string;
+	address: string;
+	stateCode: string;
 }

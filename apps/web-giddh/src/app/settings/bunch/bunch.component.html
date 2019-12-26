@@ -1,28 +1,28 @@
 <div class="clearfix mrT2">
-  <h3 class="section_head inline">Groups</h3>
-  <button class="btn btn-primary mrL1" (click)="openAddBunchModal()">Create Group</button>
+    <h3 class="section_head inline">Groups</h3>
+    <button class="btn btn-primary mrL1" (click)="openAddBunchModal()">Create Group</button>
 </div>
 
 <div class="row mrT2">
-  <div class="col-xs-3" *ngFor="let bunch of allBunches; let i = index; let l = last">
-    <div class="box bunch_parent clearfix">
-      <div class="">
-        <!--  -->
-        <div (click)="getBunchCompany(bunch)" class="cp">{{bunch.name}}</div>
-        <div class="text-right clearfix">
-          <button type="button" class="btn btn-link pull-left" (click)="openAddCompanyModal(bunch)">+ Add Company
-          </button>
-          <button type="button" class="btn btn-xs" (click)="update(bunch)"><i class="fa fa-pencil" aria-hidden="true"
-                                                                              tooltip="Edit"></i> Edit
-          </button>
-          <button type="button" class="btn btn-xs" (click)="deleteBunch(bunch.uniqueName)"><i class="fa fa-trash"
-                                                                                              aria-hidden="true"
-                                                                                              tooltip="Delete"></i>
-            Delete
-          </button>
-        </div>
-      </div>
-      <!-- <div class="panel-body">
+    <div class="col-xs-3" *ngFor="let bunch of allBunches; let i = index; let l = last">
+        <div class="box bunch_parent clearfix">
+            <div class="">
+                <!--  -->
+                <div (click)="getBunchCompany(bunch)" class="cp">{{bunch.name}}</div>
+                <div class="text-right clearfix">
+                    <button type="button" class="btn btn-link pull-left" (click)="openAddCompanyModal(bunch)">+ Add
+                        Company
+                    </button>
+                    <button type="button" class="btn btn-xs" (click)="update(bunch)"><i class="fa fa-pencil"
+                            aria-hidden="true" tooltip="Edit"></i> Edit
+                    </button>
+                    <button type="button" class="btn btn-xs" (click)="deleteBunch(bunch.uniqueName)"><i
+                            class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="panel-body">
           <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" [scrollIndicators]="true">
               <ul class="list-unstyled bunch_list">
                   <li>
@@ -40,43 +40,41 @@
               <button class="btn btn-default">+ Add Company</button>
           </div>
       </div> -->
+        </div>
     </div>
-  </div>
 </div>
 <!--end of row  -->
 
 
 <!--add bunch modal  -->
-<div bsModal #bunchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
-     (onHidden)="onHide()">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <create-bunch-component [mode]="mode" [formData]="selectedBunch" (closeModalEvent)="hideBunchModal()"
-                              (saveDataEvent)="saveBunch($event)"></create-bunch-component>
+<div bsModal #bunchModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <create-bunch-component [mode]="mode" [formData]="selectedBunch" (closeModalEvent)="hideBunchModal()"
+                (saveDataEvent)="saveBunch($event)"></create-bunch-component>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-     role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <add-bunch-company [companiesList]="companies$ | async" [activeBunch]="selectedBunch"
-                         (closeModalEvent)="hideAddCompanyModal()"
-                         (saveDataEvent)="AddBunchCompany($event)"></add-bunch-company>
+    role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <add-bunch-company [companiesList]="companies$ | async" [activeBunch]="selectedBunch"
+                (closeModalEvent)="hideAddCompanyModal()" (saveDataEvent)="AddBunchCompany($event)"></add-bunch-company>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--get bunch company modal  -->
 <div bsModal #getBunchCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-     role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <get-companies [activeBunch]="selectedBunch" [selectedBunch]="selectedBunchCompany"
-                     (closeModalEvent)="hideGetBunchCompanyModal()"
-                     (deleteCompanyEvent)="RemoveCompany($event)"></get-companies>
+    role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <get-companies [activeBunch]="selectedBunch" [selectedBunch]="selectedBunchCompany"
+                (closeModalEvent)="hideGetBunchCompanyModal()" (deleteCompanyEvent)="RemoveCompany($event)">
+            </get-companies>
+        </div>
     </div>
-  </div>
 </div>

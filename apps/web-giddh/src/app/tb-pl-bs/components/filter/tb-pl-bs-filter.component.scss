@@ -8,7 +8,7 @@
 
     font-size: 14px;
 }
-.tb-btnApply{
+.tb-btnApply {
     margin-top: 5px;
 }
 .liabilities-assets {
@@ -16,9 +16,9 @@
     width: 100%;
 }
 .date-range-picker {
-     padding-left: 35px !important;
+    padding-left: 35px !important;
     // border-color:$border-blue;
-    background-image: url('../../../../assets/images/calender.svg') !important;
+    background-image: url("../../../../assets/images/calender.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
@@ -27,21 +27,21 @@
     z-index: 99;
     cursor: default;
 }
-.inputWrapper{
+.inputWrapper {
     position: relative;
 }
 .inputWrapper:before {
     position: absolute;
-    content: '';
+    content: "";
     display: block;
     height: 36px;
     width: 1px;
     background-color: #d9d9d9;
-    left: 37px!important;
+    left: 37px !important;
     z-index: 100;
     top: 0;
 }
-.expanIcon{
+.expanIcon {
     height: 36px;
     display: flex;
     align-items: flex-end;
@@ -55,9 +55,9 @@
     background-color: #fff;
     font-size: 18px;
     color: #1a237e !important;
-        border: 1px solid #d9d9d9;
+    border: 1px solid #d9d9d9;
 }
-@media (min-width: 768px){
+@media (min-width: 768px) {
     .form-inline.financial-selectYear .form-group {
         min-width: auto !important;
     }

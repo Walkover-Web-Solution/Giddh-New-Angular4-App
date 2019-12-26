@@ -207,7 +207,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.isSellerUpdate.subscribe(a => {
             if (a) {
-                // console.log('isSellerUpdate', a);
                 this.amazonEditItemIdx = null;
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
             }

@@ -204,12 +204,13 @@ input {
     position: relative;
     z-index: 99;
     cursor: default;
+    top: 1px;
 }
 .inputWrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
-    height: 36px !important;
+    height: 37px !important;
 }
 .inputWrapper:before {
     position: absolute;
@@ -425,22 +426,23 @@ sh-select:focus {
     align-items: center;
     margin-right: 8px;
 }
-.clear-filter-btn{
+.clear-filter-btn {
     color: #1a237e;
     font-size: 14px;
 }
-.clear-filter-btn i{
+.clear-filter-btn i {
     font-size: 12px;
 }
 .search-ledger-field {
-    .btn-danger, .btn-success, .btn-warning {
+    .btn-danger,
+    .btn-success,
+    .btn-warning {
         font-size: 16px;
         width: 36px;
         padding: 0px;
         height: 36px;
     }
 }
-
 
 // reponsive
 @media only screen and (max-width: 1366px) {
@@ -465,8 +467,8 @@ sh-select:focus {
     .custom-tabs {
         display: block;
     }
-    .ledgHead table td[class*="col-"],toggle-switch
-    .ledgHead table td .select2-container {
+    .ledgHead table td[class*="col-"],
+    toggle-switch .ledgHead table td .select2-container {
         min-height: initial;
         height: initial;
         max-height: initial;

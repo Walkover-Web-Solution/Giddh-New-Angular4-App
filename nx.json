@@ -1,27 +1,27 @@
 {
-  "npmScope": "giddh-workspaces",
-  "implicitDependencies": {
-    "angular.json": "*",
-    "package.json": "*",
-    "tsconfig.json": "*",
-    "tslint.json": "*",
-    "nx.json": "*"
-  },
-  "projects": {
-    "libs": {
-      "tags": []
+    "npmScope": "giddh-workspaces",
+    "implicitDependencies": {
+        "angular.json": "*",
+        "package.json": "*",
+        "tsconfig.json": "*",
+        "tslint.json": "*",
+        "nx.json": "*"
     },
-    "xplat": {
-      "tags": []
-    },
-    "web-giddh": {
-      "tags": []
-    },
-    "web-giddh-e2e": {
-      "tags": []
-    },
-    "electron-giddh": {
-      "tags": []
+    "projects": {
+        "libs": {
+            "tags": []
+        },
+        "xplat": {
+            "tags": []
+        },
+        "web-giddh": {
+            "tags": []
+        },
+        "web-giddh-e2e": {
+            "tags": []
+        },
+        "electron-giddh": {
+            "tags": []
+        }
     }
-  }
 }
