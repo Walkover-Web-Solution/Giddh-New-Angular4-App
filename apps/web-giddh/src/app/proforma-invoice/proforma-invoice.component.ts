@@ -710,10 +710,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (results[0] && results[1]) {
                     let obj;
 
-                    //if (this.isLastInvoiceCopied) {
+                    if (this.isLastInvoiceCopied) {
+                        obj = {accountDetails: null, voucherDetails: null, templateDetails: null, entries: null, companyDetails: null, depositEntry: null, depositEntryToBeUpdated: null, depositAccountUniqueName: '', templateUniqueName: null, number: ''};
+                        let tempObj;
+
                         //if last invoice is copied then create new Voucher and copy only needed things not all things
-                        //obj = this.invFormData;
-                    //} else {
+                        obj.accountDetails = this.invFormData.accountDetails;
+                        obj.voucherDetails = this.invFormData.voucherDetails;
+                        obj.templateDetails = this.invFormData.templateDetails;
+                        obj.companyDetails = this.invFormData.companyDetails;
+                        obj.depositEntry = this.invFormData.depositEntry;
+                        obj.depositEntryToBeUpdated = this.invFormData.depositEntryToBeUpdated;
+                        obj.depositAccountUniqueName = this.invFormData.depositAccountUniqueName;
+                        obj.templateUniqueName = this.invFormData.templateUniqueName;
+                        obj.number = this.invFormData.number;
+
+                        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType)) {
+                            // parse normal response to multi currency response
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            tempObj = cloneDeep(convertedRes1) as VoucherClass;
+                        } else {
+                            tempObj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+                        }
+
+                        obj.entries = tempObj.entries;
+                    } else {
                         if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType)) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
@@ -728,7 +749,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         } else {
                             obj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
                         }
-                    //}
+                    }
 
                     if (obj.voucherDetails) {
 
@@ -743,22 +764,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                         }
 
-                        if (this.isLastInvoiceCopied) {
-                        //     // if it's copied from last invoice then copy all entries && depositEntry from result we got in voucher details api
-                        //     let result: VoucherClass | GenericRequestForGenerateSCD;
-
-                        //     if (!this.isProformaInvoice && !this.isEstimateInvoice) {
-                        //         result = ((results[1]) as VoucherClass);
-                        //     } else {
-                        //         result = ((results[1]) as GenericRequestForGenerateSCD).voucher;
-                        //     }
-
-                        //     obj.entries = result.entries;
-                        //     //obj.depositEntry = result.depositEntry || result.depositEntryToBeUpdated;
-                            obj.accountDetails = this.invFormData.accountDetails;
-                            obj.templateDetails = new TemplateDetailsClass();
-                            obj.voucherDetails.voucherNumber = "";
-                        }
                         //added update mode as causing trouble in multicurrency
                         if (obj.entries.length) {
                             obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
@@ -807,7 +812,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                         }
 
-                        if (!obj.accountDetails.billingDetails.state) {
+                        if (!this.isLastInvoiceCopied && !obj.accountDetails.billingDetails.state) {
                             obj.accountDetails.billingDetails.state = {};
                             if (this.isEstimateInvoice || this.isProformaInvoice) {
                                 obj.accountDetails.billingDetails.state.code = this.getNewStateCode(obj.accountDetails.billingDetails.stateCode);
@@ -816,7 +821,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             }
                             obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
                         }
-                        if (!obj.accountDetails.shippingDetails.state) {
+
+                        if (!this.isLastInvoiceCopied && !obj.accountDetails.shippingDetails.state) {
                             obj.accountDetails.shippingDetails.state = {};
                             if (this.isEstimateInvoice || this.isProformaInvoice) {
                                 obj.accountDetails.shippingDetails.state.code = this.getNewStateCode(obj.accountDetails.shippingDetails.stateCode);
@@ -826,15 +832,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
                         }
 
-                        if (!obj.voucherDetails.customerUniquename) {
+                        if (!this.isLastInvoiceCopied && !obj.voucherDetails.customerUniquename) {
                             obj.voucherDetails.customerUniquename = obj.accountDetails.uniqueName;
                         }
+
                         this.isCustomerSelected = true;
                         this.invoiceDataFound = true;
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
+                        console.log(this.invFormData);
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -2564,6 +2572,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string }) {
+        console.log(this.invFormData);
         this.accountUniqueName = obj.accountUniqueName;
         this.invoiceNo = obj.invoiceNo;
         this.isLastInvoiceCopied = true;
@@ -2973,7 +2982,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public async modifyMulticurrencyRes(result: any) {
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
-        await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+        if(!this.isLastInvoiceCopied) {
+            await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+        }
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
@@ -3126,8 +3137,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.voucherDetails = voucherDetails;
         voucherClassConversion.templateDetails = result.templateDetails;
 
-        this.isMulticurrencyAccount = result.multiCurrency;
-        this.customerCountryName = result.account.billingDetails.countryName;
+        if(!this.isLastInvoiceCopied) {
+            this.isMulticurrencyAccount = result.multiCurrency;
+            this.customerCountryName = result.account.billingDetails.countryName;
+        }
+        
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
 
         this.exchangeRate = result.exchangeRate;
@@ -3220,14 +3234,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * fetched to carry outn further operations
      *
      * @private
-     * @param {*} currency Currency code for the user
+     * @param {*} countryCode Country code for the user
      * @returns Promise to carry out further operations
      * @memberof ProformaInvoiceComponent
      */
-    private getUpdatedStateCodes(currency: any): Promise<any> {
+    private getUpdatedStateCodes(countryCode: any): Promise<any> {
         return new Promise((resolve: Function) => {
-            if (currency) {
-                this.salesService.getStateCode(currency).subscribe(resp => {
+            if (countryCode) {
+                this.salesService.getStateCode(countryCode).subscribe(resp => {
                     this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
                     resolve();
                 }, () => {
