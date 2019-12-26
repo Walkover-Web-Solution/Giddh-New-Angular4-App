@@ -223,7 +223,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
-        private _cdRf: ChangeDetectorRef) {
+        private _cdRf: ChangeDetectorRef
+        ) {
 
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();

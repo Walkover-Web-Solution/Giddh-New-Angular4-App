@@ -150,17 +150,15 @@
             </table>
 
         </div>
-        <div class="row warehouse-tax-field">
-            <!-- developer end work start-->
-            <div class="col-sm-4 col-xs-12" *ngIf="sourceWarehouse">
+        <div class="row warehouse-field">
+            <div *ngIf="currentTxn?.selectedAccount?.stock" class="col-sm-4 col-xs-12">
                 <div class="source-warehouse">
-                    <label>Soucre</label>
-                    <sh-select [options]="sourceOptions"></sh-select>
+                    <label>Select Warehouse</label>
+                    <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'" [options]="warehouses"></sh-select>
                 </div>
             </div>
-            <!-- developer end work finish -->
 
-            <div class="col-sm-8 col-xs-12" [ngClass]="{'col-sm-offset-4' : !sourceWarehouse}">
+            <div class="col-sm-8 col-xs-12" [ngClass]="{'col-sm-offset-4' : !(currentTxn?.selectedAccount?.stock)}">
                 <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
                     <input type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"

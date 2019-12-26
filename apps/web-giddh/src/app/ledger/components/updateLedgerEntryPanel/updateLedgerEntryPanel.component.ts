@@ -741,8 +741,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 // directly assign additional property
                 txn.selectedAccount = e.additional;
-                // Non stock item hide the warehouse section which is applicable only for stocks
-                this.selectedWarehouse = undefined;
+                delete txn.inventory;
+                // Non stock item got selected, search if there is any stock item along with non-stock item
+                const isStockItemPresent = this.isStockItemPresent();
+                if (!isStockItemPresent) {
+                    // None of the item were stock item, hide the warehouse section which is applicable only for stocks
+                    this.selectedWarehouse = undefined;
+                }
             }
 
             // check if need to showEntryPanel
@@ -1116,5 +1121,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
         let date = moment().format('DD-MM-YYYY');
         return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
+    }
+
+    /**
+     * Returns true, if any of the single item is stock
+     *
+     * @private
+     * @returns {boolean} True, if item array contains stock item
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private isStockItemPresent(): boolean {
+        for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
+            if (this.vm.selectedLedger.transactions[index].inventory) {
+                return true;
+            }
+        }
+        return false;
     }
 }
