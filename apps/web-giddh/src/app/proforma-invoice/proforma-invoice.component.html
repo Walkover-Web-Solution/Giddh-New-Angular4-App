@@ -443,9 +443,10 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
+                                        <!-- Enabled for CR/DR update flow -->
                                         <input type="text" name="accountDetails.invoiceNum"
                                             class="form-control invoiceDate attentionTo"
-                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode"
+                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
                                             [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">

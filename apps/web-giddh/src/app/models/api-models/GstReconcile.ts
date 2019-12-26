@@ -32,6 +32,7 @@ export interface GstReconcileInvoiceResult {
     placeOfSupply: string;
     stateCode: string;
     invoiceDate: string;
+    isError: boolean;
     ctin: string;
     sgst: number;
     cgst: number;
