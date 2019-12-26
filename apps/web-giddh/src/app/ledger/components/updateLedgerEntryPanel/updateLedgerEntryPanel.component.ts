@@ -469,10 +469,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }];
                             }
                             t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
-                            // Show warehouse drop only for stock items
+                            // Show warehouse dropdown only for stock items
                             const warehouseDetails = t.inventory.warehouse;
                             if (warehouseDetails) {
                                 this.selectedWarehouse = warehouseDetails.uniqueName;
+                            } else {
+                                // If warehouse details are not received show empty dropdown
+                                this.selectedWarehouse = '';
                             }
                         }
                     });
@@ -639,7 +642,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             txn.particular.name = undefined;
 
             // check if need to showEntryPanel
-            // first check with opened lager
+            // first check with opened ledger
             if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                 this.vm.showNewEntryPanel = true;
             } else {
@@ -728,6 +731,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             amount: 0,
                             rate
                         };
+                        // Stock item, show the warehouse drop down
+                        this.selectedWarehouse = '';
                     }
                     if (rate > 0 && txn.amount === 0) {
                         txn.amount = rate;
@@ -736,6 +741,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 // directly assign additional property
                 txn.selectedAccount = e.additional;
+                // Non stock item hide the warehouse section which is applicable only for stocks
+                this.selectedWarehouse = undefined;
             }
 
             // check if need to showEntryPanel
