@@ -28,11 +28,11 @@
                         <div class="row mrB2">
                             <div class="col-md-3">
                                 <label>
-                                    Date of Supply <span class="red-text">*</span>
+                                    {{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}} <span class="red-text">*</span>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Date of Supply" class="form-control" name="dateOfSupply"
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker
                                     [bsConfig]="bsConfig">
@@ -184,11 +184,11 @@
                         <div class="row mrB2">
                             <div class="col-md-3">
                                 <label>
-                                    Date of Supply <span class="red-text">*</span>
+                                    {{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}} <span class="red-text">*</span>
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Date of Supply" class="form-control" name="dateOfSupply"
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (bsValueChange)="selectDateOfSupply($event)" required readonly bsDatepicker>
                             </div>
@@ -722,7 +722,7 @@
                             <button type="button"
                                 class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}"
                                 [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
-                                (click)="submit()">{{editBranchTransferUniqueName ? 'Update Note' : 'Create Note'}}</button>
+                                (click)="submit()">{{editBranchTransferUniqueName ? 'Update' : 'Create'}}</button>
                         </div>
                     </div>
                 </section>
