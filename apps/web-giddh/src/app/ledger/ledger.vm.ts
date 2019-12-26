@@ -373,6 +373,7 @@ export interface IInventory {
     unit: IInventoryUnit;
     quantity: number;
     stock: INameUniqueName;
+    warehouse: WarehouseDetails;
 }
 
 export interface IInventoryUnit {

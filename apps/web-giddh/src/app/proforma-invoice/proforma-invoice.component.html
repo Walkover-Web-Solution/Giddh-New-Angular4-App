@@ -152,19 +152,15 @@
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <!--<div class="d-flex cp aquaColor" #copyPreviousEstimate
-                          *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isMulticurrencyAccount"
-                          style="align-items: center;margin-left: 2%">
-                          <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
-                            <i class="fa fa-files-o"></i>
-                            Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
-                          </a>
-
-                          <ng-container
-                            *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
-                          </ng-container>
-
-                        </div>-->
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length" style="align-items: center;margin-left: 2%">
+                                                    <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
+                                                        <i class="fa fa-files-o"></i>
+                                                        Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
+                                                    </a>
+                                                    <ng-container
+                                                        *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
+                                                    </ng-container>
+                                                </div>
                                                 <!-- endregion -->
                                             </div>
 
