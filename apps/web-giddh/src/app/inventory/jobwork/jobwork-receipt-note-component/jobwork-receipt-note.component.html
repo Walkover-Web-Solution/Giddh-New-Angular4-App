@@ -1,5 +1,5 @@
 <section class="reciptNote" autocomplete="off">
-    <div class="reciptNoteHeader d-flex pl-15 pr-15">
+    <div class="recipt-note-header d-flex pl-15 pr-15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
         <h3 *ngIf="branchTransferMode === 'transfernote'">Transfer Note</h3>
@@ -7,14 +7,14 @@
             <span class="icon-cross"></span>
         </div>
     </div>
-    <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2"
+    <div class="recipt-note-content">
+        <div class="recipt-note-radio-btn pr-15 pl-15 mb-2"
             *ngIf="!editBranchTransferUniqueName && branchTransferMode !== 'transfernote'">
             <span class="mrR1">
                 <input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
-                    name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
+                    name="transferType" id="multiple-products" style="margin-left: 0px !important;" type="radio"
                     (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                    for="multipleProducts">Multiple Products</label>
+                    for="multiple-products">Multiple Products</label>
             </span>
             <span>
                 <input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
@@ -25,9 +25,9 @@
             </span>
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multipleProductsWrapper " [ngClass]="{ 'mrT1' : branchTransferMode === 'transfernote' }">
+        <div class="multiple-products-wrapper " [ngClass]="{ 'mrT1' : branchTransferMode === 'transfernote' }">
             <form #newBranchTransferForm="ngForm" novalidate="">
-                <div class="multipleProducts row clearfix pl-15 pr-15">
+                <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
                         <div class="row mrB2">
                             <div class="col-md-3">
@@ -56,7 +56,22 @@
                                     (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <!-- developer end start -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>
+                                    Delivery Challan #
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- developer end finsih -->
+                        <!--
+                            commented for now
+                            <div *ngIf="transferType === 'senders'" class="row mrB2">
                             <div class="col-md-3">
                                 <label>
                                     SKU Code
@@ -66,7 +81,7 @@
                                 <input name="productSkuCode" class="form-control" maxlength="50"
                                     [(ngModel)]="branchTransfer.products[0].skuCode">
                             </div>
-                        </div>
+                        </div> -->
                         <div *ngIf="transferType === 'senders'" class="row mrB2">
                             <div class="col-md-3">
                                 <label>
@@ -78,6 +93,81 @@
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber">
                             </div>
                         </div>
+                        <!-- need to show when delivery challan on multiple recivers (developer end) -->
+                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's Name <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <sh-select #destinationName name="destinationName"
+                                    [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true"
+                                    [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
+                                    (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();"
+                                    required [disabled]="isUpdateMode"></sh-select>
+                                <span class="sender-detail-link"
+                                    (click)="toggleSenderDetailAccountAsidePane($event)"><img
+                                        src="{{imgPath}}customer-details.svg">Receiver’s
+                                    Details</span>
+                            </div>
+                        </div>
+                        <!-- need to show when delivery challan on multiple recivers (developer end) -->
+                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                            <div class="col-md-3 nowrap">
+                                <label class="nowrap">
+                                    Receiver's Warehouse <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <sh-select #destinationWarehouse name="destinationWarehouse"
+                                    [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]"
+                                    [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
+                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
+                                    (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0);"
+                                    required></sh-select>
+                            </div>
+                        </div>
+                        <!-- need to show when delivery challan on multiple recivers (developer end) -->
+                        <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's {{formFields['taxName'].label}}
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="destinationTaxNumber"
+                                    placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField
+                                    (change)="checkTaxNumberValidation(receiverGstNumberField);"
+                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
+                            </div>
+                        </div>
+                        <!-- need to show when delivery challan on multiple recivers (developer end) -->
+                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's Address
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea class="form-control" name="destinationAddress"
+                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
+                            </div>
+                        </div>
+                        <!-- developer end start -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>Reference Docs <span class="text-light-2">(Optional)</span></label>
+                            </div>
+                            <div class="col-md-4">
+                                <sh-select [options]="selectNote">
+
+                                </sh-select>
+
+                            </div>
+                        </div>
+
+                        <!-- developer end finish -->
                         <div class="row mrB2">
                             <div class="col-md-3">
                                 <label>
@@ -88,6 +178,12 @@
                                 <div class="dropdown-arrow">
                                     <input name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany"
                                         required disabled>
+
+                                    <span class="sender-detail-link"
+                                        (click)="toggleSenderDetailAccountAsidePane($event)"><img
+                                            src="{{imgPath}}customer-details.svg">Sender’s
+                                        Details</span>
+
                                 </div>
                             </div>
                         </div>
@@ -130,59 +226,8 @@
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
-                            <div class="col-md-3">
-                                <label>
-                                    Receiver's Name <span class="red-text">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <sh-select #destinationName name="destinationName"
-                                    [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true"
-                                    [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
-                                    (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();"
-                                    required [disabled]="isUpdateMode"></sh-select>
-                            </div>
-                        </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
-                            <div class="col-md-3 nowrap">
-                                <label class="nowrap">
-                                    Receiver's Warehouse <span class="red-text">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <sh-select #destinationWarehouse name="destinationWarehouse"
-                                    [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]"
-                                    [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async"
-                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0);"
-                                    required></sh-select>
-                            </div>
-                        </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
-                            <div class="col-md-3">
-                                <label>
-                                    Receiver's {{formFields['taxName'].label}}
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" class="form-control" name="destinationTaxNumber"
-                                    placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField
-                                    (change)="checkTaxNumberValidation(receiverGstNumberField);"
-                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
-                            </div>
-                        </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
-                            <div class="col-md-3">
-                                <label>
-                                    Receiver's Address
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <textarea class="form-control" name="destinationAddress"
-                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
-                            </div>
-                        </div>
+
+
                     </div>
                     <div class="col-sm-6" *ngIf="branchTransferMode === 'receiptnote'">
                         <div class="row mrB2">
@@ -251,22 +296,27 @@
                                     Sender's Name <span class="red-text">*</span>
                                 </label>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 pos-rel">
                                 <sh-select #defaultSource name="sourceName" [isFilterEnabled]="true"
                                     [forceClearReactive]="forceClear$ | async"
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName" [options]="branches$ | async"
                                     (selected)="selectCompany($event, 'sources', 0)" required [disabled]="isUpdateMode"
                                     (selected)="focusSourceWarehouse()"></sh-select>
                                 <span class="sender-detail-link"
-                                    (click)="toggleSenderDetailAccountAsidePane($event)">Sender’s
+                                    (click)="toggleSenderDetailAccountAsidePane($event)"><img
+                                        src="{{imgPath}}customer-details.svg">Sender’s
                                     Details</span>
+
+
+                                <p class="copy-previous"> <span class="icon-copy-icon"></span> Copy Previous Receipt
+                                    Note</p>
                             </div>
                         </div>
 
                         <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
                             <div class="col-md-3">
                                 <label>
-                                    Sender's {{formFields['taxName'].label}} <span class="red-text">*</span>
+                                    Sender's {{formFields['taxName'].label}}
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -287,17 +337,6 @@
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
-                        <div class="row mrB2">
-                            <div class="col-md-3">
-                                <label>
-                                    Receiver's Name <span class="red-text">*</span>
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany"
-                                    required disabled>
-                            </div>
-                        </div>
                         <!-- developer end start -->
                         <div class="row mrB2">
                             <div class="col-md-3">
@@ -312,11 +351,27 @@
                         </div>
 
                         <!-- developer end finish -->
+                        <div class="row mrB2">
+                            <div class="col-md-3">
+                                <label>
+                                    Receiver's Name <span class="red-text">*</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany"
+                                    required disabled>
+                                <span class="sender-detail-link"
+                                    (click)="toggleSenderDetailAccountAsidePane($event)"><img
+                                        src="{{imgPath}}customer-details.svg"> Receiver’s Details</span>
+                            </div>
+                        </div>
+
 
                         <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
                             <div class="col-md-3">
                                 <label>
-                                    Receiver's {{formFields['taxName'].label}} <span class="red-text">*</span>
+                                    Receiver's {{formFields['taxName'].label}}
+
                                 </label>
                             </div>
                             <div class="col-md-4">
@@ -436,7 +491,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="rightTotalAmount">
+                        <div class="right-total-amount">
                             <p>Total Amount</p>
                             <h3>{{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}</h3>
                         </div>
@@ -460,9 +515,11 @@
                                 <th width="2%">#</th>
                                 <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
                                 <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
-                                <th width="20%" class="text-right">Qty/Unit</th>
-                                <th width="20%" class="text-right">Rate</th>
+                                <th width="10%" class="text-right">Qty/Unit</th>
+                                <th width="10%" class="text-right">Rate</th>
                                 <th width="20%" class="text-right">Amount</th>
+                                <th width="20%" class="text-right">Tax</th>
+                                <th width="30%" class="text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="transferType === 'products'">
@@ -559,8 +616,11 @@
                                             {{product.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
+
+                                <!-- developer end TAX & TOTAL starts -->
                                 <td>
                                     <div *ngIf="activeRow === i">
+                                        <!-- need to add tax control here -->
                                         <input type="text" class="form-control text-right" [validation]="false"
                                             [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
                                     </div>
@@ -578,6 +638,9 @@
                                     </div>
                                 </td>
 
+                                <!-- developer end TAX & TOTAL finish -->
+
+
                                 <td class="pos-rel">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="productAmount{{i}}"
@@ -589,7 +652,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{product.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i
                                                 class="fa fa-trash"></i></a>
                                     </div>
@@ -625,6 +688,12 @@
                                         <textarea class="form-control" *ngIf="destination.warehouse.uniqueName"
                                             name="destinationWarehouseAddress{{i}}"
                                             [(ngModel)]="destination.warehouse.address"></textarea>
+
+                                        <span class="sender-detail-link"
+                                            (click)="toggleSenderDetailAccountAsidePane($event)"><img
+                                                src="{{imgPath}}customer-details.svg">Receiver’s
+                                            Details</span>
+
                                     </div>
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="destination.name">{{destination.name}}</div>
@@ -671,11 +740,33 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+
+                                </td>
+                                <!-- developer end TAX & TOTAL starts -->
+                                <td>
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">
                                             <i class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
+
+                                <!-- developer end TAX & TOTAL finish -->
                             </tr>
                         </tbody>
                         <tbody *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'">
@@ -736,7 +827,7 @@
                                             {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td>
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="sourceAmount{{i}}"
                                             decimalDigitsDirective readonly
@@ -748,14 +839,36 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+
+                                </td>
+                                <!-- developer end TAX & TOTAL starts -->
+                                <td>
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                </td>
+                                <td class="pos-rel">
+                                    <div *ngIf="activeRow === i">
+                                        <input type="text" class="form-control text-right" [validation]="false"
+                                            [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
+                                    </div>
+                                    <div *ngIf="activeRow !== i">
+                                        <div class="text-right"></div>
+                                    </div>
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i
                                                 class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
+
+                                <!-- developer end TAX & TOTAL finish -->
                             </tr>
                         </tbody>
-                        <div class="addNewLine mrT1">
+                        <div class="add-new-line mrT1">
                             <a class="multipleRecivers" (click)="addReceiver()"
                                 *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>
@@ -956,4 +1069,5 @@
 <!--  -->
 <div class="aside-overlay" *ngIf="senderDetailAccountAsidePane === 'in'"></div>
 <job-work-sender-aside *ngIf="senderDetailAccountAsidePane === 'in'" [class]="senderDetailAccountAsidePane"
-    [@slideInOut]="senderDetailAccountAsidePane"></job-work-sender-aside>
+    [@slideInOut]="senderDetailAccountAsidePane" (closeAsideEvent)="toggleSenderDetailAccountAsidePane($event)">
+</job-work-sender-aside>

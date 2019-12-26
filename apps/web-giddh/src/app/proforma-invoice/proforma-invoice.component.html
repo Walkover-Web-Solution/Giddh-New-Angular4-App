@@ -446,7 +446,8 @@
                                         <!-- Enabled for CR/DR update flow -->
                                         <input type="text" name="accountDetails.invoiceNum"
                                             class="form-control invoiceDate attentionTo"
-                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
+                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                            [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
                                             [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
@@ -777,7 +778,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
@@ -1085,7 +1086,7 @@
 
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">

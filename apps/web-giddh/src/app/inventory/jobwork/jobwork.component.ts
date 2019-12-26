@@ -444,8 +444,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
             event.preventDefault();
         }
         this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
+
         this.toggleBodyClass();
     }
+
 
 
 
@@ -671,11 +673,18 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.openModal();
     }
 
+
+
     public openModal(): void {
         this.modalRef = this.modalService.show(
             this.receiptnotetemplate,
             Object.assign({}, { class: 'modal-lg reciptNoteModal mb-0 pt-85' })
+
         );
+
+    }
+    hideModal() {
+        this.modalRef.hide();
     }
 
 }

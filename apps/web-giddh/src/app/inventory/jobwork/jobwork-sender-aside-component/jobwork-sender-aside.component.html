@@ -6,10 +6,16 @@
         </div>
     </div>
 
+    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+
     <div class="aside-body">
-        <account-add-new-details #addAccountNewComponent class="mrT4" [activeGroupUniqueName]="'sales'"
-            [isDebtorCreditor]="false" [isGstEnabledAcc]="false" [isHsnSacEnabledAcc]="false" [showBankDetail]="false">
-        </account-add-new-details>
+        <div class="aside-pane-form">
+            <account-add-new-details #addAccountNewComponent class="mrT4" [activeGroupUniqueName]="'sales'"
+                [isDebtorCreditor]="false" [isGstEnabledAcc]="false" [isHsnSacEnabledAcc]="false"
+                [showBankDetail]="false">
+            </account-add-new-details>
+        </div>
+
     </div>
 
 </div>

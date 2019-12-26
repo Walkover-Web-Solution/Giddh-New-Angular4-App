@@ -259,7 +259,7 @@
 <ng-template #receiptnotetemplate>
     <div class="recept-modal">
         <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
-            <job-work-receipt-note [branchTransferMode]="'receiptnote'">
+            <job-work-receipt-note [branchTransferMode]="'receiptnote'" (hideModal)="hideModal(true)">
             </job-work-receipt-note>
         </div>
     </div>

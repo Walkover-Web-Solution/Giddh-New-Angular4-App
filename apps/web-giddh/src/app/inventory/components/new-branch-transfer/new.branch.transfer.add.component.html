@@ -1,18 +1,18 @@
 <section class="reciptNote" autocomplete="off">
-    <div class="reciptNoteHeader d-flex pl-15 pr-15">
+    <div class="recipt-note-header d-flex pl-15 pr-15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
         <div class="closeRecipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
     </div>
-    <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
+    <div class="recipt-note-content">
+        <div class="recipt-note-radio-btn pr-15 pl-15 mb-2" *ngIf="!editBranchTransferUniqueName">
             <span class="mrR1"><input
                     [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
-                    name="transferType" id="multipleProducts" style="margin-left: 0px !important;" type="radio"
+                    name="transferType" id="multiple-products" style="margin-left: 0px !important;" type="radio"
                     (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'"><label
-                    for="multipleProducts">Multiple Products</label></span>
+                    for="multiple-products">Multiple Products</label></span>
             <span><input [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
                     name="transferType" id="multipleSenders" style="margin-left: 0px !important;" type="radio"
                     (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'"><label
@@ -21,9 +21,9 @@
                     Receivers</label></span>
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multipleProductsWrapper ">
+        <div class="multiple-products-wrapper ">
             <form #newBranchTransferForm="ngForm" novalidate="">
-                <div class="multipleProducts row clearfix pl-15 pr-15">
+                <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-sm-6" *ngIf="branchTransferMode === 'deliverynote'">
                         <div class="row mrB2">
                             <div class="col-md-3">
@@ -336,7 +336,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="rightTotalAmount">
+                        <div class="right-total-amount">
                             <p>Total Amount</p>
                             <h3>{{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}</h3>
                         </div>
@@ -468,7 +468,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{product.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i
                                                 class="fa fa-trash"></i></a>
                                     </div>
@@ -548,7 +548,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">
                                             <i class="fa fa-trash"></i></a>
                                     </div>
@@ -625,14 +625,14 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i
                                                 class="fa fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
-                        <div class="addNewLine mrT1">
+                        <div class="add-new-line mrT1">
                             <a class="multipleRecivers" (click)="addReceiver()"
                                 *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>

@@ -33,6 +33,7 @@ import { NgForm } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 
 @Component({
     selector: 'job-work-receipt-note',
@@ -77,7 +78,9 @@ export class JobworkReceiptNote implements OnInit {
     @ViewChild('destinationQuantity') public destinationQuantity;
     @ViewChild('senderGstNumberField') public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField') public receiverGstNumberField: HTMLInputElement;
+    @ViewChild('TaxControlComponent') public taxControlComponent: TaxControlComponent;
 
+    public imgPath: string = '';
     public hideTransferNoteRadioBtn: boolean = false;
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -157,6 +160,7 @@ export class JobworkReceiptNote implements OnInit {
             this.allowAutoFocusInField = true;
             this.focusDefaultSource();
         }
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     public ngOnChanges(changes: SimpleChanges) {

@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.reciptNoteHeader {
+.recipt-note-header {
     display: flex;
     justify-content: space-between;
     background-color: #fff;
@@ -14,20 +14,20 @@
 section.reciptNote {
     background-color: #fff;
 }
-.reciptNoteRadioBtn {
+.recipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
     color: #1c1c1c;
     border-bottom: 1px solid #c4c4c4;
 }
-.reciptNoteContent {
+.recipt-note-content {
     font-size: 14px;
     height: 86vh;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.multipleProducts label {
+.multiple-products label {
     vertical-align: middle;
     line-height: 2.5;
     color: #1c1c1c;
@@ -95,21 +95,21 @@ tfoot td .tableSec.form-group {
     margin-top: 7px;
     cursor: pointer;
 }
-.rightTotalAmount {
+.right-total-amount {
     text-align: right;
     color: #1c1c1c;
 }
 
-.rightTotalAmount h3 {
+.right-total-amount h3 {
     font-size: 26px;
     font-family: opensans-semibold;
 }
 
-.multipleProductsWrapper table thead,
+.multiple-products-wrapper table thead,
 .multipleReciverWrapper table thead {
     border-top: 1px solid #d9d9d9;
 }
-.multipleProductsWrapper table tbody,
+.multiple-products-wrapper table tbody,
 .multipleReciverWrapper table tbody {
     border-bottom: 1px solid #d9d9d9;
 }
@@ -299,13 +299,13 @@ tfoot td .tableSec.form-group {
     width: 100%;
     max-width: 1140px;
 }
-.trashIconDlt {
+.trash-icon-delete {
     position: absolute;
     right: -30px;
     top: 0;
     transform: translateY(16px);
 }
-.trashIconDlt a {
+.trash-icon-delete a {
     color: #999;
     border: 1px solid #999;
     border-radius: 50%;
@@ -316,7 +316,7 @@ tfoot td .tableSec.form-group {
     justify-content: center;
     align-items: center;
 }
-.addNewLine.mrT1 {
+.add-new-line.mrT1 {
     position: absolute;
     width: 100%;
 }
@@ -415,4 +415,28 @@ tfoot td .tableSec.form-group {
 .sender-detail-link {
     font-size: 12px;
     color: $btnLink;
+    display: flex;
+    align-items: center;
+    cursor: default;
+    margin-top: 5px;
+
+    img {
+        margin-right: 5px;
+    }
+}
+.copy-previous {
+    position: absolute;
+    right: 0;
+    top: 9px;
+    transform: translateX(170px);
+    font-size: 12px;
+    color: $btnLink;
+    display: flex;
+    align-items: center;
+    cursor: default;
+
+    span {
+        font-size: 14px;
+        margin-right: 2px;
+    }
 }
