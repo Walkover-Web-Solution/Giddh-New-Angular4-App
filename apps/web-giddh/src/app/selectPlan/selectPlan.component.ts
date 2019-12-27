@@ -7,7 +7,7 @@ import { Route } from '@angular/compiler/src/core';
 import { CompanyActions } from '../actions/company.actions';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyCreateRequest, CreateCompanyUsersPlan, SubscriptionRequest, SocketNewCompanyRequest, CompanyResponse } from '../models/api-models/Company';
+import { CompanyCreateRequest, CreateCompanyUsersPlan, SubscriptionRequest, CompanyResponse } from '../models/api-models/Company';
 import { ReplaySubject, Observable } from 'rxjs';
 import { UserDetails } from '../models/api-models/loginModels';
 import { takeUntil } from 'rxjs/operators';
@@ -35,7 +35,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     public subscriptionPrice: any = '';
     public UserCurrency: string = '';
 
-    public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
     public companies$: Observable<CompanyResponse[]>;
     public isCompanyCreationInProcess$: Observable<boolean>;
     public isRefreshing$: Observable<boolean>;

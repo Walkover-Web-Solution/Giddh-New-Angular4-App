@@ -1,40 +1,53 @@
-import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { AppState } from '../../../store';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { CompanyActions } from '../../../actions/company.actions';
-import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
-import { ToasterService } from '../../../services/toaster.service';
-import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
-import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
-import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { LedgerService } from '../../../services/ledger.service';
-import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { forEach, sumBy } from '../../../lodash-optimized';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { LoaderService } from '../../../loader/loader.service';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { ResizedEvent } from 'angular-resize-event';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
+import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { LoaderService } from '../../../loader/loader.service';
+import { forEach, sumBy } from '../../../lodash-optimized';
+import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
-import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { LedgerService } from '../../../services/ledger.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
-import { ResizedEvent } from 'angular-resize-event';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
+import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 
 @Component({
     selector: 'new-ledger-entry-panel',
@@ -90,10 +103,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount') public discountControl: LedgerDiscountComponent;
     @ViewChild('tax') public taxControll: TaxControlComponent;
 
-    public sourceOptions = [
-        { label: 'Vijay Nagar', value: 'Vijay Nagar' },
-        { label: 'Palasia Square', value: 'Palasia Square' }
-    ]
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
@@ -129,23 +138,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
     public totalTdElementWidth: number = 0;
+    /** Default warehouse for a company */
+    public defaultWarehouse: string;
+    /** List of warehouses for a company */
+    public warehouses: Array<any>;
+    /** Currently selected warehouse */
+    public selectedWarehouse: any;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    private fetchedBaseCurrency: string = null;
-    private fetchedConvertToCurrency: string = null;
-    private fetchedConvertedRate: number = null;
-
     constructor(private store: Store<AppState>,
         private _ledgerService: LedgerService,
-        private _ledgerActions: LedgerActions,
-        private _companyActions: CompanyActions,
         private cdRef: ChangeDetectorRef,
         private _toasty: ToasterService,
         private _loaderService: LoaderService,
-        private _settingsTagActions: SettingsTagActions,
-        private _settingsProfileActions: SettingsProfileActions) {
+        private settingsUtilityService: SettingsUtilityService
+    ) {
         this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
@@ -199,6 +208,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
+        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                this.warehouses = warehouseData.formattedWarehouses;
+                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.selectedWarehouse = String(this.defaultWarehouse);
+            }
+        });
+
         this.tags$ = this.store.select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
@@ -244,15 +262,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
                 if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
                     let appTaxes = [];
-
                     if (this.activeAccount && this.activeAccount.applicableTaxes) {
                         this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
                         this.taxListForStock = appTaxes;
                     }
-
                 }
             } else {
                 this.taxListForStock = [];
+            }
+
+            if (!this.currentTxn.selectedAccount.stock) {
+                this.selectedWarehouse = this.defaultWarehouse;
             }
 
             let companyTaxes: TaxResponse[] = [];
@@ -488,6 +508,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        // Add warehouse to all the stock entries
+        this.blankLedger.transactions.map((transaction) => {
+            if (transaction.inventory) {
+                transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
+            }
+        });
         this.saveBlankLedger.emit(true);
     }
 

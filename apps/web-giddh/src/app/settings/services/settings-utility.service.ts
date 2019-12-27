@@ -53,10 +53,9 @@ export class SettingsUtilityService {
         let defaultWarehouse: any = {};
         const formattedWarehouses = warehouses.map((warehouse: any) => {
             if (warehouse.isDefault) {
-                defaultWarehouse = warehouses;
+                defaultWarehouse = warehouse;
             }
             return { ...warehouse, label: warehouse.name, value: warehouse.uniqueName };
-
         });
         return { formattedWarehouses, defaultWarehouse };
     }

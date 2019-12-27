@@ -37,11 +37,14 @@ export class DownloadVoucherComponent implements OnInit {
     }
 
     public onDownloadInvoiceEvent() {
+        // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
+        let voucherType = this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
         let dataToSend = {
             voucherNumber: [this.selectedItem.voucherNumber],
             typeOfInvoice: this.invoiceType,
-            voucherType: this.selectedItem.voucherType
+            voucherType: voucherType
         };
+
         this._invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend)
             .subscribe(res => {
                 if (res) {

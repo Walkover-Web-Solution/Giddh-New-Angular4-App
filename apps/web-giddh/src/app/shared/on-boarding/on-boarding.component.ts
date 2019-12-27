@@ -18,7 +18,6 @@ import { CountryRequest } from '../../models/api-models/Common';
 import {
     CompanyCreateRequest,
     CompanyResponse,
-    SocketNewCompanyRequest,
     StateDetailsRequest,
 } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
@@ -88,7 +87,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         amountPaid: '',
         razorpaySignature: ''
     };
-    public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
     public companies$: Observable<CompanyResponse[]>;
     public isCompanyCreationInProcess$: Observable<boolean>;
     public isCompanyCreated$: Observable<boolean>;
@@ -204,22 +202,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             this._generalService.createNewCompany = this.company;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
             this.closeCompanyModal.emit({ isFirstStepCompleted: true });
-            // this._route.navigate(['welcome']);
-            if (companies) {
-                if (companies.length === 0) {
-                    this.fireSocketCompanyCreateRequest();
-                }
-            }
         }
-    }
-
-    public fireSocketCompanyCreateRequest() {
-        this.socketCompanyRequest.CompanyName = this.company.name;
-        this.socketCompanyRequest.Timestamp = Date.now();
-        this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-        this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
-        this.socketCompanyRequest.Name = this._generalService.user.name;
-        this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
     }
 
     public closeModal() {
