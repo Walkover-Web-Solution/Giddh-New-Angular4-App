@@ -457,7 +457,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');
-            // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
         });
     }
     private getRedirectUrl(baseHref: string) {
@@ -475,7 +474,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
               for PROD. This flag need to be removed once all the above URIs become secure */
             this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
             return 'https://app.giddh.com/pages/invoice/preview/settings';
-            // return 'https://app.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
         }
     }
 
