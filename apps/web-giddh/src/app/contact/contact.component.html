@@ -419,7 +419,7 @@
 <ng-template #mainTable>
 
     <div class="onMobileView mobilecardwrapper table-responsive vendorPage">
-        <table class="table  basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
+        <table class="table   aging-table marginBottom260 giddh-table" *ngIf="activeTab !== 'aging'">
             <thead>
                 <tr class="aging-table-top">
                     <td></td>
@@ -465,14 +465,14 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3" *ngIf="showFieldFilter.openingBalance">
+                    <th class="text-right" *ngIf="showFieldFilter.openingBalance">
                         <div class="d-flex justify-content-end align-items-center">Opening
                             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
                             </ng-container>
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">
                             {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
                             <ng-container
@@ -481,7 +481,7 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">
                             {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
                             <ng-container
@@ -490,7 +490,7 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">Closing
                             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
                             </ng-container>
