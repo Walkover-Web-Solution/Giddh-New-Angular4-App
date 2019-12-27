@@ -600,7 +600,7 @@
                     <!-- make it functional (Developer end) -->
                     <div class="row mrB1">
                         <!-- Warehouse name can be empty therefore check specifically with falsy values -->
-                        <div *ngIf="selectedWarehouse !== undefined && selectWarehouse !== null" class="col-sm-6 pdR1">
+                        <div *ngIf="shouldShowWarehouse" class="col-sm-6 pdR1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
                                 <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"

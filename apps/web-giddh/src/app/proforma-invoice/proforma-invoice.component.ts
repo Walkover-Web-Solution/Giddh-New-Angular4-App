@@ -269,6 +269,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public defaultWarehouse: string;
     /** Stores the unique name of selected warehouse */
     public selectedWarehouse: string;
+    /** True, if warehouse drop down should be displayed */
+    public shouldShowWarehouse: boolean;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -486,9 +488,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.resetInvoiceForm(this.invoiceForm);
                 if (!this.isMultiCurrencyModule()) {
                     // Hide the warehouse section if the module is other than multi-currency supported modules
-                    this.selectedWarehouse = undefined;
+                    this.shouldShowWarehouse = false;
                 } else {
-                    this.selectedWarehouse = '';
+                    this.shouldShowWarehouse = true;
                 }
             }
 
@@ -1799,6 +1801,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
                 txn.isStockTxn = true;
+                // Stock item, show the warehouse drop down if it is hidden
+                if (!this.shouldShowWarehouse) {
+                    this.shouldShowWarehouse = true;
+                }
             } else {
                 txn.isStockTxn = false;
                 txn.stockUnit = null;
@@ -1809,6 +1815,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 txn.quantity = null;
                 txn.amount = 0;
                 txn.taxableValue = 0;
+                this.handleWarehouseVisibility();
             }
             txn.sacNumber = null;
             txn.hsnNumber = null;
@@ -1977,6 +1984,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this._toasty.warningToast('Unable to delete a single transaction');
         }
+        this.handleWarehouseVisibility();
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -2978,7 +2986,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             delete obj.account.customerName;
         }
-        obj['warehouse'] = { name: '', uniqueName: this.selectedWarehouse };
+        if (this.shouldShowWarehouse) {
+            obj['warehouse'] = { name: '', uniqueName: this.selectedWarehouse };
+        }
         return obj;
     }
 
@@ -3399,10 +3409,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 if (warehouse) {
+                    // Update flow is carried out
                     this.selectedWarehouse = warehouse.uniqueName;
                 } else {
+                    // Create flow is carried out
                     this.selectedWarehouse = (this.isUpdateMode) ? '' : String(this.defaultWarehouse);
                 }
+                this.shouldShowWarehouse = true;
             }
         });
     }
@@ -3416,5 +3429,43 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private isMultiCurrencyModule(): boolean {
         return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
+    }
+
+
+    /**
+     * Returns true, if any of the single item is stock
+     *
+     * @private
+     * @returns {boolean} True, if item entries contains stock item
+     * @memberof ProformaInvoiceComponent
+     */
+    private isStockItemPresent(): boolean {
+        const entries = this.invFormData.entries;
+        for (let entry = 0; entry < entries.length; entry++) {
+            const transactions = entries[entry].transactions;
+            for (let transaction = 0; transaction < transactions.length; transaction++) {
+                const item = transactions[transaction];
+                if (item.isStockTxn) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Handles the warehouse visibility when items in the list
+     * changes from stock to non-stock or vice-versa
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private handleWarehouseVisibility(): void {
+        // Non stock item got selected, search if there is any stock item along with non-stock item
+        const isStockItemPresent = this.isStockItemPresent();
+        if (!isStockItemPresent) {
+            // None of the item were stock item, hide the warehouse section which is applicable only for stocks
+            this.shouldShowWarehouse = false;
+        }
     }
 }
