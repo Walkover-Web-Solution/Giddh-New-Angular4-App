@@ -1691,10 +1691,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
             this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
-            if (this.calculatedRoundOff === 0.5) {
-                this.calculatedRoundOff = -this.calculatedRoundOff;
-            }
-            calculatedGrandTotal = calculatedGrandTotal + this.calculatedRoundOff;
+            // if (this.calculatedRoundOff === 0.5) {
+            //     this.calculatedRoundOff = -this.calculatedRoundOff;
+            // }
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+        } else if (calculatedGrandTotal === 0) {
+            this.calculatedRoundOff = 0;
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
         this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
