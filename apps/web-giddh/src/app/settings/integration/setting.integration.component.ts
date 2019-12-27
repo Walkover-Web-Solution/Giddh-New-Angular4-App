@@ -496,11 +496,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         } else if (baseHref.indexOf('stage.giddh.com') > -1) {
             return 'http://stage.giddh.com/pages/settings/integration/email';
         } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            // return 'https://app.giddh.com/pages/settings/integration/email';
-            // return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
-
-            return 'https://app.giddh.com/pages/settings/integration/email';
-
+            return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
         } else {
             return 'https://app.giddh.com/pages/settings/integration/email';
         }
