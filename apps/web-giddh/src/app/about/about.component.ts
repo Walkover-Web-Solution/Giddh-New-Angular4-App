@@ -7,10 +7,10 @@ import { Store } from '@ngrx/store';
 import { CompanyActions } from '../actions/company.actions';
 
 @Component({
-  selector: 'about',
-  styles: [`
+    selector: 'about',
+    styles: [`
   `],
-  template: `
+    template: `
     <h1>About</h1>
     <div>
       For hot module reloading run
@@ -26,45 +26,45 @@ import { CompanyActions } from '../actions/company.actions';
 })
 export class AboutComponent implements OnInit {
 
-  public localState: any;
+    public localState: any;
 
-  constructor(
-    public route: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions
-  ) {
-  }
+    constructor(
+        public route: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions
+    ) {
+    }
 
-  public ngOnInit() {
-    this.route
-      .data
-      .subscribe((data: any) => {
+    public ngOnInit() {
+        this.route
+            .data
+            .subscribe((data: any) => {
+                /**
+                 * Your resolved data from route.
+                 */
+                this.localState = data.yourData;
+            });
+
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'about';
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         /**
-         * Your resolved data from route.
+         * static data that is bundled
+         * var mockData = require('assets/mock-data/mock-data.json');
+         * console.log('mockData', mockData);
+         * if you're working with mock data you can also use http.get('assets/mock-data/mock-data.json')
          */
-        this.localState = data.yourData;
-      });
+        this.asyncDataWithWebpack();
+    }
 
-    let companyUniqueName = null;
-    this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = companyUniqueName;
-    stateDetailsRequest.lastState = 'about';
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    /**
-     * static data that is bundled
-     * var mockData = require('assets/mock-data/mock-data.json');
-     * console.log('mockData', mockData);
-     * if you're working with mock data you can also use http.get('assets/mock-data/mock-data.json')
-     */
-    this.asyncDataWithWebpack();
-  }
+    private asyncDataWithWebpack() {
+        /**
+         * you can also async load mock data with 'es6-promise-loader'
+         * you would do this if you don't want the mock-data bundled
+         * remember that 'es6-promise-loader' is a promise
+         */
 
-  private asyncDataWithWebpack() {
-    /**
-     * you can also async load mock data with 'es6-promise-loader'
-     * you would do this if you don't want the mock-data bundled
-     * remember that 'es6-promise-loader' is a promise
-     */
-
-  }
+    }
 
 }

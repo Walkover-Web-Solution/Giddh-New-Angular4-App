@@ -1,103 +1,115 @@
 <div class="box clearfix mrT1">
-    <div class="row">
-        <h1 class="section_head pdT0 col-xs-6">Create Discount</h1>
-    </div>
+	<div class="row">
+		<h1 class="section_head pdT0 col-xs-6">Create Discount</h1>
+	</div>
 
-    <form #discountForm="ngForm" novalidate (submit)="submit()" class="discountFormSettingTab">
-        <div class="row ">
-            <div class="form-group col-sm-2 col-md-2 col-xs-12">
-                <label>Select Discount</label><br>
-                <sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type" [(ngModel)]="createRequest.type" [placeholder]="'Select Type'" [ItemHeight]="33"></sh-select>
-            </div>
+	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discountFormSettingTab">
+		<div class="row ">
+			<div class="form-group col-sm-2 col-md-2 col-xs-12">
+				<label>Select Discount</label><br>
+				<sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
+					[(ngModel)]="createRequest.type" [placeholder]="'Select Type'" [ItemHeight]="33"></sh-select>
+			</div>
 
 
-            <ng-container *ngIf="createRequest.type">
-                <div class="form-group col-sm-2 col-md-2 col-xs-12">
-                    <label>Name</label>
-                    <input type="text" [(ngModel)]="createRequest.name" name="name" placeholder="Name" class="form-control" />
-                </div>
+			<ng-container *ngIf="createRequest.type">
+				<div class="form-group col-sm-2 col-md-2 col-xs-12">
+					<label>Name</label>
+					<input type="text" [(ngModel)]="createRequest.name" name="name" placeholder="Name"
+						class="form-control" />
+				</div>
 
-                <div class="form-group col-sm-2 col-md-2 col-xs-12">
-                    <label>Value</label>
-                    <input type="text" [(ngModel)]="createRequest.discountValue" name="value" placeholder="Value" class="form-control" />
-                </div>
+				<div class="form-group col-sm-2 col-md-2 col-xs-12">
+					<label>Value</label>
+					<input type="text" [(ngModel)]="createRequest.discountValue" name="value" placeholder="Value"
+						class="form-control" />
+				</div>
 
-                <div class="form-group col-sm-2 col-md-2 col-xs-12">
-                    <label>Linked Accounts</label>
-                    <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account" [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'" [showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'" (noResultsClicked)="toggleAccountAsidePane($event)">
-                    </sh-select>
-                </div>
+				<div class="form-group col-sm-2 col-md-2 col-xs-12">
+					<label>Linked Accounts</label>
+					<sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
+						[(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
+						[showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'"
+						(noResultsClicked)="toggleAccountAsidePane($event)">
+					</sh-select>
+				</div>
 
-                <div class="col-sm-2 col-md-2 col-xs-12 form-group d-flex hideLableOnMobile" style="align-items: flex-end">
-                    <label class="d-block"></label>
-                    <button type="submit" class="btn btn-success mrTop" *ngIf="!(createRequest.discountUniqueName)" [ladda]="isDiscountCreateInProcess$ | async">Add
-          </button>
-                    <button type="submit" class="btn btn-success mrTop" *ngIf="createRequest.discountUniqueName" [ladda]="isDiscountUpdateInProcess$ | async">Update
-          </button>
-                </div>
-            </ng-container>
+				<div class="col-sm-2 col-md-2 col-xs-12 form-group d-flex hideLableOnMobile"
+					style="align-items: flex-end">
+					<label class="d-block"></label>
+					<button type="submit" class="btn btn-success mrTop" *ngIf="!(createRequest.discountUniqueName)"
+						[ladda]="isDiscountCreateInProcess$ | async">Add
+					</button>
+					<button type="submit" class="btn btn-success mrTop" *ngIf="createRequest.discountUniqueName"
+						[ladda]="isDiscountUpdateInProcess$ | async">Update
+					</button>
+				</div>
+			</ng-container>
 
-        </div>
-    </form>
+		</div>
+	</form>
 
-    <div class=" ">
-        <div class="row">
+	<div class=" ">
+		<div class="row">
 
-            <div class=" col-sm-12 col-md-4 col-xs-12">
+			<div class=" col-sm-12 col-md-4 col-xs-12">
 
-                <table class="table table-bordered basic mrB  onMobileView">
+				<table class="table table-bordered basic mrB  onMobileView">
 
-                    <thead>
-                        <tr>
-                            <th [style.width.px]="'50'">#</th>
-                            <th>Name</th>
-                            <th class="">Action</th>
-                        </tr>
-                    </thead>
+					<thead>
+						<tr>
+							<th [style.width.px]="'50'">#</th>
+							<th>Name</th>
+							<th class="">Action</th>
+						</tr>
+					</thead>
 
-                    <tbody>
-                        <tr *ngFor="let discount of discountList$ | async; let i = index">
-                            <td data-title="#">{{ i + 1 }}</td>
-                            <td data-title="Name"> {{ discount.name }}</td>
-                            <td data-title="Action">
-                                <span (click)="edit(discount)" class="btn btn-xs">
-                  <i class="fa fa-pencil"></i>
-                </span>
-                                <span (click)="showDeleteDiscountModal(discount.uniqueName)" class="btn btn-xs">
-                  <i class="fa fa-trash"></i>
-                </span>
-                            </td>
-                        </tr>
-                    </tbody>
+					<tbody>
+						<tr *ngFor="let discount of discountList$ | async; let i = index">
+							<td data-title="#">{{ i + 1 }}</td>
+							<td data-title="Name"> {{ discount.name }}</td>
+							<td data-title="Action">
+								<span (click)="edit(discount)" class="btn btn-xs">
+									<i class="fa fa-pencil"></i>
+								</span>
+								<span (click)="showDeleteDiscountModal(discount.uniqueName)" class="btn btn-xs">
+									<i class="fa fa-trash"></i>
+								</span>
+							</td>
+						</tr>
+					</tbody>
 
-                    <tbody *ngIf="!(discountList$ | async).length" class="onMobileView noRecords">
-                        <tr>
-                            <td colspan="3" class="text-center empty_table">
-                                <h1>No Discount Found !!</h1>
-                            </td>
-                        </tr>
-                    </tbody>
+					<tbody *ngIf="!(discountList$ | async).length" class="onMobileView noRecords">
+						<tr>
+							<td colspan="3" class="text-center empty_table">
+								<h1>No Discount Found !!</h1>
+							</td>
+						</tr>
+					</tbody>
 
-                </table>
+				</table>
 
-            </div>
+			</div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 
 </div>
 
 <!-- open account aside -->
-<aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)" [activeGroupUniqueName]="'discount'"></aside-menu-account>
+<aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
+	[@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+	[activeGroupUniqueName]="'discount'"></aside-menu-account>
 
 
 <!--delete discount confirmation model -->
 <div bsModal #discountConfirmationModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <!-- modal-liq90 class is removed for now-->
-        <div class="modal-content">
-            <confirm-modal [body]="'Do You Really Want to Delete This Discount'" (successCallBack)="delete()" (cancelCallBack)="hideDeleteDiscountModal()"></confirm-modal>
-            <!--<delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)"></delete-tax-confirmation-model>-->
-        </div>
-    </div>
+	<div class="modal-dialog modal-md">
+		<!-- modal-liq90 class is removed for now-->
+		<div class="modal-content">
+			<confirm-modal [body]="'Do You Really Want to Delete This Discount'" (successCallBack)="delete()"
+				(cancelCallBack)="hideDeleteDiscountModal()"></confirm-modal>
+			<!--<delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)"></delete-tax-confirmation-model>-->
+		</div>
+	</div>
 </div>

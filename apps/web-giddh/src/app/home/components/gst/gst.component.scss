@@ -1,46 +1,44 @@
+span.monthDropdown {
+    font-size: 12px;
+    color: #666666;
+    vertical-align: top;
+}
+.dashboard-filter .btn-group {
+    display: block;
+    line-height: 1;
+}
+.dashboard-filter .btn-group span {
+    vertical-align: middle;
+    color: #666666;
+}
+.underline {
+    text-decoration: underline;
+}
+.dashboard-filter {
+    display: inline-flex;
+    color: #666666;
+    align-items: flex-end;
+}
 
-      span.monthDropdown {
-        font-size: 12px;
-        color: #666666;
-        vertical-align: top;
-      }
-      .dashboard-filter .btn-group {
-          display: block;
-              line-height: 1;
-      }
-       .dashboard-filter .btn-group span{
-        vertical-align: middle;
-         color: #666666;
-       }
-       .underline{
-         text-decoration:underline;
-       }
-       .dashboard-filter{
-         display:inline-flex;
-         color:#666666;
-             align-items: flex-end;
-
-       }
-
-       .dashboard-filter .icon-collapse-icon{
-        margin-left: 8px;
+.dashboard-filter .icon-collapse-icon {
+    margin-left: 8px;
     font-size: 14px;
 }
-.gstDropdown{
-  display: block;
+.gstDropdown {
+    display: block;
 }
-.gstDropdown span.icon-arrow-down{
-  margin-left: 5px;
+.gstDropdown span.icon-arrow-down {
+    margin-left: 5px;
 }
 .amountInCash {
     font-size: 20px;
-    color: #1A237E;
+    color: #1a237e;
 }
 .amountInCash span.icon-rupees {
     font-size: 16px;
 }
-.totalGstCode{
-  display: flex;
+.totalGstCode {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 30px;
@@ -65,8 +63,8 @@
     color: #666666;
     font-size: 14px;
 }
-#dashboard .panel-default{
-  position: relative;
+#dashboard .panel-default {
+    position: relative;
 }
 
 .addTax {
@@ -76,9 +74,9 @@
     bottom: 20px;
     text-decoration: underline;
 }
-.addTax a{
-  color: #262626;
-  font-size: 14px;
+.addTax a {
+    color: #262626;
+    font-size: 14px;
 }
 .dateamount small {
     font-size: 12px;

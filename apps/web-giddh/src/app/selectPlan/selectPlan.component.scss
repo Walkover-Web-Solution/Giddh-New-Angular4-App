@@ -8,17 +8,17 @@
 .your-account span {
     display: block;
     font-size: 16px;
-    color: #9B9B9B;
+    color: #9b9b9b;
     margin-bottom: 10px;
 }
 
 .your-account p {
-    color: #2C2C2C;
+    color: #2c2c2c;
     font-size: 16px;
 }
 
 .your-account p.success-text {
-    color: #2FAB4A !important;
+    color: #2fab4a !important;
 }
 
 .welcome-msg {
@@ -27,7 +27,6 @@
 
 .choose-ur-plan {
     padding-top: 40px;
-
 }
 
 .your-account {
@@ -41,24 +40,23 @@
     margin-bottom: 30px;
     background-color: #fff;
     padding: 15px;
-    box-shadow: 0 0 3px rgba(0,0,0,.1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
 }
-@media(max-width:767px){
-  .welcome-msg .btn-default {
-    margin-top: 10px;
+@media (max-width: 767px) {
+    .welcome-msg .btn-default {
+        margin-top: 10px;
+    }
+    .select-plan-block {
+        margin-bottom: 10px;
+    }
 }
-.select-plan-block {
-
-    margin-bottom: 10px;
-}
-}
-@media(max-width:414px){
-  .your-account span  ,   .your-account p{
-   font-size: 14px;
-
-}
-.choose-ur-plan {
-    padding-top: 0px;
+@media (max-width: 414px) {
+    .your-account span,
+    .your-account p {
+        font-size: 14px;
+    }
+    .choose-ur-plan {
+        padding-top: 0px;
         margin-bottom: 20px;
-}
+    }
 }

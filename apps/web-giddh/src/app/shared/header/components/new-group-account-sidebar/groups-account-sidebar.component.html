@@ -1,47 +1,47 @@
 <!-- <perfect-scrollbar> -->
 <div class="grp_col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
-  <div class="grp_wrapper" fxFlex [ngStyle]="{'width':mc.columns.length * 255 + 'px'}"
-    [navigationWalker]="{vertical:'nav-vr-item',horizontal:'nav-hr-item'}" #navigation="navigationWalker" #root
-    (onReset)="initNavigator(navigation,root.children[0])" (onRight)="onRightKey($event,navigation)"
-    (onLeft)="onLeftKey($event,navigation)">
-    <!-- level 1 -->
-    <div class="col_wrapper left-account-opration" *ngFor="let col of mc.columns;let i=index" [style.height.px]="height"
-      nav-hr-item (ngInit)="onColAdd($event,navigation)">
-      <!-- <div class="grp_list" style="height:700px"> -->
-      <ul class="new_btn_ul" *ngIf="i !== 0">
-        <li class="new_btn">
-          <a href="javascript:void(0)" nav-vr-item class="btn-link"
-            *ngIf="!isSearchingGroups || (isSearchingGroups && col.IsCreateNewBtnShowable)"
-            (click)="ShowAddNewForm(col)">Create new</a>
-        </li>
-      </ul>
-      <ng-container *ngIf="col.Items">
-        <ul class="grp_list usesr-last-list"
-          *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list'; let _items = vsCollection">
-          <ng-container *ngFor="let item of _items">
-            <!-- {{item.name}} -->
-            <li *ngIf="item.isGroup" class="list-item sidebarTooltip">
-              <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
-                (click)="onGroupClick(item,i)" [ngClass]="{
+    <div class="grp_wrapper" fxFlex [ngStyle]="{'width':mc.columns.length * 255 + 'px'}"
+        [navigationWalker]="{vertical:'nav-vr-item',horizontal:'nav-hr-item'}" #navigation="navigationWalker" #root
+        (onReset)="initNavigator(navigation,root.children[0])" (onRight)="onRightKey($event,navigation)"
+        (onLeft)="onLeftKey($event,navigation)">
+        <!-- level 1 -->
+        <div class="col_wrapper left-account-opration" *ngFor="let col of mc.columns;let i=index"
+            [style.height.px]="height" nav-hr-item (ngInit)="onColAdd($event,navigation)">
+            <!-- <div class="grp_list" style="height:700px"> -->
+            <ul class="new_btn_ul" *ngIf="i !== 0">
+                <li class="new_btn">
+                    <a href="javascript:void(0)" nav-vr-item class="btn-link"
+                        *ngIf="!isSearchingGroups || (isSearchingGroups && col.IsCreateNewBtnShowable)"
+                        (click)="ShowAddNewForm(col)">Create new</a>
+                </li>
+            </ul>
+            <ng-container *ngIf="col.Items">
+                <ul class="grp_list usesr-last-list"
+                    *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list'; let _items = vsCollection">
+                    <ng-container *ngFor="let item of _items">
+                        <!-- {{item.name}} -->
+                        <li *ngIf="item.isGroup" class="list-item sidebarTooltip">
+                            <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
+                                (click)="onGroupClick(item,i)" [ngClass]="{
             'isActive': ((activeGroupUniqueName | async) === item?.uniqueName) && !(activeAccount | async),
             'isParent':item?.isOpen
           }" tooltip="{{item.synonyms}}" placement="bottom">
-                {{ item.name }}
-              </a>
-            </li>
-            <li *ngIf="!item.isGroup">
-              <a href="javascript:void(0);" nav-vr-item class="list-item isAcc" [ngClass]="{
+                                {{ item.name }}
+                            </a>
+                        </li>
+                        <li *ngIf="!item.isGroup">
+                            <a href="javascript:void(0);" nav-vr-item class="list-item isAcc" [ngClass]="{
             'isActive': ((activeAccount | async)?.uniqueName === item ?.uniqueName)}" id="acc_{{item.name}}"
-                (click)="onAccountClick(item,i)">
-                {{ item.name }}
-              </a>
-            </li>
-          </ng-container>
-        </ul>
-      </ng-container>
-      <!-- </div> -->
-    </div>
+                                (click)="onAccountClick(item,i)">
+                                {{ item.name }}
+                            </a>
+                        </li>
+                    </ng-container>
+                </ul>
+            </ng-container>
+            <!-- </div> -->
+        </div>
 
-  </div>
+    </div>
 </div>
 <!-- </perfect-scrollbar> -->

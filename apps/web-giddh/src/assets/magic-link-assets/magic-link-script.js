@@ -156,9 +156,11 @@ var app = new Vue({
                             this.dateRange.startDate = moment(this.ledgerData.fromDate, 'DD-MM-YYYY');
                             this.dateRange.endDate = moment(this.ledgerData.toDate, 'DD-MM-YYYY');
                             $('tr').tooltip('hide');
-                            document.getElementById("loader-1").style.display = 'none';
-                            document.getElementById("app").style.display = 'block';
                         }
+
+                        // hide loader and show app
+                        document.getElementById("loader-1").style.display = 'none';
+                        document.getElementById("app").style.display = 'block';
                     })
                     .catch(e => {
                         this.$toaster.error('Something went wrong.');
@@ -204,6 +206,11 @@ var app = new Vue({
                 endDate: moment(picker.endDate).format('DD-MM-YYYY')
             };
             var id = this.getParameterByName('id');
+
+            // show loader when date changes
+            document.getElementById("loader-1").style.display = 'flex';
+            document.getElementById("app").style.display = 'none';
+
             this.getMagicLinkData(id, dates.startDate, dates.endDate);
         },
         handleResize: function(ev) {

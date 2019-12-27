@@ -26,20 +26,24 @@
                 </td>
                 <td>
                     <div>{{ item.accountName }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.accountName !== item.dataInGiddh.accountName}">{{ item.dataInGiddh.accountName }}
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.accountName !== item.dataInGiddh.accountName}">
+                        {{ item.dataInGiddh.accountName }}
                     </div>
 
                 </td>
                 <td>
                     <div>{{ item.invoiceNumber }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.invoiceNumber !== item.dataInGiddh.invoiceNumber}">
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.invoiceNumber !== item.dataInGiddh.invoiceNumber}">
                         {{ item.dataInGiddh.invoiceNumber }}
                     </div>
 
                 </td>
                 <td>
                     <div>{{ item.invoiceDate }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.invoiceDate !== item.dataInGiddh.invoiceDate}">
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.invoiceDate !== item.dataInGiddh.invoiceDate}">
                         {{ item.dataInGiddh.invoiceDate }}
                     </div>
 
@@ -47,7 +51,8 @@
                 </td>
                 <td>
                     <div>{{ item.placeOfSupply }} ({{item.stateCode}})</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.placeOfSupply !== item.dataInGiddh.placeOfSupply}">
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.placeOfSupply !== item.dataInGiddh.placeOfSupply}">
                         {{ item.dataInGiddh.placeOfSupply }} ({{ item.dataInGiddh.stateCode }})
                     </div>
 
@@ -55,7 +60,8 @@
                 </td>
                 <td class="text-right">
                     <div><i class="fa fa-inr"></i> {{ item.taxableAmount }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.taxableAmount !== item.dataInGiddh.taxableAmount}">
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.taxableAmount !== item.dataInGiddh.taxableAmount}">
                         <i class="fa fa-inr"></i> {{ item.dataInGiddh.taxableAmount }}
                     </div>
 
@@ -78,7 +84,8 @@
                 </td>
                 <td class="text-right">
                     <div><i class="fa fa-inr"></i> {{ item.sgst }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.sgst !== item.dataInGiddh.sgst}"><i class="fa fa-inr"></i> {{ item.dataInGiddh.sgst }}
+                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.sgst !== item.dataInGiddh.sgst}"><i
+                            class="fa fa-inr"></i> {{ item.dataInGiddh.sgst }}
                     </div>
 
 
@@ -91,7 +98,8 @@
                 </td>
                 <td class="text-right">
                     <div><i class="fa fa-inr"></i> {{ item.grandTotal }}</div>
-                    <div *ngIf="item.dataInGiddh" [ngClass]="{ 'text-danger': item.grandTotal !== item.dataInGiddh.grandTotal}">
+                    <div *ngIf="item.dataInGiddh"
+                        [ngClass]="{ 'text-danger': item.grandTotal !== item.dataInGiddh.grandTotal}">
                         <i class="fa fa-inr"></i> {{ item.dataInGiddh.grandTotal }}
                     </div>
                 </td>

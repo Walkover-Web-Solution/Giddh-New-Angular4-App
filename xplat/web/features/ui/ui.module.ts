@@ -7,15 +7,15 @@ import { RouterModule } from '@angular/router';
 import { UISharedModule } from '@giddh-workspaces/features';
 
 const MODULES = [
-  CommonModule,
-  RouterModule,
-  FormsModule,
-  ReactiveFormsModule,
-  UISharedModule
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UISharedModule
 ];
 
 @NgModule({
-  imports: [...MODULES],
-  exports: [...MODULES]
+    imports: [...MODULES],
+    exports: [...MODULES]
 })
-export class UIModule {}
+export class UIModule { }

@@ -84,8 +84,8 @@ export class AccountDetailModalComponent implements OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
-                private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction,
-                private _router: Router) {
+        private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction,
+        private _router: Router) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
     }
 
@@ -126,7 +126,7 @@ export class AccountDetailModalComponent implements OnChanges {
                 }
                 this.openSmsDialog();
                 break;
-            case  4: // send email
+            case 4: // send email
                 if (event) {
                     event.stopPropagation();
                 }

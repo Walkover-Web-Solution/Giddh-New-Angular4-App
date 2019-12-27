@@ -1,118 +1,118 @@
 <div class="dashboard-container">
-  <div class="totalSalesHeader">
-    <div class="row">
-      <div class="col-sm-6">
+    <div class="totalSalesHeader">
         <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
 
-          <div class="col-sm-6">
-            <div class="daterang-block">
-              <label>Date Range</label>
-              <div class="dateRangeInput">
-                <span class="icon-calender"></span>
-                <input type="text" placeholder="Select Dates" class="form-control" bsDaterangepicker>
-              </div>
+                    <div class="col-sm-6">
+                        <div class="daterang-block">
+                            <label>Date Range</label>
+                            <div class="dateRangeInput">
+                                <span class="icon-calender"></span>
+                                <input type="text" placeholder="Select Dates" class="form-control" bsDaterangepicker>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="daterang-block">
+                            <label><input type="checkbox"> Compare to</label>
+                            <div class="dateRangeInput disabled">
+                                <span class="icon-calender"></span>
+                                <input type="text" placeholder="Select Dates" class="form-control" bsDaterangepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
 
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="daterang-block">
-              <label><input type="checkbox"> Compare to</label>
-              <div class="dateRangeInput disabled">
-                <span class="icon-calender"></span>
-                <input type="text" placeholder="Select Dates" class="form-control" bsDaterangepicker>
-              </div>
+
+            <div class="col-sm-6">
+                <div class="page-title">
+                    <div class="collapse-close" [routerLink]="['/home']">
+                        <span class="icon-collapse-icon" tooltip="Collapse"></span>
+                    </div>
+                    <h1>Total Sales</h1>
+                </div>
+
             </div>
-          </div>
-
         </div>
-
-
-      </div>
-
-      <div class="col-sm-6">
-        <div class="page-title">
-          <div class="collapse-close" [routerLink]="['/home']">
-            <span class="icon-collapse-icon" tooltip="Collapse"></span>
-          </div>
-          <h1>Total Sales</h1>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-
-  <div class="panel panel-default mrT1">
-
-    <div class=" clearfix topdates">
-      <div class="pull-left aboutDate">
-        <div class="active-date">
-          <span></span>01 Sep 19 - 31 Sep 19
-        </div>
-        <div class="inActive-date">
-          <span></span>01 Sep 19 - 31 Sep 19
-        </div>
-      </div>
-
-
-    </div>
-
-    <div class="">
-      <div class="total-salesTabs">
-        <tabset>
-          <tab heading="Daily" id="tab1">
-
-
-            <chart [options]="options"></chart>
-
-
-          </tab>
-          <tab heading="Weekly">
-            <chart [options]="options"></chart>
-
-          </tab>
-          <tab heading="Monthly">
-            <chart [options]="options"></chart>
-          </tab>
-        </tabset>
-      </div>
-
-
-
     </div>
 
 
-    <div class="total-sale-data">
-      <div class="row">
-        <div class="col-sm-3 single-sale-data">
-          <div class="">
-            <p>Total Sales (Sep 19)</p>
-            <h3>10,10,900.00</h3>
-          </div>
+    <div class="panel panel-default mrT1">
+
+        <div class=" clearfix topdates">
+            <div class="pull-left aboutDate">
+                <div class="active-date">
+                    <span></span>01 Sep 19 - 31 Sep 19
+                </div>
+                <div class="inActive-date">
+                    <span></span>01 Sep 19 - 31 Sep 19
+                </div>
+            </div>
+
+
         </div>
-        <div class="col-sm-3 single-sale-data">
-          <div class="">
-            <p>Total Sales (Aug 19)</p>
-            <h3>10,10,900.00</h3>
-          </div>
+
+        <div class="">
+            <div class="total-salesTabs">
+                <tabset>
+                    <tab heading="Daily" id="tab1">
+
+
+                        <chart [options]="options"></chart>
+
+
+                    </tab>
+                    <tab heading="Weekly">
+                        <chart [options]="options"></chart>
+
+                    </tab>
+                    <tab heading="Monthly">
+                        <chart [options]="options"></chart>
+                    </tab>
+                </tabset>
+            </div>
+
+
+
         </div>
-        <div class="col-sm-3 single-sale-data">
-          <div class="">
-            <p>Highest Sales</p>
-            <h3>10,10,900.00</h3>
-            <span class="dateWiseSale">(12 Sep 19)</span>
-          </div>
+
+
+        <div class="total-sale-data">
+            <div class="row">
+                <div class="col-sm-3 single-sale-data">
+                    <div class="">
+                        <p>Total Sales (Sep 19)</p>
+                        <h3>10,10,900.00</h3>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div class="">
+                        <p>Total Sales (Aug 19)</p>
+                        <h3>10,10,900.00</h3>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div class="">
+                        <p>Highest Sales</p>
+                        <h3>10,10,900.00</h3>
+                        <span class="dateWiseSale">(12 Sep 19)</span>
+                    </div>
+                </div>
+                <div class="col-sm-3 single-sale-data">
+                    <div class="">
+                        <p>Lowest Sales</p>
+                        <h3>10,10,900.00</h3>
+                        <span class="dateWiseSale">(12 Sep 19)</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-3 single-sale-data">
-          <div class="">
-            <p>Lowest Sales</p>
-            <h3>10,10,900.00</h3>
-            <span class="dateWiseSale">(12 Sep 19)</span>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
 
 </div>

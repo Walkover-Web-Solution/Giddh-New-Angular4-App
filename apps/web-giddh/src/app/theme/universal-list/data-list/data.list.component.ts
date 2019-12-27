@@ -402,6 +402,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
             }
             // search data conditional
             filteredData = this.universalSearchService.filterByTerm(term, d);
+            console.log(filteredData);
             this.updateRowsViaSearch(filteredData);
 
             // emit no result event
@@ -443,6 +444,8 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
                 this.virtualScrollElem.startupLoop = true;
                 this.virtualScrollElem.refresh();
             }
+
+            console.log(this.rows);
         });
     }
 

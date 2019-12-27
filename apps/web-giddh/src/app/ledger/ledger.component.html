@@ -12,37 +12,38 @@
 
                     <div style="position: relative" *ngIf="checkedTrxWhileHovering.length === 0">
                         <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
-                               (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
+                            (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                         <i class="icon-search pos-abs" style="left:5px;top:10px;"></i>
                     </div>
 
                     <span class="d-flex advance-icon advnceSearchFilter pointer" [tooltip]="'Advance Search'"
-                          [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
+                        [placement]="'top'"
+                        [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <i class="icon-advance-serch" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i>
                     </span>
 
-                   <a class="cp mrL1 clear-filter-btn" href="javascript: void 0" (click)="resetAdvanceSearch()" *ngIf="isAdvanceSearchImplemented"
-                   tooltip="Reset Advance Search">
-                       <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
-                       Clear Filter
-                   </a>
+                    <a class="cp mrL1 clear-filter-btn" href="javascript: void 0" (click)="resetAdvanceSearch()"
+                        *ngIf="isAdvanceSearchImplemented" tooltip="Reset Advance Search">
+                        <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i>
+                        Clear Filter
+                    </a>
 
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0">
 
                         <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
-                                tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                            tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                         </button>
 
                         <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
-                                tooltip="Generate Invoice" [placement]="'top'"><i class="icon-generate-invoice"></i>
+                            tooltip="Generate Invoice" [placement]="'top'"><i class="icon-generate-invoice"></i>
                         </button>
 
                         <button class="btn btn-success" (click)="performBulkAction('upload', BulkUploadfileInput)"
-                                container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
+                            container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                         </button>
                         <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
-                               id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                               [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                            id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
+                            [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                     </div>
 
                 </div>
@@ -76,8 +77,7 @@
                         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
                             <input type="checkbox" class="toggle-checkbox" id="disabled"
-                                   [(ngModel)]="currencyTogglerModel"
-                                   (click)="toggleCurrency($event)">
+                                [(ngModel)]="currencyTogglerModel" (click)="toggleCurrency($event)">
 
                             <label class="toggle-label" for="disabled">
                                 <span class="toggle-inner"></span>
@@ -1186,7 +1186,7 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()">
+<ledger-aside-pane [class]="asideMenuState"  *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()">
 </ledger-aside-pane>
 <!-- aside menu section -->
 

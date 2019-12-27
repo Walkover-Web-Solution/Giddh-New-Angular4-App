@@ -1,23 +1,29 @@
 <div id="shareModal">
     <div id="share-modal" class="" ng-if="ledgerCtrl.toggleShare">
         <div class="pd2 bg_grey">
-            <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeBaseAccountModal.emit()" aria-label="Close">×</span>
+            <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeBaseAccountModal.emit()"
+                aria-label="Close">×</span>
             <h3>Are you sure you want to change the base account?</h3>
         </div>
 
         <div class="modal-body" id="SharePop">
             <div class="modal_wrap">
-                <p>Note: Please update if any changes made in the ledger before changing base account, unsaved changes will be removed.</p>
+                <p>Note: Please update if any changes made in the ledger before changing base account, unsaved changes
+                    will be removed.</p>
                 <div class="mrT2">
-                    <sh-select [disabled]="false" placeholder="Select Account" filterPlaceholder="Search Account" name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class="" [useInBuiltFilterForFlattenAc]="true">
+                    <sh-select [disabled]="false" placeholder="Select Account" filterPlaceholder="Search Account"
+                        name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class=""
+                        [useInBuiltFilterForFlattenAc]="true">
                         <ng-template #optionTemplate let-option="option">
-                            <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
+                            <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
+                                style="border-bottom: 1px solid #ccc;">
                                 <div class="item fs14">{{option?.label}}</div>
                                 <div class="item_unq fs14">{{option.additional?.uniqueName}}</div>
                             </a>
                         </ng-template>
                     </sh-select>
-                    <button class="btn btn-success btn-block mrT1" (click)="saveBaseAccount()" [disabled]="!accountUniqueName">Change Base Account</button>
+                    <button class="btn btn-success btn-block mrT1" (click)="saveBaseAccount()"
+                        [disabled]="!accountUniqueName">Change Base Account</button>
                 </div>
             </div>
         </div>

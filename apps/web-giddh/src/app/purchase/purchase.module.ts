@@ -22,29 +22,29 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
  */
 
 @NgModule({
-  declarations: [PurchaseInvoiceComponent, PurchaseComponent, AsideMenuPurchaseInvoiceSettingComponent, ReconcileDesignComponent],
-  imports: [
-    PurchaseRoutingModule,
-    CollapseModule,
-    PaginationModule,
-    DatepickerModule,
-    BsDropdownModule,
-    Daterangepicker,
-    LaddaModule,
-    HighlightModule,
-    TooltipModule,
-    ClickOutsideModule,
-    TabsModule,
-    AlertModule,
-    ElementViewChildModule,
-    PerfectScrollbarModule
-  ],
-  entryComponents: [
-    PaginationComponent
-  ],
-  exports: [
-    AsideMenuPurchaseInvoiceSettingComponent
-  ]
+    declarations: [PurchaseInvoiceComponent, PurchaseComponent, AsideMenuPurchaseInvoiceSettingComponent, ReconcileDesignComponent],
+    imports: [
+        PurchaseRoutingModule,
+        CollapseModule,
+        PaginationModule,
+        DatepickerModule,
+        BsDropdownModule,
+        Daterangepicker,
+        LaddaModule,
+        HighlightModule,
+        TooltipModule,
+        ClickOutsideModule,
+        TabsModule,
+        AlertModule,
+        ElementViewChildModule,
+        PerfectScrollbarModule
+    ],
+    entryComponents: [
+        PaginationComponent
+    ],
+    exports: [
+        AsideMenuPurchaseInvoiceSettingComponent
+    ]
 })
 export class PurchaseModule {
 }

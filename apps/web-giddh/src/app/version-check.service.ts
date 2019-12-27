@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class VersionCheckService {
 
-    public  onVersionChange$: Subject<boolean> =  new Subject();
+    public onVersionChange$: Subject<boolean> = new Subject();
 
     // this will be replaced by actual hash post-build.js
     private currentHash = '{{POST_BUILD_ENTERS_HASH_HERE}}';

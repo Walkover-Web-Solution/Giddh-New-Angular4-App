@@ -152,4 +152,38 @@ export class GeneralService {
             return n;
         }
     }
+
+    storeUtmParameters(routerParams: any): void {
+        if (routerParams['utm_source']) {
+            localStorage.setItem('utm_source', routerParams['utm_source']);
+        }
+        if (routerParams['utm_medium']) {
+            localStorage.setItem('utm_medium', routerParams['utm_medium']);
+        }
+        if (routerParams['utm_campaign']) {
+            localStorage.setItem('utm_campaign', routerParams['utm_campaign']);
+        }
+        if (routerParams['utm_term']) {
+            localStorage.setItem('utm_term', routerParams['utm_term']);
+        }
+        if (routerParams['utm_content']) {
+            localStorage.setItem('utm_content', routerParams['utm_content']);
+        }
+    }
+
+    getUtmParameter(param: string): string {
+        if (localStorage.getItem(param)) {
+            return localStorage.getItem(param);
+        } else {
+            return "";
+        }
+    }
+
+    removeUtmParameters(): void {
+        localStorage.removeItem("utm_source");
+        localStorage.removeItem("utm_medium");
+        localStorage.removeItem("utm_campaign");
+        localStorage.removeItem("utm_term");
+        localStorage.removeItem("utm_content");
+    }
 }

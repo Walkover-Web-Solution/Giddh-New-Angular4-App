@@ -1,68 +1,70 @@
 <!-- no data start -->
 <div class="no-data" *ngIf="noData">
-  <h1>Sorry, No Data Found!</h1>
-  <img src="/assets/images/no-data.png" alt="">
+    <h1>Sorry, No Data Found!</h1>
+    <img src="/assets/images/no-data.png" alt="">
 </div>
 <!-- nodata end -->
 
 <div>
-  <div *ngIf="!noData">
-    <div class="mrT2 clearfix">
-      <!--top heading  labels-->
+    <div *ngIf="!noData">
+        <div class="mrT2 clearfix">
+            <!--top heading  labels-->
 
 
-      <!--Main Grid-->
-      <div class="table-container">
+            <!--Main Grid-->
+            <div class="table-container">
 
-        <div class="income mrB1">
-          <div class="clearfix profitLoss">
+                <div class="income mrB1">
+                    <div class="clearfix profitLoss">
 
-            <table class="mrB table basic">
-              <thead>
-              <tr style="border-bottom: 2px solid #b7b7b8;">
-                <th class="col-xs-3"
-                    style="padding:0px !important; border-left: unset !important;border-right: 2px solid #b7b7b8;">
+                        <table class="mrB table basic">
+                            <thead>
+                                <tr style="border-bottom: 2px solid #b7b7b8;">
+                                    <th class="col-xs-3"
+                                        style="padding:0px !important; border-left: unset !important;border-right: 2px solid #b7b7b8;">
 
-                  <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
+                                        <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
-                    <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" style="display:flex">
-                      <span style="margin-left: 15px; flex: 1;">Particular</span>
-                      <i class="glyphicon glyphicon-search" (click)="toggleSearch()"
-                         style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
-                    </div>
+                                            <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
+                                                style="display:flex">
+                                                <span style="margin-left: 15px; flex: 1;">Particular</span>
+                                                <i class="glyphicon glyphicon-search" (click)="toggleSearch()"
+                                                    style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                                            </div>
 
-                    <div [hidden]="!showClearSearch">
-                      <input style="height: 39px;" type="search" #searchInputEl
-                             class="form-control"
-                             placeholder="Search"
-                             aria-describedby="sizing-addon3"
-                             id="w-398px" [formControl]="bsSearchControl">
-                      <!--<i class="glyphicon glyphicon-search" (click)="showClearSearch = false;"-->
-                      <!--style="position: relative;top:-6px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>-->
-                    </div>
+                                            <div [hidden]="!showClearSearch">
+                                                <input style="height: 39px;" type="search" #searchInputEl
+                                                    class="form-control" placeholder="Search"
+                                                    aria-describedby="sizing-addon3" id="w-398px"
+                                                    [formControl]="bsSearchControl">
+                                                <!--<i class="glyphicon glyphicon-search" (click)="showClearSearch = false;"-->
+                                                <!--style="position: relative;top:-6px;left:94%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>-->
+                                            </div>
 
-                  </div>
+                                        </div>
 
-                </th>
-                <th class="col-xs-3 text-right" style="border-right: 2px solid #b7b7b8;">As Of
-                  <span
-                    *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'"> {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
-                </th>
-                <th class="col-xs-3 text-right" style="padding: 8px;">As Of
-                  <span
-                    *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'"> {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
-                </th>
-              </tr>
-              </thead>
-            </table>
+                                    </th>
+                                    <th class="col-xs-3 text-right" style="border-right: 2px solid #b7b7b8;">As Of
+                                        <span
+                                            *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
+                                            {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                                    </th>
+                                    <th class="col-xs-3 text-right" style="padding: 8px;">As Of
+                                        <span
+                                            *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
+                                            {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
 
-            <!--Grid-->
-            <div class="mr1">
-              <div class="">
-                <strong class="fs18">I EQUITY AND LIABILITIES </strong>
-              </div>
-            </div>
-            <!-- <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
+                        <!--Grid-->
+                        <div class="mr1">
+                            <div class="">
+                                <strong class="fs18">I EQUITY AND LIABILITIES </strong>
+                            </div>
+                        </div>
+                        <!-- <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
               [search]="search" [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp  of  liabilityGrp.childGroups" bs-grid-row [search]="search" [groupDetail]="subGrp"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
@@ -72,44 +74,46 @@
               </section>
             </section> -->
 
-            <ng-template #groupDetails let-list let-padding="padding">
-              <ng-container *ngFor="let grp of list">
-                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" bs-grid-row
-                         [groupDetail]="grp" [padding]="padding" [search]="search" [from]="from" [to]="to"
-                         [padding]="padding">
-                  <ng-container
-                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
-                </section>
-              </ng-container>
-            </ng-template>
+                        <ng-template #groupDetails let-list let-padding="padding">
+                            <ng-container *ngFor="let grp of list">
+                                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated"
+                                    [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding"
+                                    [search]="search" [from]="from" [to]="to" [padding]="padding">
+                                    <ng-container
+                                        *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }">
+                                    </ng-container>
+                                </section>
+                            </ng-container>
+                        </ng-template>
 
-            <ng-container
-              *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }"></ng-container>
-            <!--/Grid-->
-            <div class="top_bar clearfix">
-              <div class="col-xs-4  group">
-                <strong>Total Liabilities</strong>
-              </div>
-              <div class="col-xs-4  group text-right">
-                <strong>{{ bsData?.liabTotal | giddhCurrency }}</strong>
-              </div>
-              <div class="col-xs-4  group text-right">
-                <strong>{{ bsData?.liabTotalEnd | giddhCurrency }}</strong>
-              </div>
-            </div>
-            <!--<hr class="bdrT"/>-->
-          </div>
-        </div>
+                        <ng-container
+                            *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }">
+                        </ng-container>
+                        <!--/Grid-->
+                        <div class="top_bar clearfix">
+                            <div class="col-xs-4  group">
+                                <strong>Total Liabilities</strong>
+                            </div>
+                            <div class="col-xs-4  group text-right">
+                                <strong>{{ bsData?.liabTotal | giddhCurrency }}</strong>
+                            </div>
+                            <div class="col-xs-4  group text-right">
+                                <strong>{{ bsData?.liabTotalEnd | giddhCurrency }}</strong>
+                            </div>
+                        </div>
+                        <!--<hr class="bdrT"/>-->
+                    </div>
+                </div>
 
-        <div class="expenses">
-          <div class="clearfix profitLoss table-responsive">
-            <!--Grid-->
-            <div class="mr1">
-              <div class="">
-                <strong class="fs18">II ASSETS</strong>
-              </div>
-            </div>
-            <!-- <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"
+                <div class="expenses">
+                    <div class="clearfix profitLoss table-responsive">
+                        <!--Grid-->
+                        <div class="mr1">
+                            <div class="">
+                                <strong class="fs18">II ASSETS</strong>
+                            </div>
+                        </div>
+                        <!-- <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"
               [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp of  assets.childGroups" bs-grid-row [groupDetail]="subGrp" [search]="search"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
@@ -118,35 +122,37 @@
                 </section>
               </section>
             </section> -->
-            <ng-template #groupDetails let-list let-padding="padding">
-              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
-                       [groupDetail]="grp" [padding]="padding" [search]="search" [padding]="padding"
-                       [from]="from" [to]="to">
-                <ng-container
-                  *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
-              </section>
-            </ng-template>
-            <ng-container
-              *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }"></ng-container>
-            <!--/Grid-->
-          </div>
-        </div>
+                        <ng-template #groupDetails let-list let-padding="padding">
+                            <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
+                                [groupDetail]="grp" [padding]="padding" [search]="search" [padding]="padding"
+                                [from]="from" [to]="to">
+                                <ng-container
+                                    *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }">
+                                </ng-container>
+                            </section>
+                        </ng-template>
+                        <ng-container
+                            *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }">
+                        </ng-container>
+                        <!--/Grid-->
+                    </div>
+                </div>
 
-        <div class="top_bar clearfix">
-          <div class="col-xs-4  group">
-            <strong>Total Assets</strong>
-          </div>
-          <div class="col-xs-4  group text-right">
-            <strong>{{ bsData?.assetTotal | giddhCurrency }}</strong>
-          </div>
-          <div class="col-xs-4  group text-right">
-            <strong>{{ bsData?.assetTotalEnd | giddhCurrency }}</strong>
-          </div>
+                <div class="top_bar clearfix">
+                    <div class="col-xs-4  group">
+                        <strong>Total Assets</strong>
+                    </div>
+                    <div class="col-xs-4  group text-right">
+                        <strong>{{ bsData?.assetTotal | giddhCurrency }}</strong>
+                    </div>
+                    <div class="col-xs-4  group text-right">
+                        <strong>{{ bsData?.assetTotalEnd | giddhCurrency }}</strong>
+                    </div>
+                </div>
+                <!--<hr class="bdrT"/>-->
+                <!-- end of expenses -->
+            </div>
+            <!-- end row -->
         </div>
-        <!--<hr class="bdrT"/>-->
-        <!-- end of expenses -->
-      </div>
-      <!-- end row -->
     </div>
-  </div>
 </div>

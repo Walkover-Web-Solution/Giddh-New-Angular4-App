@@ -3,15 +3,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
 
 export const DATEPICKER_VALUE_ACCESSOR: any = {
-  provide: NG_VALUE_ACCESSOR,
-  // tslint:disable-next-line:no-forward-ref
-  useExisting: forwardRef(() => DatePickerComponent),
-  multi: true
+	provide: NG_VALUE_ACCESSOR,
+	// tslint:disable-next-line:no-forward-ref
+	useExisting: forwardRef(() => DatePickerComponent),
+	multi: true
 };
 
 @Component({
-  selector: 'date-picker',
-  template: `
+	selector: 'date-picker',
+	template: `
     <div class="form-group {{ containerClass }}" (clickOutside)="showToDatePicker=false;">
       <label>{{label}}</label>
       <div class="input-group" style="display:table">
@@ -48,98 +48,98 @@ export const DATEPICKER_VALUE_ACCESSOR: any = {
       </div>
     </div>
   `,
-  encapsulation: ViewEncapsulation.None,
-  providers: [DATEPICKER_VALUE_ACCESSOR]
+	encapsulation: ViewEncapsulation.None,
+	providers: [DATEPICKER_VALUE_ACCESSOR]
 })
 export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit, ControlValueAccessor {
 
-  @Input() public value: string;
-  @Input() public label: string;
-  @Input() public maxDate: string;
-  @Input() public minDate: string;
-  @Input() public showCalenderButton: boolean = true;
-  @Input() public showAdditionalButton: boolean = true;
-  @Input() public containerClass: string;
+	@Input() public value: string;
+	@Input() public label: string;
+	@Input() public maxDate: string;
+	@Input() public minDate: string;
+	@Input() public showCalenderButton: boolean = true;
+	@Input() public showAdditionalButton: boolean = true;
+	@Input() public containerClass: string;
 
-  @Input() public disabled: boolean = false;
-  // emitter when value is changed
-  @Input() public showToDatePicker: boolean;
-  public onChangeCb: (_: any) => void = (e) => {
-    //
-  }
-  public onTouchedCb: () => void = () => {
-    //
-  }
-  private date: Date = new Date();
+	@Input() public disabled: boolean = false;
+	// emitter when value is changed
+	@Input() public showToDatePicker: boolean;
+	public onChangeCb: (_: any) => void = (e) => {
+		//
+	}
+	public onTouchedCb: () => void = () => {
+		//
+	}
+	private date: Date = new Date();
 
-  constructor(private cd: ChangeDetectorRef, private _elementRef: ElementRef) {
-    this.value = this.convertToString(this.date);
-  }
+	constructor(private cd: ChangeDetectorRef, private _elementRef: ElementRef) {
+		this.value = this.convertToString(this.date);
+	}
 
-  @HostListener('document:click', ['$event', '$event.target'])
-  public onClick(event: MouseEvent, targetElement: HTMLElement): void {
-    if (!targetElement) {
-      return;
-    }
+	@HostListener('document:click', ['$event', '$event.target'])
+	public onClick(event: MouseEvent, targetElement: HTMLElement): void {
+		if (!targetElement) {
+			return;
+		}
 
-    const clickedInside = this._elementRef.nativeElement.contains(targetElement);
-    if (!clickedInside) {
-      this.showToDatePicker = false;
-    }
-  }
+		const clickedInside = this._elementRef.nativeElement.contains(targetElement);
+		if (!clickedInside) {
+			this.showToDatePicker = false;
+		}
+	}
 
-  public writeValue(value: any): void {
-    if (value && value !== '') {
-      this.value = value;
-      this.date = this.convertToDate(value);
-    }
-  }
+	public writeValue(value: any): void {
+		if (value && value !== '') {
+			this.value = value;
+			this.date = this.convertToDate(value);
+		}
+	}
 
-  public registerOnChange(fn: any): void {
-    this.onChangeCb = fn;
-  }
+	public registerOnChange(fn: any): void {
+		this.onChangeCb = fn;
+	}
 
-  public registerOnTouched(fn: any): void {
-    this.onTouchedCb = fn;
-  }
+	public registerOnTouched(fn: any): void {
+		this.onTouchedCb = fn;
+	}
 
-  public ngOnInit() {
-//
-  }
+	public ngOnInit() {
+		//
+	}
 
-  public ngOnChanges(changes: SimpleChanges) {
-    //
-  }
+	public ngOnChanges(changes: SimpleChanges) {
+		//
+	}
 
-  public ngAfterViewInit() {
-    //
-  }
+	public ngAfterViewInit() {
+		//
+	}
 
-  public ngOnDestroy() {
-    //
-  }
+	public ngOnDestroy() {
+		//
+	}
 
-  public setToday() {
-    this.value = this.convertToString(new Date());
-    this.onChangeCb(this.value);
-  }
+	public setToday() {
+		this.value = this.convertToString(new Date());
+		this.onChangeCb(this.value);
+	}
 
-  public clearDate() {
-    this.value = '';
-    this.onChangeCb(this.value);
-  }
+	public clearDate() {
+		this.value = '';
+		this.onChangeCb(this.value);
+	}
 
-  public selectionDone(event) {
-    this.value = this.convertToString(event);
-    this.onChangeCb(this.value);
-    this.showToDatePicker = false;
-  }
+	public selectionDone(event) {
+		this.value = this.convertToString(event);
+		this.onChangeCb(this.value);
+		this.showToDatePicker = false;
+	}
 
-  public convertToDate(str: string, format: string = 'DD-MM-YYYY'): Date {
-    return moment(str, format).toDate();
-  }
+	public convertToDate(str: string, format: string = 'DD-MM-YYYY'): Date {
+		return moment(str, format).toDate();
+	}
 
-  public convertToString(date: Date, format: string = 'DD-MM-YYYY'): string {
-    return moment(date).format(format);
-  }
+	public convertToString(date: Date, format: string = 'DD-MM-YYYY'): string {
+		return moment(date).format(format);
+	}
 }

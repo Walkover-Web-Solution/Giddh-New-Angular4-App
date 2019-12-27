@@ -3,31 +3,30 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../environments/environment';
 
 @Component({
-  selector: 'publicPageHandler',
-  styles: [``],
-  template: ``
+    selector: 'publicPageHandler',
+    styles: [``],
+    template: ``
 })
 export class PublicPageHandlerComponent {
 
-  public localState: any;
+    public localState: any;
 
-  constructor(
-    public route: ActivatedRoute,
-    private router: Router) {
-    if (this.router.routerState.snapshot.url.includes('create-invoice')) {
-      this.router.navigate(['/create-invoice']);
-    } else if (this.router.routerState.snapshot.url.includes('signup')) {
-      this.router.navigateByUrl('signup');
-    } else if (this.router.routerState.snapshot.url.includes('app/pages/settings')) {
-      let url = this.router.routerState.snapshot.url;
-      url = url.replace('/app', '');
-      this.router.navigateByUrl(url);
-    } else {
-        if (isElectron) {
-            this.router.navigate(['/login']);
+    constructor(
+        public route: ActivatedRoute,
+        private router: Router) {
+        if (this.router.routerState.snapshot.url.includes('create-invoice')) {
+            this.router.navigate(['/create-invoice']);
+        } else if (this.router.routerState.snapshot.url.includes('signup')) {
+            this.router.navigateByUrl('signup');
+        } else if (this.router.routerState.snapshot.url.includes('pages/settings')) {
+            let url = this.router.routerState.snapshot.url;
+            this.router.navigateByUrl(url);
         } else {
-            window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+            if (isElectron) {
+                this.router.navigate(['/login']);
+            } else {
+                window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+            }
         }
     }
-  }
 }
