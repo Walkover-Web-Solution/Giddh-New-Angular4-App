@@ -3428,13 +3428,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 if (warehouse) {
-                    // Update flow is carried out
+                    // Update flow is carried out and we have received warehouse details
                     this.selectedWarehouse = warehouse.uniqueName;
+                    this.shouldShowWarehouse = true;
                 } else {
-                    // Create flow is carried out
-                    this.selectedWarehouse = (this.isUpdateMode) ? '' : String(this.defaultWarehouse);
+                    if (this.isUpdateMode) {
+                        // Update flow is carried out
+                        // Hide the warehouse drop down as the API has not returned warehouse
+                        // details in response which means user has updated the item to non-stock
+                        this.shouldShowWarehouse = false;
+                    } else {
+                        // Create flow is carried out
+                        this.selectedWarehouse = String(this.defaultWarehouse);
+                        this.shouldShowWarehouse = true;
+                    }
                 }
-                this.shouldShowWarehouse = true;
             }
         });
     }
