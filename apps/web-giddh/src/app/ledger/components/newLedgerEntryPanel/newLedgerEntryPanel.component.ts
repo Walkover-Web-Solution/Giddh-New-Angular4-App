@@ -179,7 +179,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.activeAccount$.subscribe(acc => {
-            //   console.log('activeAccount...');
             if (acc) {
                 this.activeAccount = acc;
                 let parentAcc = acc.parentGroups[0].uniqueName;

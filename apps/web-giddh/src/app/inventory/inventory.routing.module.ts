@@ -46,9 +46,9 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                         pathMatch: "full",
                         component: InventoryWelcomeComponent
                     },
-                    { 
-                        path: "jobwork", 
-                        component: JobworkComponent 
+                    {
+                        path: "jobwork",
+                        component: JobworkComponent
                     },
                     {
                         path: "jobwork/:type/:uniqueName",

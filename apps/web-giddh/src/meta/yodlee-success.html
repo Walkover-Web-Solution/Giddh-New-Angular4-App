@@ -34,7 +34,8 @@
     </div>
 
     <div class="copy-right">
-        <p>All right are reserved &copy; 2020 Walkover <a href="https://app.giddh.com/" target="_Blank">Giddh.com</a></p>
+        <p>All right are reserved &copy; 2020 Walkover <a href="https://app.giddh.com/" target="_Blank">Giddh.com</a>
+        </p>
     </div>
 </div>
 
@@ -71,7 +72,7 @@
 
     function postCallBackData() {
         var paramToSend = 'JSONcallBackStatus' + window.location.search.split('JSONcallBackStatus')[1];
-        $.get(apiBaseUrl + 'company/' + companyUniqueName + '/yodlee/call-back?' + paramToSend, function(data, status) {
+        $.get(apiBaseUrl + 'company/' + companyUniqueName + '/yodlee/call-back?' + paramToSend, function (data, status) {
             console.log('Account Added Successfully');
         });
     }
@@ -82,7 +83,7 @@
 
     getApi();
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var apiBaseUrl = '';
         $('#failed').hide();
         $('#success').hide();

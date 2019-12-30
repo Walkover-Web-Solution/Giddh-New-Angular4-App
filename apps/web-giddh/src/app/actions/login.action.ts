@@ -34,7 +34,6 @@ import { AccountService } from '../services/account.service';
 import { Configuration } from '../app.constant';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
-import { environment } from '../../environments/environment';
 
 @Injectable()
 export class LoginActions {
@@ -320,11 +319,7 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = this.actions$
         .ofType(LoginActions.LogOut).pipe(
             map((action: CustomActions) => {
-                if (isElectron) {
-                    this._router.navigate(['/login']);
-                } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
-                }
+                this._router.navigate(['/login']);
                 window.location.reload();
                 return { type: 'EmptyAction' };
             }));
@@ -1060,7 +1055,6 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any) {
-        // console.log('finalThingTodo');
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));

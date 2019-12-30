@@ -388,8 +388,6 @@ export class InventoryService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        // console.log('stockReportRequest', stockReportRequest);
-
         return this._http.post(this.config.apiUrl + INVENTORY_API.STOCK_REPORT_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
             .replace(':stockUniqueName', encodeURIComponent(stockReportRequest.stockUniqueName))
@@ -427,7 +425,6 @@ export class InventoryService {
      * get GetGroupStocksReport
      */
     public GetGroupStocksReport(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
-        // console.log('stockReportRequest is :', stockReportRequest);
         let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT;
         if (stockReportRequest.entity) {
             url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
@@ -481,7 +478,6 @@ export class InventoryService {
     }
 
     public GetGroupStocksReport_V3(stockReportRequest: GroupStockReportRequest): Observable<BaseResponse<GroupStockReportResponse, GroupStockReportRequest>> {
-        // console.log('stockReportRequest is :', stockReportRequest);
         let url = this.config.apiUrl + INVENTORY_API.GROUP_STOCK_REPORT_V3;
         if (stockReportRequest.entity) {
             url = url.replace(':entity', encodeURIComponent(stockReportRequest.entity));
@@ -503,8 +499,6 @@ export class InventoryService {
         } else {
             url = url.replace(':number', '');
         }
-
-        // console.log('GetGroupStocksReport_V2', stockReportRequest);
 
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;

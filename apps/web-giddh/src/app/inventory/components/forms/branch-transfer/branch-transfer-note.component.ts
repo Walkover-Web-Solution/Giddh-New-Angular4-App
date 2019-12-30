@@ -509,7 +509,6 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
                 });
                 this.InventoryEntryValue.isManufactured = this.isManufactured.value;
             }
-            console.log("this.InventoryEntryValue", this.InventoryEntryValue);
             this.onSave.emit({ ...this.InventoryEntryValue });
         }
     }

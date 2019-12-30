@@ -1,26 +1,26 @@
 <div class="form-group mrT2">
-  <p class="steps-block">
+    <p class="steps-block">
         <span class="sp-template">
-      <button type="button" (click)="setStep('one')" class="btn"
-              [ngClass]="{'active': (stage === 'one' || stage === 'two') }">1</button>
-      <br>
-      <span [ngClass]="{'label-active': (stage === 'one' || stage === 'two')}">Select Template</span>
+            <button type="button" (click)="setStep('one')" class="btn"
+                [ngClass]="{'active': (stage === 'one' || stage === 'two') }">1</button>
+            <br>
+            <span [ngClass]="{'label-active': (stage === 'one' || stage === 'two')}">Select Template</span>
         </span>
-    <span class="v_line" [ngClass]="{'active': stage === 'two'}"></span>
-  </p>
-  <p class="steps-block">
+        <span class="v_line" [ngClass]="{'active': stage === 'two'}"></span>
+    </p>
+    <p class="steps-block">
         <span class="sp-template">
-      <button type="button" (click)="setStep('two')" class="btn" [ngClass]="{'active': stage === 'two'}"
-              [disabled]="stage === 'one'">2</button>
-      <br> <span [ngClass]="{'label-active': (stage === 'two' || stage === 'three')}">Create Invoice</span>
+            <button type="button" (click)="setStep('two')" class="btn" [ngClass]="{'active': stage === 'two'}"
+                [disabled]="stage === 'one'">2</button>
+            <br> <span [ngClass]="{'label-active': (stage === 'two' || stage === 'three')}">Create Invoice</span>
         </span>
-    <span class="v_line" [ngClass]="{'active': stage === 'three'}"></span>
-  </p>
-  <p class="steps-block">
+        <span class="v_line" [ngClass]="{'active': stage === 'three'}"></span>
+    </p>
+    <p class="steps-block">
         <span class="sp-template">
-      <button type="button" (click)="setStep('three')" class="btn" [ngClass]="{'active': stage === 'three'}"
-              [disabled]="stage === 'one' || stage === 'two'">3</button>
-      <br> Export Invoices
-    </span>
-  </p>
+            <button type="button" (click)="setStep('three')" class="btn" [ngClass]="{'active': stage === 'three'}"
+                [disabled]="stage === 'one' || stage === 'two'">3</button>
+            <br> Export Invoices
+        </span>
+    </p>
 </div>

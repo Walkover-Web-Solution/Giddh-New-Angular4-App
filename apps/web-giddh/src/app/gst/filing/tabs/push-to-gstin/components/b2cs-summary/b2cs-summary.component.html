@@ -1,100 +1,100 @@
 <div class="gstr-transactions-summary">
-  <!---->
-  <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
-  <p style="padding-top:6px;" class="text-muted half">Details of invoices with value less than 2.5 lakhs that you’ve
-    issued to consumers other than B2C (Large) transactions.</p>
+    <!---->
+    <h4 class="clearfix gstr-summary-title">B2C (Small) Details</h4>
+    <p style="padding-top:6px;" class="text-muted half">Details of invoices with value less than 2.5 lakhs that you’ve
+        issued to consumers other than B2C (Large) transactions.</p>
 
-  <div class="">
-    <div>
-      <table class="transactions-table table-striped  table zi-table"
-             *ngIf="brcsSummary.length">
-        <thead>
-        <tr>
-          <!---->
-          <th style="" class="text-left">
-            <div style="position: relative">
-              <div class="pull-left over-flow"> Type</div>
-              <!---->
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Rate</div>
-              <!---->
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Place of Supply</div>
-              <!---->
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> Taxable Amount</div>
-              <!---->
-            </div>
-          </th>
+    <div class="">
+        <div>
+            <table class="transactions-table table-striped  table zi-table" *ngIf="brcsSummary.length">
+                <thead>
+                    <tr>
+                        <!---->
+                        <th style="" class="text-left">
+                            <div style="position: relative">
+                                <div class="pull-left over-flow"> Type</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Rate</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Place of Supply</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> Taxable Amount</div>
+                                <!---->
+                            </div>
+                        </th>
 
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> IGST Amount</div>
-              <!---->
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> CGST Amount</div>
-              <!---->
-            </div>
-          </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> IGST Amount</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> CGST Amount</div>
+                                <!---->
+                            </div>
+                        </th>
 
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> SGST Amount</div>
-              <!---->
-            </div>
-          </th>
-          <th style="" class="text-right">
-            <div style="position: relative">
-              <div class=" over-flow"> CESS</div>
-              <!---->
-            </div>
-          </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> SGST Amount</div>
+                                <!---->
+                            </div>
+                        </th>
+                        <th style="" class="text-right">
+                            <div style="position: relative">
+                                <div class=" over-flow"> CESS</div>
+                                <!---->
+                            </div>
+                        </th>
 
-          <!---->
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of brcsSummary">
-          <td> {{item.typ ? item.typ : '-'}} </td>
-          <td class="text-right"> {{item.rt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.pos ? item.pos : '-'}} </td>
-          <td class="text-right"> {{item.txval | giddhCurrency}} </td>
-          <td class="text-right"> {{item.iamt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.camt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.samt | giddhCurrency}} </td>
-          <td class="text-right"> {{item.csamt | giddhCurrency}} </td>
-        </tr>
-        <!---->
-        </tbody>
-      </table>
+                        <!---->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of brcsSummary">
+                        <td> {{item.typ ? item.typ : '-'}} </td>
+                        <td class="text-right"> {{item.rt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.pos ? item.pos : '-'}} </td>
+                        <td class="text-right"> {{item.txval | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.iamt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.camt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.samt | giddhCurrency}} </td>
+                        <td class="text-right"> {{item.csamt | giddhCurrency}} </td>
+                    </tr>
+                    <!---->
+                </tbody>
+            </table>
 
-      <!--      <div class="text-center" *ngIf="(b2csSummaryResponse$ | async)?.totalPages > 1">-->
-      <!--        <pagination [maxSize]="5" [totalItems]="(b2csSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
-      <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
-      <!--                    [rotate]="false"></pagination>-->
-      <!--      </div>-->
+            <!--      <div class="text-center" *ngIf="(b2csSummaryResponse$ | async)?.totalPages > 1">-->
+            <!--        <pagination [maxSize]="5" [totalItems]="(b2csSummaryResponse$ | async)?.totalItems" [itemsPerPage]="10"-->
+            <!--                    (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true"-->
+            <!--                    [rotate]="false"></pagination>-->
+            <!--      </div>-->
 
-    </div>
-
-    <div class="" *ngIf="!brcsSummary.length">
-      <div class="filings-empty-state">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-        <div class="empty-msg"><span>  There is no summary of invoices with value less than 2.5 lakhs, other than B2C (Large) that you’ve issued to consumers.  </span>
         </div>
-      </div>
-    </div>
 
-  </div>
+        <div class="" *ngIf="!brcsSummary.length">
+            <div class="filings-empty-state">
+                <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg"><span> There is no summary of invoices with value less than 2.5 lakhs, other than
+                        B2C (Large) that you’ve issued to consumers. </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

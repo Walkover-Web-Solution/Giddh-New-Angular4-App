@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { AuthenticationService } from '../services/authentication.service';
 import { LoginActions } from '../actions/login.action';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     template: `<h2>Please wait...</h2>`
@@ -18,9 +18,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
 
     constructor(
         private route: ActivatedRoute,
-        private router: Router,
         private store: Store<AppState>,
-        private _authService: AuthenticationService,
+        private _generalService: GeneralService,
         private _loginAction: LoginActions,
     ) {
     }
@@ -31,6 +30,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._generalService.storeUtmParameters(this.route.snapshot.queryParams);
+
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];
             this.verifyToken();

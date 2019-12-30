@@ -209,7 +209,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
         this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
         this.socketCompanyRequest.Name = this._generalService.user.name;
+        this.socketCompanyRequest.utm_source = this._generalService.getUtmParameter('utm_source');
+        this.socketCompanyRequest.utm_medium = this._generalService.getUtmParameter('utm_medium');
+        this.socketCompanyRequest.utm_campaign = this._generalService.getUtmParameter('utm_campaign');
+        this.socketCompanyRequest.utm_term = this._generalService.getUtmParameter('utm_term');
+        this.socketCompanyRequest.utm_content = this._generalService.getUtmParameter('utm_content');
         this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
+
+        this._generalService.removeUtmParameters();
     }
 
     public closeModal() {
@@ -255,7 +262,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
                     this.socialAuthService.signOut().then().catch((err) => {
-                        // console.log ('err', err);
                     });
                     this.store.dispatch(this._loginAction.ClearSession());
                     this.store.dispatch(this._loginAction.socialLogoutAttempt());

@@ -11,29 +11,29 @@ import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api
 
 @Injectable()
 export class NewVsOldInvoicesService implements OnInit {
-  private companyUniqueName: string;
+    private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService,
-              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-  }
+    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+        private _generalService: GeneralService,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+    }
 
-  public ngOnInit() {
-    //
-  }
+    public ngOnInit() {
+        //
+    }
 
-  public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
-    this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':type', queryRequest.type.toString())
-      .replace(':value', queryRequest.value.toString()))
-      .pipe(map((res) => {
-        let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
-        data.queryString = queryRequest;
-        return data;
-      }),
-      catchError((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest)));
-  }
+    public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':type', queryRequest.type.toString())
+            .replace(':value', queryRequest.value.toString()))
+            .pipe(map((res) => {
+                let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
+                data.queryString = queryRequest;
+                return data;
+            }),
+                catchError((e) => this.errorHandler.HandleCatch<NewVsOldInvoicesResponse, string>(e, null, queryRequest)));
+    }
 }

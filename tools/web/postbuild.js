@@ -16,12 +16,12 @@ console.log('\nRunning post-build tasks');
 let rootDirectiory = '';
 // console.log(process.argv.length);
 for (var i = 0; i < process.argv.length; i++) {
-  console.log(process.argv[i]);
-  if (process.argv[i].startsWith('--path=')) {
+    console.log(process.argv[i]);
+    if (process.argv[i].startsWith('--path=')) {
 
-    rootDirectiory = '../../' + process.argv[i].replace('--path=', '').replace(' ', '');
-    console.log("Dist Folder Path = " + rootDirectiory);
-  }
+        rootDirectiory = '../../' + process.argv[i].replace('--path=', '').replace(' ', '');
+        console.log("Dist Folder Path = " + rootDirectiory);
+    }
 }
 
 const versionFilePath = path.join(__dirname, rootDirectiory, 'version.json');
@@ -34,38 +34,38 @@ let mainBundleRegexp = /^main.?([a-z0-9]*)?.js$/;
 
 // read the dist folder files and find the one we're looking for
 readDir(path.join(__dirname, rootDirectiory))
-  .then(files => {
-    mainBundleFile = files.find(f => mainBundleRegexp.test(f));
+    .then(files => {
+        mainBundleFile = files.find(f => mainBundleRegexp.test(f));
 
-    if (mainBundleFile) {
-      let matchHash = mainBundleFile.match(mainBundleRegexp);
+        if (mainBundleFile) {
+            let matchHash = mainBundleFile.match(mainBundleRegexp);
 
-      // if it has a hash in it's name, mark it down
-      if (matchHash.length > 1 && !!matchHash[1]) {
-        mainHash = matchHash[1];
-      }
-    }
+            // if it has a hash in it's name, mark it down
+            if (matchHash.length > 1 && !!matchHash[1]) {
+                mainHash = matchHash[1];
+            }
+        }
 
-    console.log(`Writing version and hash to ${versionFilePath}`);
+        console.log(`Writing version and hash to ${versionFilePath}`);
 
-    // write current version and hash into the version.json file
-    const src = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
-    return writeFile(versionFilePath, src);
-  }).then(() => {
-  // main bundle file not found, dev build?
-  if (!mainBundleFile) {
-    return;
-  }
+        // write current version and hash into the version.json file
+        const src = `{"version": "${appVersion}", "hash": "${mainHash}"}`;
+        return writeFile(versionFilePath, src);
+    }).then(() => {
+        // main bundle file not found, dev build?
+        if (!mainBundleFile) {
+            return;
+        }
 
-  console.log(`Replacing hash in the ${mainBundleFile}`);
+        console.log(`Replacing hash in the ${mainBundleFile}`);
 
-  // replace hash placeholder in our main.js file so the code knows it's current hash
-  const mainFilepath = path.join(__dirname, rootDirectiory, mainBundleFile);
-  return readFile(mainFilepath, 'utf8')
-    .then(mainFileData => {
-      const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
-      return writeFile(mainFilepath, replacedFile);
+        // replace hash placeholder in our main.js file so the code knows it's current hash
+        const mainFilepath = path.join(__dirname, rootDirectiory, mainBundleFile);
+        return readFile(mainFilepath, 'utf8')
+            .then(mainFileData => {
+                const replacedFile = mainFileData.replace('{{POST_BUILD_ENTERS_HASH_HERE}}', mainHash);
+                return writeFile(mainFilepath, replacedFile);
+            });
+    }).catch(err => {
+        console.log('Error with post build:', err);
     });
-}).catch(err => {
-  console.log('Error with post build:', err);
-});

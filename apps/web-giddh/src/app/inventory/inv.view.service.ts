@@ -14,7 +14,7 @@ export class InvViewService {
         this.viewJobworkSubject.next({ view: View, uniqueName: UniqueName, name: Name });
     }
     public setActiveDate(from: string, to: string) {
-      this.viewDateSubject.next({ from: from, to: to});
+        this.viewDateSubject.next({ from: from, to: to });
     }
 
     public clearMessage(type?: string) {
@@ -33,7 +33,7 @@ export class InvViewService {
         return this.viewJobworkSubject.asObservable();
     }
     public getActiveDate(): Observable<any> {
-      return this.viewDateSubject.asObservable();
+        return this.viewDateSubject.asObservable();
     }
 }
 

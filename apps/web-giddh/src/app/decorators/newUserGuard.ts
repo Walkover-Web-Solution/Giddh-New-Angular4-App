@@ -7,21 +7,21 @@ import { Store } from '@ngrx/store';
 
 @Injectable()
 export class NewUserAuthGuard implements CanActivate {
-  private user: VerifyEmailResponseModel;
+    private user: VerifyEmailResponseModel;
 
-  constructor(public _router: Router, private store: Store<AppState>) {
-  }
-
-  public canActivate() {
-    this.store.pipe(take(1)).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user;
-      }
-    });
-    if (this.user && this.user.session && this.user.session.id) {
-      return true;
-    } else {
-      return false;
+    constructor(public _router: Router, private store: Store<AppState>) {
     }
-  }
+
+    public canActivate() {
+        this.store.pipe(take(1)).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user;
+            }
+        });
+        if (this.user && this.user.session && this.user.session.id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,27 +1,27 @@
 <div class="welcome-msg  ">
-    <div class="row">
-        <div class="col-md-9">
-            <p class="mb-2">Hi {{logedInUser?.name}} !</p>
-            <p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
-            </p>
-        </div>
-        <div class="col-md-3 text-right xs-left">
-            <a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
-        </div>
-    </div>
-    <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="row">
-                    <ng-container *ngFor="let item of SubscriptionPlans; let i=index">
-                        <!-- Free plans -->
-                        <ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
-                            <div class="col-sm-4">
-                                <div class="select-plan-block">
-                                    {{item?.planDetails?.name}}
-                                    <div class="your-account">
+	<div class="row">
+		<div class="col-md-9">
+			<p class="mb-2">Hi {{logedInUser?.name}} !</p>
+			<p class="mb-3">Please select a subscription for your company <strong>“{{this.currentCompany}}”.</strong>
+			</p>
+		</div>
+		<div class="col-md-3 text-right xs-left">
+			<a (click)="backClicked()" class="btn btn-default pr-3 pl-3 mb-2">Back</a>
+		</div>
+	</div>
+	<div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
+		<div class="row">
+			<div class="col-sm-9">
+				<div class="row">
+					<ng-container *ngFor="let item of SubscriptionPlans; let i=index">
+						<!-- Free plans -->
+						<ng-container *ngIf="!item?.planDetails?.amount && !item.subscriptionId">
+							<div class="col-sm-4">
+								<div class="select-plan-block">
+									{{item?.planDetails?.name}}
+									<div class="your-account">
 
-                                        <!-- <div class="row">
+										<!-- <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
                       Subscription ID
@@ -34,85 +34,85 @@
                                                     </div>
                                                 </div> -->
 
-                                        <!--  -->
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Price
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p *ngIf="item?.planDetails?.amount">
-                                                    {{item?.planDetails?.amount | number}}
-                                                </p>
-                                                <p *ngIf="!item?.planDetails?.amount">
-                                                    FREE
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!--  -->
+										<!--  -->
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Price
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p *ngIf="item?.planDetails?.amount">
+													{{item?.planDetails?.amount | number}}
+												</p>
+												<p *ngIf="!item?.planDetails?.amount">
+													FREE
+												</p>
+											</div>
+										</div>
+										<!--  -->
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Total Companies
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p class="">
-                                                    {{item?.planDetails?.companiesLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Total Companies
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p class="">
+													{{item?.planDetails?.companiesLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Transactions Limit
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{item?.planDetails?.transactionLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Transactions Limit
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.transactionLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Renewal
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{item?.planDetails?.duration }}
-                                                    {{item?.planDetails?.durationUnit}}(s)
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Renewal
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.duration }}
+													{{item?.planDetails?.durationUnit}}(s)
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
-                                                    [ladda]="this.isUpdateCompanyInProgress$ | async">Select
-                                                    Plan</button>
-                                            </div>
-                                        </div>
-                                    </div>
+										<div class="row">
+											<div class="col-xs-12">
+												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(item);"
+													[ladda]="this.isUpdateCompanyInProgress$ | async">Select
+													Plan</button>
+											</div>
+										</div>
+									</div>
 
-                                </div>
+								</div>
 
-                            </div>
-                        </ng-container>
-                        <!-- new plan after free -->
-                        <ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
-                            <div class="col-sm-4">
-                                <div class="select-plan-block">
-                                    {{item?.planDetails?.name}}
-                                    <div class="your-account">
+							</div>
+						</ng-container>
+						<!-- new plan after free -->
+						<ng-container *ngIf="item?.planDetails?.amount && !item.subscriptionId">
+							<div class="col-sm-4">
+								<div class="select-plan-block">
+									{{item?.planDetails?.name}}
+									<div class="your-account">
 
-                                        <!-- <div class="row">
+										<!-- <div class="row">
                                                     <div class="col-xs-6">
                                                         <span>
                       Subscription ID
@@ -125,194 +125,194 @@
                                                     </div>
                                                 </div> -->
 
-                                        <!--  -->
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Price
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{item?.planDetails?.amount | number}}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!--  -->
+										<!--  -->
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Price
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.amount | number}}
+												</p>
+											</div>
+										</div>
+										<!--  -->
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Total Companies
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p class="">
-                                                    {{item?.planDetails?.companiesLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Total Companies
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p class="">
+													{{item?.planDetails?.companiesLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Transactions Limit
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{item?.planDetails?.transactionLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Transactions Limit
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.transactionLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Renewal
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{item?.planDetails?.duration}}
-                                                    {{item?.planDetails?.durationUnit}}(s)
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Renewal
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{item?.planDetails?.duration}}
+													{{item?.planDetails?.durationUnit}}(s)
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <button class="btn btn-success mrT1 mrB2"
-                                                    (click)="buyPlanClicked(item)">Buy Plan</button>
-                                            </div>
-                                        </div>
-                                    </div>
+										<div class="row">
+											<div class="col-xs-12">
+												<button class="btn btn-success mrT1 mrB2"
+													(click)="buyPlanClicked(item)">Buy Plan</button>
+											</div>
+										</div>
+									</div>
 
-                                </div>
+								</div>
 
-                            </div>
-                        </ng-container>
-                    </ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngFor="let paidItem of SubscriptionPlans">
-                        <ng-container
-                            *ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
+							</div>
+						</ng-container>
+					</ng-container>
+				</div>
+				<div class="row">
+					<ng-container *ngFor="let paidItem of SubscriptionPlans">
+						<ng-container
+							*ngIf="paidItem?.subscriptionId && paidItem?.totalCompanies!==paidItem?.planDetails?.companiesLimit">
 
-                            <div class="col-sm-4">
-                                <div class="select-plan-block">
-                                    {{paidItem?.planDetails?.name}}
-                                    <div class="your-account">
+							<div class="col-sm-4">
+								<div class="select-plan-block">
+									{{paidItem?.planDetails?.name}}
+									<div class="your-account">
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription ID
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{paidItem.subscriptionId}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription ID
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{paidItem.subscriptionId}}
+												</p>
+											</div>
+										</div>
 
-                                        <!--  -->
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Price
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{paidItem?.planDetails?.amount | number}}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!--  -->
+										<!--  -->
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Price
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{paidItem?.planDetails?.amount | number}}
+												</p>
+											</div>
+										</div>
+										<!--  -->
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Total Companies
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p class="">
-                                                    {{ paidItem?.totalCompanies | number}} out of
-                                                    {{ paidItem?.planDetails?.companiesLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Total Companies
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p class="">
+													{{ paidItem?.totalCompanies | number}} out of
+													{{ paidItem?.planDetails?.companiesLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Transactions Limit
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{paidItem?.planDetails?.transactionLimit | number}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Transactions Limit
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{paidItem?.planDetails?.transactionLimit | number}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <span>
-                                                    Subscription Renewal
-                                                </span>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <p>
-                                                    {{paidItem?.expiry}}
-                                                </p>
-                                            </div>
-                                        </div>
+										<div class="row">
+											<div class="col-xs-6">
+												<span>
+													Subscription Renewal
+												</span>
+											</div>
+											<div class="col-xs-6">
+												<p>
+													{{paidItem?.expiry}}
+												</p>
+											</div>
+										</div>
 
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(paidItem)"
-                                                    [ladda]="this.isUpdateCompanyInProgress$ | async">Select
-                                                    Plan</button>
-                                            </div>
-                                        </div>
-                                    </div>
+										<div class="row">
+											<div class="col-xs-12">
+												<button class="btn btn-primary mrT1 mrB2" (click)="choosePlan(paidItem)"
+													[ladda]="this.isUpdateCompanyInProgress$ | async">Select
+													Plan</button>
+											</div>
+										</div>
+									</div>
 
-                                </div>
+								</div>
 
-                            </div>
-                        </ng-container>
-                    </ng-container>
-                </div>
-            </div>
+							</div>
+						</ng-container>
+					</ng-container>
+				</div>
+			</div>
 
-            <div class="col-sm-3">
-                <div class="activation-key">
-                    <label>Activation Key</label>
-                    <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                        class="form-control mrT1" placeholder="Enter activation key">
-                </div>
-                <div class="activation-btn">
-                    <button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
-                        (click)="createCompanyViaActivationKey()">
-                        Activate</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="isSwitchPlanInProcess">
-            <div class="no-data mrT2 loader-main">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
-            </div>
-    </div>
-    <!-- <div class="note-wrap">
+			<div class="col-sm-3">
+				<div class="activation-key">
+					<label>Activation Key</label>
+					<input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
+						class="form-control mrT1" placeholder="Enter activation key">
+				</div>
+				<div class="activation-btn">
+					<button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
+						(click)="createCompanyViaActivationKey()">
+						Activate</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="isSwitchPlanInProcess">
+		<div class="no-data mrT2 loader-main">
+			<!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+			<div class="spinner2">
+				<div class="cube1"></div>
+				<div class="cube2"></div>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="note-wrap">
         <p>Note:</p>
         <p>* revenue more than 12 and less than 20 lacs</p>
     </div> -->

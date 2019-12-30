@@ -1,145 +1,147 @@
 <div id="" class="">
 
-  <div class="modal-header">
-    <h3>Perform Payment action</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-  </div>
+    <div class="modal-header">
+        <h3>Perform Payment action</h3>
+        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    </div>
 
-  <div class="modal-body clearfix" id="export-body" autocomplete="off">
+    <div class="modal-body clearfix" id="export-body" autocomplete="off">
 
-    <form name="invoiceActionForm" novalidate #f="ngForm" (ngSubmit)="onConfirmation(paymentActionFormObj)">
+        <form name="invoiceActionForm" novalidate #f="ngForm" (ngSubmit)="onConfirmation(paymentActionFormObj)">
 
-      <div class="row">
-        <div class="col-xs-6 form-group">
-          <label>Payment Date <sup>*</sup></label>
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label>Payment Date <sup>*</sup></label>
 
-          <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
-                 [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}"/>
-        </div>
+                    <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
+                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
+                </div>
 
-        <div class="col-xs-6 form-group">
-          <label>Amount <sup>*</sup></label>
-          <input type="text" class="form-control" decimalDigitsDirective [(ngModel)]="paymentActionFormObj.amount"
-                 placeholder="Enter Amount"
-                 name="amount" #amountField autocomplete="off" required/>
-        </div>
+                <div class="col-xs-6 form-group">
+                    <label>Amount <sup>*</sup></label>
+                    <input type="text" class="form-control" decimalDigitsDirective
+                        [(ngModel)]="paymentActionFormObj.amount" placeholder="Enter Amount" name="amount" #amountField
+                        autocomplete="off" required />
+                </div>
 
-      </div>
+            </div>
 
-      <div class="row">
+            <div class="row">
 
-        <div class="col-xs-6 form-group">
+                <div class="col-xs-6 form-group">
 
-          <label>Payment Mode <sup>*</sup></label>
+                    <label>Payment Mode <sup>*</sup></label>
 
-          <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
-                     [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
-                     [placeholder]="'Select Account'" [notFoundLink]="false"
-                     [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true"
-                     class="text-left" required>
+                    <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
+                        [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
+                        [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
+                        [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required>
 
-            <ng-template #optionTemplate1 let-option="option">
-              <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                <div class="item">{{ option.label }}</div>
-                <div class="item_unq">{{ option.value }}</div>
-              </a>
-            </ng-template>
+                        <ng-template #optionTemplate1 let-option="option">
+                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <div class="item">{{ option.label }}</div>
+                                <div class="item_unq">{{ option.value }}</div>
+                            </a>
+                        </ng-template>
 
-          </sh-select>
+                    </sh-select>
 
-        </div>
+                </div>
 
-        <div class="col-xs-6 form-group">
+                <div class="col-xs-6 form-group">
 
-          <label>Tag</label>
+                    <label>Tag</label>
 
-          <sh-select [options]="tags" name="selectedTag" [(ngModel)]="paymentActionFormObj.tagUniqueName"
-                     [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
-                     [ItemHeight]="33"></sh-select>
+                    <sh-select [options]="tags" name="selectedTag" [(ngModel)]="paymentActionFormObj.tagUniqueName"
+                        [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
+                        [ItemHeight]="33"></sh-select>
 
-        </div>
-      </div>
+                </div>
+            </div>
 
-      <div class="row" *ngIf="isBankSelected">
+            <div class="row" *ngIf="isBankSelected">
 
-        <div class="col-xs-6 form-group">
-          <label>Cheque No.(if payment by Cheque)</label>
-          <input type="text" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
-                 [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber"/>
-        </div>
+                <div class="col-xs-6 form-group">
+                    <label>Cheque No.(if payment by Cheque)</label>
+                    <input type="text" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
+                        [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
+                </div>
 
-        <div class="col-xs-6 form-group">
-          <label>Cheque Clearance Date</label>
-          <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
-                 [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
-                 placeholder="DD-MM-YYYY"/>
-        </div>
+                <div class="col-xs-6 form-group">
+                    <label>Cheque Clearance Date</label>
+                    <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
+                        [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
+                        placeholder="DD-MM-YYYY" />
+                </div>
 
-      </div>
+            </div>
 
-      <!-- switch currency on click-->
-      <div class="clearfix" *ngIf="isMulticurrencyAccount">
-        <div class="switch-currency mb-1" *ngIf="!showSwitchedCurr">
-            <span class="text-light d-inline-block pr-1">Base Currency</span>
+            <!-- switch currency on click-->
+            <div class="clearfix" *ngIf="isMulticurrencyAccount">
+                <div class="switch-currency mb-1" *ngIf="!showSwitchedCurr">
+                    <span class="text-light d-inline-block pr-1">Base Currency</span>
 
-          <span class="left-currency middle">1 {{accountCurrency}}</span>
+                    <span class="left-currency middle">1 {{accountCurrency}}</span>
 
-          <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(true)">
-          <span class="edit-icon cp">
-              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
-                   (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
-              <img src=" assets/images/autosave.svg" class="edit-pencil mr-1 middle"
-                   (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue"
-                   *ngIf="autoSaveIcon">
+                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                        (click)="switchCurrencyImg(true)">
+                    <span class="edit-icon cp">
+                        <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
+                            (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
+                        <img src=" assets/images/autosave.svg" class="edit-pencil mr-1 middle"
+                            (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue"
+                            *ngIf="autoSaveIcon">
 
-                <span class="mr-1 middle">{{companyCurrencyName}}</span>
-            </span>
-          <span class="right-currency middle mt-1">
-                <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
-                <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
-                       class="form-control edit-currency">
-              </span>
+                        <span class="mr-1 middle">{{companyCurrencyName}}</span>
+                    </span>
+                    <span class="right-currency middle mt-1">
+                        <span class="currency-digits"
+                            *ngIf="!showCurrencyValue">{{originalExchangeRate | giddhCurrency}}</span>
+                        <input type="number" name="exchangeRate" [(ngModel)]="exchangeRate" *ngIf="showCurrencyValue"
+                            class="form-control edit-currency">
+                    </span>
 
-        </div>
+                </div>
 
 
-        <div class="switch-currency mb-1" *ngIf="showSwitchedCurr">
-          <span class="text-light d-inline-block pr-1">Base Currency</span>
-          <span class="left-currency middle">1 {{companyCurrencyName}}</span>
-          <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon" (click)="switchCurrencyImg(false)">
-          <span class="edit-icon cp">
-              <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
-                   (click)="saveCancelExcRate(false)">
-              <img src=" assets/images/autosave.svg" class="edit-pencil mr-1"
-                   (click)="saveCancelExcRate(true)"
-                   *ngIf="autoSaveIcon">
+                <div class="switch-currency mb-1" *ngIf="showSwitchedCurr">
+                    <span class="text-light d-inline-block pr-1">Base Currency</span>
+                    <span class="left-currency middle">1 {{companyCurrencyName}}</span>
+                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                        (click)="switchCurrencyImg(false)">
+                    <span class="edit-icon cp">
+                        <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
+                            (click)="saveCancelExcRate(false)">
+                        <img src=" assets/images/autosave.svg" class="edit-pencil mr-1"
+                            (click)="saveCancelExcRate(true)" *ngIf="autoSaveIcon">
 
-                   <span class="mr-1 middle">{{accountCurrency}}</span>
-            </span>
-          <span class="right-currency middle mt-1">
-              <span class="currency-digits" *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
-              <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate" *ngIf="showCurrencyValue"
-                     class="form-control edit-currency">
-            </span>
+                        <span class="mr-1 middle">{{accountCurrency}}</span>
+                    </span>
+                    <span class="right-currency middle mt-1">
+                        <span class="currency-digits"
+                            *ngIf="!showCurrencyValue">{{originalReverseExchangeRate | giddhCurrency}}</span>
+                        <input type="number" name="exchangeRate" [(ngModel)]="reverseExchangeRate"
+                            *ngIf="showCurrencyValue" class="form-control edit-currency">
+                    </span>
 
-        </div>
-      </div>
-      <div class="row">
+                </div>
+            </div>
+            <div class="row">
 
-        <div class="col-xs-12 form-group">
-          <label>Description</label>
-          <textarea type="text" class="form-control" placeholder="Description"
-                    [(ngModel)]="paymentActionFormObj.description" name="description"></textarea>
-        </div>
+                <div class="col-xs-12 form-group">
+                    <label>Description</label>
+                    <textarea type="text" class="form-control" placeholder="Description"
+                        [(ngModel)]="paymentActionFormObj.description" name="description"></textarea>
+                </div>
 
-      </div>
+            </div>
 
-      <div class="pull-right">
-        <button type="submit" class="btn btn-success" [disabled]="f.invalid">Save</button>
-        <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
-      </div>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-success" [disabled]="f.invalid">Save</button>
+                <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            </div>
 
-    </form>
+        </form>
 
-  </div>
+    </div>
 </div>

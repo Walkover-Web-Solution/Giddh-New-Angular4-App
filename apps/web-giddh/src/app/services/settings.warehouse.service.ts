@@ -104,13 +104,13 @@ export class SettingsWarehouseService {
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
     }
 
-	public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
-		return this.http.get(this.config.apiUrl + WAREHOUSE_API.GET_WAREHOUSE_DETAILS
-			.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-			.replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {
-			let data: BaseResponse<WareHouseResponse, string> = res;
-			return data;
-		}), catchError((e) => this.errorHandler.HandleCatch<WareHouseResponse, string>(e, WareHouseResponse)));
-	}
+    public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
+        return this.http.get(this.config.apiUrl + WAREHOUSE_API.GET_WAREHOUSE_DETAILS
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<WareHouseResponse, string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<WareHouseResponse, string>(e, WareHouseResponse)));
+    }
 
 }

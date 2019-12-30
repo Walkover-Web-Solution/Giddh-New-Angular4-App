@@ -1,21 +1,22 @@
 <form #invoiceForm="ngForm" novalidate [formGroup]="CreateInvoiceForm" class="container-fluid form-container">
-  <div class="row">
-    <div class="container">
-      <section class="form-inline">
-        <!-- end genaral detail -->
-        <div class="col-xs-12">
-          <div class="collapse-pane clearfix">
-            <div class="collapse-pane-heading">
-              <div class="ico-box-wrap" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
-                <div class="ico-box">
-                  <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                </div>
-                <div class="ico-head">Sender’s Details</div>
-              </div>
-            </div>
-            <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-              <div class="row mt13" formGroupName="companyDetails">
-                <!-- <div class="form-group col-xs-2">
+    <div class="row">
+        <div class="container">
+            <section class="form-inline">
+                <!-- end genaral detail -->
+                <div class="col-xs-12">
+                    <div class="collapse-pane clearfix">
+                        <div class="collapse-pane-heading">
+                            <div class="ico-box-wrap" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
+                                <div class="ico-box">
+                                    <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                        aria-hidden="true"></span>
+                                </div>
+                                <div class="ico-head">Sender’s Details</div>
+                            </div>
+                        </div>
+                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                            <div class="row mt13" formGroupName="companyDetails">
+                                <!-- <div class="form-group col-xs-2">
           <label>Ship Date</label>
           <input formControlName="shippingDate" type="text" [placeholder]="giddhDateFormat" bsDatepicker class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
       </div>
@@ -27,44 +28,46 @@
           <label>Tracking No.</label>
           <input type="text" class="form-control" />
       </div> -->
-                <div class="col-xs-6">
-                  <div class="row">
-                    <div class="form-group col-xs-8"
-                         [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }">
-                      <label>Sender’s Name <sup>*</sup></label>
-                      <input type="text" class="form-control" formControlName="name" class="form-control"/>
-                    </div>
-                    <ng-container formGroupName="companyGstDetails">
-                      <div class="form-group col-xs-4">
-                        <label>State</label>
-                        <sh-select #stateEl formControlName="stateCode" class="splSales"
-                                   [options]="statesSource$ | async" [width]="139"></sh-select>
-                      </div>
-                      <div class="mrT2 pull-left width100">
-                        <div class="form-group col-xs-8">
-                          <label>PAN</label>
-                          <input type="text" class="form-control" formControlName="panNumber"/>
-                        </div>
-                        <div class="form-group col-xs-4">
-                          <label>GSTIN</label>
-                          <input type="text" class="form-control" formControlName="gstNumber"
-                                 (keyup)="getStateCode('senderInfo', stateEl);"/>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                </div>
-                <div class="col-xs-4">
-                  <div class="form-group width100">
-                    <label>Sender’s address</label>
-                    <textarea class="form-control" formControlName="address" rows="5"></textarea>
-                  </div>
-                </div>
+                                <div class="col-xs-6">
+                                    <div class="row">
+                                        <div class="form-group col-xs-8"
+                                            [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['companyDetails'].get('name').invalid }">
+                                            <label>Sender’s Name <sup>*</sup></label>
+                                            <input type="text" class="form-control" formControlName="name"
+                                                class="form-control" />
+                                        </div>
+                                        <ng-container formGroupName="companyGstDetails">
+                                            <div class="form-group col-xs-4">
+                                                <label>State</label>
+                                                <sh-select #stateEl formControlName="stateCode" class="splSales"
+                                                    [options]="statesSource$ | async" [width]="139"></sh-select>
+                                            </div>
+                                            <div class="mrT2 pull-left width100">
+                                                <div class="form-group col-xs-8">
+                                                    <label>PAN</label>
+                                                    <input type="text" class="form-control"
+                                                        formControlName="panNumber" />
+                                                </div>
+                                                <div class="form-group col-xs-4">
+                                                    <label>GSTIN</label>
+                                                    <input type="text" class="form-control" formControlName="gstNumber"
+                                                        (keyup)="getStateCode('senderInfo', stateEl);" />
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group width100">
+                                        <label>Sender’s address</label>
+                                        <textarea class="form-control" formControlName="address" rows="5"></textarea>
+                                    </div>
+                                </div>
 
-                <div class="clearfix"></div>
+                                <div class="clearfix"></div>
 
 
-                <!-- <ng-container formGroupName="customFields">
+                                <!-- <ng-container formGroupName="customFields">
           <div class="form-group col-xs-2">
               <label>Field 1</label>
               <input type="text" formControlName="customField1" class="form-control" />
@@ -78,160 +81,170 @@
               <input type="text" formControlName="customField3" class="form-control" />
           </div>
       </ng-container> -->
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- end other details collapse pane -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end other details collapse pane -->
 
-        <div class="col-xs-12">
-          <div class="collapse-pane clearfix">
-            <div class="collapse-pane-heading">
-              <div class="ico-box-wrap" (click)="isCustDtlCollapsed = !isCustDtlCollapsed">
-                <div class="ico-box">
-                  <span [ngClass]="isCustDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                </div>
-                <div class="ico-head">Customer Details</div>
-              </div>
-            </div>
-            <div [collapse]="isCustDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-              <div class="row mt13" formGroupName="userDetails">
-                <!-- commented by sagar sir -->
-                <div class="form-group col-xs-4"
-                     [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }">
-                  <label>Attention to
-                    <sup>*</sup>
-                  </label>
-                  <input placeholder="Customer name" type="text" formControlName="userCompanyName"
-                         class="form-control"/>
-                </div>
-                <div class="form-group col-xs-2">
-                  <label>Country</label>
-                  <!-- <input placeholder="Customer name" type="text" formControlName="userCompanyName" class="form-control" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }"
+                <div class="col-xs-12">
+                    <div class="collapse-pane clearfix">
+                        <div class="collapse-pane-heading">
+                            <div class="ico-box-wrap" (click)="isCustDtlCollapsed = !isCustDtlCollapsed">
+                                <div class="ico-box">
+                                    <span [ngClass]="isCustDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                        aria-hidden="true"></span>
+                                </div>
+                                <div class="ico-head">Customer Details</div>
+                            </div>
+                        </div>
+                        <div [collapse]="isCustDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                            <div class="row mt13" formGroupName="userDetails">
+                                <!-- commented by sagar sir -->
+                                <div class="form-group col-xs-4"
+                                    [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }">
+                                    <label>Attention to
+                                        <sup>*</sup>
+                                    </label>
+                                    <input placeholder="Customer name" type="text" formControlName="userCompanyName"
+                                        class="form-control" />
+                                </div>
+                                <div class="form-group col-xs-2">
+                                    <label>Country</label>
+                                    <!-- <input placeholder="Customer name" type="text" formControlName="userCompanyName" class="form-control" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }"
 /> -->
-                  <sh-select class="sh-form_control" formControlName="countryCode" [options]="countrySource"
-                             [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
-                </div>
+                                    <sh-select class="sh-form_control" formControlName="countryCode"
+                                        [options]="countrySource"
+                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }">
+                                    </sh-select>
+                                </div>
 
-                <div class="form-group col-xs-2">
-                  <label>Mobile No.</label>
-                  <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" formControlName="userMobileNumber"
-                         class="form-control"/>
-                </div>
-                <!-- <div class="form-group col-xs-3">
+                                <div class="form-group col-xs-2">
+                                    <label>Mobile No.</label>
+                                    <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
+                                        formControlName="userMobileNumber" class="form-control" />
+                                </div>
+                                <!-- <div class="form-group col-xs-3">
                         <label>Customer Name</label>
                         <input type="text" class="form-control" formControlName="userName" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userName').invalid }">
                     </div> -->
-                <div class="form-group col-xs-2">
-                  <label>Email Id</label>
-                  <input type="email" placeholder="someone@example.com" formControlName="userEmail"
-                         class="form-control"/>
-                </div>
+                                <div class="form-group col-xs-2">
+                                    <label>Email Id</label>
+                                    <input type="email" placeholder="someone@example.com" formControlName="userEmail"
+                                        class="form-control" />
+                                </div>
 
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- end general details collapse pane -->
-        <div class="col-xs-12">
-          <div class="collapse-pane clearfix">
-            <div class="collapse-pane-heading">
-              <div class="ico-box-wrap" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
-                <div class="ico-box">
-                  <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                </div>
-                <div class="ico-head">Mailing Details</div>
-              </div>
-            </div>
-            <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-              <div class="row mt13">
-                <div formGroupName="userDetails">
-                  <div class=""
-                       [ngClass]="{'col-xs-6':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-4': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
-                    <div class="row" formGroupName="billingDetails">
-                      <div class="form-group"
-                           [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
-                        <label>Billing Address</label>
-                        <textarea formControlName="address" (keyup)="autoFillShippingDetails()" class="form-control"
-                                  rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
-                      </div>
-                      <div class="form-group col-xs-4"
-                           *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
-                        <div>
-                          <label>State</label>
-                          <sh-select formControlName="stateCode" (selected)="autoFillShippingDetails()" #statesBilling
-                                     class="splSales" [options]="statesSource$ | async" [width]="139"></sh-select>
+                            </div>
                         </div>
-                        <div class="mrT2">
-                          <label>GSTIN</label>
-                          <input formControlName="gstNumber" maxLength="15" type="text" class="form-control"
-                                 (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"/>
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                  <div class=""
-                       [ngClass]="{'col-xs-6':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-4': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
-                    <div class="row" formGroupName="shippingDetails">
-                      <div class="form-group"
-                           [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
-                        <label style="width:340px;">
-                          <input type="checkbox" (change)="autoFillShippingDetails()"
-                                 formControlName="autoFillShipping"> Shipping Address Same as Billing Address</label>
-                        <textarea formControlName="address"
-                                  [readonly]="CreateInvoiceForm.get('userDetails')['controls']['shippingDetails'].get('autoFillShipping').value"
-                                  class="form-control"
-                                  rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
-                      </div>
-                      <div class="form-group col-xs-4"
-                           *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
-                        <div>
-                          <label>State</label>
-                          <sh-select formControlName="stateCode"
-                                     [disabled]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value"
-                                     #statesShipping class="splSales" [options]="statesSource$ | async"></sh-select>
+                </div>
+
+
+                <!-- end general details collapse pane -->
+                <div class="col-xs-12">
+                    <div class="collapse-pane clearfix">
+                        <div class="collapse-pane-heading">
+                            <div class="ico-box-wrap" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
+                                <div class="ico-box">
+                                    <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'"
+                                        aria-hidden="true"></span>
+                                </div>
+                                <div class="ico-head">Mailing Details</div>
+                            </div>
                         </div>
-                        <div class="mrT2">
-                          <label>GSTIN</label>
-                          <input formControlName="gstNumber"
-                                 [readonly]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value"
-                                 maxLength="15" type="text" class="form-control"
-                                 (keyup)="getStateCode('shippingDetails', statesShipping)"
-                          />
+                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                            <div class="row mt13">
+                                <div formGroupName="userDetails">
+                                    <div class=""
+                                        [ngClass]="{'col-xs-6':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-4': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
+                                        <div class="row" formGroupName="billingDetails">
+                                            <div class="form-group"
+                                                [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
+                                                <label>Billing Address</label>
+                                                <textarea formControlName="address" (keyup)="autoFillShippingDetails()"
+                                                    class="form-control"
+                                                    rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
+                                            </div>
+                                            <div class="form-group col-xs-4"
+                                                *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
+                                                <div>
+                                                    <label>State</label>
+                                                    <sh-select formControlName="stateCode"
+                                                        (selected)="autoFillShippingDetails()" #statesBilling
+                                                        class="splSales" [options]="statesSource$ | async"
+                                                        [width]="139"></sh-select>
+                                                </div>
+                                                <div class="mrT2">
+                                                    <label>GSTIN</label>
+                                                    <input formControlName="gstNumber" maxLength="15" type="text"
+                                                        class="form-control"
+                                                        (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=""
+                                        [ngClass]="{'col-xs-6':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-4': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
+                                        <div class="row" formGroupName="shippingDetails">
+                                            <div class="form-group"
+                                                [ngClass]="{'col-xs-8':CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN', 'col-xs-12': CreateInvoiceForm.controls['userDetails'].get('countryCode').value !== 'IN' }">
+                                                <label style="width:340px;">
+                                                    <input type="checkbox" (change)="autoFillShippingDetails()"
+                                                        formControlName="autoFillShipping"> Shipping Address Same as
+                                                    Billing Address</label>
+                                                <textarea formControlName="address"
+                                                    [readonly]="CreateInvoiceForm.get('userDetails')['controls']['shippingDetails'].get('autoFillShipping').value"
+                                                    class="form-control"
+                                                    rows="{{ CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN' ? 5 : 3}}"></textarea>
+                                            </div>
+                                            <div class="form-group col-xs-4"
+                                                *ngIf="CreateInvoiceForm.controls['userDetails'].get('countryCode').value === 'IN'">
+                                                <div>
+                                                    <label>State</label>
+                                                    <sh-select formControlName="stateCode"
+                                                        [disabled]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value"
+                                                        #statesShipping class="splSales"
+                                                        [options]="statesSource$ | async"></sh-select>
+                                                </div>
+                                                <div class="mrT2">
+                                                    <label>GSTIN</label>
+                                                    <input formControlName="gstNumber"
+                                                        [readonly]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value"
+                                                        maxLength="15" type="text" class="form-control"
+                                                        (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
                         </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <!-- end row -->
-            </div>
-          </div>
-        </div>
 
-        <!-- end mailing address collapse pane -->
+                <!-- end mailing address collapse pane -->
 
-        <!-- start general detail -->
-        <div class="col-xs-12">
-          <div class="collapse-pane clearfix">
-            <div class="collapse-pane-heading">
-              <div class="ico-box-wrap" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
-                <div class="ico-box">
-                  <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
-                </div>
-                <span class="ico-head">Invoice Details</span>
-              </div>
+                <!-- start general detail -->
+                <div class="col-xs-12">
+                    <div class="collapse-pane clearfix">
+                        <div class="collapse-pane-heading">
+                            <div class="ico-box-wrap" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
+                                <div class="ico-box">
+                                    <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                        aria-hidden="true"></span>
+                                </div>
+                                <span class="ico-head">Invoice Details</span>
+                            </div>
 
-            </div>
-            <div [collapse]="isGenDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
-              <div class="row mt13">
-                <!-- <div class="form-group col-xs-4">
+                        </div>
+                        <div [collapse]="isGenDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                            <div class="row mt13">
+                                <!-- <div class="form-group col-xs-4">
     <label>Attention to</label>
     <input type="text" name="accountDetails.attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
 </div> -->
-                <!-- <div class="col-xs-6">
+                                <!-- <div class="col-xs-6">
     <div class="row">
         <ng-container formGroupName="companyDetails">
             <div class="form-group col-xs-6">
@@ -252,102 +265,109 @@
         </ng-container>
     </div>
 </div> -->
-                <div class="col-xs-12">
-                  <div class="row">
-                    <ng-container formGroupName="invoiceDetails">
-                      <div class="form-group col-xs-2"
-                           [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['invoiceDetails'].get('invoiceNumber').invalid }">
-                        <label>Invoice Number
-                          <sup>*</sup>
-                        </label>
-                        <input type="text" class="form-control" formControlName="invoiceNumber"/>
-                      </div>
-                      <div class="form-group col-xs-2">
-                        <label>Invoice Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="invoiceDate"
-                               class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
-                      </div>
-                      <div class="form-group col-xs-2">
-                        <label>Due Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="dueDate"
-                               class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
-                      </div>
-                    </ng-container>
-                    <ng-container formGroupName="other">
-                      <div class="form-group col-xs-2">
-                        <label>Ship Date</label>
-                        <input type="text" [placeholder]="giddhDateFormat" formControlName="shippingDate"
-                               class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
-                      </div>
-                      <div class="form-group col-xs-2">
-                        <label>Ship Via</label>
-                        <input type="text" class="form-control" formControlName="shippedVia"/>
-                      </div>
-                      <div class="form-group col-xs-2">
-                        <label>Tracking No.</label>
-                        <input type="text" class="form-control" formControlName="trackingNumber"/>
-                      </div>
-                    </ng-container>
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <ng-container formGroupName="invoiceDetails">
+                                            <div class="form-group col-xs-2"
+                                                [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['invoiceDetails'].get('invoiceNumber').invalid }">
+                                                <label>Invoice Number
+                                                    <sup>*</sup>
+                                                </label>
+                                                <input type="text" class="form-control"
+                                                    formControlName="invoiceNumber" />
+                                            </div>
+                                            <div class="form-group col-xs-2">
+                                                <label>Invoice Date</label>
+                                                <input type="text" [placeholder]="giddhDateFormat"
+                                                    formControlName="invoiceDate" class="form-control" bsDatepicker
+                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }">
+                                            </div>
+                                            <div class="form-group col-xs-2">
+                                                <label>Due Date</label>
+                                                <input type="text" [placeholder]="giddhDateFormat"
+                                                    formControlName="dueDate" class="form-control" bsDatepicker
+                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                                            </div>
+                                        </ng-container>
+                                        <ng-container formGroupName="other">
+                                            <div class="form-group col-xs-2">
+                                                <label>Ship Date</label>
+                                                <input type="text" [placeholder]="giddhDateFormat"
+                                                    formControlName="shippingDate" class="form-control" bsDatepicker
+                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                                            </div>
+                                            <div class="form-group col-xs-2">
+                                                <label>Ship Via</label>
+                                                <input type="text" class="form-control" formControlName="shippedVia" />
+                                            </div>
+                                            <div class="form-group col-xs-2">
+                                                <label>Tracking No.</label>
+                                                <input type="text" class="form-control"
+                                                    formControlName="trackingNumber" />
+                                            </div>
+                                        </ng-container>
 
-                  </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
-              </div>
-            </div>
-          </div>
+            </section>
         </div>
-      </section>
     </div>
-  </div>
-  <div class="row mrT">
-    <section class="clearfix pd1 pdB2 mrB2 whiteBg">
-      <div class="container">
-        <table class="table" formArrayName="entries">
-          <thead>
-          <tr>
-            <td>#</td>
-            <td>Date</td>
-            <td>Description</td>
-            <td class="text-right">Quantity</td>
-            <td class="text-right">Rate</td>
-            <td class="text-right">Discount</td>
-            <td class="text-right">Tax</td>
-            <td class="text-right">Amount</td>
-          </tr>
-          </thead>
-          <tbody
-            *ngFor="let entry of CreateInvoiceForm.get('entries')['controls']; let entryIdx = index; let first = first; let last = last">
-          <tr [formGroupName]="entryIdx">
-            <td>{{ entryIdx+1 }}</td>
-            <td width="128px">
-              <input type="text" formControlName="entryDate" [placeholder]="giddhDateFormat" bsDatepicker
-                     class="form-control text-left" [bsConfig]="{ dateInputFormat: giddhDateFormat }"/>
-            </td>
-            <td>
-              <input type="text" formControlName="description" placeholder="Description" class="form-control"/>
-            </td>
-            <td width="93px">
-              <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="quantity"
-                     placeholder="Quantity" class="form-control text-right"/>
-            </td>
-            <td width="100px">
-              <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="rate" placeholder="Rate"
-                     class="form-control  text-right"/>
-            </td>
-            <td width="100px">
-              <input type="text" (keyup)="calculateAndSetTotal()" formControlName="discount" placeholder="Discount"
-                     class="form-control  text-right"/>
-            </td>
-            <td width="100px">
-              <input type="text" (keyup)="processTax(entryIdx)" formControlName="tax" placeholder="Tax"
-                     class="form-control  text-right"/>
-            </td>
-            <td width="108px">
-              <input type="text" (keyup)="calculateAndSetTotal()" formControlName="amount" placeholder="Amount"
-                     class="form-control  text-right"/>
-            </td>
-            <!-- <td>
+    <div class="row mrT">
+        <section class="clearfix pd1 pdB2 mrB2 whiteBg">
+            <div class="container">
+                <table class="table" formArrayName="entries">
+                    <thead>
+                        <tr>
+                            <td>#</td>
+                            <td>Date</td>
+                            <td>Description</td>
+                            <td class="text-right">Quantity</td>
+                            <td class="text-right">Rate</td>
+                            <td class="text-right">Discount</td>
+                            <td class="text-right">Tax</td>
+                            <td class="text-right">Amount</td>
+                        </tr>
+                    </thead>
+                    <tbody
+                        *ngFor="let entry of CreateInvoiceForm.get('entries')['controls']; let entryIdx = index; let first = first; let last = last">
+                        <tr [formGroupName]="entryIdx">
+                            <td>{{ entryIdx+1 }}</td>
+                            <td width="128px">
+                                <input type="text" formControlName="entryDate" [placeholder]="giddhDateFormat"
+                                    bsDatepicker class="form-control text-left"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
+                            </td>
+                            <td>
+                                <input type="text" formControlName="description" placeholder="Description"
+                                    class="form-control" />
+                            </td>
+                            <td width="93px">
+                                <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="quantity"
+                                    placeholder="Quantity" class="form-control text-right" />
+                            </td>
+                            <td width="100px">
+                                <input type="text" (keyup)="processRateAndQuantity(entryIdx)" formControlName="rate"
+                                    placeholder="Rate" class="form-control  text-right" />
+                            </td>
+                            <td width="100px">
+                                <input type="text" (keyup)="calculateAndSetTotal()" formControlName="discount"
+                                    placeholder="Discount" class="form-control  text-right" />
+                            </td>
+                            <td width="100px">
+                                <input type="text" (keyup)="processTax(entryIdx)" formControlName="tax"
+                                    placeholder="Tax" class="form-control  text-right" />
+                            </td>
+                            <td width="108px">
+                                <input type="text" (keyup)="calculateAndSetTotal()" formControlName="amount"
+                                    placeholder="Amount" class="form-control  text-right" />
+                            </td>
+                            <!-- <td>
 <div class="">
 <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
   class="form-control text-right" [(ngModel)]="transaction.hsnNumber" />
@@ -356,8 +376,8 @@
 </div>
 </td> -->
 
-            <!-- show/hide fields -->
-            <!-- <td class="nested-table-wrap">
+                            <!-- show/hide fields -->
+                            <!-- <td class="nested-table-wrap">
 <table width="100%" cellspacing="0" cellspadding="0">
 <tbody>
   <tr>
@@ -412,14 +432,14 @@
 </tbody>
 </table>
 </td> -->
-            <!-- <td> -->
-            <!-- <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list> -->
-            <!-- </td> -->
-            <!-- <td>
+                            <!-- <td> -->
+                            <!-- <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list> -->
+                            <!-- </td> -->
+                            <!-- <td>
 <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.taxableValue" />
 </td> -->
-            <!-- <td class="tax-list-dd-wrap dropdown-container"> -->
-            <!-- <sales-tax-list
+                            <!-- <td class="tax-list-dd-wrap dropdown-container"> -->
+                            <!-- <sales-tax-list
 class="salesTax"
 [showTaxPopup]="false"
 [taxes]="companyTaxesList$ | async"
@@ -428,114 +448,117 @@ class="salesTax"
 (selectedTaxEvent)="selectedTaxEvent($event, entry)"
 (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
 </sales-tax-list> -->
-            <!-- </td> -->
-            <!-- <td>
+                            <!-- </td> -->
+                            <!-- <td>
 <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
 />
 </td>-->
-            <td class="action-panel-td alR">
+                            <td class="action-panel-td alR">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow()">
-                  <i class="icon-add" aria-hidden="true"></i>
-                </span>
-              <span class="cp" *ngIf="!last" (click)="removeTransaction(entryIdx)">
-                  <i class="icon-cross" aria-hidden="true"></i>
-                </span>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+                                    <i class="icon-add" aria-hidden="true"></i>
+                                </span>
+                                <span class="cp" *ngIf="!last" (click)="removeTransaction(entryIdx)">
+                                    <i class="icon-cross" aria-hidden="true"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        <!-- sub total and total calc -->
-        <table class="table">
-          <tbody>
-          <tr>
-            <td width="50%" formGroupName="other">
-              <div class="col-xs-8 pdT1">
-                <label class="mrB1">Message</label>
-                <textarea style="height:140px" class="form-control" formControlName="note2"></textarea>
-              </div>
-            </td>
-            <td width="50%" formGroupName="uiCalculation">
-              <section class="tableSec">
-                <div class="tableRow">
-                  <div class="tableCell">Total Amount</div>
-                  <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
+                <!-- sub total and total calc -->
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="50%" formGroupName="other">
+                                <div class="col-xs-8 pdT1">
+                                    <label class="mrB1">Message</label>
+                                    <textarea style="height:140px" class="form-control"
+                                        formControlName="note2"></textarea>
+                                </div>
+                            </td>
+                            <td width="50%" formGroupName="uiCalculation">
+                                <section class="tableSec">
+                                    <div class="tableRow">
+                                        <div class="tableCell">Total Amount</div>
+                                        <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
                     | number:'1.2-2'}}
-                  </div>
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">Discount</div>
-                  <div class="tableCell figureCell">
-                    {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
-                  </div>
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">Discount</div>
+                                        <div class="tableCell figureCell">
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
+                                        </div>
 
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">Taxable Value</div>
-                  <div class="tableCell figureCell">
-                    {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
-                  </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">Taxable Value</div>
+                                        <div class="tableCell figureCell">
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
+                                        </div>
 
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">Tax</div>
-                  <div class="tableCell figureCell">
-                    {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
-                  </div>
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">
-                    <strong>Total</strong>
-                  </div>
-                  <div class="tableCell figureCell">
-                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value |
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">Tax</div>
+                                        <div class="tableCell figureCell">
+                                            {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">
+                                            <strong>Total</strong>
+                                        </div>
+                                        <div class="tableCell figureCell">
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value |
                       number:'1.2-2'}}</strong>
-                  </div>
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">Deposit</div>
-                  <div class="tableCell figureCell">
-                    <input type="number" placeholder="Amount" class="form-control" formControlName="depositAmount"/>
-                  </div>
-                </div>
-                <div class="tableRow">
-                  <div class="tableCell">
-                    <strong>Balance Due</strong>
-                  </div>
-                  <div class="tableCell figureCell">
-                    <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value |
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">Deposit</div>
+                                        <div class="tableCell figureCell">
+                                            <input type="number" placeholder="Amount" class="form-control"
+                                                formControlName="depositAmount" />
+                                        </div>
+                                    </div>
+                                    <div class="tableRow">
+                                        <div class="tableCell">
+                                            <strong>Balance Due</strong>
+                                        </div>
+                                        <div class="tableCell figureCell">
+                                            <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value |
                       number:'1.2-2'}}</strong>
-                  </div>
-                </div>
-              </section>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- end -->
-    </section>
-  </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- end -->
+        </section>
+    </div>
 
 </form>
 
 
 <section class="">
-  <section id="actionPane" class="text-center">
-    <div class="container">
-      <div class="pull-right pr">
-        <!-- <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
+    <section id="actionPane" class="text-center">
+        <div class="container">
+            <div class="pull-right pr">
+                <!-- <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
   <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button> -->
-        <button type="submit" class="btn btn-success" (click)="onSubmitInvoiceForm(invoiceForm)">Generate Invoice
-        </button>
-      </div>
-    </div>
-  </section>
+                <button type="submit" class="btn btn-success" (click)="onSubmitInvoiceForm(invoiceForm)">Generate
+                    Invoice
+                </button>
+            </div>
+        </div>
+    </section>
 </section>
 <div bsModal #invoicePreviewModal="bs-modal" [config]="{ keyboard: true }" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg" style="height: 100%;">
-    <div *ngIf="base64Data" class="modal-content">
-      <iframe width="100%" height="600px" name="plugin" [attr.src]="base64Data" type="application/pdf"></iframe>
+    <div class="modal-dialog modal-lg" style="height: 100%;">
+        <div *ngIf="base64Data" class="modal-content">
+            <iframe width="100%" height="600px" name="plugin" [attr.src]="base64Data" type="application/pdf"></iframe>
+        </div>
     </div>
-  </div>
 </div>

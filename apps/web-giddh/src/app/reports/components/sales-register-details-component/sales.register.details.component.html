@@ -1,137 +1,137 @@
 <div class="responsive mt-2">
-  <table class="table basic table-bordered">
-    <thead>
-      <tr>
-        <th class="widtn-100">
-          <div class="d-flex">
-            <div class="flex-fill pr-1">
-              Date
-            </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-            </div>
+    <table class="table basic table-bordered">
+        <thead>
+            <tr>
+                <th class="widtn-100">
+                    <div class="d-flex">
+                        <div class="flex-fill pr-1">
+                            Date
+                        </div>
+                        <div class="icon-pointer">
+                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                        </div>
 
 
-          </div>
-        </th>
+                    </div>
+                </th>
 
-        <th class="td_in_searchBox">
-          <div>
-            <span> Account</span><i class="icon-search"></i>
-          </div>
-        </th>
+                <th class="td_in_searchBox">
+                    <div>
+                        <span> Account</span><i class="icon-search"></i>
+                    </div>
+                </th>
 
-        <th class="width-160">
-          <div class="d-flex">
-            <div class="flex-fill pr-1">
-              Voucher Type
-            </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-            </div>
+                <th class="width-160">
+                    <div class="d-flex">
+                        <div class="flex-fill pr-1">
+                            Voucher Type
+                        </div>
+                        <div class="icon-pointer">
+                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                        </div>
 
-          </div>
-        </th>
+                    </div>
+                </th>
 
-        <th class="td_in_searchBox width-160">
-          <div>
-            <span> Number</span><i class="icon-search"></i>
-          </div>
-          <!-- <div class="input-container">
+                <th class="td_in_searchBox width-160">
+                    <div>
+                        <span> Number</span><i class="icon-search"></i>
+                    </div>
+                    <!-- <div class="input-container">
             <input class="w100" placeholder="Search Report No." type="text">
           </div> -->
-        </th>
+                </th>
 
-        <th class="width-160">
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1">
-              Sales
-            </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-            </div>
+                <th class="width-160">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right pr-1">
+                            Sales
+                        </div>
+                        <div class="icon-pointer">
+                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                        </div>
 
-          </div>
-        </th>
+                    </div>
+                </th>
 
-        <th class="width-160">
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1">
-              Return
-            </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-            </div>
+                <th class="width-160">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right pr-1">
+                            Return
+                        </div>
+                        <div class="icon-pointer">
+                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                        </div>
 
-          </div>
-        </th>
+                    </div>
+                </th>
 
-        <th class="width-160">
-          <div class="d-flex">
-            <div class="flex-fill text-right pr-1">
-              Net Sales
-            </div>
-            <div class="icon-pointer">
-              <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-              <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-            </div>
+                <th class="width-160">
+                    <div class="d-flex">
+                        <div class="flex-fill text-right pr-1">
+                            Net Sales
+                        </div>
+                        <div class="icon-pointer">
+                            <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
+                            <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
+                        </div>
 
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of items">
-        <td>{{item.date}}</td>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of items">
+                <td>{{item.date}}</td>
 
-        <td>
-          <div class="btn-group ac-detail" dropdown>
-            <a href="javascript:void(0)" id="button-basic" dropdownToggle aria-controls="dropdown-basic">
-              {{item.account}}
-            </a>
+                <td>
+                    <div class="btn-group ac-detail" dropdown>
+                        <a href="javascript:void(0)" id="button-basic" dropdownToggle aria-controls="dropdown-basic">
+                            {{item.account}}
+                        </a>
 
-            <div id="dropdown-basic" *dropdownMenu class="dropdown-menu p-modal-tolltip" role="menu"
-              aria-labelledby="button-basic">
-              <div class="account-detail-custom-header">
-                <div class="d-flex">
-                  <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
-                    <h3 class="account-detail-custom-title word-break">
-                      <span>Mehta & Sons</span>
-                    </h3>
-                  </div>
-                  <div class="account-detail-padding">
-                    <a href="javascript:void(0)"><img src="./assets/images/path.svg"></a>
-                  </div>
-                </div>
-                <div class="custom-detail account-detail-padding">
-                  <h4>9876543210</h4>
-                  <h4>mehta&sons@gmail.com</h4>
-                  <h4>23ABCDE1234F2Z5</h4>
-                </div>
-              </div>
-              <div class="height-82px">
-                <ul class="list-unstyled">
-                  <li class="li-link"><a href="javascript: void 0">Go to Ledger</a></li>
-                  <li class="li-link"><a href="javascript: void 0">Generate Invoice</a></li>
-                  <li class="li-link"><a href="javascript: void 0">Send SMS</a></li>
-                  <li class="li-link"><a href="javascript: void 0">Send Email</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td>{{item.voucherType}}</td>
-        <td><a href="javascript:void(0)">{{item.Number}}</a></td>
-        <td class="text-right">{{item.sales}}</td>
-        <td class="text-right">{{item.return}}</td>
-        <td class="text-right">{{item.netSales}}</td>
-      </tr>
-    </tbody>
-  </table>
+                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu p-modal-tolltip" role="menu"
+                            aria-labelledby="button-basic">
+                            <div class="account-detail-custom-header">
+                                <div class="d-flex">
+                                    <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
+                                        <h3 class="account-detail-custom-title word-break">
+                                            <span>Mehta & Sons</span>
+                                        </h3>
+                                    </div>
+                                    <div class="account-detail-padding">
+                                        <a href="javascript:void(0)"><img src="./assets/images/path.svg"></a>
+                                    </div>
+                                </div>
+                                <div class="custom-detail account-detail-padding">
+                                    <h4>9876543210</h4>
+                                    <h4>mehta&sons@gmail.com</h4>
+                                    <h4>23ABCDE1234F2Z5</h4>
+                                </div>
+                            </div>
+                            <div class="height-82px">
+                                <ul class="list-unstyled">
+                                    <li class="li-link"><a href="javascript: void 0">Go to Ledger</a></li>
+                                    <li class="li-link"><a href="javascript: void 0">Generate Invoice</a></li>
+                                    <li class="li-link"><a href="javascript: void 0">Send SMS</a></li>
+                                    <li class="li-link"><a href="javascript: void 0">Send Email</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>{{item.voucherType}}</td>
+                <td><a href="javascript:void(0)">{{item.Number}}</a></td>
+                <td class="text-right">{{item.sales}}</td>
+                <td class="text-right">{{item.return}}</td>
+                <td class="text-right">{{item.netSales}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <!-- region sort icon template -->
@@ -139,5 +139,5 @@
 <!-- endregion -->
 
 <div class="text-center">
-  <pagination [totalItems]="30"></pagination>
+    <pagination [totalItems]="30"></pagination>
 </div>

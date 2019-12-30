@@ -1,6 +1,6 @@
 p.bankName {
     font-size: 14px;
-    color: #1A237E;
+    color: #1a237e;
     margin-bottom: 5px;
 }
 
@@ -11,9 +11,9 @@ p.bankBalnc {
     justify-content: space-between;
 }
 .single-bank-detatil {
-    border-bottom: 1px solid #D9D9D9;
+    border-bottom: 1px solid #d9d9d9;
     padding-bottom: 10px;
-        margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 a.connectBnk {
     position: absolute;
@@ -21,11 +21,11 @@ a.connectBnk {
     color: #262626;
     text-decoration: underline;
 }
-table.basic td{
+table.basic td {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
-    border-bottom: 1px solid #D9D9D9;
+    border-bottom: 1px solid #d9d9d9;
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: 16px;
@@ -34,13 +34,12 @@ table.basic td{
 .credtorsTable tr:last-child td {
     border-bottom: none !important;
 }
-table.basic th{
-  color: #1A237E;
-  font-size: 14px;
-
+table.basic th {
+    color: #1a237e;
+    font-size: 14px;
 }
-.cr-dr-body{
-  padding: 15px;
+.cr-dr-body {
+    padding: 15px;
 }
 .debtorsTable {
     margin-bottom: 50px;
@@ -50,17 +49,17 @@ span.thisWeek {
     text-decoration: underline;
     font-size: 16px;
 }
-.top-five-cr-dr-table td{
-  white-space: normal;
+.top-five-cr-dr-table td {
+    white-space: normal;
 }
 thead th {
     padding-bottom: 5px !important;
 }
-.no-entries{
+.no-entries {
     border-top: 1px solid #d9d9d9 !important;
     margin-top: 10px;
     padding-bottom: 20px !important;
     text-align: center;
     color: rgba(0, 0, 0, 0.4) !important;
     font-size: 16px;
-    }
+}

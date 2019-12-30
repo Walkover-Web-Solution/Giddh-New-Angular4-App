@@ -59,67 +59,67 @@ import { WarehouseActions } from '../settings/warehouse/action/warehouse.action'
  */
 
 @NgModule({
-  imports: [
-    EffectsModule.forRoot([
-      HomeActions,
-      GeneralActions,
-      ExpencesAction,
-      CompanyActions,
-      LoginActions,
-      GroupWithAccountsAction,
-      VerifyMobileActions,
-      AccountsAction,
-      SidebarAction,
-      InventoryAction,
-      InventoryReportActions,
-      InventoryEntryActions,
-      InventoryUsersActions,
-      SidebarAction,
-      CustomStockUnitAction,
-      StockReportActions,
-      SearchActions,
-      AuditLogsActions,
-      PermissionActions,
-      ManufacturingActions,
-      FlyAccountsActions,
-      TBPlBsActions,
-      LedgerActions,
-      DaybookActions,
-      InvoiceActions,
-      SettingsIntegrationActions,
-      SettingsProfileActions,
-      SettingsBranchActions,
-      SettingsTagActions,
-      SettingsTaxesActions,
-      SalesActions,
-      SettingsLinkedAccountsActions,
-      InvoicePurchaseActions,
-      SettingsFinancialYearActions,
-      SettingsPermissionActions,
-      SessionActions,
-      SettingsTriggersActions,
-      ImportExcelActions,
-      SettingsDiscountActions,
-      NewVsOldInvoicesActions,
-      AgingReportActions,
-      CompanyImportExportActions,
-      InvoiceReceiptActions,
-      CompanyImportExportActions,
-      GstReconcileActions,
-      SubscriptionsActions,
-      ProformaActions,
-      CommonActions,
-      ItemOnBoardingActions,
-      WarehouseActions
-    ])
-  ],
-  exports: [EffectsModule]
+    imports: [
+        EffectsModule.forRoot([
+            HomeActions,
+            GeneralActions,
+            ExpencesAction,
+            CompanyActions,
+            LoginActions,
+            GroupWithAccountsAction,
+            VerifyMobileActions,
+            AccountsAction,
+            SidebarAction,
+            InventoryAction,
+            InventoryReportActions,
+            InventoryEntryActions,
+            InventoryUsersActions,
+            SidebarAction,
+            CustomStockUnitAction,
+            StockReportActions,
+            SearchActions,
+            AuditLogsActions,
+            PermissionActions,
+            ManufacturingActions,
+            FlyAccountsActions,
+            TBPlBsActions,
+            LedgerActions,
+            DaybookActions,
+            InvoiceActions,
+            SettingsIntegrationActions,
+            SettingsProfileActions,
+            SettingsBranchActions,
+            SettingsTagActions,
+            SettingsTaxesActions,
+            SalesActions,
+            SettingsLinkedAccountsActions,
+            InvoicePurchaseActions,
+            SettingsFinancialYearActions,
+            SettingsPermissionActions,
+            SessionActions,
+            SettingsTriggersActions,
+            ImportExcelActions,
+            SettingsDiscountActions,
+            NewVsOldInvoicesActions,
+            AgingReportActions,
+            CompanyImportExportActions,
+            InvoiceReceiptActions,
+            CompanyImportExportActions,
+            GstReconcileActions,
+            SubscriptionsActions,
+            ProformaActions,
+            CommonActions,
+            ItemOnBoardingActions,
+            WarehouseActions
+        ])
+    ],
+    exports: [EffectsModule]
 })
 export class ActionModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: ActionModule,
-      providers: []
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: ActionModule,
+            providers: []
+        };
+    }
 }

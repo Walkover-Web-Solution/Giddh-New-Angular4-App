@@ -1,58 +1,59 @@
 <div id="emails" class="tabcontent">
 
-  <div class="clearfix mrT2">
-    <h2 style="margin-bottom: 0;">Standard email</h2>
-    <small>Edit the email content your customer gets</small>
-  </div>
-  <div class="clearfix mrT2">
-    <div class="form-group">
-      Subject
-      <input class="form-control" placeholder="Invoice AB4123 from Walkover " name="subject"
-             [(ngModel)]="emailObject.subject" (keyup)="onUpdateEmailObject()"/>
-    </div>
-  </div>
+	<div class="clearfix mrT2">
+		<h2 style="margin-bottom: 0;">Standard email</h2>
+		<small>Edit the email content your customer gets</small>
+	</div>
+	<div class="clearfix mrT2">
+		<div class="form-group">
+			Subject
+			<input class="form-control" placeholder="Invoice AB4123 from Walkover " name="subject"
+				[(ngModel)]="emailObject.subject" (keyup)="onUpdateEmailObject()" />
+		</div>
+	</div>
 
-  <div class="clearfix mrT2">
-    <div class="form-group">
-      <div class="">
-        <input type="checkbox" name="useGreeting" [(ngModel)]="emailObject.useGreeting"
-               (change)="onUpdateEmailObject()"/> Use greeting
-      </div>
-      <div class="col-xs-4 pdL0">
-        <div class="custom-select pos-rel">
-          <select class="form-control" name="greeting" [(ngModel)]="emailObject.greeting"
-                  (change)="onUpdateEmailObject()">
-            <option value="">Blank</option>
-            <option value="To">To</option>
-            <option value="Dear">Dear</option>
-          </select>
-          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-        </div>
-      </div>
-      <div class="col-xs-8">
-        <div class="row">
-          <div class="custom-select pos-rel">
-            <select class="form-control" name="username" [(ngModel)]="emailObject.username"
-                    (change)="onUpdateEmailObject()">
-              <option value="Customer name">Customer name</option>
-              <option value="Company name">Company name</option>
-              <option value="Attention to">Attention to</option>
-            </select>
-            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="clearfix mrT2">
+		<div class="form-group">
+			<div class="">
+				<input type="checkbox" name="useGreeting" [(ngModel)]="emailObject.useGreeting"
+					(change)="onUpdateEmailObject()" /> Use greeting
+			</div>
+			<div class="col-xs-4 pdL0">
+				<div class="custom-select pos-rel">
+					<select class="form-control" name="greeting" [(ngModel)]="emailObject.greeting"
+						(change)="onUpdateEmailObject()">
+						<option value="">Blank</option>
+						<option value="To">To</option>
+						<option value="Dear">Dear</option>
+					</select>
+					<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+				</div>
+			</div>
+			<div class="col-xs-8">
+				<div class="row">
+					<div class="custom-select pos-rel">
+						<select class="form-control" name="username" [(ngModel)]="emailObject.username"
+							(change)="onUpdateEmailObject()">
+							<option value="Customer name">Customer name</option>
+							<option value="Company name">Company name</option>
+							<option value="Attention to">Attention to</option>
+						</select>
+						<span class="select_drop"><i class="fa fa-caret-down"></i></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <div class="clearfix mrT2">
-    <div class="form-group">
-      Message to customer
-      <div class="">
-        <textarea name="body" [(ngModel)]="emailObject.body" (keyup)="onUpdateEmailObject()" class="form-control"
-                  rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private Limited</textarea>
-      </div>
-    </div>
-  </div>
+	<div class="clearfix mrT2">
+		<div class="form-group">
+			Message to customer
+			<div class="">
+				<textarea name="body" [(ngModel)]="emailObject.body" (keyup)="onUpdateEmailObject()"
+					class="form-control"
+					rows="5">Here’s your invoice! We appreciate your prompt payment. Thanks for your business. Walkover Web Solutions Private Limited</textarea>
+			</div>
+		</div>
+	</div>
 
 </div>

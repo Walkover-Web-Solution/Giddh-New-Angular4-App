@@ -1,61 +1,62 @@
 <div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" style="position: relative">
-  <label *ngIf="showHeaderText">Discount</label>
+    <label *ngIf="showHeaderText">Discount</label>
 
-  <a id="discount">
-    <div class="multi-select adjust">
-      <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer"
-        (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum" [mask]="maskInput"
-        [prefix]="prefixInput" [suffix]="suffixInput" readonly (blur)="discountInputBlur($event)"
-        style="padding-right:22px !important;" />
-      <!-- <span class="caret cp no-select" (click)="discountMenu = true;hideOtherPopups.emit(true)"></span> -->
-    </div>
-  </a>
+    <a id="discount">
+        <div class="multi-select adjust">
+            <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer"
+                (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum" [mask]="maskInput"
+                [prefix]="prefixInput" [suffix]="suffixInput" readonly (blur)="discountInputBlur($event)"
+                style="padding-right:22px !important;" />
+            <!-- <span class="caret cp no-select" (click)="discountMenu = true;hideOtherPopups.emit(true)"></span> -->
+        </div>
+    </a>
 
-  <div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;"
-    [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
+    <div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;"
+        [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
 
-    <div>
+        <div>
 
-      <div class="d-flex mb-1">
+            <div class="d-flex mb-1">
 
-        <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
+                <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
-        <div class="pos-rel">
-          <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
-            decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)"
-            (input)="discountFromInput('PERCENTAGE', $event)" style="width: 100px;padding-right: 20px !important;">
-          <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
+                <div class="pos-rel">
+                    <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
+                        decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)"
+                        (input)="discountFromInput('PERCENTAGE', $event)"
+                        style="width: 100px;padding-right: 20px !important;">
+                    <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
+                </div>
+
+            </div>
+
+            <div class="d-flex mb-1">
+                <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
+                <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
+                    decimalDigitsDirective [(ngModel)]="discountFixedValueModal"
+                    (input)="discountFromInput('FIX_AMOUNT', $event)" style="width: 100px">
+            </div>
+
         </div>
 
-      </div>
+        <div class="d-flex flex-col" style="justify-content: center" *ngIf="discountAccountsDetails.length > 1">
+            <span class="or-line">AND</span>
+        </div>
 
-      <div class="d-flex mb-1">
-        <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-        <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
-          decimalDigitsDirective [(ngModel)]="discountFixedValueModal" (input)="discountFromInput('FIX_AMOUNT', $event)"
-          style="width: 100px">
-      </div>
+        <div *ngIf="discountAccountsDetails.length > 1">
+            <ul style="list-style: none;overflow: auto;max-height: 100px">
 
+                <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
+                    <li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
+                        <label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
+                            <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
+                                (change)="change()" (click)="$event.stopPropagation()" />
+                            <span class="pull-left ellp">{{discount.name}}</span>
+                        </label>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
     </div>
-
-    <div class="d-flex flex-col" style="justify-content: center" *ngIf="discountAccountsDetails.length > 1">
-      <span class="or-line">AND</span>
-    </div>
-
-    <div *ngIf="discountAccountsDetails.length > 1">
-      <ul style="list-style: none;overflow: auto;max-height: 100px">
-
-        <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-          <li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
-            <label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
-              <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                (change)="change()" (click)="$event.stopPropagation()" />
-              <span class="pull-left ellp">{{discount.name}}</span>
-            </label>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-  </div>
-  <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </div>
