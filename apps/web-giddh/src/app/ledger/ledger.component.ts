@@ -902,7 +902,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }, 0);
             });
         } else {
-            const currentlyAddedTransaction = this.lc.blankLedger.transactions[this.lc.blankLedger.transactions.length - 1];
+            const currentlyAddedTransaction = this.lc.currentBlankTxn;
             if (currentlyAddedTransaction.inventory) {
                 // Add the warehouse selected for an item
                 currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
