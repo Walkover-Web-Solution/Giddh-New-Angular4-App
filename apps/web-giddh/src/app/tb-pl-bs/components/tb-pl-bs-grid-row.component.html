@@ -1,33 +1,33 @@
 <div class="row row-2 tb-pl-bs-grid-row" [trial-accordion]="groupDetail"
-     *ngIf="groupDetail.groupName && groupDetail.isVisible">
-  <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}"
-       [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
-  <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }}
-    {{groupDetail.forwardedBalance | recType }}
-  </div>
-  <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
-  <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
-  <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }}
-    {{groupDetail.closingBalance | recType }}
-  </div>
+    *ngIf="groupDetail.groupName && groupDetail.isVisible">
+    <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}"
+        [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
+    <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }}
+        {{groupDetail.forwardedBalance | recType }}
+    </div>
+    <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
+    <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
+    <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }}
+        {{groupDetail.closingBalance | recType }}
+    </div>
 </div>
 <ng-container *ngFor="let account of groupDetail.accounts">
-  <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
-  <section class="row row-2 account " *ngIf="account.isVisible">
-    <div class="row"
-         *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0)">
-      <div class="col-xs-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}"
-           [innerHTML]="account.name | lowercase | highlight:search"></div>
-      <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }}
-        {{account.openingBalance | recType }}
-      </div>
-      <div class="col-xs-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
-      <div class="col-xs-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
-      <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }}
-        {{account.closingBalance | recType }}
-      </div>
-    </div>
-  </section>
+    <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
+    <section class="row row-2 account " *ngIf="account.isVisible">
+        <div class="row"
+            *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0)">
+            <div class="col-xs-4 account" [ngStyle]="{'padding-left': (padding+20)+'px'}"
+                [innerHTML]="account.name | lowercase | highlight:search"></div>
+            <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }}
+                {{account.openingBalance | recType }}
+            </div>
+            <div class="col-xs-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
+            <div class="col-xs-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
+            <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }}
+                {{account.closingBalance | recType }}
+            </div>
+        </div>
+    </section>
 </ng-container>
 
 <ng-content></ng-content>

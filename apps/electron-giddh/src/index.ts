@@ -7,59 +7,59 @@ import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLogin
 let windowManager: WindowManager = null;
 
 app.on("ready", () => {
-  ipcMain.on("log.error", (event: any, arg: any) => {
-    log(arg);
-  });
+    ipcMain.on("log.error", (event: any, arg: any) => {
+        log(arg);
+    });
 
-  setMenu();
-  windowManager = new WindowManager();
-  windowManager.openWindows();
+    setMenu();
+    windowManager = new WindowManager();
+    windowManager.openWindows();
 });
 ipcMain.on("open-url", (event, arg) => {
-  windowManager.openWindows(arg);
+    windowManager.openWindows(arg);
 });
 
 
 ipcMain.on("authenticate", async function (event, arg) {
 
-  const electronOauth2 = require("electron-oauth");
-  let config = {};
-  let bodyParams = {};
-  if (arg === "google") {
-    // google
-    config = GoogleLoginElectronConfig;
-    bodyParams = AdditionalGoogleLoginParams;
-  } else {
-    // linked in
-    config = LinkedinLoginElectronConfig;
-    bodyParams = AdditionalLinkedinLoginParams;
-  }
-  try {
-    const myApiOauth = electronOauth2(config, {
-      alwaysOnTop: true,
-      autoHideMenuBar: true,
-      webPreferences: {
-        devTools: true,
-        partition: "oauth2",
-        nodeIntegration: false
-      }
-    });
-
-    myApiOauth.getAccessToken(bodyParams, (token) => {
-      if (arg === "google") {
+    const electronOauth2 = require("electron-oauth");
+    let config = {};
+    let bodyParams = {};
+    if (arg === "google") {
         // google
-        event.returnValue = token.access_token;
-        // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
-      } else {
+        config = GoogleLoginElectronConfig;
+        bodyParams = AdditionalGoogleLoginParams;
+    } else {
         // linked in
-        event.returnValue = token.access_token;
-        // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
-      }
-      event.sender.send('authenticate-token',event.returnValue);
-    });
+        config = LinkedinLoginElectronConfig;
+        bodyParams = AdditionalLinkedinLoginParams;
+    }
+    try {
+        const myApiOauth = electronOauth2(config, {
+            alwaysOnTop: true,
+            autoHideMenuBar: true,
+            webPreferences: {
+                devTools: true,
+                partition: "oauth2",
+                nodeIntegration: false
+            }
+        });
+
+        myApiOauth.getAccessToken(bodyParams, (token) => {
+            if (arg === "google") {
+                // google
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+            } else {
+                // linked in
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+            }
+            event.sender.send('authenticate-token', event.returnValue);
+        });
 
 
-  } catch (e) {
-    //
-  }
+    } catch (e) {
+        //
+    }
 });

@@ -1,51 +1,53 @@
 <div class="gstr-transactions-summary">
-  <!---->
+	<!---->
 
-  <h4 class="clearfix gstr-summary-title">Document Issued</h4>
-  <p style="padding-top:6px;" class="text-muted half">Document Issued denotes all documents that you have issued in the
-    corresponding filing period which you have pushed to GSTN. Enter the first and last serial number of each document
-    for the corresponding filing period, the total number of documents
-    and the number of cancelled documents.</p>
+	<h4 class="clearfix gstr-summary-title">Document Issued</h4>
+	<p style="padding-top:6px;" class="text-muted half">Document Issued denotes all documents that you have issued in
+		the
+		corresponding filing period which you have pushed to GSTN. Enter the first and last serial number of each
+		document
+		for the corresponding filing period, the total number of documents
+		and the number of cancelled documents.</p>
 
-  <div>
-    <div *ngIf="doc_issuesVM && doc_issuesVM.length">
+	<div>
+		<div *ngIf="doc_issuesVM && doc_issuesVM.length">
 
-      <table class="table table-striped transactions-table">
-        <thead>
-        <tr class="text-uppercase">
-          <th width="20px"></th>
-          <th width="80px"> S.No</th>
-          <th width="35%"> Nature of Document</th>
-          <th> Sr. No. From</th>
-          <th> Sr. No. To</th>
-          <th> Total Number</th>
-          <th> Total Cancelled</th>
-          <th> Net Issued</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of doc_issuesVM;">
-          <td></td>
-          <td>{{item.num}}</td>
-          <td> {{item.doc ? item.doc : '-' }} </td>
-          <td>{{item.from ? item.from : '-'}}</td>
-          <td>{{item.to ? item.to : '-'}}</td>
-          <td class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
-          <td class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
-          <td class="text-center">{{item.net_issues ? item.net_issues : '-'}}</td>
-        </tr>
-        </tbody>
-      </table>
+			<table class="table table-striped transactions-table">
+				<thead>
+					<tr class="text-uppercase">
+						<th width="20px"></th>
+						<th width="80px"> S.No</th>
+						<th width="35%"> Nature of Document</th>
+						<th> Sr. No. From</th>
+						<th> Sr. No. To</th>
+						<th> Total Number</th>
+						<th> Total Cancelled</th>
+						<th> Net Issued</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let item of doc_issuesVM;">
+						<td></td>
+						<td>{{item.num}}</td>
+						<td> {{item.doc ? item.doc : '-' }} </td>
+						<td>{{item.from ? item.from : '-'}}</td>
+						<td>{{item.to ? item.to : '-'}}</td>
+						<td class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
+						<td class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
+						<td class="text-center">{{item.net_issues ? item.net_issues : '-'}}</td>
+					</tr>
+				</tbody>
+			</table>
 
 
-    </div>
+		</div>
 
-    <div class="" *ngIf="!(doc_issuesVM.length)">
-      <div class="filings-empty-state">
-        <img src="{{imgPath}}nofound.svg" [style.max-width.px]="110"/>
-        <div class="empty-msg"><span>  No result found.  </span></div>
-      </div>
-    </div>
+		<div class="" *ngIf="!(doc_issuesVM.length)">
+			<div class="filings-empty-state">
+				<img src="{{imgPath}}nofound.svg" [style.max-width.px]="110" />
+				<div class="empty-msg"><span> No result found. </span></div>
+			</div>
+		</div>
 
-  </div>
+	</div>
 </div>

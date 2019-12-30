@@ -1,37 +1,38 @@
 <div class="container-fluid clearfix">
-  <div class="top_bar" *ngIf="step <= 3">
-    <h2 class="section_title" *ngIf="step === 1"></h2>
-    <h2 class="section_title" *ngIf="step === 2">Map Fields</h2>
-    <h2 class="section_title" *ngIf="step === 3">Import Data</h2>
-  </div>
+    <div class="top_bar" *ngIf="step <= 3">
+        <h2 class="section_title" *ngIf="step === 1"></h2>
+        <h2 class="section_title" *ngIf="step === 2">Map Fields</h2>
+        <h2 class="section_title" *ngIf="step === 3">Import Data</h2>
+    </div>
 </div>
 
 <div class="clearfix col-xs-12">
-  <div class="col-xs-12 p0">
-    <div class="clearfix mrT2 mrB2">
-      <div [ngSwitch]="step">
+    <div class="col-xs-12 p0">
+        <div class="clearfix mrT2 mrB2">
+            <div [ngSwitch]="step">
 
-        <ng-container *ngSwitchCase="1">
-          <upload-file [isLoading]="isUploadInProgress" [entity]="entity" (onFileUpload)="onFileUpload($event)">
-          </upload-file>
-        </ng-container>
+                <ng-container *ngSwitchCase="1">
+                    <upload-file [isLoading]="isUploadInProgress" [entity]="entity"
+                        (onFileUpload)="onFileUpload($event)">
+                    </upload-file>
+                </ng-container>
 
-        <ng-container *ngSwitchCase="2">
-          <map-excel-data [importData]="excelState?.importExcelData" [entity]="entity"
-            (onNext)="mappingDone(excelState?.importExcelData)" (onBack)="onBack()"></map-excel-data>
-        </ng-container>
+                <ng-container *ngSwitchCase="2">
+                    <map-excel-data [importData]="excelState?.importExcelData" [entity]="entity"
+                        (onNext)="mappingDone(excelState?.importExcelData)" (onBack)="onBack()"></map-excel-data>
+                </ng-container>
 
-        <ng-container *ngSwitchCase="3">
-          <import-process [entity]="entity" [isLoading]="excelState?.requestState === 4" [importData]="mappedData"
-            (onSubmit)="onSubmit($event)" (onBack)="onBack()"></import-process>
-        </ng-container>
+                <ng-container *ngSwitchCase="3">
+                    <import-process [entity]="entity" [isLoading]="excelState?.requestState === 4"
+                        [importData]="mappedData" (onSubmit)="onSubmit($event)" (onBack)="onBack()"></import-process>
+                </ng-container>
 
-        <ng-container *ngSwitchCase="4">
-          <upload-success (onContinueUpload)="onContinueUpload($event)" (onShowReport)="showReport()"
-            [UploadExceltableResponse]="UploadExceltableResponse"></upload-success>
-        </ng-container>
+                <ng-container *ngSwitchCase="4">
+                    <upload-success (onContinueUpload)="onContinueUpload($event)" (onShowReport)="showReport()"
+                        [UploadExceltableResponse]="UploadExceltableResponse"></upload-success>
+                </ng-container>
 
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

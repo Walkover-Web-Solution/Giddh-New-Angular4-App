@@ -93,7 +93,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 transactionInprogress: false
             });
         case LEDGER.ADVANCE_SEARCH:
-            return Object.assign({}, state, {transactionInprogress: true});
+            return Object.assign({}, state, { transactionInprogress: true });
         case LEDGER.ADVANCE_SEARCH_RESPONSE:
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
             if (transaction.status === 'success') {
@@ -123,13 +123,13 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 transactionInprogress: false
             });
         case LEDGER.DOWNLOAD_LEDGER_INVOICE:
-            return Object.assign({}, state, {downloadInvoiceInProcess: true});
+            return Object.assign({}, state, { downloadInvoiceInProcess: true });
         case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
             let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
             if (downloadData.status === 'success') {
-                return Object.assign({}, state, {downloadInvoiceInProcess: false});
+                return Object.assign({}, state, { downloadInvoiceInProcess: false });
             }
-            return Object.assign({}, state, {downloadInvoiceInProcess: false});
+            return Object.assign({}, state, { downloadInvoiceInProcess: false });
         case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
             let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
             if (discountData.status === 'success' && discountData.body.results.length > 0) {
@@ -137,7 +137,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
                 });
             } else {
-                return {...state, discountAccountsList: null};
+                return { ...state, discountAccountsList: null };
             }
         case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
             return Object.assign({}, state, {
@@ -298,22 +298,19 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return state;
         }
         case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES: {
-            return Object.assign({}, state, {ledgerBulkActionSuccess: false});
+            return Object.assign({}, state, { ledgerBulkActionSuccess: false });
         }
         case LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE: {
-            return Object.assign({}, state, {ledgerBulkActionSuccess: true});
+            return Object.assign({}, state, { ledgerBulkActionSuccess: true });
         }
         case LEDGER.GENERATE_BULK_LEDGER_INVOICE: {
-            return Object.assign({}, state, {ledgerBulkActionSuccess: false});
+            return Object.assign({}, state, { ledgerBulkActionSuccess: false });
         }
         case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
-            return Object.assign({}, state, {ledgerBulkActionSuccess: true});
+            return Object.assign({}, state, { ledgerBulkActionSuccess: true });
         }
         case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
             let res = action.payload;
-            if (res.status === 'success') {
-                console.log('res:', res.rates);
-            }
             return state;
         }
         case LEDGER.SELECT_DESELECT_ALL_ENTRIES: {

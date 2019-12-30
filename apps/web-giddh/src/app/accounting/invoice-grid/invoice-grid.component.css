@@ -1,39 +1,39 @@
 .mx-300 {
-  max-width: 300px;
+    max-width: 300px;
 }
 
 .mx-350 {
-  max-width: 350px;
+    max-width: 350px;
 }
 
 .appearance_none:focus {
-  background: #ccc !important;
+    background: #ccc !important;
 }
 
 .appearance_none {
-  background: #e5e5e5 !important;
+    background: #e5e5e5 !important;
 }
 
 .max-height28 {
-  max-height: 28px;
+    max-height: 28px;
 }
 
 .form-inline .form-control {
-  font-size: 14px;
-  padding: 2px 7px !important;
-  text-transform: capitalize;
-  /* height: 24px;
+    font-size: 14px;
+    padding: 2px 7px !important;
+    text-transform: capitalize;
+    /* height: 24px;
   line-height: 24px; */
 }
 
 .lh24 {
-  line-height: 24px;
+    line-height: 24px;
 }
 
 .mx-300 label {
-  width: 130px;
+    width: 130px;
 }
 
 .mx-350 label {
-  width: 160px;
+    width: 160px;
 }

@@ -1,115 +1,115 @@
 <section [clickOutsideEnabled]="true" [delayClickOutsideInit]="true" [exclude]="defaultExcludedTags"
-    (clickOutside)="handleOutSideClick($event)">
+	(clickOutside)="handleOutSideClick($event)">
 
-    <section #wrapper [class.isVisible]="isOpen" [class.isFlying]="isFlying" class="universal-data-list-wrapper">
-        <!-- header -->
-        <ng-container>
-            <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
-        </ng-container>
-        <!-- end header -->
+	<section #wrapper [class.isVisible]="isOpen" [class.isFlying]="isFlying" class="universal-data-list-wrapper">
+		<!-- header -->
+		<ng-container>
+			<ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+		</ng-container>
+		<!-- end header -->
 
-        <ng-container *ngIf="rows && rows.length > 0">
-            <div #mainEle tabindex="0" (keydown)="onKeydownHandlerOfListEle($event)" class="universal-list-items"
-                [style.width.px]="ItemWidth">
-                <ng-container *ngIf="isOpen">
-                    <!-- virtual scroll -->
+		<ng-container *ngIf="rows && rows.length > 0">
+			<div #mainEle tabindex="0" (keydown)="onKeydownHandlerOfListEle($event)" class="universal-list-items"
+				[style.width.px]="ItemWidth">
+				<ng-container *ngIf="isOpen">
+					<!-- virtual scroll -->
 
-                    <ng-container>
-                        <universal-virtual-scroll [items]="rows" [childHeight]="ItemHeight"
-                            (update)="checkItems($event)" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                            [style.max-height.px]="(viewPortItems?.length !== 0) ? ItemHeight * (viewPortItems && (viewPortItems.length < visibleItems ) ? viewPortItems.length : visibleItems) : ItemHeight">
+					<ng-container>
+						<universal-virtual-scroll [items]="rows" [childHeight]="ItemHeight"
+							(update)="checkItems($event)" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
+							[style.max-height.px]="(viewPortItems?.length !== 0) ? ItemHeight * (viewPortItems && (viewPortItems.length < visibleItems ) ? viewPortItems.length : visibleItems) : ItemHeight">
 
-                            <div class="item" *ngFor="let r of viewPortItems; trackBy: trackByFn"
-                                (mouseenter)="handleMouseEvent($event, r)" (click)="itemSelected(r)"
-                                [ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
-                                <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
-                                    <div class="item-icon">
-                                        <ng-container [ngSwitch]="r.type">
-                                            <ng-container *ngSwitchCase="'MENU'">
-                                                <span class="icon-bar"></span>
-                                            </ng-container>
-                                            <ng-container *ngSwitchCase="'GROUP'">
-                                                <span class="icon-group"></span>
-                                            </ng-container>
-                                            <ng-container *ngSwitchDefault>
-                                                <small class="">A/c</small>
-                                            </ng-container>
-                                        </ng-container>
-                                    </div>
-                                    <div class="item-details flex-grow-1">
-                                        <p>{{r.name}}</p>
-                                        <ng-container [ngSwitch]="r.type">
-                                            <ng-container *ngSwitchCase="'MENU'">
-                                                <small>Menu</small>
-                                            </ng-container>
-                                        </ng-container>
-                                        <ng-container *ngIf="r.parentGroups">
-                                            <p class="smlP">
-                                                <small>
-                                                    <span *ngFor="let item of r.parentGroups; let idx = index">
-                                                        <ng-container *ngIf="idx > 0">
-                                                            <span>&nbsp;❯&nbsp;</span>
-                                                        </ng-container>
-                                                        {{item.name}}
-                                                    </span>
-                                                </small>
-                                            </p>
-                                        </ng-container>
-                                        <ng-container *ngIf="!r.type">
-                                            <span class="hvrTxt">{{r.uniqueName}}</span>
-                                        </ng-container>
-                                    </div>
-                                </a>
-                            </div>
+							<div class="item" *ngFor="let r of viewPortItems; trackBy: trackByFn"
+								(mouseenter)="handleMouseEvent($event, r)" (click)="itemSelected(r)"
+								[ngClass]="{'selected': r.isHilighted, 'active': r.isSelected }">
+								<a href="javascript:void(0)" class="d-flex flex-row align-items-center">
+									<div class="item-icon">
+										<ng-container [ngSwitch]="r.type">
+											<ng-container *ngSwitchCase="'MENU'">
+												<span class="icon-bar"></span>
+											</ng-container>
+											<ng-container *ngSwitchCase="'GROUP'">
+												<span class="icon-group"></span>
+											</ng-container>
+											<ng-container *ngSwitchDefault>
+												<small class="">A/c</small>
+											</ng-container>
+										</ng-container>
+									</div>
+									<div class="item-details flex-grow-1">
+										<p>{{r.name}}</p>
+										<ng-container [ngSwitch]="r.type">
+											<ng-container *ngSwitchCase="'MENU'">
+												<small>Menu</small>
+											</ng-container>
+										</ng-container>
+										<ng-container *ngIf="r.parentGroups">
+											<p class="smlP">
+												<small>
+													<span *ngFor="let item of r.parentGroups; let idx = index">
+														<ng-container *ngIf="idx > 0">
+															<span>&nbsp;❯&nbsp;</span>
+														</ng-container>
+														{{item.name}}
+													</span>
+												</small>
+											</p>
+										</ng-container>
+										<ng-container *ngIf="!r.type">
+											<span class="hvrTxt">{{r.uniqueName}}</span>
+										</ng-container>
+									</div>
+								</a>
+							</div>
 
-                        </universal-virtual-scroll>
-                    </ng-container>
-                    <!-- end -->
-                </ng-container>
-            </div>
-        </ng-container>
-        <!--  end main list -->
-        <ng-container *ngIf="rows && rows.length === 0 || !rows">
-            <div #mainEle>
-                <div class="p-2" [style.width.px]="ItemWidth" *ngIf="!dontShowNoResultMsg">
-                    <span *ngIf="rows && rows.length === 0">
-                        <div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
-                            <p class="block text-center mrB2">No matches found. Did you spell it correctly?</p>
-                            <ng-container *ngIf="showChannelCreateBtn">
-                                <button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
-                                <button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
-                                <!-- <a href="javascript:void(0)" class="btn btn-light create_channel" (click)="newTeamCreationEmitter.emit(searchEle.nativeElement.value)">
+						</universal-virtual-scroll>
+					</ng-container>
+					<!-- end -->
+				</ng-container>
+			</div>
+		</ng-container>
+		<!--  end main list -->
+		<ng-container *ngIf="rows && rows.length === 0 || !rows">
+			<div #mainEle>
+				<div class="p-2" [style.width.px]="ItemWidth" *ngIf="!dontShowNoResultMsg">
+					<span *ngIf="rows && rows.length === 0">
+						<div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
+							<p class="block text-center mrB2">No matches found. Did you spell it correctly?</p>
+							<ng-container *ngIf="showChannelCreateBtn">
+								<button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
+								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>
+								<!-- <a href="javascript:void(0)" class="btn btn-light create_channel" (click)="newTeamCreationEmitter.emit(searchEle.nativeElement.value)">
                   Create a channel named #{{searchEle.nativeElement.value | slice:0:21}}
                 </a> -->
-                            </ng-container>
-                        </div>
-                    </span>
-                    <span *ngIf="!rows">Something went wrong</span>
-                </div>
-            </div>
-        </ng-container>
-    </section>
+							</ng-container>
+						</div>
+					</span>
+					<span *ngIf="!rows">Something went wrong</span>
+				</div>
+			</div>
+		</ng-container>
+	</section>
 
-    <!-- end main section -->
+	<!-- end main section -->
 </section>
 
 <!-- input box template -->
 <ng-template #searchEleTemplate>
-    <div #searchWrapEle class="search-wrapper" (click)="handleClickOnSearchWrapper($event)">
-        <span class="searh-ico"><i class="icon-search"></i></span>
-        <span *ngFor="let item of listOfSelectedGroups; let idx = index">
-            <div class="vR">
-                <div class="vN">
-                    <div class="vT">{{item.name}}</div>
-                    <ng-container>
-                        <span>&nbsp;❯&nbsp;</span>
-                    </ng-container>
-                    <!-- <div class="vM" (click)="removeItemFromSelectedGroups(item)">×</div> -->
-                </div>
-            </div>
-        </span>
-        <input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()"
-            (keydown)="handleKeydown($event)" (keyup)="search($event, $event.target.value)" />
-    </div>
-    <i class="icon-cross close-navigation" (click)="close()"></i>
+	<div #searchWrapEle class="search-wrapper" (click)="handleClickOnSearchWrapper($event)">
+		<span class="searh-ico"><i class="icon-search"></i></span>
+		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
+			<div class="vR">
+				<div class="vN">
+					<div class="vT">{{item.name}}</div>
+					<ng-container>
+						<span>&nbsp;❯&nbsp;</span>
+					</ng-container>
+					<!-- <div class="vM" (click)="removeItemFromSelectedGroups(item)">×</div> -->
+				</div>
+			</div>
+		</span>
+		<input class="searchEle" #searchEle type="text" [placeholder]="searchBoxPlaceholder" (focus)="handleFocus()"
+			(keydown)="handleKeydown($event)" (keyup)="search($event, $event.target.value)" />
+	</div>
+	<i class="icon-cross close-navigation" (click)="close()"></i>
 </ng-template>

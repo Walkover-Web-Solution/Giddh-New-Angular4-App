@@ -26,41 +26,41 @@ import { ClickOutsideModule } from 'ng-click-outside';
 
 
 @NgModule({
-  declarations: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    ReportsGraphComponent,
-    ReportsTableComponent,
-    SalesRegisterComponent,
-    SalesRegisterExpandComponent,
-    SalesRegisterDetailsComponent,
-    ReportsDashboardComponent
-  ],
-  exports: [
-    ReportsComponent,
-    ReportsDetailsComponent,
-    DatepickerModule,
-    BsDropdownModule,
-    Daterangepicker,
-    PaginationModule
-  ],
-  providers: [],
-  imports: [
-    ReportsRoutingModule,
-    // NgMultiSelectDropDownModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    CommonModule,
-    ChartModule,
-    BsDropdownModule,
-    PaginationModule,
-    ShSelectModule,
-    FormsModule,
-    CurrencyModule,
-    AccountDetailModalModule,
-    ReactiveFormsModule,
-    ClickOutsideModule,
-    TooltipModule
-  ]
+    declarations: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        ReportsGraphComponent,
+        ReportsTableComponent,
+        SalesRegisterComponent,
+        SalesRegisterExpandComponent,
+        SalesRegisterDetailsComponent,
+        ReportsDashboardComponent
+    ],
+    exports: [
+        ReportsComponent,
+        ReportsDetailsComponent,
+        DatepickerModule,
+        BsDropdownModule,
+        Daterangepicker,
+        PaginationModule
+    ],
+    providers: [],
+    imports: [
+        ReportsRoutingModule,
+        // NgMultiSelectDropDownModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        CommonModule,
+        ChartModule,
+        BsDropdownModule,
+        PaginationModule,
+        ShSelectModule,
+        FormsModule,
+        CurrencyModule,
+        AccountDetailModalModule,
+        ReactiveFormsModule,
+        ClickOutsideModule,
+        TooltipModule
+    ]
 })
 
 export class ReportsModule {

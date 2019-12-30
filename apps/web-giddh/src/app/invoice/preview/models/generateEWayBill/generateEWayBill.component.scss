@@ -1,29 +1,28 @@
-.e-way-card{
-  div{
-    height: 186px;
-cursor: pointer;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-p{
-  text-align: center;
-  color: #333333;
-  font-size: 16px;
-  margin-top: 20px;
+.e-way-card {
+    div {
+        height: 186px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        p {
+            text-align: center;
+            color: #333333;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    }
 }
 
-  }
+.e-way-card:hover div {
+    background-color: #fffaf8;
 }
-
-.e-way-card:hover div{
-  background-color: #FFFAF8;
-}
-.e-way-card:hover .icon-link{
-  .a {
-    stroke-width: 0.75px;
-  }
+.e-way-card:hover .icon-link {
+    .a {
+        stroke-width: 0.75px;
+    }
 }
 .modal-455 {
-  width: 455px;
+    width: 455px;
 }

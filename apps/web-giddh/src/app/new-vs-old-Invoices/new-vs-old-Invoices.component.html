@@ -6,7 +6,9 @@
                 <div class="pull-left">
                     <div class="form-group mrR1 max500">
                         <label>Select Year</label>
-                        <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required></sh-select>
+                        <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear"
+                            [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required>
+                        </sh-select>
                         <div class="h-25px" style="color: red;">
                             <!--<div *ngIf="SelectYear.invalid">please select year</div>-->
                         </div>
@@ -15,7 +17,9 @@
 
                     <div class="form-group mrR1 max500">
                         <label>Select Type</label>
-                        <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType" [(ngModel)]="selectedType" #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
+                        <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType"
+                            [(ngModel)]="selectedType" #SelectType="ngModel" [options]="GetTypeOptions" required
+                            (selected)="ChangingValue($event)"></sh-select>
                         <div class="h-25px" style="color: red;">
                             <div *ngIf="SelectType.invalid">please select type</div>
                         </div>
@@ -23,7 +27,9 @@
 
                     <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
                         <label>Select Month</label>
-                        <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth" [(ngModel)]="selectedmonth" #SelectMonth="ngModel" [options]="monthOptions" required [customSorting]="customMonthSorting"></sh-select>
+                        <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth"
+                            [(ngModel)]="selectedmonth" #SelectMonth="ngModel" [options]="monthOptions" required
+                            [customSorting]="customMonthSorting"></sh-select>
                         <div class="h-25px" style="color: red;">
                             <div *ngIf="SelectMonth.invalid">please select month</div>
                         </div>
@@ -31,7 +37,9 @@
 
                     <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
                         <label>Select Quater</label>
-                        <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required></sh-select>
+                        <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater"
+                            [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required>
+                        </sh-select>
                         <div class="h-25px" style="color: red;">
                             <div *ngIf="SelectQuater.invalid">please select quater</div>
                         </div>
@@ -40,8 +48,8 @@
                         <div style="margin-top: 20px">
                             <div>
                                 <button class="btn btn-success" type="submit" [disabled]="carried.invalid">
-                  Go
-                </button>
+                                    Go
+                                </button>
                             </div>
                             <div class="h-25px"></div>
                         </div>

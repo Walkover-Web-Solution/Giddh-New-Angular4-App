@@ -1,58 +1,61 @@
 <div class="container-fluid settings-bg">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="backup-data">
-        {{ (isFirstScreen ? 'Backup' : (mode === 'export' ? 'Export' : 'Import')) + ' Data' }}
-      </div>
-
-    </div>
-    <div class="col-xs-12" id="settingTab">
-
-      <ng-container *ngIf="isFirstScreen">
-        <div class="main-container-import-export">
-          <div>
-            <div>
-              <h2 class="text-center" style="font-size: 36px;">Import or export your account master data </h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="backup-data">
+                {{ (isFirstScreen ? 'Backup' : (mode === 'export' ? 'Export' : 'Import')) + ' Data' }}
             </div>
 
-            <div style="display:flex;margin-top: 50px;">
-
-              
-                <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}" (click)="setActiveTab('export')">
-                <a href="javascript:void(0)">
-                  <div class="text-center import-export-icon">
-                    <i class="fa fa-upload"></i>
-                  </div>
-                  <div>
-                    <span>EXPORT</span>
-                  </div>
-                </a>
-                </div>
-              
-
-
-              <div class="import-card btn" [ngClass]="{'selected': mode === 'import'}" (click)="setActiveTab('import')">
-              <a href="javascript:void(0)">
-                <div class="text-center import-export-icon">
-                  <i class="fa fa-download"></i>
-                </div>
-                <div>
-                  <span>IMPORT</span>
-                </div>
-              </a>
-              </div>
-            </div>
-
-          </div>
         </div>
-      </ng-container>
+        <div class="col-xs-12" id="settingTab">
 
-      <ng-container *ngIf="!isFirstScreen">
-        <company-import-export-form-component [mode]="mode"
-                                              (backPressed)="back()"></company-import-export-form-component>
-      </ng-container>
+            <ng-container *ngIf="isFirstScreen">
+                <div class="main-container-import-export">
+                    <div>
+                        <div>
+                            <h2 class="text-center" style="font-size: 36px;">Import or export your account master data
+                            </h2>
+                        </div>
+
+                        <div style="display:flex;margin-top: 50px;">
 
 
+                            <div class="export-card btn" [ngClass]="{'selected': mode === 'export'}"
+                                (click)="setActiveTab('export')">
+                                <a href="javascript:void(0)">
+                                    <div class="text-center import-export-icon">
+                                        <i class="fa fa-upload"></i>
+                                    </div>
+                                    <div>
+                                        <span>EXPORT</span>
+                                    </div>
+                                </a>
+                            </div>
+
+
+
+                            <div class="import-card btn" [ngClass]="{'selected': mode === 'import'}"
+                                (click)="setActiveTab('import')">
+                                <a href="javascript:void(0)">
+                                    <div class="text-center import-export-icon">
+                                        <i class="fa fa-download"></i>
+                                    </div>
+                                    <div>
+                                        <span>IMPORT</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isFirstScreen">
+                <company-import-export-form-component [mode]="mode" (backPressed)="back()">
+                </company-import-export-form-component>
+            </ng-container>
+
+
+        </div>
     </div>
-  </div>
 </div>

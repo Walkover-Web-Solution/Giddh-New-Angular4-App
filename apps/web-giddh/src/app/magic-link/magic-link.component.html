@@ -10,23 +10,27 @@
                 <div class="col-sm-12 col-md-3">
                     <div class="row">
                         <div class="input-group" [ngClass]="{'mrB2': isResponsive}">
-                            <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="onDateRangeSelected($event)" class="form-control" />
+                            <input type="text" name="daterangeInput" #dateRangePickerDir daterangepicker
+                                [options]="datePickerOptions" (applyDaterangepicker)="onDateRangeSelected($event)"
+                                class="form-control" />
                             <!-- <input type="text" class="form-control" placeholder="01/01/2017 - 31/01/2017"> -->
                             <span class="input-group-addon">
-                      <span class="fa fa-calendar"></span>
+                                <span class="fa fa-calendar"></span>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div id="web-cont" class="col-md-6 text-center" *ngIf="!isResponsive" style="font-size:25px;color:#6d6e70">
+                <div id="web-cont" class="col-md-6 text-center" *ngIf="!isResponsive"
+                    style="font-size:25px;color:#6d6e70">
                     {{ledgerData.account.name}} A/c
                 </div>
                 <div class="col-md-3 col-sm-12">
                     <div class="row">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search Ledger" name="searchText" [(ngModel)]="searchText">
+                            <input type="text" class="form-control" placeholder="Search Ledger" name="searchText"
+                                [(ngModel)]="searchText">
                             <span class="input-group-addon">
-                      <span class="fa fa-search"></span>
+                                <span class="fa fa-search"></span>
                             </span>
                         </div>
                     </div>
@@ -40,8 +44,10 @@
                 <div class="col-xs-4">
                     <div style="font-size:12px;color:#262626">Opening</div>
                     <div>
-                        <span class="fs-18" style="color:#262626">{{ledgerData.ledgerTransactions.forwardedBalance.amount | number:'1.2-2'}}</span>
-                        <span style="font-size:16px;color:#262626">{{ ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</span>
+                        <span class="fs-18"
+                            style="color:#262626">{{ledgerData.ledgerTransactions.forwardedBalance.amount | number:'1.2-2'}}</span>
+                        <span
+                            style="font-size:16px;color:#262626">{{ ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</span>
                     </div>
                 </div>
                 <div class="col-xs-4" style="font-size:11px;padding-top:15px">
@@ -54,8 +60,10 @@
                         Closing
                     </div>
                     <div>
-                        <span style="font-size:16px;color:#262626">{{ ledgerData.ledgerTransactions.balance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</span>
-                        <span class="fs-18" style="color:#262626">{{ledgerData.ledgerTransactions.balance.amount | number:'1.2-2'}}</span>
+                        <span
+                            style="font-size:16px;color:#262626">{{ ledgerData.ledgerTransactions.balance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</span>
+                        <span class="fs-18"
+                            style="color:#262626">{{ledgerData.ledgerTransactions.balance.amount | number:'1.2-2'}}</span>
                     </div>
                 </div>
             </div>
@@ -65,15 +73,21 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs device-small bg-gr" role="tablist">
                     <li class="nav-item wid-50" role="presentation">
-                        <a class="nav-link" [ngClass]="{'active': selectedTab === 'debit' || !selectedTab }" (click)="selectedTab='debit'" href="javascript:void(0);" aria-controls="debit" role="tab" data-toggle="tab">Debit</a>
+                        <a class="nav-link" [ngClass]="{'active': selectedTab === 'debit' || !selectedTab }"
+                            (click)="selectedTab='debit'" href="javascript:void(0);" aria-controls="debit" role="tab"
+                            data-toggle="tab">Debit</a>
                     </li>
                     <li class="nav-item text-right wid-50" role="presentation">
-                        <a class="nav-link" [ngClass]="{'active': selectedTab === 'credit'}" (click)="selectedTab='credit'" aria-controls="credit" href="javascript:void(0);" role="tab" data-toggle="tab">Credit</a>
+                        <a class="nav-link" [ngClass]="{'active': selectedTab === 'credit'}"
+                            (click)="selectedTab='credit'" aria-controls="credit" href="javascript:void(0);" role="tab"
+                            data-toggle="tab">Credit</a>
                     </li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content ledger_book" id="transaction_table">
-                    <div role="tabpanel" class="tab-pane col-xs-12 col-md-6" [ngClass]="{'active': selectedTab === 'debit' || !selectedTab, 'pd350':!isResponsive}" id="debit" *ngIf="!selectedTab || selectedTab == 'debit'">
+                    <div role="tabpanel" class="tab-pane col-xs-12 col-md-6"
+                        [ngClass]="{'active': selectedTab === 'debit' || !selectedTab, 'pd350':!isResponsive}"
+                        id="debit" *ngIf="!selectedTab || selectedTab == 'debit'">
                         <div class="row">
                             <table class="table table-bordered bg-wh">
                                 <thead>
@@ -90,38 +104,61 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="ledger-row" *ngIf="ledgerData.ledgerTransactions.forwardedBalance.amount > 0 && ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'">
+                                    <tr class="ledger-row"
+                                        *ngIf="ledgerData.ledgerTransactions.forwardedBalance.amount > 0 && ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'">
                                         <td class="col-xs-3"></td>
                                         <td class="col-xs-6">B/F Balance</td>
                                         <td class="col-xs-3 text-right">
-                                            <span *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'" class="">{{ ledgerData.ledgerTransactions.forwardedBalance.amount | number: '1.2-2' }}</span>
-                                            <span *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'" class="">0</span>
+                                            <span
+                                                *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'"
+                                                class="">{{ ledgerData.ledgerTransactions.forwardedBalance.amount | number: '1.2-2' }}</span>
+                                            <span
+                                                *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'"
+                                                class="">0</span>
                                         </td>
                                     </tr>
-                                    <tr class="ledger-row" *ngIf="(ledgerData.ledgerTransactions.forwardedBalance.type !== 'DEBIT') || (ledgerData.ledgerTransactions.forwardedBalance.amount == 0)">
+                                    <tr class="ledger-row"
+                                        *ngIf="(ledgerData.ledgerTransactions.forwardedBalance.type !== 'DEBIT') || (ledgerData.ledgerTransactions.forwardedBalance.amount == 0)">
                                         <td colspan="3" class="">&nbsp;</td>
                                     </tr>
                                     <!-- *ngIf="ledger.hasDebit" -->
-                                    <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers" (click)="checkCompEntry(ledger)" [ngClass]="{compoundEntry: ledger.isCompoundEntry}">
+                                    <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers"
+                                        (click)="checkCompEntry(ledger)"
+                                        [ngClass]="{compoundEntry: ledger.isCompoundEntry}">
                                         <td colspan="100%" style="padding:0;border:0">
                                             <table style="width:100%">
                                                 <tbody>
                                                     <!-- ng-if="txn.type == 'DEBIT'" -->
-                                                    <ng-container *ngFor="let txn of ledger.transactions | filter: searchText">
+                                                    <ng-container
+                                                        *ngFor="let txn of ledger.transactions | filter: searchText">
                                                         <tr class="text-left bdrB" *ngIf="txn.type === 'DEBIT'">
                                                             <td class="col-xs-3">{{ledger.entryDate}}</td>
                                                             <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
-                                                            <td class="col-xs-3 bdrL pos-rel" [ngClass]="{'pdR25imp': ledger.invoiceGenerated}" align="right">
+                                                            <td class="col-xs-3 bdrL pos-rel"
+                                                                [ngClass]="{'pdR25imp': ledger.invoiceGenerated}"
+                                                                align="right">
                                                                 {{txn.amount}}
-                                                                <ng-container *ngIf="ledger.invoiceGenerated && ledger.invoiceNumber">
-                                                                    <span class="download-invoice-ledger" (click)="downloadInvoice(ledger.invoiceNumber)" container="body" tooltip="Download Invoice : {{ledger.invoiceNumber}}" [placement]="'top'">
-                                              <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
-                                              </span>
+                                                                <ng-container
+                                                                    *ngIf="ledger.invoiceGenerated && ledger.invoiceNumber">
+                                                                    <span class="download-invoice-ledger"
+                                                                        (click)="downloadInvoice(ledger.invoiceNumber)"
+                                                                        container="body"
+                                                                        tooltip="Download Invoice : {{ledger.invoiceNumber}}"
+                                                                        [placement]="'top'">
+                                                                        <i class="glyphicon glyphicon-download"
+                                                                            style="font-size:15px;"></i>
+                                                                    </span>
                                                                 </ng-container>
-                                                                <ng-container *ngIf="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
-                                                                    <span class="download-invoice-ledger" (click)="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)" container="body" tooltip="Download Invoice : {{ledger.purchaseInvoiceNumber}}" [placement]="'top'">
-                                              <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
-                                              </span>
+                                                                <ng-container
+                                                                    *ngIf="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
+                                                                    <span class="download-invoice-ledger"
+                                                                        (click)="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)"
+                                                                        container="body"
+                                                                        tooltip="Download Invoice : {{ledger.purchaseInvoiceNumber}}"
+                                                                        [placement]="'top'">
+                                                                        <i class="glyphicon glyphicon-download"
+                                                                            style="font-size:15px;"></i>
+                                                                    </span>
                                                                 </ng-container>
                                                             </td>
                                                         </tr>
@@ -130,23 +167,29 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr class="total_col" *ngIf="ledgerData.ledgerTransactions.balance.type === 'CREDIT' && isResponsive">
+                                    <tr class="total_col"
+                                        *ngIf="ledgerData.ledgerTransactions.balance.type === 'CREDIT' && isResponsive">
                                         <td colspan="12" class="col-xs-12 text-right h32">
                                             <span [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
-                               C/F: Cr {{ ledgerData.ledgerTransactions.balance.amount | number: '1.2-2' }}
-                               </span>
+                                                C/F: Cr
+                                                {{ ledgerData.ledgerTransactions.balance.amount | number: '1.2-2' }}
+                                            </span>
                                         </td>
                                     </tr>
                                     <tr *ngIf="isResponsive">
-                                        <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                            <span class="" style="width: 150px;display: block;float: right;">{{ reckoningDebitTotal | number: '1.2-2' }}</span>
+                                        <td colspan="12" class="col-xs-12 text-right h32"
+                                            style="padding-right:10px !important;">
+                                            <span class=""
+                                                style="width: 150px;display: block;float: right;">{{ reckoningDebitTotal | number: '1.2-2' }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane col-xs-12 col-md-6" [ngClass]="{'active': selectedTab === 'credit', 'pd350':!isResponsive}" id="credit" *ngIf="!selectedTab || selectedTab == 'credit'">
+                    <div role="tabpanel" class="tab-pane col-xs-12 col-md-6"
+                        [ngClass]="{'active': selectedTab === 'credit', 'pd350':!isResponsive}" id="credit"
+                        *ngIf="!selectedTab || selectedTab == 'credit'">
                         <div class="row">
                             <table class="table table-bordered bg-wh">
                                 <thead>
@@ -163,41 +206,62 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="ledger-row" *ngIf="ledgerData.ledgerTransactions.forwardedBalance.amount > 0 && ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'">
+                                    <tr class="ledger-row"
+                                        *ngIf="ledgerData.ledgerTransactions.forwardedBalance.amount > 0 && ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'">
                                         <td class="col-xs-3"></td>
                                         <td class="col-xs-6">B/F Balance</td>
                                         <td class="col-xs-3 text-right">
-                                            <span *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'">
-                            {{ ledgerData.ledgerTransactions.forwardedBalance.amount | number: '1.2-2'}}</span>
-                                            <span *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'">0</span>
+                                            <span
+                                                *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'CREDIT'">
+                                                {{ ledgerData.ledgerTransactions.forwardedBalance.amount | number: '1.2-2'}}</span>
+                                            <span
+                                                *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT'">0</span>
                                         </td>
                                     </tr>
-                                    <tr class="ledger-row" *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type !== 'CREDIT' || (ledgerData.ledgerTransactions.forwardedBalance.amount == 0)">
+                                    <tr class="ledger-row"
+                                        *ngIf="ledgerData.ledgerTransactions.forwardedBalance.type !== 'CREDIT' || (ledgerData.ledgerTransactions.forwardedBalance.amount == 0)">
                                         <td class="" colspan="3">&nbsp;</td>
                                     </tr>
                                     <!-- ng-if="ledger.hasCredit" -->
                                     <!-- ng-class="{compoundEntry: ledger.isCompoundEntry}"
      ng-click="checkCompEntry(ledger)" -->
                                     <!-- uib-tooltip="Total : {{ledger.total.amount}} {{ledger.total.type}}" tooltip-placement="top" -->
-                                    <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers" (click)="checkCompEntry(ledger)" [ngClass]="{compoundEntry: ledger.isCompoundEntry}">
+                                    <tr *ngFor="let ledger of ledgerData.ledgerTransactions.ledgers"
+                                        (click)="checkCompEntry(ledger)"
+                                        [ngClass]="{compoundEntry: ledger.isCompoundEntry}">
                                         <td colspan="100%" style="padding:0; border:0">
                                             <table style="width:100%;">
                                                 <tbody>
-                                                    <ng-container *ngFor="let txn of ledger.transactions | filter: searchText">
+                                                    <ng-container
+                                                        *ngFor="let txn of ledger.transactions | filter: searchText">
                                                         <tr class="text-left bdrB" *ngIf="txn.type === 'CREDIT'">
                                                             <td class="col-xs-3">{{ledger.entryDate}}</td>
                                                             <td class="col-xs-6 bdrL">{{txn.particular.name}}</td>
-                                                            <td class="col-xs-3 bdrL pos-rel" [ngClass]="{'pdR25imp': ledger.invoiceGenerated}" align="right">
+                                                            <td class="col-xs-3 bdrL pos-rel"
+                                                                [ngClass]="{'pdR25imp': ledger.invoiceGenerated}"
+                                                                align="right">
                                                                 {{txn.amount}}
-                                                                <ng-container *ngIf="ledger.invoiceGenerated && ledger.invoiceNumber">
-                                                                    <span class="download-invoice-ledger" (click)="downloadInvoice(ledger.invoiceNumber)" container="body" tooltip="Download Invoice : {{ledger.invoiceNumber}}" [placement]="'top'">
-                                           <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
-                                           </span>
+                                                                <ng-container
+                                                                    *ngIf="ledger.invoiceGenerated && ledger.invoiceNumber">
+                                                                    <span class="download-invoice-ledger"
+                                                                        (click)="downloadInvoice(ledger.invoiceNumber)"
+                                                                        container="body"
+                                                                        tooltip="Download Invoice : {{ledger.invoiceNumber}}"
+                                                                        [placement]="'top'">
+                                                                        <i class="glyphicon glyphicon-download"
+                                                                            style="font-size:15px;"></i>
+                                                                    </span>
                                                                 </ng-container>
-                                                                <ng-container *ngIf="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
-                                                                    <span class="download-invoice-ledger" (click)="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)" container="body" tooltip="Download Invoice : {{ledger.purchaseInvoiceNumber}}" [placement]="'top'">
-                                           <i class="glyphicon glyphicon-download" style="font-size:15px;"></i>
-                                           </span>
+                                                                <ng-container
+                                                                    *ngIf="ledger.invoiceGenerated && ledger.purchaseInvoiceNumber">
+                                                                    <span class="download-invoice-ledger"
+                                                                        (click)="downloadPurchaseInvoice(ledger.purchaseInvoiceNumber)"
+                                                                        container="body"
+                                                                        tooltip="Download Invoice : {{ledger.purchaseInvoiceNumber}}"
+                                                                        [placement]="'top'">
+                                                                        <i class="glyphicon glyphicon-download"
+                                                                            style="font-size:15px;"></i>
+                                                                    </span>
                                                                 </ng-container>
                                                             </td>
                                                         </tr>
@@ -209,15 +273,18 @@
                                     <tr *ngIf="ledgerData.ledgerTransactions.balance.type === 'DEBIT' && isResponsive">
                                         <td colspan="12" class="col-xs-12 text-right h32">
                                             <span tooltip="" [placement]="'top'">
-                            C/F: Dr
-                            <span class="primary_clr">{{ledgerData.ledgerTransactions.balance.amount | number: '1.2-2'}}
-                            </span>
+                                                C/F: Dr
+                                                <span
+                                                    class="primary_clr">{{ledgerData.ledgerTransactions.balance.amount | number: '1.2-2'}}
+                                                </span>
                                             </span>
                                         </td>
                                     </tr>
                                     <tr *ngIf="isResponsive">
-                                        <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                            <span class="" style="width: 150px;display: block;float: right;">{{reckoningCreditTotal | number: '1.2-2' }}</span>
+                                        <td colspan="12" class="col-xs-12 text-right h32"
+                                            style="padding-right:10px !important;">
+                                            <span class=""
+                                                style="width: 150px;display: block;float: right;">{{reckoningCreditTotal | number: '1.2-2' }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -229,15 +296,19 @@
                         <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
                             <tbody>
                                 <tr class="total_col">
-                                    <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                        <span *ngIf="ledgerData.ledgerTransactions.balance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
-                         C/F: Cr {{ ledgerData.ledgerTransactions.balance.amount | number: '1.2-2' }}
-                         </span>
+                                    <td colspan="12" class="col-xs-12 text-right h32"
+                                        style="padding-right:10px !important">
+                                        <span *ngIf="ledgerData.ledgerTransactions.balance.type === 'CREDIT'"
+                                            [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
+                                            C/F: Cr {{ ledgerData.ledgerTransactions.balance.amount | number: '1.2-2' }}
+                                        </span>
                                     </td>
                                 </tr>
                                 <tr class="total_col">
-                                    <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                        <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ reckoningDebitTotal | number: '1.2-2' }}</span>
+                                    <td colspan="12" class="col-xs-12 text-right h32"
+                                        style="padding-right:10px !important;">
+                                        <span class="bdrT"
+                                            style="width: 150px;display: block;float: right;padding: 10px 0;">{{ reckoningDebitTotal | number: '1.2-2' }}</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -245,17 +316,22 @@
                         <table class="ledger-footer-1 " style="width:50%;right:0;bottom:0;">
                             <tbody>
                                 <tr class="total_col">
-                                    <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                                        <span *ngIf="ledgerData.ledgerTransactions.balance.type === 'DEBIT'" tooltip="" [placement]="'top'">
-                         C/F: Dr
-                         <span class="primary_clr">{{ledgerData.ledgerTransactions.balance.amount | number: '1.2-2'}}
-                         </span>
+                                    <td colspan="12" class="col-xs-12 text-right h32"
+                                        style="padding-right:10px !important">
+                                        <span *ngIf="ledgerData.ledgerTransactions.balance.type === 'DEBIT'" tooltip=""
+                                            [placement]="'top'">
+                                            C/F: Dr
+                                            <span
+                                                class="primary_clr">{{ledgerData.ledgerTransactions.balance.amount | number: '1.2-2'}}
+                                            </span>
                                         </span>
                                     </td>
                                 </tr>
                                 <tr class="total_col">
-                                    <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
-                                        <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{reckoningCreditTotal | number: '1.2-2' }}</span>
+                                    <td colspan="12" class="col-xs-12 text-right h32"
+                                        style="padding-right:10px !important;">
+                                        <span class="bdrT"
+                                            style="width: 150px;display: block;float: right;padding: 10px 0;">{{reckoningCreditTotal | number: '1.2-2' }}</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -267,7 +343,8 @@
         </div>
     </section>
     <!--total section-->
-    <section class="ledger-stat" *ngIf="(ledgerData.ledgerTransactions.totalDebitTransactions > 0 || ledgerData.ledgerTransactions.totalCreditTransactions > 0) && !isResponsive">
+    <section class="ledger-stat"
+        *ngIf="(ledgerData.ledgerTransactions.totalDebitTransactions > 0 || ledgerData.ledgerTransactions.totalCreditTransactions > 0) && !isResponsive">
         <div class="container">
             <div class="col-xs-3">
                 <!--<span class="primary_clr mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
@@ -279,17 +356,22 @@
             </div>
             <div class="col-xs-3">
                 <h1>Opening Balance</h1>
-                <h3>{{ledgerData.ledgerTransactions.forwardedBalance.amount | number:'1.2-2'}} {{ ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+                <h3>{{ledgerData.ledgerTransactions.forwardedBalance.amount | number:'1.2-2'}}
+                    {{ ledgerData.ledgerTransactions.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
             <div class="col-xs-3">
                 <h1 class="primary_clr">Net Total
-                    <span *ngIf="ledgerData.ledgerTransactions.creditTotal > ledgerData.ledgerTransactions.debitTotal">Credit</span>
-                    <span *ngIf="ledgerData.ledgerTransactions.creditTotal < ledgerData.ledgerTransactions.debitTotal">Debit</span>
+                    <span
+                        *ngIf="ledgerData.ledgerTransactions.creditTotal > ledgerData.ledgerTransactions.debitTotal">Credit</span>
+                    <span
+                        *ngIf="ledgerData.ledgerTransactions.creditTotal < ledgerData.ledgerTransactions.debitTotal">Debit</span>
                 </h1>
-                <h3 class=" primary_clr" *ngIf="ledgerData.ledgerTransactions.creditTotal > ledgerData.ledgerTransactions.debitTotal">
+                <h3 class=" primary_clr"
+                    *ngIf="ledgerData.ledgerTransactions.creditTotal > ledgerData.ledgerTransactions.debitTotal">
                     {{ledgerData.ledgerTransactions.creditTotal - ledgerData.ledgerTransactions.debitTotal | number:'1.2-2'}}
                 </h3>
-                <h3 class=" primary_clr" *ngIf="ledgerData.ledgerTransactions.creditTotal < ledgerData.ledgerTransactions.debitTotal">
+                <h3 class=" primary_clr"
+                    *ngIf="ledgerData.ledgerTransactions.creditTotal < ledgerData.ledgerTransactions.debitTotal">
                     {{ledgerData.ledgerTransactions.debitTotal - ledgerData.ledgerTransactions.creditTotal | number:'1.2-2'}}
                 </h3>
                 <h1 class="mrT">Dr Total {{ledgerData.ledgerTransactions.debitTotal | number:'1.2-2'}}</h1>
@@ -297,7 +379,8 @@
             </div>
             <div class="col-xs-3">
                 <h1>Closing Balance</h1>
-                <h3>{{ledgerData.ledgerTransactions.balance.amount | number:'1.2-2'}} {{ ledgerData.ledgerTransactions.balance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+                <h3>{{ledgerData.ledgerTransactions.balance.amount | number:'1.2-2'}}
+                    {{ ledgerData.ledgerTransactions.balance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
             </div>
         </div>
     </section>
@@ -307,8 +390,12 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-sm-12">
-                        <h3 class="arvo">Giddh <strong>automates the accounting</strong> on behalf of <span class="companyName"><strong>{{ledgerData.companyName}}</strong></span>.</h3>
-                        <h4 class="arvo">We would love to extend our support via <a href="https://muneem.co" target="_blank" class="green" style="text-decoration: underline;">Muneem</a> for any query related to your ledger with <span class="companyName">{{ledgerData.companyName}}</span>.
+                        <h3 class="arvo">Giddh <strong>automates the accounting</strong> on behalf of <span
+                                class="companyName"><strong>{{ledgerData.companyName}}</strong></span>.</h3>
+                        <h4 class="arvo">We would love to extend our support via <a href="https://muneem.co"
+                                target="_blank" class="green" style="text-decoration: underline;">Muneem</a> for any
+                            query related to your ledger with <span
+                                class="companyName">{{ledgerData.companyName}}</span>.
                         </h4>
                     </div>
                 </div>
@@ -341,13 +428,16 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="name">Full Name *</label>
-                                            <input name="contactForm.name" placeholder="Full Name*" [(ngModel)]="cForm.name" type="text" required class="form-control">
+                                            <input name="contactForm.name" placeholder="Full Name*"
+                                                [(ngModel)]="cForm.name" type="text" required class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="message">Contact Number *</label>
-                                            <input class="form-control" placeholder="Contact Number *" type="text" decimalDigitsDirective name="contactForm.number" [(ngModel)]="cForm.number" minlength="7" maxlength="12" required>
+                                            <input class="form-control" placeholder="Contact Number *" type="text"
+                                                decimalDigitsDirective name="contactForm.number"
+                                                [(ngModel)]="cForm.number" minlength="7" maxlength="12" required>
                                         </div>
                                     </div>
                                 </div>
@@ -355,14 +445,16 @@
                                 <div class="control-group">
                                     <div class="form-group">
                                         <label for="email">Email Address *</label>
-                                        <input name="contactForm.email" placeholder="Email Address *" [(ngModel)]="cForm.email" type="email" required class="form-control">
+                                        <input name="contactForm.email" placeholder="Email Address *"
+                                            [(ngModel)]="cForm.email" type="email" required class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="control-group">
                                     <div class="form-group">
                                         <label for="message">Message</label>
-                                        <textarea name="contactForm.message" placeholder="Message" [(ngModel)]="cForm.message" class="form-control"></textarea>
+                                        <textarea name="contactForm.message" placeholder="Message"
+                                            [(ngModel)]="cForm.message" class="form-control"></textarea>
                                     </div>
                                 </div>
 
@@ -375,9 +467,10 @@
                     </div>
                 </div> -->
                                 <!-- [disabled]="contactForm.invalid" -->
-                                <button (click)="submitForm(cForm)" class="btn btn-default btn-lg" [disabled]="true" type="submit">
-                  Submit
-                </button>
+                                <button (click)="submitForm(cForm)" class="btn btn-default btn-lg" [disabled]="true"
+                                    type="submit">
+                                    Submit
+                                </button>
 
                             </form>
 
@@ -399,9 +492,13 @@
                                 <p>405-406, Capt. C. S. Naidu Arcade,</p>
                                 <p>Near Greater Kailash Hospital, 10/2 Old Palasia,</p>
                                 <p>Indore, Madhya Pradesh 452018</p>
-                                <p class="mrT3">Sales : <a class="white" href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a><br/> Support : <a class="white" href="mailto:support@giddh.com">support@giddh.com</a><br>
-                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:07939593939">079 39 59 3939</a>
-                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:08033037089">080 33 03 7089</a>
+                                <p class="mrT3">Sales : <a class="white"
+                                        href="mailto:shubhendra@giddh.com">shubhendra@giddh.com</a><br /> Support : <a
+                                        class="white" href="mailto:support@giddh.com">support@giddh.com</a><br>
+                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:07939593939">079
+                                        39 59 3939</a>
+                                    <i class="glyphicon glyphicon-phone"></i><a class="white" href="tel:08033037089">080
+                                        33 03 7089</a>
                                 </p>
                                 <div id="farzi"></div>
                             </div>

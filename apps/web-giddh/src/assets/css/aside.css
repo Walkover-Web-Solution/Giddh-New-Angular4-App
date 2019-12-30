@@ -5,7 +5,6 @@
 
 .aside-pane {
     background-color: #f4f5f8;
-    /* width: 400px; */
     position: relative;
     z-index: 5;
     height: 100vh;
@@ -13,7 +12,7 @@
     overflow: auto;
 }
 .aside-pane {
-    max-width: 480px;
+    max-width: 760px;
     width: 100%;
 }
 .aside-overlay {
@@ -32,26 +31,23 @@
 .aside-body {
     padding: 0 15px;
 }
-.aside-title {
-    /* padding-bottom: 10px;
-  border-bottom: 1px solid #c6c7c7; */
+@media (max-width: 768px) {
+    .aside-pane {
+        max-width: 600px;
+    }
 }
-
 @media (max-width: 575px) {
     .aside-pane {
         max-width: 370px;
-        width: 100%;
     }
 }
 @media (max-width: 375px) {
     .aside-pane {
         max-width: 310px;
-        width: 100%;
     }
 }
 @media (max-width: 320px) {
     .aside-pane {
         max-width: 280px;
-        width: 100%;
     }
 }

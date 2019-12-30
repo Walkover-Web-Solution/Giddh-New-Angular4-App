@@ -12,30 +12,30 @@ import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.mod
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
+    suppressScrollX: true
 };
 
 @NgModule({
-  declarations: [
-    NewVsOldInvoicesComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ElementViewChildModule,
-    NewVsOldInvoicesRoutingModule,
-    LaddaModule,
-    ShSelectModule,
-    TabsModule,
-    BsDropdownModule,
-    TooltipModule,
-    SharedModule,
-    SelectModule.forRoot(),
-    ModalModule,
-    PaginationModule
-  ],
-  providers: []
+    declarations: [
+        NewVsOldInvoicesComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ElementViewChildModule,
+        NewVsOldInvoicesRoutingModule,
+        LaddaModule,
+        ShSelectModule,
+        TabsModule,
+        BsDropdownModule,
+        TooltipModule,
+        SharedModule,
+        SelectModule.forRoot(),
+        ModalModule,
+        PaginationModule
+    ],
+    providers: []
 })
 
 export class NewVsOldInvoicesModule {

@@ -9,23 +9,23 @@ export * from './option.interface';
 export * from './select.component';
 
 @NgModule({
-  declarations: [
-    SelectComponent,
-    SelectDropdownComponent
-  ],
-  exports: [
-    SelectComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule
-  ]
+    declarations: [
+        SelectComponent,
+        SelectDropdownComponent
+    ],
+    exports: [
+        SelectComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule
+    ]
 })
 export class SelectModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SelectModule,
-      providers: []
-    };
-  }
+    public static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: SelectModule,
+            providers: []
+        };
+    }
 }

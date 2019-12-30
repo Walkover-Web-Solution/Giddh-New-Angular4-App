@@ -27,7 +27,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
     // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
-    { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },
+    // { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },
     { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing' },
     { type: 'MENU', name: 'Inventory > Report', uniqueName: '/pages/inventory/report' },
 
