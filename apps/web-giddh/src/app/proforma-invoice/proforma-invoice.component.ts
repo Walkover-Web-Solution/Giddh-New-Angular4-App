@@ -374,13 +374,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }),
             takeUntil(this.destroyed$)
         );
-        // this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-
-        //     if (warehouses) {
-        //         const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
-        //         this.warehouses = warehouseData.formattedWarehouses;
-        //     }
-        // });
 
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
@@ -499,6 +492,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     this.shouldShowWarehouse = true;
                     if (this.isCashInvoice) {
+                        // Load default warehouse for Cash Invoice
                         this.initializeWarehouse();
                     }
                 }
