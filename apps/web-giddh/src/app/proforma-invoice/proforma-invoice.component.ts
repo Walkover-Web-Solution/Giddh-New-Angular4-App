@@ -37,7 +37,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
+import { auditTime, delay, take, takeUntil, filter } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -374,6 +374,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }),
             takeUntil(this.destroyed$)
         );
+        // this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+
+        //     if (warehouses) {
+        //         const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+        //         this.warehouses = warehouseData.formattedWarehouses;
+        //     }
+        // });
 
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
@@ -491,6 +498,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.shouldShowWarehouse = false;
                 } else {
                     this.shouldShowWarehouse = true;
+                    if (this.isCashInvoice) {
+                        this.initializeWarehouse();
+                    }
                 }
             }
 
@@ -3333,6 +3343,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Handles the customer name change for Cash Invoice
+     *
+     * @param {*} event Input change event
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleCustomerChange(event: any): void {
+        if (!event.target.value) {
+            // Input is cleared reset to default warehouse
+            this.selectedWarehouse = String(this.defaultWarehouse);
+        }
+    }
+
     public onBlurDueDate(index) {
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
@@ -3405,7 +3428,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses),  filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
