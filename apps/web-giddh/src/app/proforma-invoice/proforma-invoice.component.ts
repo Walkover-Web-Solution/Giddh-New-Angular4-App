@@ -37,7 +37,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, delay, take, takeUntil } from 'rxjs/operators';
+import { auditTime, delay, take, takeUntil, filter } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -491,6 +491,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.shouldShowWarehouse = false;
                 } else {
                     this.shouldShowWarehouse = true;
+                    if (this.isCashInvoice) {
+                        // Load default warehouse for Cash Invoice
+                        this.initializeWarehouse();
+                    }
                 }
             }
 
@@ -3333,6 +3337,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Handles the customer name change for Cash Invoice
+     *
+     * @param {*} event Input change event
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleCustomerChange(event: any): void {
+        if (!event.target.value) {
+            // Input is cleared reset to default warehouse
+            this.selectedWarehouse = String(this.defaultWarehouse);
+        }
+    }
+
     public onBlurDueDate(index) {
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
@@ -3405,19 +3422,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses),  filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 if (warehouse) {
-                    // Update flow is carried out
+                    // Update flow is carried out and we have received warehouse details
                     this.selectedWarehouse = warehouse.uniqueName;
+                    this.shouldShowWarehouse = true;
                 } else {
-                    // Create flow is carried out
-                    this.selectedWarehouse = (this.isUpdateMode) ? '' : String(this.defaultWarehouse);
+                    if (this.isUpdateMode) {
+                        // Update flow is carried out
+                        // Hide the warehouse drop down as the API has not returned warehouse
+                        // details in response which means user has updated the item to non-stock
+                        this.shouldShowWarehouse = false;
+                    } else {
+                        // Create flow is carried out
+                        this.selectedWarehouse = String(this.defaultWarehouse);
+                        this.shouldShowWarehouse = true;
+                    }
                 }
-                this.shouldShowWarehouse = true;
             }
         });
     }
