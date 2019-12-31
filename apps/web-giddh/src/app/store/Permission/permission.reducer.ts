@@ -80,13 +80,14 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE: {
-            // role is successfully deleted now remove deleted role from store
-            let newState = _.cloneDeep(state);
-            // res contains deleted role's uniqueName
-            newState.roles.splice(newState.roles.findIndex((role: IRoleCommonResponseAndRequest) => {
-                return role.uniqueName === action.payload.queryString.roleUniqueName;
-            }), 1);
-            return { ...state, ...newState };
+            // filter out deleted role from permission role list, when status is success
+            if (action.payload.status === 'success') {
+                return {
+                    ...state,
+                    roles: state.roles.filter(role => role.uniqueName !== action.payload.queryString.roleUniqueName)
+                }
+            }
+            return state;
         }
         case PERMISSION_ACTIONS.GET_ALL_PAGES: {
             return state;
