@@ -1,6 +1,6 @@
 {
     "name": "giddh-workspaces",
-    "version": "6.5.23",
+    "version": "7.0.0",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -125,7 +125,7 @@
         "cross-env": "^5.2.0",
         "dotenv": "6.2.0",
         "electron": "^4.0.5",
-        "electron-builder": "^20.39.0",
+        "electron-builder": "21.2.0",
         "electron-installer-dmg": "~2.0.0",
         "electron-is-dev": "^1.1.0",
         "electron-log": "^3.0.5",
