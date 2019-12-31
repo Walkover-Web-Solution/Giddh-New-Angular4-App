@@ -272,7 +272,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             if (!this.currentTxn.selectedAccount.stock) {
-                this.selectedWarehouse = this.defaultWarehouse;
+                this.selectedWarehouse = String(this.defaultWarehouse);
             }
 
             let companyTaxes: TaxResponse[] = [];
