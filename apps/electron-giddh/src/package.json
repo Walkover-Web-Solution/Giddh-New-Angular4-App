@@ -1,76 +1,75 @@
 {
-	"name": "giddh",
-	"version": "6.1.3",
-	"description": "Accounting Software from Giddh.",
-	"main": "index.js",
-	"author": "Walkover Technologies<info@walkover.in>",
-	"homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
-	"repository": {
-		"url": "https://github.com/nstudio/xplat"
-	},
-	"license": "MIT",
-	"dependencies": {
-		"angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
-		"configstore": "^4.0.0",
-		"electron-is-dev": "^1.1.0",
-		"electron-log": "^3.0.5",
-		"electron-oauth": "git+https://github.com/govi2010/electron-oauth2.git",
-		"electron-updater": "4.0.6",
-		"is-cidr": "^3.0.0",
-		"jquery": "^3.4.1",
-		"moment": "^2.24.0"
-	},
-	"build": {
-		"appId": "com.giddh.prod",
-		"publish": [
-			{
-				"provider": "s3",
-				"bucket": "giddh-app-builds"
-			}
-		],
-		"directories": {
-			"buildResources": "resources",
-			"output": "../electrongiddh-packages"
-		},
-		"mac": {
-			"category": "public.app-category.finance",
-			"target": [
-				"dmg",
-				"zip"
-			],
-			"identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
-			"type": "distribution",
-			"entitlements": "default.entitlements.mac.plist",
-			"provisioningProfile": "embedded.provisionprofile",
-			"icon": "icon.png"
-		},
-		"linux": {
-			"icon": "icon.png",
-			"maintainer": "Walkover Technologies Pvt Ltd",
-			"target": [
-				"AppImage",
-				"snap",
-				"zip"
-			]
-		},
-		"win": {
-			"target": [
-				"nsis",
-				"nsis-web",
-				"zip"
-			],
-			"icon": "icon.ico",
-			"publisherName": "Walkover Technologies Pvt Ltd",
-			"certificateSubjectName": "Walkover Technologies Pvt Ltd"
-		},
-		"nsis": {
-			"oneClick": true,
-			"createDesktopShortcut": true,
-			"createStartMenuShortcut": true,
-			"menuCategory": "Accounting",
-			"shortcutName": "Giddh",
-			"perMachine": false
-		},
-		"asar": true
-	}
+    "name": "giddh",
+    "version": "7.0.0",
+    "description": "Accounting Software from Giddh.",
+    "main": "index.js",
+    "author": "Walkover Technologies<info@walkover.in>",
+    "homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
+    "repository": {
+        "url": "https://github.com/nstudio/xplat"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "angular2-highcharts": "git+https://github.com/mtflynn/angular2-highcharts.git",
+        "configstore": "^4.0.0",
+        "electron-is-dev": "^1.1.0",
+        "electron-log": "^3.0.5",
+        "electron-oauth": "git+https://github.com/govi2010/electron-oauth2.git",
+        "electron-updater": "4.0.6",
+        "is-cidr": "^3.0.0",
+        "jquery": "^3.4.1",
+        "moment": "^2.24.0"
+    },
+    "build": {
+        "appId": "com.giddh.prod",
+        "electronVersion": "4.2.12",
+        "publish": [{
+            "provider": "s3",
+            "bucket": "giddh-app-builds"
+        }],
+        "directories": {
+            "buildResources": "resources",
+            "output": "../electrongiddh-packages"
+        },
+        "mac": {
+            "category": "public.app-category.finance",
+            "target": [
+                "dmg",
+                "zip"
+            ],
+            "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
+            "type": "distribution",
+            "entitlements": "default.entitlements.mac.plist",
+            "provisioningProfile": "embedded.provisionprofile",
+            "icon": "icon.png"
+        },
+        "linux": {
+            "icon": "icon.png",
+            "maintainer": "Walkover Technologies Pvt Ltd",
+            "target": [
+                "AppImage",
+                "snap",
+                "zip"
+            ]
+        },
+        "win": {
+            "target": [
+                "nsis",
+                "nsis-web",
+                "zip"
+            ],
+            "icon": "icon.ico",
+            "publisherName": "Walkover Technologies Pvt Ltd",
+            "certificateSubjectName": "Walkover Technologies Pvt Ltd"
+        },
+        "nsis": {
+            "oneClick": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "menuCategory": "Accounting",
+            "shortcutName": "Giddh",
+            "perMachine": false
+        },
+        "asar": true
+    }
 }
