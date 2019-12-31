@@ -1810,6 +1810,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // Stock item, show the warehouse drop down if it is hidden
                 if (!this.shouldShowWarehouse) {
                     this.shouldShowWarehouse = true;
+                    this.selectedWarehouse = String(this.defaultWarehouse);
                 }
             } else {
                 txn.isStockTxn = false;
