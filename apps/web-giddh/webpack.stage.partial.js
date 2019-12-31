@@ -21,7 +21,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://stage.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('http://apitest.giddh.com/'),
-            'process.env.APP_FOLDER': JSON.stringify('/')
+            'process.env.APP_FOLDER': JSON.stringify('')
         }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]

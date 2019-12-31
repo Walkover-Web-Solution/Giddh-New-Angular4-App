@@ -489,11 +489,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getRedirectUrl(baseHref: string) {
-        if (LOCAL_ENV) {
-            return `${baseHref}pages/settings?tab=integration`;
-        } else if (PRODUCTION_ENV || STAGING_ENV || TEST_ENV) {
-            return `${baseHref}pages/settings/integration/email`;
-        }
+        return `${baseHref}pages/settings?tab=integration`;
     }
 
     private getGoogleCredentials() {
