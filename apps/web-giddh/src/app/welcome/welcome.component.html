@@ -76,7 +76,7 @@
                         </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox">
+                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
@@ -103,8 +103,9 @@
                             </div>
                         </div>
                     </div>
-                    <ng-container *ngIf="selectedBusinesstype === 'Registered'">
-                        <div class="col-xs-12 mrB2 selectBox" *ngIf="formFields['taxName'] !== undefined">
+                    <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
+                        <div class="col-xs-12 mrB2 selectBox"
+                            *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
@@ -124,9 +125,9 @@
                             </div>
                         </div>
                         <div class="col-xs-12 mrB2 selectBox">
-                            <div class=" ">
+                            <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
-                                <div class=" ">
+                                <div>
                                     <sh-select #states [options]="statesSource$ | async" required
                                         [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
                                         [(ngModel)]="companyProfileObj.state" style="width:100%"
@@ -134,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && itemOnBoardingDetails?.onBoardingType != 'warehouse')"
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)"
                             class="col-xs-12 mrB2 selectBox">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
@@ -164,7 +165,8 @@
                         </div>
                     </ng-container>
                     <div class="col-xs-12 mrB2 selectBox">
-                        <div *ngIf="selectedBusinesstype" class="clearfix">
+                        <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
+                        <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
                                 <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address <sup
@@ -173,11 +175,12 @@
                             </ng-container>
                             <ng-template #onBoardingItemAddress>
                                 <label for="address" class="d-block">{{itemOnBoardingDetails?.onBoardingType}} Address
-                                    <sup *ngIf="selectedBusinesstype === 'Registered'"
-                                        class="text-danger">*</sup></label>
+                                    <sup class="text-danger">*</sup></label>
                             </ng-template>
-                            <textarea [attr.required]="selectedBusinesstype === 'Registered'" placeholder="Address"
-                                class="form-control mrT1 " name="address" id="address"
+                            <textarea
+                                [class.invalid-address]="isWarehouse && welcomeForm?.form?.controls['address']?.errors?.required"
+                                [required]="selectedBusinesstype === 'Registered' || isWarehouse"
+                                placeholder="Address" class="form-control mrT1 " name="address" id="address"
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>

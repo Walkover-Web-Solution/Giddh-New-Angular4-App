@@ -147,6 +147,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Form instance */
     @ViewChild('welcomeForm') welcomeForm: NgForm;
 
+    /**
+     * Returns true, if onboarding of Warehouse is going on
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof WelcomeComponent
+     */
+    public get isWarehouse(): boolean {
+        return this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === 'Warehouse';
+    }
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Phone utility to check the validity of a contact number */
     private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
@@ -193,6 +204,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.company.uniqueName = (this.itemDetails && this.itemDetails.uniqueName) ? this.itemDetails.uniqueName : '';
             this.company.country = (this.itemDetails && this.itemDetails.countryCode) ? this.itemDetails.countryCode : '';
             this.company.baseCurrency = (this.itemDetails && this.itemDetails.currencyCode) ? this.itemDetails.currencyCode : '';
+            this.statesSource$.pipe(takeUntil(this.destroyed$)).subscribe((states) => {
+                if (states.length > 0) {
+                    this.company.stateCode = (this.itemDetails && this.itemDetails.stateCode) ? this.itemDetails.stateCode : '';
+                    this.reFillForm();
+                }
+            });
+
+            console.log('Item details: ', this.itemDetails);
             this.prepareWelcomeForm();
         } else {
             this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
@@ -205,18 +224,20 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
         }
-        combineLatest([
-            this._companyService.GetAllBusinessTypeList(),
-            this._companyService.GetAllBusinessNatureList()
-        ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
-            _.map(businessTypeResponse.body, (businessType) => {
-                this.businessTypeList.push({ label: businessType, value: businessType });
+        if (!this.isOnBoardingInProgress) {
+            combineLatest([
+                this._companyService.GetAllBusinessTypeList(),
+                this._companyService.GetAllBusinessNatureList()
+            ]).subscribe(([businessTypeResponse, businessNatureResponse]) => {
+                _.map(businessTypeResponse.body, (businessType) => {
+                    this.businessTypeList.push({ label: businessType, value: businessType });
+                });
+                _.map(businessNatureResponse.body, (businessNature) => {
+                    this.businessNatureList.push({ label: businessNature, value: businessNature });
+                });
+                this.reFillForm();
             });
-            _.map(businessNatureResponse.body, (businessNature) => {
-                this.businessNatureList.push({ label: businessNature, value: businessNature });
-            });
-            this.reFillForm();
-        });
+        }
     }
 
     public ngAfterViewInit() {
@@ -308,11 +329,25 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
             this._router.navigate(['select-plan']);
-        } else if (this.isItemUpdateInProgress && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            // Check for contact number validity only for update flow of warehouse
-            isWelcomeFormValid = this.isContactNumberValid();
-            if (!isWelcomeFormValid && this.contactNumberField) {
-                this.contactNumberField.nativeElement.focus();
+        } else {
+            if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+                if (this.isItemUpdateInProgress) {
+                    // Check for contact number validity only for update flow of warehouse as
+                    // the create warehouse validation will be performed in on-boarding component
+                    isWelcomeFormValid = this.isContactNumberValid();
+                    if (!isWelcomeFormValid && this.contactNumberField) {
+                        this.contactNumberField.nativeElement.focus();
+                    }
+                }
+                // Validate address field
+                const addressField = this.welcomeForm.form.controls['address'];
+                addressField.setValue(addressField.value.trim());
+                if (!this.isAddressValid(addressField.value)) {
+                    addressField.setErrors({ 'required': true });
+                    isWelcomeFormValid = false;
+                } else {
+                    addressField.setErrors({});
+                }
             }
         }
         if (isWelcomeFormValid) {
@@ -743,11 +778,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!isFormFilled) {
                         // Current warehouse item has no detail, try the default warehouse
                         this.fillOnBoardingDetails('DEFAULT_WAREHOUSE');
-                    } else {
-                        const { taxNumber: defaultCompanyTaxNumber = '' } = this.getDefaultCompanyDetails();
-                        /* Form is filled is default warehouse details. Check the 'Same as HQ' checkbox
-                            if the tax number of default warehouse is same as default company */
-                        this.isTaxNumberSameAsHeadQuarter = (defaultCompanyTaxNumber === this.itemDetails.taxNumber) ? 1 : 0;
                     }
                     break;
                 case 'DEFAULT_WAREHOUSE':
@@ -756,20 +786,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!isFormFilled) {
                         // Default warehouse has no detail, try the default company
                         this.fillOnBoardingDetails('DEFAULT_COMPANY');
-                    } else {
-                        const { taxNumber: defaultCompanyTaxNumber = '' } = this.getDefaultCompanyDetails();
-                        /* Form is filled is default warehouse details. Check the 'Same as HQ' checkbox
-                            if the tax number of default warehouse is same as default company */
-                        this.isTaxNumberSameAsHeadQuarter = (defaultCompanyTaxNumber === defaultWarehouse.taxNumber) ? 1 : 0;
                     }
                     break;
                 case 'DEFAULT_COMPANY':
-                    const { address: autoFillAddress = '', taxNumber: autoFillTaxNumber = '' } = this.getDefaultCompanyDetails();
+                    const { address: autoFillAddress = '', stateCode } = this.getDefaultCompanyDetails();
                     const defaultCompany = {
-                        businessType: this.activeCompany.businessType,
-                        businessNature: this.activeCompany.businessNature,
                         address: autoFillAddress,
-                        taxNumber: autoFillTaxNumber
+                        stateCode
                     };
                     this.fillFormDetails(defaultCompany);
                     // Check the 'Same as HQ' checkbox
@@ -777,15 +800,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     break;
                 default: break;
             }
-
-            setTimeout(() => {
-                // setTimeout is required as 'gstNumberField' viewchild is not present in ngOnInit() lifecycle
-                if (this.gstNumberField) {
-                    // Check the validity of GST number and select the state as per the GST
-                    this.checkGstNumValidation(this.gstNumberField.nativeElement);
-                    this.getStateCode(this.gstNumberField.nativeElement, this.statesDropdown);
-                }
-            });
         }
     }
 
@@ -852,16 +866,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private fillFormDetails(entity: any): boolean {
         if (entity) {
-            this.companyProfileObj.businessNature = entity.businessNature;
-            this.companyProfileObj.businessType = entity.businessType;
-            this.selectedBusinesstype = this.companyProfileObj.businessType;
-            if (this.selectedBusinesstype === 'Registered') {
-                this.companyProfileObj.taxNumber = entity.taxNumber;
-            }
             this.companyProfileObj.address = entity.address;
+            this.companyProfileObj.state = entity.stateCode;
         }
-        return !!(this.companyProfileObj.businessNature || this.companyProfileObj.businessType ||
-            this.companyProfileObj.address || this.companyProfileObj.taxNumber);
+        return !!(this.companyProfileObj.address || this.companyProfileObj.state);
     }
 
     /**
@@ -882,5 +890,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         return defaultCompany;
+    }
+
+    /**
+     * Returns true if address is valid
+     *
+     * @private
+     * @param {string} address Address to be validated
+     * @returns {boolean} True if address is valid
+     * @memberof WelcomeComponent
+     */
+    private isAddressValid(address: string = ''): boolean {
+        return address.trim().length > 0;
     }
 }

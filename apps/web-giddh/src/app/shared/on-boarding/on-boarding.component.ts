@@ -350,6 +350,23 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
+        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
+            // Fetch current company country
+            // if (settings && settings.profile && settings.profile.countryV2) {
+            //     const country = settings.profile.countryV2;
+            //     this.company.country = country.alpha2CountryCode || country.alpha3CountryCode;
+            // }
+            if (session.companies) {
+                session.companies.forEach(company => {
+                    if (company.uniqueName === session.companyUniqueName) {
+                        // this.company.country = country.alpha2CountryCode || country.alpha3CountryCode;
+                        const countryDetails = company.countryV2;
+                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                        console.log('Company: ', company);
+                    }
+                });
+            }
+        });
     }
 
     public getCurrency() {
