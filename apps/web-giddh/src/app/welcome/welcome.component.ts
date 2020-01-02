@@ -144,6 +144,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
     /** Contact number field */
     @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
+    /** Address field */
+    @ViewChild('address') addressField: ElementRef<any>;
     /** Form instance */
     @ViewChild('welcomeForm') welcomeForm: NgForm;
 
@@ -339,9 +341,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 addressField.setValue(addressField.value.trim());
                 if (!this.isAddressValid(addressField.value)) {
                     addressField.setErrors({ 'required': true });
+                    if (this.addressField) {
+                        (this.addressField.nativeElement as HTMLElement).classList.add('error-box');
+                    }
                     isWelcomeFormValid = false;
                 } else {
-                    addressField.setErrors({});
+                    addressField.setErrors(null);
+                    this.removeAddressFieldError();
                 }
             }
         }
@@ -352,6 +358,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     taxName: this.formFields
                 }
             });
+        }
+    }
+
+    /**
+     * Removes error class from address field
+     *
+     * @memberof WelcomeComponent
+     */
+    public removeAddressFieldError(): void {
+        if (this.addressField) {
+            (this.addressField.nativeElement as HTMLElement).classList.remove('error-box');
         }
     }
 
