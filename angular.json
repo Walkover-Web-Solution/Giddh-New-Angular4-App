@@ -251,13 +251,18 @@
                         "port": 3000,
                         "baseUrl": "localapp.giddh.com:3000",
                         "browserTarget": "web-giddh:build",
-                        "extraWebpackConfig": "./webpack.partial.js",
                         "assets": [],
                         "plugin": "./hook.js"
                     },
                     "configurations": {
                         "prod": {
                             "browserTarget": "web-giddh:build:prod"
+                        },
+                        "stage": {
+                            "browserTarget": "web-giddh:build:stage"
+                        },
+                        "test": {
+                            "browserTarget": "web-giddh:build:test"
                         }
                     }
                 },

@@ -1,4 +1,5 @@
 const getGoogleCredentials = () => {
+    console.log('main-auth.config.ts Is PROD: ', PRODUCTION_ENV);
     if (PRODUCTION_ENV || isElectron) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',

@@ -489,10 +489,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getRedirectUrl(baseHref: string) {
+        console.log('Setting integration component baseHref: ', baseHref);
         return `${baseHref}pages/settings?tab=integration`;
     }
 
     private getGoogleCredentials() {
+        console.log('Setting integration component getGoogleCredentials: ', PRODUCTION_ENV);
         if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'

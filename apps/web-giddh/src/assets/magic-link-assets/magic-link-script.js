@@ -301,6 +301,7 @@ var app = new Vue({
                 })
         },
         getApi: function () {
+            console.log('Magic link URL: ', ApiUrl);
             return ApiUrl;
         }
     }
