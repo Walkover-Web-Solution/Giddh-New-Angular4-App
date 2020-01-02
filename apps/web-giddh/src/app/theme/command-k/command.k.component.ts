@@ -204,6 +204,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             this.initSetParentWidth();
+
+            if (this.virtualScrollElem) {
+                let item = this.virtualScrollElem.directionToll(40);
+                if (item) {
+                    this.refreshToll(item, 40);
+                }
+            }
         });
     }
 
@@ -376,5 +383,17 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleHighLightedItemEvent(item: any): void {
         // no need to do anything in the function
+    }
+
+    /**
+     * This function returns the uniquename of item
+     *
+     * @param {*} index
+     * @param {*} item
+     * @returns uniqueName
+     * @memberof CommandKComponent
+     */
+    public trackByFn(index, item: any) {
+        return item.uniqueName; // unique id corresponding to the item
     }
 }
