@@ -15,14 +15,6 @@
     margin-left: 6px;
 }
 
-.icon-pointer .glyphicon:hover {
-    color: #fff !important;
-}
-
-.icon-pointer .activeTextColor {
-    color: $activeIconTh !important;
-}
-
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
@@ -30,14 +22,12 @@
 
 .icon-pointer .font-xxs {
     font-size: 12px;
-    color: #757bb9;
 }
 .aging-table {
     max-width: 1170px;
     width: 100%;
 }
 .paginationWrapper {
-    max-width: 1171px;
     width: 100%;
 }
 .customer-right table {
@@ -82,15 +72,15 @@ span.inputAddon {
     font-size: 20px;
     border-radius: 2px;
 }
-// table{
-//   position: relative;
-// }
-// .basic  thead tr:last-child  th{
-//     position: sticky !important;
-//     top: 59px;
-//     z-index: 99;
-//     box-shadow: 1px 1px 0 #d9d9d9;
-// }
+tr.aging-table-top {
+    border-bottom: 1px solid $tableBorderColor;
+}
+tr.aging-table-top td {
+    padding: 8px 0;
+}
+.aging-table-top + tr > th {
+    border-bottom: none !important;
+}
 // responsive
 @media (min-width: 769px) {
     .onMobileView > .top-aging-table-top {
