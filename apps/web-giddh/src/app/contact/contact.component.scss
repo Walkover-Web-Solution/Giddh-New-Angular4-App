@@ -175,8 +175,7 @@ td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
 }
 
 tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer,
-tr:last-child
-    td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+tr:last-child td.pos-rel.WordWrap.vendorCustomerName.cursor-pointer {
     border-bottom: 1px solid #ddd !important;
 }
 
@@ -306,9 +305,7 @@ span.inputAddon {
     position: relative;
     padding-right: 10px !important;
 }
-.aging-table-top + tr > th {
-    border-bottom: none !important;
-}
+
 // responsive
 
 @media (max-width: 768px) {
