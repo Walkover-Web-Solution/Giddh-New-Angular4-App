@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
@@ -53,6 +53,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchedItems: any[] = [];
     public listOfSelectedGroups: any[] = [];
     public noResultsFound: boolean = false;
+    public highlightedItem: number = 0;
+    public allowLoadMore: boolean = false;
+    public isLoading: boolean = false;
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
@@ -77,6 +80,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+            this.commandKRequestParams.page = 1;
+            this.searchedItems = [];
             this.commandKRequestParams.q = term;
             this.searchCommandK();
             this._cdref.markForCheck();
@@ -184,7 +189,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof CommandKComponent
      */
-    public searchCommandK(): void {
+    public searchCommandK(): void | boolean {
+        if (this.isLoading) {
+            return false;
+        }
+
+        this.isLoading = true;
+
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
             this.commandKRequestParams.group = lastGroup.uniqueName;
@@ -193,13 +204,24 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this._commandKService.searchCommandK(this.commandKRequestParams).subscribe((res) => {
+            this.isLoading = false;
+
             if (res && res.body && res.body.results && res.body.results.length > 0) {
-                this.searchedItems = res.body.results;
+                let loop = 0;
+                res.body.results.forEach(key => {
+                    key.loop = loop;
+                    this.searchedItems.push(key);
+                    loop++;
+                });
+                this.highlightedItem = 0;
                 this.noResultsFound = false;
+                this.allowLoadMore = true;
                 this._cdref.detectChanges();
             } else {
-                this.searchedItems = [];
-                this.noResultsFound = true;
+                if (this.searchedItems.length === 0) {
+                    this.noResultsFound = true;
+                    this.allowLoadMore = false;
+                }
                 this._cdref.detectChanges();
             }
 
@@ -383,6 +405,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleHighLightedItemEvent(item: any): void {
         // no need to do anything in the function
+        this.highlightedItem = item.loop;
     }
 
     /**
@@ -404,5 +427,42 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public close() {
         this.closeEmitter.emit(true);
+    }
+
+    /**
+     * This function is used to highlight the hovered item
+     *
+     * @param {number} index
+     * @memberof CommandKComponent
+     */
+    public highlightItem(index: number) {
+        this.highlightedItem = index;
+    }
+
+    /**
+     * This function is used to unhighlight the selected item
+     *
+     *
+     * @memberof CommandKComponent
+     */
+    public unhighlightItem() {
+        this.highlightedItem = -1;
+    }
+
+    /**
+     * This function will load more records on scroll
+     *
+     * @param {*} event
+     * @memberof CommandKComponent
+     */
+    @HostListener('scroll', ['$event'])
+    onScroll(event: any) {
+        // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
+        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+            if (this.allowLoadMore && !this.isLoading) {
+                this.commandKRequestParams.page++;
+                this.searchCommandK();
+            }
+        }
     }
 }
