@@ -396,4 +396,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public trackByFn(index, item: any) {
         return item.uniqueName; // unique id corresponding to the item
     }
+
+    /**
+     * This will close the modal
+     *
+     * @memberof CommandKComponent
+     */
+    public close() {
+        this.closeEmitter.emit(true);
+    }
 }
