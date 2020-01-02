@@ -40,4 +40,23 @@ export class SettingsUtilityService {
             taxType
         };
     }
+
+    /**
+     * Returns the formatted warehouse data by appending 'label' and 'value' with
+     * warehouse name and uniqueName respectively
+     *
+     * @param {Array<any>} warehouses Warehouse data received from the service
+     * @returns {*} Formatted warehouse data
+     * @memberof SettingsUtilityService
+     */
+    public getFormattedWarehouseData(warehouses: Array<any>): any {
+        let defaultWarehouse: any = {};
+        const formattedWarehouses = warehouses.map((warehouse: any) => {
+            if (warehouse.isDefault) {
+                defaultWarehouse = warehouse;
+            }
+            return { ...warehouse, label: warehouse.name, value: warehouse.uniqueName };
+        });
+        return { formattedWarehouses, defaultWarehouse };
+    }
 }

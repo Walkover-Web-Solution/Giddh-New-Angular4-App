@@ -1,40 +1,52 @@
-import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
-import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
-import { AppState } from '../../../store';
-import { select, Store } from '@ngrx/store';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { ToasterService } from '../../../services/toaster.service';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
-import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
-import { AccountService } from '../../../services/account.service';
-import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { UpdateLedgerVm } from './updateLedger.vm';
-import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { AccountResponse } from '../../../models/api-models/Account';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
-import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { saveAs } from 'file-saver';
-import { LoaderService } from '../../../loader/loader.service';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { createSelector } from 'reselect';
-import { TagRequest } from '../../../models/api-models/settingsTags';
-import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
-import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { saveAs } from 'file-saver';
+import * as moment from 'moment/moment';
+import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
+import { createSelector } from 'reselect';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
+import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { LoaderService } from '../../../loader/loader.service';
+import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
+import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { PettyCashResonse } from '../../../models/api-models/Expences';
+import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { TagRequest } from '../../../models/api-models/settingsTags';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { AccountService } from '../../../services/account.service';
+import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { LedgerService } from '../../../services/ledger.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { UpdateLedgerVm } from './updateLedger.vm';
+import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 
 @Component({
     selector: 'update-ledger-entry-panel',
@@ -70,11 +82,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
-    public selectWarehouse = [
-        { label: 'Vijay Nagar', value: 'Vijay Nagar' },
-        { label: 'Gita Bhawan', value: 'Gita Bhawan' },
-        { label: 'Rajendra Nagar', value: 'Rajendra Nagar' },
-    ];
+
+    /** Warehouse data for warehouse drop down */
+    public warehouses: Array<any>;
+    /** Currently selected warehouse */
+    public selectedWarehouse: string;
+    /** Default warehouse of a company */
+    private defaultWarehouse: string;
+    /** True, if warehouse drop down should be displayed */
+    public shouldShowWarehouse: boolean;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -118,10 +134,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public accountPettyCashStream: any;
 
-    constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-        private _toasty: ToasterService, private _accountService: AccountService,
-        private _ledgerAction: LedgerActions, private _loaderService: LoaderService,
-        private _settingsTagActions: SettingsTagActions, private _cdr: ChangeDetectorRef) {
+    constructor(
+        private store: Store<AppState>,
+        private _ledgerService: LedgerService,
+        private _toasty: ToasterService,
+        private _accountService: AccountService,
+        private _ledgerAction: LedgerActions,
+        private _loaderService: LoaderService,
+        private _settingsTagActions: SettingsTagActions,
+        private settingsUtilityService: SettingsUtilityService
+    ) {
+
         this.vm = new UpdateLedgerVm();
 
         this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
@@ -154,7 +177,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-
+        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                this.warehouses = warehouseData.formattedWarehouses;
+                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            }
+        });
         this.showAdvanced = false;
         this.vm.selectedLedger = new LedgerResponse();
         this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
@@ -445,6 +474,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }];
                             }
                             t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                            // Show warehouse dropdown only for stock items
+                            const warehouseDetails = t.inventory.warehouse;
+                            if (warehouseDetails) {
+                                this.selectedWarehouse = warehouseDetails.uniqueName;
+                            } else {
+                                // If warehouse details are not received show default warehouse
+                                this.selectedWarehouse = String(this.defaultWarehouse);
+                            }
+                            this.shouldShowWarehouse = true;
                         }
                     });
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
@@ -610,7 +648,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             txn.particular.name = undefined;
 
             // check if need to showEntryPanel
-            // first check with opened lager
+            // first check with opened ledger
             if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
                 this.vm.showNewEntryPanel = true;
             } else {
@@ -699,6 +737,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             amount: 0,
                             rate
                         };
+                        // Stock item, show the warehouse drop down
+                        if (!this.shouldShowWarehouse) {
+                            this.shouldShowWarehouse = true;
+                        }
                     }
                     if (rate > 0 && txn.amount === 0) {
                         txn.amount = rate;
@@ -707,6 +749,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 // directly assign additional property
                 txn.selectedAccount = e.additional;
+                delete txn.inventory;
+                // Non stock item got selected, search if there is any stock item along with non-stock item
+                const isStockItemPresent = this.isStockItemPresent();
+                if (!isStockItemPresent) {
+                    // None of the item were stock item, hide the warehouse section which is applicable only for stocks
+                    this.shouldShowWarehouse = false;
+                }
             }
 
             // check if need to showEntryPanel
@@ -817,7 +866,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
             }
         }
-
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
 
         // special case for is petty cash mode
@@ -839,7 +887,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
-
+        requestObj.transactions.map((transaction) => {
+            if (transaction.inventory && this.shouldShowWarehouse) {
+                // Update the warehouse details in update ledger flow
+                if (transaction.inventory.warehouse) {
+                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
+                } else {
+                    transaction.inventory.warehouse = { name: '', uniqueName: '' };
+                    transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
+                }
+            }
+        });
         if (this.tcsOrTds === 'tds') {
             delete requestObj['tcsCalculationMethod'];
         }
@@ -859,10 +917,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Unsubscribe to all the listeners to avoid memory leaks
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public ngOnDestroy(): void {
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        // Remove the transaction details for ledger once the component is destroyed
+        this.store.dispatch(this._ledgerAction.resetLedgerTrxDetails());
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {
@@ -1064,5 +1129,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
         let date = moment().format('DD-MM-YYYY');
         return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
+    }
+
+    /**
+     * Returns true, if any of the single item is stock
+     *
+     * @private
+     * @returns {boolean} True, if item array contains stock item
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private isStockItemPresent(): boolean {
+        for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
+            if (this.vm.selectedLedger.transactions[index].inventory) {
+                return true;
+            }
+        }
+        return false;
     }
 }
