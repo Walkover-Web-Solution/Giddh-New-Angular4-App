@@ -91,9 +91,6 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     /** Cache of the last scroll height to prevent setting CSS when not needed. */
     private lastScrollHeight = -1;
 
-    /** Cache of the last top padding to prevent setting CSS when not needed. */
-    private lastTopPadding = -1;
-
     private _parentScroll: Element | Window;
 
     constructor(
@@ -513,13 +510,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         }
         let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
         let start = Math.min(maxStart, (indexByScrollTop * d.itemsPerRow));
-        const topPadding = (items == null || items.length === 0) ? 0 : (d.childHeight * (start / d.itemsPerRow) - (d.childHeight * Math.min(start, this.bufferAmount)));
 
-        if (topPadding !== this.lastTopPadding) {
-            this.renderer.setStyle(this.contentElementRef.nativeElement, 'transform', `translateY(${topPadding}px)`);
-            this.renderer.setStyle(this.contentElementRef.nativeElement, 'webkitTransform', `translateY(${topPadding}px)`);
-            this.lastTopPadding = topPadding;
-        }
         start = !isNaN(start) ? start : -1;
         end = !isNaN(end) ? end : -1;
         start -= this.bufferAmount;
