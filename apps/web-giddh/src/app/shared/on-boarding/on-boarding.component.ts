@@ -350,6 +350,17 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
+        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
+            // Fetch current company country
+            if (session.companies) {
+                session.companies.forEach(company => {
+                    if (company.uniqueName === session.companyUniqueName) {
+                        const countryDetails = company.countryV2;
+                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                    }
+                });
+            }
+        });
     }
 
     public getCurrency() {
