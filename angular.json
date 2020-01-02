@@ -24,7 +24,9 @@
                             "testing/tsconfig.libs.json",
                             "testing/tsconfig.libs.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -50,7 +52,9 @@
                             "testing/tsconfig.xplat.json",
                             "testing/tsconfig.xplat.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -223,8 +227,7 @@
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.test.ts"
                                 }
-                            ],
-
+                            ]
                         }
                     }
                 },
@@ -253,7 +256,9 @@
                             "apps/web-giddh/tsconfig.app.json",
                             "apps/web-giddh/tsconfig.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 },
                 "test": {
@@ -291,7 +296,9 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
