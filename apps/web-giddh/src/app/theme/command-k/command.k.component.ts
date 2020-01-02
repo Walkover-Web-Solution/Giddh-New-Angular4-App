@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { ScrollComponent } from './virtual-scroll/vscroll';
 import { GeneralService } from '../../services/general.service';
@@ -8,7 +8,6 @@ import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
 import { remove } from '../../lodash-optimized';
 
-const KEY_FOR_QUERY = 'query';
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
 ];
@@ -53,12 +52,12 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public searchedItems: any[] = [];
     public listOfSelectedGroups: any[] = [];
+    public noResultsFound: boolean = false;
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
         group: ''
     };
-    public noResultsFound: boolean = false;
 
     constructor(
         private renderer: Renderer,
@@ -70,46 +69,61 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchCommandK();
     }
 
-    public ngOnInit() {
-
+    /**
+     * Initializes the component
+     *
+     * @memberof CommandKComponent
+     */
+    public ngOnInit(): void {
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
             this.commandKRequestParams.q = term;
             this.searchCommandK();
             this._cdref.markForCheck();
         });
-
-        setTimeout(() => {
-            this.handleClickOnSearchWrapper();
-        }, 0);
     }
 
-    public ngAfterViewInit() {
+    /**
+     * This function gets called after view initializes and will
+     * set focus in search box and will call function to adjust the width of container
+     * @memberof CommandKComponent
+     */
+    public ngAfterViewInit(): void {
         setTimeout(() => {
-            this.handleClickOnSearchWrapper();
-
+            this.focusInSearchBox();
             this.doingUIErrands();
         }, 0);
     }
 
-    public doingUIErrands() {
+    /**
+     * This function will check wrapper and parent element and then call function to set the width of container
+     *
+     * @memberof CommandKComponent
+     */
+    public doingUIErrands(): void {
         this.zone.runOutsideAngular(() => {
             if (this.wrapper && this.parentEle) {
-                this.setParentWidthFunc();
+                this.initSetParentWidth();
             }
         });
     }
 
-    public ngOnDestroy() {
+    /**
+     * Releases all the observables to avoid memory leaks
+     *
+     * @memberof CommandKComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
     /**
-     * function will be used to set element liquid width.
-     * according to parent width.
+     * This function sets the width of container inside the modal
+     *
+     * @memberof CommandKComponent
      */
-    public setParentWidthFunc() {
+    public initSetParentWidth(): void {
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
@@ -123,7 +137,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public itemSelected(item: any) {
+    /**
+     * This function will get called if any item get selected
+     *
+     * @param {*} item
+     * @memberof CommandKComponent
+     */
+    public itemSelected(item: any): void {
         // emit data in case of direct A/c or Menus
         if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
             if (item.type === 'MENU') {
@@ -146,15 +166,25 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchEle.nativeElement.value = null;
 
             // set focus on search
-            this.handleClickOnSearchWrapper();
+            this.focusInSearchBox();
         }
     }
 
-    public triggerAddManage() {
+    /**
+     * This function will get called if we want to create a/c or group
+     *
+     * @memberof CommandKComponent
+     */
+    public triggerAddManage(): void {
         this.newTeamCreationEmitter.emit(true);
     }
 
-    public searchCommandK() {
+    /**
+     * This function will call the api to search items
+     *
+     * @memberof CommandKComponent
+     */
+    public searchCommandK(): void {
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
             this.commandKRequestParams.group = lastGroup.uniqueName;
@@ -163,23 +193,37 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this._commandKService.searchCommandK(this.commandKRequestParams).subscribe((res) => {
-            if (res && res.body) {
+            if (res && res.body && res.body.results && res.body.results.length > 0) {
                 this.searchedItems = res.body.results;
+                this.noResultsFound = false;
                 this._cdref.detectChanges();
             } else {
                 this.searchedItems = [];
                 this.noResultsFound = true;
+                this._cdref.detectChanges();
             }
 
-            this.setParentWidthFunc();
+            this.initSetParentWidth();
         });
     }
 
-    public handleOutSideClick(e: any) {
+    /**
+     * This function will get called if clicked outside of modal
+     *
+     * @param {*} e
+     * @memberof CommandKComponent
+     */
+    public handleOutSideClick(e: any): void {
 
     }
 
-    private captureValueFromList() {
+    /**
+     * This function will get called if pressed enter on any item
+     *
+     * @private
+     * @memberof CommandKComponent
+     */
+    private captureValueFromList(): void {
         if (this.virtualScrollElem) {
             let item = this.virtualScrollElem.activeItem();
             if (item) {
@@ -190,11 +234,22 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public handleFocus() {
+    /**
+     * This function will set the list to open on focus of search box
+     *
+     * @memberof CommandKComponent
+     */
+    public handleFocus(): void {
         this.isOpen = true;
     }
 
-    public handleKeydown(e: any) {
+    /**
+     * This function will get called if we remove search string or group
+     *
+     * @param {*} e
+     * @memberof CommandKComponent
+     */
+    public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
         if (key === TAB) {
@@ -240,19 +295,12 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * close on outside click
-     * expect in case of multiple
+     * This function will remove the selected groups in decending order
+     * if we press backspace in search box
+     * @param {*} [item]
+     * @memberof CommandKComponent
      */
-    public hide() {
-        if (!this.preventOutSideClose) {
-            this.isOpen = false;
-        } else {
-            this.closeEmitter.emit(true);
-        }
-    }
-
-    // remove item
-    public removeItemFromSelectedGroups(item?: any) {
+    public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
             this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
         } else {
@@ -260,8 +308,14 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    // a toll to add condition before calling final func
-    public refreshToll(item: any, key?: number) {
+    /**
+     * This function calls the function to refresh the scroll view
+     *
+     * @param {*} item
+     * @param {number} [key]
+     * @memberof CommandKComponent
+     */
+    public refreshToll(item: any, key?: number): void {
         if (key === UP_ARROW) {
             this.refreshScrollView(item, 'UP');
         } else {
@@ -269,7 +323,14 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public refreshScrollView(item: any, direction?: string) {
+    /**
+     * This function refreshes the scroll view
+     *
+     * @param {*} item
+     * @param {string} [direction]
+     * @memberof CommandKComponent
+     */
+    public refreshScrollView(item: any, direction?: string): void {
         if (item) {
             this.virtualScrollElem.scrollInto(item, direction);
             this.virtualScrollElem.startupLoop = true;
@@ -277,7 +338,15 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public initSearch(e: KeyboardEvent, term: string) {
+    /**
+     * This function will init search on keyup of search box
+     *
+     * @param {KeyboardEvent} e
+     * @param {string} term
+     * @returns {void}
+     * @memberof CommandKComponent
+     */
+    public initSearch(e: KeyboardEvent, term: string): void {
         let key = e.which || e.keyCode;
         // preventing search operation on arrows key
         if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
@@ -287,14 +356,25 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.searchSubject.next(term);
     }
 
-    public handleClickOnSearchWrapper(e?: KeyboardEvent) {
+    /**
+     * This function puts the focus in search box
+     *
+     * @param {KeyboardEvent} [e]
+     * @memberof CommandKComponent
+     */
+    public focusInSearchBox(e?: KeyboardEvent): void {
         if (this.searchEle) {
             this.searchEle.nativeElement.focus();
         }
     }
 
-    // get initialized on init and return selected item
-    public handleHighLightedItemEvent(item: any) {
-        // do the thing
+    /**
+     * This function get initialized on init and show selected item
+     *
+     * @param {*} item
+     * @memberof CommandKComponent
+     */
+    public handleHighLightedItemEvent(item: any): void {
+        // no need to do anything in the function
     }
 }
