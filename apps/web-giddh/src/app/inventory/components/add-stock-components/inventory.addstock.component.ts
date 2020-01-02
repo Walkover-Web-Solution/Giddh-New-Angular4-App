@@ -166,7 +166,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         // add stock form
         this.addStockForm = this._fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
-            uniqueName: ['', [Validators.required, Validators.minLength(2)]],
+            uniqueName: [''],
             stockUnitCode: ['', [Validators.required]],
             openingQuantity: ['', decimalDigits],
             skuCode: [''],
