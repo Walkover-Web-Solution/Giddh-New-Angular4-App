@@ -61,7 +61,7 @@
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
-                                <sh-select class="pull-left select-caret"
+                                <sh-select class="pull-left select-caret" (blur)="isContactNumberValid()"
                                     [disabled]="(createNewCompanyPreparedObj.phoneCode && !isItemUpdateInProgress) ? 'disabled' : null"
                                     style="width: 90px;margin-right: 16px;" name="phoneCode" [placeholder]="+91"
                                     [options]="callingCodesSource$ | async"
