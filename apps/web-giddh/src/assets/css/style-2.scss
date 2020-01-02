@@ -2,6 +2,184 @@
 
 @import "../css/giddh-common.scss";
 
+
+
+
+/* table css need to removed at last  (start)
+   Don't touch this table css (If any body work on that contact me..)
+*/
+
+.basic > tbody > tr > td,
+.basic > tbody > tr > th,
+.basic > tfoot > tr > td,
+.basic > tfoot > tr > th,
+.basic > thead > tr > td,
+.basic > thead > tr > th {
+    vertical-align: middle !important;
+    font-size: 14px;
+    word-break: break-word;
+    white-space: nowrap;
+}
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
+    font-weight: 400;
+    padding: 14px 10px;
+    text-transform: capitalize;
+    border-right: none !important;
+    border-left: none !important;
+}
+
+.basic > tbody > tr td:last-child,
+.basic > thead > tr th:last-child {
+    border-right: 1px solid #ddd !important;
+}
+
+.basic > tbody > tr td:first-child,
+.basic > thead > tr th:first-child {
+    border-left: 1px solid #ddd !important;
+}
+.basic > thead > tr > th {
+    background: #fff;
+    color: #000000;
+    border-right: 1px solid #d1d1d1;
+    padding: 15px 11px !important;
+    font-weight: 400;
+    border-bottom: 1px solid #d1d1d1;
+    font-family: opensans-semibold;
+    font-size: 14px;
+    border-top: 1px solid #d1d1d1; // position: sticky !important;
+    // top: 60px;
+    // z-index: 999;
+}
+
+.basic > tbody > tr:hover td {
+    background: #f4f5f8;
+}
+
+
+.basic {
+    background: #fff;
+}
+
+/*
+.aging-table > thead > tr > th {
+    background: #e5e5e5;
+    color: #262626;
+    border: 0;
+    font-family: "" opensans-semibold "";
+    text-transform: capitalize;
+    border-right: 1px solid #cac8c6;
+    border-top: 1px solid #cac8c6;
+    border-bottom: 1px solid #cac8c6;
+}*/
+
+
+@media (max-width: 768px) {
+    .onMobileView tbody tr {
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-bottom: 1px solid #dfdfdf;
+        cursor: pointer;
+        display: block;
+        padding: 5px 0 10px 0px;
+        margin: 22px auto 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .onMobileView table {
+        background: transparent;
+        margin-bottom: 0;
+        width: 100%;
+        display: block;
+    }
+    .onMobileView table tbody {
+        display: block;
+        width: 100%;
+    }
+    .onMobileView table thead {
+        display: none;
+    }
+    .onMobileView tbody > tr > td {
+        border: 0 !important;
+        display: block;
+        padding: 5px 10px 5px 50% !important;
+        position: relative;
+        text-align: left;
+        height: auto !important;
+        min-height: 30px !important;
+        word-wrap: inherit !important;
+        max-width: 100%;
+        white-space: inherit;
+    }
+    .onMobileView tbody td:after {
+        content: "";
+        width: calc(100% - 30px);
+        display: block;
+        margin: 0 auto;
+        height: 1px;
+        background: transparent;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -6px;
+    }
+    .onMobileView tbody td:before {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 14px;
+        content: attr(data-title);
+        display: table-cell;
+        font-weight: 500;
+        height: 100%;
+        left: 27px;
+        margin: auto;
+        position: absolute;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 40%;
+        text-align: left;
+    }
+    .onMobileView .table-bordered > tfoot > tr > td {
+        border: none;
+    }
+    .onMobileView th {
+        display: none;
+    }
+    .onMobileView.basic > tbody > tr:hover td,
+    .onMobileView .basic > tbody > tr:hover td {
+        background: transparent;
+    }
+     .onMobileView.table-bordered {
+        border: none;
+        background: transparent;
+        margin-top: 0;
+    }
+    .noRecords.onMobileView td:before {
+        display: none !important;
+    }
+    .noRecords.onMobileView td {
+        text-align: center !important;
+        padding: 5px 10px 5px 0% !important;
+    }
+     .onMobileView tbody td::first-letter {
+        text-transform: uppercase;
+    }
+     .onMobileView,
+    .onMobileView tbody {
+        display: block;
+    }
+    
+}
+
+
+
+@media (max-width: 320px) {
+    .onMobileView tbody td {
+        padding: 5px 10px 5px 53% !important;
+    }
+}
+
+/* table css need to removed at last (finish)*/
+
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -9171,3 +9349,4 @@ button {
         margin: 70px auto;
     }
 }
+

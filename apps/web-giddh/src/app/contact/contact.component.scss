@@ -365,6 +365,15 @@ span.inputAddon {
     .aging-table tr:hover .vendorCustomerName .table-checkbox {
         top: 5px;
     }
+
+    .customerName .icon-ellipse {
+        top: 8px;
+    }
+    .pos-rel.WordWrap {
+        .icon-dots-three-vertical {
+            display: block;
+        }
+    }
 }
 @media (max-width: 767px) {
     span.inputAddon {

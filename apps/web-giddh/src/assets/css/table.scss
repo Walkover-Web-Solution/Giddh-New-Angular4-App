@@ -103,7 +103,7 @@
         }
     }
     /*card responsive code*/
-    .onMobileView {
+    .on-mobile-view {
         display: block;
         table {
             background: transparent;
@@ -121,7 +121,7 @@
         table tbody tr {
             box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
             background: #fff;
-            border-bottom: 1px solid #d9d9d9;
+            border-bottom: none;
             cursor: pointer;
             display: block;
             padding: 5px 0 10px 0px;
@@ -188,7 +188,7 @@
             background: transparent;
         }
     }
-    .noRecords.onMobileView {
+    .no-records.on-mobile-view {
         td:before {
             display: none !important;
         }
@@ -200,7 +200,7 @@
 }
 
 @media (max-width: 320px) {
-    .onMobileView {
+    .on-mobile-view {
         tbody td {
             padding: 5px 10px 5px 53% !important;
         }
