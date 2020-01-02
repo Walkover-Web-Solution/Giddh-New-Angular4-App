@@ -204,14 +204,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.company.uniqueName = (this.itemDetails && this.itemDetails.uniqueName) ? this.itemDetails.uniqueName : '';
             this.company.country = (this.itemDetails && this.itemDetails.countryCode) ? this.itemDetails.countryCode : '';
             this.company.baseCurrency = (this.itemDetails && this.itemDetails.currencyCode) ? this.itemDetails.currencyCode : '';
-            this.statesSource$.pipe(takeUntil(this.destroyed$)).subscribe((states) => {
-                if (states.length > 0) {
-                    this.company.stateCode = (this.itemDetails && this.itemDetails.stateCode) ? this.itemDetails.stateCode : '';
-                    this.reFillForm();
-                }
-            });
-
-            console.log('Item details: ', this.itemDetails);
             this.prepareWelcomeForm();
         } else {
             this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
@@ -274,6 +266,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.companyProfileObj.selectedState = this.states[stateLoop].label;
                 }
             }
+        } else if (this.isItemUpdateInProgress && this.isWarehouse) {
+            // Prefill state details if warehouse update flow is carried out
+            this.reFillForm();
         }
     }
 
