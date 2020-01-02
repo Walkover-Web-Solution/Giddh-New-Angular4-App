@@ -227,6 +227,22 @@
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.test.ts"
                                 }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": true,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                }
                             ]
                         }
                     }
