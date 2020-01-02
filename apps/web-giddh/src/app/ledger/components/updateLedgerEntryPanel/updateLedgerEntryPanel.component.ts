@@ -86,7 +86,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
     /** Currently selected warehouse */
-    public selectedWarehouse: any;
+    public selectedWarehouse: string;
+    /** Default warehouse of a company */
+    private defaultWarehouse: string;
+    /** True, if warehouse drop down should be displayed */
+    public shouldShowWarehouse: boolean;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -177,6 +181,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
+                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
             }
         });
         this.showAdvanced = false;
@@ -474,9 +479,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             if (warehouseDetails) {
                                 this.selectedWarehouse = warehouseDetails.uniqueName;
                             } else {
-                                // If warehouse details are not received show empty dropdown
-                                this.selectedWarehouse = '';
+                                // If warehouse details are not received show default warehouse
+                                this.selectedWarehouse = String(this.defaultWarehouse);
                             }
+                            this.shouldShowWarehouse = true;
                         }
                     });
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
@@ -732,7 +738,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             rate
                         };
                         // Stock item, show the warehouse drop down
-                        this.selectedWarehouse = '';
+                        if (!this.shouldShowWarehouse) {
+                            this.shouldShowWarehouse = true;
+                        }
                     }
                     if (rate > 0 && txn.amount === 0) {
                         txn.amount = rate;
@@ -746,7 +754,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 const isStockItemPresent = this.isStockItemPresent();
                 if (!isStockItemPresent) {
                     // None of the item were stock item, hide the warehouse section which is applicable only for stocks
-                    this.selectedWarehouse = undefined;
+                    this.shouldShowWarehouse = false;
                 }
             }
 
@@ -880,7 +888,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         requestObj.transactions.map((transaction) => {
-            if (transaction.inventory) {
+            if (transaction.inventory && this.shouldShowWarehouse) {
                 // Update the warehouse details in update ledger flow
                 if (transaction.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;

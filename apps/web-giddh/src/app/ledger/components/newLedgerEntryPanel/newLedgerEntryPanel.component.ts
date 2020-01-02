@@ -89,7 +89,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
-    @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
+    @Output() public changeTransactionType: EventEmitter<any> = new EventEmitter();
     @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
@@ -272,7 +272,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             if (!this.currentTxn.selectedAccount.stock) {
-                this.selectedWarehouse = this.defaultWarehouse;
+                this.selectedWarehouse = String(this.defaultWarehouse);
             }
 
             let companyTaxes: TaxResponse[] = [];
@@ -326,7 +326,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public addToDrOrCr(type: string, e: Event) {
-        this.changeTransactionType.emit(type);
+        this.changeTransactionType.emit({
+            type,
+            warehouse: this.selectedWarehouse
+        });
         e.stopPropagation();
     }
 
@@ -508,9 +511,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
-        // Add warehouse to all the stock entries
+        /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
+            This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
-            if (transaction.inventory) {
+            if (transaction.inventory && !transaction.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
         });
