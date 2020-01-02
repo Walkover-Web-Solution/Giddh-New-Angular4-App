@@ -39,17 +39,6 @@
     color: #a9a9a9;
 }
 
-.icon-pointer .glyphicon:hover {
-    color: #fff !important;
-}
-.icon-pointer {
-    color: red;
-}
-.icon-pointer .activeTextColor {
-    color: $activeIconTh !important;
-    opacity: 1 !important;
-}
-
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
@@ -312,7 +301,14 @@ span.inputAddon {
 .aging-table .btn-small {
     min-width: 140px;
 }
-
+.aging-table.basic > thead > tr > th {
+    border-top: 1px solid $tableBorderColor;
+    position: relative;
+    padding-right: 10px !important;
+}
+.aging-table-top + tr > th {
+    border-bottom: none !important;
+}
 // responsive
 
 @media (max-width: 768px) {
@@ -368,6 +364,15 @@ span.inputAddon {
     }
     .aging-table tr:hover .vendorCustomerName .table-checkbox {
         top: 5px;
+    }
+
+    .customerName .icon-ellipse {
+        top: 8px;
+    }
+    .pos-rel.WordWrap {
+        .icon-dots-three-vertical {
+            display: block;
+        }
     }
 }
 @media (max-width: 767px) {
