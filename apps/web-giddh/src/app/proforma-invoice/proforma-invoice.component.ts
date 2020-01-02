@@ -1692,15 +1692,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             calculatedGrandTotal = 0;
         }
 
-        //Save the Grand Total for Edit
-        if (calculatedGrandTotal > 0) {
-            this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
-            // if (this.calculatedRoundOff === 0.5) {
-            //     this.calculatedRoundOff = -this.calculatedRoundOff;
-            // }
-            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
-        } else if (calculatedGrandTotal === 0) {
-            this.calculatedRoundOff = 0;
+        if (!this.isPurchaseInvoice) {
+            //Save the Grand Total for Edit
+            if (calculatedGrandTotal > 0) {
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+                // if (this.calculatedRoundOff === 0.5) {
+                //     this.calculatedRoundOff = -this.calculatedRoundOff;
+                // }
+                calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+            } else if (calculatedGrandTotal === 0) {
+                this.calculatedRoundOff = 0;
+            }
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
         this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
@@ -1808,7 +1810,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
                 txn.isStockTxn = true;
                 // Stock item, show the warehouse drop down if it is hidden
-                if (!this.shouldShowWarehouse) {
+                if (this.isMultiCurrencyModule() && !this.shouldShowWarehouse) {
                     this.shouldShowWarehouse = true;
                     this.selectedWarehouse = String(this.defaultWarehouse);
                 }
@@ -3468,13 +3470,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isStockItemPresent(): boolean {
-        const entries = this.invFormData.entries;
-        for (let entry = 0; entry < entries.length; entry++) {
-            const transactions = entries[entry].transactions;
-            for (let transaction = 0; transaction < transactions.length; transaction++) {
-                const item = transactions[transaction];
-                if (item.isStockTxn) {
-                    return true;
+        if (this.isMultiCurrencyModule()) {
+            const entries = this.invFormData.entries;
+            for (let entry = 0; entry < entries.length; entry++) {
+                const transactions = entries[entry].transactions;
+                for (let transaction = 0; transaction < transactions.length; transaction++) {
+                    const item = transactions[transaction];
+                    if (item.isStockTxn) {
+                        return true;
+                    }
                 }
             }
         }
