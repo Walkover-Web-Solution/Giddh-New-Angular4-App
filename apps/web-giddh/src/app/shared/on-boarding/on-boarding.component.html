@@ -41,10 +41,12 @@
                         <div class="col-xs-6 mrB3 ">
                             <span>
                                 <label for="country" class="d-block">Country<sup>*</sup></label>
-                                <sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-                                    name="country" [(ngModel)]="company.country" class="pull-left select-caret"
-                                    [required]='true' (selected)="selectCountry($event)"
-                                    [defaultValue]="selectedCountry" style="width: 100%">
+                                <sh-select id="country"
+                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
+                                    [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
+                                    [(ngModel)]="company.country" class="pull-left select-caret" [required]='true'
+                                    (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
+                                    style="width: 100%">
                                 </sh-select>
                             </span>
                         </div>
@@ -52,6 +54,7 @@
                             <label for="">Currency <sup>*</sup></label>
                             <div class="custom-select select-caret pos-rel">
                                 <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                     [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
                                     [defaultValue]="company.baseCurrency"></sh-select>
                             </div>

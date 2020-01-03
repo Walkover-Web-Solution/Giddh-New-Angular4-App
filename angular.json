@@ -24,9 +24,7 @@
                             "testing/tsconfig.libs.json",
                             "testing/tsconfig.libs.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -52,9 +50,7 @@
                             "testing/tsconfig.xplat.json",
                             "testing/tsconfig.xplat.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -103,7 +99,7 @@
                             "apps/web-giddh/src/assets/css/font-awesome.css",
                             "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
                             "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
-                            "apps/web-giddh/src/assets/css/style-1.css",
+                            "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/aside.css",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
@@ -272,9 +268,7 @@
                             "apps/web-giddh/tsconfig.app.json",
                             "apps/web-giddh/tsconfig.spec.json"
                         ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 },
                 "test": {
@@ -312,9 +306,7 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
+                        "exclude": ["**/node_modules/**"]
                     }
                 }
             }
@@ -366,7 +358,7 @@
                             "apps/web-giddh/src/assets/css/font-awesome.css",
                             "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
                             "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
-                            "apps/web-giddh/src/assets/css/style-1.css",
+                            "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/aside.css",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",

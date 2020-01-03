@@ -131,7 +131,7 @@
 <!-- endregion -->
 
 <ng-template #mainTable>
-    <table class="table basic table-bordered aging-table table-aging-report table-responsive">
+    <table class="table  giddh-table aging-table table-aging-report table-responsive">
         <thead>
             <tr class="aging-table-top">
                 <td></td>
@@ -159,14 +159,14 @@
                     </div>
                 </th>
 
-                <th class="text-right pr-3">
+                <th class="text-right">
                     <div class="d-flex align-items-center justify-content-end">Upcoming Due
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'futureDueAmount'}">
                         </ng-container>
                     </div>
                 </th>
 
-                <th class="italic unbold underline pr-3 text-right">
+                <th class="italic unbold underline text-right">
                     <div class="d-flex align-items-center justify-content-end"><span
                             (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} Days</span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}">
@@ -174,7 +174,7 @@
                     </div>
                 </th>
 
-                <th class="italic text-right pr-3 unbold underline">
+                <th class="italic text-right unbold underline">
                     <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">
                             {{(agingDropDownoptions$| async)?.fourth + 1}}-{{((agingDropDownoptions$| async)?.fifth)}}
                             Days </span>
@@ -183,7 +183,7 @@
                     </div>
                 </th>
 
-                <th class="italic text-right pr-3 unbold underline">
+                <th class="italic text-right unbold underline">
                     <div class="d-flex align-items-center justify-content-end"><span (click)="openAgingDropDown()">
                             {{((agingDropDownoptions$| async)?.fifth + 1)}}-{{((agingDropDownoptions$| async)?.sixth)}}
                             Days </span>
@@ -192,7 +192,7 @@
                     </div>
                 </th>
 
-                <th class="italic text-right pr-3 unbold underline">
+                <th class="italic text-right unbold underline">
                     <div class="d-flex align-items-center justify-content-end"><span
                             (click)="openAgingDropDown()">{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days </span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range3'}">
@@ -200,7 +200,7 @@
                     </div>
                 </th>
 
-                <th class="text-right pr-3">
+                <th class="text-right">
                     <div class="d-flex align-items-center justify-content-end">Total Due
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'totalDueAmount'}">
                         </ng-container>
@@ -216,21 +216,21 @@
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
 
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td data-title="name">{{ entry.name }}</td>
-                    <td data-title="groupName">{{ entry.groupName }}</td>
-                    <td data-title="dueAmount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
+                    <td data-title="Name">{{ entry.name }}</td>
+                    <td data-title="Group Name">{{ entry.groupName }}</td>
+                    <td data-title="Due Amount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
                     <td attr.data-title="0 - {{ (agingDropDownoptions$| async)?.fourth }} Days" class="text-right">
                         {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-                    <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}}
-          -{{((agingDropDownoptions$| async)?.fifth)}} Days' class="text-right"> <span
+                    <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}} - {{((agingDropDownoptions$| async)?.fifth)}} Days'
+                        class="text-right"> <span
                             (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
                     </td>
-                    <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}}
-          -{{((agingDropDownoptions$| async)?.sixth)}} Days" class="text-right">
+                    <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}} - {{((agingDropDownoptions$| async)?.sixth)}} Days"
+                        class="text-right">
                         {{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
                     <td attr.data-title="{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days " class="text-right">
                         {{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-                    <td data-title="totalDueAmount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
+                    <td data-title="Total Amount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
                 </tr>
 
             </ng-container>

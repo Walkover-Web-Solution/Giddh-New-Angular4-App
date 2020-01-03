@@ -1,53 +1,74 @@
-import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    ChangeDetectorRef,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    EventEmitter,
+    OnDestroy,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import { LedgerActions } from '../actions/ledger/ledger.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
-import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
-import * as uuid from 'uuid';
-import { LedgerService } from '../services/ledger.service';
+import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
+import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
-import { AccountService } from '../services/account.service';
-import { GroupService } from '../services/group.service';
-import { ToasterService } from '../services/toaster.service';
-import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
+import * as moment from 'moment/moment';
 import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
-import { base64ToBlob, giddhRoundOff } from '../shared/helpers/helperFunctions';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
+import { createSelector } from 'reselect';
+import {
+    BehaviorSubject,
+    combineLatest as observableCombineLatest,
+    Observable,
+    of as observableOf,
+    ReplaySubject,
+    Subject,
+} from 'rxjs';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import * as uuid from 'uuid';
+
+import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
+import { LedgerActions } from '../actions/ledger/ledger.actions';
+import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
+import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
+import { LoaderService } from '../loader/loader.service';
+import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
-import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { createSelector } from 'reselect';
-import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
-import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
-import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
-import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { LEDGER_API } from '../services/apiurls/ledger.api';
-import { LoaderService } from '../loader/loader.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
-import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
-import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
+import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
+import {
+    DownloadLedgerRequest,
+    IELedgerResponse,
+    TransactionsRequest,
+    TransactionsResponse,
+} from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
+import { LEDGER_API } from '../services/apiurls/ledger.api';
+import { LedgerService } from '../services/ledger.service';
+import { ToasterService } from '../services/toaster.service';
+import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { base64ToBlob, giddhRoundOff } from '../shared/helpers/helperFunctions';
+import { AppState } from '../store';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
+import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
+import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 
 @Component({
     selector: 'ledger',
@@ -185,18 +206,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
-    // public accountBaseCurrency: string;
-    // public showMultiCurrency: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private subscribeCount: number = 0;
     private accountUniquename: any;
 
-    constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-        private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-        private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private _settingsTagActions: SettingsTagActions,
-        private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions, private _loginActions: LoginActions,
-        private invoiceActions: InvoiceActions, private _loaderService: LoaderService, private _settingsDiscountAction: SettingsDiscountActions,
-        private _cdRf: ChangeDetectorRef) {
+    constructor(
+        private store: Store<AppState>,
+        private _ledgerActions: LedgerActions,
+        private route: ActivatedRoute,
+        private _ledgerService: LedgerService,
+        private _toaster: ToasterService,
+        private _companyActions: CompanyActions,
+        private _settingsTagActions: SettingsTagActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private _generalActions: GeneralActions,
+        private _loginActions: LoginActions,
+        private _loaderService: LoaderService,
+        private _settingsDiscountAction: SettingsDiscountActions,
+        private warehouseActions: WarehouseActions,
+        private _cdRf: ChangeDetectorRef
+    ) {
+
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -216,6 +245,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this._companyActions.getTax());
         // reset redirect state from login action
@@ -235,7 +265,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     toggleShow() {
         this.condition = this.condition ? false : true;
         this.condition2 = this.condition ? false : true;
-
         this.Shown = this.Shown ? false : true;
         this.isHide = this.isHide ? false : true;
     }
@@ -416,8 +445,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!Array.isArray(resp[0])) {
                 return;
             }
-
-            this.subscribeCount++;
 
             this.hideEledgerWrap();
             let dateObj = resp[0];
@@ -862,8 +889,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public toggleTransactionType(event: string) {
-        let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event);
+    public toggleTransactionType(event: any) {
+        let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
         if (unAccountedTrx) {
@@ -875,7 +902,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }, 0);
             });
         } else {
-            let newTrx = this.lc.addNewTransaction(event);
+            const currentlyAddedTransaction = this.lc.currentBlankTxn;
+            if (currentlyAddedTransaction.inventory) {
+                // Add the warehouse selected for an item
+                currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
+            }
+            let newTrx = this.lc.addNewTransaction(event.type);
             this.lc.blankLedger.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
             setTimeout(() => {
@@ -1017,7 +1049,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showUpdateLedgerModal(txn: ITransactionItem) {
         let transactions: TransactionsResponse = null;
         this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
-
         if (transactions) {
             // if (txn.isBaseAccount) {
             //   // store the trx values in store
