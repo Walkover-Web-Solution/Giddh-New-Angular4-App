@@ -1498,11 +1498,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // don't show loader when aside menu is opened
             this.shouldShowLoader = false;
-            document.querySelector('body').classList.add('fixed');
+
+            /* add fixed class only in crete mode not in update mode
+                - because fixed class is already added in update mode due to double scrolling issue
+            */
+
+
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.add('fixed');
+            }
         } else {
             // reset show loader variable because no aside pane is open
             this.shouldShowLoader = true;
-            document.querySelector('body').classList.remove('fixed');
+
+            /* remove fixed class only in crete mode not in update mode
+                - because fixed class is needed in update mode due to double scrolling issue
+            */
+
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.remove('fixed');
+            }
         }
     }
 
