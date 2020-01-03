@@ -1,12 +1,11 @@
 import { InvoicePurchaseActions } from '../../../../actions/purchase-invoice/purchase-invoice.action';
-import { Component, ComponentFactoryResolver, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
-import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
@@ -15,7 +14,6 @@ import { Router } from '@angular/router';
 import { PurchaseInvoiceService } from '../../../../services/purchase-invoice.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AccountService } from '../../../../services/account.service';
-import * as moment from 'moment';
 
 @Component({
 	selector: 'reconcile',
@@ -40,17 +38,12 @@ import * as moment from 'moment';
 		])
 	]
 })
-export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
+export class ReconcileComponent implements OnInit, OnDestroy {
 	@Input() public data: GstReconcileInvoiceDetails = null;
 	@Input() public currentPeriod: any = null;
 	@Input() public activeCompanyGstNumber: string = '';
 	@Input() public selectedGst: string = '';
 	@Input() public selectedTab: string = '';
-
-	@ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
-	@ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
-	@ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
-	@ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
 
 	public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
 	public gstAuthenticated$: Observable<boolean>;
@@ -59,7 +52,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 	public gstMatchedData$: Observable<ReconcileActionState>;
 	public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
 	public reconcileActiveTab: GstReconcileActionsEnum = GstReconcileActionsEnum.notfoundonportal;
-	public moment = moment;
 	public pullFromGstInProgress$: Observable<boolean>;
 	public imgPath: string = '';
 
@@ -74,7 +66,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 		private purchaseInvoiceService: PurchaseInvoiceService,
 		private accountService: AccountService,
 		private _reconcileActions: GstReconcileActions,
-		private componentFactoryResolver: ComponentFactoryResolver,
 	) {
 		this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
 		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -113,13 +104,6 @@ export class ReconcileComponent implements OnInit, OnDestroy, OnChanges {
 		request.action = action;
 		// request.count = 3;
 		this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
-	}
-
-	/**
-	 * ngOnChanges
-	 */
-	public ngOnChanges() {
-		//
 	}
 
 	public ngOnDestroy() {

@@ -168,7 +168,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         if (formData && formData.otherData) {
             const { controls: formControls } = formData.welcomeForm;
             if (formControls) {
-                const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls, formData.otherData.taxName);
+                const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls);
                 if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress) {
                     requestParamter['warehouseUniqueName'] = this.selectedWarehouse.uniqueName;
                     this.store.dispatch(this.warehouseActions.updateWarehouse(requestParamter));

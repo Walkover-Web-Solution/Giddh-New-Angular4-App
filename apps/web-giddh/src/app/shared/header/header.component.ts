@@ -610,8 +610,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 // });
             } else {
                 // get groups with accounts for general use
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
+                //this.store.dispatch(this._generalActions.getGroupWithAccounts());
+                //this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });

@@ -33,6 +33,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
+import { CommandKModule } from '../theme/command-k/command.k.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
@@ -163,7 +164,8 @@ export function provideConfig() {
         HighlightModule,
         TabsModule,
         CKEditorModule,
-        NgxMaskModule
+        NgxMaskModule,
+        CommandKModule
     ],
     exports: [
         CommonModule,
