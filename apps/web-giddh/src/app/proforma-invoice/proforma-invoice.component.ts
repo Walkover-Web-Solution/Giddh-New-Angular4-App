@@ -2186,7 +2186,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
         }
 
-        this.calculateBalanceDue();
+        // Reset the balance due on change of payment mode
+        setTimeout(() => {
+            this.depositAmount = 0;
+            this.invFormData.voucherDetails.balanceDue = 0;
+            this._cdr.detectChanges();
+        }, 10);
+        //this.calculateBalanceDue();
     }
 
     public clickedInside($event: Event) {
