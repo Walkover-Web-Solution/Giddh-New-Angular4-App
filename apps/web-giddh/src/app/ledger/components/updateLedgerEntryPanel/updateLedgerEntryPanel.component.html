@@ -599,15 +599,18 @@
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
                     <div class="row mrB1">
-                        <!-- <div class="col-sm-6 pdR1">
-                                <div class="selectWarehouse">
-                                    <label class="font-12">Select Warehouse</label>
-                                    <sh-select [options]="selectWarehouse">
-                                    </sh-select>
-                                </div>
-                            </div> -->
+                        <!-- Warehouse name can be empty therefore check specifically with falsy values -->
+                        <div *ngIf="shouldShowWarehouse" class="col-sm-6 pdR1">
+                            <div class="selectWarehouse">
+                                <label class="font-12">Select Warehouse</label>
+                                <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
+                                    [options]="warehouses">
+                                </sh-select>
+                            </div>
+                        </div>
 
-                        <!-- <ng-template [ngIf]="vm.stockTrxEntry">
+                        <!-- TODO: Add multiple warehouse feature
+                            <ng-template [ngIf]="vm.stockTrxEntry">
                             <div class="col-sm-3 pdL1 pdR1">
                                 <div class="table-amount text-right ">
                                     <label class="font-12">Quantity</label>

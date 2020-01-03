@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public loginWithPasswdForm: FormGroup;
     public isLoginWithPasswordInProcess$: Observable<boolean>;
     public forgotPasswordForm: FormGroup;
+    public verifyOtpForm: FormGroup;
     public resetPasswordForm: FormGroup;
     public isForgotPasswordInProgress$: Observable<boolean>;
     public isForgotPasswordInSuccess$: Observable<boolean>;
@@ -176,6 +177,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.forgotPasswordForm = this._fb.group({
             userId: ["", [Validators.required]]
+        });
+        this.verifyOtpForm = this._fb.group({
+            oneTimePassword: ["", [Validators.required]]
         });
         this.resetPasswordForm = this._fb.group({
             verificationCode: ["", [Validators.required]],
