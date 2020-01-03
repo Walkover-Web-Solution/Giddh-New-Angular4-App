@@ -958,6 +958,7 @@
                                             <div style="flex: 1;">
                                                 <input type="text" [disabled]="transaction.isStockTxn"
                                                     (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                    (click)="transactionAmountClicked(transaction)"
                                                     placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
@@ -1804,7 +1805,7 @@
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
                                                     <input type="text" [disabled]="transaction.isStockTxn"
-                                                        (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)"
                                                         placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                                                         class="form-control text-right" [(ngModel)]="transaction.amount"
                                                         decimalDigitsDirective
