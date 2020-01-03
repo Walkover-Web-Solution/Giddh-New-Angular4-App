@@ -537,7 +537,7 @@
                 <ng-container *ngIf="activeTab === 'customer'">
 
                     <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
-                        <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
+                        <td class="pos-rel WordWrap customer-name cursor-pointer" (clickOutside)="dropdown.hide()"
                             (dblclick)="dropdown.show()" data-title="Customer">
                             <span class="inline table-checkbox">
                                 <label></label>
@@ -733,8 +733,8 @@
                 <ng-container *ngIf="activeTab==='vendor' ">
 
                     <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
-                        <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer" data-title="Vendor"
-                            (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
+                        <td class="pos-rel WordWrap customer-name vendor-customer-name cursor-pointer"
+                            data-title="Vendor" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                             <span class="inline table-checkbox ">
                                 <label></label>
                                 <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "
