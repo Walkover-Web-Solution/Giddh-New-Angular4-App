@@ -737,7 +737,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        if (uniqueName.value) {
+            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        }
         this.addStockForm.get('uniqueName').enable();
 
         let formObj = _.cloneDeep(this.addStockForm.value);
@@ -835,7 +837,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public update() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        if (uniqueName.value) {
+            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        }
         this.addStockForm.get('uniqueName').enable();
 
         let formObj = this.addStockForm.value;
