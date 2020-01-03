@@ -42,8 +42,7 @@
                         <div class="form-group">
                             <label>Mobile Number</label>
                             <input type="text" id="contactNo" class="form-control" name="contactNo"
-                                [(ngModel)]="billingDetailsObj.contactNo" (blur)="isValidMobileNumber(mobileNoEl)"
-                                #mobileNoEl>
+                                [(ngModel)]="billingDetailsObj.contactNo" #mobileNoEl>
                         </div>
 
                         <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
