@@ -718,7 +718,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isContactNumberValid(): boolean {
         const contactNumberElement = this.contactNumberField.nativeElement;
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + contactNumberElement.value, this.company.country);
+            let parsedNumber = this.phoneUtility.parse('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country);
             if (this.phoneUtility.isValidNumber(parsedNumber)) {
                 contactNumberElement.classList.remove('error-box');
                 return true;

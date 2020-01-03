@@ -216,21 +216,21 @@
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
 
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td data-title="name">{{ entry.name }}</td>
-                    <td data-title="groupName">{{ entry.groupName }}</td>
-                    <td data-title="dueAmount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
+                    <td data-title="Name">{{ entry.name }}</td>
+                    <td data-title="Group Name">{{ entry.groupName }}</td>
+                    <td data-title="Due Amount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
                     <td attr.data-title="0 - {{ (agingDropDownoptions$| async)?.fourth }} Days" class="text-right">
                         {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
-                    <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}}
-          -{{((agingDropDownoptions$| async)?.fifth)}} Days' class="text-right"> <span
+                    <td attr.data-title='{{(agingDropDownoptions$| async)?.fourth + 1}} - {{((agingDropDownoptions$| async)?.fifth)}} Days'
+                        class="text-right"> <span
                             (click)="openAgingDropDown()">{{ entry.currentAndPastDueAmount[1].dueAmount |giddhCurrency}}</span>
                     </td>
-                    <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}}
-          -{{((agingDropDownoptions$| async)?.sixth)}} Days" class="text-right">
+                    <td attr.data-title="{{((agingDropDownoptions$| async)?.fifth + 1)}} - {{((agingDropDownoptions$| async)?.sixth)}} Days"
+                        class="text-right">
                         {{ entry.currentAndPastDueAmount[2].dueAmount |giddhCurrency}}</td>
                     <td attr.data-title="{{(agingDropDownoptions$| async)?.sixth + 1 }}+ Days " class="text-right">
                         {{ entry.currentAndPastDueAmount[3].dueAmount |giddhCurrency}}</td>
-                    <td data-title="totalDueAmount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
+                    <td data-title="Total Amount" class="text-right"> {{ entry.totalDueAmount |giddhCurrency}}</td>
                 </tr>
 
             </ng-container>
