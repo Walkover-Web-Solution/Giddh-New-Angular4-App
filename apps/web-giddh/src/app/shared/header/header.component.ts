@@ -612,7 +612,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 // get groups with accounts for general use
                 //this.store.dispatch(this._generalActions.getGroupWithAccounts());
                 //this.store.dispatch(this._generalActions.getFlattenAccount());
-                //this.store.dispatch(this._generalActions.getFlattenGroupsReq());
+                this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });
         if (this.route.snapshot.url.toString() === 'new-user') {
