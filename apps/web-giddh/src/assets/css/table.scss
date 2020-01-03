@@ -102,6 +102,9 @@
         tbody > tr > td:last-child {
             border-right: none;
         }
+        tbody > tr:hover td {
+            background: transparent;
+        }
     }
     /*card responsive code*/
     .on-mobile-view {
