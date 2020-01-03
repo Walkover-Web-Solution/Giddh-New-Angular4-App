@@ -351,6 +351,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany = new CompanyCreateRequest();
             this.createNewCompany.name = this.activeCompany.name;
             this.createNewCompany.contactNo = this.activeCompany.contactNo;
+            this.createNewCompany.phoneCode = this.activeCompany.countryV2 ? this.activeCompany.countryV2.callingCode : '';
             this.createNewCompany.country = this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
             this.createNewCompany.uniqueName = this.activeCompany.uniqueName;
             this.createNewCompany.address = this.activeCompany.address;
