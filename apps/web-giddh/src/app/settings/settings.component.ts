@@ -210,10 +210,17 @@ export class SettingsComponent implements OnInit {
     }
 
     private getRedirectUrl(baseHref: string) {
+        console.log('Setting component getRedirectUrl ', baseHref);
+        console.log('Url returned: ', `${baseHref}pages/settings?tab=integration`);
+        console.log('Test: ', TEST_ENV);
+        console.log('PROD: ', PRODUCTION_ENV);
+        console.log('STAGE: ', STAGING_ENV);
+        console.log('LOCAL: ', LOCAL_ENV);
         return `${baseHref}pages/settings?tab=integration`;
     }
 
     private getGoogleCredentials() {
+        console.log('Setting component getGoogleCredentials: ', PRODUCTION_ENV);
         if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
