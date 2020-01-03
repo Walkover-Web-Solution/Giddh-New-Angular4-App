@@ -3365,6 +3365,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * on click of transaction amount
+     * if amount is zero then remove it for better user experiance
+     * @param transaction
+     */
+    public transactionAmountClicked(transaction: SalesTransactionItemClass) {
+        if (Number(transaction.amount) === 0) {
+            transaction.amount = undefined;
+        }
+    }
+
     public onBlurInvoiceDate(index) {
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
