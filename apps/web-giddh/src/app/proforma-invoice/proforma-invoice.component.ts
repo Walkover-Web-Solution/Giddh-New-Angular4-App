@@ -456,6 +456,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.invoiceNo = parmas['invoiceNo'];
                 this.isUpdateMode = true;
+
+                // add fixed class to body because double scroll showing in invoice update mode
+                document.querySelector('body').classList.add('fixed');
+
                 this.isUpdateDataInProcess = true;
                 this.prepareInvoiceTypeFlags();
 
@@ -2186,7 +2190,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositAccountUniqueName = '';
         }
 
-        this.calculateBalanceDue();
+        // Reset the balance due on change of payment mode
+        setTimeout(() => {
+            this.depositAmount = 0;
+            this.invFormData.voucherDetails.balanceDue = 0;
+            this._cdr.detectChanges();
+        }, 10);
+        //this.calculateBalanceDue();
     }
 
     public clickedInside($event: Event) {
@@ -2694,6 +2704,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.isUpdateMode = !this.isLastInvoiceCopied;
+
+        // add fixed class to body because double scroll showing in invoice update mode
+        if (this.isUpdateMode) {
+            document.querySelector('body').classList.add('fixed');
+        }
+
         this.isUpdateDataInProcess = true;
 
         this.prepareInvoiceTypeFlags();
@@ -3431,7 +3447,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses),  filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
