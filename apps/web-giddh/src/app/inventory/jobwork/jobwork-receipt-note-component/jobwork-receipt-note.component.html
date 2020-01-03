@@ -151,7 +151,8 @@
                             </div>
                             <div class="col-md-4">
                                 <textarea class="form-control" name="destinationAddress"
-                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
+                                    [(ngModel)]="branchTransfer.destinations[0].warehouse.address"
+                                    placeholder="Add Description"></textarea>
                             </div>
                         </div>
                         <!-- developer end start -->
@@ -223,7 +224,8 @@
                             </div>
                             <div class="col-md-4">
                                 <textarea class="form-control" name="sourceAddress"
-                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"
+                                    placeholder="Add Description"></textarea>
                             </div>
                         </div>
 
@@ -334,7 +336,8 @@
                             </div>
                             <div class="col-md-4">
                                 <textarea class="form-control" name="sourceAddress"
-                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"
+                                    placeholder="Add Description"></textarea>
                             </div>
                         </div>
                         <!-- developer end start -->
@@ -390,7 +393,7 @@
                             <div class="col-md-4">
                                 <textarea class="form-control" name="destinationAddress"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.address"
-                                    (blur)="focusSelectDropdown(0);"></textarea>
+                                    (blur)="focusSelectDropdown(0);" placeholder="Add Description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -446,7 +449,8 @@
                             </div>
                             <div class="col-md-4">
                                 <textarea class="form-control" name="sourceAddress"
-                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                                    [(ngModel)]="branchTransfer.sources[0].warehouse.address"
+                                    placeholder="Add Description"></textarea>
                             </div>
                         </div>
                         <!-- developer end start -->
@@ -486,7 +490,7 @@
                             <div class="col-md-4">
                                 <textarea class="form-control" name="destinationAddress"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.address"
-                                    (blur)="focusSelectDropdown(0);"></textarea>
+                                    (blur)="focusSelectDropdown(0);" placeholder="Add Description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -505,9 +509,9 @@
                                 <th data-title="Product Description" width="30%">Product Description</th>
                                 <th width="10%" class="text-right">Qty/Unit</th>
                                 <th width="10%" class="text-right">Rate</th>
-                                <th width="20%" class="text-right">Amount</th>
-                                <th width="20%" class="text-right">Tax</th>
-                                <th width="30%" class="text-right">Total</th>
+                                <th width="15%" class="text-right">Amount</th>
+                                <th width="15%" class="text-right">Tax</th>
+                                <th width="20%" class="text-right">Total</th>
                             </tr>
                         </thead>
                         <thead *ngIf="transferType !== 'products'">
@@ -517,9 +521,9 @@
                                 <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
                                 <th width="10%" class="text-right">Qty/Unit</th>
                                 <th width="10%" class="text-right">Rate</th>
-                                <th width="20%" class="text-right">Amount</th>
-                                <th width="20%" class="text-right">Tax</th>
-                                <th width="30%" class="text-right">Total</th>
+                                <th width="15%" class="text-right">Amount</th>
+                                <th width="15%" class="text-right">Tax</th>
+                                <th width="20%" class="text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="transferType === 'products'">
@@ -559,7 +563,8 @@
                                         </div>
                                         <textarea #productDescription rows="3" cols="5" maxlength="100"
                                             class="form-control" name="productDescription{{i}}"
-                                            *ngIf="product.uniqueName" [(ngModel)]="product.description"></textarea>
+                                            *ngIf="product.uniqueName" [(ngModel)]="product.description"
+                                            placeholder="Add Description"></textarea>
                                     </div>
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="product.name">{{product.name}}</div>
@@ -596,7 +601,7 @@
                                         <input type="text" class="form-control text-right" name="productQty{{i}}"
                                             (change)="calculateRowTotal(product)" decimalDigitsDirective
                                             [(ngModel)]="product.stockDetails.quantity">
-                                        {{product.stockDetails.stockUnit}}
+                                        <span class="text-right d-block"> {{product.stockDetails.stockUnit}}</span>
                                     </div>
                                     <div *ngIf="activeRow !== i">
                                         <div class="text-right">{{product.stockDetails.quantity}}
@@ -687,7 +692,8 @@
                                             [(ngModel)]="destination.warehouse.taxNumber">
                                         <textarea class="form-control" *ngIf="destination.warehouse.uniqueName"
                                             name="destinationWarehouseAddress{{i}}"
-                                            [(ngModel)]="destination.warehouse.address"></textarea>
+                                            [(ngModel)]="destination.warehouse.address"
+                                            placeholder="Add Description"></textarea>
 
                                         <span class="sender-detail-link"
                                             (click)="toggleSenderDetailAccountAsidePane($event)"><img
@@ -793,8 +799,8 @@
                                             (change)="checkTaxNumberValidation(sourceGstNumberField);"
                                             [(ngModel)]="source.warehouse.taxNumber">
                                         <textarea class="form-control" *ngIf="source.warehouse.uniqueName"
-                                            name="sourceWarehouseAddress{{i}}"
-                                            [(ngModel)]="source.warehouse.address"></textarea>
+                                            name="sourceWarehouseAddress{{i}}" [(ngModel)]="source.warehouse.address"
+                                            placeholder="Add Description"></textarea>
                                     </div>
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="source.name">{{source.name}}</div>
@@ -959,6 +965,35 @@
                                 class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}"
                                 [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
                                 (click)="submit()">{{editBranchTransferUniqueName ? 'Update Note' : 'Create Note'}}</button>
+
+                            <div class="btn-group send-print-btn" dropdown [dropup]="true" [autoClose]="true">
+
+
+                                <button id="button-split" type="button" dropdownToggle
+                                    class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                                    aria-controls="dropdown-split">
+                                    <span class="caret"></span>
+
+                                </button>
+
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                                    role="menu" aria-labelledby="button-basic">
+
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp">Create
+                                            & Send</a>
+                                    </li>
+
+                                    <li role="menuitem">
+                                        <a class="dropdown-item cp">Create
+                                            & Print</a>
+                                    </li>
+
+
+                                </ul>
+                            </div>
+
+
                         </div>
                     </div>
                 </section>

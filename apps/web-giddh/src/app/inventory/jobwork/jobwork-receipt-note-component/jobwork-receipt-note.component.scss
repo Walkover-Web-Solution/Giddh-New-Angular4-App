@@ -437,6 +437,20 @@ tfoot td .tableSec.form-group {
 
     span {
         font-size: 14px;
-        margin-right: 2px;
+        margin-right: 5px;
+    }
+}
+.multiple-products-wrapper {
+    padding-bottom: 80px;
+}
+.send-print-btn {
+    display: inline-block !important;
+    .dropdown-toggle-split {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    .dropdown-menu-right {
+        bottom: 0;
+        transform: translateY(-40px) !important;
     }
 }
