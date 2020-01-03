@@ -460,11 +460,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
     private getRedirectUrl(baseHref: string) {
-        console.log('Invoice setting component getRedirectUrl ', baseHref);
-        console.log('Test: ', TEST_ENV);
-        console.log('PROD: ', PRODUCTION_ENV);
-        console.log('STAGE: ', STAGING_ENV);
-        console.log('LOCAL: ', LOCAL_ENV);
         if (TEST_ENV) {
             console.log(`${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`);
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;
@@ -479,7 +474,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     private getGoogleCredentials() {
-        console.log('Invoice setting component getGoogleCredentials: ', PRODUCTION_ENV);
         if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',

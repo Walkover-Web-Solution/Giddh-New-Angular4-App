@@ -37,7 +37,6 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        console.log('tb-pl-bs.component: ', TEST_ENV);
         this.setCurrentPageTitle('Trial Balance');
 
         if (TEST_ENV) {
