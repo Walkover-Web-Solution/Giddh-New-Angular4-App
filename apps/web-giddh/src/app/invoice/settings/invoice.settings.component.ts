@@ -461,14 +461,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
     private getRedirectUrl(baseHref: string) {
         if (TEST_ENV) {
-            console.log(`${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`);
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;
         } else if (PRODUCTION_ENV || STAGING_ENV || LOCAL_ENV) {
             /* All the above URIs are not secured and Google has blocked
               addition of unsecured URIs therefore show Gmail integration text only
               for PROD. This flag need to be removed once all the above URIs become secure */
             this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
-            console.log(`${baseHref}pages/invoice/preview/settings`);
             return `${baseHref}pages/invoice/preview/settings`;
         }
     }
