@@ -37,7 +37,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, delay, take, takeUntil, filter } from 'rxjs/operators';
+import { auditTime, delay, filter, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -456,6 +456,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.invoiceNo = parmas['invoiceNo'];
                 this.isUpdateMode = true;
+
+                // add fixed class to body because double scroll showing in invoice update mode
+                document.querySelector('body').classList.add('fixed');
+
                 this.isUpdateDataInProcess = true;
                 this.prepareInvoiceTypeFlags();
 
@@ -1494,11 +1498,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // don't show loader when aside menu is opened
             this.shouldShowLoader = false;
-            document.querySelector('body').classList.add('fixed');
+
+            /* add fixed class only in crete mode not in update mode
+                - because fixed class is already added in update mode due to double scrolling issue
+             */
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.add('fixed');
+            }
         } else {
             // reset show loader variable because no aside pane is open
             this.shouldShowLoader = true;
-            document.querySelector('body').classList.remove('fixed');
+
+            /* remove fixed class only in crete mode not in update mode
+                - because fixed class is needed in update mode due to double scrolling issue
+            */
+
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.remove('fixed');
+            }
         }
     }
 
@@ -2694,6 +2711,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.isUpdateMode = !this.isLastInvoiceCopied;
+
+        // add fixed class to body because double scroll showing in invoice update mode
+        if (this.isUpdateMode) {
+            document.querySelector('body').classList.add('fixed');
+        }
+
         this.isUpdateDataInProcess = true;
 
         this.prepareInvoiceTypeFlags();
@@ -3436,7 +3459,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses),  filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
@@ -3471,7 +3494,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isMultiCurrencyModule(): boolean {
         return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
     }
-
 
     /**
      * Returns true, if any of the single item is stock
