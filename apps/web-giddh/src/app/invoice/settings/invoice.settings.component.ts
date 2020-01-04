@@ -465,6 +465,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         console.log('PROD: ', PRODUCTION_ENV);
         console.log('STAGE: ', STAGING_ENV);
         console.log('LOCAL: ', LOCAL_ENV);
+        console.log('isElectron: ', isElectron);
         if (TEST_ENV) {
             console.log(`${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`);
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;
