@@ -1,8 +1,8 @@
+<div class="aside-pane">
 <div class="form-header" *ngIf="!hideFirstStep">
     <h3>Add</h3>
 </div>
 <button *ngIf="hideFirstStep" id="back" (click)="backButtonPressed()">Back</button>
-
 <button id="close" *ngIf="!hideFirstStep" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
 <div class="aside-pane">
     <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
@@ -21,4 +21,5 @@
     <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
         <create-account-service (closeAsideEvent)="closeAsidePane($event)"></create-account-service>
     </div>
+</div>
 </div>
