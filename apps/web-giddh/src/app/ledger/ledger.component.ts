@@ -489,6 +489,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
 
+            this.currencyTogglerModel = false;
+
             if (params['accountUniqueName']) {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
                 this.lc.accountUnq = params['accountUniqueName'];
@@ -630,7 +632,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                this.currencyTogglerModel = false;
 
                 let stockListFormFlattenAccount: IFlattenAccountsResultItem;
                 if (data[1]) {
