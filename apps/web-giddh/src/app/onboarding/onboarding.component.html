@@ -1,11 +1,4 @@
 <div id="main" class="welcome-container clearfix">
-    <!-- [ngClass]="{'menu_open':sideMenu.isopen}" -->
-    <!--    <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>-->
-    <!--    <layout-main>-->
-    <!-- <div class="welcome-header">
-      <h2>Welcome To Giddh! </h2>
-  </div>
-  <hr/> -->
     <div class="">
         <div class=" m-t-35">
             <div class="col-xs-12 col-md-5 col-sm-6">
@@ -13,25 +6,20 @@
                 <ul class="manage_invoice">
                     <li>
                         <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
-                        <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img
-                                src="{{imgPath}}create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                        <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
                     </li>
                     <li>
                         <!-- <i class="icon-Add-customer"></i> -->
-                        <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg"
-                                alt="" class="mrR1"> Add a customer
+                        <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mrR1"> Add a customer
                         </a>
                     </li>
                     <li>
                         <!-- <i class="icon-Invite-Accountant"></i> -->
-                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt=""
-                                class="mrR1"> Update your GST settings </a>
+                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update your GST settings </a>
                     </li>
                     <li>
 
-                        <a href="javascript:void 0" (click)="selectConfigureBank()"> <img
-                                src="{{imgPath}}configure-bank-account.svg" alt="" class="mrR1"> Configure your bank
-                            account
+                        <a href="javascript:void 0" (click)="selectConfigureBank()"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account
                         </a>
                     </li>
                 </ul>
@@ -40,9 +28,11 @@
                     Dont worry!<br> Get easily your accounting data on Giddh.
                 </p>
                 <!--<button class="btn btn-sync">Sync with Tally</button>-->
-                <a class="btn btn-sync"
-                    href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+                <a class="btn btn-sync" target="_blank" href="https://faq.giddh.com/en/articles/1574939-how-to-sync-your-data-from-tally-to-giddh">
                     Sync With Tally
+                </a>
+                <a class="btn btn-sync" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
+                Download TCP
                 </a>
 
                 <div class="mt-2 right_section">
@@ -91,32 +81,27 @@
 
                         <div class="importData-blocks">
                             <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','account']"> <img
-                                        src="assets/images/new/acc-import.svg">
+                                <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
                                     <p>Accounts</p>
                                 </a>
                             </div>
                             <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','group']"> <img
-                                        src="assets/images/new/group-import.svg">
+                                <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
                                     <p>Groups</p>
                                 </a>
                             </div>
                             <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','stock']"> <img
-                                        src="assets/images/new/Inventory-13.svg">
+                                <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
                                     <p>Inventories</p>
                                 </a>
                             </div>
                             <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','entries']"><img
-                                        src="assets/images/new/entries-import.svg">
+                                <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
                                     <p>Entries</p>
                                 </a>
                             </div>
                             <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','trial-balance']"><img
-                                        src="assets/images/new/tb-import.svg">
+                                <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
                                     <p>Trial Balance</p>
                                 </a>
                             </div>
@@ -132,31 +117,3 @@
     <!--    </layout-main>-->
     <!-- <app-footer></app-footer> -->
 </div>
-
-<!--delete company modal  -->
-<!--<div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">-->
-<!--  <div class="modal-dialog modal-lg">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header">-->
-<!--        <h3 class="left">Talk to Sales</h3>-->
-<!--        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>-->
-<!--      </div>-->
-
-<!--      <div class="modal-body custom-body">-->
-<!--        <div class="" id="settingTab">-->
-<!--          <tabset #supportTab>-->
-<!--            <tab heading="Arrange a Demo">-->
-<!--              <div class="argdemo">-->
-<!--                <p>Choose your preferred time to schedule a demo with an expert. </p>-->
-<!--                <button class="btn btn-primary" (click)="scheduleNow()">Click Here</button>-->
-<!--              </div>-->
-<!--            </tab>-->
-<!--            <tab heading="Drop us Mail">-->
-<!--              <div id="Jkvq" class="talktosale-superform"></div>-->
-<!--            </tab>-->
-<!--          </tabset>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

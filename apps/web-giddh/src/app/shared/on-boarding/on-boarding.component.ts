@@ -11,20 +11,12 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { LoginActions } from '../../actions/login.action';
 import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
-import {
-    CompanyCreateRequest,
-    CompanyResponse,
-    StateDetailsRequest,
-} from '../../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
-import { AuthenticationService } from '../../services/authentication.service';
-import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
-import { LocationService } from '../../services/location.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { AuthService } from '../../theme/ng-social-login-module';
@@ -108,12 +100,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private verifyActions: VerifyMobileActions,
         private companyActions: CompanyActions,
-        private _location: LocationService,
         private _route: Router,
         private _loginAction: LoginActions,
-        private _companyService: CompanyService,
-        private _aunthenticationService: AuthenticationService,
-        private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private _toaster: ToasterService,
         private commonActions: CommonActions
@@ -121,7 +109,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getCountry();
-        this.getCurrency();
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
@@ -342,12 +329,25 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     if (this.company.country === res[key].alpha2CountryCode) {
                         this.selectedCountry = res[key].alpha2CountryCode + ' - ' + res[key].countryName;
                     }
+                    this.getCurrency();
                 });
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = (this.onBoardingType) ? this.onBoardingType.toLowerCase() : 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
+            // Fetch current company country
+            if (session.companies) {
+                session.companies.forEach(company => {
+                    if (company.uniqueName === session.companyUniqueName) {
+                        const countryDetails = company.countryV2;
+                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                        this.company.phoneCode = countryDetails.callingCode;
+                    }
+                });
             }
         });
     }
@@ -359,6 +359,9 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
+                if (this.onBoardingType === OnBoardingType.Warehouse) {
+                    this.company.baseCurrency = this.countryCurrency[this.company.country];
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetCurrency());
             }

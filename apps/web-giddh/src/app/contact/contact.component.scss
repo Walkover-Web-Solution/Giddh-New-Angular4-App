@@ -16,7 +16,7 @@
     opacity: 0;
     top: 8px;
 }
-.aging-table > tbody > tr td.vendorCustomerName input[type="checkbox"] {
+.aging-table > tbody > tr td.vendor-customer-name input[type="checkbox"] {
     position: absolute !important;
     opacity: 0;
     top: 2px;
@@ -37,17 +37,6 @@
 .icon-pointer.iconSearch {
     top: 30%;
     color: #a9a9a9;
-}
-
-.icon-pointer .glyphicon:hover {
-    color: #fff !important;
-}
-.icon-pointer {
-    color: red;
-}
-.icon-pointer .activeTextColor {
-    color: $activeIconTh !important;
-    opacity: 1 !important;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -161,11 +150,11 @@ td.commentField {
     white-space: normal;
 }
 //  my css
-tr:first-child td.pos-rel.WordWrap.customerName.cursor-pointer {
+tr:first-child td.pos-rel.WordWrap.customer-name.cursor-pointer {
     border-top: none;
 }
 
-td.pos-rel.WordWrap.customerName.cursor-pointer {
+td.pos-rel.WordWrap.customer-name.cursor-pointer {
     border-bottom: none;
     height: 37px;
     line-height: 1.4;
@@ -179,24 +168,23 @@ td.pos-rel.WordWrap.customerName.cursor-pointer {
     padding-right: 35px;
 }
 
-td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
     height: 42px;
     line-height: 1;
     border-right: none;
 }
 
-tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer,
-tr:last-child
-    td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
+tr:last-child td.pos-rel.WordWrap.vendor-customer-name.cursor-pointer {
     border-bottom: 1px solid #ddd !important;
 }
 
-.customerName .icon-ellipse {
+.customer-name .icon-ellipse {
     position: absolute;
     right: 10px;
     top: 14px;
 }
-.customerName.vendorCustomerName .icon-ellipse {
+.customer-name.vendor-customer-name .icon-ellipse {
     top: 8px;
 }
 .pos-rel.WordWrap {
@@ -214,7 +202,7 @@ tr:last-child
     }
 }
 
-.pos-rel.WordWrap.vendorCustomerName:hover .icon-dots-three-vertical {
+.pos-rel.WordWrap.vendor-customer-name:hover .icon-dots-three-vertical {
     line-height: 1.6;
 }
 
@@ -312,6 +300,11 @@ span.inputAddon {
 .aging-table .btn-small {
     min-width: 140px;
 }
+.aging-table.basic > thead > tr > th {
+    border-top: 1px solid $tableBorderColor;
+    position: relative;
+    padding-right: 10px !important;
+}
 
 // responsive
 
@@ -322,9 +315,9 @@ span.inputAddon {
     .custumerRightWrap h4.mb-1.pdR2 {
         margin-bottom: 0;
     }
-    tr:last-child td.pos-rel.WordWrap.customerName.cursor-pointer,
+    tr:last-child td.pos-rel.WordWrap.customer-name.cursor-pointer,
     tr:last-child
-        td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+        td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
         border-bottom: none !important;
     }
 
@@ -355,19 +348,28 @@ span.inputAddon {
         z-index: 90;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
-    td.pos-rel.WordWrap.customerName.cursor-pointer,
-    td.pos-rel.WordWrap.customerName.vendorCustomerName.cursor-pointer {
+    td.pos-rel.WordWrap.customer-name.cursor-pointer,
+    td.pos-rel.WordWrap.customer-name.vendor-customer-name.cursor-pointer {
         max-width: 100%;
         white-space: inherit;
         line-height: 1.5;
     }
-    .pos-rel.WordWrap.vendorCustomerName .icon-dots-three-vertical {
+    .pos-rel.WordWrap.vendor-customer-name .icon-dots-three-vertical {
         position: relative;
         top: -5px;
         line-height: 1 !important;
     }
-    .aging-table tr:hover .vendorCustomerName .table-checkbox {
+    .aging-table tr:hover .vendor-customer-name .table-checkbox {
         top: 5px;
+    }
+
+    .customer-name .icon-ellipse {
+        top: 8px;
+    }
+    .pos-rel.WordWrap {
+        .icon-dots-three-vertical {
+            display: block;
+        }
     }
 }
 @media (max-width: 767px) {
@@ -401,11 +403,11 @@ span.inputAddon {
     .paginationWrapper {
         margin-bottom: 0px !important;
     }
-    .customerName,
-    .vendorCustomerName {
+    .customer-name,
+    .vendor-customer-name {
         padding-right: 20px !important;
     }
-    .customerName .icon-ellipse {
+    .customer-name .icon-ellipse {
         top: 8px;
     }
 }

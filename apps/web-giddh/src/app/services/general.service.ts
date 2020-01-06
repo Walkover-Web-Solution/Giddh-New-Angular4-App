@@ -186,4 +186,8 @@ export class GeneralService {
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
     }
+
+    getLastElement(array) {
+        return array[array.length - 1];
+    };
 }

@@ -24,6 +24,8 @@ import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { IRegistration } from "../../models/interfaces/registration.interface";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { CurrentPage } from '../../models/api-models/Common';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 export declare const gapi: any;
 
@@ -109,16 +111,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private accountService: AccountService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
-        private _fb: FormBuilder
+        private _fb: FormBuilder,
+        private _generalActions: GeneralActions
     ) {
         this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
         this.isGmailIntegrated$ = this.store.select(s => s.settings.isGmailIntegrated).pipe(takeUntil(this.destroyed$));
         this.isPaymentAdditionSuccess$ = this.store.select(s => s.settings.isPaymentAdditionSuccess).pipe(takeUntil(this.destroyed$));
         this.isPaymentUpdationSuccess$ = this.store.select(s => s.settings.isPaymentUpdationSuccess).pipe(takeUntil(this.destroyed$));
+        this.setCurrentPageTitle();
     }
 
     public ngOnInit() {
@@ -485,23 +489,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getRedirectUrl(baseHref: string) {
-        if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/app/pages/settings?tab=integration';
-        } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/settings/integration/email';
-        } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/settings/integration/email';
-        } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            // return 'https://app.giddh.com/pages/settings/integration/email';
-            return 'https://localapp.giddh.com:3000/pages/settings/integration/email';
-
-        } else {
-            return 'https://app.giddh.com/pages/settings/integration/email';
-        }
+        return `${baseHref}pages/settings?tab=integration`;
     }
 
-    private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+    private getGoogleCredentials() {
+        if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
             };
@@ -543,5 +535,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.store.dispatch(this.settingsIntegrationActions.UpdatePaymentInfo(requestData));
         this.paymentFormObj = new PaymentClass();
+    }
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Settings > Integration";
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

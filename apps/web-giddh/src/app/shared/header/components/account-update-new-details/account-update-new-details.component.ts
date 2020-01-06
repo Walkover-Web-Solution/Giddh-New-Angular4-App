@@ -602,7 +602,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         let gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
-            address: ['', Validators.maxLength(120)],
+            address: [''],
             state: this._fb.group({
                 code: [''],
                 name: [''],

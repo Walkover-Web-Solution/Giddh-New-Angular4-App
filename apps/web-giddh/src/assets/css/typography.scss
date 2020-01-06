@@ -1,0 +1,69 @@
+@font-face {
+    font-family: "opensans-regular";
+    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
+    src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
+            format("embedded-opentype"),
+        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg")
+            format("woff2"),
+        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
+            format("woff"),
+        url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: "opensans-semibold";
+    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
+    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
+            format("embedded-opentype"),
+        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.svg")
+            format("woff2"),
+        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.woff")
+            format("woff"),
+        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "opensans-bold";
+    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
+    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
+            format("embedded-opentype"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
+            format("woff2"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
+            format("woff"),
+        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: "opensans-extra-bold";
+    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
+    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
+            format("embedded-opentype"),
+        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg")
+            format("woff2"),
+        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.woff")
+            format("woff"),
+        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.ttf")
+            format("truetype");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+/*table fonts start*/
+
+$tableFontRegular: "opensans-regular";
+$tableFontSemibold: "opensans-semibold";
+$tableFontBold: "opensans-bold";
+$tableFontExtraBold: "opensans-extra-bold";
+
+/*table fonts end*/

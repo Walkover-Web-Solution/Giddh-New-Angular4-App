@@ -52,3 +52,9 @@ export class CurrentPage {
     url: string;
     additional: string;
 }
+
+export class CommandKRequest {
+    page: any;
+    q: string;
+    group: string;
+}

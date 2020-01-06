@@ -52,7 +52,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.CREATE_ROLE: {
-            return { ...state, addUpdateRoleInProcess: true };
+            return {...state, addUpdateRoleInProcess: true};
         }
         case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -61,32 +61,33 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             if (res.status === 'success') {
                 newState.roles.push(res.body);
             }
-            return { ...state, ...newState };
+            return {...state, ...newState};
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE: {
-            return { ...state, addUpdateRoleInProcess: true };
+            return {...state, addUpdateRoleInProcess: true};
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
             if (roleIndx > -1) {
                 newState.roles[roleIndx] = action.payload;
-                return { ...state, ...newState, addUpdateRoleInProcess: false };
+                return {...state, ...newState, addUpdateRoleInProcess: false};
             } else {
-                return { ...state, addUpdateRoleInProcess: false };
+                return {...state, addUpdateRoleInProcess: false};
             }
         }
         case PERMISSION_ACTIONS.DELETE_ROLE: {
             return state;
         }
         case PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE: {
-            // role is successfully deleted now remove deleted role from store
-            let newState = _.cloneDeep(state);
-            // res contains deleted role's uniqueName
-            newState.roles.splice(newState.roles.findIndex((role: IRoleCommonResponseAndRequest) => {
-                return role.uniqueName === action.payload.queryString.roleUniqueName;
-            }), 1);
-            return { ...state, ...newState };
+            // filter out deleted role from permission role list, when status is success
+            if (action.payload.status === 'success') {
+                return {
+                    ...state,
+                    roles: state.roles.filter(role => role.uniqueName !== action.payload.queryString.roleUniqueName)
+                };
+            }
+            return state;
         }
         case PERMISSION_ACTIONS.GET_ALL_PAGES: {
             return state;
@@ -121,10 +122,10 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return Object.assign({}, state, newState);
         }
         case AccountsAction.SHARE_ENTITY: {
-            return Object.assign({}, state, { createPermissionInProcess: true });
+            return Object.assign({}, state, {createPermissionInProcess: true});
         }
         case AccountsAction.SHARE_ENTITY_RESPONSE: {
-            return Object.assign({}, state, { createPermissionInProcess: false });
+            return Object.assign({}, state, {createPermissionInProcess: false});
         }
         default: {
             return state;

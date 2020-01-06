@@ -224,7 +224,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _settingsDiscountAction: SettingsDiscountActions,
         private warehouseActions: WarehouseActions,
         private _cdRf: ChangeDetectorRef
-        ) {
+    ) {
 
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -245,7 +245,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this._companyActions.getTax());
         // reset redirect state from login action
@@ -889,8 +889,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }));
     }
 
-    public toggleTransactionType(event: string) {
-        let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event);
+    public toggleTransactionType(event: any) {
+        let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
         if (unAccountedTrx) {
@@ -902,7 +902,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }, 0);
             });
         } else {
-            let newTrx = this.lc.addNewTransaction(event);
+            const currentlyAddedTransaction = this.lc.currentBlankTxn;
+            if (currentlyAddedTransaction.inventory) {
+                // Add the warehouse selected for an item
+                currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
+            }
+            let newTrx = this.lc.addNewTransaction(event.type);
             this.lc.blankLedger.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
             setTimeout(() => {

@@ -616,7 +616,7 @@
                         <li><a href="javascript:void(0)"><strong>Inventory</strong></a></li>
                         <li><a (click)="analyzeOtherMenus('inventory')">Inventory</a></li>
                         <li><a (click)="analyzeOtherMenus('manufacturing/report')">Manufacturing</a></li>
-                        <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li>
+                        <!-- <li><a (click)="analyzeOtherMenus('inventory/jobwork')">Job Work</a></li> -->
                         <li><a (click)="analyzeOtherMenus('inventory/report')">Branch Transfer</a></li>
                         <li><a (click)="analyzeOtherMenus('settings/warehouse')">Warehouse</a></li>
                     </ul>
@@ -851,12 +851,15 @@
 <ng-template #navigationModal>
 
     <div class="modal-body" #mdl>
-        <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
+        <!-- <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
             (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true"
             [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)"
             (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true"
             [searchBoxPlaceholder]="'Search'" [isMultiple]="false" (closeEmitter)="modelRef.hide()">
-        </universal-data-list>
+        </universal-data-list> -->
+        <command-k (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
+        (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" (groupEmitter)="makeGroupEntryInDB($event)"
+        (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
 
         <div class="shortcuts">
             <strong>↑</strong> <strong>↓</strong>&nbsp; to navigate <strong class="mrL1"

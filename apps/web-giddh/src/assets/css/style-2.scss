@@ -1,36 +1,182 @@
 @charset "utf-8";
-/* @font-face {
-    font-family: 'icomoon';
-    src: url('../fonts/main-icomoon/icomoon.eot');
-    src: url('../fonts/main-icomoon/icomoon.eot') format('eot'), url('../fonts/icomoon/icomoon.ttf') format('ttf'), url('../fonts/main-icomoon/icomoon.woff') format('woff'), url('../fonts/main-icomoon/icomoon.svg') format('svg');
-    font-weight: normal;
-    font-style: normal;
-} */
 
-/* @font-face {
-  font-family: 'icomoon';
-  src:  url('../fonts/main-icomoon/icomoon.eot?3n1cct');
-  src:  url('../fonts/main-icomoon/icomoon.eot?3n1cct#iefix') format('embedded-opentype'),
-    url('../fonts/main-icomoon/icomoon.ttf?3n1cct') format('truetype'),
-    url('../fonts/main-icomoon/icomoon.woff?3n1cct') format('woff'),
-    url('../fonts/main-icomoon/icomoon.svg?3n1cct#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-} */
+@import "../css/giddh-common.scss";
 
-/* @import "../fonts/main-icomoon/style.css"; */
+/* table css need to removed at last  (start)
+   Don't touch this table css (If any body work on that contact me..)
+*/
 
-/* css start */
+.basic > tbody > tr > td,
+.basic > tbody > tr > th,
+.basic > tfoot > tr > td,
+.basic > tfoot > tr > th,
+.basic > thead > tr > td,
+.basic > thead > tr > th {
+    vertical-align: middle !important;
+    font-size: 14px;
+    word-break: break-word;
+    white-space: nowrap;
+}
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
+    font-weight: 400;
+    padding: 14px 10px;
+    text-transform: capitalize;
+    border-right: none !important;
+    border-left: none !important;
+}
 
-/* :root {
-  --light-blue:#5b63b9;
-  --light-blue01:#868ee0;
-  --dark-blue:#1A237E;
-  --dark-blue01: #313a96;
-  --light-gray:#e6e7e8;
-} */
+.basic > tbody > tr td:last-child,
+.basic > thead > tr th:last-child {
+    border-right: 1px solid #ddd !important;
+}
 
-@import "../css/color.scss";
+.basic > tbody > tr td:first-child,
+.basic > thead > tr th:first-child {
+    border-left: 1px solid #ddd !important;
+}
+.basic > thead > tr > th {
+    background: #fff;
+    color: #000000;
+    border-right: 1px solid #d1d1d1;
+    padding: 15px 11px !important;
+    font-weight: 400;
+    border-bottom: 1px solid #d1d1d1;
+    font-family: opensans-semibold;
+    font-size: 14px;
+    border-top: 1px solid #d1d1d1; // position: sticky !important;
+    // top: 60px;
+    // z-index: 999;
+}
+
+.basic > tbody > tr:hover td {
+    background: #f4f5f8;
+}
+
+
+.basic {
+    background: #fff;
+}
+
+/*
+.aging-table > thead > tr > th {
+    background: #e5e5e5;
+    color: #262626;
+    border: 0;
+    font-family: "" opensans-semibold "";
+    text-transform: capitalize;
+    border-right: 1px solid #cac8c6;
+    border-top: 1px solid #cac8c6;
+    border-bottom: 1px solid #cac8c6;
+}*/
+
+
+@media (max-width: 768px) {
+    .onMobileView tbody tr {
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        border-bottom: 1px solid #dfdfdf;
+        cursor: pointer;
+        display: block;
+        padding: 5px 0 10px 0px;
+        margin: 22px auto 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    .onMobileView table {
+        background: transparent;
+        margin-bottom: 0;
+        width: 100%;
+        display: block;
+    }
+    .onMobileView table tbody {
+        display: block;
+        width: 100%;
+    }
+    .onMobileView table thead {
+        display: none;
+    }
+    .onMobileView tbody > tr > td {
+        border: 0 !important;
+        display: block;
+        padding: 5px 10px 5px 50% !important;
+        position: relative;
+        text-align: left;
+        height: auto !important;
+        min-height: 30px !important;
+        word-wrap: inherit !important;
+        max-width: 100%;
+        white-space: inherit;
+    }
+    .onMobileView tbody td:after {
+        content: "";
+        width: calc(100% - 30px);
+        display: block;
+        margin: 0 auto;
+        height: 1px;
+        background: transparent;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -6px;
+    }
+    .onMobileView tbody td:before {
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 14px;
+        content: attr(data-title);
+        display: table-cell;
+        font-weight: 500;
+        height: 100%;
+        left: 27px;
+        margin: auto;
+        position: absolute;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 40%;
+        text-align: left;
+    }
+    .onMobileView .table-bordered > tfoot > tr > td {
+        border: none;
+    }
+    .onMobileView th {
+        display: none;
+    }
+    .onMobileView.basic > tbody > tr:hover td,
+    .onMobileView .basic > tbody > tr:hover td {
+        background: transparent;
+    }
+     .onMobileView.table-bordered {
+        border: none;
+        background: transparent;
+        margin-top: 0;
+    }
+    .noRecords.onMobileView td:before {
+        display: none !important;
+    }
+    .noRecords.onMobileView td {
+        text-align: center !important;
+        padding: 5px 10px 5px 0% !important;
+    }
+     .onMobileView tbody td::first-letter {
+        text-transform: uppercase;
+    }
+     .onMobileView,
+    .onMobileView tbody {
+        display: block;
+    }
+    
+}
+
+
+
+@media (max-width: 320px) {
+    .onMobileView tbody td {
+        padding: 5px 10px 5px 53% !important;
+    }
+}
+
+/* table css need to removed at last (finish)*/
+
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -842,14 +988,6 @@ ul.sub-list {
     font-style: italic;
 }
 
-.aging-table.basic > thead > tr > th {
-    border: 1px solid $tableBorderColor !important;
-    position: relative;
-    border-right-color: $tableBorderColor !important;
-    padding-right: 10px !important;
-    border-left: none !important;
-    border-right: none !important;
-}
 
 .sorting-box {
     position: absolute;
@@ -868,14 +1006,17 @@ ul.sub-list {
     line-height: 0;
     margin: 1px 0;
 }
-
+.aging-table-top td  {
+    border: 0px solid !important;
+    background: #f7f8fa !important;
+}
 .aging-table-top .top-aging-table-top {
     background: rgba(
         49,
         58,
         151,
         0.15
-    ); // border: 1px solid rgba(49,58,151,0.15) !important;
+    ) !important;
 }
 
 .aging-table-top .top-aging-table-top strong,
@@ -887,10 +1028,7 @@ ul.sub-list {
     font-family: opensans-semibold;
 }
 
-.aging-table-top td {
-    border: 0px solid !important;
-    background: #f7f8fa;
-}
+
 
 .aging-table {
     border: 0px;
@@ -902,16 +1040,7 @@ ul.sub-list {
     min-width: 145px;
 }
 
-.aging-table > thead > tr > th {
-    background: #e5e5e5;
-    color: #262626;
-    border: 0;
-    font-family: "" opensans-semibold "";
-    text-transform: capitalize;
-    border-right: 1px solid #cac8c6;
-    border-top: 1px solid #cac8c6;
-    border-bottom: 1px solid #cac8c6;
-}
+
 
 .d-none {
     display: none;
@@ -974,7 +1103,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: inherit !important;
+    font-family: $tableFontRegular !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1994,17 +2123,7 @@ fieldset[disabled] .btn-primary:hover {
     color: #fff;
 }
 
-.basic > tbody > tr > td,
-.basic > tbody > tr > th,
-.basic > tfoot > tr > td,
-.basic > tfoot > tr > th,
-.basic > thead > tr > td,
-.basic > thead > tr > th {
-    vertical-align: middle !important;
-    font-size: 14px;
-    word-break: break-word;
-    white-space: nowrap;
-}
+
 
 p.table-email {
     white-space: nowrap;
@@ -2024,24 +2143,7 @@ p.table-email {
     color: #333333;
 }
 
-.basic > tbody > tr > td,
-.basic > thead > tr > th {
-    font-weight: 400;
-    padding: 14px 10px;
-    text-transform: capitalize;
-    border-right: none !important;
-    border-left: none !important;
-}
 
-.basic > tbody > tr td:last-child,
-.basic > thead > tr th:last-child {
-    border-right: 1px solid #ddd !important;
-}
-
-.basic > tbody > tr td:first-child,
-.basic > thead > tr th:first-child {
-    border-left: 1px solid #ddd !important;
-}
 
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
 .top-five-cr-dr-table .basic > thead > tr th:last-child {
@@ -5345,28 +5447,7 @@ input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
 
-.basic {
-    background: #fff;
-} // table.basic{
-//   position: relative;
-// }
-.basic > thead > tr > th {
-    background: #fff;
-    color: #000000;
-    border-right: 1px solid #d1d1d1;
-    padding: 15px 11px !important;
-    font-weight: 400;
-    border-bottom: 1px solid #d1d1d1;
-    font-family: opensans-semibold;
-    font-size: 14px;
-    border-top: 1px solid #d1d1d1; // position: sticky !important;
-    // top: 60px;
-    // z-index: 999;
-}
 
-.basic > tbody > tr:hover td {
-    background: #f4f5f8;
-}
 
 .nested_table > tbody tr td {
     border: 0 !important;
@@ -7744,13 +7825,13 @@ section.ledger-stat.sticky-footer.stickyFooterSaleAmount {
     padding-bottom: 0;
 }
 
-.aging-table .vendorCustomerName .table-checkbox {
+.aging-table .vendor-customer-name .table-checkbox {
     position: absolute;
     left: 5px;
     top: 13px;
 }
 
-.aging-table tr:hover .vendorCustomerName .table-checkbox {
+.aging-table tr:hover .vendor-customer-name .table-checkbox {
     top: 13px;
 }
 
@@ -7937,9 +8018,6 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: #333;
 }
 
-.basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
-}
 
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
@@ -8311,14 +8389,8 @@ table.basic td {
     color: #1c1c1c;
 }
 
-.aging-table .text-light-2 {
-    color: $iconColorTh;
-}
-
-.aging-table .icon-pointer .activeTextColor {
-    color: #000 !important;
-    opacity: 1 !important;
-}
+ 
+ 
 
 .invoice-table td > a {
     color: #1c1c1c;
@@ -8767,79 +8839,7 @@ button {
         top: 0;
         z-index: 4;
     }
-    .onMobileView tbody tr {
-        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: #fff;
-        border-bottom: 1px solid #dfdfdf;
-        cursor: pointer;
-        display: block;
-        padding: 5px 0 10px 0px;
-        margin: 22px auto 0;
-        width: 100%;
-        max-width: 100%;
-    }
-    .onMobileView table {
-        background: transparent;
-        margin-bottom: 0;
-        width: 100%;
-        display: block;
-    }
-    .onMobileView table tbody {
-        display: block;
-        width: 100%;
-    }
-    .onMobileView table thead {
-        display: none;
-    }
-    .onMobileView tbody > tr > td {
-        border: 0 !important;
-        display: block;
-        padding: 5px 10px 5px 50% !important;
-        position: relative;
-        text-align: left;
-        height: auto !important;
-        min-height: 30px !important;
-        word-wrap: inherit !important;
-        max-width: 100%;
-        white-space: inherit;
-    }
-    .onMobileView tbody td:after {
-        content: "";
-        width: calc(100% - 30px);
-        display: block;
-        margin: 0 auto;
-        height: 1px;
-        background: transparent;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -6px;
-    }
-    .onMobileView tbody td:before {
-        color: rgba(0, 0, 0, 0.55);
-        font-size: 14px;
-        content: attr(data-title);
-        display: table-cell;
-        font-weight: 500;
-        height: 100%;
-        left: 27px;
-        margin: auto;
-        position: absolute;
-        vertical-align: middle;
-        white-space: nowrap;
-        width: 40%;
-        text-align: left;
-    }
-    .onMobileView .table-bordered > tfoot > tr > td {
-        border: none;
-    }
-    .onMobileView th {
-        display: none;
-    }
-    .onMobileView.basic > tbody > tr:hover td,
-    .onMobileView .basic > tbody > tr:hover td {
-        background: transparent;
-    }
+    
     .tax-engine .table.transactions-table.onMobileView tbody > tr > td {
         max-width: 100% !important;
     }
@@ -8853,18 +8853,7 @@ button {
         display: inline-block;
         cursor: grab;
     }
-    .onMobileView.table-bordered {
-        border: none;
-        background: transparent;
-        margin-top: 0;
-    }
-    .noRecords.onMobileView td:before {
-        display: none !important;
-    }
-    .noRecords.onMobileView td {
-        text-align: center !important;
-        padding: 5px 10px 5px 0% !important;
-    }
+   
     .table-responsive {
         padding: 0 3px;
         border: none;
@@ -8886,9 +8875,7 @@ button {
     .table > thead > tr > th {
         white-space: initial !important;
     }
-    .onMobileView tbody td::first-letter {
-        text-transform: uppercase;
-    }
+   
     .universal_date label.btn.btn-link {
         display: none;
     }
@@ -8996,10 +8983,7 @@ button {
     .card-table tbody tr {
         display: block;
     }
-    .onMobileView,
-    .onMobileView tbody {
-        display: block;
-    }
+   
     .blank-label {
         display: none;
     }
@@ -9180,11 +9164,7 @@ button {
     }
 }
 
-@media (max-width: 320px) {
-    .onMobileView tbody td {
-        padding: 5px 10px 5px 53% !important;
-    }
-}
+
 
 @media only screen and (max-width: 1400px) {
     .template_list {
@@ -9366,3 +9346,4 @@ button {
         margin: 70px auto;
     }
 }
+

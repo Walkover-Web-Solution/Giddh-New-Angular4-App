@@ -589,7 +589,12 @@ export class LoginActions {
         .ofType(LoginActions.LoginWithPasswdResponse).pipe(
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
-                    if (action.payload.body.user.isVerified) {
+
+                    if (action.payload.body.statusCode === "AUTHENTICATE_TWO_WAY") {
+                        if (action.payload.body.text) {
+                            this._toaster.successToast(action.payload.body.text, action.payload.code);
+                        }
+                    } else if (action.payload.body.user.isVerified) {
                         return this.LoginSuccess();
                     }
                 } else {
@@ -1059,6 +1064,9 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         this._router.navigate([stateDetail.body.lastState]);
+        if (isElectron) {
+            window.location.reload();
+        }
         return { type: 'EmptyAction' };
     }
 }

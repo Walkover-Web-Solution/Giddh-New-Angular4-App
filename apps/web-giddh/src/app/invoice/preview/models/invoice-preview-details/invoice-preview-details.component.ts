@@ -302,6 +302,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.performActionAfterClose();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('fixed');
     }
 
     public testPagesLoaded(count: number) {

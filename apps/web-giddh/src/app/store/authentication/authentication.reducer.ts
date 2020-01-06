@@ -61,6 +61,7 @@ export interface AuthenticationState {
     signupVerifyEmail: string;
     isForgotPasswordInProcess: boolean;
     isResetPasswordInSuccess: boolean;
+    isLoginWithPasswordIsShowVerifyOtp: boolean;
 }
 
 
@@ -116,7 +117,8 @@ const initialState = {
     isLoginWithPasswordSuccessNotVerified: false,
     signupVerifyEmail: null,
     isForgotPasswordInProcess: false,
-    isResetPasswordInSuccess: false
+    isResetPasswordInSuccess: false,
+    isLoginWithPasswordIsShowVerifyOtp: false
 };
 
 const sessionInitialState: SessionState = {
@@ -364,7 +366,13 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         case LoginActions.LoginWithPasswdResponse: {
             let res: BaseResponse<any, any> = action.payload;
             if (res.status === 'success') {
-                if (!res.body.user.isVerified) {
+                if (res.body.statusCode === "AUTHENTICATE_TWO_WAY") {
+                    return Object.assign({}, state, {
+                        isLoginWithPasswordInProcess: false,
+                        isLoginWithPasswordIsShowVerifyOtp: true,
+                        user: res.body
+                    });
+                } else if (!res.body.user.isVerified) {
                     return Object.assign({}, state, {
                         isLoginWithPasswordInProcess: false,
                         isLoginWithPasswordSuccessNotVerified: true,

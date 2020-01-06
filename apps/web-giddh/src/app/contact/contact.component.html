@@ -146,7 +146,7 @@
                 </p>
             </div>
 
-            <div class="contact-main customerPage onMobileView">
+            <div class="contact-main customerPage on-mobile-view">
 
                 <div class=" pdB2 mrB1">
 
@@ -418,8 +418,8 @@
 
 <ng-template #mainTable>
 
-    <div class="onMobileView mobilecardwrapper table-responsive vendorPage">
-        <table class="table  basic table-bordered aging-table marginBottom260" *ngIf="activeTab !== 'aging'">
+    <div class="on-mobile-view mobilecardwrapper table-responsive vendorPage">
+        <table class="table   aging-table marginBottom260 giddh-table" *ngIf="activeTab !== 'aging'">
             <thead>
                 <tr class="aging-table-top">
                     <td></td>
@@ -465,14 +465,14 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3" *ngIf="showFieldFilter.openingBalance">
+                    <th class="text-right" *ngIf="showFieldFilter.openingBalance">
                         <div class="d-flex justify-content-end align-items-center">Opening
                             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'openingBalance'}">
                             </ng-container>
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">
                             {{ activeTab === 'customer' ? 'Sales' : 'Purchase' }}
                             <ng-container
@@ -481,7 +481,7 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">
                             {{ activeTab === 'customer' ? 'Receipt' : 'Payment' }}
                             <ng-container
@@ -490,7 +490,7 @@
                         </div>
                     </th>
 
-                    <th class="text-right  pr-3">
+                    <th class="text-right">
                         <div class="d-flex justify-content-end align-items-center">Closing
                             <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amountDue'}">
                             </ng-container>
@@ -527,7 +527,7 @@
 
                     <th *ngIf="showFieldFilter.comment">Comment</th>
 
-                    <th *ngIf="activeTab === 'vendor' && isICICIIntegrated">Action</th>
+                    <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
 
                 </tr>
 
@@ -537,7 +537,7 @@
                 <ng-container *ngIf="activeTab === 'customer'">
 
                     <tr *ngFor="let account of sundryDebtorsAccounts;let idx = index">
-                        <td class="pos-rel WordWrap customerName cursor-pointer" (clickOutside)="dropdown.hide()"
+                        <td class="pos-rel WordWrap customer-name cursor-pointer" (clickOutside)="dropdown.hide()"
                             (dblclick)="dropdown.show()" data-title="Customer">
                             <span class="inline table-checkbox">
                                 <label></label>
@@ -733,8 +733,8 @@
                 <ng-container *ngIf="activeTab==='vendor' ">
 
                     <tr *ngFor="let account of sundryCreditorsAccounts; let idx=index ">
-                        <td class="pos-rel WordWrap customerName vendorCustomerName cursor-pointer" data-title="Vendor"
-                            (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
+                        <td class="pos-rel WordWrap customer-name vendor-customer-name cursor-pointer"
+                            data-title="Vendor" (clickOutside)="dropdown.hide()" (dblclick)="dropdown.show()">
                             <span class="inline table-checkbox ">
                                 <label></label>
                                 <input type="checkbox" (click)="selectAccount($event, account.uniqueName) "

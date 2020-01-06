@@ -15,68 +15,7 @@ TITLE:    Styles for giddh.com
 AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
-
-/* Webfont: Lato-Bold */
-
-/* @font-face {
-    font-family: ''opensans-semibold'';
-    src: url('../fonts/lato/Lato-Bold.eot');
-
-    src: url('../fonts/lato/Lato-Bold.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/lato/Lato-Bold.woff2') format('woff2'),
-    url('../fonts/lato/Lato-Bold.woff') format('woff'),
-    url('../fonts/lato/Lato-Bold.ttf') format('truetype');
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-} */
-
-/* Webfont: Lato-Medium */
-
-/* @font-face {
-    font-family: 'opensans-regular';
-    src: url('../fonts/lato/Lato-Medium.eot');
-
-    src: url('../fonts/lato/Lato-Medium.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/lato/Lato-Medium.woff2') format('woff2'),
-    url('../fonts/lato/Lato-Medium.woff') format('woff'),
-    url('../fonts/lato/Lato-Medium.ttf') format('truetype');
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-} */
-
-/* Webfont: Lato-Regular */
-
-/* @font-face {
-    font-family: 'opensans-regular';
-    src: url('../fonts/lato/Lato-Regular.eot');
-
-    src: url('../fonts/lato/Lato-Regular.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/lato/Lato-Regular.woff2') format('woff2'),
-    url('../fonts/lato/Lato-Regular.woff') format('woff'),
-    url('../fonts/lato/Lato-Regular.ttf') format('truetype');
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-} */
-
-/* Webfont: Lato-Semibold */
-/*
-@font-face {
-    font-family: 'opensans-regular';
-    src: url('../fonts/lato/Lato-Semibold.eot');
-
-    src: url('../fonts/lato/Lato-Semibold.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/lato/Lato-Semibold.woff2') format('woff2'),
-    url('../fonts/lato/Lato-Semibold.woff') format('woff'),
-    url('../fonts/lato/Lato-Semibold.ttf') format('truetype');
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-} */
-
-@font-face {
+ @font-face {
     font-family: "opensans-regular";
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
@@ -137,17 +76,6 @@ VERSION:  1
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
-/* @font-face{
-  font-family: 'opensans-regular';
-  src:url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot');
-    src: url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg') format('woff2'),
-    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff') format('woff'),
-    url('../fonts/open-sans/open-sans-regular/OpenSans-Regular.ttf') format('truetype');
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-} */
 
 html,
 body {

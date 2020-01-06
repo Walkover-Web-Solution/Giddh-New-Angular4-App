@@ -54,12 +54,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     public loginWithPasswdForm: FormGroup;
     public isLoginWithPasswordInProcess$: Observable<boolean>;
     public forgotPasswordForm: FormGroup;
+    public verifyOtpForm: FormGroup;
     public resetPasswordForm: FormGroup;
     public isForgotPasswordInProgress$: Observable<boolean>;
     public isForgotPasswordInSuccess$: Observable<boolean>;
     public isResetPasswordInSuccess$: Observable<boolean>;
     public signupVerifyForm: FormGroup;
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
+    public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
+
 
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
@@ -130,7 +133,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordSuccessNotVerified$ = store.select(state => {
             return state.login.isLoginWithPasswordSuccessNotVerified;
         }).pipe(takeUntil(this.destroyed$));
-
+        this.isLoginWithPasswordIsShowVerifyOtp$ = store.select(state => {
+            return state.login.isLoginWithPasswordIsShowVerifyOtp;
+        }).pipe(takeUntil(this.destroyed$));
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
@@ -172,6 +177,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.forgotPasswordForm = this._fb.group({
             userId: ["", [Validators.required]]
+        });
+        this.verifyOtpForm = this._fb.group({
+            oneTimePassword: ["", [Validators.required]]
         });
         this.resetPasswordForm = this._fb.group({
             verificationCode: ["", [Validators.required]],
@@ -247,6 +255,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
                 console.log("isLoginWithPasswordSuccessNotVerified", res);
+            }
+        });
+        this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            if (res) {
+                this.showTwoWayAuthModal();
             }
         });
     }
