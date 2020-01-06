@@ -3,7 +3,9 @@
 .ddMaxHeight {
     max-height: 500px;
 }
-
+.giddh-logo img {
+    width: 100px;
+}
 .nav-left-bar {
     position: fixed;
     top: 61px;
@@ -131,7 +133,7 @@ a[vr-item]:focus {
 }
 
 .main-company-name > li > a {
-    padding: 7px 10px !important;
+    padding: 7px 15px !important;
 }
 
 // .main-company-name>li>a:hover {
@@ -139,7 +141,6 @@ a[vr-item]:focus {
 // }
 
 .main-company-name > li > a:hover .cText .cName,
-.main-company-name > li > a:hover .cText .fyear,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
     color: #fff;
 }
@@ -574,30 +575,29 @@ span.icon-support.dropdown-toggle {
     position: fixed;
     width: 100%;
     top: 0;
-
     z-index: 9990;
 }
 
 .primary-header .giddh-logo {
-    text-align: center;
     vertical-align: middle;
-    line-height: 3.8;
+    display: flex;
+    align-items: center;
+    height: 60px;
 }
-.primary-header .rightDetails {
+.primary-header .right-details {
     transform: translateY(14px);
-    padding-right: 15px;
 }
 .primary-header li.company-name {
     top: 0;
     width: 100%;
 }
 
-.primary-header .companyName-financeYear {
+.primary-header .comp-name-finance-year {
     display: inline-block;
     padding-left: 10px;
     width: 90%;
 }
-.primary-header .companyName-financeYear span {
+.primary-header .comp-name-finance-year span {
     display: block;
     vertical-align: middle;
 }
@@ -611,13 +611,8 @@ span.icon-support.dropdown-toggle {
     display: flex;
     align-items: center;
 }
-.uniqNmae-finaclYear span {
+.uniqname-financial-year span {
     display: inline-block !important;
-}
-.uniqNmae-finaclYear span:nth-child(2) {
-    margin-left: 10px;
-    padding-left: 10px;
-    border-left: 1px solid #fff;
 }
 .company-name .dropdown-menu {
     padding-top: 15px;
@@ -629,7 +624,34 @@ ul.sub-list {
 .upgradePlan.list-inline > li {
     padding-left: 0 !important;
 }
+.nav-left-bar .company-name .cText span {
+    color: #1c1c1c;
+}
+.nav-left-bar .comp-name-finance-year {
+    display: inline;
+    padding-left: 0;
+    float: right;
+    width: 150px;
+    position: relative;
+    top: -3px;
+}
+.nav-left-bar .uniqname-financial-year span {
+    display: block !important;
+}
 
+.nav-left-bar .company-name .cText span.alice {
+    color: #fff !important;
+}
+.nav-left-bar .company-name .branch-unique-name {
+    font-size: 12px;
+    color: #01a9f4 !important;
+    padding: 0 0 3px 0;
+}
+
+.company-name .ellp {
+    white-space: inherit;
+    font-size: 14px;
+}
 /* responsive */
 
 @media (max-width: 1023px) {
@@ -673,29 +695,7 @@ ul.sub-list {
         padding-bottom: 0;
         font-size: 18px;
     }
-    .nav-left-bar .company-name .cText span {
-        color: #1c1c1c !important;
-        display: block;
-    }
-    .nav-left-bar .companyName-financeYear {
-        display: inline;
-        padding-left: 0;
-    }
-    .nav-left-bar .uniqNmae-finaclYear span {
-        display: block !important;
-    }
-    .nav-left-bar .uniqNmae-finaclYear span:nth-child(2) {
-        margin-left: 0;
-        padding-left: 0;
-        border-left: none;
-    }
-    .nav-left-bar .uniqNmae-finaclYear {
-        padding-left: 0;
-    }
-    .nav-left-bar .company-name .cText span.alice {
-        color: #fff !important;
-        display: none;
-    }
+
     .primary-header .btn-group.cp.mrL1.d-inline-block {
         height: 34px;
     }
@@ -757,6 +757,9 @@ ul.sub-list {
         display: inline-flex !important;
         align-items: center;
     }
+    .nav-left-bar .comp-name-finance-year {
+        width: 200px;
+    }
 }
 @media (min-width: 412px) and (max-width: 840px) {
     ul.sub-list {
@@ -774,11 +777,6 @@ ul.sub-list {
     }
 }
 
-@media (min-width: 768px) {
-    .sidebarLishowMob {
-        display: none !important;
-    }
-}
 @media (max-width: 375px) {
     .universal_date li.dateRangPicker {
         display: block;
