@@ -1525,6 +1525,7 @@ label.salesCountryLabel {
 }
 .setActive .td_Wrapper {
     height: 80%;
+    display: initial;
 }
 .setActive td:last-child .td_Wrapper {
     height: 105% !important;
@@ -1544,6 +1545,10 @@ label.salesCountryLabel {
     border: 1px solid #999;
     border-radius: 50%;
     text-align: center;
+}
+.setActive .trashIconDlt {
+    -webkit-transform: translateY(-40px);
+    -moz-transform: translateY(20px);
 }
 .wrap-td-data .icon-rupees {
     font-size: 11px;
