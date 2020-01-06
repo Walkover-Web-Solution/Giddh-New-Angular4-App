@@ -443,8 +443,10 @@ sh-select:focus {
         height: 36px;
     }
 }
-
-// reponsive
+.transaction-in-short {
+    margin-bottom: 80px;
+}
+/* reponsive */
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;
