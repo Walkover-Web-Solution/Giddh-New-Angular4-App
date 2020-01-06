@@ -11,7 +11,6 @@
     min-height: 100vh;
     background: #fff;
     width: 215px;
-    /* padding-bottom: 120px; */
     left: -215px;
     z-index: 990;
 }
@@ -121,10 +120,6 @@ a[vr-item]:focus {
 .account-search .form-control:-moz-placeholder {
     color: #484848 !important;
 }
-/* .left_fixed_header.open,
-.left_fixed_header:hover {
-  width: 210px;
-} */
 
 .left_fixed_header li:hover {
     cursor: pointer;
@@ -134,10 +129,6 @@ a[vr-item]:focus {
     padding: 7px 10px !important;
 }
 
-// .main-company-name>li>a:hover {
-//     background: #40505F;
-// }
-
 .main-company-name > li > a:hover .cText .cName,
 .main-company-name > li > a:hover .cText .fyear,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
@@ -145,8 +136,6 @@ a[vr-item]:focus {
 }
 
 .left_fixed_header > li {
-    /* overflow: hidden;
-  position: relative; */
     text-transform: capitalize;
     position: relative;
 }
@@ -162,7 +151,6 @@ a[vr-item]:focus {
     padding: 7px 15px;
     color: #1c1c1c;
     position: relative;
-    /* width: 32px; */
 }
 .left_fixed_header > li > a:before {
     position: absolute;
@@ -196,7 +184,6 @@ a[vr-item]:focus {
     font-size: 14px;
     vertical-align: middle;
     padding-left: 0px;
-    /* opacity: 0; */
     text-align: left;
     color: #262626;
     letter-spacing: 0.6px;
@@ -207,7 +194,6 @@ a[vr-item]:focus {
 
 .left_fixed_header.open li a .label {
     opacity: 1;
-    // overflow: hidden;
     text-overflow: ellipsis;
     max-width: 170px;
     white-space: inherit;
@@ -236,51 +222,6 @@ a[vr-item]:focus {
     display: flex;
     justify-content: space-between;
 }
-
-:host ::ng-deep .tooltip {
-    /* white-space: nowrap;
-  width: auto !important;
-  max-width: inherit !important; */
-}
-
-/*
-:host ::ng-deep #universal_search .form-control {
-  margin-bottom: 0;
-  border: none !important;
-  border-top-left-radius: 8px !important;
-  border-top-right-radius: 8px !important;
-  padding: 20px 20px !important;
-  height: auto;
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-:host ::ng-deep #universal_search virtual-scroll .scrollable-content .item > a {
-  border: 0 !important;
-  padding: 6px 20px;
-}
-
-:host ::ng-deep #universal_search .menu {
-  position: relative;
-  box-shadow: none;
-}
-
-.universal_modal .modal-content {
-  border: 0;
-  border-radius: 0;
-  border-top-left-radius: 8px !important;
-  border-top-right-radius: 8px !important;
-  border-bottom-left-radius: 8px !important;
-  border-bottom-right-radius: 8px !important;
-}
-
-.universal_modal .form-group {
-  margin-bottom: 0;
-}
-
-.universal_modal.modal.in .modal-dialog {
-  transform: translateY(100px) !important;
-} */
 
 :host
     ::ng-deep
@@ -405,18 +346,11 @@ a[vr-item]:focus {
 .sub-menu > a > i {
     font-size: 13px;
     vertical-align: middle;
-    /* float: right; */
     text-align: right;
     position: relative;
     color: #a0a0a0;
     top: 6px;
 }
-
-/* .nav-left-bar perfect-scrollbar {
-    position: initial !important;
-    height: auto;
-    max-height: inherit;
-} */
 
 .sub-menu > li {
     position: relative;
@@ -448,11 +382,6 @@ a[vr-item]:focus {
 .menu_wrapper {
     max-height: 100%;
 }
-
-/*
-#other_sub_menu {
-    bottom: auto;
-} */
 
 .left-sub-menu.open {
     visibility: visible;
@@ -503,9 +432,7 @@ a[vr-item]:focus {
 .mobile_menu_icon {
     display: none;
 }
-// #cmpWrp{
-//   background-color:$dark-blue;
-// }
+
 .calender-addone {
     background-color: $headerBtnColor;
     color: #fff;
