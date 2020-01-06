@@ -18,11 +18,11 @@
                                 <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                 </span>
 
-                                <div class="comp-name-finance-year" placement="bottom">
+                                <div class="company-name-finance-year" placement="bottom">
                                     <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
                                     </span>
 
-                                    <div class="uniqname-financial-year"> <span
+                                    <div class="unique-name-financial-year"> <span
                                             *ngIf="(selectedCompany | async)?.nameAlias"
                                             style="font-size:12px;color:#01A9F4;">
                                             ({{ (selectedCompany | async)?.nameAlias }})
@@ -296,11 +296,11 @@
                         <span class="cName ellp pdR1 alice">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                         </span>
 
-                        <div class="comp-name-finance-year" placement="bottom">
+                        <div class="company-name-finance-year" placement="bottom">
                             <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
-                            <div class="uniqname-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias"
+                            <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias"
                                     class="branch-unique-name">
                                     ({{ (selectedCompany | async)?.nameAlias }})
                                 </span>
