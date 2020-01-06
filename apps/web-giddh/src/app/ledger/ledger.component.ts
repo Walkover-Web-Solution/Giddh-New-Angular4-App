@@ -486,6 +486,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
                     this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
                     this.trxRequest.page = 0;
+                    this.currencyTogglerModel = false;
                 }
             }
 
@@ -630,7 +631,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                this.currencyTogglerModel = false;
 
                 let stockListFormFlattenAccount: IFlattenAccountsResultItem;
                 if (data[1]) {
