@@ -468,7 +468,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{product.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeProduct(i)" *ngIf="branchTransfer.products.length > 1"><i
                                                 class="fa fa-trash"></i></a>
                                     </div>
@@ -548,7 +548,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{destination.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">
                                             <i class="fa fa-trash"></i></a>
                                     </div>
@@ -625,7 +625,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}}
                                             {{source.warehouse.stockDetails.amount | giddhCurrency}}</div>
                                     </div>
-                                    <div class="trashIconDlt">
+                                    <div class="trash-icon-delete">
                                         <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i
                                                 class="fa fa-trash"></i></a>
                                     </div>
