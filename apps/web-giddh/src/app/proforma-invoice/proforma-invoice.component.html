@@ -146,16 +146,21 @@
                                                 <ng-container *ngIf="isCashInvoice">
                                                     <input type="text" name="voucherDetails.customerName"
                                                         #inputCustomerName class="form-control cashInvoiceInput"
-                                                        [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)"
+                                                        [(ngModel)]="invFormData.voucherDetails.customerName"
+                                                        (change)="handleCustomerChange($event)"
                                                         (blur)='selectDefaultbank()' [readOnly]="isUpdateMode">
                                                 </ng-container>
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
-                                                    <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                                                    *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode"
+                                                    style="align-items: center;margin-left: 2%">
+                                                    <a href="javascript: void 0"
+                                                        (click)="showLastEstimateModal = !showLastEstimateModal">
                                                         <i class="fa fa-files-o"></i>
-                                                        Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
+                                                        Copy Previous
+                                                        {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
                                                     <ng-container
                                                         *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
@@ -425,7 +430,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
+                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'"
+                                            [(ngModel)]="selectedWarehouse" [options]="warehouses">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -441,7 +447,8 @@
                                         <!-- Enabled for CR/DR update flow -->
                                         <input type="text" name="accountDetails.invoiceNum"
                                             class="form-control invoiceDate attentionTo"
-                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
+                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                            [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
                                             [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
@@ -622,7 +629,7 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                                 <!-- region static entries-->
                                 <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()"
-                                    [hidden]="activeIndx === entryIdx" class="entriesTr setActive"
+                                    [hidden]="activeIndx === entryIdx" class="entriesTr set-active"
                                     [ngClass]="{'isOtherTax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
 
                                     <td>{{ entryIdx + 1 }}</td>
@@ -772,7 +779,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
@@ -958,8 +965,8 @@
                                             <div style="flex: 1;">
                                                 <input type="text" [disabled]="transaction.isStockTxn"
                                                     (blur)="calculateWhenTrxAltered(entry, transaction)"
-                                                    (click)="transactionAmountClicked(transaction)"
-                                                    placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                                                    (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
@@ -1081,7 +1088,7 @@
 
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
@@ -1259,7 +1266,8 @@
                                                     *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                                             </div>
                                         </div>
-                                        <div class="tableRow" *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                        <div class="tableRow"
+                                            *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                             <div class="tableCell">
                                                 <strong>Round Off</strong>
@@ -1805,7 +1813,8 @@
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
                                                     <input type="text" [disabled]="transaction.isStockTxn"
-                                                        (blur)="calculateWhenTrxAltered(entry, transaction)" (click)="transactionAmountClicked(transaction)"
+                                                        (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (click)="transactionAmountClicked(transaction)"
                                                         placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                                                         class="form-control text-right" [(ngModel)]="transaction.amount"
                                                         decimalDigitsDirective
@@ -2083,7 +2092,8 @@
                                         *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                                 </div>
                             </div>
-                            <div class="tableRow" *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                            <div class="tableRow"
+                                *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="tableCell">
                                     <strong>Round Off</strong>

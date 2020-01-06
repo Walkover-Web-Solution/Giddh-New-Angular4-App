@@ -1523,20 +1523,20 @@ label.salesCountryLabel {
 .defaultActive .td_Wrapper {
     height: 100%;
 }
-.setActive .td_Wrapper {
+.set-active .td_Wrapper {
     height: 80%;
     display: initial;
 }
-.setActive td:last-child .td_Wrapper {
+.set-active td:last-child .td_Wrapper {
     height: 105% !important;
 }
-.setActive.isOtherTax td:last-child .td_Wrapper .differ-currency {
+.set-active.isOtherTax td:last-child .td_Wrapper .differ-currency {
     margin-bottom: 14px;
 }
 .dlt-abs {
     position: relative;
 }
-.trashIconDlt {
+.trash-icon-delete {
     position: absolute;
     right: -30px;
     transform: translateY(-40px);
@@ -1546,7 +1546,7 @@ label.salesCountryLabel {
     border-radius: 50%;
     text-align: center;
 }
-.setActive .trashIconDlt {
+.set-active .trash-icon-delete {
     transform: translateY(-40px);
     -webkit-transform: translateY(-40px);
     -moz-transform: translateY(-40px);
