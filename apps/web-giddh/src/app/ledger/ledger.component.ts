@@ -486,9 +486,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
                     this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
                     this.trxRequest.page = 0;
-                    this.currencyTogglerModel = false;
                 }
             }
+
+            this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
