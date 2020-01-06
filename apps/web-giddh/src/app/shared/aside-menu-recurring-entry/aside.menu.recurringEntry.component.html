@@ -4,6 +4,7 @@
 	</div>
 	<button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 	<div class="aside-body">
+        <div class="aside-pane-form">
 		<form [formGroup]="form">
 			<div class="row pdT2">
 				<div class="col-xs-4 form-group">
@@ -26,7 +27,7 @@
 				expire
 			</div>
 
-			<div class="form-group">
+			<div class="form-group ng-select-wrap liq selectGroup">
 				<label class="mrB1">Interval<span class="text-danger">*</span></label>
 				<ng-select placeholder="Select Interval" filterPlaceholder="Type to search..."
 					formControlName="duration" name="duration" [options]="intervalOptions" style="width:100%">
@@ -48,6 +49,7 @@
 				<button class="btn btn-success btn-sm" [ladda]="isLoading"
 					(click)="saveRecurringInvoice()">Update</button>
 			</div>
-		</form>
+        </form>
+      </div>
 	</div>
 </div>
