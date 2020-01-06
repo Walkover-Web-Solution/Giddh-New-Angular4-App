@@ -164,7 +164,7 @@
     .onMobileView tbody {
         display: block;
     }
-    
+
 }
 
 
@@ -7661,7 +7661,9 @@ app-header {
 }
 
 /* my css */
-
+.box .company-box .inner-company-box ul > li .tooltip {
+    word-break: break-all;
+}
 .radius-none {
     border-radius: 0px !important;
 }
@@ -8391,8 +8393,8 @@ table.basic td {
     color: #1c1c1c;
 }
 
- 
- 
+
+
 
 .invoice-table td > a {
     color: #1c1c1c;
@@ -8841,7 +8843,7 @@ button {
         top: 0;
         z-index: 4;
     }
-    
+
     .tax-engine .table.transactions-table.onMobileView tbody > tr > td {
         max-width: 100% !important;
     }
@@ -8855,7 +8857,7 @@ button {
         display: inline-block;
         cursor: grab;
     }
-   
+
     .table-responsive {
         padding: 0 3px;
         border: none;
@@ -8877,7 +8879,7 @@ button {
     .table > thead > tr > th {
         white-space: initial !important;
     }
-   
+
     .universal_date label.btn.btn-link {
         display: none;
     }
@@ -8985,7 +8987,7 @@ button {
     .card-table tbody tr {
         display: block;
     }
-   
+
     .blank-label {
         display: none;
     }
