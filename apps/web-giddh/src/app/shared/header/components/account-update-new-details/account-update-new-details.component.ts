@@ -222,6 +222,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     accountDetails.addresses.map(a => {
                         this.renderGstDetails(a, accountDetails.addresses.length);
                     });
+                } else {
+                    if (accountDetails.addresses.length === 0) {
+                        this.addBlankGstForm();
+                    }
                 }
 
                 // hsn/sac enable disable
@@ -437,7 +441,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         })
         if (selectedGroupDetails) {
             if (selectedGroupDetails.additional) {
-                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : { uniqueName: selectedGroupDetails.value };
                 if (parentGroup) {
                     this.isParentDebtorCreditor(parentGroup.uniqueName);
                 }
@@ -541,12 +545,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 // this.addAccountForm.controls['addresses'] = this._fb.array([]);
                 this.isIndia = false;
             } else {
-                const addresses = this.addAccountForm.get('addresses') as FormArray;
-                if (addresses.controls.length === 0) {
-                    this.addBlankGstForm();
-                }
                 this.isIndia = true;
             }
+        }
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
         }
     }
     public tabChanged(activeTab: string) {
@@ -594,7 +598,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
     }
