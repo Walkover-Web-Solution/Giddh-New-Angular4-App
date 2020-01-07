@@ -77,16 +77,38 @@
                             <div class="form-group clearfix">
                                 <label>Inventory Type</label>
                                 <div class="mrT1">
-                                    <label class="radio-inline pd0 w100">
+                                    <!-- <label class="radio-inline pd0 w100">
                                         <input type="radio" class="radio_theme cp ml0"
                                             [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory"
                                             (change)="updateInventorySetting(true)" name="inventoryType" />Product
-                                    </label>
-                                    <label class="radio-inline pd0 mrL2">
+
+
+                                    </label> -->
+
+                                    <span class="pd0 mrR1">
+                                        <input id="radio-1" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                            [checked]="CompanySettingsObj?.companyInventorySettings && CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                            (change)="updateInventorySetting(true)" name="inventoryType" checked>
+                                        <label for="radio-1" class="radio-custom-label">Product</label>
+
+                                    </span>
+
+
+                                    <!-- <label class="radio-inline pd0 mrL2">
                                         <input type="radio" class="radio_theme cp"
                                             [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory"
                                             (change)="updateInventorySetting(false)" name="inventoryType" />Service
                                     </label>
+                                     -->
+
+                                    <span class="pd0 ">
+                                        <input id="radio-2" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                            [checked]="CompanySettingsObj?.companyInventorySettings && !CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                            (change)="updateInventorySetting(false)" name="inventoryType">
+                                        <label for="radio-2" class="radio-custom-label">Service</label>
+
+                                    </span>
+
                                 </div>
                             </div>
                         </div>
