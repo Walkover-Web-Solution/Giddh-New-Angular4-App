@@ -464,18 +464,25 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
                     this.trxRequest.page = 0;
                 } else {
-                    // date picker start and end date set to undefined when today is selected
-                    this.datePickerOptions = {...this.datePickerOptions, startDate: undefined, endDate: undefined};
+                    // date picker start and end date set to today when app date is selected as today
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment().toDate(),
+                        endDate: moment().toDate()
+                    };
+                    // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
                     this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                         dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
                             bsRangeValue: []
                         })
                     });
                     this.advanceSearchRequest.page = 0;
-                    this.advanceSearchRequest.to = undefined;
-                    this.trxRequest.from = undefined;
-                    this.trxRequest.to = undefined;
                     this.trxRequest.page = 0;
+
+                    // set request from and to, '' because we are depending on api to give us from and to date
+                    this.advanceSearchRequest.to = '';
+                    this.trxRequest.from = '';
+                    this.trxRequest.to = '';
                 }
             }
 
@@ -533,6 +540,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
+                // set date picker to and from date, as what we got from api
                 this.datePickerOptions = {
                     ...this.datePickerOptions,
                     startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
