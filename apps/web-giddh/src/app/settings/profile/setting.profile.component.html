@@ -54,7 +54,7 @@
                             <span>
                                 <input id="isMultiple" (change)="changeEventOfForm('isMultipleCurrency')"
                                     [(ngModel)]="companyProfileObj.isMultipleCurrency" class="checkbox-custom"
-                                    name="isMultiple" type="checkbox" checked>
+                                    name="isMultiple" type="checkbox">
                                 <label for="isMultiple" class="checkbox-custom-label">Multicurrency?</label>
                             </span>
 
@@ -245,10 +245,7 @@
                                                 <label for="" class="d-block">{{formFields['taxName'].label}}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
-                                                        <!-- <input type="checkbox" (click)="setGstAsDefault(i, $event)"
-                                                            [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
-                                                            tooltip="Default {{formFields['taxName'].label}}"
-                                                            placement="bottom" (change)="checkGstDetails()" /> -->
+
 
                                                         <input id="checkbox-{{i}}" class="checkbox-custom"
                                                             (click)="setGstAsDefault(i, $event)"

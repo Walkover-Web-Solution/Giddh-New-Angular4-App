@@ -11,23 +11,11 @@
                 </div>
                 <div class="contentView mrL2">
                     <div class="branch-views">
-                        <!-- <span class="mrR1" (click)="changeBranchViewType('table');">
-                            <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;"
-                                type="radio" [checked]="(branchViewType === 'table') ? true : false">Table View
-                        </span> -->
-
                         <span (click)="changeBranchViewType('table');" class="mrR1">
                             <input id="radio-1" name="signatureType" class="radio-custom" name="radio-group"
                                 type="radio" [checked]="(branchViewType === 'table') ? true : false" checked>
                             <label for="radio-1" class="radio-custom-label">Table View</label>
                         </span>
-
-
-                        <!-- <span (click)="changeBranchViewType('card');"> <input class="radio_theme" name="signatureType"
-                                style="margin-left: 0px !important;" type="radio"
-                                [checked]="(branchViewType === 'card') ? true : false">Card View </span> -->
-
-
                         <span (click)="changeBranchViewType('card');">
                             <input id="radio-2" name="signatureType" class="radio-custom" name="radio-group"
                                 type="radio" [checked]="(branchViewType === 'card') ? true : false">
