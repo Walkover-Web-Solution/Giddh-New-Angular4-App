@@ -598,7 +598,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT']
         });
     }
