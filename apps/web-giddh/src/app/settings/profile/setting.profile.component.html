@@ -245,10 +245,20 @@
                                                 <label for="" class="d-block">{{formFields['taxName'].label}}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
-                                                        <input type="checkbox" (click)="setGstAsDefault(i, $event)"
+                                                        <!-- <input type="checkbox" (click)="setGstAsDefault(i, $event)"
                                                             [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
                                                             tooltip="Default {{formFields['taxName'].label}}"
-                                                            placement="bottom" (change)="checkGstDetails()" />
+                                                            placement="bottom" (change)="checkGstDetails()" /> -->
+
+                                                        <input id="checkbox-{{i}}" class="checkbox-custom"
+                                                            (click)="setGstAsDefault(i, $event)"
+                                                            [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
+                                                            tooltip="Default {{formFields['taxName'].label}}"
+                                                            placement="bottom" (change)="checkGstDetails()"
+                                                            type="checkbox">
+                                                        <label for="checkbox-{{i}}"
+                                                            class="checkbox-custom-label"></label>
+
                                                     </div>
                                                     <input type="text" placeholder="{{formFields['taxName'].label}}"
                                                         class="form-control" (keyup)="setChildState(gstNumberField, i);"
