@@ -1715,7 +1715,8 @@ header .navbar {
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:active:focus {
+.btn-primary:active:focus,
+.btn-primary:active:hover {
     background: $border-blue;
     color: #fff;
     border-color: $border-blue;
@@ -8692,12 +8693,30 @@ button {
     width: 18px;
     height: 18px;
     padding: 2px;
-    margin-right: 10px;
+    margin-right: 5px;
+    border-radius: 2px;
     text-align: center;
+}
+.checkbox-custom + .checkbox-custom-label:after{
+        transform: rotate(-45deg) scale(0,0);
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 5px;
+    z-index: 1;
+    width: 12px;
+    height: 7px;
+    border: 2px solid #fff;
+    border-top-style: none;
+    border-right-style: none;
+    transition: transform .4s cubic-bezier(.45,1.8,.5,.75)
+}
+.checkbox-custom:checked + .checkbox-custom-label:after{
+    transform: rotate(-45deg) scale(1,1);
 }
 .checkbox-custom:checked + .checkbox-custom-label:before {
     background: $border-blue;
-    box-shadow: inset 0px 0px 0px 4px #fff;
+
     border: 2px solid $border-blue;
 }
 .radio-custom + .radio-custom-label:before {

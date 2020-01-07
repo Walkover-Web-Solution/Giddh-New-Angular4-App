@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .role {
     background: #f1f1f2;
     border: 1px solid #c2cdd3;
@@ -87,19 +89,19 @@
 
 .rolehead {
     background: #fff;
-    min-height: 166px;
-    outline: 1px solid #d4602a;
-    display: table;
+    min-height: 170px;
+    outline: 1px solid $border-blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .rolehead h1 {
     height: 100%;
     text-align: center;
-    width: 100%;
     font-size: 1.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: inherit;
 }
 
 .role ul li {
@@ -174,6 +176,10 @@
 }
 
 .rolehead .vcenter {
-    max-width: 100px;
+    max-width: 100%;
     padding: 0 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
