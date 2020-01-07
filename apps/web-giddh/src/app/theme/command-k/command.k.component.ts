@@ -1,12 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { ReplaySubject, Subject, Observable } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { ScrollComponent } from './virtual-scroll/vscroll';
 import { GeneralService } from '../../services/general.service';
 import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
 import { remove } from '../../lodash-optimized';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -56,6 +58,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public highlightedItem: number = 0;
     public allowLoadMore: boolean = false;
     public isLoading: boolean = false;
+    public activeCompanyUniqueName: any = '';
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
@@ -63,12 +66,16 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     constructor(
+        private store: Store<AppState>,
         private renderer: Renderer,
         private zone: NgZone,
         private _generalService: GeneralService,
         private _commandKService: CommandKService,
         private _cdref: ChangeDetectorRef
     ) {
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
+            this.activeCompanyUniqueName = res;
+        });
         this.searchCommandK(true);
     }
 
@@ -207,7 +214,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this._commandKService.searchCommandK(this.commandKRequestParams).subscribe((res) => {
+        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
