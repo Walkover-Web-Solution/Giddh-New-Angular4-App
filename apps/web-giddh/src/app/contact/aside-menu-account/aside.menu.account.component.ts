@@ -31,7 +31,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
     @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-    @ViewChild('addAccountNewComponent') public addAccountNewComponent: AccountAddNewDetailsComponent
+    @ViewChild('addAccountNewComponent') public addAccountNewComponent: AccountAddNewDetailsComponent;
 
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other
@@ -86,8 +86,22 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
         }
-        this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
+        // loop over flatten accounts and check if given account is under sundrycreditors group
+        this.store.pipe(select(p => p.general.flattenAccounts), take(1)).subscribe(flattenAccounts => {
+
+            if (flattenAccounts && flattenAccounts.length) {
+                // get account from flatten accounts array
+                let accountFromFlattenAcc = flattenAccounts.find(fAcc => fAcc.uniqueName === this.accountDetails.uniqueName);
+
+                // if yes set showBankDetail = true for showing adding bank details in account-update form.
+                this.showBankDetail = accountFromFlattenAcc.parentGroups.some(group => group.uniqueName === 'sundrycreditors');
+            } else {
+                this.showBankDetail = false;
+            }
+        });
+
+        // this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.activeGroup$.subscribe((a) => {
             if (a) {
                 this.virtualAccountEnable$.subscribe(s => {
@@ -106,7 +120,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 }).map(m => {
                     return {
                         value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-                    }
+                    };
                 });
                 this.flatGroupsOptions = items;
             }
@@ -124,6 +138,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
         this.getUpdateList.emit(this.activeGroupUniqueName);
     }
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName = event;
@@ -185,7 +200,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
             });
-            listItem = Object.assign({}, listItem, { parentGroups: [] });
+            listItem = Object.assign({}, listItem, {parentGroups: []});
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
