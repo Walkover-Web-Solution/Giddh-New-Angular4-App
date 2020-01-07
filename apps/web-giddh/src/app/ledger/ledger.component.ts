@@ -422,7 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detactChanges();
+        this.newLedPanelCtrl.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -1124,8 +1124,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-        blankTransactionObj.valuesInAccountCurrency = this.selectedCurrency === 0;
-        blankTransactionObj.exchangeRate = (this.lc.blankLedger.selectedCurrencyToDisplay !== this.selectedCurrency) ? (1 / blankTransactionObj.exchangeRate) : blankTransactionObj.exchangeRate;
 
         if (blankTransactionObj.transactions.length > 0) {
 
