@@ -402,9 +402,9 @@
                             ],
                             "optimization": false,
                             "outputHashing": "all",
-                            "sourceMap": false,
+                            "sourceMap": true,
                             "extractCss": true,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "aot": false,
                             "extractLicenses": false,
                             "vendorChunk": false,
@@ -507,11 +507,11 @@
                 "serve": {
                     "builder": "ngx-build-plus:dev-server",
                     "options": {
-                        "host": "localhost",
+                        "host": "localapp.giddh.com",
                         "port": 4200,
-                        "baseUrl": "localhost:4200",
+                        "baseUrl": "localapp.giddh.com:4200",
                         "browserTarget": "electron-giddh:build:local",
-                        "extraWebpackConfig": "./webpack.partial.js",
+                        "extraWebpackConfig": "./webpack.electron.partial.js",
                         "plugin": "./hook.js"
                     },
                     "configurations": {

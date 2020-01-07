@@ -1,8 +1,14 @@
-import { app, ipcMain } from "electron";
+import {app, ipcMain} from "electron";
 import setMenu from "./AppMenuManager";
-import { log } from "./util";
+import {log} from "./util";
 import WindowManager from "./WindowManager";
-import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from "./main-auth.config";
+import {
+    AdditionalGoogleLoginParams,
+    AdditionalLinkedinLoginParams,
+    GoogleLoginElectronConfig,
+    LinkedinLoginElectronConfig
+} from "./main-auth.config";
+import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
 
 let windowManager: WindowManager = null;
 
@@ -20,41 +26,61 @@ ipcMain.on("open-url", (event, arg) => {
 });
 
 
-ipcMain.on("authenticate", async function (event, arg) {
+ipcMain.on("authenticate", (event, arg) => {
 
-    const electronOauth2 = require("electron-oauth");
-    let config = {};
-    let bodyParams = {};
     if (arg === "google") {
-        // google
-        config = GoogleLoginElectronConfig;
-        bodyParams = AdditionalGoogleLoginParams;
-    } else {
-        // linked in
-        config = LinkedinLoginElectronConfig;
-        bodyParams = AdditionalLinkedinLoginParams;
-    }
-    try {
-        const myApiOauth = electronOauth2(config, {
-            alwaysOnTop: true,
-            autoHideMenuBar: true,
-            webPreferences: {
-                devTools: true,
-                partition: "oauth2",
-                nodeIntegration: false
+        const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
+            GoogleLoginElectronConfig.clientSecret,
+            ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'],
+            {
+                successRedirectURL: "http://localapp.giddh.com:3000/",
+                loopbackInterfaceRedirectionPort: 45587,
+                refocusAfterSuccess: true,
             }
-        });
-        const token = await myApiOauth.getAccessToken(bodyParams);
+        );
+
+        myApiOauth.openAuthWindowAndGetTokens()
+            .then(token => {
+                event.returnValue = token;
+                event.sender.send('take-your-gmail-token', token);
+                console.log(JSON.stringify(token));
+                // use your token.access_token
+            });
+    } else {
+        const electronOauth2 = require("electron-oauth");
+        let config = {};
+        let bodyParams = {};
         if (arg === "google") {
             // google
-            event.returnValue = token.access_token;
-            // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+            config = GoogleLoginElectronConfig;
+            bodyParams = AdditionalGoogleLoginParams;
         } else {
             // linked in
-            event.returnValue = token.access_token;
-            // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+            config = LinkedinLoginElectronConfig;
+            bodyParams = AdditionalLinkedinLoginParams;
         }
-    } catch (e) {
-        //
+        try {
+            const myApiOauth = electronOauth2(config, {
+                alwaysOnTop: true,
+                autoHideMenuBar: true,
+                webPreferences: {
+                    devTools: true,
+                    partition: "oauth2",
+                    nodeIntegration: false
+                }
+            });
+            const token = myApiOauth.getAccessToken(bodyParams);
+            if (arg === "google") {
+                // google
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.signupWithGoogle(token.access_token));
+            } else {
+                // linked in
+                event.returnValue = token.access_token;
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(token.access_token));
+            }
+        } catch (e) {
+            //
+        }
     }
 });

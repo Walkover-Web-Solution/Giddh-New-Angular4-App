@@ -60,6 +60,7 @@
         "@angular/platform-browser": "^7.0.0",
         "@angular/platform-browser-dynamic": "^7.0.0",
         "@angular/router": "^7.0.0",
+        "@getstation/electron-google-oauth2": "^2.0.0",
         "@giddh-workspaces/scss": "file:libs/scss",
         "@giddh-workspaces/web": "file:xplat/web",
         "@ng-bootstrap/ng-bootstrap": "^3.2.0",

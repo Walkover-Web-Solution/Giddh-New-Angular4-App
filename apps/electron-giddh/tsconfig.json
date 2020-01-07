@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
+        "inlineSources": true,
         "sourceMap": true,
         "declaration": false,
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
+        "importHelpers": true,
         "experimentalDecorators": true,
         "esModuleInterop": true,
         "target": "es5",

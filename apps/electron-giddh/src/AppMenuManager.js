@@ -1,11 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
 var electron_1 = require("electron");
 var AppUpdater_1 = require("./AppUpdater");
-var WindowManager_1 = __importDefault(require("./WindowManager"));
+var WindowManager_1 = tslib_1.__importDefault(require("./WindowManager"));
 function setMenu() {
     var windowsMenu = {
         label: 'Window',
