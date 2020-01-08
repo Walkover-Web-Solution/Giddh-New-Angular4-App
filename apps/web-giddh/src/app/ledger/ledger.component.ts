@@ -1001,7 +1001,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxType: 'tcs',
             exchangeRate: 1,
             exchangeRateForDisplay: 1,
-            valuesInAccountCurrency: false,
+            valuesInAccountCurrency: (this.selectedCurrency === 1),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
@@ -1586,6 +1586,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
         this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
         this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+        // If the currency toggle button is checked then it is not in account currency
+        this.lc.blankLedger.valuesInAccountCurrency = !event.target.checked;
 
         this.getTransactionData();
     }
