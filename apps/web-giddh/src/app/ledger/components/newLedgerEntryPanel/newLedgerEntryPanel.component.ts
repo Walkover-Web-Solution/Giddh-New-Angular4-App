@@ -866,10 +866,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public swapEntries(entryKeys: Array<any>): void {
-        // Swap the unit rate and converted rate
-        this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
-        this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
-        this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
+        if (this.currentTxn.inventory) {
+            // Swap the unit rate and converted rate
+            this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
+        }
 
         // Swap the provided key value pairs
         entryKeys.forEach((entry: any) => {
