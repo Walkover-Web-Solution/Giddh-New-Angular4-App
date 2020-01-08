@@ -1001,7 +1001,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxType: 'tcs',
             exchangeRate: 1,
             exchangeRateForDisplay: 1,
-            valuesInAccountCurrency: (this.selectedCurrency === 1),
+            valuesInAccountCurrency: (this.selectedCurrency === 0),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
