@@ -69,7 +69,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         private _commandKService: CommandKService,
         private _cdref: ChangeDetectorRef
     ) {
-        this.searchCommandK();
+        this.searchCommandK(true);
     }
 
     /**
@@ -81,9 +81,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
             this.commandKRequestParams.page = 1;
-            this.searchedItems = [];
             this.commandKRequestParams.q = term;
-            this.searchCommandK();
+            this.searchCommandK(true);
             this._cdref.markForCheck();
         });
     }
@@ -172,6 +171,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
             // set focus on search
             this.focusInSearchBox();
+            this.searchCommandK(true);
         }
     }
 
@@ -189,9 +189,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof CommandKComponent
      */
-    public searchCommandK(): void | boolean {
+    public searchCommandK(resetItems: boolean): void | boolean {
         if (this.isLoading) {
             return false;
+        }
+
+        if (resetItems) {
+            this.searchedItems = [];
         }
 
         this.isLoading = true;
@@ -257,8 +261,14 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             let item = this.virtualScrollElem.activeItem();
             if (item) {
                 this.itemSelected(item);
+                if (item.type === 'GROUP') {
+                    this.searchedItems = [];
+                }
             } else if (this.searchedItems && this.searchedItems.length === 1) {
                 this.itemSelected(this.searchedItems[0]);
+                if (item.type === 'GROUP') {
+                    this.searchedItems = [];
+                }
             }
         }
     }
@@ -461,7 +471,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
             if (this.allowLoadMore && !this.isLoading) {
                 this.commandKRequestParams.page++;
-                this.searchCommandK();
+                this.searchCommandK(false);
             }
         }
     }

@@ -164,7 +164,7 @@
     .onMobileView tbody {
         display: block;
     }
-    
+
 }
 
 
@@ -1611,6 +1611,8 @@ input:-moz-placeholder {
     justify-content: center;
     align-items: center;
     padding: 0;
+    margin-right: 5px;
+        float: left;
 }
 
 .company-name .cText .fyear {
@@ -1715,7 +1717,8 @@ header .navbar {
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:active:focus {
+.btn-primary:active:focus,
+.btn-primary:active:hover {
     background: $border-blue;
     color: #fff;
     border-color: $border-blue;
@@ -5111,6 +5114,8 @@ label {
     border: 1px solid $border-blue;
 }
 
+
+
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -7659,7 +7664,9 @@ app-header {
 }
 
 /* my css */
-
+.box .company-box .inner-company-box ul > li .tooltip {
+    word-break: break-all;
+}
 .radius-none {
     border-radius: 0px !important;
 }
@@ -8389,8 +8396,8 @@ table.basic td {
     color: #1c1c1c;
 }
 
- 
- 
+
+
 
 .invoice-table td > a {
     color: #1c1c1c;
@@ -8654,6 +8661,80 @@ button {
 .disable-select-group .toggle {
     display: none;
 }
+
+/* radio & checkbox new CSS start */
+.checkbox-custom,
+.radio-custom {
+    opacity: 0;
+    position: absolute;
+}
+.checkbox-custom,
+.checkbox-custom-label,
+.radio-custom,
+.radio-custom-label {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    cursor: pointer;
+    padding-bottom: 0;
+}
+.checkbox-custom-label,
+.radio-custom-label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+}
+.checkbox-custom + .checkbox-custom-label:before,
+.radio-custom + .radio-custom-label:before {
+    content: "";
+    background: #fff;
+    border: 1px solid #ccc;
+    display: inline-block;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    padding: 2px;
+    margin-right: 5px;
+    border-radius: 2px;
+    text-align: center;
+}
+.checkbox-custom + .checkbox-custom-label:after{
+        transform: rotate(-45deg) scale(0,0);
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 5px;
+    z-index: 1;
+    width: 12px;
+    height: 7px;
+    border: 2px solid #fff;
+    border-top-style: none;
+    border-right-style: none;
+    transition: transform .4s cubic-bezier(.45,1.8,.5,.75)
+}
+.checkbox-custom:checked + .checkbox-custom-label:after{
+    transform: rotate(-45deg) scale(1,1);
+}
+.checkbox-custom:checked + .checkbox-custom-label:before {
+    background: $border-blue;
+
+    border: 2px solid $border-blue;
+}
+.radio-custom + .radio-custom-label:before {
+    border-radius: 50%;
+    border: 1px solid $border-blue;
+}
+.radio-custom:checked + :before {
+    background: $border-blue;
+    border: 1px solid $border-blue;
+    box-shadow: inset 0px 0px 0px 4px #fff;
+}
+.checkbox-custom:focus + .checkbox-custom-label:before {
+    border: 1px solid $border-blue;
+}
+
+/* radio & checkbox new CSS end */
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -8839,7 +8920,7 @@ button {
         top: 0;
         z-index: 4;
     }
-    
+
     .tax-engine .table.transactions-table.onMobileView tbody > tr > td {
         max-width: 100% !important;
     }
@@ -8853,7 +8934,7 @@ button {
         display: inline-block;
         cursor: grab;
     }
-   
+
     .table-responsive {
         padding: 0 3px;
         border: none;
@@ -8875,7 +8956,7 @@ button {
     .table > thead > tr > th {
         white-space: initial !important;
     }
-   
+
     .universal_date label.btn.btn-link {
         display: none;
     }
@@ -8983,7 +9064,7 @@ button {
     .card-table tbody tr {
         display: block;
     }
-   
+
     .blank-label {
         display: none;
     }

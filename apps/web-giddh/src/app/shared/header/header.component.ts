@@ -80,6 +80,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
     @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
 
+    public hideAsDesignChanges: false;
     public title: Observable<string>;
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
@@ -611,7 +612,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
                 // get groups with accounts for general use
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                //this.store.dispatch(this._generalActions.getFlattenAccount());
+                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });
