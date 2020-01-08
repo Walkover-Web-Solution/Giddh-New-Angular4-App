@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .pItem {
     padding: 0 4px;
 }
@@ -148,8 +149,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .icon-box {
     text-align: center;
     display: flex;
-    align-items: flex-end;
-    padding: 0 10px 10px;
+    align-items: center;
+    padding: 8px 10px 10px;
 }
 
 .add-multicurrency .icon-box {
@@ -165,7 +166,44 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     top: 15px;
     position: relative;
 }
+.checkbox-custom-label strong {
+    display: contents;
+}
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: $btnLink;
+        font-size: 10px;
+    }
+}
+.custom-modal-rcm {
+    max-width: 630px;
+    border: 1px solid #ddd;
+    position: absolute;
+    z-index: 9;
+    background-color: #fff;
+    width: 100%;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    .modal-header {
+        padding: 10px 15px;
+        h3 {
+            font-size: 14px;
+        }
+        .close {
+            font-size: 18px;
+            right: 15px;
+            top: 0px;
+        }
+    }
 
+    p {
+        font-size: 12px;
+        color: #000;
+    }
+}
 @media only screen and (max-width: 1024px) {
     .ledger_book {
         display: block;

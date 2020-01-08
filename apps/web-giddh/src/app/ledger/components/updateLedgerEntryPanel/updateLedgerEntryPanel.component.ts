@@ -51,7 +51,7 @@ import { SettingsUtilityService } from '../../../settings/services/settings-util
 @Component({
     selector: 'update-ledger-entry-panel',
     templateUrl: './updateLedgerEntryPanel.component.html',
-    styleUrls: ['./updateLedgerEntryPanel.component.css'],
+    styleUrls: ['./updateLedgerEntryPanel.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({

@@ -402,7 +402,47 @@
 
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
+
+            <!-- reverse charge transction start (make it functional by developer end) -->
+            <div class="pdB1 mTB1">
+
+                <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox">
+                <label for="tourist-scheme-1" class="checkbox-custom-label">
+                    Is this transaction applicable for <strong> Reverse Charge? </strong>
+
+                </label>
+                <span class="text-light font-12"> (Tax is compulsory)</span>
+
+                <!-- custom modal (make it function by developer end, right its hidden)-->
+                <div class="custom-modal-rcm" hidden>
+                    <div class="modal-header">
+                        <span class="close" data-dismiss="modal"><span class="icon-cross"></span></span>
+                        <h3 class="d-inline-block mr-1">Reverse Charge Confirmation</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mrB1 text-light">Note: If you uncheck this transaction from Reverse Charge, applied
+                            taxes will be consider as normal taxes and reverse
+                            charge effect will be removed from GST Report.</p>
+
+                        <!-- hidden now toggle according to condition -->
+                        <p class="mrB1 text-light" hidden>Note: If you check this transaction for Reverse Charge,
+                            applied taxes will be consider under Reverse Charge taxes and
+                            will be added in GST Report.</p>
+
+                        <p class="mrB1">Are you sure you want to uncheck this transaction from Reverse Charge?</p>
+                        <!-- hidden now toggle according to condition -->
+                        <p class="mrB1" hidden>Are you sure you want to check this transaction for Reverse Charge?</p>
+                        <div><button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- reverse charge transction end  -->
+
             <!-- region amount and discount container -->
+
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel">
                     <div class="width100 total-detail-table"
@@ -534,6 +574,7 @@
                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                     (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)">
                                 </update-ledger-tax-control>
+                                <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span>
                             </span>
 
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">

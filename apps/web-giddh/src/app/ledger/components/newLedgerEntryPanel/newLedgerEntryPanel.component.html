@@ -4,6 +4,20 @@
 
         <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
 
+            <!-- reverse charge transction start (make it functional by developer end) -->
+            <div class="pdB1 mTB1">
+
+                <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox">
+                <label for="tourist-scheme-1" class="checkbox-custom-label">
+                    Is this transaction applicable for <strong> Reverse Charge? </strong>
+
+                </label>
+                <span class="text-light font-12"> (Tax is compulsory)</span>
+
+            </div>
+
+            <!-- reverse charge transction end  -->
+
             <table class="width100 total-detail-table">
 
                 <tbody class="">
@@ -122,6 +136,8 @@
                                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
                             </tax-control>
+                            <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span>
+
                             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTax |giddhCurrency}}
@@ -154,7 +170,8 @@
             <div *ngIf="currentTxn?.selectedAccount?.stock" class="col-sm-4 col-xs-12">
                 <div class="source-warehouse">
                     <label>Select Warehouse</label>
-                    <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'" [options]="warehouses"></sh-select>
+                    <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
+                        [options]="warehouses"></sh-select>
                 </div>
             </div>
 
@@ -196,6 +213,20 @@
         <div class="pdB1 inWords" *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
+
+        <!-- reverse charge transction start (make it functional by developer end) -->
+        <div class="pdB1 mTB1">
+
+            <input id="tourist-scheme" class="checkbox-custom" type="checkbox">
+            <label for="tourist-scheme" class="checkbox-custom-label">
+                Is this transaction applicable for <strong> Reverse Charge? </strong>
+
+            </label>
+            <span class="text-light font-12"> (Tax is compulsory)</span>
+
+        </div>
+
+        <!-- reverse charge transction end  -->
 
         <div class="clearfix">
             <textarea rows="3" cols="" name="des" class="form-control" placeholder="Description"
