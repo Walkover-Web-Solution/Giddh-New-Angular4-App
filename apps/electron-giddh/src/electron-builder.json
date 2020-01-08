@@ -1,0 +1,62 @@
+{
+    "appId": "com.giddh.prod",
+    "electronVersion": "4.2.12",
+    "publish": [
+        {
+            "provider": "s3",
+            "bucket": "giddh-app-builds"
+        }
+    ],
+    "directories": {
+        "buildResources": "resources",
+        "output": "../electrongiddh-packages"
+    },
+    "mac": {
+        "category": "public.app-category.finance",
+        "target": [
+            "dmg",
+            "zip"
+        ],
+        "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
+        "type": "distribution",
+        "entitlements": "default.entitlements.mac.plist",
+        "provisioningProfile": "embedded.provisionprofile",
+        "icon": "icon.png"
+    },
+    "mas": {
+        "entitlements": "",
+        "entitlementsInherit": ""
+    },
+    "dmg": {
+        "sign": true
+    },
+    "linux": {
+        "icon": "icon.png",
+        "maintainer": "Walkover Technologies Pvt Ltd",
+        "target": [
+            "AppImage",
+            "snap",
+            "zip"
+        ]
+    },
+    "win": {
+        "target": [
+            "nsis",
+            "nsis-web",
+            "zip"
+        ],
+        "icon": "icon.ico",
+        "publisherName": "Walkover Technologies Pvt Ltd",
+        "certificateSubjectName": "Walkover Technologies Pvt Ltd",
+        "legalTrademarks": "Walkover Technologies Pvt Ltd"
+    },
+    "nsis": {
+        "oneClick": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "menuCategory": "Accounting",
+        "shortcutName": "Giddh",
+        "perMachine": false
+    },
+    "asar": true
+}
