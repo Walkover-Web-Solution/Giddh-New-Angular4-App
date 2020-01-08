@@ -271,6 +271,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectedWarehouse: string;
     /** True, if warehouse drop down should be displayed */
     public shouldShowWarehouse: boolean;
+    /** True, if the entry contains RCM applicable taxes */
+    public isRcmEntry: boolean = false;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -396,6 +398,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
+    }
+
+    public rcmCHanged() {
+        console.log(this.isRcmEntry);
     }
 
     public ngOnInit() {

@@ -365,6 +365,11 @@ $greyClr: #6d6d6d;
     tbody + tbody {
         border: 0;
     }
+    .rcm-tax sup {
+        font-size: 14px;
+        top: 0;
+        color: red;
+    }
 }
 
 ng-select.splSales {

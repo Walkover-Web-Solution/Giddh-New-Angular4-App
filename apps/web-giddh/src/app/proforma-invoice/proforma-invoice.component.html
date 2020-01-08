@@ -542,13 +542,13 @@
 
                             <!-- reverse charge transction start (make it functional by developer end)-->
                             <!-- for purchase invoice start -->
-                            <div class="row mTB1">
+                            <div class="row mTB1" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <input id="reverse-charge" class="checkbox-custom" type="checkbox">
+                                        <input id="reverse-charge" name="rcmEntry" class="checkbox-custom" type="checkbox" [(ngModel)]="isRcmEntry" (change)="rcmCHanged()">
                                         <label for="reverse-charge" class="checkbox-custom-label">
                                             Is this transaction applicable for reverse charge?
                                         </label>
@@ -661,7 +661,7 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}}
+                                    {{item.label}} <span class="rcm-tax" *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
                                 </th>
                             </tr>
                         </thead>
