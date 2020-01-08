@@ -1,0 +1,26 @@
+
+
+<form action="#">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="your-name">Your name</label>
+                      <input type="text" class="form-control" id="your-name"  >
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="your-mail">Your email</label>
+                      <input type="email" class="form-control" id="your-mail"   >
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="message-box">Message</label>
+                      <textarea  class="form-control" id="message-box">
+
+							</textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
