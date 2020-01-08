@@ -376,7 +376,6 @@ a[vr-item]:focus {
 
 .nav_wrapper {
     position: relative;
-
     height: calc(100vh - 145px);
 }
 
@@ -553,6 +552,7 @@ ul.sub-list {
 }
 .nav-left-bar .company-name .cText span {
     color: #1c1c1c;
+    word-break: break-all;
 }
 .nav-left-bar .company-name-finance-year {
     display: inline;
@@ -580,6 +580,13 @@ ul.sub-list {
     font-size: 14px;
 }
 /* responsive */
+
+
+@media (max-height: 770px) {
+    .nav_wrapper {
+        height: calc(100vh - 235px);
+    }
+}
 
 @media (max-width: 1023px) {
     .modal-liq90 {
