@@ -42,7 +42,11 @@ ipcMain.on("authenticate", (event, arg) => {
         myApiOauth.openAuthWindowAndGetTokens()
             .then(token => {
                 event.returnValue = token;
-                event.sender.send('take-your-gmail-token', token);
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', token);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', token);
+                }
                 console.log(JSON.stringify(token));
                 // use your token.access_token
             });

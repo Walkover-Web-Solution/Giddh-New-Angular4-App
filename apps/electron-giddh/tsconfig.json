@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "inlineSources": true,
+        "inlineSources": false,
         "sourceMap": true,
         "declaration": false,
         "moduleResolution": "node",

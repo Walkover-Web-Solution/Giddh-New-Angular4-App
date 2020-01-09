@@ -11,6 +11,7 @@
         "buildResources": "resources",
         "output": "../electrongiddh-packages"
     },
+    "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
         "category": "public.app-category.finance",
         "target": [
@@ -19,16 +20,23 @@
         ],
         "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
         "type": "distribution",
-        "entitlements": "default.entitlements.mac.plist",
-        "provisioningProfile": "embedded.provisionprofile",
-        "icon": "icon.png"
-    },
-    "mas": {
-        "entitlements": "",
-        "entitlementsInherit": ""
+        "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
+        "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
+        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
+        "icon": "icon.png",
+        "hardenedRuntime" : true,
+        "gatekeeperAssess": false
     },
     "dmg": {
         "sign": true
+    },
+    "mas": {
+        "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
+        "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
+        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
+    },
+    "dmg": {
+        "sign": false
     },
     "linux": {
         "icon": "icon.png",
