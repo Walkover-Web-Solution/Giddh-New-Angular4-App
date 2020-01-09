@@ -1,21 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    AfterViewChecked,
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChanges,
-    ViewChild,
-} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
@@ -155,11 +139,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-        private _ledgerService: LedgerService,
-        private cdRef: ChangeDetectorRef,
-        private _toasty: ToasterService,
-        private _loaderService: LoaderService,
-        private settingsUtilityService: SettingsUtilityService
+                private _ledgerService: LedgerService,
+                private cdRef: ChangeDetectorRef,
+                private _toasty: ToasterService,
+                private _loaderService: LoaderService,
+                private settingsUtilityService: SettingsUtilityService
     ) {
         this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
@@ -197,7 +181,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.activeAccount = acc;
@@ -293,7 +277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            this.blankLedger.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
                             break;
                         default:
                             appliedTaxes.push(tax.uniqueName);
@@ -449,7 +433,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.taxControll) {
             taxTotal = this.taxControll.taxRenderData.filter(f => f.isChecked)
                 .reduce((pv, cv) => {
-                    return Number(pv) + Number(cv.amount)
+                    return Number(pv) + Number(cv.amount);
                 }, 0) || 0;
         }
         // A = (P+X+ 0.01XT) /(1-0.01Y + 0.01T -0.0001YT)
@@ -521,7 +505,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
             if (transaction.inventory && !transaction.inventory.warehouse) {
-                transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
+                transaction.inventory.warehouse = {name: '', uniqueName: this.selectedWarehouse};
             }
         });
         this.saveBlankLedger.emit(true);
@@ -543,8 +527,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
+                data: {company: companyUniqueName},
+                headers: {'Session-Id': sessionKey},
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -576,7 +560,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+        this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate.toString());
         }
@@ -815,6 +799,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
         } else {
             this.blankLedger.otherTaxesSum = 0;
+            this.blankLedger.tdsTcsTaxesSum = 0;
             this.blankLedger.isOtherTaxesApplicable = false;
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
