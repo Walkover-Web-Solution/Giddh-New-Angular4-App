@@ -425,7 +425,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         console.log('Selected Tx: ', txn);
-        this.handleRcmVisibility(txn);
+        this.handleRcmVisibility(txn, true);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
         this.newLedPanelCtrl.detectChanges();
@@ -1159,7 +1159,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
 
         if (blankTransactionObj.transactions.length > 0) {
-
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
@@ -1648,15 +1647,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
     }
 
-    private handleRcmVisibility(transaction: any) {
+    private handleRcmVisibility(transaction: any, isCreateFlow: boolean = false): void {
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
             let currentLedgerAccountDetails, selectedAccountDetails;
+            const transactionUniqueName = (isCreateFlow) ?
+                (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '' :
+                transaction.particular.uniqueName;
             for (let index = 0; index < accounts.length; index++) {
                 const account = accounts[index];
                 if (account.uniqueName === this.lc.accountUnq) {
                     currentLedgerAccountDetails = _.cloneDeep(account);
                 }
-                if (account.uniqueName === transaction.particular.uniqueName) {
+                if (account.uniqueName === transactionUniqueName) {
                     selectedAccountDetails = _.cloneDeep(account);
                 }
                 if (currentLedgerAccountDetails && selectedAccountDetails) {
@@ -1666,8 +1668,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.shouldShowRcmEntry = this.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
             console.log('RCM: ', this.shouldShowRcmEntry);
-            if (this.lc && this.lc.currentTxn) {
-                this.lc.currentTxn['shouldShowRcmEntry'] = this.shouldShowRcmSection;
+            if (this.lc && this.lc.currentBlankTxn) {
+                this.lc.currentBlankTxn['shouldShowRcmEntry'] = this.shouldShowRcmEntry;
+                console.log('Current: ', this.lc.currentBlankTxn);
             }
         });
     }

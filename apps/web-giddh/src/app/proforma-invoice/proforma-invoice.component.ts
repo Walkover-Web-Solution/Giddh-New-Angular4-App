@@ -1249,6 +1249,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
+        this.isRcmEntry = false;
 
         this.assignDates();
         let invoiceSettings: InvoiceSetting = null;
@@ -1337,6 +1338,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return entry;
         });
 
+        if (this.isPurchaseInvoice && this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+            return;
+        }
+
         if (!data.accountDetails.uniqueName) {
             data.accountDetails.uniqueName = 'cash';
         }
@@ -1386,9 +1391,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // check for valid entries and transactions
         if (data.entries) {
             _.forEach(data.entries, (entry) => {
-                if (this.isRcmEntry) {
-                    entry['subVoucher'] = Subvoucher.ReverseCharge;
-                }
+                entry['subVoucher'] = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
@@ -3477,6 +3480,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }
         this.hsnDropdownShow = !this.hsnDropdownShow;
+    }
+
+    handleOutsideClick() {
+        this.activeIndx = null;
+    }
+
+    validateTaxes(data: any): boolean {
+        let validEntries = true;
+        data.entries.forEach((entry: any, index: number) => {
+            const transaction = this.invFormData.entries[index].transactions[0];
+            if (transaction) {
+                transaction['requiredTax'] = (entry.taxes.length === 0);
+                validEntries = false;
+            }
+        });
+        return validEntries;
     }
 
     /**

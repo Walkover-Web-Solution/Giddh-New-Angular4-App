@@ -549,7 +549,8 @@
                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                     (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)">
                                 </update-ledger-tax-control>
-                                <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span>
+                                <!-- TODO: After design finalization
+                                    <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
                             </span>
 
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">

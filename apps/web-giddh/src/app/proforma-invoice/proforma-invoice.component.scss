@@ -508,6 +508,9 @@ textarea:focus {
                     white-space: normal;
                     width: 90px;
                 }
+                &.error-box.item-tax {
+                    border: 2px solid red !important;
+                }
             }
         }
     }

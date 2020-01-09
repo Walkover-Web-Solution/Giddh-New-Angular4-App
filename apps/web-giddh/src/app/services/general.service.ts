@@ -213,7 +213,7 @@ export class GeneralService {
             headerText,
             headerCssClass,
             messageText: `Note: If you check this transaction for Reverse Charge,
-            applied taxes will be consider under Reverse Charge taxes and
+            applied taxes will be considered under Reverse Charge taxes and
             will be added in GST Report.`,
             messageCssClass,
             footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
@@ -223,7 +223,7 @@ export class GeneralService {
                 headerText,
                 headerCssClass,
                 messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
-                taxes will be consider as normal taxes and reverse
+                taxes will be considered as normal taxes and reverse
                 charge effect will be removed from GST Report.`,
                 messageCssClass,
                 footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',

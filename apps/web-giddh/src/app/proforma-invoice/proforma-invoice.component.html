@@ -675,7 +675,7 @@
                         </thead>
                         <tbody
                             *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last"
-                            (clickOutside)="activeIndx = null" [exclude]="'.entriesTr'">
+                            (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
 
                             <ng-container *ngFor="let transaction of entry.transactions;">
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
@@ -790,7 +790,7 @@
                                         </div>
 
                                     </td>
-                                    <td class="text-right item-tax" style="height:1px;">
+                                    <td [class.error-box]="transaction.requiredTax" class="text-right item-tax" style="height:1px;" (focus)="transaction.requiredTax = false;">
                                         <div class="td_Wrapper">
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data"><span
@@ -1067,9 +1067,10 @@
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
-                                                <span class="eligible-ITC">Eligible for ITC <span
+                                                <!-- TODO: After design finalization
+                                                    <span class="eligible-ITC">Eligible for ITC <span
                                                         class="icon-edit"></span>
-                                                </span>
+                                                </span> -->
                                             </div>
 
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">

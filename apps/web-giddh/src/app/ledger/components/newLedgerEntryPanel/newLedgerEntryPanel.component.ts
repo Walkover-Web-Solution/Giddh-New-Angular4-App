@@ -342,11 +342,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public addToDrOrCr(type: string, e: Event) {
+        e.stopPropagation();
+        if (this.isRcmEntry && !this.validateTaxes()) {
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
         });
-        e.stopPropagation();
     }
 
     public calculateDiscount(total: number) {
@@ -527,6 +531,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if (this.isRcmEntry && !this.validateTaxes()) {
+            // Taxes are mandatory for RCM entries
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
@@ -931,5 +940,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
         this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
         this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+    }
+
+    /**
+     * Validates the taxes
+     *
+     * @private
+     * @returns {boolean} True, if taxes are applied
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private validateTaxes(): boolean {
+        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+        return taxes.length > 0;
     }
 }
