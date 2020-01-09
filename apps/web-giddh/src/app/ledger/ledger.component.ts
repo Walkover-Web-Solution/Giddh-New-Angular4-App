@@ -422,7 +422,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detactChanges();
+        this.newLedPanelCtrl.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -486,8 +486,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.trxRequest.from = moment(universalDate[0]).format('DD-MM-YYYY');
                     this.trxRequest.to = moment(universalDate[1]).format('DD-MM-YYYY');
                     this.trxRequest.page = 0;
+                } else {
+                    // date picker start and end date set to today when app date is selected as today
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions,
+                        startDate: moment().toDate(),
+                        endDate: moment().toDate()
+                    };
+                    // set advance search bsRangeValue to blank, because we are depending api to give us from and to date
+                    this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                        dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                            bsRangeValue: []
+                        })
+                    });
+                    this.advanceSearchRequest.page = 0;
+                    this.trxRequest.page = 0;
+
+                    // set request from and to, '' because we are depending on api to give us from and to date
+                    this.advanceSearchRequest.to = '';
+                    this.trxRequest.from = '';
+                    this.trxRequest.to = '';
                 }
             }
+
+            this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
@@ -543,6 +565,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
+                // set date picker to and from date, as what we got from api
+                this.datePickerOptions = {
+                    ...this.datePickerOptions,
+                    startDate: moment(lt.from, 'DD-MM-YYYY').toDate(),
+                    endDate: moment(lt.to, 'DD-MM-YYYY').toDate()
+                };
                 if (lt.closingBalance) {
                     this.closingBalanceBeforeReconcile = lt.closingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
@@ -630,7 +658,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                this.currencyTogglerModel = false;
 
                 let stockListFormFlattenAccount: IFlattenAccountsResultItem;
                 if (data[1]) {
@@ -974,7 +1001,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxType: 'tcs',
             exchangeRate: 1,
             exchangeRateForDisplay: 1,
-            valuesInAccountCurrency: false,
+            valuesInAccountCurrency: (this.selectedCurrency === 0),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
@@ -1123,8 +1150,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-        blankTransactionObj.valuesInAccountCurrency = this.selectedCurrency === 0;
-        blankTransactionObj.exchangeRate = (this.lc.blankLedger.selectedCurrencyToDisplay !== this.selectedCurrency) ? (1 / blankTransactionObj.exchangeRate) : blankTransactionObj.exchangeRate;
 
         if (blankTransactionObj.transactions.length > 0) {
 
@@ -1561,6 +1586,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
         this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
         this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+        // If the currency toggle button is checked then it is not in account currency
+        this.lc.blankLedger.valuesInAccountCurrency = !event.target.checked;
 
         this.getTransactionData();
     }

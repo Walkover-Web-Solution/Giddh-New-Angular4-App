@@ -49,6 +49,14 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 
+/** New ledger entries */
+const NEW_LEDGER_ENTRIES = [
+    ['amount', 'convertedAmount'],
+    ['discount', 'convertedDiscount'],
+    ['tax', 'convertedTax'],
+    ['total', 'convertedTotal'],
+];
+
 @Component({
     selector: 'new-ledger-entry-panel',
     templateUrl: 'newLedgerEntryPanel.component.html',
@@ -67,7 +75,6 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
         ]),
     ]
 })
-
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
@@ -94,7 +101,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
-    @Output() public currencyChangeEvent: EventEmitter<string> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
     @ViewChild('sh') public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -689,7 +695,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public detactChanges() {
+    public detectChanges() {
         if (!this.cdRef['destroyed']) {
             this.cdRef.detectChanges();
         }
@@ -815,14 +821,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public currencyChange() {
-        this.blankLedger.selectedCurrencyToDisplay = this.blankLedger.selectedCurrencyToDisplay === 0 ? 1 : 0;
         let rate = 0;
         if (Number(this.blankLedger.exchangeRateForDisplay)) {
             rate = 1 / this.blankLedger.exchangeRate;
         }
         this.blankLedger.exchangeRate = rate;
         this.blankLedger.exchangeRateForDisplay = giddhRoundOff(rate, this.giddhBalanceDecimalPlaces);
-        this.detactChanges();
+        if (this.blankLedger.selectedCurrencyToDisplay === 0) {
+            // Currency changed to account currency (currency different from base currency of company)
+            this.blankLedger.selectedCurrencyToDisplay = 1;
+            this.blankLedger.valuesInAccountCurrency = false;
+        } else {
+            // Currency changed to company currency
+            this.blankLedger.selectedCurrencyToDisplay = 0;
+            this.blankLedger.valuesInAccountCurrency = true;
+        }
+        this.selectedCurrency = this.blankLedger.selectedCurrencyToDisplay;
+        this.swapEntries(NEW_LEDGER_ENTRIES);
+
+        setTimeout(() => {
+            this.assignPrefixAndSuffixForCurrency();
+            this.detectChanges();
+        }, 100);
     }
 
     public exchangeRateChanged() {
@@ -835,11 +855,42 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!baseModel || !this.blankLedger.exchangeRate) {
             return 0;
         }
-        //multiplying AND DIVIDING with exchange rate for display instead of original exchange rate
-        if (this.blankLedger.selectedCurrencyToDisplay === 0) {
-            return giddhRoundOff(baseModel * this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
-        } else {
-            return giddhRoundOff(baseModel / this.blankLedger.exchangeRateForDisplay, this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), this.giddhBalanceDecimalPlaces);
+    }
+
+    /**
+     * Swaps provided entries value with their converted values (obtained by multiplying exchange rate with
+     * actual value)
+     *
+     * @param {Array<any>} entryKeys Arrays of keys to be swapped
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public swapEntries(entryKeys: Array<any>): void {
+        if (this.currentTxn.inventory) {
+            // Swap the unit rate and converted rate
+            this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
         }
+
+        // Swap the provided key value pairs
+        entryKeys.forEach((entry: any) => {
+            this.currentTxn[entry[0]] = this.currentTxn[entry[0]] - this.currentTxn[entry[1]];
+            this.currentTxn[entry[1]] = this.currentTxn[entry[0]] + this.currentTxn[entry[1]];
+            this.currentTxn[entry[0]] = this.currentTxn[entry[1]] - this.currentTxn[entry[0]];
+        });
+    }
+
+    /**
+     * Assigns the prefix and suffix based on currency toggle button present in this
+     * component
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private assignPrefixAndSuffixForCurrency(): void {
+        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
+        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
+        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
     }
 }

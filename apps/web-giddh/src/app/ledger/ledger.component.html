@@ -665,7 +665,6 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        (currencyChangeEvent)="toggleCurrencyForDisplayInNewLedger($event)"
                                         [invoiceList]="invoiceList">
                                     </new-ledger-entry-panel>
                                 </div>
@@ -920,7 +919,6 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                        (currencyChangeEvent)="toggleCurrencyForDisplayInNewLedger($event)"
                                         [invoiceList]="invoiceList">
                                     </new-ledger-entry-panel>
                                 </div>
@@ -1066,127 +1064,130 @@
 
 <!-- region total section -->
 <!-- commented due to API  -->
-<div class="container">
-    <section class="ledger-stat mrT3"
-        *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+<div class="transaction-in-short">
+    <div class="container">
+        <section class="ledger-stat mrT3"
+            *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
 
-        <div class="row">
-            <div class="col-sm-3 col-xs-12 stat-block">
-                <div class="ledger-state-box">
-                    <h1>Total Transactions
-                        <span class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
+            <div class="row">
+                <div class="col-sm-3 col-xs-12 stat-block">
+                    <div class="ledger-state-box">
+                        <h1>Total Transactions
+                            <span class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
                 async)?.creditTransactionsCount}}</span>
-                    </h1>
-                    <span class=" mrR2 greyTextClr">Debit <span
-                            class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
-                    <span class=" mrR2 greyTextClr">Credit <span class="digitBlue">
-                            {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
-                </div>
-            </div>
-            <div class="col-sm-3 col-xs-12 stat-block">
-                <div class="ledger-state-box">
-                    <h1>Opening Balance</h1>
-
-                    <h3 class="digitBlue">
-                        {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
-                        {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
-                    </h3>
-
-                    <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                        {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
-                        {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
-                    </h3>
-
-                </div>
-            </div>
-
-            <div class="col-sm-3 col-xs-12 stat-block">
-                <div class="ledger-state-box">
-
-                    <h1 class="">Net Total</h1>
-
-                    <div class="d-flex" style="justify-content: space-between">
-
-                        <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
-                            <h3 class="digitBlue">
-                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal | giddhCurrency}}
-                                Cr.
-                            </h3>
-
-                            <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
-                                Cr.
-                            </h3>
-                        </div>
-
-                    </div>
-
-                    <div class="d-flex" style="justify-content: space-between">
-
-                        <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
-                            <h3 class="digitBlue">
-                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal | giddhCurrency}}
-                                Dr.
-                            </h3>
-
-                            <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
-                                Dr.
-                            </h3>
-                        </div>
-                    </div>
-
-                    <br>
-
-                    <div class="d-flex debitCreditAmount" style="justify-content: space-between">
-
-                        <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
-                            <span class="digitBlue mt-1">
-                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
-                            </span>
-                            <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
-                            </span>
                         </h1>
-
-                        <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Credit
-                            <span class="digitBlue mt-1">
-                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
-                            </span>
-                            <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
-                            </span>
-                        </h1>
-
+                        <span class=" mrR2 greyTextClr">Debit <span
+                                class="digitBlue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
+                        <span class=" mrR2 greyTextClr">Credit <span class="digitBlue">
+                                {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
                     </div>
-
                 </div>
-            </div>
+                <div class="col-sm-3 col-xs-12 stat-block">
+                    <div class="ledger-state-box">
+                        <h1>Opening Balance</h1>
 
-            <div class="col-sm-3 col-xs-12 stat-block">
-
-                <div class="ledger-state-box">
-                    <h1>Closing Balance</h1>
-                    <div class="d-flex" style="justify-content: space-between;flex-direction: column">
                         <h3 class="digitBlue">
-                            {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
-                            {{ ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
+                            {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
-                        <h3 class="digitBlue" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                            {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
-                            {{ ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+
+                        <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
+                            {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
                         </h3>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-xs-12 stat-block">
+                    <div class="ledger-state-box">
+
+                        <h1 class="">Net Total</h1>
+
+                        <div class="d-flex" style="justify-content: space-between">
+
+                            <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
+                                <h3 class="digitBlue">
+                                    {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal | giddhCurrency}}
+                                    Cr.
+                                </h3>
+
+                                <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
+                                    Cr.
+                                </h3>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex" style="justify-content: space-between">
+
+                            <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
+                                <h3 class="digitBlue">
+                                    {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal | giddhCurrency}}
+                                    Dr.
+                                </h3>
+
+                                <h3 class="digitBlue subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
+                                    Dr.
+                                </h3>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="d-flex debitCreditAmount" style="justify-content: space-between">
+
+                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
+                                <span class="digitBlue mt-1">
+                                    {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
+                                </span>
+                                <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
+                                </span>
+                            </h1>
+
+                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Credit
+                                <span class="digitBlue mt-1">
+                                    {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
+                                </span>
+                                <span class="digitBlue mt-1 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                    {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
+                                </span>
+                            </h1>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-xs-12 stat-block">
+
+                    <div class="ledger-state-box">
+                        <h1>Closing Balance</h1>
+                        <div class="d-flex" style="justify-content: space-between;flex-direction: column">
+                            <h3 class="digitBlue">
+                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
+                                {{ ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            </h3>
+                            <h3 class="digitBlue" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
+                                {{ ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            </h3>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </div>
 <!-- modal sections -->
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()">
+<ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState"
+    (closeAsideEvent)="toggleAsidePane()">
 </ledger-aside-pane>
 <!-- aside menu section -->
 

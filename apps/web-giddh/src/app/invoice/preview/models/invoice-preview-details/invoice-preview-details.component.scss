@@ -340,7 +340,7 @@ span.close-modal.cp.pull-right {
 .invoice-editWrapper {
     height: 100vh;
     overflow-y: auto;
-    padding-bottom: 140px;
+
     .invoice-editHeader {
         display: flex;
         justify-content: space-between;
@@ -368,7 +368,7 @@ span.close-modal.cp.pull-right {
         }
     }
     .invoice-editBody {
-        padding-bottom: 0;
+        padding-bottom: 140px;
     }
 }
 
