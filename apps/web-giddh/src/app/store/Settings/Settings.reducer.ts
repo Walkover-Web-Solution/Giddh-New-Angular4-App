@@ -250,6 +250,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             // newState.profileRequest = false;
             // return Object.assign({}, state, newState);
         }
+        case SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE: {
+            return {
+                ...state,
+                updateProfileSuccess: false,
+            };
+        }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
