@@ -9,7 +9,6 @@ export default class AppUpdaterV1 {
         const log = require('electron-log');
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
-        autoUpdater.checkForUpdatesAndNotify();
         autoUpdater.on('update-available', () => {
             if (updater) {
                 dialog.showMessageBox({
@@ -60,6 +59,7 @@ export default class AppUpdaterV1 {
         autoUpdater.on('error', (error) => {
             dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
         })
+        autoUpdater.checkForUpdatesAndNotify();
 
     }
 }
