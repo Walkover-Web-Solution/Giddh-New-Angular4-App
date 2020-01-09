@@ -28,15 +28,12 @@
         "gatekeeperAssess": false
     },
     "dmg": {
-        "sign": true
+        "sign": false
     },
     "mas": {
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
-    },
-    "dmg": {
-        "sign": false
     },
     "linux": {
         "icon": "icon.png",
