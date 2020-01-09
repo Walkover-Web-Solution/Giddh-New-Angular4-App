@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
 // import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
@@ -34,7 +35,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         SalesRegisterComponent,
         SalesRegisterExpandComponent,
         SalesRegisterDetailsComponent,
-        ReportsDashboardComponent
+        ReportsDashboardComponent,
+        ReverseChargeReport
     ],
     exports: [
         ReportsComponent,

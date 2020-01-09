@@ -1,0 +1,48 @@
+<div class="reverse-table-report">
+    <div class="container-fluid">
+        <table class="table giddh-table">
+            <!-- add sorting and search box (developer end) -->
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="td_in_searchBox">Entry Date </th>
+                    <th>Supplier's Date</th>
+                    <th>Vouchter Type</th>
+                    <th>Invoice No.</th>
+                    <th>Supplier's Invoice Date</th>
+                    <th>Supplier Country</th>
+                    <th>Taxable Value</th>
+                    <th>Tax Rate</th>
+                    <th>Tax Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reverseChargeTables of reverseChargeTable">
+                    <td>{{ reverseChargeTables.serialNo }} </td>
+                    <td>{{ reverseChargeTables.entryDate }}</td>
+                    <td>{{ reverseChargeTables.suppliersName }}</td>
+                    <td>{{ reverseChargeTables.voucherType }}</td>
+                    <td>{{ reverseChargeTables.invoiceNo }}</td>
+                    <td>{{ reverseChargeTables.suppliersInvoicDate }}</td>
+                    <td>{{ reverseChargeTables.suppliersCountry }}</td>
+                    <td>{{ reverseChargeTables.taxableBalue }}</td>
+                    <td>{{ reverseChargeTables.taxRate }}</td>
+                    <td>{{ reverseChargeTables.taxAmount }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<!-- region search template (developer end) -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+    </div>
+</ng-template>
+<!-- endregion -->

@@ -14,4 +14,8 @@ export class ReportsDashboardComponent implements OnInit {
     openDetailedSalesReport() {
         this.router.navigate(['/pages/reports/reports-details']);
     }
+
+    openReverseChargeReport() {
+        this.router.navigate(['/pages/reports/reverse-charge']);
+    }
 }
