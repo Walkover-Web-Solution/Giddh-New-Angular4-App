@@ -1,23 +1,10 @@
 <div class="ledger-panel" (click)="hideDiscountTax()" #entryContent (keyup)="saveCtrlEnter($event)">
 
     <div class="wrapper">
-
+        <!-- reverse charge transction start (make it functional by developer end) -->
+        <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
+        <!-- reverse charge transction end  -->
         <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
-
-            <!-- reverse charge transction start (make it functional by developer end) -->
-            <div class="pdB1 mTB1">
-
-                <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox">
-                <label for="tourist-scheme-1" class="checkbox-custom-label">
-                    Is this transaction applicable for <strong> Reverse Charge? </strong>
-
-                </label>
-                <span class="text-light font-12"> (Tax is compulsory)</span>
-
-            </div>
-
-            <!-- reverse charge transction end  -->
-
             <table class="width100 total-detail-table">
 
                 <tbody class="">
@@ -164,7 +151,6 @@
                 </tbody>
 
             </table>
-
         </div>
         <div class="row warehouse-field">
             <div *ngIf="currentTxn?.selectedAccount?.stock" class="col-sm-4 col-xs-12">
@@ -174,7 +160,6 @@
                         [options]="warehouses"></sh-select>
                 </div>
             </div>
-
             <div class="col-sm-8 col-xs-12" [ngClass]="{'col-sm-offset-4' : !(currentTxn?.selectedAccount?.stock)}">
                 <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
@@ -206,27 +191,9 @@
                 </div>
             </div>
         </div>
-
-
-
-
         <div class="pdB1 inWords" *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
-
-        <!-- reverse charge transction start (make it functional by developer end) -->
-        <div class="pdB1 mTB1">
-
-            <input id="tourist-scheme" class="checkbox-custom" type="checkbox">
-            <label for="tourist-scheme" class="checkbox-custom-label">
-                Is this transaction applicable for <strong> Reverse Charge? </strong>
-
-            </label>
-            <span class="text-light font-12"> (Tax is compulsory)</span>
-
-        </div>
-
-        <!-- reverse charge transction end  -->
 
         <div class="clearfix">
             <textarea rows="3" cols="" name="des" class="form-control" placeholder="Description"
@@ -234,11 +201,8 @@
         </div>
 
         <table class="width100 mrT">
-
             <tbody>
-
                 <tr>
-
                     <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
                         <i class="fa cp"
                             [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
@@ -246,18 +210,14 @@
                     </td>
 
                     <td class="text-right">
-
                         <span class="primary_clr">
                             Total in
                             {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
                             <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
                             {{ blankLedger.compoundTotal | giddhCurrency }}
                         </span>
-
                     </td>
-
                 </tr>
-
             </tbody>
         </table>
 
@@ -547,4 +507,19 @@
         {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
     </span>
 
+</ng-template>
+
+<ng-template #rcmEntryCheckbox>
+    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pdB1 mTB1">
+        <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
+            (click)="toggleRcmCheckbox($event)">
+        <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover" [popover]="rcmTemplate"
+            placement="right" containerClass="update-ledger-rcm">
+            Is this transaction applicable for <strong> Reverse Charge? </strong>
+        </label>
+        <span class="text-light font-12"> (Tax is compulsory)</span>
+    </div>
+</ng-template>
+<ng-template #rcmTemplate>
+    <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
 </ng-template>

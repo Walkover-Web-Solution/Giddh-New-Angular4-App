@@ -548,12 +548,19 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <input id="reverse-charge" name="rcmEntry" class="checkbox-custom" type="checkbox" [(ngModel)]="isRcmEntry" (change)="rcmCHanged()">
-                                        <label for="reverse-charge" class="checkbox-custom-label">
+                                        <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
+                                            type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
+                                        <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body"
+                                            placement="bottom" containerClass="purchase-invoice-rcm"
+                                            for="reverse-charge" class="checkbox-custom-label">
                                             Is this transaction applicable for reverse charge?
                                         </label>
                                     </div>
                                 </div>
+                                <ng-template #rcmTemplate>
+                                    <rcm-modal [configuration]="rcmConfiguration"
+                                        (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                                </ng-template>
                             </div>
                             <!-- for purchase invoice end -->
 
@@ -661,7 +668,8 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}} <span class="rcm-tax" *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
+                                    {{item.label}} <span class="rcm-tax"
+                                        *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
                                 </th>
                             </tr>
                         </thead>

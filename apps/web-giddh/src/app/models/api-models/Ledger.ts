@@ -115,7 +115,7 @@ export class LedgerResponse {
     public exchangeRateForDisplay?: number = 1;
     public valuesInAccountCurrency?: boolean = false;
     public discountResources?: any[];
-
+    public subVoucher?: string = '';
     public pettyCashEntryStatus?: PettyCashEntryStatus;
     public attachedFileUniqueNames?: string[];
 
