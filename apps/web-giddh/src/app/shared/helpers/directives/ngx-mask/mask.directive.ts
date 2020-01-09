@@ -107,6 +107,7 @@ const unSupportedPrefixAndSuffix = [
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
     @Input('mask') public maskExpression: string = '';
+    @Input() public rawInputValue: any = '';
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
     @Input() public patterns: IConfig['patterns'] = {};
     @Input() public prefix: IConfig['prefix'] = '';
@@ -161,6 +162,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         const {
             maskExpression,
             specialCharacters,
+            rawInputValue,
             patterns,
             prefix,
             suffix,
@@ -185,6 +187,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             }
             this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
         }
+
+        if (rawInputValue) {
+            this._inputValue = this.rawInputValue.toString();
+        }
+
         if (patterns) {
             this._maskService.maskAvailablePatterns = patterns.currentValue;
         }

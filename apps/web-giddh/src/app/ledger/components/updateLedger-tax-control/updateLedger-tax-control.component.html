@@ -4,7 +4,7 @@
 
     <a id="tax" class="clearfix">
         <div class="multi-select adjust">
-            <input type="text" readonly [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput" name=""
+            <input type="text" readonly [mask]="maskInput" [rawInputValue]="formattedTotal" [prefix]="prefixInput" [suffix]="suffixInput" name="formattedTotal"
                 class="form-control cursor-pointer text-right" [(ngModel)]="formattedTotal"
                 (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" />
             <span class="caret"></span>
