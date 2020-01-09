@@ -4,6 +4,7 @@
     border: 1px solid #d9d9d9;
     width: 100%;
     max-width: 100%;
+    border-collapse: separate;
 
     thead > tr > td,
     thead > tr > th {
@@ -16,7 +17,6 @@
         border-right: none;
         background: #fff;
         padding: 15px 11px;
-        position: relative;
         border-bottom: 1px solid #d9d9d9;
         font-family: $tableFontSemibold;
     }
@@ -89,7 +89,9 @@
         }
     }
 }
-
+.table-responsive {
+    overflow-y: initial;
+}
 /* responsive */
 
 @media (max-width: 768px) {
