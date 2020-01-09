@@ -3,7 +3,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -12,33 +12,28 @@ import { FormControl } from '@angular/forms';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
 
-
 @Component({
-    selector: 'sales-register-expand',
-    templateUrl: './sales.register.expand.component.html',
-    styleUrls: ['./sales.register.expand.component.scss']
+    selector: 'purchase-register-expand',
+    templateUrl: './purchase.register.expand.component.html',
+    styleUrls: ['./purchase.register.expand.component.scss']
 })
-export class SalesRegisterExpandComponent implements OnInit {
 
-    public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
+export class PurchaseRegisterExpandComponent implements OnInit {
+    public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
-    public SalesRegisteDetailedResponse$: Observable<SalesRegisteDetailedResponse>;
-    public isGetSalesDetailsInProcess$: Observable<boolean>;
-    public isGetSalesDetailsSuccess$: Observable<boolean>;
-    public getDetailedsalesRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
+    public PurchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
+    public isGetPurchaseDetailsInProcess$: Observable<boolean>;
+    public isGetPurchaseDetailsSuccess$: Observable<boolean>;
+    public getDetailedPurchaseRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
     public selectedMonth: string;
-    // public showSearchCustomer: boolean = false;
     public showSearchInvoiceNo: boolean = false;
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
     @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
-    // @ViewChild('customerSearch') public customerSearch: ElementRef;
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-
     public voucherNumberInput: FormControl = new FormControl();
-    // public customerNameInput: FormControl = new FormControl();
     public monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
@@ -56,38 +51,36 @@ export class SalesRegisterExpandComponent implements OnInit {
         discount: false,
         tax: false
     };
-
-
     bsValue = new Date();
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
-        this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
-        this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
+        this.PurchaseRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
+        this.isGetPurchaseDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsInProcess), takeUntil(this.destroyed$));
+        this.isGetPurchaseDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetPurchaseDetailsSuccess), takeUntil(this.destroyed$));
     }
 
     ngOnInit() {
         this.setCurrentPageTitle();
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = 20;
-        this.getDetailedsalesRequestFilter.q = '';
+        this.getDetailedPurchaseRequestFilter.page = 1;
+        this.getDetailedPurchaseRequestFilter.count = 20;
+        this.getDetailedPurchaseRequestFilter.q = '';
 
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
                 this.from = params.from;
                 this.to = params.to;
-                this.getDetailedsalesRequestFilter.from = this.from;
-                this.getDetailedsalesRequestFilter.to = this.to;
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
             }
         });
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.getCurrentMonthYear();
-        this.SalesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
+        this.PurchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
-                this.SalesRegisteDetailedItems = res;
-                _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
+                this.PurchaseRegisteDetailedItems = res;
+                _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
                 });
                 if (this.voucherNumberInput.value) {
@@ -105,32 +98,33 @@ export class SalesRegisterExpandComponent implements OnInit {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.getDetailedsalesRequestFilter.sort = null;
-            this.getDetailedsalesRequestFilter.sortBy = null;
-            this.getDetailedsalesRequestFilter.q = s;
-            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+            this.getDetailedPurchaseRequestFilter.sort = null;
+            this.getDetailedPurchaseRequestFilter.sortBy = null;
+            this.getDetailedPurchaseRequestFilter.q = s;
+            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
             if (s === '') {
                 this.showSearchInvoiceNo = false;
             }
         });
-
     }
 
-    public getDetailedSalesReport(SalesDetailedfilter) {
+    public getDetailedPurchaseReport(PurchaseDetailedfilter) {
         setTimeout(() => { this.detectChange() }, 200);
-        this.store.dispatch(this.invoiceReceiptActions.GetSalesRegistedDetails(SalesDetailedfilter));
+        this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRegistedDetails(PurchaseDetailedfilter));
     }
+
     public pageChanged(ev: any): void {
-        if (ev.page === this.getDetailedsalesRequestFilter.page) {
+        if (ev.page === this.getDetailedPurchaseRequestFilter.page) {
             return;
         }
-        this.getDetailedsalesRequestFilter.page = ev.page;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        this.getDetailedPurchaseRequestFilter.page = ev.page;
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
+
     public sortbyApi(ord, key) {
-        this.getDetailedsalesRequestFilter.sortBy = key;
-        this.getDetailedsalesRequestFilter.sort = ord;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        this.getDetailedPurchaseRequestFilter.sortBy = key;
+        this.getDetailedPurchaseRequestFilter.sort = ord;
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
     /**
     * emitExpand
@@ -138,21 +132,24 @@ export class SalesRegisterExpandComponent implements OnInit {
     public emitExpand() {
         this.expand = !this.expand;
     }
+
     public columnFilter(event, column) {
         if (event && column) {
             this.showFieldFilter[column] = event;
         }
     }
+
     public hideListItems() {
         if (this.filterDropDownList.isOpen) {
             this.filterDropDownList.hide();
         }
     }
+
     public goToDashboard(val: boolean) {
         if (val) {
             this.router.navigate(['/pages/reports']);
         } else {
-            this.router.navigate(['/pages/reports', 'sales-register']);
+            this.router.navigate(['/pages/reports', 'purchase-register']);
         }
     }
 
@@ -165,8 +162,8 @@ export class SalesRegisterExpandComponent implements OnInit {
         } else {
             return selecteddate;
         }
-
     }
+
     public getCurrentMonthYear() {
         if (this.from && this.to) {
             let currentYearFrom = this.from.split('-')[2];
@@ -180,16 +177,15 @@ export class SalesRegisterExpandComponent implements OnInit {
             }
             this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
         }
-
     }
+
     public selectedFilterMonth(monthYridx: string, i) {
         let date = this.getDateFromMonth(i);
-        this.getDetailedsalesRequestFilter.from = date.firstDay;
-        this.getDetailedsalesRequestFilter.to = date.lastDay;
-        this.getDetailedsalesRequestFilter.q = '';
+        this.getDetailedPurchaseRequestFilter.from = date.firstDay;
+        this.getDetailedPurchaseRequestFilter.to = date.lastDay;
+        this.getDetailedPurchaseRequestFilter.q = '';
         this.selectedMonth = monthYridx;
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 
     public getDateFromMonth(selectedMonth) {
@@ -210,8 +206,6 @@ export class SalesRegisterExpandComponent implements OnInit {
             year = dt.getFullYear();
 
         // GET THE FIRST AND LAST DATE OF THE MONTH.
-        //let firstDay = new Date(year, month , 0).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
-        //let lastDay = new Date(year, month + 1, 1).toISOString().replace(/T.*/,'').split('-').reverse().join('-');
         if (parseInt(month) < 10) {
             month = '0' + month;
         }
@@ -220,33 +214,23 @@ export class SalesRegisterExpandComponent implements OnInit {
 
         return { firstDay, lastDay };
     }
+
     public toggleSearch(fieldName: string) {
         if (fieldName === 'invoiceNumber') {
             this.showSearchInvoiceNo = true;
-            // this.showSearchCustomer = false;
-
             setTimeout(() => {
                 this.invoiceSearch.nativeElement.focus();
             }, 200);
-        }
-        // else if (fieldName === 'customerUniqueName') {
-        //   this.showSearchCustomer = true;
-        //   this.showSearchInvoiceNo = false;
-        //   setTimeout(() => {
-        //     this.customerSearch.nativeElement.focus();
-        //   }, 200);
-        // }
-        else {
+        } else {
             this.showSearchInvoiceNo = false;
-            // this.showSearchCustomer = false;
         }
         this.detectChange();
     }
+
     public clickedOutsideEvent() {
-
         this.showSearchInvoiceNo = false;
-
     }
+
     detectChange() {
         if (!this._cd['destroyed']) {
             this._cd.detectChanges();
@@ -255,7 +239,7 @@ export class SalesRegisterExpandComponent implements OnInit {
 
     public setCurrentPageTitle() {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Reports > Sales Register";
+        currentPageObj.name = "Reports > Purchase Register";
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
