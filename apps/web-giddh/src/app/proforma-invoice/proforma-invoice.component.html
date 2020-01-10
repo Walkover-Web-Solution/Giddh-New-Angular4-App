@@ -158,8 +158,7 @@
                                                     style="align-items: center;margin-left: 2%">
                                                     <a href="javascript: void 0"
                                                         (click)="showLastEstimateModal = !showLastEstimateModal">
-                                                        <i class="fa fa-files-o"></i>
-                                                        Copy Previous
+                                                        <i class="fa fa-files-o"></i> Copy Previous
                                                         {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
                                                     <ng-container
@@ -315,7 +314,6 @@
                                                                         </div>
 
                                                                         <div class="col-sm-12 pd ">
-
                                                                             <input [readonly]="autoFillShipping"
                                                                                 autocomplete="None" maxLength="15"
                                                                                 type="text"
@@ -325,6 +323,15 @@
                                                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                                                                 (keyup)="getStateCode('shippingDetails', statesShipping)"
                                                                                 placeholder="GSTIN" />
+                                                                            <input [readonly]="autoFillShipping"
+                                                                                maxLength="15" autocomplete="None"
+                                                                                type="text"
+                                                                                name="shippingDetails.gstNumber"
+                                                                                class="form-control input-custom"
+                                                                                *ngIf="showTRNNo"
+                                                                                [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                                                                (keyup)="getStateCode('shippingDetails', statesShipping);"
+                                                                                placeholder="TRN" />
                                                                         </div>
 
                                                                     </div>
@@ -532,6 +539,47 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- reverse charge transction start -->
+                            <!-- for purchase invoice start -->
+                            <div class="row mTB1" *ngIf="isPurchaseInvoice">
+                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <label></label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-6 pl-0">
+                                        <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
+                                            type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
+                                        <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body"
+                                            placement="bottom" containerClass="purchase-invoice-rcm"
+                                            for="reverse-charge" class="checkbox-custom-label">
+                                            Is this transaction applicable for reverse charge?
+                                        </label>
+                                    </div>
+                                </div>
+                                <ng-template #rcmTemplate>
+                                    <rcm-modal [configuration]="rcmConfiguration"
+                                        (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                                </ng-template>
+                            </div>
+                            <!-- for purchase invoice end -->
+                            <!-- reverse charge transction end  -->
+
+                            <!-- for sales invoice start -->
+                            <div class="row mTB1" hidden>
+                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <label></label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-6 pl-0">
+                                        <input id="tourist-scheme" class="checkbox-custom" type="checkbox">
+                                        <label for="tourist-scheme" class="checkbox-custom-label">
+                                            Is this transaction applicable for Tourist Scheme?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- for sales invoice end -->
                             <!-- endregion -->
 
                         </div>
@@ -617,13 +665,14 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}}
+                                    {{item.label}} <span class="rcm-tax"
+                                        *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody
                             *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last"
-                            (clickOutside)="activeIndx = null" [exclude]="'.entriesTr'">
+                            (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
 
                             <ng-container *ngFor="let transaction of entry.transactions;">
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
@@ -738,7 +787,7 @@
                                         </div>
 
                                     </td>
-                                    <td class="text-right item-tax" style="height:1px;">
+                                    <td [class.error-box]="transaction.requiredTax" class="text-right item-tax" style="height:1px;" (focus)="transaction.requiredTax = false;">
                                         <div class="td_Wrapper">
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data"><span
@@ -1015,7 +1064,12 @@
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
+                                                <!-- TODO: After design finalization
+                                                    <span class="eligible-ITC">Eligible for ITC <span
+                                                        class="icon-edit"></span>
+                                                </span> -->
                                             </div>
+
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>{{baseCurrencySymbol}}</span>
                                                 <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
@@ -1060,7 +1114,8 @@
                                                                 disabled="disabled" [(ngModel)]="entry.otherTaxSum"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" name="entry.otherTaxesSum" />
+                                                                [mask]="inputMaskFormat"
+                                                                name="entry.otherTaxesSum_{{entryIdx}}" />
                                                         </div>
 
                                                         <p
@@ -1428,7 +1483,7 @@
                 <!-- endregion -->
 
                 <!-- region mobile view  -->
-                <div class="showInMobile">
+                <div class="showInMobile" *ngIf="isMobileView">
                     <div class="card-invoiceTable-wrapper"
                         *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
 
@@ -1932,7 +1987,7 @@
                                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                                     [suffix]="selectedSuffixForCurrency"
                                                                     [mask]="inputMaskFormat"
-                                                                    name="entry.otherTaxesSum" />
+                                                                    name="entry.otherTaxesSum_{{entryIdx}}" />
                                                             </div>
 
                                                             <p
@@ -2264,8 +2319,7 @@
                                     class="btn btn-default" *ngIf="isCustomerSelected">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
-                                    </span>
-                                    &amp; Update A/c
+                                    </span> &amp; Update A/c
                                 </button>
 
                                 <div class="btn-group" dropdown [dropup]="true">

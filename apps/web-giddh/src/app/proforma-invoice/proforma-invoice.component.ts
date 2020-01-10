@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalDirective, ModalOptions, PopoverDirective } from 'ngx-bootstrap';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -58,7 +58,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration } from '../app.constant';
+import { Configuration, Subvoucher } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -76,6 +76,8 @@ import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { WarehouseDetails } from '../ledger/ledger.vm';
+import { RcmModalConfiguration, RCM_ACTIONS } from '../common/rcm-modal/rcm-modal.interface';
+import { GeneralService } from '../services/general.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -161,6 +163,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('inputCustomerName') public inputCustomerName: ElementRef;
     @ViewChild('customerBillingAddress') public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
+
+    /** RCM popup instance */
+    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -271,6 +276,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectedWarehouse: string;
     /** True, if warehouse drop down should be displayed */
     public shouldShowWarehouse: boolean;
+    /** True, if the entry contains RCM applicable taxes */
+    public isRcmEntry: boolean = false;
+    /** RCM modal configuration */
+    public rcmConfiguration: RcmModalConfiguration;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -324,6 +333,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private salesService: SalesService,
         private _toasty: ToasterService,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private _invoiceActions: InvoiceActions,
         private _settingsDiscountAction: SettingsDiscountActions,
         public route: ActivatedRoute,
@@ -395,6 +405,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ngAfterViewInit() {
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
+        }
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === RCM_ACTIONS.YES) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+        }
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
         }
     }
 
@@ -1211,6 +1249,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
+        this.isRcmEntry = false;
 
         this.assignDates();
         let invoiceSettings: InvoiceSetting = null;
@@ -1299,6 +1338,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return entry;
         });
 
+        if (this.isPurchaseInvoice && this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+            return;
+        }
+
         if (!data.accountDetails.uniqueName) {
             data.accountDetails.uniqueName = 'cash';
         }
@@ -1348,6 +1391,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // check for valid entries and transactions
         if (data.entries) {
             _.forEach(data.entries, (entry) => {
+                entry['subVoucher'] = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
@@ -2074,15 +2118,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public setActiveIndx(indx: number) {
-        // BELOW CODE WAS PUTTING FOCUS ON PAYMENT MODE DROPDOWN SO COMMENTED THE CODE
-        // setTimeout(function () {
-        //   let focused = $('.focused');
-        //   if (focused && focused[indx]) {
-        //     $('.focused')[indx].focus();
-        //   }
-        // }, 200);
-
         this.activeIndx = indx;
+        try {
+            if (this.isPurchaseInvoice && this.isRcmEntry) {
+                this.invFormData.entries[indx].transactions[0]['requiredTax'] = false;
+            }
+        } catch (error) { }
     }
 
     public doAction(action: ActionTypeAfterVoucherGenerateOrUpdate) {
@@ -2389,7 +2430,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this._toasty.errorToast('Something went wrong! Try again');
                     });
             } else {
-                // credit and debit note still uses old api so just pass result to service don't parse it
+                // Purchase invoice still uses old api so just pass result to service don't parse it
                 this.salesService.updateVoucher(result).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, invoiceForm);
@@ -3436,6 +3477,36 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }
         this.hsnDropdownShow = !this.hsnDropdownShow;
+    }
+
+    /**
+     * Outside click handler for transaction row
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    handleOutsideClick(): void {
+        this.activeIndx = null;
+    }
+
+    /**
+     * Validates the taxes entry and returns false if anyone of the entry
+     * has no taxes
+     *
+     * @param {*} data Data to be checked
+     * @returns {boolean} True, if all the entries have atleast single tax
+     * @memberof ProformaInvoiceComponent
+     */
+    validateTaxes(data: any): boolean {
+        let validEntries = true;
+        data.entries.forEach((entry: any, index: number) => {
+            const transaction = (this.invFormData && this.invFormData.entries && this.invFormData.entries[index].transactions) ?
+                this.invFormData.entries[index].transactions[0] : '';
+            if (transaction) {
+                transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
+                validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
+            }
+        });
+        return validEntries;
     }
 
     /**

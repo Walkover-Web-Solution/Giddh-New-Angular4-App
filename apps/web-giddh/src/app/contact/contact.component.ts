@@ -90,7 +90,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = 'showTableColumn';
-    public localStorageKeysForFilters = { customer: 'customerFilterStorage', vendor: 'vendorFilterStorage' };
+    public localStorageKeysForFilters = {customer: 'customerFilterStorage', vendor: 'vendorFilterStorage'};
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,

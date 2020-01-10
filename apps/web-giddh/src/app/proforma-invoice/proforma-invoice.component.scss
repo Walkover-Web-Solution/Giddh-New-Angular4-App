@@ -365,6 +365,11 @@ $greyClr: #6d6d6d;
     tbody + tbody {
         border: 0;
     }
+    .rcm-tax sup {
+        font-size: 14px;
+        top: 0;
+        color: red;
+    }
 }
 
 ng-select.splSales {
@@ -502,6 +507,9 @@ textarea:focus {
                 &:nth-child(3) {
                     white-space: normal;
                     width: 90px;
+                }
+                &.error-box.item-tax {
+                    border: 2px solid red !important;
                 }
             }
         }
@@ -1578,7 +1586,20 @@ strong {
 .add-line-bulk-item a:focus {
     text-decoration: underline;
 }
-// resposnvie
+label.checkbox-custom-label {
+    line-height: initial !important;
+}
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: $btnLink;
+        font-size: 10px;
+    }
+}
+/* resposnvie */
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;
@@ -1791,6 +1812,12 @@ strong {
         justify-content: center;
         align-items: center;
         width: 100%;
+    }
+    label.checkbox-custom-label {
+        line-height: initial !important;
+        left: 0;
+        align-items: end;
+        vertical-align: middle;
     }
 }
 @media (max-width: 320px) {

@@ -1,6 +1,4 @@
-.primary_color {
-    color: #d35f29 !important;
-}
+@import "../../../../assets/css/color.scss";
 
 .ledger-panel {
     overflow: visible;
@@ -51,6 +49,22 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+}
+.checkbox-custom-label strong {
+    display: contents;
+}
+span.eligible-ITC {
+    font-size: 11px;
+    cursor: pointer;
+    padding-top: 5px;
+    display: inline-block;
+    span {
+        color: $btnLink;
+        font-size: 10px;
+    }
+}
+.rcm-entry {
+    padding-left: 4px;
 }
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {

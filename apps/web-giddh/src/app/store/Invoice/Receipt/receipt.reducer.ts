@@ -6,7 +6,7 @@ import { INVOICE_ACTIONS } from 'apps/web-giddh/src/app/actions/invoice/invoice.
 import { ILedgersInvoiceResult, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
 import * as _ from '../../../lodash-optimized';
-import { SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { SalesRegisteDetailedResponse, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
 export interface ReceiptState {
     vouchers: ReciptResponse;
@@ -25,7 +25,10 @@ export interface ReceiptState {
     actionOnInvoiceSuccess: boolean;
     isGetSalesDetailsInProcess: boolean;
     isGetSalesDetailsSuccess: boolean;
-    SalesRegisteDetailedResponse: SalesRegisteDetailedResponse
+    SalesRegisteDetailedResponse: SalesRegisteDetailedResponse;
+    isGetPurchaseDetailsInProcess: boolean;
+    isGetPurchaseDetailsSuccess: boolean;
+    PurchaseRegisteDetailedResponse: PurchaseRegisteDetailedResponse;
 }
 
 const initialState: ReceiptState = {
@@ -45,7 +48,10 @@ const initialState: ReceiptState = {
     actionOnInvoiceSuccess: false,
     isGetSalesDetailsInProcess: false,
     isGetSalesDetailsSuccess: false,
-    SalesRegisteDetailedResponse: null
+    SalesRegisteDetailedResponse: null,
+    isGetPurchaseDetailsInProcess: false,
+    isGetPurchaseDetailsSuccess: false,
+    PurchaseRegisteDetailedResponse: null
 };
 
 export function Receiptreducer(state: ReceiptState = initialState, action: CustomActions): ReceiptState {
@@ -274,6 +280,25 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                 newState.isGetSalesDetailsInProcess = false;
                 newState.isGetSalesDetailsSuccess = true;
                 newState.SalesRegisteDetailedResponse = res.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+
+        case INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS: {
+            return Object.assign({}, state, {
+                isGetPurchaseDetailsInProcess: true,
+                isGetPurchaseDetailsSuccess: false
+            });
+        }
+
+        case INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, PurchaseRegisteDetailedResponse> = action.payload;
+            if (res.status === 'success') {
+                newState.isGetPurchaseDetailsInProcess = false;
+                newState.isGetPurchaseDetailsSuccess = true;
+                newState.PurchaseRegisteDetailedResponse = res.body;
                 return Object.assign({}, state, newState);
             }
             return state;

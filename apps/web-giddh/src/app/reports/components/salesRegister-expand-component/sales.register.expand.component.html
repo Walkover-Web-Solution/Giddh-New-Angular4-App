@@ -10,7 +10,7 @@
                             <input type="checkbox" name="voucherType" (ngModelChange)="
                                     columnFilter($event, 'voucherType')
                                 " [(ngModel)]="showFieldFilter.voucherType" />
-                            voucher Type</a>
+                            Voucher Type</a>
                     </li>
                     <li role="menuitem">
                         <a class="dropdown-item">
@@ -302,11 +302,11 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 10">
+        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 50">
             <pagination [totalItems]="
                     (SalesRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
-                [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
+                [boundaryLinks]="true" [itemsPerPage]="50" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>

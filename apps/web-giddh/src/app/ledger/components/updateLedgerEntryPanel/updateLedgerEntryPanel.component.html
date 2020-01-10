@@ -34,7 +34,7 @@
     <!-- endregion -->
 
     <!-- region main body -->
-    <div class="modal-body" [hidden]="isChangeAcc" *ngIf="!(isTxnUpdateInProcess$ | async)">
+    <div class="modal-body" [hidden]="isChangeAcc">
 
         <!-- region transactions -->
         <div class="ledgHead entry-popup">
@@ -178,6 +178,7 @@
 
                                         <input type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
+                                               [rawInputValue]="txn.amount"
                                             [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
                                             (click)="addBlankTrx('DEBIT', txn, $event)" (blur)="onTxnAmountChange(txn)">
@@ -345,7 +346,7 @@
                                     <td data-title="Amount" class="col-xs-2 text-right">
                                         <input class="form-control text-right" type="text" [(ngModel)]="txn.amount"
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                            [suffix]="vm.selectedSuffixForCurrency"
+                                            [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
                                             (click)="addBlankTrx('CREDIT', txn, $event)"
                                             (blur)="onTxnAmountChange(txn)">
                                         <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
@@ -402,6 +403,21 @@
 
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
+            <!-- reverse charge transction start -->
+            <div *ngIf="shouldShowRcmEntry" class="pdB1 mTB1">
+                <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
+                    (click)="toggleRcmCheckbox($event)">
+                <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
+                    [popover]="rcmTemplate" placement="right" containerClass="update-ledger-rcm">
+                    Is this transaction applicable for <strong> Reverse Charge?</strong>
+                </label>
+                <span class="text-light font-12"> (Tax is compulsory)</span>
+            </div>
+            <ng-template #rcmTemplate>
+                <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+            </ng-template>
+            <!-- reverse charge transction end  -->
+
             <!-- region amount and discount container -->
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel">
@@ -465,7 +481,7 @@
                                 <input type="text" name=""
                                     (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)"
                                     [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                    [suffix]="vm.selectedSuffixForCurrency"
+                                    [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                 <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
@@ -482,7 +498,7 @@
                         <div class="text-right table-amount">
                             <label class="font-12">Amount</label>
                             <input type="text" name="" class="form-control text-right" [mask]="vm.inputMaskFormat"
-                                [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
+                                   [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
                                 (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()"
                                 [(ngModel)]="vm.totalAmount" />
 
@@ -534,6 +550,8 @@
                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                     (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)">
                                 </update-ledger-tax-control>
+                                <!-- TODO: After design finalization
+                                    <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
                             </span>
 
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
@@ -551,6 +569,7 @@
                             <label class="font-12">Total Amt.</label>
                             <input type="text" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
                                 [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
+                                   [rawInputValue]="vm.grandTotal"
                                 [suffix]="vm.selectedSuffixForCurrency" (blur)="vm.inventoryTotalChanged()" />
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                 <ng-container
@@ -579,7 +598,7 @@
 
                                     <input class="text-right form-control" disabled="disabled"
                                         [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                        [suffix]="vm.selectedSuffixForCurrency"
+                                        [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.selectedLedger.otherTaxesSum"
                                         [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum" />
                                 </div>
                             </div>
@@ -816,7 +835,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="javascript:void(0)" class="text-light" (click)="toggleCurrency()">
+                                        <a href="javascript:void(0)" class="text-light">
                                             <i class="icon-switch-icon"></i>
                                         </a>
                                     </li>
@@ -916,12 +935,3 @@
 
 </ng-template>
 <!-- endregion -->
-
-<!--loading-->
-<div *ngIf="(isTxnUpdateInProcess$ | async)" class="no-data mrT2 loader-main">
-    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
