@@ -77,8 +77,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashEntry: any;
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
-    /** True, if RCM should be displayed */
-    @Input() public shouldShowRcmEntry: boolean;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -102,6 +100,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: RcmModalConfiguration;
+    /** True, if RCM should be displayed */
+    public shouldShowRcmEntry: boolean;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -519,6 +519,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
                     }
                     this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
+                    this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
                     //#endregion
                 }
 
@@ -1190,6 +1191,41 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
             if (this.vm.selectedLedger.transactions[index].inventory) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if anyone of the transactions satisfies the RCM checks
+     *
+     * @private
+     * @param {*} transactions Transactions of the current ledger
+     * @returns {boolean} True, if anyone of the transactions satisfies the RCM checks
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private isRcmEntryPresent(transactions: any): boolean {
+        if (transactions) {
+            for (let index = 0; index < transactions.length; index++) {
+                const transactionUniqueName = transactions[index].particular.uniqueName;
+                let selectedAccountDetails;
+                this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
+                    for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
+                        const account = accounts[accountIndex];
+                        if (account.uniqueName === transactionUniqueName) {
+                            // Found the user selected particular account
+                            selectedAccountDetails = _.cloneDeep(account);
+                            console.log('Found: ', selectedAccountDetails);
+                            break;
+                        }
+                    }
+                });
+                if (selectedAccountDetails) {
+                    const isRcmEntry = this.generalService.shouldShowRcmSection(this.activeAccount, selectedAccountDetails);
+                    if (isRcmEntry) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
