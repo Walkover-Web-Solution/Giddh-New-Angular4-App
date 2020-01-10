@@ -93,9 +93,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             if (flattenAccounts && flattenAccounts.length) {
                 // get account from flatten accounts array
                 let accountFromFlattenAcc = flattenAccounts.find(fAcc => fAcc.uniqueName === this.accountDetails.uniqueName);
-
-                // if yes set showBankDetail = true for showing adding bank details in account-update form.
-                this.showBankDetail = accountFromFlattenAcc.parentGroups.some(group => group.uniqueName === 'sundrycreditors');
+                if (accountFromFlattenAcc) {
+                    // if yes set showBankDetail = true for showing adding bank details in account-update form.
+                    this.showBankDetail = accountFromFlattenAcc.parentGroups.some(group => group.uniqueName === 'sundrycreditors');
+                }
             } else {
                 this.showBankDetail = false;
             }
