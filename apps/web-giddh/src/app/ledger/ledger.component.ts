@@ -1647,6 +1647,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
     }
 
+    /**
+     * Handles RCM section visinility based on provided transaction details
+     *
+     * @private
+     * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
+     * @param {boolean} [isCreateFlow=false] True, if a create new ledger flow is carried out
+     * @memberof LedgerComponent
+     */
     private handleRcmVisibility(transaction: any, isCreateFlow: boolean = false): void {
         this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
             let currentLedgerAccountDetails, selectedAccountDetails;
@@ -1656,13 +1664,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             for (let index = 0; index < accounts.length; index++) {
                 const account = accounts[index];
                 if (account.uniqueName === this.lc.accountUnq) {
+                    // Found the current ledger details
                     currentLedgerAccountDetails = _.cloneDeep(account);
                 }
                 if (account.uniqueName === transactionUniqueName) {
+                    // Found the user selected particular account
                     selectedAccountDetails = _.cloneDeep(account);
                 }
                 if (currentLedgerAccountDetails && selectedAccountDetails) {
-                    // Accounts found
+                    // Accounts found, break the loop
                     break;
                 }
             }
@@ -1675,6 +1685,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Decides based on current ledger and selected account details whether the RCM section
+     * needs to be displayed
+     *
+     * @private
+     * @param {*} currentLedgerAccountDetails Current ledger detail
+     * @param {*} selectedAccountDetails User selected particular account
+     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @memberof LedgerComponent
+     */
     private shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             console.log('Current Ledger: ', currentLedgerAccountDetails);

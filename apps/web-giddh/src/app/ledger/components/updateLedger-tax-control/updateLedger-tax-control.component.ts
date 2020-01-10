@@ -62,6 +62,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    /** Tax input field */
     @ViewChild('taxInputElement') public taxInputElement: ElementRef;
 
     public sum: number = 0;

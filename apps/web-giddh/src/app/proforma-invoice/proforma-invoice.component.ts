@@ -3479,7 +3479,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.hsnDropdownShow = !this.hsnDropdownShow;
     }
 
-    handleOutsideClick() {
+    /**
+     * Outside click handler for transaction row
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    handleOutsideClick(): void {
         this.activeIndx = null;
     }
 
