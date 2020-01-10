@@ -6,6 +6,7 @@ import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-m
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
+import * as moment from 'moment';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +17,44 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private _dateRangePickerDefaultRanges = {
+        Today: [moment(), moment()],
+        Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ],
+        'This Week': [{
+            'Sun - Today': [moment().startOf('week'), moment()],
+            'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
+        }],
+        'This Quarter to Date': [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ],
+        'This Financial Year to Date': [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ],
+        'This Year to Date': [
+            moment().startOf('year'),
+            moment()
+        ],
+        'Last Quarter': [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ],
+        'Last Financial Year': [
+            moment().startOf('year').subtract(10, 'year'),
+            moment().endOf('year').subtract(10, 'year')
+        ],
+        'Last Year': [
+            moment().subtract(1, 'year').startOf('year'),
+            moment().subtract(1, 'year').endOf('year')
+        ]
+    };
 
 
     get user(): UserDetails {
@@ -40,6 +79,14 @@ export class GeneralService {
 
     set sessionId(sessionId: string) {
         this._sessionId = sessionId;
+    }
+
+    get dateRangePickerDefaultRanges(): any {
+        return this._dateRangePickerDefaultRanges;
+    }
+
+    set dateRangePickerDefaultRanges(value: any) {
+        this._dateRangePickerDefaultRanges = value;
     }
 
     // currencyType define specific type of currency out of four type of urrencyType a.1,00,00,000 ,b.10,000,000,c.10\'000\'000,d.10 000 000

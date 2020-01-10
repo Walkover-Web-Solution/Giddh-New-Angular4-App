@@ -26,8 +26,8 @@ export interface CurrentCompanyState {
 }
 
 /**
-* Setting the InitialState for this Reducer's Store
-*/
+ * Setting the InitialState for this Reducer's Store
+ */
 const initialState: CurrentCompanyState = {
     taxes: null,
     isTaxesLoading: false,
@@ -45,10 +45,18 @@ const initialState: CurrentCompanyState = {
             customRangeLabel: 'Custom range'
         },
         ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
+            Today: [moment(), moment()],
+            Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [
+                moment().subtract(1, 'month').startOf('month'),
+                moment().subtract(1, 'month').endOf('month')
             ],
+            'This Week': [{
+                'Sun - Today': [moment().startOf('week'), moment()],
+                'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
+            }],
             'This Quarter to Date': [
                 moment().quarter(moment().quarter()).startOf('quarter'),
                 moment()
@@ -61,11 +69,7 @@ const initialState: CurrentCompanyState = {
                 moment().startOf('year'),
                 moment()
             ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
+            'Last Quarter': [
                 moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
                 moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
             ],
@@ -74,8 +78,8 @@ const initialState: CurrentCompanyState = {
                 moment().endOf('year').subtract(10, 'year')
             ],
             'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
+                moment().subtract(1, 'year').startOf('year'),
+                moment().subtract(1, 'year').endOf('year')
             ]
         },
         startDate: moment().subtract(30, 'days'),
@@ -120,7 +124,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxCreationInProcess: true,
                 isTaxCreatedSuccessfully: false,
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
@@ -137,7 +141,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxCreationInProcess: false,
                 isTaxCreatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX: {
@@ -145,7 +149,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxUpdatingInProcess: true,
                 isTaxUpdatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE: {
@@ -167,7 +171,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxUpdatingInProcess: false,
                 isTaxUpdatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
@@ -185,16 +189,21 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
             let res = action.payload;
             if (res) {
-                let newState = _.cloneDeep(state);
-                let dateRangePickerConfig = _.cloneDeep(newState.dateRangePickerConfig);
-                dateRangePickerConfig.ranges['This Financial Year to Date'][0] = moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-                dateRangePickerConfig.ranges['Last Financial Year'] = [
-                    moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year'),
-                    moment(_.clone(res.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year')
-                ];
-                return Object.assign({}, state, {
-                    dateRangePickerConfig
-                });
+
+                return {
+                    ...state,
+                    dateRangePickerConfig: {
+                        ...state.dateRangePickerConfig,
+                        ranges: {
+                            ...state.dateRangePickerConfig.ranges,
+                            ['This Financial Year to Date']: [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()],
+                            ['Last Financial Year']: [
+                                moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+                                moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')
+                            ]
+                        }
+                    }
+                };
             }
             break;
         }
@@ -202,13 +211,13 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             return {
                 ...state,
                 isCompanyActionInProgress: true
-            }
+            };
         }
         case CompanyActions.DELETE_COMPANY_RESPONSE: {
             return {
                 ...state,
                 isCompanyActionInProgress: false
-            }
+            };
         }
         case CompanyActions.GET_REGISTRATION_ACCOUNT:
             return Object.assign({}, state, {

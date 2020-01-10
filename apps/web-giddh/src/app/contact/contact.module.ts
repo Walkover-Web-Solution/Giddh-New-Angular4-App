@@ -24,6 +24,7 @@ import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 //payemnt aside component
 
 
@@ -71,6 +72,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         GhSortByPipeModule,
         GenericAsideMenuAccountModule,
+        NgxDaterangepickerMd.forRoot()
     ],
     entryComponents: [
         PaginationComponent
