@@ -457,7 +457,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
                             let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
                             if (this.vm.isValidCategory(category)) {
+                                /**
+                                 * replace transaction amount with the actualAmount key that we got in response of get-ledger
+                                 * because of ui and api follow different calculation pattern,
+                                 * so transaction amount of income/ expenses account differ from both the side
+                                 * so overcome this issue api provides the actual amount which was added by user while creating entry
+                                 */
                                 t.amount = this.vm.selectedLedger.actualAmount;
+                                // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                                if (t.inventory) {
+                                    t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                                    t.inventory.rate = this.vm.selectedLedger.actualRate;
+                                }
                             }
                         }
 
