@@ -3499,9 +3499,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     validateTaxes(data: any): boolean {
         let validEntries = true;
         data.entries.forEach((entry: any, index: number) => {
-            const transaction = this.invFormData.entries[index].transactions[0];
+            const transaction = (this.invFormData.entries[index].transactions) ? this.invFormData.entries[index].transactions[0] : '';
             if (transaction) {
-                transaction['requiredTax'] = (entry.taxes.length === 0);
+                transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
                 validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
             }
         });
