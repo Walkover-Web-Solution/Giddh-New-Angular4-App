@@ -1699,12 +1699,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             console.log('Current Ledger: ', currentLedgerAccountDetails);
             console.log('Selected account: ', selectedAccountDetails);
-            const rcmUniqueNames = ['fixedassets', 'purchases', 'otherindirectexpenses'];
-
-            return (currentLedgerAccountDetails.parentGroups[0] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[0].uniqueName)) ||
-                (currentLedgerAccountDetails.parentGroups[1] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[1].uniqueName)) ||
-                (selectedAccountDetails.parentGroups[0] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[0].uniqueName)) ||
-                (selectedAccountDetails.parentGroups[1] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[1].uniqueName));
+            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+                const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
+                const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
+                const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
+                const selectedAccountFirstParent = selectedAccountDetails.parentGroups[0] ? selectedAccountDetails.parentGroups[0].uniqueName : '';
+                const selectedAccountSecondParent = selectedAccountDetails.parentGroups[1] ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                return (allowedFirstLevelUniqueNames.some((firstLevelUniqueName: string) => [currentLedgerFirstParent, selectedAccountFirstParent].includes(firstLevelUniqueName)) &&
+                    !disallowedSecondLevelUniqueNames.some((secondLevelUniqueName: string) => [currentLedgerSecondParent, selectedAccountSecondParent].includes(secondLevelUniqueName)));
+            }
         }
         return false;
     }
