@@ -51,7 +51,7 @@
                     <span class="d-inline-block pl-1"> ></span>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span
+                    <a href="javascript:void(0)" (click)="goToDashboard(false)">Purchase Register</a><span
                         class="d-inline-block pl-1"> ></span>
                 </li>
             </ul>
@@ -89,7 +89,7 @@
     </div>
 </div>
 
-<ng-container *ngIf="(isGetSalesDetailsSuccess$ | async)">
+<ng-container *ngIf="(isGetPurchaseDetailsSuccess$ | async)">
     <div class="clearfix sales-register-table">
         <div class="responsive mt-2">
             <table class="table basic table-bordered table-middle ">
@@ -145,12 +145,12 @@
 
                         <th class=" text-right ">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Sales</div>
+                                <div class=" text-right ">Purchase</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
                                             context: {
-                                                $implicit: 'creditTotal'
+                                                $implicit: 'debitTotal'
                                             }
                                         ">
                                     </ng-container>
@@ -164,7 +164,7 @@
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
-                                            context: { $implicit: 'debitTotal' }
+                                            context: { $implicit: 'creditTotal' }
                                         ">
                                     </ng-container>
                                 </div>
@@ -217,7 +217,7 @@
                         </th>
                         <th class=" text-right ">
                             <div class="d-flex justify-content-end">
-                                <div class=" ">Net Sales</div>
+                                <div class=" ">Net Purchase</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -229,9 +229,9 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="(SalesRegisteDetailedResponse$ | async).items.length">
+                <tbody *ngIf="(PurchaseRegisteDetailedResponse$ | async).items.length">
                     <tr *ngFor="
-                            let item of (SalesRegisteDetailedResponse$ | async)
+                            let item of (PurchaseRegisteDetailedResponse$ | async)
                                 .items
                         ">
                         <td>{{ item.date }}</td>
@@ -259,7 +259,7 @@
                             }}</a>
                         </td>
                         <td class="text-right ">
-                            {{ item.creditTotal | giddhCurrency }}
+                            {{ item.debitTotal | giddhCurrency }}
                             <ng-container *ngIf="expand">
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>{{ stock.amount | giddhCurrency }}</p>
@@ -267,7 +267,7 @@
                             </ng-container>
                         </td>
                         <td class="text-right ">
-                            {{ item.debitTotal | giddhCurrency }}
+                            {{ item.creditTotal | giddhCurrency }}
                         </td>
                         <td class="text-right " *ngIf="showFieldFilter.qtyRate">
                             -
@@ -302,17 +302,17 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(SalesRegisteDetailedResponse$ | async).totalItems > 50">
+        <div class="text-center " *ngIf="(PurchaseRegisteDetailedResponse$ | async).totalItems > 50">
             <pagination [totalItems]="
-                    (SalesRegisteDetailedResponse$ | async).totalItems
-                " [(ngModel)]="getDetailedsalesRequestFilter.page" [maxSize]="5" class="pagination-sm "
+                    (PurchaseRegisteDetailedResponse$ | async).totalItems
+                " [(ngModel)]="getDetailedPurchaseRequestFilter.page" [maxSize]="5" class="pagination-sm "
                 [boundaryLinks]="true" [itemsPerPage]="50" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
     <div class="no-data " *ngIf="
-            (SalesRegisteDetailedResponse$ | async).items.length === 0 &&
-            !(isGetSalesDetailsInProcess$ | async)
+            (PurchaseRegisteDetailedResponse$ | async).items.length === 0 &&
+            !(isGetPurchaseDetailsInProcess$ | async)
         ">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
@@ -322,16 +322,16 @@
         <div class="col-xs-3 ">
             <p>Transaction count</p>
             <p class="text-orange ">
-                {{ (SalesRegisteDetailedResponse$ | async).totalItems }}
+                {{ (PurchaseRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
         <div class="col-xs-9 ">
-            <div *ngIf="SalesRegisteDetailedItems" class="clearfix main-sale-register-box ">
+            <div *ngIf="PurchaseRegisteDetailedItems" class="clearfix main-sale-register-box ">
                 <div class="sale-register-box text-right">
-                    <p>Sales</p>
+                    <p>Purchase</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).creditTotal
+                            (PurchaseRegisteDetailedResponse$ | async).debitTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -340,7 +340,7 @@
                     <p>Return</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).debitTotal
+                            (PurchaseRegisteDetailedResponse$ | async).creditTotal
                                 | giddhCurrency
                         }}
                     </h4>
@@ -349,7 +349,7 @@
                     <p>Discount</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async)
+                            (PurchaseRegisteDetailedResponse$ | async)
                                 .discountTotal | giddhCurrency
                         }}
                     </h4>
@@ -358,17 +358,17 @@
                     <p>Total Tax</p>
                     <h4>
                         {{
-                            (SalesRegisteDetailedResponse$ | async).taxTotal
+                            (PurchaseRegisteDetailedResponse$ | async).taxTotal
                                 | giddhCurrency
                         }}
                     </h4>
                 </div>
 
                 <div class="sale-register-box text-right">
-                    <p>Net Sales</p>
+                    <p>Net Purchase</p>
                     <h4 class="text-orange ">
                         {{
-                            (SalesRegisteDetailedResponse$ | async).netTotal
+                            (PurchaseRegisteDetailedResponse$ | async).netTotal
                                 .amount | giddhCurrency
                         }}
                     </h4>
@@ -379,7 +379,7 @@
     </div>
 </ng-container>
 
-<div *ngIf="(isGetSalesDetailsInProcess$ | async)">
+<div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
     <div class="no-data mrT2 loader-main" *ngIf="showLoader">
         <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
@@ -391,29 +391,29 @@
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
 
-    <div class="icon-sort-asc" *ngIf="getDetailedsalesRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
+    <div class="icon-sort-asc" *ngIf="getDetailedPurchaseRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
         [ngClass]="{
             activeTextColor:
-                getDetailedsalesRequestFilter.sortBy === col &&
-                getDetailedsalesRequestFilter.sort === 'asc'
+                getDetailedPurchaseRequestFilter.sortBy === col &&
+                getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
 
     <div class="icon-sort-asc" *ngIf="
-            getDetailedsalesRequestFilter.sortBy === col &&
-            getDetailedsalesRequestFilter.sort === 'asc'
+            getDetailedPurchaseRequestFilter.sortBy === col &&
+            getDetailedPurchaseRequestFilter.sort === 'asc'
         " (click)="sortbyApi('desc', col)" [ngClass]="{
             activeTextColor:
-                getDetailedsalesRequestFilter.sortBy === col &&
-                getDetailedsalesRequestFilter.sort === 'asc'
+                getDetailedPurchaseRequestFilter.sortBy === col &&
+                getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
 
     <div class="icon-sort-dsc" *ngIf="
-            getDetailedsalesRequestFilter.sortBy === col &&
-            getDetailedsalesRequestFilter.sort === 'desc'
+            getDetailedPurchaseRequestFilter.sortBy === col &&
+            getDetailedPurchaseRequestFilter.sort === 'desc'
         " (click)="sortbyApi('asc', col)" [ngClass]="{
             activeTextColor:
-                getDetailedsalesRequestFilter.sortBy === col &&
-                getDetailedsalesRequestFilter.sort === 'desc'
+                getDetailedPurchaseRequestFilter.sortBy === col &&
+                getDetailedPurchaseRequestFilter.sort === 'desc'
         }"></div>
 </ng-template>
 <!-- endregion -->
