@@ -1,33 +1,10 @@
-<!--<span (blur)="hideDiscountMenu()" [attachOutsideOnClick]="true" (clickOutside)="hideDiscountMenu()">-->
-<!--<label>Discount</label>-->
-<!--<a (click)="discountMenu = !discountMenu" id="discount">-->
-<!--<input type="text" decimalDigitsDirective [DecimalPlaces]="2" name="" class="form-control cursor-pointer"-->
-<!--[(ngModel)]="discountTotal" disabled="disabled"/>-->
-<!--</a>-->
-<!--<ul class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()">-->
-<!--<li>-->
-<!--<table>-->
-<!--<tr-->
-<!--*ngFor="let discount of discountAccountsDetails;">-->
-<!--<td class="pdL w100">{{ discount.name }}</td>-->
-<!--<td class="pdR pdT w50">-->
-<!--<input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control"-->
-<!--(change)="change()" [(ngModel)]="discount.amount"/>-->
-<!--</td>-->
-<!--</tr>-->
-<!--</table>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</span>-->
-
-
 <span (clickOutside)="hideDiscountMenu()">
 	<label>Discount</label>
 
 	<a id="discount">
 		<div class="multi-select adjust">
-			<input type="text" [prefix]="prefixInput" [suffix]="suffixInput" [mask]="maskInput" name=""
-				class="form-control cursor-pointer text-right" [(ngModel)]="discountTotal" readonly
+			<input type="text" [prefix]="prefixInput" [suffix]="suffixInput" [mask]="maskInput" name="discountTotal"
+				class="form-control cursor-pointer text-right" [rawInputValue]="discountTotal" [(ngModel)]="discountTotal" readonly
 				(focus)="discountMenu = true;hideOtherPopups.emit(true)" />
 			<span class="caret"></span>
 		</div>

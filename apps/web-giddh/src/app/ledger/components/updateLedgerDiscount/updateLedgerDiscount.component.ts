@@ -52,7 +52,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 	}
 
 	public ngOnChanges(changes: SimpleChanges): void {
-		if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+		if ('discountAccountsDetails' in changes && !changes.discountAccountsDetails.firstChange && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
 			this.prepareDiscountList();
 
 			/* check if !this.defaultDiscount.discountUniqueName so it's means
