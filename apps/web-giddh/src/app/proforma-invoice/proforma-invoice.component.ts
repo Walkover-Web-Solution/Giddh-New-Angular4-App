@@ -2118,15 +2118,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public setActiveIndx(indx: number) {
-        // BELOW CODE WAS PUTTING FOCUS ON PAYMENT MODE DROPDOWN SO COMMENTED THE CODE
-        // setTimeout(function () {
-        //   let focused = $('.focused');
-        //   if (focused && focused[indx]) {
-        //     $('.focused')[indx].focus();
-        //   }
-        // }, 200);
-
         this.activeIndx = indx;
+        try {
+            if (this.isPurchaseInvoice && this.isRcmEntry) {
+                this.invFormData.entries[indx].transactions[0]['requiredTax'] = false;
+            }
+        } catch (error) {}
     }
 
     public doAction(action: ActionTypeAfterVoucherGenerateOrUpdate) {
@@ -3486,13 +3483,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.activeIndx = null;
     }
 
+    /**
+     * Validates the taxes entry and returns false if anyone of the entry
+     * has no taxes
+     *
+     * @param {*} data Data to be checked
+     * @returns {boolean} True, if all the entries have atleast single tax
+     * @memberof ProformaInvoiceComponent
+     */
     validateTaxes(data: any): boolean {
         let validEntries = true;
         data.entries.forEach((entry: any, index: number) => {
             const transaction = this.invFormData.entries[index].transactions[0];
             if (transaction) {
                 transaction['requiredTax'] = (entry.taxes.length === 0);
-                validEntries = false;
+                validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
             }
         });
         return validEntries;
