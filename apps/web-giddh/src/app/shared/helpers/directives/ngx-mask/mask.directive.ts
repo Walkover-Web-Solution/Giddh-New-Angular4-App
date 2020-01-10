@@ -107,6 +107,7 @@ const unSupportedPrefixAndSuffix = [
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
     @Input('mask') public maskExpression: string = '';
+    // special input for extracting raw value of input box
     @Input() public rawInputValue: any = '';
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
     @Input() public patterns: IConfig['patterns'] = {};
@@ -189,6 +190,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         }
 
         if (rawInputValue) {
+            // replace input value with raw value for getting update values
             this._inputValue = this.rawInputValue.toString();
         }
 
@@ -226,12 +228,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     }
 
     // tslint:disable-next-line: cyclomatic-complexity
-    public validate({ value }: FormControl): ValidationErrors | null {
+    public validate({value}: FormControl): ValidationErrors | null {
         if (!this._maskService.validation) {
             return null;
         }
         if (this._maskService.ipError) {
-            return { 'Mask error': true };
+            return {'Mask error': true};
         }
         if (
             this._maskValue.startsWith('dot_separator') ||
@@ -283,14 +285,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) ||
                 (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?'))
             ) {
-                return { 'Mask error': true };
+                return {'Mask error': true};
             }
             if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
                 if (value.toString().length < length) {
-                    return { 'Mask error': true };
+                    return {'Mask error': true};
                 }
             }
         }
@@ -412,14 +414,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
 
                 // replace dot from special characters in following type of separator
                 if ([Separators.IND_COMMA_SEPARATED.toString(), Separators.INT_COMMA_SEPARATED.toString(),
-                Separators.INT_SPACE_SEPARATED.toString(), Separators.INT_APOSTROPHE_SEPARATED.toString()]
+                    Separators.INT_SPACE_SEPARATED.toString(), Separators.INT_APOSTROPHE_SEPARATED.toString()]
                     .includes(this.maskExpression)) {
                     specialChars = specialChars.filter((f: string) => f !== '.');
                 }
                 this.specialCharacters = specialChars;
                 while (
                     this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
-                ) {
+                    ) {
                     el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                 }
             }
@@ -457,7 +459,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
-            (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+        (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
             ? (this._maskService.formElementProperty = [
                 'value',
                 this._maskService.applyMask(inputValue, this._maskService.maskExpression),
