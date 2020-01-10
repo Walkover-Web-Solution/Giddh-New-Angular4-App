@@ -895,9 +895,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         if (this.isRcmEntry && requestObj.taxes.length === 0) {
-            // Taxes are mandatory for RCM entries
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
 
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;

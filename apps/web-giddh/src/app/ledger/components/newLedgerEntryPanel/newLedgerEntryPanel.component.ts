@@ -532,9 +532,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public saveLedger() {
         if (this.isRcmEntry && !this.validateTaxes()) {
-            // Taxes are mandatory for RCM entries
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */

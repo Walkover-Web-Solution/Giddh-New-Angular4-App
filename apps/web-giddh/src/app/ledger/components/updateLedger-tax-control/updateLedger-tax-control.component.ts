@@ -243,7 +243,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     public handleInputFocus(): void {
         this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
-        this.taxInputElement.nativeElement.classList.remove('error-box');
+        if (this.taxInputElement && this.taxInputElement.nativeElement) {
+            this.taxInputElement.nativeElement.classList.remove('error-box');
+        }
     }
 
     /**
