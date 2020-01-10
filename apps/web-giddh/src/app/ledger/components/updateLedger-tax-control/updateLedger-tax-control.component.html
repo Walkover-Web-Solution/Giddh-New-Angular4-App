@@ -4,9 +4,9 @@
 
     <a id="tax" class="clearfix">
         <div class="multi-select adjust">
-            <input type="text" readonly [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput" name=""
+            <input #taxInputElement type="text" readonly [mask]="maskInput" [prefix]="prefixInput" [suffix]="suffixInput" name=""
                 class="form-control cursor-pointer text-right" [(ngModel)]="formattedTotal"
-                (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" />
+                (focus)="handleInputFocus()" />
             <span class="caret"></span>
         </div>
     </a>

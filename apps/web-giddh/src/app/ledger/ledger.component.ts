@@ -206,6 +206,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
+
+    /** True, if RCM entry needs to be displayed */
+    public shouldShowRcmEntry: boolean = false;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
 
@@ -420,6 +424,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        console.log('Selected Tx: ', txn);
+        this.handleRcmVisibility(txn, true);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
         this.newLedPanelCtrl.detectChanges();
@@ -1098,6 +1104,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showUpdateLedgerForm = true;
         this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+        this.handleRcmVisibility(txn)
         this.loadUpdateLedgerComponent();
         this.updateLedgerModal.show();
     }
@@ -1152,7 +1159,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
 
         if (blankTransactionObj.transactions.length > 0) {
-
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
@@ -1255,6 +1261,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
+
+        componentInstance.shouldShowRcmEntry = this.shouldShowRcmEntry;
 
         componentInstance.closeUpdateLedgerModal.subscribe(() => {
             this.hideUpdateLedgerModal();
@@ -1637,5 +1645,67 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.closingBalanceBeforeReconcile = null;
         this.getBankTransactions();
         this.getTransactionData();
+    }
+
+    /**
+     * Handles RCM section visinility based on provided transaction details
+     *
+     * @private
+     * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
+     * @param {boolean} [isCreateFlow=false] True, if a create new ledger flow is carried out
+     * @memberof LedgerComponent
+     */
+    private handleRcmVisibility(transaction: any, isCreateFlow: boolean = false): void {
+        this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
+            let currentLedgerAccountDetails, selectedAccountDetails;
+            const transactionUniqueName = (isCreateFlow) ?
+                (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '' :
+                transaction.particular.uniqueName;
+            for (let index = 0; index < accounts.length; index++) {
+                const account = accounts[index];
+                if (account.uniqueName === this.lc.accountUnq) {
+                    // Found the current ledger details
+                    currentLedgerAccountDetails = _.cloneDeep(account);
+                }
+                if (account.uniqueName === transactionUniqueName) {
+                    // Found the user selected particular account
+                    selectedAccountDetails = _.cloneDeep(account);
+                }
+                if (currentLedgerAccountDetails && selectedAccountDetails) {
+                    // Accounts found, break the loop
+                    break;
+                }
+            }
+            this.shouldShowRcmEntry = this.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+            console.log('RCM: ', this.shouldShowRcmEntry);
+            if (this.lc && this.lc.currentBlankTxn) {
+                this.lc.currentBlankTxn['shouldShowRcmEntry'] = this.shouldShowRcmEntry;
+                console.log('Current: ', this.lc.currentBlankTxn);
+            }
+        });
+    }
+
+    /**
+     * Decides based on current ledger and selected account details whether the RCM section
+     * needs to be displayed
+     *
+     * @private
+     * @param {*} currentLedgerAccountDetails Current ledger detail
+     * @param {*} selectedAccountDetails User selected particular account
+     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @memberof LedgerComponent
+     */
+    private shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+        if (currentLedgerAccountDetails && selectedAccountDetails) {
+            console.log('Current Ledger: ', currentLedgerAccountDetails);
+            console.log('Selected account: ', selectedAccountDetails);
+            const rcmUniqueNames = ['fixedassets', 'purchases', 'otherindirectexpenses'];
+
+            return (currentLedgerAccountDetails.parentGroups[0] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[0].uniqueName)) ||
+                (currentLedgerAccountDetails.parentGroups[1] && rcmUniqueNames.includes(currentLedgerAccountDetails.parentGroups[1].uniqueName)) ||
+                (selectedAccountDetails.parentGroups[0] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[0].uniqueName)) ||
+                (selectedAccountDetails.parentGroups[1] && rcmUniqueNames.includes(selectedAccountDetails.parentGroups[1].uniqueName));
+        }
+        return false;
     }
 }

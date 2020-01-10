@@ -402,6 +402,21 @@
 
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
+            <!-- reverse charge transction start -->
+            <div *ngIf="shouldShowRcmEntry" class="pdB1 mTB1">
+                <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
+                    (click)="toggleRcmCheckbox($event)">
+                <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
+                    [popover]="rcmTemplate" placement="right" containerClass="update-ledger-rcm">
+                    Is this transaction applicable for <strong> Reverse Charge?</strong>
+                </label>
+                <span class="text-light font-12"> (Tax is compulsory)</span>
+            </div>
+            <ng-template #rcmTemplate>
+                <rcm-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+            </ng-template>
+            <!-- reverse charge transction end  -->
+
             <!-- region amount and discount container -->
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel">
@@ -534,6 +549,8 @@
                                     [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : vm.selectedLedger.taxes"
                                     (hideOtherPopups)="hideDiscount()" (selectedTaxEvent)="vm.taxTrxUpdated($event)">
                                 </update-ledger-tax-control>
+                                <!-- TODO: After design finalization
+                                    <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
                             </span>
 
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
