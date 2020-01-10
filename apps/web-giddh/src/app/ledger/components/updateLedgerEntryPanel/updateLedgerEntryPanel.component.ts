@@ -1,12 +1,23 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -14,6 +25,7 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
+import { RCM_ACTIONS, RcmModalConfiguration } from '../../../common/rcm-modal/rcm-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
@@ -26,8 +38,10 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -35,12 +49,11 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
-import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 
 @Component({
     selector: 'update-ledger-entry-panel',
     templateUrl: './updateLedgerEntryPanel.component.html',
-    styleUrls: ['./updateLedgerEntryPanel.component.css'],
+    styleUrls: ['./updateLedgerEntryPanel.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -64,6 +77,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashEntry: any;
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
+    /** True, if RCM should be displayed */
+    @Input() public shouldShowRcmEntry: boolean;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -71,6 +86,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax') public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+
+    /** RCM popup instance */
+    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
@@ -80,6 +98,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private defaultWarehouse: string;
     /** True, if warehouse drop down should be displayed */
     public shouldShowWarehouse: boolean;
+    /** True, if subvoucher is RCM */
+    public isRcmEntry: boolean = false;
+    /** RCM modal configuration */
+    public rcmConfiguration: RcmModalConfiguration;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -124,14 +146,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public accountPettyCashStream: any;
 
     constructor(
-        private store: Store<AppState>,
-        private _ledgerService: LedgerService,
-        private _toasty: ToasterService,
         private _accountService: AccountService,
+        private _ledgerService: LedgerService,
+        private generalService: GeneralService,
         private _ledgerAction: LedgerActions,
         private _loaderService: LoaderService,
         private _settingsTagActions: SettingsTagActions,
-        private settingsUtilityService: SettingsUtilityService
+        private settingsUtilityService: SettingsUtilityService,
+        private store: Store<AppState>,
+        private _toasty: ToasterService
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -165,11 +188,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isHide = !this.isHide;
     }
 
-    public async ngOnInit() {
-        this.showAdvanced = false;
-        this.vm.selectedLedger = new LedgerResponse();
-        this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
-
+    public ngOnInit() {
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
@@ -177,7 +196,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
             }
         });
-
+        this.showAdvanced = false;
+        this.vm.selectedLedger = new LedgerResponse();
+        this.vm.selectedLedger.otherTaxModal = new SalesOtherTaxesModal();
+        // this.totalAmount = this.vm.totalAmount;
         this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
@@ -191,6 +213,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.isPettyCash) {
             this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
+                    // this.accountPettyCashStream = res;
+                    // this.editAccUniqueName$ = observableOf(this.accountPettyCashStream.baseAccount.uniqueName);
                     this.entryUniqueName = res.uniqueName;
                     this.accountUniqueName = res.particular.uniqueName;
                     this.selectedLedgerStream$ = observableOf(res as LedgerResponse);
@@ -204,57 +228,37 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.entryUniqueName = resp[0];
                 this.accountUniqueName = resp[1];
                 this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
+                // this.firstBaseAccountSelected = this.accountUniqueName;
             }
         });
 
         // emit upload event
         this.uploadInput = new EventEmitter<UploadInput>();
         // set file upload options
-        this.fileUploadOptions = {concurrency: 0};
-
-        // assign flatten accounts to flattenAccountList
-        this.flattenAccountListStream$.pipe(take(1)).subscribe(flattenAccounts => {
-            if (flattenAccounts) {
-                this.vm.flatternAccountList = flattenAccounts;
-            }
-        });
-
-        // assign company profile to profile variable
-        this.companyProfile$.pipe(take(1)).subscribe(profile => {
-            if (profile) {
-                this.profileObj = profile;
-            }
-        });
-
-        // get active account details
-        try {
-            let accountResponse = await this._accountService.GetAccountDetailsV2(this.accountUniqueName).toPromise();
-            if (accountResponse && accountResponse.status === 'success') {
-                this.activeAccount = accountResponse.body as AccountResponse;
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        this.fileUploadOptions = { concurrency: 0 };
 
         // get flatten_accounts list && get transactions list && get ledger account list
-        this.selectedLedgerStream$
-            .subscribe((resp: any) => {
-                if (resp) {
+        observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
+            .subscribe((resp: any[]) => {
+                if (resp[0] && resp[1] && resp[3]) {
 
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
-                    if (this.isPettyCash && this.accountUniqueName && !this.activeAccount) {
+                    if (this.isPettyCash && this.accountUniqueName && resp[2].status !== 'success') {
                         return;
                     }
 
                     //#region flatten group list assign process
-                    this.vm.giddhBalanceDecimalPlaces = this.profileObj.balanceDecimalPlaces;
+                    this.vm.flatternAccountList = resp[0];
+                    this.activeAccount = cloneDeep(resp[2].body);
+                    this.profileObj = resp[3];
+                    this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
 
                     // special check if we have petty cash mode and we receive an entry whose uniquename is null
                     // so it means it's other account entry of petty cash
                     // so for that we have to add a dummy account in flatten account array
                     if (this.isPettyCash) {
-                        if (resp.othersCategory) {
+                        if (resp[1].othersCategory) {
                             // check we already have others account in flatten account, then don't do anything
                             const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
                             if (!isThereOthersAcc) {
@@ -268,12 +272,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
 
                     // set account details for multi currency account
-                    this.prepareMultiCurrencyObject(resp.particular.uniqueName);
+                    this.prepareMultiCurrencyObject(resp[1].particular.uniqueName);
                     // end multi currency assign
 
                     let stockListFormFlattenAccount: IFlattenAccountsResultItem;
                     if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
-                        stockListFormFlattenAccount = cloneDeep(this.vm.flatternAccountList.find((acc) => acc.uniqueName === this.activeAccount.uniqueName));
+                        stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
                     }
 
                     let isStockableAccount: boolean = false;
@@ -299,7 +303,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                     }
 
-                    this.vm.getUnderstandingText(resp.particularType, resp.particular.name);
+                    this.vm.getUnderstandingText(resp[1].particularType, resp[1].particular.name);
 
                     let accountsArray: IOption[] = [];
                     let accountsForBaseAccountArray: IOption[] = [];
@@ -307,7 +311,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         // stocks from ledger account
                         this.vm.flatternAccountList.map(acc => {
                             // normal entry
-                            accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
 
                             // normal merge account entry
                             if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -330,7 +334,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     accountsArray.push({
                                         value: `${acc.uniqueName}#${as.uniqueName}`,
                                         label: acc.name + '(' + as.uniqueName + ')',
-                                        additional: Object.assign({}, acc, {stock: as})
+                                        additional: Object.assign({}, acc, { stock: as })
                                     });
                                     // normal merge account entry
                                     if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -339,7 +343,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                             accountsArray.push({
                                                 value: `${ma}#${as.uniqueName}`,
                                                 label: ma + '(' + as.uniqueName + ')',
-                                                additional: Object.assign({}, acc, {stock: as})
+                                                additional: Object.assign({}, acc, { stock: as })
                                             });
                                         });
                                     }
@@ -347,7 +351,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
 
                             // add current account entry in base account array
-                            accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                            accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                         });
 
                     } else {
@@ -357,15 +361,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     accountsArray.push({
                                         value: `${acc.uniqueName}#${as.uniqueName}`,
                                         label: `${acc.name} (${as.uniqueName})`,
-                                        additional: Object.assign({}, acc, {stock: as})
+                                        additional: Object.assign({}, acc, { stock: as })
                                     });
                                 });
-                                accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                                accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                             } else {
-                                accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                                accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
 
                                 // add current account entry in base account array
-                                accountsForBaseAccountArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                                accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                             }
                             // normal merge account entry
                             if (acc.mergedAccounts && acc.mergedAccounts !== '') {
@@ -386,7 +390,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     //#endregion
 
                     //#region transaction assignment process
-                    this.vm.selectedLedger = resp;
+                    this.vm.selectedLedger = resp[1];
+                    this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
 
                     if (this.isPettyCash) {
                         // create missing property for petty cash
@@ -406,7 +411,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.selectedLedger.taxes = [];
                         this.vm.selectedLedger.discounts = [];
                         this.vm.selectedLedger.attachedFile = '';
-                        this.vm.selectedLedger.voucher = {name: '', shortCode: ''};
+                        this.vm.selectedLedger.voucher = { name: '', shortCode: '' };
                         this.vm.selectedLedger.invoicesToBePaid = [];
                     }
 
@@ -421,30 +426,31 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
                     let otherTaxesModal = new SalesOtherTaxesModal();
-                    otherTaxesModal.itemLabel = resp.particular.name;
+                    otherTaxesModal.itemLabel = resp[1].particular.name;
 
                     let tax: TaxResponse;
-                    if (resp.tcsTaxes && resp.tcsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp.tcsTaxes[0]);
+                    if (resp[1].tcsTaxes && resp[1].tcsTaxes.length) {
+                        tax = companyTaxes.find(f => f.uniqueName === resp[1].tcsTaxes[0]);
                         this.vm.selectedLedger.otherTaxType = 'tcs';
-                    } else if (resp.tdsTaxes && resp.tdsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp.tdsTaxes[0]);
+                    } else if (resp[1].tdsTaxes && resp[1].tdsTaxes.length) {
+                        tax = companyTaxes.find(f => f.uniqueName === resp[1].tdsTaxes[0]);
                         this.vm.selectedLedger.otherTaxType = 'tds';
                     }
 
                     if (tax) {
-                        otherTaxesModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                        otherTaxesModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                     }
 
-                    otherTaxesModal.tcsCalculationMethod = resp.tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+                    // otherTaxesModal.appliedOtherTax = (resp[1].tcsTaxes.length ? resp[1].tcsTaxes : resp[1].tdsTaxes) || [];
+                    otherTaxesModal.tcsCalculationMethod = resp[1].tcsCalculationMethod || SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
 
                     this.vm.selectedLedger.isOtherTaxesApplicable = !!(tax);
                     this.vm.selectedLedger.otherTaxModal = otherTaxesModal;
 
-                    this.baseAccount$ = observableOf(resp.particular);
-                    this.baseAccountName$ = resp.particular.uniqueName;
-                    this.baseAcc = resp.particular.uniqueName;
-                    this.firstBaseAccountSelected = resp.particular.uniqueName;
+                    this.baseAccount$ = observableOf(resp[1].particular);
+                    this.baseAccountName$ = resp[1].particular.uniqueName;
+                    this.baseAcc = resp[1].particular.uniqueName;
+                    this.firstBaseAccountSelected = resp[1].particular.uniqueName;
 
                     this.vm.selectedLedger.transactions.map(t => {
 
@@ -504,7 +510,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
                     }
 
-                    this.vm.reInitilizeDiscount(resp);
+                    this.vm.reInitilizeDiscount(resp[1]);
 
                     this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
                     this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
@@ -545,7 +551,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
             : false;
 
-        this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+        this.vm.foreignCurrencyDetails = { code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
 
         if (this.vm.isMultiCurrencyAvailable) {
             let currencies: ICurrencyResponse[] = [];
@@ -553,7 +559,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
             this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
             multiCurrencyAccCurrency = currencies.find(f => f.code === this.multiCurrencyAccDetails.currency);
-            this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
+            this.vm.baseCurrencyDetails = { code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol };
         } else {
             this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
         }
@@ -615,8 +621,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: {company: companyUniqueName},
-                headers: {'Session-Id': sessionKey},
+                data: { company: companyUniqueName },
+                headers: { 'Session-Id': sessionKey },
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -883,10 +889,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         }
+        if (this.isRcmEntry && requestObj.taxes.length === 0) {
+            // Taxes are mandatory for RCM entries
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
 
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
-
+        requestObj.subVoucher = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         requestObj.transactions.map((transaction) => {
@@ -895,7 +906,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (transaction.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 } else {
-                    transaction.inventory.warehouse = {name: '', uniqueName: ''};
+                    transaction.inventory.warehouse = { name: '', uniqueName: '' };
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 }
             }
@@ -950,10 +961,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this._ledgerService.DownloadInvoice(downloadRequest, this.activeAccount ? this.activeAccount.uniqueName : '').subscribe(d => {
+        this._ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
-                return saveAs(blob, `${this.activeAccount ? this.activeAccount.name : ''} - ${invoiceName}.pdf`);
+                return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
             } else {
                 this._toasty.errorToast(d.message);
             }
@@ -1004,9 +1015,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
 
             this.invoiceList = [];
-            this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+            this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
-                    this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
         } else {
@@ -1022,9 +1033,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
 
             this.invoiceList = [];
-            this._ledgerService.GetInvoiceList({accountUniqueName: this.accountUniqueName, status: 'unpaid'}).subscribe((res: any) => {
+            this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
-                    this.invoiceList.push({label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false});
+                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
         } else {
@@ -1104,12 +1115,40 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (Number(this.vm.selectedLedger.exchangeRateForDisplay)) {
             rate = 1 / this.vm.selectedLedger.exchangeRate;
         }
-        this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.vm.giddhBalanceDecimalPlaces)};
+        this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.vm.giddhBalanceDecimalPlaces) };
     }
 
     public exchangeRateChanged() {
         this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
         this.vm.inventoryAmountChanged();
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === RCM_ACTIONS.YES) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+        }
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
     }
 
     // petty cash account changes, change all things related to account uniquename

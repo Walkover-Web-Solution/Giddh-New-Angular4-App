@@ -1,15 +1,32 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, } from '@angular/core';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, Subvoucher } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective, ModalDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
+import { RcmModalConfiguration, RCM_ACTIONS } from '../../../common/rcm-modal/rcm-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -32,6 +49,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
+import { GeneralService } from '../../../services/general.service';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -93,6 +111,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('discount') public discountControl: LedgerDiscountComponent;
     @ViewChild('tax') public taxControll: TaxControlComponent;
 
+    /** RCM popup instance */
+    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
     public fileUploadOptions: UploaderOptions;
@@ -134,16 +155,21 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public warehouses: Array<any>;
     /** Currently selected warehouse */
     public selectedWarehouse: any;
+    /** True, if subvoucher is RCM */
+    public isRcmEntry: boolean = false;
+    /** RCM modal configuration */
+    public rcmConfiguration: RcmModalConfiguration;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-                private _ledgerService: LedgerService,
-                private cdRef: ChangeDetectorRef,
-                private _toasty: ToasterService,
-                private _loaderService: LoaderService,
-                private settingsUtilityService: SettingsUtilityService
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private _ledgerService: LedgerService,
+        private _loaderService: LoaderService,
+        private settingsUtilityService: SettingsUtilityService,
+        private _toasty: ToasterService
     ) {
         this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
@@ -181,7 +207,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = {concurrency: 0};
+        this.fileUploadOptions = { concurrency: 0 };
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.activeAccount = acc;
@@ -277,7 +303,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            this.blankLedger.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
+                            this.blankLedger.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                             break;
                         default:
                             appliedTaxes.push(tax.uniqueName);
@@ -316,11 +342,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public addToDrOrCr(type: string, e: Event) {
+        e.stopPropagation();
+        if (this.isRcmEntry && !this.validateTaxes()) {
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
         this.changeTransactionType.emit({
             type,
             warehouse: this.selectedWarehouse
         });
-        e.stopPropagation();
     }
 
     public calculateDiscount(total: number) {
@@ -501,11 +531,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
+        if (this.isRcmEntry && !this.validateTaxes()) {
+            // Taxes are mandatory for RCM entries
+            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+            return;
+        }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
             if (transaction.inventory && !transaction.inventory.warehouse) {
-                transaction.inventory.warehouse = {name: '', uniqueName: this.selectedWarehouse};
+                transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
         });
         this.saveBlankLedger.emit(true);
@@ -527,8 +562,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
-                data: {company: companyUniqueName},
-                headers: {'Session-Id': sessionKey},
+                data: { company: companyUniqueName },
+                headers: { 'Session-Id': sessionKey },
             };
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
@@ -560,7 +595,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public unitChanged(stockUnitCode: string) {
         let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
+        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate.toString());
         }
@@ -867,6 +902,35 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === RCM_ACTIONS.YES) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+        }
+        this.currentTxn['subVoucher'] = this.isRcmEntry ? Subvoucher.ReverseCharge : '';
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
+    }
+
+    /**
      * Assigns the prefix and suffix based on currency toggle button present in this
      * component
      *
@@ -877,5 +941,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
         this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
         this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+    }
+
+    /**
+     * Validates the taxes
+     *
+     * @private
+     * @returns {boolean} True, if taxes are applied
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    private validateTaxes(): boolean {
+        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+        return taxes.length > 0;
     }
 }
