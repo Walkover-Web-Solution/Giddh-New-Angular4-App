@@ -70,7 +70,7 @@ export class SalesRegisterExpandComponent implements OnInit {
         this.setCurrentPageTitle();
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = 20;
+        this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
 
 

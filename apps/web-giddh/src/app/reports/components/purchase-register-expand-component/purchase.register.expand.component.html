@@ -302,11 +302,11 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(PurchaseRegisteDetailedResponse$ | async).totalItems > 10">
+        <div class="text-center " *ngIf="(PurchaseRegisteDetailedResponse$ | async).totalItems > 50">
             <pagination [totalItems]="
                     (PurchaseRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedPurchaseRequestFilter.page" [maxSize]="5" class="pagination-sm "
-                [boundaryLinks]="true" [itemsPerPage]="10" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
+                [boundaryLinks]="true" [itemsPerPage]="50" [rotate]="false" previousText="&#9668; " nextText="&#9658; "
                 (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>

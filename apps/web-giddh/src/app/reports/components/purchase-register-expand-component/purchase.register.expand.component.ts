@@ -63,7 +63,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         this.setCurrentPageTitle();
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
-        this.getDetailedPurchaseRequestFilter.count = 20;
+        this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
 
 
