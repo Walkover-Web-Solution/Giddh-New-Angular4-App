@@ -246,7 +246,9 @@ export class GeneralService {
             console.log('Current Ledger: ', currentLedgerAccountDetails);
             console.log('Selected account: ', selectedAccountDetails);
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+                // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                // List of not allowed second level parent groups
                 const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
                 const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
