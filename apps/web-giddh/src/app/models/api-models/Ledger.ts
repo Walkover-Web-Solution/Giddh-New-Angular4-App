@@ -96,6 +96,7 @@ export class LedgerResponse {
     public particular?: INameUniqueName;
     public particularType?: string;
     public actualAmount?: number;
+    public actualRate?: number;
     public invoicesToBePaid?: string[];
     public linkedInvoices?: string[];
     public warning?: string;

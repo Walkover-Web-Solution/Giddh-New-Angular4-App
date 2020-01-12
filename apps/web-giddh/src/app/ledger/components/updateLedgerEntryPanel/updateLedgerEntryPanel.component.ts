@@ -385,8 +385,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         });
                     }
 
-                    this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'text'));
-                    this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'text');
+                    this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
+                    this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
                     //#endregion
 
                     //#region transaction assignment process
@@ -457,7 +457,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
                             let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
                             if (this.vm.isValidCategory(category)) {
+                                /**
+                                 * replace transaction amount with the actualAmount key that we got in response of get-ledger
+                                 * because of ui and api follow different calculation pattern,
+                                 * so transaction amount of income/ expenses account differ from both the side
+                                 * so overcome this issue api provides the actual amount which was added by user while creating entry
+                                 */
                                 t.amount = this.vm.selectedLedger.actualAmount;
+                                // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                                if (t.inventory) {
+                                    t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                                    t.inventory.rate = this.vm.selectedLedger.actualRate;
+                                }
                             }
                         }
 
@@ -521,14 +532,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
                     this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
                     //#endregion
-                }
 
-                setTimeout(() => {
-                    this.vm.getEntryTotal();
                     this.vm.generatePanelAmount();
-                    this.vm.generateGrandTotal();
-                    this.vm.generateCompoundTotal();
-                }, 500);
+                }
             });
 
         // check if delete entry is success
