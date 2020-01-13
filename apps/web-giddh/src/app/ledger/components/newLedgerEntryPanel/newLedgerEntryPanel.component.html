@@ -292,22 +292,21 @@
                 [style.width.px]="161"></sh-select> -->
                             </td>
 
-                            <td class="pdR1 pt-2 hidden-xs">
+                            <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
                                 <input type="checkbox" name="advanceReceipt"
-                            [(ngModel)]="blankLedger.advanceReceipt"> Advance Receipt
+                                    (change)="handleAdvanceReceiptChange($event)" [(ngModel)]="isAdvanceReceipt">
+                                Advance Receipt
                             </td>
-
-
 
                         </tr>
                     </table>
 
-                    <table class="hidden-sm">
+                    <table *ngIf="shouldShowAdvanceReceipt"  class="hidden-lg hidden-md hidden-sm">
                         <tbody>
                             <tr>
                                 <td class="pdR1 pt-1">
-                                    <input type="checkbox" name="advanceReceipt"
-                                [(ngModel)]="blankLedger.advanceReceipt"> Advance Receipt
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
+                                        (change)="handleAdvanceReceiptChange($event)"> Advance Receipt
                                 </td>
                             </tr>
                         </tbody>

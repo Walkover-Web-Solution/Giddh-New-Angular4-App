@@ -178,8 +178,7 @@
 
                                         <input type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
-                                               [rawInputValue]="txn.amount"
-                                            [prefix]="vm.selectedPrefixForCurrency"
+                                            [rawInputValue]="txn.amount" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
                                             (click)="addBlankTrx('DEBIT', txn, $event)" (blur)="onTxnAmountChange(txn)">
 
@@ -481,7 +480,8 @@
                                 <input type="text" name=""
                                     (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)"
                                     [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                    [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.stockTrxEntry.inventory.rate"
+                                    [suffix]="vm.selectedSuffixForCurrency"
+                                    [rawInputValue]="vm.stockTrxEntry.inventory.rate"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control text-right" />
                                 <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
@@ -498,9 +498,9 @@
                         <div class="text-right table-amount">
                             <label class="font-12">Amount</label>
                             <input type="text" name="" class="form-control text-right" [mask]="vm.inputMaskFormat"
-                                   [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
-                                (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()"
-                                [(ngModel)]="vm.totalAmount" />
+                                [rawInputValue]="vm.totalAmount" [prefix]="vm.selectedPrefixForCurrency"
+                                [suffix]="vm.selectedSuffixForCurrency" (focus)="hideDiscountTax()"
+                                (blur)="vm.inventoryAmountChanged()" [(ngModel)]="vm.totalAmount" />
 
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                 <ng-container
@@ -569,8 +569,8 @@
                             <label class="font-12">Total Amt.</label>
                             <input type="text" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
                                 [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                   [rawInputValue]="vm.grandTotal"
-                                [suffix]="vm.selectedSuffixForCurrency" (blur)="vm.inventoryTotalChanged()" />
+                                [rawInputValue]="vm.grandTotal" [suffix]="vm.selectedSuffixForCurrency"
+                                (blur)="vm.inventoryTotalChanged()" />
                             <p class="mb-0 amnt-total" *ngIf="vm.isMultiCurrencyAvailable">
                                 <ng-container
                                     *ngTemplateOutlet="totalWithCurrencySymbol;context: { $implicit: vm.convertedGrandTotal }">
@@ -598,7 +598,8 @@
 
                                     <input class="text-right form-control" disabled="disabled"
                                         [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                        [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="vm.selectedLedger.otherTaxesSum"
+                                        [suffix]="vm.selectedSuffixForCurrency"
+                                        [rawInputValue]="vm.selectedLedger.otherTaxesSum"
                                         [(ngModel)]="vm.selectedLedger.otherTaxesSum" name="entry.otherTaxesSum" />
                                 </div>
                             </div>
@@ -745,9 +746,9 @@
                                     </div>
                                 </td>
 
-                                <td class="pdR1 pt-1 xs-pt-0">
-                                    <input type="checkbox" name="advanceReceipt"
-                                [(ngModel)]="vm.selectedLedger.advanceReceipt"> Advance Receipt
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pt-1 xs-pt-0">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"> Advance
+                                    Receipt
                                 </td>
 
                             </tr>

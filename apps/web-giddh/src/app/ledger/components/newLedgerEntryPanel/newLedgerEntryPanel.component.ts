@@ -159,6 +159,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: RcmModalConfiguration;
+    /** True, if the selected voucher type is 'Receipt' */
+    public shouldShowAdvanceReceipt: boolean = false;
+    /** True, if advance receipt is enabled */
+    public isAdvanceReceipt: boolean = false;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -531,7 +535,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
-        if (this.isRcmEntry && !this.validateTaxes()) {
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
@@ -767,7 +771,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public getInvoiveListsData(e: any) {
         if (e.value === 'rcpt') {
+            this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
+        } else {
+            this.shouldShowAdvanceReceipt = false;
+            this.isAdvanceReceipt = false;
         }
     }
 
@@ -932,6 +940,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.rcmPopup) {
             this.rcmPopup.hide();
         }
+    }
+
+    /**
+     * Handles the advance receipt change by appending the advance receipt
+     * in subvoucher of current transaction
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleAdvanceReceiptChange(): void {
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
     }
 
     /**
