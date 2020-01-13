@@ -302,4 +302,10 @@ span.eligible-ITC {
     .entrypanel .bl-1 {
         border-left: 0;
     }
+    .advanced input[type="checkbox"] {
+        width: initial !important;
+    }
+    .xs-pt-0 {
+        padding-top: 0px !important;
+    }
 }

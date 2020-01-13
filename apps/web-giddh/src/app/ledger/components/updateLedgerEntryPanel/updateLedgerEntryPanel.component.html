@@ -736,13 +736,18 @@
 
                                 </td>
 
-                                <td>
+                                <td class="pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
                                         <input type="text" placeholder="Voucher no." class="form-control"
                                             [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
                                             [style.width.px]="80" />
                                     </div>
+                                </td>
+
+                                <td class="pdR1 pt-1 xs-pt-0">
+                                    <input type="checkbox" name="advanceReceipt"
+                                [(ngModel)]="vm.selectedLedger.advanceReceipt"> Advance Receipt
                                 </td>
 
                             </tr>
