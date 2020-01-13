@@ -537,7 +537,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public saveLedger() {
         if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM entries
+                // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
                 return;
             }
