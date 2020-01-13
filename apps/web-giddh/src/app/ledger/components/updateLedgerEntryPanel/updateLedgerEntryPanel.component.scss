@@ -149,7 +149,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .icon-box {
     text-align: center;
     display: flex;
-    align-items: center;
+    -webkit-box-align: end;
+    align-items: flex-end;
     padding: 8px 10px 10px;
 }
 
