@@ -102,6 +102,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public rcmConfiguration: RcmModalConfiguration;
     /** True, if RCM should be displayed */
     public shouldShowRcmEntry: boolean;
+    /** True, if advance receipt is enabled */
+    public isAdvanceReceipt: boolean = false;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -394,6 +396,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.vm.selectedLedger = resp[1];
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
+                    this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === Subvoucher.AdvanceReceipt);
 
                     if (this.isPettyCash) {
                         // create missing property for petty cash
@@ -902,9 +905,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         }
-        if (this.isRcmEntry && requestObj.taxes.length === 0) {
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && requestObj.taxes.length === 0) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
-                // Taxes are mandatory for RCM entries
+                // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
                 return;
             }
@@ -912,7 +915,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
-        requestObj.subVoucher = (this.isRcmEntry) ? Subvoucher.ReverseCharge : '';
+        requestObj.subVoucher = (this.isRcmEntry) ? Subvoucher.ReverseCharge : (this.isAdvanceReceipt) ? Subvoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
         requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         requestObj.transactions.map((transaction) => {
