@@ -77,8 +77,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashEntry: any;
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
-    /** True, if RCM should be displayed */
-    @Input() public shouldShowRcmEntry: boolean;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
@@ -102,6 +100,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: RcmModalConfiguration;
+    /** True, if RCM should be displayed */
+    public shouldShowRcmEntry: boolean;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -241,7 +241,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         observableCombineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[3]) {
-
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
                     if (this.isPettyCash && this.accountUniqueName && resp[2].status !== 'success') {
                         return;
@@ -250,6 +249,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     //#region flatten group list assign process
                     this.vm.flatternAccountList = resp[0];
                     this.activeAccount = cloneDeep(resp[2].body);
+                    // Decides whether to show the RCM entry
+                    this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
                     this.profileObj = resp[3];
                     this.vm.giddhBalanceDecimalPlaces = resp[3].balanceDecimalPlaces;
                     this.vm.inputMaskFormat = this.profileObj.balanceDisplayFormat ? this.profileObj.balanceDisplayFormat.toLowerCase() : '';
@@ -391,6 +392,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[1];
+                    // Check the RCM checkbox if API returns subvoucher as Reverse charge
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
 
                     if (this.isPettyCash) {
@@ -901,9 +903,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         if (this.isRcmEntry && requestObj.taxes.length === 0) {
-            // Taxes are mandatory for RCM entries
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
 
         requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
@@ -1194,6 +1198,44 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
             if (this.vm.selectedLedger.transactions[index].inventory) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if anyone of the transactions satisfies the RCM checks
+     *
+     * @private
+     * @param {*} transactions Transactions of the current ledger
+     * @returns {boolean} True, if anyone of the transactions satisfies the RCM checks
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private isRcmEntryPresent(transactions: any): boolean {
+        if (transactions) {
+            console.log('Trx: ', transactions);
+            for (let index = 0; index < transactions.length; index++) {
+                const transactionUniqueName = transactions[index].particular.uniqueName;
+                console.log('transaction unique name: ', transactionUniqueName);
+                let selectedAccountDetails;
+                this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
+                    for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
+                        const account = accounts[accountIndex];
+                        if (account.uniqueName === transactionUniqueName) {
+                            // Found the user selected particular account
+                            selectedAccountDetails = _.cloneDeep(account);
+                            console.log('Found: ', selectedAccountDetails);
+                            break;
+                        }
+                    }
+                });
+                if (selectedAccountDetails) {
+                    const isRcmEntry = this.generalService.shouldShowRcmSection(this.activeAccount, selectedAccountDetails);
+                    console.log('isrcm: ', isRcmEntry);
+                    if (isRcmEntry) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

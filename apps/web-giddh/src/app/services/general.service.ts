@@ -231,4 +231,36 @@ export class GeneralService {
                 buttons
             };
     }
+
+    /**
+     * Decides based on current ledger and selected account details whether the RCM section
+     * needs to be displayed
+     *
+     * @param {*} currentLedgerAccountDetails Current ledger detail
+     * @param {*} selectedAccountDetails User selected particular account
+     * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
+     * @memberof GeneralService
+     */
+    shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+        if (currentLedgerAccountDetails && selectedAccountDetails) {
+            console.log('Current Ledger: ', currentLedgerAccountDetails);
+            console.log('Selected account: ', selectedAccountDetails);
+            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+                // List of allowed first level parent groups
+                const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                // List of not allowed second level parent groups
+                const disallowedSecondLevelUniqueNames = ['discount', 'exchangeloss'];
+                const currentLedgerFirstParent = currentLedgerAccountDetails.parentGroups[0] ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
+                const currentLedgerSecondParent = currentLedgerAccountDetails.parentGroups[1] ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
+                const selectedAccountFirstParent = selectedAccountDetails.parentGroups[0] ? selectedAccountDetails.parentGroups[0].uniqueName : '';
+                const selectedAccountSecondParent = selectedAccountDetails.parentGroups[1] ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
+                // level parent group unique name in allowed unique names and MUST NOT have their second level parent
+                // in disallowed unique names
+                return (allowedFirstLevelUniqueNames.some((firstLevelUniqueName: string) => [currentLedgerFirstParent, selectedAccountFirstParent].includes(firstLevelUniqueName)) &&
+                    !disallowedSecondLevelUniqueNames.some((secondLevelUniqueName: string) => [currentLedgerSecondParent, selectedAccountSecondParent].includes(secondLevelUniqueName)));
+            }
+        }
+        return false;
+    }
 }
