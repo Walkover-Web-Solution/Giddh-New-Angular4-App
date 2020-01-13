@@ -1351,6 +1351,10 @@ export class DaterangepickerComponent implements OnInit {
      * fit into minDate and maxDate limitations.
      */
     disableRange(ranges, range) {
+        // if range have sub-range then don't disable it
+        if (range.ranges && range.ranges.length) {
+            return false;
+        }
         const rangeMarkers = ranges.find(r => r.name === range.name);
         const areBothBefore = rangeMarkers.value.every(date => {
             if (!this.minDate) {
@@ -1580,7 +1584,6 @@ export class DaterangepickerComponent implements OnInit {
                 } else {
                     if (subRange.ranges && subRange.ranges.length) {
                         range = this.findRange(subRange.ranges, label);
-                        return range;
                     }
                 }
             }

@@ -59,7 +59,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-
+    selected: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -271,6 +271,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
                     endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
                 };
+
+                this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
+
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
                 this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);

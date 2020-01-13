@@ -163,8 +163,8 @@ export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
                 value[this._endKey] = change.endDate;
                 this.value = value;
                 this.onChange.emit(value);
-                if (typeof change.chosenLabel === 'string') {
-                    this._el.nativeElement.value = change.chosenLabel;
+                if (typeof change.name === 'string') {
+                    this._el.nativeElement.value = change.name;
                 }
             }
         });

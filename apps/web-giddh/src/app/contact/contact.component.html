@@ -141,6 +141,7 @@
                     <span class="italic underline">
 
                         <input type="text"
+                               [(ngModel)]="selected"
                                ngxDaterangepickerMd
                                [alwaysShowCalendars]="true"
                                [ranges]="datePickerOptions.ranges"
@@ -151,7 +152,7 @@
                                (rangeClicked)="selectedDate($event)"
                                (datesUpdated)="selectedDate($event)"
                                [keepCalendarOpeningWithRange]="true"
-                               [showRangeLabelOnInput]="true"
+                               [showRangeLabelOnInput]="false"
                                class="form-control"
                                placeholder="Select please..."/>
 
@@ -441,11 +442,12 @@
                     <td></td>
                     <td *ngIf="showFieldFilter.parentGroup"></td>
                     <td [attr.colspan]="tableColsPan" class="text-center top-aging-table-top">
-                        <p>
+                        <p style="display: flex;justify-content: center;align-items: center">
                             <strong>Due as on </strong>
                             <span class="italic underline">
 
-                                <input type="text"
+                                <input type="text" style="width: 250px !important;"
+                                       [(ngModel)]="selected"
                                        ngxDaterangepickerMd
                                        [alwaysShowCalendars]="true"
                                        [ranges]="datePickerOptions.ranges"
@@ -456,9 +458,9 @@
                                        [showDropdowns]="true"
                                        [locale]="{applyLabel: 'Done'}"
                                        (datesUpdated)="selectedDate($event)"
-                                       [keepCalendarOpeningWithRange]="true"
-                                       [showRangeLabelOnInput]="true"
-                                       class="form-control"
+                                       [keepCalendarOpeningWithRange]="false"
+                                       [showRangeLabelOnInput]="false"
+                                       class="form-control date-range-picker"
                                        placeholder="Select please..."/>
 
 <!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->

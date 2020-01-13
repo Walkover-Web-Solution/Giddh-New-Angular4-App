@@ -27,5 +27,5 @@ export const DefaultLocaleConfig: LocaleConfig = {
   daysOfWeek: moment.weekdaysMin(),
   monthNames: moment.monthsShort(),
   firstDay: moment.localeData().firstDayOfWeek(),
-  format: 'DD/MM/YYYY'
+  format: 'DD-MMM-YYYY'
 };
