@@ -151,7 +151,7 @@
                                (rangeClicked)="selectedDate($event)"
                                (datesUpdated)="selectedDate($event)"
                                [keepCalendarOpeningWithRange]="true"
-                               [showRangeLabelOnInput]="false"
+                               [showRangeLabelOnInput]="true"
                                class="form-control"
                                placeholder="Select please..."/>
 
@@ -449,14 +449,15 @@
                                        ngxDaterangepickerMd
                                        [alwaysShowCalendars]="true"
                                        [ranges]="datePickerOptions.ranges"
+                                       [showCustomRangeLabel]="true"
                                        [showClearButton]="false"
                                        [showCancel]="true"
+                                       [linkedCalendars]="true"
                                        [showDropdowns]="true"
                                        [locale]="{applyLabel: 'Done'}"
-                                       (rangeClicked)="selectedDate($event)"
                                        (datesUpdated)="selectedDate($event)"
                                        [keepCalendarOpeningWithRange]="true"
-                                       [showRangeLabelOnInput]="false"
+                                       [showRangeLabelOnInput]="true"
                                        class="form-control"
                                        placeholder="Select please..."/>
 

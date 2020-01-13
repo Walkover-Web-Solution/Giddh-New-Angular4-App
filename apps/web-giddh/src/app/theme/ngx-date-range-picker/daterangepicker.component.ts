@@ -63,18 +63,24 @@ export class CalendarVariables {
     end: CalendarData;
 }
 
-export interface RangesInterface {
+export interface DateRangesInterface {
     name: string;
     value: any[];
     ranges: any[];
     isSelected: boolean;
 }
 
+export interface DateRangeClicked {
+    name: string;
+    startDate: Moment;
+    endDate: Moment;
+}
+
 @Component({
     selector: 'ngx-daterangepicker-material',
     styleUrls: ['./daterangepicker.component.scss'],
     templateUrl: './daterangepicker.component.html',
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.ShadowDom,
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => DaterangepickerComponent),
@@ -144,7 +150,7 @@ export class DaterangepickerComponent implements OnInit {
     lastDayOfPreviousMonthClass: string = null;
     // custom ranges
     @Input()
-    ranges: any = {};
+    ranges: DateRangesInterface[] = [];
     @Input()
     showCancel = false;
     @Input()
@@ -152,7 +158,6 @@ export class DaterangepickerComponent implements OnInit {
     @Input()
     showRangeLabelOnInput = false;
     chosenRange: string;
-    rangesArray: Array<any> = [];
     // some state information
     isShown: boolean = false;
     inline = true;
@@ -162,9 +167,9 @@ export class DaterangepickerComponent implements OnInit {
     options: any = {}; // should get some opt from user
     @Input() drops: string;
     @Input() opens: string;
-    @Output('choosedDate') choosedDate: EventEmitter<Object>;
-    @Output('rangeClicked') rangeClicked: EventEmitter<Object>;
-    @Output('datesUpdated') datesUpdated: EventEmitter<Object>;
+    @Output() choosedDate: EventEmitter<DateRangeClicked>;
+    @Output() rangeClicked: EventEmitter<DateRangeClicked>;
+    @Output() datesUpdated: EventEmitter<DateRangeClicked>;
     @ViewChild('pickerContainer') pickerContainer: ElementRef;
     showMonthPicker = false;
 
@@ -259,24 +264,22 @@ export class DaterangepickerComponent implements OnInit {
      * check various start and end date validation in given ranges
      */
     renderRanges() {
-        if (typeof this.ranges === 'object') {
-            this.ranges = this.parseRangesToVm(this.ranges);
+        this.ranges = this.parseRangesToVm(this.ranges);
 
-            // if there's no ranges given, display calender in place of ranges list
-            this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        // if there's no ranges given, display calender in place of ranges list
+        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
 
-            // if no time picker is defined then,
-            // set start date as start of start date
-            // and end date as end of end date
-            if (!this.timePicker) {
-                this.startDate = this.startDate.startOf('day');
-                this.endDate = this.endDate.endOf('day');
-            }
+        // if no time picker is defined then,
+        // set start date as start of start date
+        // and end date as end of end date
+        if (!this.timePicker) {
+            this.startDate = this.startDate.startOf('day');
+            this.endDate = this.endDate.endOf('day');
+        }
 
-            // can't be used together for now
-            if (this.timePicker && this.autoApply) {
-                this.autoApply = false;
-            }
+        // can't be used together for now
+        if (this.timePicker && this.autoApply) {
+            this.autoApply = false;
         }
     }
 
@@ -625,7 +628,7 @@ export class DaterangepickerComponent implements OnInit {
         }
         this.updateMonthsInView();
         if (this.autoApply) {
-            this.datesUpdated.emit({startDate: this.startDate, endDate: this.endDate});
+            this.datesUpdated.emit({name: '', startDate: this.startDate, endDate: this.endDate});
         }
         this.updateView();
     }
@@ -774,10 +777,10 @@ export class DaterangepickerComponent implements OnInit {
             }
         }
         if (this.chosenLabel) {
-            this.choosedDate.emit({chosenLabel: this.chosenLabel, startDate: this.startDate, endDate: this.endDate});
+            this.choosedDate.emit({name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate});
         }
 
-        this.datesUpdated.emit({startDate: this.startDate, endDate: this.endDate});
+        this.datesUpdated.emit({name: '', startDate: this.startDate, endDate: this.endDate});
         this.hide();
     }
 
@@ -1246,7 +1249,7 @@ export class DaterangepickerComponent implements OnInit {
             this.setActiveDate(ActiveDateEnum.Start);
             this.isShown = false; // hide calendars
         }
-        this.rangeClicked.emit({label: range.name, dates: dates.value});
+        this.rangeClicked.emit({name: range.name, startDate: dates.value[0], endDate: dates.value[1]});
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1338,8 +1341,8 @@ export class DaterangepickerComponent implements OnInit {
     clear() {
         this.startDate = moment().startOf('day');
         this.endDate = moment().endOf('day');
-        this.choosedDate.emit({chosenLabel: '', startDate: null, endDate: null});
-        this.datesUpdated.emit({startDate: null, endDate: null});
+        this.choosedDate.emit({name: '', startDate: null, endDate: null});
+        this.datesUpdated.emit({name: '', startDate: null, endDate: null});
         this.hide();
     }
 
@@ -1518,30 +1521,19 @@ export class DaterangepickerComponent implements OnInit {
      * parse given range to view model that datepicker uses
      * @param ranges
      */
-    private parseRangesToVm(ranges) {
-        const parsedRanges: Array<RangesInterface> = [];
+    private parseRangesToVm(ranges: DateRangesInterface[]) {
+        ranges = ranges.map(range => {
+            range.isSelected = false;
+            range.ranges = range.ranges ? range.ranges : [];
+            range.value = range.value ? range.value : [];
 
-        for (const range in ranges) {
-            if (!(ranges[range][0] instanceof moment)) {
-                const subRange = this.parseRangesToVm(ranges[range][0]);
-                parsedRanges.push({
-                    name: range,
-                    value: [],
-                    ranges: subRange,
-                    isSelected: false
-                });
-            } else {
-                const value = this.rangeValidator(ranges, range);
-                parsedRanges.push({
-                    name: range,
-                    value: [value.start, value.end],
-                    ranges: [],
-                    isSelected: false
-                });
+            if (range.ranges) {
+                this.parseRangesToVm(range.ranges);
             }
-        }
 
-        return parsedRanges;
+            return range;
+        });
+        return ranges;
     }
 
     /**
@@ -1549,7 +1541,7 @@ export class DaterangepickerComponent implements OnInit {
      * @param ranges
      * @param rangeName
      */
-    private selectRange(ranges: RangesInterface[], rangeName: string): boolean {
+    private selectRange(ranges: DateRangesInterface[], rangeName: string): boolean {
         let isSelected = false;
         if (ranges && ranges.length) {
             ranges.forEach(range => {

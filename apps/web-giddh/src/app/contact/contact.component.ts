@@ -810,12 +810,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
-        if (value.event.type === 'hide') {
+        this.fromDate = moment(value.startDate).format('DD-MM-YYYY');
+        this.toDate = moment(value.endDate).format('DD-MM-YYYY');
+        // if (value.event.type === 'hide') {
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             this.detectChanges();
-        }
+        // }
     }
 
     public toggleAllSelection(action: boolean) {

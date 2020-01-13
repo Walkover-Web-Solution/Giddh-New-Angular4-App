@@ -44,44 +44,66 @@ const initialState: CurrentCompanyState = {
             cancelLabel: 'Cancel',
             customRangeLabel: 'Custom range'
         },
-        ranges: {
-            Today: [moment(), moment()],
-            Yesterday: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'This Week': [{
-                'Sun - Today': [moment().startOf('week'), moment()],
-                'Mon - Today': [moment().startOf('week').add(1, 'd'), moment()]
+        ranges: [
+            {
+                name: 'Today', value: [moment(), moment()]
+            },
+            {
+                name: 'Yesterday', value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+            },
+            {
+                name: 'Last 7 Days', value: [moment().subtract(6, 'days'), moment()]
+            },
+            {
+                name: 'This Month', value: [moment().startOf('month'), moment().endOf('month')]
+            },
+            {
+                name: 'Last Month', value: [
+                    moment().subtract(1, 'month').startOf('month'),
+                    moment().subtract(1, 'month').endOf('month')
+                ]
+            },
+            {
+                name: 'This Week', ranges: [{
+                    name: 'Sun - Today', value: [moment().startOf('week'), moment()]
+                }, {name: 'Mon - Today', value: [moment().startOf('week').add(1, 'd'), moment()]}]
+            },
+            {
+                name: 'This Quarter to Date', value: [
+                    moment().quarter(moment().quarter()).startOf('quarter'),
+                    moment()
+                ]
+            },
+            {
+                name: 'This Financial Year to Date', value: [
+                    moment().startOf('year').subtract(9, 'year'),
+                    moment()
+                ]
+            },
+            {
+                name: 'This Year to Date', value: [
+                    moment().startOf('year'),
+                    moment()
+                ]
+            },
+            {
+                name: 'Last Quarter', value: [
+                    moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+                    moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+                ]
+            },
+            {
+                name: 'Last Financial Year', value: [
+                    moment().startOf('year').subtract(10, 'year'),
+                    moment().endOf('year').subtract(10, 'year')
+                ]
+            },
+            {
+                name: 'Last Year', value: [
+                    moment().subtract(1, 'year').startOf('year'),
+                    moment().subtract(1, 'year').endOf('year')
+                ]
             }],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Quarter': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().subtract(1, 'year').startOf('year'),
-                moment().subtract(1, 'year').endOf('year')
-            ]
-        },
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     },
@@ -194,14 +216,17 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     ...state,
                     dateRangePickerConfig: {
                         ...state.dateRangePickerConfig,
-                        ranges: {
-                            ...state.dateRangePickerConfig.ranges,
-                            ['This Financial Year to Date']: [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()],
-                            ['Last Financial Year']: [
-                                moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                                moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')
-                            ]
-                        }
+                        ranges: state.dateRangePickerConfig.ranges.map(range => {
+                            if (range.name === 'This Financial Year to Date') {
+                                range.value = [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()];
+                            } else if (range.name === 'Last Financial Year') {
+                                range.value = [
+                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')
+                                ];
+                            }
+                            return range;
+                        })
                     }
                 };
             }
