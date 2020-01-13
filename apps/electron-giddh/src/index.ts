@@ -9,6 +9,7 @@ import {
     LinkedinLoginElectronConfig
 } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+import ElectronLinkedInOAuth2 from "./sampleLinkedin";
 
 let windowManager: WindowManager = null;
 
@@ -50,7 +51,29 @@ ipcMain.on("authenticate", (event, arg) => {
                 console.log(JSON.stringify(token));
                 // use your token.access_token
             });
-    } else {
+    } if (arg === "linkedin") {
+        const myApiOauth = new ElectronLinkedInOAuth2(LinkedinLoginElectronConfig.clientId,
+            LinkedinLoginElectronConfig.clientSecret,"http://127.0.0.1:45589/callback",
+            AdditionalLinkedinLoginParams.scope,
+            {
+                successRedirectURL: "http://localapp.giddh.com:3000/",
+                loopbackInterfaceRedirectionPort: 45587,
+                refocusAfterSuccess: true,
+            }
+        );
+
+        myApiOauth.openAuthWindowAndGetTokens()
+            .then(token => {
+                event.returnValue = token;
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', token);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', token);
+                }
+                console.log(JSON.stringify(token));
+                // use your token.access_token
+            });
+    }  else {
         const electronOauth2 = require("electron-oauth");
         let config = {};
         let bodyParams = {};

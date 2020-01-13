@@ -7,6 +7,7 @@ var util_1 = require("./util");
 var WindowManager_1 = tslib_1.__importDefault(require("./WindowManager"));
 var main_auth_config_1 = require("./main-auth.config");
 var electron_google_oauth2_1 = tslib_1.__importDefault(require("@getstation/electron-google-oauth2"));
+var sampleLinkedin_1 = tslib_1.__importDefault(require("./sampleLinkedin"));
 var windowManager = null;
 electron_1.app.on("ready", function () {
     electron_1.ipcMain.on("log.error", function (event, arg) {
@@ -22,6 +23,25 @@ electron_1.ipcMain.on("open-url", function (event, arg) {
 electron_1.ipcMain.on("authenticate", function (event, arg) {
     if (arg === "google") {
         var myApiOauth = new electron_google_oauth2_1.default(main_auth_config_1.GoogleLoginElectronConfig.clientId, main_auth_config_1.GoogleLoginElectronConfig.clientSecret, ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'], {
+            successRedirectURL: "http://localapp.giddh.com:3000/",
+            loopbackInterfaceRedirectionPort: 45587,
+            refocusAfterSuccess: true,
+        });
+        myApiOauth.openAuthWindowAndGetTokens()
+            .then(function (token) {
+            event.returnValue = token;
+            if (event.reply) {
+                event.reply('take-your-gmail-token', token);
+            }
+            else if (event.sender.send) {
+                event.sender.send('take-your-gmail-token', token);
+            }
+            console.log(JSON.stringify(token));
+            // use your token.access_token
+        });
+    }
+    if (arg === "linkedin") {
+        var myApiOauth = new sampleLinkedin_1.default(main_auth_config_1.LinkedinLoginElectronConfig.clientId, main_auth_config_1.LinkedinLoginElectronConfig.clientSecret, "http://127.0.0.1:45589/callback", main_auth_config_1.AdditionalLinkedinLoginParams.scope, {
             successRedirectURL: "http://localapp.giddh.com:3000/",
             loopbackInterfaceRedirectionPort: 45587,
             refocusAfterSuccess: true,
