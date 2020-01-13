@@ -901,6 +901,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn[entry[1]] = this.currentTxn[entry[0]] + this.currentTxn[entry[1]];
             this.currentTxn[entry[0]] = this.currentTxn[entry[1]] - this.currentTxn[entry[0]];
         });
+        this.discountControl.discountTotal = this.currentTxn.discount;
+        this.taxControll.taxTotalAmount = this.currentTxn.tax;
     }
 
     /**
