@@ -28,7 +28,7 @@ export const SALES_GROUPS = ['revenuefromoperations']; // sales
 export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
-    @Input() public selectedVouchertype: string;
+    @Input() public selectedVoucherType: string;
 
     // public
     public addAcForm: FormGroup;
@@ -69,12 +69,10 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             const hsn: AbstractControl = this.addAcForm.get('hsnNumber');
             const sac: AbstractControl = this.addAcForm.get('sacNumber');
             if (a === 'hsn') {
-                // hsn.reset();
                 sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                // sac.reset();
                 hsn.reset();
                 sac.enable();
                 hsn.disable();
@@ -86,7 +84,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             let result: IOption[] = [];
             this.flatAccountWGroupsList$ = observableOf([]);
             if (res.status === 'success' && res.body.length > 0) {
-                if (this.selectedVouchertype === 'purchase') {
+                if (this.selectedVoucherType === 'purchase') {
                     let revenueGrp = _.find(res.body, { uniqueName: 'operatingcost' });
                     let flatGrps = this._groupService.flattenGroup([revenueGrp], []);
                     if (flatGrps && flatGrps.length) {
@@ -146,7 +144,6 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
             if (res.status === 'success') {
                 this._toasty.successToast('A/c created successfully.');
                 this.closeCreateAcModal();
-                // this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
                 this._store.dispatch(this._salesActions.createServiceAcSuccess({ name: res.body.name, uniqueName: res.body.uniqueName }));
             } else {
                 this._toasty.errorToast(res.message, res.code);

@@ -12,7 +12,7 @@ export class AsideMenuProductServiceComponent {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
-    @Input() public selectedVouchertype: string;
+    @Input() public selectedVoucherType: string;
     public autoFocusInChild: boolean = true;
 
     // public

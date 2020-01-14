@@ -220,7 +220,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
-    public selectedVouchertype: string = 'sales'
+    public selectedVoucherType: string = 'sales'
     // modals related
     public modalConfig: ModalOptions = {
         animated: true,
@@ -1080,7 +1080,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public pageChanged(val: string, label: string) {
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
-        this.selectedVouchertype = val;
+        this.selectedVoucherType = val;
     }
 
     public prepareInvoiceTypeFlags() {
