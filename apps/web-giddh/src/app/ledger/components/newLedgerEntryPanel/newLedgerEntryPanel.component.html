@@ -65,7 +65,8 @@
                             <label class="fs20">=</label>
                         </td>
 
-                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields" class="pItem text-right amount">
+                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right amount">
                             <label class="primary_clr">Amount</label>
                             <input type="text" name="" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -77,13 +78,15 @@
                             </p>
                         </td>
 
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields" class="text-center table-minus">
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount)"
+                            class="text-center table-minus">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">-</label>
                         </td>
 
                         <!--discount-->
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields" class="pItem text-right price" (click)="$event.stopPropagation()">
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right price" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
@@ -95,12 +98,14 @@
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">+</label>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && !(companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && !(companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
@@ -113,6 +118,8 @@
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
                             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
+                                [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
+                                [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
                                 [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']" [maskInput]="inputMaskFormat"
                                 [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
@@ -128,12 +135,14 @@
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
 
-                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields" class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
+                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
                             <label class="primary_clr">Total</label>
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="" class="form-control text-right"
@@ -290,14 +299,14 @@
 
                             <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
                                 <input type="checkbox" name="advanceReceipt"
-                                    (change)="handleAdvanceReceiptChange($event)" [(ngModel)]="isAdvanceReceipt">
+                                    (change)="handleAdvanceReceiptChange()" [(ngModel)]="isAdvanceReceipt">
                                 Advance Receipt
                             </td>
 
                         </tr>
                     </table>
 
-                    <table *ngIf="shouldShowAdvanceReceipt"  class="hidden-lg hidden-md hidden-sm">
+                    <table *ngIf="shouldShowAdvanceReceipt" class="hidden-lg hidden-md hidden-sm">
                         <tbody>
                             <tr>
                                 <td class="pdR1 pt-1">

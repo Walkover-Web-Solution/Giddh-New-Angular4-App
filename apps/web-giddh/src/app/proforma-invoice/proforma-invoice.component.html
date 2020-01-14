@@ -665,7 +665,7 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}} <span class="rcm-tax"
+                                    {{item.label}} <span class="mandatory-asterisk"
                                         *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
                                 </th>
                             </tr>
