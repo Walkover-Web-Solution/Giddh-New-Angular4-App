@@ -1648,7 +1648,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.total = ((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum));
+        trx.total = parseFloat(((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum)).toFixed(2));
 
         this.calculateSubTotal();
         this.calculateTotalDiscount();

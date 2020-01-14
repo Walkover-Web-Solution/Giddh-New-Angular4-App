@@ -372,7 +372,7 @@
                         <!-- Customer -->
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
-                            {{item.account.name}}
+                            {{item.account.customerName}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                 [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
                                 [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
@@ -483,7 +483,7 @@
                         <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="modalUniqueName = ''">
                             <!-- Customer -->
-                            {{item.account.name}}
+                            {{item.account.customerName}}
                             <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                 [voucherType]="selectedVoucher" [accountUniqueName]="item.account.uniqueName"
                                 [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
@@ -579,7 +579,7 @@
                             </div>
                             <div (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                                 (clickOutside)="modalUniqueName = ''">
-                                {{item.account.name}}
+                                {{item.account.customerName}}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
                                     [accountUniqueName]="item.account.uniqueName" [voucherType]="selectedVoucher"
                                     [from]="invoiceSearchRequest.from" [to]="invoiceSearchRequest.to"
