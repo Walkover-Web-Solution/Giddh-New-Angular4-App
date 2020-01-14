@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -12,6 +12,7 @@ export class AsideMenuProductServiceComponent {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
+    @Input() public selectedVouchertype: string;
     public autoFocusInChild: boolean = true;
 
     // public
