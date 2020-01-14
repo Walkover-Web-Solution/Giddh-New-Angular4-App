@@ -1,25 +1,24 @@
 <div class="aside-pane">
-<div class="form-header" *ngIf="!hideFirstStep">
-    <h3>Add</h3>
-</div>
-<button *ngIf="hideFirstStep" id="back" (click)="backButtonPressed()">Back</button>
-<button id="close" *ngIf="!hideFirstStep" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
-<div class="aside-pane">
-    <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
-        <div class="pd1 alC">
-            <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Product</button>
-        </div>
-        <div class="pd1 alC">
-            <button class="btn btn-lg btn-primary" (click)="toggleServicePane()">Add Service</button>
-        </div>
+    <div class="form-header" *ngIf="!hideFirstStep">
+        <h3>Add</h3>
     </div>
+    <button *ngIf="hideFirstStep" id="back" (click)="backButtonPressed()">Back</button>
+    <button id="close" *ngIf="!hideFirstStep" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
+    <div class="aside-pane">
+        <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
+            <div class="pd1 alC">
+                <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Product</button>
+            </div>
+            <div class="pd1 alC">
+                <button class="btn btn-lg btn-primary" (click)="toggleServicePane()">Add Service</button>
+            </div>
+        </div>
 
-    <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
-        <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)"
-            (animateAside)="animateAside($event)"></sales-create-stock>
+        <div class="aside-body flexy-child-1 " *ngIf="isAddStockOpen">
+            <sales-create-stock [autoFocusInChild]="autoFocusInChild" (closeAsideEvent)="closeAsidePane($event)" (animateAside)="animateAside($event)"></sales-create-stock>
+        </div>
+        <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
+            <create-account-service (closeAsideEvent)="closeAsidePane($event)" [selectedVoucherType]="selectedVoucherType"></create-account-service>
+        </div>
     </div>
-    <div class="aside-body flexy-child-1" *ngIf="isAddServiceOpen">
-        <create-account-service (closeAsideEvent)="closeAsidePane($event)"></create-account-service>
-    </div>
-</div>
 </div>

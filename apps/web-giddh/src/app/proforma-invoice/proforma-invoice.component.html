@@ -856,9 +856,7 @@
                                                                 </a>
                                                             </span>
 
-                                                    <input class="text-right form-control other-taxes-input" disabled="disabled" [(ngModel)]="entry.otherTaxSum"
-                                                           [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency"
-                                                           [mask]="inputMaskFormat" name="entry.otherTaxesSum_{{entryIdx}}"
+                                                    <input class="text-right form-control other-taxes-input" disabled="disabled" [(ngModel)]="entry.otherTaxSum" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" name="entry.otherTaxesSum_{{entryIdx}}"
                                                     />
                                                 </div>
 
@@ -1591,9 +1589,7 @@
                                                                     </a>
                                                                 </span>
 
-                                            <input class="text-right form-control other-taxes-input" disabled="disabled" [(ngModel)]="entry.otherTaxSum"
-                                                   [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency"
-                                                   [mask]="inputMaskFormat" name="entry.otherTaxesSum_{{entryIdx}}"
+                                            <input class="text-right form-control other-taxes-input" disabled="disabled" [(ngModel)]="entry.otherTaxSum" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" name="entry.otherTaxesSum_{{entryIdx}}"
                                             />
                                         </div>
 
@@ -1987,7 +1983,7 @@
     *ngIf="accountAsideMenuState === 'in'" [selectedAccountUniqueName]="selectedCustomerForDetails" (onShortcutPress)="toggleAccountAsidePane()" (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<aside-menu-product-service [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 <app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 <!-- region send email popup -->
