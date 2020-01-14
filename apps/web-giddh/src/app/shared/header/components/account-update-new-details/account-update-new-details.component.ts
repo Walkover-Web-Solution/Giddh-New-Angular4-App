@@ -832,7 +832,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-        // this.isShowBankDetails(this.activeGroupUniqueName);
+        // this.isShowBankDetails(this.activeGroupUniqueName); // have commented due to showBankDetail again checked according to single level of groupUnique name
         if (!this.showVirtualAccount) {
             delete accountRequest['cashFreeVirtualAccountData'];
         }
