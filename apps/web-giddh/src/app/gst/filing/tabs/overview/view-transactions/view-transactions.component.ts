@@ -31,6 +31,7 @@ export const InvoiceType = [
     { label: 'B2CS', value: 'b2cs' },
     { label: 'Export', value: 'export' },
     { label: 'Nil', value: 'nil' },
+    { label: 'All', value: 'all' }
 ];
 
 export const Gstr2InvoiceType = [
