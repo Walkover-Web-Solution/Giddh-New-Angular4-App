@@ -64,6 +64,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     public userSessionId: any = null;
     public modalRef: BsModalRef;
     public activeTab: string;
+    public isUpdateCompanyInProgress$: Observable<boolean>;
+    public isCreateAndSwitchCompanyInProcess: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -94,6 +96,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
         this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
 
         this.authenticateTwoWay$ = this.store.select(s => {
             if (s.session.user) {
@@ -175,6 +178,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
             } else {
                 this.store.dispatch(this._sessionAction.getAllSession());
             }
+        });
+        this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+            this.isCreateAndSwitchCompanyInProcess = inProcess;
         });
     }
 
