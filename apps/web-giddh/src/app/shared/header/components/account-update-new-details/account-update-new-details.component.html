@@ -29,7 +29,7 @@
                         <label>Country <sup class="text-danger">*</sup> </label>
                         <sh-select [options]="countrySource" [isFilterEnabled]="true"
                             (viewInitEvent)="onViewReady($event)" formControlName="countryCode"
-                            (selected)="selectCountry($event)"></sh-select>
+                            (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -147,7 +147,7 @@
                                                 [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''"
                                                 (selected)="selectedState(gst, $event)"
                                                 [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                class="wd100">
+                                                class="wd100" [useInBuiltFilterForIOptionTypeItems]="true">
                                             </sh-select>
                                         </div>
                                     </div>

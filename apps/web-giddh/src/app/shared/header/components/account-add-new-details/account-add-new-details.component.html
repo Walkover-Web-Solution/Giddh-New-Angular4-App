@@ -28,7 +28,7 @@
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
                         <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required
-                            [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)">
+                            [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true">
                         </sh-select>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                                             <sh-select #states [options]="statesSource$ | async"
                                                 [isFilterEnabled]="true" (selected)="selectedState(gst, $event)"
                                                 [forceClearReactive]="forceClear$ | async" formControlName="stateCode"
-                                                style="width:100%">
+                                                style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true">
                                             </sh-select>
                                         </div>
                                     </div>
