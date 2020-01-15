@@ -1172,8 +1172,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
-     * Handles the advance receipt change by appending the advance receipt
-     * in subvoucher of current transaction
+     * Handles the advance receipt change
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
