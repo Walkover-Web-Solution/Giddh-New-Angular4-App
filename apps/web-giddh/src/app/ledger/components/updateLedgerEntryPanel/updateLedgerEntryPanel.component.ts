@@ -104,6 +104,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public shouldShowRcmEntry: boolean;
     /** True, if advance receipt is enabled */
     public isAdvanceReceipt: boolean = false;
+    /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
+    public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
     public tags$: Observable<TagRequest[]>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -1167,6 +1169,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.rcmPopup) {
             this.rcmPopup.hide();
         }
+    }
+
+    /**
+     * Handles the advance receipt change
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public handleAdvanceReceiptChange(): void {
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
     }
 
     // petty cash account changes, change all things related to account uniquename

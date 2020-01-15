@@ -92,7 +92,7 @@
                                     *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
                                     <img src="{{imgPath}}cdn.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container *ngSwitchCase="item.gstReturnType === 'advance-payments'">
+                                <ng-container *ngSwitchCase="item.gstReturnType === 'advance-receipt' || item.gstReturnType === 'advance-payments'">
                                     <img src="{{imgPath}}adv.svg" class="icon text-bottom" />
                                 </ng-container>
 

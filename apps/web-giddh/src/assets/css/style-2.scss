@@ -2747,6 +2747,12 @@ input[type="checkbox"]:checked:after {
     overflow: hidden;
 }
 
+.mandatory-asterisk {
+    font-size: 14px;
+    top: 0;
+    color: red;
+}
+
 @media only screen and (max-width: 1400px) {
     .template_list {
         width: 25%;
