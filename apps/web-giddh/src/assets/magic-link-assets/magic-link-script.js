@@ -95,7 +95,7 @@ var app = new Vue({
         isSmall: false
     },
     mounted: function () {
-        this.folderPath = window.location.hostname === 'localapp.giddh.com' ? '' : 'app/';
+        this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id)
     },
@@ -303,7 +303,7 @@ var app = new Vue({
         getApi: function () {
             var apiBaseUrl = '';
             switch (window.location.hostname) {
-                case 'localapp.giddh.com':
+                case 'localhost':
                 case 'dev.giddh.com':
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
