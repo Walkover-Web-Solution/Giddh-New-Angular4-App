@@ -73,7 +73,7 @@
                 "build": {
                     "builder": "ngx-build-plus:build",
                     "options": {
-                        "baseHref": "http://localapp.giddh.com:3000",
+                        "baseHref": "http://localhost:3000",
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
@@ -127,8 +127,8 @@
                         "local": {
                             "outputPath": "dist/apps/web-giddh-local",
                             "extraWebpackConfig": "./webpack.local.partial.js",
-                            "baseHref": "http://localapp.giddh.com:3000",
-                            "baseUrl": "localapp.giddh.com:3000",
+                            "baseHref": "http://localhost:3000",
+                            "baseUrl": "localhost:3000",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -159,7 +159,7 @@
                         "stage": {
                             "outputPath": "dist/apps/web-giddh-stage",
                             "extraWebpackConfig": "./webpack.stage.partial.js",
-                            "baseHref": "http://stage.giddh.com/",
+                            "baseHref": "https://stage.giddh.com/",
                             "baseUrl": "stage.giddh.com",
                             "fileReplacements": [
                                 {
@@ -250,10 +250,10 @@
                 "serve": {
                     "builder": "ngx-build-plus:dev-server",
                     "options": {
-                        "host": "localapp.giddh.com",
-                        "baseHref": "http://localapp.giddh.com:3000",
+                        "host": "localhost",
+                        "baseHref": "http://localhost:3000",
                         "port": 3000,
-                        "baseUrl": "localapp.giddh.com:3000",
+                        "baseUrl": "localhost:3000",
                         "browserTarget": "web-giddh:build",
                         "extraWebpackConfig": "./webpack.partial.js",
                         "assets": [],
