@@ -492,7 +492,7 @@
                         </ng-template>
 
                         <div class="icon-box"
-                            *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry) || !shouldShowAdvanceReceiptMandatoryFields">
+                            *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <label class="fs20">=</label>
                         </div>
 
@@ -515,7 +515,7 @@
                             <label class="icon-minus font-12"></label>
                         </div>
 
-                        <div *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields" class="text-right table-amount">
+                        <div *ngIf="vm.showNewEntryPanel || !shouldShowAdvanceReceiptMandatoryFields" class="text-right table-amount">
                             <span auto-close="outsideClick">
                                 <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
                                     [ledgerAmount]="vm.selectedLedger.actualAmount"

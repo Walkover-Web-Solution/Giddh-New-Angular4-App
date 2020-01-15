@@ -85,7 +85,7 @@
                         </td>
 
                         <!--discount-->
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right price" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
