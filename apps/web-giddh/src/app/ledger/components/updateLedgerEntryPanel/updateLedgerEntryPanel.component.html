@@ -752,18 +752,23 @@
                                             [style.width.px]="80" />
                                     </div>
                                 </td>
-
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pt-1 xs-pt-0">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
-                                        (change)="handleAdvanceReceiptChange()"> Advance
-                                    Receipt
-                                </td>
-
                             </tr>
 
                         </table>
 
-                        <table class="mrT1 xs-table-block">
+                        <table>
+                            <tr>
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pb-1">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
+                                        (change)="handleAdvanceReceiptChange()"> Advance
+                                    Receipt
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                        <table class="xs-table-block">
 
                             <tbody>
                                 <tr>
