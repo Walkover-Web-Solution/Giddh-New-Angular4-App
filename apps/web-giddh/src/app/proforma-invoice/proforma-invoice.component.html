@@ -913,7 +913,6 @@
                                                                     [(ngModel)]="entry.entryDate"
                                                                     [disabled]="isUpdateMode"
                                                                     (onShown)="hsnDropdownShow = false;"
-                                                                    (bsValueChange)="onEntryDateChanged($event, entry.entryDate)"
                                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                                     #dp="bsDatepicker" />
                                                                 <span class="edit-icon cp" (click)="dp.toggle()"
@@ -1720,7 +1719,6 @@
                                                                             class="form-control text-left"
                                                                             [(ngModel)]="entry.entryDate"
                                                                             [disabled]="isUpdateMode"
-                                                                            (bsValueChange)="onEntryDateChanged($event, entry.entryDate)"
                                                                             (onShown)="hsnDropdownShow = false"
                                                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                                             #dp="bsDatepicker" />
