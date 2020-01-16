@@ -577,7 +577,6 @@ export class NgxDaterangepickerComponent implements OnInit {
 
         if (this.minDate && this.startDate.isBefore(this.minDate)) {
             this.startDate = this.minDate.clone();
-            console.log('formatted start date :-', this.startDate.format(this.locale.format));
             if (this.timePicker && this.timePickerIncrement) {
                 this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
             }

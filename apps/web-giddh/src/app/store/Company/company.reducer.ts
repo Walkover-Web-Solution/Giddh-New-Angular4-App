@@ -6,6 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IRegistration } from "../../models/interfaces/registration.interface";
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM } from '../../app.constant';
 
 /**
  * Keeping Track of the CompanyState
@@ -44,66 +45,7 @@ const initialState: CurrentCompanyState = {
             cancelLabel: 'Cancel',
             customRangeLabel: 'Custom range'
         },
-        ranges: [
-            {
-                name: 'Today', value: [moment(), moment()]
-            },
-            {
-                name: 'Yesterday', value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
-            },
-            {
-                name: 'Last 7 Days', value: [moment().subtract(6, 'days'), moment()]
-            },
-            {
-                name: 'This Month', value: [moment().startOf('month'), moment().endOf('month')]
-            },
-            {
-                name: 'Last Month', value: [
-                    moment().subtract(1, 'month').startOf('month'),
-                    moment().subtract(1, 'month').endOf('month')
-                ]
-            },
-            {
-                name: 'This Week', ranges: [{
-                    name: 'Sun - Today', value: [moment().startOf('week'), moment()]
-                }, {name: 'Mon - Today', value: [moment().startOf('week').add(1, 'd'), moment()]}]
-            },
-            {
-                name: 'This Quarter to Date', value: [
-                    moment().quarter(moment().quarter()).startOf('quarter'),
-                    moment()
-                ]
-            },
-            {
-                name: 'This Financial Year to Date', value: [
-                    moment().startOf('year').subtract(9, 'year'),
-                    moment()
-                ]
-            },
-            {
-                name: 'This Year to Date', value: [
-                    moment().startOf('year'),
-                    moment()
-                ]
-            },
-            {
-                name: 'Last Quarter', value: [
-                    moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                    moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-                ]
-            },
-            {
-                name: 'Last Financial Year', value: [
-                    moment().startOf('year').subtract(10, 'year'),
-                    moment().endOf('year').subtract(10, 'year')
-                ]
-            },
-            {
-                name: 'Last Year', value: [
-                    moment().subtract(1, 'year').startOf('year'),
-                    moment().subtract(1, 'year').endOf('year')
-                ]
-            }],
+        ranges: DEFAULT_DATE_RANGE_PICKER_RANGES,
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     },
@@ -217,9 +159,9 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     dateRangePickerConfig: {
                         ...state.dateRangePickerConfig,
                         ranges: state.dateRangePickerConfig.ranges.map(range => {
-                            if (range.name === 'This Financial Year to Date') {
+                            if (range.name === DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisFinancialYearToDate) {
                                 range.value = [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()];
-                            } else if (range.name === 'Last Financial Year') {
+                            } else if (range.name === DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastFinancialYear) {
                                 range.value = [
                                     moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
                                     moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')

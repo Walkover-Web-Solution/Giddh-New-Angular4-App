@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export const Configuration = {
     AppUrl,
     ApiUrl,
@@ -52,3 +54,88 @@ export enum Subvoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
+
+/**
+ * enums for default date range picker
+ */
+export enum DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM {
+    Today = 'Today',
+    Yesterday = 'Yesterday',
+    Last7Days = 'Last 7 Days',
+    ThisMonth = 'This Month',
+    LastMonth = 'Last Month',
+    ThisWeek = 'This Week',
+    SunToToday = 'Sun - Today',
+    MonToToday = 'Mon - Today',
+    ThisQuarterToDate = 'This Quarter to Date',
+    ThisFinancialYearToDate = 'This Financial Year to Date',
+    ThisYearToDate = 'This Year to Date',
+    LastQuarter = 'Last Quarter',
+    LastFinancialYear = 'Last Financial Year',
+    LastYear = 'Last Year'
+}
+
+/**
+ * default ranges for date range picker
+ */
+export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Today, value: [moment(), moment()]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisWeek, ranges: [{
+            name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.SunToToday, value: [moment().startOf('week'), moment()]
+        }, {name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()]}]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.ThisYearToDate, value: [
+            moment().startOf('year'),
+            moment()
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastFinancialYear, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment().endOf('year').subtract(10, 'year')
+        ]
+    },
+    {
+        name: DEFAULT_DATE_RANGE_PICKER_RANGES_ENUM.LastYear, value: [
+            moment().subtract(1, 'year').startOf('year'),
+            moment().subtract(1, 'year').endOf('year')
+        ]
+    }
+];
