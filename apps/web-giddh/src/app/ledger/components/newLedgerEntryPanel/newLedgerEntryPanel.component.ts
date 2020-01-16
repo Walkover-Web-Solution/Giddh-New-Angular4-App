@@ -168,6 +168,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private isExchangeRateSwapped: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -414,20 +415,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public changePrice(val: string) {
-        this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+        if (!this.isExchangeRateSwapped) {
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
 
-        this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
-        // calculate discount on change of price
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
+            // calculate discount on change of price
+            if (this.discountControl) {
+                this.discountControl.ledgerAmount = this.currentTxn.amount;
+                this.discountControl.change();
+            }
+
+            this.calculateTotal();
+            this.calculateCompoundTotal();
         }
-
-        this.calculateTotal();
-        this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
@@ -898,18 +901,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public swapEntries(entryKeys: Array<any>): void {
+        this.isExchangeRateSwapped = true;
         if (this.currentTxn.inventory) {
             // Swap the unit rate and converted rate
-            this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
-            this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
-            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
+            let rate = this.currentTxn.inventory.unit.rate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = rate;
         }
 
         // Swap the provided key value pairs
         entryKeys.forEach((entry: any) => {
-            this.currentTxn[entry[0]] = this.currentTxn[entry[0]] - this.currentTxn[entry[1]];
-            this.currentTxn[entry[1]] = this.currentTxn[entry[0]] + this.currentTxn[entry[1]];
-            this.currentTxn[entry[0]] = this.currentTxn[entry[1]] - this.currentTxn[entry[0]];
+            let value = this.currentTxn[entry[0]];
+            this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
+            this.currentTxn[entry[1]] = value;
         });
         if (this.discountControl) {
             this.discountControl.discountTotal = this.currentTxn.discount;
@@ -917,6 +921,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.taxControll) {
             this.taxControll.taxTotalAmount = this.currentTxn.tax;
         }
+        setTimeout(() => {
+            this.isExchangeRateSwapped = false;
+        }, 300);
     }
 
     /**
