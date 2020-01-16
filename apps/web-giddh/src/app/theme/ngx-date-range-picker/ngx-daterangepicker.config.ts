@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as _moment from 'moment';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const moment = _moment;
 
@@ -19,7 +20,7 @@ export class LocaleConfig {
 
 export const DefaultLocaleConfig: LocaleConfig = {
   direction: 'ltr',
-  separator: ' - ',
+  separator: '-',
   weekLabel: 'W',
   applyLabel: 'Apply',
   cancelLabel: 'Cancel',
@@ -27,5 +28,5 @@ export const DefaultLocaleConfig: LocaleConfig = {
   daysOfWeek: moment.weekdaysMin(),
   monthNames: moment.monthsShort(),
   firstDay: moment.localeData().firstDayOfWeek(),
-  format: 'DD-MMM-YYYY'
+  format: GIDDH_DATE_FORMAT
 };

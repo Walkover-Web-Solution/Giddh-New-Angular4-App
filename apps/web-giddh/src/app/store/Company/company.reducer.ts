@@ -7,6 +7,7 @@ import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, DefaultDateRangePickerRangesEnum } from '../../app.constant';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the CompanyState
@@ -35,19 +36,19 @@ const initialState: CurrentCompanyState = {
     isGetTaxesSuccess: false,
     activeFinancialYear: null,
     dateRangePickerConfig: {
-        opens: 'left',
         locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
+            direction: 'ltr',
+            separator: '-',
+            weekLabel: 'W',
+            applyLabel: 'Apply',
             cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
+            customRangeLabel: 'Custom range',
+            daysOfWeek: moment.weekdaysMin(),
+            monthNames: moment.monthsShort(),
+            firstDay: moment.localeData().firstDayOfWeek(),
+            format: GIDDH_DATE_FORMAT
         },
-        ranges: DEFAULT_DATE_RANGE_PICKER_RANGES,
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        ranges: DEFAULT_DATE_RANGE_PICKER_RANGES
     },
     account: null,
     isTaxCreationInProcess: false,
