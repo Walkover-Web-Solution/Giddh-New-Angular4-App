@@ -399,6 +399,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === Subvoucher.ReverseCharge);
                     this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === Subvoucher.AdvanceReceipt);
+                    this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
 
                     if (this.isPettyCash) {
                         // create missing property for petty cash
@@ -1178,6 +1179,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public handleAdvanceReceiptChange(): void {
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
+        this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
+        if (this.shouldShowAdvanceReceiptMandatoryFields) {
+            this.vm.generatePanelAmount();
+        }
     }
 
     // petty cash account changes, change all things related to account uniquename
