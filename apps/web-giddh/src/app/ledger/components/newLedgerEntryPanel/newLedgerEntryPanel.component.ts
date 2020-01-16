@@ -168,6 +168,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True, if exchange rate is swapped */
     private isExchangeRateSwapped: boolean = false;
 
     constructor(private store: Store<AppState>,
@@ -922,6 +923,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.taxControll.taxTotalAmount = this.currentTxn.tax;
         }
         setTimeout(() => {
+            // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
             this.isExchangeRateSwapped = false;
         }, 300);
     }
