@@ -74,6 +74,7 @@ var WindowManager = /** @class */ (function () {
             }
             var options = {
                 // to avoid visible maximizing
+                icon: __dirname + '/assets/icon/favicon.ico',
                 show: false,
                 webPreferences: {
                     nodeIntegration: true
