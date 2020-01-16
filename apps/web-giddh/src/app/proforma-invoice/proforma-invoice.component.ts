@@ -220,7 +220,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
-
+    public selectedVoucherType: string = 'sales'
     // modals related
     public modalConfig: ModalOptions = {
         animated: true,
@@ -299,6 +299,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isPrefixAppliedForCurrency: boolean;
     public selectedSuffixForCurrency: string = '';
     public companyCurrencyName: string;
+    public customerCurrencyCode: string;
     public baseCurrencySymbol: string = '';
     public depositCurrSymbol: string = '';
     public grandTotalMulDum;
@@ -1079,6 +1080,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public pageChanged(val: string, label: string) {
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
+        this.selectedVoucherType = val;
     }
 
     public prepareInvoiceTypeFlags() {
@@ -1927,7 +1929,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (this.isMulticurrencyAccount) {
+                this.customerCurrencyCode = item.additional.currency;
                 this.companyCurrencyName = item.additional.currency;
+            } else {
+                this.customerCurrencyCode = this.companyCurrency;
             }
 
             if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
@@ -3222,8 +3227,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getCurrencyRate(to, from) {
-        let date = moment().format('DD-MM-YYYY');
+    /**
+     * get currency rate on entry date changed
+     * @param selectedDate: Date ( date that is selected by user )
+     * @param modelDate: Date ( date that was already selected by user )
+     */
+    public onEntryDateChanged(selectedDate, modelDate) {
+        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format('DD-MM-YYYY'));
+        }
+    }
+
+    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {

@@ -10,7 +10,7 @@ Error.stackTraceLimit = Infinity;
 export const environment: Environment = {
     production: false,
     AppUrl: 'http://localhost:3000/',
-    ApiUrl: 'http://apitest.giddh.com/',
+    ApiUrl: 'https://apitest.giddh.com/',
     isElectron: false,
     OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw==',
     APP_FOLDER: '',

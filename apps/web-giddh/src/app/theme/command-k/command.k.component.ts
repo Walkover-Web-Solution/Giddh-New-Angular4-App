@@ -1,12 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { ReplaySubject, Subject, Observable } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
 import { ScrollComponent } from './virtual-scroll/vscroll';
 import { GeneralService } from '../../services/general.service';
 import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
 import { remove } from '../../lodash-optimized';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -33,7 +35,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public dontShowNoResultMsg: boolean = false;
     @Input() public showChannelCreateBtn: boolean = true;
 
-    @Input() public isOpen: boolean = false;
+    @Input() public isOpen: boolean = true;
     @Input() public defaultExcludedTags: string = 'input, button, .searchEle, .modal-content, .modal-backdrop';
     @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
@@ -56,6 +58,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public highlightedItem: number = 0;
     public allowLoadMore: boolean = false;
     public isLoading: boolean = false;
+    public activeCompanyUniqueName: any = '';
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
@@ -63,13 +66,17 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     constructor(
+        private store: Store<AppState>,
         private renderer: Renderer,
         private zone: NgZone,
         private _generalService: GeneralService,
         private _commandKService: CommandKService,
         private _cdref: ChangeDetectorRef
     ) {
-        this.searchCommandK();
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
+            this.activeCompanyUniqueName = res;
+        });
+        this.searchCommandK(true);
     }
 
     /**
@@ -81,9 +88,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
             this.commandKRequestParams.page = 1;
-            this.searchedItems = [];
             this.commandKRequestParams.q = term;
-            this.searchCommandK();
+            this.searchCommandK(true);
             this._cdref.markForCheck();
         });
     }
@@ -172,6 +178,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
             // set focus on search
             this.focusInSearchBox();
+            this.searchCommandK(true);
         }
     }
 
@@ -189,9 +196,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof CommandKComponent
      */
-    public searchCommandK(): void | boolean {
+    public searchCommandK(resetItems: boolean): void | boolean {
         if (this.isLoading) {
             return false;
+        }
+
+        if (resetItems) {
+            this.searchedItems = [];
         }
 
         this.isLoading = true;
@@ -203,7 +214,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this._commandKService.searchCommandK(this.commandKRequestParams).subscribe((res) => {
+        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
@@ -257,8 +268,14 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             let item = this.virtualScrollElem.activeItem();
             if (item) {
                 this.itemSelected(item);
+                if (item.type === 'GROUP') {
+                    this.searchedItems = [];
+                }
             } else if (this.searchedItems && this.searchedItems.length === 1) {
                 this.itemSelected(this.searchedItems[0]);
+                if (item.type === 'GROUP') {
+                    this.searchedItems = [];
+                }
             }
         }
     }
@@ -461,7 +478,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
             if (this.allowLoadMore && !this.isLoading) {
                 this.commandKRequestParams.page++;
-                this.searchCommandK();
+                this.searchCommandK(false);
             }
         }
     }

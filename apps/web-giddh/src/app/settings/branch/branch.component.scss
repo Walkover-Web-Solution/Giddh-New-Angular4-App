@@ -41,6 +41,7 @@
     align-items: center;
     border-right: 1px solid #d9d9d9;
     color: #999999;
+    left: 0;
 }
 .input-grp-dateRangePicker input.form-control {
     padding-left: 35px !important;
@@ -117,6 +118,7 @@
     vertical-align: middle;
     line-height: 2;
 }
+
 @media (max-width: 375px) {
     .grey_clr button.btn.btn-default {
         margin-left: 0;
