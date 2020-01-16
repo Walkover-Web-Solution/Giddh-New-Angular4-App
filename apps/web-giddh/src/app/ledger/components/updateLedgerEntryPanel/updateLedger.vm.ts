@@ -54,6 +54,8 @@ export class UpdateLedgerVm {
             dr: ''
         }
     };
+    /** True, if advance receipt is present */
+    public isAdvanceReceipt: boolean = false;
 
     // multi-currency variables
     public isMultiCurrencyAvailable: boolean = false;
@@ -202,7 +204,7 @@ export class UpdateLedgerVm {
     }
 
     public isValidCategory(category: string): boolean {
-        return category === 'income' || category === 'expenses' || category === 'fixedassets';
+        return category === 'income' || category === 'expenses' || category === 'fixedassets' || (this.isAdvanceReceipt && category === 'assets');
     }
 
     public isThereStockEntry(uniqueName: string): boolean {
