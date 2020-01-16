@@ -262,6 +262,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.companyTaxesList = res || [];
         });
 
+        this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
+        this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.AdvanceReceipt : false;
+        this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.ReverseCharge : false;
         // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
     }
