@@ -150,7 +150,7 @@ td.commentField {
     white-space: normal;
 }
 //  my css
-tr:first-child td.pos-rel.WordWrap.customer-name.cursor-pointer {
+.aging-table tbody tr:first-child td {
     border-top: none;
 }
 
@@ -218,6 +218,7 @@ tr.aging-table-top td {
 .aging-table {
     max-width: 1170px;
     width: 100%;
+    -moz-transform: translate(1px, 0);
 }
 
 .table-aging-report {
@@ -265,9 +266,10 @@ i.icon-options {
     background-color: #fff;
     color: #999;
     font-size: 20px;
-    position: relative;
-    top: 2px;
-    padding: 7px 7px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 i.icon-options:hover {
     background-color: #eaeaea;

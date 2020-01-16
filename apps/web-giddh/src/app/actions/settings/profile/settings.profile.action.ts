@@ -146,6 +146,11 @@ export class SettingsProfileActions {
             payload: value
         };
     }
+    public resetPatchProfile(): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE,
+        };
+    }
 
     public PatchProfileResponse(value): CustomActions {
         return {

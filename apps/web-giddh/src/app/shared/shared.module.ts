@@ -72,8 +72,8 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
-const getGoogleCredentials = (baseHref: string) => {
-    if (baseHref === 'https://app.giddh.com/' || isElectron) {
+const getGoogleCredentials = () => {
+    if (PRODUCTION_ENV || isElectron) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -91,7 +91,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
-        provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
     },
     {
         id: LinkedinLoginProvider.PROVIDER_ID,

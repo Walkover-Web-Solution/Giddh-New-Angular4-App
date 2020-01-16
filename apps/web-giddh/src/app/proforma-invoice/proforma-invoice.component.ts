@@ -37,7 +37,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, delay, take, takeUntil, filter } from 'rxjs/operators';
+import { auditTime, delay, filter, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -220,7 +220,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
-
+    public selectedVoucherType: string = 'sales'
     // modals related
     public modalConfig: ModalOptions = {
         animated: true,
@@ -299,6 +299,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isPrefixAppliedForCurrency: boolean;
     public selectedSuffixForCurrency: string = '';
     public companyCurrencyName: string;
+    public customerCurrencyCode: string;
     public baseCurrencySymbol: string = '';
     public depositCurrSymbol: string = '';
     public grandTotalMulDum;
@@ -456,6 +457,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.invoiceNo = parmas['invoiceNo'];
                 this.isUpdateMode = true;
+
+                // add fixed class to body because double scroll showing in invoice update mode
+                document.querySelector('body').classList.add('fixed');
+
                 this.isUpdateDataInProcess = true;
                 this.prepareInvoiceTypeFlags();
 
@@ -1075,6 +1080,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public pageChanged(val: string, label: string) {
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
+        this.selectedVoucherType = val;
     }
 
     public prepareInvoiceTypeFlags() {
@@ -1494,11 +1500,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // don't show loader when aside menu is opened
             this.shouldShowLoader = false;
-            document.querySelector('body').classList.add('fixed');
+
+            /* add fixed class only in crete mode not in update mode
+                - because fixed class is already added in update mode due to double scrolling issue
+             */
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.add('fixed');
+            }
         } else {
             // reset show loader variable because no aside pane is open
             this.shouldShowLoader = true;
-            document.querySelector('body').classList.remove('fixed');
+
+            /* remove fixed class only in crete mode not in update mode
+                - because fixed class is needed in update mode due to double scrolling issue
+            */
+
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.remove('fixed');
+            }
         }
     }
 
@@ -1910,7 +1929,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (this.isMulticurrencyAccount) {
+                this.customerCurrencyCode = item.additional.currency;
                 this.companyCurrencyName = item.additional.currency;
+            } else {
+                this.customerCurrencyCode = this.companyCurrency;
             }
 
             if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
@@ -2694,6 +2716,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.isUpdateMode = !this.isLastInvoiceCopied;
+
+        // add fixed class to body because double scroll showing in invoice update mode
+        if (this.isUpdateMode) {
+            document.querySelector('body').classList.add('fixed');
+        }
+
         this.isUpdateDataInProcess = true;
 
         this.prepareInvoiceTypeFlags();
@@ -3199,8 +3227,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getCurrencyRate(to, from) {
-        let date = moment().format('DD-MM-YYYY');
+    /**
+     * get currency rate on entry date changed
+     * @param selectedDate: Date ( date that is selected by user )
+     * @param modelDate: Date ( date that was already selected by user )
+     */
+    public onEntryDateChanged(selectedDate, modelDate) {
+        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format('DD-MM-YYYY'));
+        }
+    }
+
+    public getCurrencyRate(to, from, date = moment().format('DD-MM-YYYY')) {
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
@@ -3365,6 +3403,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * on click of transaction amount
+     * if amount is zero then remove it for better user experiance
+     * @param transaction
+     */
+    public transactionAmountClicked(transaction: SalesTransactionItemClass) {
+        if (Number(transaction.amount) === 0) {
+            transaction.amount = undefined;
+        }
+    }
+
     public onBlurInvoiceDate(index) {
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
@@ -3425,7 +3474,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses),  filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
@@ -3460,7 +3509,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isMultiCurrencyModule(): boolean {
         return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash].includes(this.invoiceType);
     }
-
 
     /**
      * Returns true, if any of the single item is stock

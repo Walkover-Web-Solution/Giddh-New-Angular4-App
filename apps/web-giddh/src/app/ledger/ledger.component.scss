@@ -1,13 +1,14 @@
 @import "../../assets/css/color.scss";
-
 .form-control,
 input {
     color: #1c1c1c;
 }
+
 .notfound-option {
     display: flex;
     justify-content: space-between;
 }
+
 .ledgHead table td[class*="col-"],
 .ledgHead table td .select2-container {
     padding: 8px 10px !important;
@@ -19,6 +20,7 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .ledgHead table td.pdR25imp {
     padding-right: 25px !important;
 }
@@ -41,12 +43,15 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .ledgHead.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
+
 .ledgHead .ledger-main td[class*="col-"] {
     padding: 0px !important;
 }
+
 // table th[class*=col-]:last-child,
 // .ledger-main tr td:last-child,
 // table td[class*=col-]:last-child {
@@ -55,16 +60,20 @@ input {
 .total_col td {
     border: 0 !important;
 }
+
 .ledger-main .form-control {
     border: 0;
 }
+
 .t-h-bg1 th {
     border-left: 0;
 }
+
 .ledgHead input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
 }
+
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
     color: #fff;
@@ -78,6 +87,7 @@ input {
     right: 0 !important;
     border-radius: 2px;
 }
+
 .ledger-stat {
     padding: 10px 15px 0;
     background: #fff;
@@ -86,35 +96,42 @@ input {
     margin: 0px 0 0;
     box-shadow: 0px 2px 6px #0000001a;
 }
+
 .ledger-stat .row {
     display: flex;
     flex-wrap: wrap;
 }
+
 .icomoon_ico {
     margin-left: 0;
     margin-right: 8px;
 }
+
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
+
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
 }
+
 .ledger-head th {
     color: $JacksonsPurple;
     padding-left: 0;
-
     padding-bottom: 10px;
 }
+
 .total_col td {
     border: 0;
 }
+
 .ledger-stat span {
     display: inline-block;
 }
+
 .pageCount {
     overflow: hidden;
     width: 100% !important;
@@ -125,41 +142,51 @@ input {
     font-size: 12px;
     z-index: 0;
 }
+
 #pagination {
     margin: 0 auto;
     overflow: hidden;
     width: 100%;
     text-align: center;
 }
-.pagination > li > a {
+
+.pagination>li>a {
     color: #4d4d4d;
 }
-.pagination > .active > a {
+
+.pagination>.active>a {
     background: #d35f29 !important;
     color: #fff !important;
     border-color: #bd501d !important;
 }
-.pagination > li > a:hover {
+
+.pagination>li>a:hover {
     color: #d35f29;
 }
+
 .grey {
     color: #4d4d4d;
 }
+
 .ledger-panel label {
     font-weight: 400;
 }
+
 .upload_div {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
     border: 1px solid #ccc;
 }
+
 .upload_div label {
     padding: 6px;
 }
+
 .pdR25imp {
     padding-right: 25px !important;
 }
+
 .t-h-bg1 th {
     background: #fff;
     color: #000000;
@@ -171,6 +198,7 @@ input {
     font-size: 14px;
     border-top: 1px solid #d1d1d1;
 }
+
 .ledger-main .form-control,
 .ledger-main input {
     color: #1c1c1c;
@@ -186,6 +214,7 @@ input {
     background: #fff;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
+
 .Width600 {
     position: absolute;
     width: 600px;
@@ -206,12 +235,14 @@ input {
     cursor: default;
     top: 1px;
 }
+
 .inputWrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
+
 .inputWrapper:before {
     position: absolute;
     content: "";
@@ -228,25 +259,31 @@ input {
     display: flex;
     justify-content: flex-end;
 }
+
 .d-flex {
     display: flex;
 }
+
 .d-none {
     display: none;
 }
+
 .h-table tr {
     height: 45px;
 }
+
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
     height: 41px;
     line-height: 1;
 }
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
+
 ::-webkit-calendar-picker-indicator {
     display: none;
 }
@@ -254,37 +291,46 @@ input[type="date"]::-webkit-outer-spin-button {
 .focusUnset.ledger-main .form-control:focus {
     border: unset !important;
 }
+
 tr[vr-item]:focus {
     background-color: #f7f8fa;
     outline: 0;
 }
+
 sh-select:focus {
     outline: 1px #d35f29 solid;
 }
+
 .notfound-option.active {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
+
 .amnt-total {
     font-size: 12px;
     color: #999999;
     padding-left: 5px;
 }
+
 .ledger_book .left-col-new,
 .ledger_book .right-col-new {
     background: #fff;
 }
+
 .left-col-new table.width100.h-table tbody tr td:last-child,
 .left-col-new table.width100.h-table thead tr th:last-child {
     border-right: 0px !important;
 }
+
 .left-col-new table.width100.h-table tbody tr td:first-child,
 .left-col-new table.width100.h-table thead tr th:first-child {
     border-left: 1px solid #ccc !important;
 }
+
 .custom-tabs {
     display: none;
 }
+
 .ledgHead .icomoon_ico {
     color: #999;
     width: 36px;
@@ -296,11 +342,13 @@ sh-select:focus {
     border-top-width: 1px;
     background-color: #fff;
 }
+
 .advancSearchBlock input {
     background: $lightGray !important;
     height: 28px;
     border-color: $lightGray !important;
 }
+
 .advancSearchBlock input::placeholder {
     color: #666666;
 }
@@ -310,9 +358,11 @@ sh-select:focus {
     height: initial;
     width: 100%;
 }
+
 .ledger-section {
     display: flex;
 }
+
 .ledger-section {
     display: flex;
 }
@@ -324,15 +374,19 @@ sh-select:focus {
     padding: 6px 9px;
     color: #fff;
 }
+
 #blankLedgerContainer .ledger-main .no-leftBorder {
     border-left: none !important;
 }
+
 .ledger-row input[type="checkbox"] {
     margin-right: 15px;
 }
+
 .ledger_book .ledger-footer-1 .total_col .border-top {
     border-top: 1px solid #d9d9d9 !important;
 }
+
 .ledger_book .ledger-footer-1 .total_col .bdrT {
     border: none;
 }
@@ -343,6 +397,7 @@ sh-select:focus {
     border-radius: 2px;
     position: relative;
 }
+
 .advanceSearchByDate:before {
     position: absolute;
     content: "";
@@ -352,6 +407,7 @@ sh-select:focus {
     left: -33%;
     top: 17px;
 }
+
 .advanceSearchByDate:after {
     position: absolute;
     content: "";
@@ -365,14 +421,17 @@ sh-select:focus {
 .ledger-head {
     margin-top: 46px;
 }
+
 .ledger-stat h1 {
     color: #262626;
     font-size: 16px;
     margin-bottom: 10px;
 }
+
 .digitBlue {
     color: $dark-blue00;
 }
+
 .greyTextClr {
     color: #666 !important;
     font-size: 14px;
@@ -381,30 +440,37 @@ sh-select:focus {
 .ledger-stat h3 {
     font-size: 16px;
 }
+
 .stat-block {
     border-right: 1px solid #d9d9d9;
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 .stat-block:first-child {
     border-bottom: 8px solid $dark-blue00;
 }
+
 .stat-block:nth-child(2) {
     border-bottom: 8px solid $JacksonsPurple;
 }
+
 .stat-block:nth-child(3) {
     border-bottom: 8px solid $border-blue;
 }
+
 .stat-block:last-child {
     border-right: none;
     border-bottom: 8px solid $light-blue02;
 }
+
 .advnceSearchFilter {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
 }
+
 .subTotal {
     font-size: 14px !important;
 }
@@ -416,23 +482,29 @@ sh-select:focus {
     align-items: center;
     margin-right: 10px;
 }
+
 .modal-ledger {
     width: 70%;
 }
+
 .justify-content-between {
     justify-content: space-between;
 }
+
 .d-flex.search-ledger-field {
     align-items: center;
     margin-right: 8px;
 }
+
 .clear-filter-btn {
     color: #1a237e;
     font-size: 14px;
 }
+
 .clear-filter-btn i {
     font-size: 12px;
 }
+
 .search-ledger-field {
     .btn-danger,
     .btn-success,
@@ -443,10 +515,12 @@ sh-select:focus {
         height: 36px;
     }
 }
+
 .transaction-in-short {
     margin-bottom: 80px;
 }
-/* reponsive */
+
+// reponsive
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;
@@ -461,6 +535,7 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
+
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
@@ -476,6 +551,7 @@ sh-select:focus {
         max-height: initial;
     }
 }
+
 @media (max-width: 991px) {
     .daterngoption {
         margin-bottom: 10px;
@@ -501,6 +577,7 @@ sh-select:focus {
         min-width: 200px;
     }
 }
+
 @media only screen and (max-width: 767px) {
     .ledgHead table td[class*="col-"],
     .ledgHead table td .select2-container {
@@ -602,6 +679,7 @@ sh-select:focus {
         border-right: 1px solid #d1d1d1;
     }
 }
+
 @media (max-width: 575px) {
     .debitCreditAmount {
         display: block !important;
@@ -610,6 +688,7 @@ sh-select:focus {
         padding-left: 15px;
     }
 }
+
 @media (max-width: 360px) {
     .search-ledger-field {
         display: block;

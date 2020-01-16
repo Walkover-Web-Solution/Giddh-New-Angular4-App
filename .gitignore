@@ -2,7 +2,7 @@
 
 # build auth related
 default.entitlements.mac.plist
-embedded.provisionprofile
+electron-sign/embedded.provisionprofile
 
 package-lock_*
 

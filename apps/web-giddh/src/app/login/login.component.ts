@@ -8,8 +8,20 @@ import { ModalDirective } from "ngx-bootstrap";
 import { Configuration } from "../app.constant";
 import { Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { LinkedInRequestModel, SignupwithEmaillModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from "../models/api-models/loginModels";
-import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from "../theme/ng-social-login-module/index";
+import {
+    LinkedInRequestModel,
+    SignupwithEmaillModel,
+    SignupWithMobile,
+    VerifyEmailModel,
+    VerifyEmailResponseModel,
+    VerifyMobileModel
+} from "../models/api-models/loginModels";
+import {
+    AuthService,
+    GoogleLoginProvider,
+    LinkedinLoginProvider,
+    SocialUser
+} from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
@@ -77,6 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
+
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
         private store: Store<AppState>,
@@ -357,20 +370,18 @@ export class LoginComponent implements OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                ipcRenderer.send("authenticate", provider);
-                ipcRenderer.once("authenticate-token", (event, res) => {
-                    // debugger;
-                    console.log(res);
-                    this.store.dispatch(this.loginAction.signupWithGoogle(res));
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
-                // this.store.dispatch(this.loginAction.signupWithGoogle(t));
+
             } else {
                 // linked in
-                ipcRenderer.send("authenticate", provider);
-
-                ipcRenderer.once("authenticate-token", (event, res) => {
-                    // debugger;
-                    this.store.dispatch(this.loginAction.LinkedInElectronLogin(res));
+                // const t = ipcRenderer.send("authenticate", provider);
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
 

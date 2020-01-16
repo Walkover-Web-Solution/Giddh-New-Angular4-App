@@ -1,34 +1,59 @@
 'use strict';
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var os = __importStar(require("os"));
-var path = __importStar(require("path"));
+var tslib_1 = require("tslib");
+var os = tslib_1.__importStar(require("os"));
+var path = tslib_1.__importStar(require("path"));
 var Configstore = require('configstore');
-var url = __importStar(require("url"));
+var url = tslib_1.__importStar(require("url"));
 var util_1 = require("./util");
+var serve;
+var args = process.argv.slice(1);
+serve = args.some(function (val) { return val === '--serve'; });
+// let win: Electron.BrowserWindow = null;
+var getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+var isEnvSet = 'ELECTRON_IS_DEV' in process.env;
+var debugMode = isEnvSet
+    ? getFromEnv
+    : process.defaultApp ||
+        /node_modules[\\/]electron[\\/]/.test(process.execPath);
 exports.DEFAULT_URL = url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
 });
 function defaultWindows() {
-    return [
-        {
-            url: exports.DEFAULT_URL,
-            width: 800,
-            height: 600,
-            webPreferences: {
-                plugins: true,
-                webSecurity: false,
+    console.log('server: ', serve);
+    console.log('debugMode: ', debugMode);
+    if (serve) {
+        require('electron-reload')(__dirname, {
+            electron: require(__dirname + "/../../../node_modules/electron")
+        });
+        return [
+            {
+                url: 'http://localhost:4200',
+                width: 800,
+                height: 600,
+                webPreferences: {
+                    plugins: true,
+                    webSecurity: false,
+                    devTools: debugMode
+                }
             }
-        }
-    ];
+        ];
+    }
+    else {
+        return [
+            {
+                url: exports.DEFAULT_URL,
+                width: 800,
+                height: 600,
+                webPreferences: {
+                    plugins: true,
+                    webSecurity: false,
+                }
+            }
+        ];
+    }
 }
 var StateManager = /** @class */ (function () {
     function StateManager() {
@@ -41,6 +66,9 @@ var StateManager = /** @class */ (function () {
         console.log(exports.DEFAULT_URL);
         var data = this.getOrLoadData();
         data.windows = defaultWindows();
+        if (debugMode) {
+            process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+        }
         this.store.all = data;
     };
     StateManager.prototype.getWindows = function () {
@@ -58,7 +86,7 @@ var StateManager = /** @class */ (function () {
             data = this.store.all;
             this.data = data;
         }
-        return data;
+        return this.store.all;
     };
     return StateManager;
 }());

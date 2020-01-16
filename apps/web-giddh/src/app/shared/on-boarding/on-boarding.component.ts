@@ -345,6 +345,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                     if (company.uniqueName === session.companyUniqueName) {
                         const countryDetails = company.countryV2;
                         this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                        this.company.phoneCode = countryDetails.callingCode;
                     }
                 });
             }

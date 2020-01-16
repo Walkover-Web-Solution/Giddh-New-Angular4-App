@@ -29,7 +29,7 @@ export const IsyncData = [
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
-    styleUrls: ['./branch.component.css'],
+    styleUrls: ['./branch.component.scss'],
     providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 

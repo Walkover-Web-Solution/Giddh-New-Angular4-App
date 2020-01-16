@@ -35,7 +35,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public dontShowNoResultMsg: boolean = false;
     @Input() public showChannelCreateBtn: boolean = true;
 
-    @Input() public isOpen: boolean = false;
+    @Input() public isOpen: boolean = true;
     @Input() public defaultExcludedTags: string = 'input, button, .searchEle, .modal-content, .modal-backdrop';
     @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
