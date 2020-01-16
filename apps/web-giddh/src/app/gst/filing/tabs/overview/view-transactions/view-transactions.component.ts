@@ -31,7 +31,6 @@ export const InvoiceType = [
     { label: 'B2CS', value: 'b2cs' },
     { label: 'Export', value: 'export' },
     { label: 'Nil', value: 'nil' },
-    { label: 'All', value: 'all' }
 ];
 
 export const Gstr2InvoiceType = [
@@ -43,8 +42,9 @@ export const Gstr2InvoiceType = [
 ];
 
 export const Entitytype = [
+    { label: 'All', value: 'all' },
     { label: 'Registered', value: 'registered' },
-    { label: 'Unregistered', value: 'unregistered' },
+    { label: 'Unregistered', value: 'unregistered' }
 ];
 
 // export const Status = [
@@ -208,7 +208,11 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
         if (this.filterParam.type) {
             let selected;
             if (this.selectedGst === 'gstr1') {
-                selected = _.find(InvoiceType, o => o.value === filters.type);
+                if (this.filterParam.entityType === 'advance-receipt') {
+                    selected = _.find(Entitytype, o => o.value === filters.type)
+                } else {
+                    selected = _.find(InvoiceType, o => o.value === filters.type);
+                }
             } else {
                 selected = _.find(Gstr2InvoiceType, o => o.value === filters.type);
             }
