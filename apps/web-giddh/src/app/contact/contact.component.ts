@@ -59,7 +59,7 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
-    selected: any;
+    // selected: any;
     public flattenAccounts: any = [];
     public sundryDebtorsAccountsBackup: any = {};
     public sundryDebtorsAccountsForAgingReport: IOption[] = [];
@@ -272,7 +272,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate()
                 };
 
-                this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
+                // this.selected = {startDate: moment(universalDate[0], 'DD-MM-YYYY'), endDate: moment(universalDate[1], 'DD-MM-YYYY')};
 
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
                 this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
@@ -813,9 +813,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        if (value.startDate && value.endDate) {
-            this.fromDate = moment(value.startDate).format('DD-MM-YYYY');
-            this.toDate = moment(value.endDate).format('DD-MM-YYYY');
+        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
+        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        if (value.event.type === 'hide') {
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', 20, this.searchStr);
             this.detectChanges();
         }
