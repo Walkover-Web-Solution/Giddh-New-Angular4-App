@@ -6,6 +6,7 @@ import { RcmModalButton, RcmModalConfiguration } from '../common/rcm-modal/rcm-m
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
+import * as moment from 'moment';
 
 @Injectable()
 export class GeneralService {
@@ -16,7 +17,6 @@ export class GeneralService {
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
 
     get user(): UserDetails {
         return this._user;
