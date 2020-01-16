@@ -9,8 +9,24 @@
                     <div class="input-group ">
                         <!-- <span class="icon-calender"></span> -->
                         <span class="inputWrapper">
-                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
+
+                            <input type="text"
+                                   [(ngModel)]="selectedDateRange"
+                                   ngxDaterangepickerMd
+                                   [alwaysShowCalendars]="true"
+                                   [ranges]="datePickerOptions.ranges"
+                                   [showClearButton]="false"
+                                   [showCancel]="true"
+                                   [showDropdowns]="true"
+                                   [locale]="{applyLabel: 'Done'}"
+                                   (rangeClicked)="dateRangeChanged($event)"
+                                   (datesUpdated)="dateRangeChanged($event)"
+                                   [keepCalendarOpeningWithRange]="true"
+                                   [showRangeLabelOnInput]="false"
+                                   name="selectedDateRange"
+                                   class="form-control"
+                                   placeholder="Select please..."/>
+
                         </span>
                     </div>
 
