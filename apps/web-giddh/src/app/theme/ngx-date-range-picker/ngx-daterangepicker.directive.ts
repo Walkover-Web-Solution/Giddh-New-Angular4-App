@@ -1,27 +1,22 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
-import { DaterangepickerComponent } from './daterangepicker.component';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
-import { LocaleConfig } from './daterangepicker.config';
+import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
+import { LocaleConfig } from './ngx-daterangepicker.config';
 
 const moment = _moment;
 
 @Directive({
     selector: 'input[ngxDaterangepickerMd]',
-    host: {
-        '(keyup.esc)': 'hide()',
-        '(blur)': 'onBlur()',
-        '(click)': 'open()'
-    },
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => DaterangepickerDirective), multi: true
+            useExisting: forwardRef(() => NgxDaterangepickerDirective), multi: true
         }
     ]
 })
-export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
-    public picker: DaterangepickerComponent;
+export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
+    public picker: NgxDaterangepickerComponent;
     private _onChange = Function.prototype;
     private _onTouched = Function.prototype;
     private _validatorChange = Function.prototype;
@@ -142,10 +137,10 @@ export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     ) {
         this.drops = 'down';
         this.opens = 'right';
-        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(DaterangepickerComponent);
+        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(NgxDaterangepickerComponent);
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
-        this.picker = (<DaterangepickerComponent> componentRef.instance);
+        this.picker = (<NgxDaterangepickerComponent> componentRef.instance);
         this.picker.inline = false; // set inline to false for all directive usage
     }
 
@@ -197,10 +192,12 @@ export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         }
     }
 
+    @HostListener('blur')
     onBlur() {
         this._onTouched();
     }
 
+    @HostListener('click', ['$event'])
     open(event?: any) {
         this.picker.show(event);
         setTimeout(() => {
@@ -208,8 +205,36 @@ export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         });
     }
 
+    @HostListener("document:keyup.esc", ['$event'])
     hide(e?) {
         this.picker.hide(e);
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    inputChanged(e) {
+        if (e.target.tagName.toLowerCase() !== 'input') {
+            return;
+        }
+        if (!e.target.value.length) {
+            return;
+        }
+        const dateString = e.target.value.split(this.picker.locale.separator);
+        let start = null, end = null;
+        if (dateString.length === 2) {
+            start = moment(dateString[0], this.picker.locale.format);
+            end = moment(dateString[1], this.picker.locale.format);
+        }
+        if (this.singleDatePicker || start === null || end === null) {
+            start = moment(e.target.value, this.picker.locale.format);
+            end = start;
+        }
+        if (!start.isValid() || !end.isValid()) {
+            return;
+        }
+        this.picker.setStartDate(start);
+        this.picker.setEndDate(end);
+        this.picker.updateView();
+
     }
 
     toggle(e?) {

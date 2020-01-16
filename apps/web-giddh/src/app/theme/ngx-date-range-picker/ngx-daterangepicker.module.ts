@@ -2,15 +2,15 @@ import { CommonModule } from '@angular/common';
 import {  ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { DaterangepickerComponent } from './daterangepicker.component';
-import { DaterangepickerDirective } from './daterangepicker.directive';
-import { LocaleConfig, DefaultLocaleConfig } from './daterangepicker.config';
 import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
+import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
+import { NgxDaterangepickerDirective } from './ngx-daterangepicker.directive';
+import { DefaultLocaleConfig, LocaleConfig } from './ngx-daterangepicker.config';
 
 @NgModule({
   declarations: [
-    DaterangepickerComponent,
-    DaterangepickerDirective
+    NgxDaterangepickerComponent,
+    NgxDaterangepickerDirective
   ],
   imports: [
     CommonModule,
@@ -20,11 +20,11 @@ import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
   ],
   providers: [],
   exports: [
-    DaterangepickerComponent,
-    DaterangepickerDirective
+    NgxDaterangepickerComponent,
+    NgxDaterangepickerDirective
   ],
   entryComponents: [
-    DaterangepickerComponent
+    NgxDaterangepickerComponent
   ]
 })
 export class NgxDaterangepickerMd {

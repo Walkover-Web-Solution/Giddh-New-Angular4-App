@@ -1,3 +1,3 @@
-export { NgxDaterangepickerMd } from './daterangepicker.module';
-export { DaterangepickerComponent } from './daterangepicker.component';
-export { DaterangepickerDirective } from './daterangepicker.directive';
+export { NgxDaterangepickerMd } from './ngx-daterangepicker.module';
+export { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
+export { NgxDaterangepickerDirective } from './ngx-daterangepicker.directive';

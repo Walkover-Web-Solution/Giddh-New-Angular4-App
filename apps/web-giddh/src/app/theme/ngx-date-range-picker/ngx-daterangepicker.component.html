@@ -78,7 +78,7 @@
 
           <!-- start date/ end date inputs container -->
           <div style="display: flex;justify-content: space-around;padding-top: 10px">
-            <input placeholder="start date" mask="d0/m0/0000" [dropSpecialCharacters]="true" #startDateElement
+            <input placeholder="start date" #startDateElement
                    [value]="startDateString" (change)="setStartDate($event.target.value)"
                    (click)="ActiveDate =0"
                    style="width: 100px;height:30px;font-size: 12px;"
@@ -86,7 +86,7 @@
             <span style="display: flex;align-items: flex-start">
               _
             </span>
-            <input placeholder="end date" mask="d0/m0/0000" [dropSpecialCharacters]="true" #endDateElement
+            <input placeholder="end date" #endDateElement
                    [value]="endDateString" (change)="setEndDate($event.target.value)"
                    (click)="ActiveDate =1"
                    style="width: 100px;height: 30px;font-size: 12px;"

@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { LocaleConfig } from './daterangepicker.config';
 
 import * as _moment from 'moment';
 import { Moment } from 'moment';
+import { LocaleConfig } from './ngx-daterangepicker.config';
 
 const moment = _moment;
 
@@ -78,16 +78,16 @@ export interface DateRangeClicked {
 
 @Component({
     selector: 'ngx-daterangepicker-material',
-    styleUrls: ['./daterangepicker.component.scss'],
-    templateUrl: './daterangepicker.component.html',
+    styleUrls: ['./ngx-daterangepicker.component.scss'],
+    templateUrl: './ngx-daterangepicker.component.html',
     encapsulation: ViewEncapsulation.ShadowDom,
     providers: [{
         provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => DaterangepickerComponent),
+        useExisting: forwardRef(() => NgxDaterangepickerComponent),
         multi: true
     }]
 })
-export class DaterangepickerComponent implements OnInit {
+export class NgxDaterangepickerComponent implements OnInit {
     chosenLabel: string;
     calendarVariables: CalendarVariables = {start: {}, end: {}};
     timepickerVariables: { start: any, end: any } = {start: {}, end: {}};
@@ -557,6 +557,9 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     setStartDate(startDate) {
+        if (!moment(startDate, this.locale.format, true).isValid()) {
+            return;
+        }
         if (typeof startDate === 'string') {
             this.startDate = moment(startDate, this.locale.format);
         }
@@ -574,6 +577,7 @@ export class DaterangepickerComponent implements OnInit {
 
         if (this.minDate && this.startDate.isBefore(this.minDate)) {
             this.startDate = this.minDate.clone();
+            console.log('formatted start date :-', this.startDate.format(this.locale.format));
             if (this.timePicker && this.timePickerIncrement) {
                 this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
             }
