@@ -50,5 +50,5 @@ export const PAGINATION_LIMIT = 20;
 /** Subvoucher type */
 export enum Subvoucher {
     ReverseCharge = 'REVERSE_CHARGE',
-    AdvanceReceipt = 'ADVANCED_RECEIPT'
+    AdvanceReceipt = 'ADVANCE_RECEIPT'
 }

@@ -159,9 +159,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
     public rcmConfiguration: RcmModalConfiguration;
+    /** True, if the selected voucher type is 'Receipt' */
+    public shouldShowAdvanceReceipt: boolean = false;
+    /** True, if advance receipt is enabled */
+    public isAdvanceReceipt: boolean = false;
+    /** True, if advance receipt checkbox is checked, will show the mandatory fields for Advance Receipt */
+    public shouldShowAdvanceReceiptMandatoryFields: boolean = false;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private isExchangeRateSwapped: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -408,20 +415,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public changePrice(val: string) {
-        this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
+        if (!this.isExchangeRateSwapped) {
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate);
 
-        this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
 
-        // calculate discount on change of price
-        if (this.discountControl) {
-            this.discountControl.ledgerAmount = this.currentTxn.amount;
-            this.discountControl.change();
+            // calculate discount on change of price
+            if (this.discountControl) {
+                this.discountControl.ledgerAmount = this.currentTxn.amount;
+                this.discountControl.change();
+            }
+
+            this.calculateTotal();
+            this.calculateCompoundTotal();
         }
-
-        this.calculateTotal();
-        this.calculateCompoundTotal();
     }
 
     public changeQuantity(val: string) {
@@ -531,10 +540,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public saveLedger() {
-        if (this.isRcmEntry && !this.validateTaxes()) {
-            // Taxes are mandatory for RCM entries
-            this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
-            return;
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
+            if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
+                // Taxes are mandatory for RCM and Advance Receipt entries
+                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                return;
+            }
         }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
@@ -765,7 +776,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public getInvoiveListsData(e: any) {
         if (e.value === 'rcpt') {
+            this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
+        } else {
+            this.shouldShowAdvanceReceipt = false;
+            this.isAdvanceReceipt = false;
         }
     }
 
@@ -886,19 +901,29 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public swapEntries(entryKeys: Array<any>): void {
+        this.isExchangeRateSwapped = true;
         if (this.currentTxn.inventory) {
             // Swap the unit rate and converted rate
-            this.currentTxn.inventory.unit.rate = this.currentTxn.inventory.unit.rate - this.currentTxn.convertedRate;
-            this.currentTxn.convertedRate = this.currentTxn.inventory.unit.rate + this.currentTxn.convertedRate;
-            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate - this.currentTxn.inventory.unit.rate;
+            let rate = this.currentTxn.inventory.unit.rate;
+            this.currentTxn.inventory.unit.rate = this.currentTxn.convertedRate;
+            this.currentTxn.convertedRate = rate;
         }
 
         // Swap the provided key value pairs
         entryKeys.forEach((entry: any) => {
-            this.currentTxn[entry[0]] = this.currentTxn[entry[0]] - this.currentTxn[entry[1]];
-            this.currentTxn[entry[1]] = this.currentTxn[entry[0]] + this.currentTxn[entry[1]];
-            this.currentTxn[entry[0]] = this.currentTxn[entry[1]] - this.currentTxn[entry[0]];
+            let value = this.currentTxn[entry[0]];
+            this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
+            this.currentTxn[entry[1]] = value;
         });
+        if (this.discountControl) {
+            this.discountControl.discountTotal = this.currentTxn.discount;
+        }
+        if (this.taxControll) {
+            this.taxControll.taxTotalAmount = this.currentTxn.tax;
+        }
+        setTimeout(() => {
+            this.isExchangeRateSwapped = false;
+        }, 300);
     }
 
     /**
@@ -928,6 +953,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.rcmPopup) {
             this.rcmPopup.hide();
         }
+    }
+
+    /**
+     * Handles the advance receipt change by appending the advance receipt
+     * in subvoucher of current transaction
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleAdvanceReceiptChange(): void {
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
+        this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
     }
 
     /**

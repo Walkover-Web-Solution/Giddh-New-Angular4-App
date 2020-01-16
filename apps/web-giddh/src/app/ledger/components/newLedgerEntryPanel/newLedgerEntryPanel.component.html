@@ -4,35 +4,31 @@
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
         <!-- reverse charge transction end  -->
-        <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
+        <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width100 total-detail-table">
 
                 <tbody class="">
 
-                    <tr *ngIf="currentTxn.selectedAccount">
+                    <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
 
-                        <td class="pItem qty-unit" *ngIf="currentTxn.selectedAccount.stock">
-
+                        <td class="pItem qty-unit" *ngIf="currentTxn?.selectedAccount?.stock">
                             <table>
-
                                 <tbody>
-
                                     <tr>
-
                                         <td class="text-right width-70"
                                             ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                                             <label style="margin-right: 6px;">Qty</label>
                                             <input type="text" name="" class="form-control text-right"
                                                 (change)="changeQuantity($event.target.value)"
-                                                [(ngModel)]="currentTxn.inventory.quantity" decimalDigitsDirective
+                                                [(ngModel)]="currentTxn?.inventory.quantity" decimalDigitsDirective
                                                 [DecimalPlaces]="4" />
                                         </td>
 
-                                        <td *ngIf="currentTxn.unitRate">
+                                        <td *ngIf="currentTxn?.unitRate">
                                             <label>Unit</label>
                                             <select class="form-control" style="width: 78px;"
                                                 (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn.inventory.unit.code">
+                                                [value]="currentTxn?.inventory.unit.code">
                                                 <option *ngFor="let item of currentTxn.unitRate" [value]="item.code">
                                                     {{item.stockUnitCode}}
                                                 </option>
@@ -47,12 +43,12 @@
 
                         </td>
 
-                        <td class="text-center table-plus" *ngIf="currentTxn.selectedAccount.stock">
+                        <td class="text-center table-plus" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20 pt-04">x</label>
                         </td>
 
-                        <td class="pItem text-right price" *ngIf="currentTxn.selectedAccount.stock">
+                        <td class="pItem text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label>Price</label>
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -60,16 +56,17 @@
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn.convertedRate | giddhCurrency}}
+                                {{ currentTxn?.convertedRate | giddhCurrency}}
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="currentTxn.selectedAccount.stock">
+                        <td class="text-center equal-2" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
 
-                        <td class="pItem text-right amount">
+                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right amount">
                             <label class="primary_clr">Amount</label>
                             <input type="text" name="" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -77,17 +74,19 @@
                                 (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn.convertedAmount | giddhCurrency}}
+                                {{ currentTxn?.convertedAmount | giddhCurrency}}
                             </p>
                         </td>
 
-                        <td class="text-center table-minus">
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount)"
+                            class="text-center table-minus">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">-</label>
                         </td>
 
                         <!--discount-->
-                        <td class="pItem text-right price" (click)="$event.stopPropagation()">
+                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) || !shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right price" (click)="$event.stopPropagation()">
                             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
@@ -95,21 +94,23 @@
                             </ledger-discount>
                             <p class="mb-0 amnt-total pr-1 pl-1" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn.convertedDiscount | giddhCurrency}}
+                                {{ currentTxn?.convertedDiscount | giddhCurrency}}
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="(companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">+</label>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="!(companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && !(companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
 
-                        <td *ngIf="(companyTaxesList$ | async)?.length"
+                        <td *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
                             class="pItem amount pos-rel dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()" (click)="$event.stopPropagation()">
                             <!--tax control component-->
@@ -117,6 +118,8 @@
                             <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
                             <tax-control #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
+                                [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
+                                [isMandatory]="shouldShowAdvanceReceiptMandatoryFields || isRcmEntry"
                                 [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']" [maskInput]="inputMaskFormat"
                                 [prefixInput]="selectedPrefixForCurrency" [suffixInput]="selectedSuffixForCurrency"
                                 [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
@@ -132,12 +135,14 @@
                             </p>
                         </td>
 
-                        <td class="text-center equal-2" *ngIf="(companyTaxesList$ | async)?.length">
+                        <td class="text-center equal-2"
+                            *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
                             <label class="fs20">=</label>
                         </td>
 
-                        <td class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
+                        <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
+                            class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
                             <label class="primary_clr">Total</label>
                             <input type="text" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="" class="form-control text-right"
@@ -292,7 +297,24 @@
                 [style.width.px]="161"></sh-select> -->
                             </td>
 
+                            <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
+                                <input type="checkbox" name="advanceReceipt"
+                                    (change)="handleAdvanceReceiptChange()" [(ngModel)]="isAdvanceReceipt">
+                                Advance Receipt
+                            </td>
+
                         </tr>
+                    </table>
+
+                    <table *ngIf="shouldShowAdvanceReceipt" class="hidden-lg hidden-md hidden-sm">
+                        <tbody>
+                            <tr>
+                                <td class="pdR1 pt-1">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
+                                        (change)="handleAdvanceReceiptChange($event)"> Advance Receipt
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
 
                     <table class="mrT1">

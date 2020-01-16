@@ -149,7 +149,8 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .icon-box {
     text-align: center;
     display: flex;
-    align-items: center;
+    -webkit-box-align: end;
+    align-items: flex-end;
     padding: 8px 10px 10px;
 }
 
@@ -300,5 +301,11 @@ span.eligible-ITC {
     }
     .entrypanel .bl-1 {
         border-left: 0;
+    }
+    .advanced input[type="checkbox"] {
+        width: initial !important;
+    }
+    .xs-pt-0 {
+        padding-top: 0px !important;
     }
 }
