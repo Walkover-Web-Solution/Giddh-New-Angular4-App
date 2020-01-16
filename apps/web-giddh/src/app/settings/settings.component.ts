@@ -193,7 +193,7 @@ export class SettingsComponent implements OnInit {
     }
 
     private saveGmailAuthCode(authCode: string) {
-        const dataToSave = {
+        const getAccessTokenData = {
             code: authCode,
             client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
             client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
@@ -207,11 +207,27 @@ export class SettingsComponent implements OnInit {
 
         options.headers = {} as any;
 
-        this.http.post("https://accounts.google.com/o/oauth2/token", dataToSave, options).subscribe((p)=>{
-            debugger;
+        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).subscribe((p: any) => {
+            const dataToSave = {
+                "access_token": p.access_token,
+                "expires_in": p.expires_in,
+                "refresh_token": p.refresh_token
+            };
+            this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+
+                if (res.status === 'success') {
+                    this._toast.successToast('Gmail account added successfully.', 'Success');
+                } else {
+                    this._toast.errorToast(res.message, res.code);
+                }
+                this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+                this.router.navigateByUrl('/pages/settings/integration/email');
+                // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
+            });
         })
 
-        debugger;
+        // debugger;
+
 
         // this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
         //

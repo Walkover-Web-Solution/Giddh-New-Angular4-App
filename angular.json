@@ -73,7 +73,7 @@
         "build": {
           "builder": "ngx-build-plus:build",
           "options": {
-            "baseHref": "http://localapp.giddh.com:3000",
+            "baseHref": "http://localhost:3000",
             "outputPath": "dist/apps/web-giddh",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",
@@ -127,8 +127,8 @@
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
               "extraWebpackConfig": "./webpack.local.partial.js",
-              "baseHref": "http://localapp.giddh.com:3000",
-              "baseUrl": "localapp.giddh.com:3000",
+              "baseHref": "http://localhost:3000",
+              "baseUrl": "localhost:3000",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -250,10 +250,10 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-            "host": "localapp.giddh.com",
-            "baseHref": "http://localapp.giddh.com:3000",
+            "host": "localhost",
+            "baseHref": "http://localhost:3000",
             "port": 3000,
-            "baseUrl": "localapp.giddh.com:3000",
+            "baseUrl": "localhost:3000",
             "browserTarget": "web-giddh:build",
             "extraWebpackConfig": "./webpack.partial.js",
             "assets": [],
@@ -507,9 +507,9 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-            "host": "localapp.giddh.com",
+            "host": "localhost",
             "port": 4200,
-            "baseUrl": "localapp.giddh.com:4200",
+            "baseUrl": "localhost:4200",
             "browserTarget": "electron-giddh:build:local",
             "extraWebpackConfig": "./webpack.electron.partial.js",
             "plugin": "./hook.js"

@@ -377,8 +377,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             } else {
                 // linked in
+                // const t = ipcRenderer.send("authenticate", provider);
+                // this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
                 const t = ipcRenderer.send("authenticate", provider);
-                this.store.dispatch(this.loginAction.LinkedInElectronLogin(t));
+                ipcRenderer.once('take-your-gmail-token', (sender , arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
             }
 
         } else {
