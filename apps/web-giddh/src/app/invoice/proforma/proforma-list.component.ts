@@ -88,8 +88,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private _generalService: GeneralService) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
-        this.advanceSearchFilter.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-        this.advanceSearchFilter.to = moment().format('DD-MM-YYYY');
+        this.advanceSearchFilter.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+        this.advanceSearchFilter.to = moment().format(GIDDH_DATE_FORMAT);
 
         this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
         this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
@@ -126,7 +126,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         item.uniqueName = item.proformaNumber || item.estimateNumber;
                         item.invoiceDate = item.proformaDate || item.estimateDate;
 
-                        let dueDate = item.expiryDate ? moment(item.expiryDate, 'DD-MM-YYYY') : null;
+                        let dueDate = item.expiryDate ? moment(item.expiryDate, GIDDH_DATE_FORMAT) : null;
 
                         if (dueDate) {
                             if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.action)) {
@@ -266,8 +266,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
                 }
+                this.getAll();
             }
-            this.getAll();
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
@@ -313,7 +313,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.localStorageSelectedDate = 'estimateSelectedDate';
             }
-            this.getAll();
+            // this.getAll();
             this.selectedVoucher = null;
         }
     }
@@ -421,7 +421,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public dateRangeChanged(event: any) {
         this.showResetAdvanceSearchIcon = true;
-        if (event) {
+        if (event && event.startDate && event.endDate) {
             this.advanceSearchFilter.from = moment(event.startDate).format(GIDDH_DATE_FORMAT);
             this.advanceSearchFilter.to = moment(event.endDate).format(GIDDH_DATE_FORMAT);
             if (window.localStorage) {
@@ -435,8 +435,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     localStorage.setItem('estimateSelectedDate', JSON.stringify(this.estimateSelectedDate));
                 }
             }
-        }
         this.getAll();
+        }
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
