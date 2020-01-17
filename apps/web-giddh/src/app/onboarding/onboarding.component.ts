@@ -94,6 +94,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else {
             let newwindow = window.open('https://calendly.com/sales-accounting-software/talk-to-sale', 'scheduleWindow', 'height=650,width=1199,left=200,top=100`');
+
             if (window.focus) {
                 newwindow.focus();
             }
