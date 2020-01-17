@@ -236,9 +236,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
             let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
             let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
             if (financialYear) {
-                // // set dates
-                // this.assignStartAndEndDateForDateRangePicker(financialYear.financialYearStarts, financialYear.financialYearEnds);
-
                 this.filterForm.patchValue({
                     to: financialYear.financialYearEnds,
                     from: financialYear.financialYearStarts,
