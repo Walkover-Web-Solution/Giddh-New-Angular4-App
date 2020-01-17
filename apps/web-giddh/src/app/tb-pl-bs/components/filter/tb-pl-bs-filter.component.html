@@ -24,10 +24,28 @@
                     </div>
                     <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
                         <span class="inputWrapper">
-                            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                (hideDaterangepicker)="selectedDate($event)"
-                                (applyDaterangepicker)="selectedDate($event)"
-                                class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1" /></span>
+
+<!--                            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
+<!--                                (hideDaterangepicker)="selectedDate($event)"-->
+<!--                                (applyDaterangepicker)="selectedDate($event)"-->
+<!--                                class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1" />-->
+
+                            <input type="text"
+                                   formControlName="selectedDateRange"
+                                   ngxDaterangepickerMd
+                                   [alwaysShowCalendars]="true"
+                                   [ranges]="datePickerOptions.ranges"
+                                   [showClearButton]="false"
+                                   [showCancel]="true"
+                                   [showDropdowns]="true"
+                                   [locale]="{applyLabel: 'Done'}"
+                                   (datesUpdated)="selectedDate($event)"
+                                   [keepCalendarOpeningWithRange]="true"
+                                   [showRangeLabelOnInput]="false"
+                                   class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1"
+                                   placeholder="Select please..."/>
+                        </span>
+
                     </div>
                     <!--
                     <div class="form-group tb-btnApply">
