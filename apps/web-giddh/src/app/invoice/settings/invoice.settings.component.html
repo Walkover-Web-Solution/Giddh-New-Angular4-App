@@ -24,9 +24,9 @@
                             <div class="clearfix" *ngIf="false">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-5 "><label>Default payment gateway</label></div>
+                                    <div class="col-xs-12 col-sm-3 "><label>Default payment gateway</label></div>
 
-                                    <div class="col-xs-6 col-sm-7">
+                                    <div class="col-xs-6 col-sm-9">
                                         <div class="form-group clearfix max150">
                                             <sh-select placeholder="Payment Gateway" name="defaultPaymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
                                         </div>
@@ -39,13 +39,13 @@
                             <div class="clearfix pdT1">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-3">
 
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher" name="enableNarrationOnInvAndVoucher" class="showOnMobile" />
                                         <label>Show Narration on Ledger</label>
                                     </div>
 
-                                    <div class="col-xs-6 col-sm-7 form-group">
+                                    <div class="col-xs-6 col-sm-9 form-group">
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher" name="enableNarrationOnInvAndVoucher" class="hideOnMobile" />
                                     </div>
                                 </div>
@@ -55,12 +55,12 @@
                             <div class="clearfix pdT1" *ngIf="false">
                                 <div class="row">
 
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" name="autoCreateVirtualAccountsForDebtors" class="pull-left showOnMobile" />
                                         <label>Create virtual accounts for customers</label>
                                     </div>
 
-                                    <div class="col-xs-6 col-sm-7">
+                                    <div class="col-xs-6 col-sm-9">
                                         <div class="form-group clearfix" *ngIf="companyCashFreeSettings">
                                             <input type="checkbox" [(ngModel)]="companyCashFreeSettings.autoCreateVirtualAccountsForDebtors" name="autoCreateVirtualAccountsForDebtors" class="pull-left hideOnMobile" />
                                         </div>
@@ -73,13 +73,13 @@
                             <div class="clearfix pdT1" *ngIf="false">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.createPaymentEntry" class="pull-left" name="invoiceCreatePaymentEntry" class="showOnMobile" />
                                         <label>Create entry after payment using any payment gateway
                                             (Razorpay)</label>
                                     </div>
 
-                                    <div class="col-xs-12 col-sm-7">
+                                    <div class="col-xs-12 col-sm-9">
 
                                         <div class="form-group paymentGateway clearfix">
 
@@ -120,11 +120,11 @@
                             <div class="clearfix pdT1" *ngIf="false">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="enableEstimate" class="showOnMobile" />
                                         <label>Enable Estimates/Quotations</label></div>
 
-                                    <div class="col-xs-6 col-sm-7">
+                                    <div class="col-xs-6 col-sm-9">
                                         <div class="form-group clearfix">
                                             <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="enableEstimate" class="hideOnMobile" />
                                         </div>
@@ -137,11 +137,11 @@
                             <div class="clearfix pdT1" *ngIf="false">
 
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="enableProforma" class="showOnMobile" />
                                         <label>Enable Proforma Invoices</label></div>
 
-                                    <div class="col-xs-6 col-sm-7">
+                                    <div class="col-xs-6 col-sm-9">
                                         <div class="form-group clearfix">
                                             <input type="checkbox" [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="enableProforma" class="hideOnMobile" />
                                         </div>
@@ -182,9 +182,9 @@
 
                         <div class="row">
 
-                            <div class="col-xs-12 col-sm-5 lh34"><label>From Email</label></div>
+                            <div class="col-xs-12 col-sm-3 lh34"><label>From Email</label></div>
 
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-9">
 
                                 <div class="row">
 
@@ -226,12 +226,12 @@
                     <div class="clearfix  pdT1">
 
                         <div class="row">
-                            <div class="col-sm-5 col-xs-12">
+                            <div class="col-sm-3 col-xs-12">
                                 <input type="checkbox" [(ngModel)]="companyEmailSettings.sendThroughGmail" name="sendThroughGmail" [disabled]="!isGmailIntegrated" class="showOnMobile" />
                                 <label>Send email through Gmail</label>
                             </div>
 
-                            <div class="col-xs-7 form-group" style="display: flex;align-items: center">
+                            <div class="col-xs-9 form-group" style="display: flex;align-items: center">
                                 <input type="checkbox" [(ngModel)]="companyEmailSettings.sendThroughGmail" name="sendThroughGmail" [disabled]="!isGmailIntegrated" class="hideOnMobile" />
 
                                 <span class="ml-1 integratdeEmail">
@@ -266,10 +266,10 @@
                     <div class="clearfix">
 
                         <div class="row headingName">
-                            <div class="col-xs-12 col-sm-5  lh34"><label>Heading Name<span
+                            <div class="col-xs-12 col-sm-3  lh34"><label>Heading Name<span
                                         class="red-text">*</span></label></div>
 
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-9">
                                 <div class="">
                                     <div class="">
                                         <div class=" form-group">
@@ -287,9 +287,9 @@
 
                         <div class="row">
 
-                            <div class="col-xs-12 col-sm-5 lh34"><label>Default expiry days</label></div>
+                            <div class="col-xs-12 col-sm-3 lh34"><label>Default expiry days</label></div>
 
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-9">
 
                                 <div class=" defaultExpiry">
                                     <div class="">
@@ -335,26 +335,24 @@
 
                         <div class="row nextStepEstimate">
 
-                            <div class="col-xs-12 col-sm-5 lh34"><label>Next step to Estimate<span
+                            <div class="col-xs-12 col-sm-3 lh34"><label>Next step to Estimate<span
                                         class="red-text">*</span></label>
                             </div>
 
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-9">
 
                                 <div class=" selectEstimate">
 
                                     <div class="col-md-2 col-sm-3 col-xs-12 p-0">
 
-                                        <div class="">
+                                        <span class="d-inline-block mr-2">
                                             <input class="radio_theme" name="signatureType" style="margin-left: 0px !important;" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'"> Proforma
-                                        </div>
+                                        </span>
 
-                                    </div>
-
-                                    <div class="col-md-2 col-sm-3 col-xs-12 p-0">
-                                        <div>
+                                        <span>
                                             <input class="radio_theme" name="signatureType" type="radio" style="margin-left: 0px !important;" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'"> Invoice
-                                        </div>
+                                        </span>
+
                                     </div>
 
                                 </div>
@@ -365,12 +363,12 @@
 
                             <div class="row">
 
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp" name="estimateAutoChange" class="showOnMobile" /> <label>Auto change status (on
                                         expiry)</label>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-7 form-group">
+                                <div class="col-xs-12 col-sm-9 form-group">
                                     <input type="checkbox" [(ngModel)]="estimateSetting.autoChangeStatusOnExp" name="estimateAutoChange" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -379,11 +377,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="estimateSetting.autoMail" name="estimateAutomail" class="showOnMobile" /> <label>Auto mail when
                                         generated</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group ">
+                                <div class="col-xs-12 col-sm-9 form-group ">
                                     <input type="checkbox" [(ngModel)]="estimateSetting.autoMail" name="estimateAutomail" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -392,12 +390,12 @@
 
                         <div class="clearfix pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left" name="invoiceCreatePaymentEntry" class="showOnMobile" /><label>Enable send
                                         invoice via
                                         SMS</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 ">
+                                <div class="col-xs-12 col-sm-9">
                                     <div class="form-group clearfix">
                                         <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left" name="invoiceCreatePaymentEntry" class="hideOnMobile" />
 
@@ -449,9 +447,9 @@
                     <div class="clearfix">
 
                         <div class="row headingName">
-                            <div class="col-xs-12 col-sm-5 lh34"><label>Heading Name<span
+                            <div class="col-xs-12 col-sm-3 lh34"><label>Heading Name<span
                                         class="red-text">*</span></label></div>
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-9">
                                 <div class="">
                                     <div class="">
                                         <div class=" form-group">
@@ -468,8 +466,8 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 col-sm-5 lh34"><label>Default expiry days</label></div>
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-3 lh34"><label>Default expiry days</label></div>
+                            <div class="col-xs-12 col-sm-9">
                                 <div class=" defaultExpiry">
                                     <div class="">
                                         <div class=" form-group">
@@ -512,11 +510,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="proformaSetting.autoChangeStatusOnExp" name="proformaAutoChange" class="showOnMobile" />
                                     <label>Auto change status (on expiry)</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group ">
+                                <div class="col-xs-12 col-sm-9 form-group">
                                     <input type="checkbox" [(ngModel)]="proformaSetting.autoChangeStatusOnExp" name="proformaAutoChange" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -524,11 +522,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="proformaSetting.autoMail" name="proformaAutomail" class="showOnMobile" />
                                     <label>Auto mail when updated/generated</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group ">
+                                <div class="col-xs-12 col-sm-9 form-group ">
                                     <input type="checkbox" [(ngModel)]="proformaSetting.autoMail" name="proformaAutomail" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -536,10 +534,10 @@
 
                         <div class="clearfix pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="proformaCreatePaymentEntry" class="showOnMobile" />
                                     <label>Enable send proforma via SMS</label></div>
-                                <div class="col-xs-12 col-sm-7 ">
+                                <div class="col-xs-12 col-sm-9 ">
                                     <div class="form-group clearfix">
                                         <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="proformaCreatePaymentEntry" class="hideOnMobile" />
                                         <!-- <div class="mrT1 max250 mrT3" *ngIf="invoiceSetting.sendInvLinkOnSms">
@@ -608,8 +606,8 @@
 
                         <div class="row">
 
-                            <div class="col-xs-12 col-sm-5  lh34"><label>Default expiry days</label></div>
-                            <div class="col-xs-12 col-sm-7">
+                            <div class="col-xs-12 col-sm-3  lh34"><label>Default expiry days</label></div>
+                            <div class="col-xs-12 col-sm-9">
                                 <div class=" defaultExpiry">
                                     <div class="">
                                         <div class=" form-group">
@@ -652,11 +650,11 @@
                         <div class="clearfix ">
 
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <label style="vertical-align:middle">Invoice Lock Date</label>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-7">
+                                <div class="col-xs-12 col-sm-9">
                                     <div class="form-group date-pickerInvoice invoice-lock-date  mb-0">
                                         <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSetting.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
                                         <span class="icon-calender " (click)="dp.toggle()"></span>
@@ -668,11 +666,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" name="invoiceStatusPayment" [(ngModel)]="invoiceSetting.showSeal" class="showOnMobile" /> <label>Show seal
                                         according to status of payment</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group">
+                                <div class="col-xs-12 col-sm-9 form-group">
                                     <input type="checkbox" name="invoiceStatusPayment" [(ngModel)]="invoiceSetting.showSeal" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -680,11 +678,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.autoPaid" name="invoiceAutoPaid" class="showOnMobile" />
                                     <label>Auto Paid</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group ">
+                                <div class="col-xs-12 col-sm-9 form-group ">
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.autoPaid" name="invoiceAutoPaid" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -692,11 +690,11 @@
 
                         <div class="clearfix  pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail" class="showOnMobile" />
                                     <label>Auto mail when updated</label>
                                 </div>
-                                <div class="col-xs-12 col-sm-7 form-group ">
+                                <div class="col-xs-12 col-sm-9 form-group ">
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail" class="hideOnMobile" />
                                 </div>
                             </div>
@@ -705,14 +703,14 @@
                         <div class="clearfix pdT1">
                             <div class="row">
 
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
 
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms" (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)" name="invoiceSetting.sendInvLinkOnSms" class="pull-left showOnMobile" />
 
                                     <label>Enable send invoice via SMS</label>
                                 </div>
 
-                                <div class="col-xs-12 col-sm-7">
+                                <div class="col-xs-12 col-sm-9">
 
                                     <div class="form-group clearfix">
 
@@ -730,10 +728,10 @@
 
                         <div class="clearfix pdT1">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-5">
+                                <div class="col-xs-12 col-sm-3">
                                     <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" class="showOnMobile" />
                                     <label>Custom Invoice#</label></div>
-                                <div class="col-xs-12 col-sm-7">
+                                <div class="col-xs-12 col-sm-9">
                                     <div class="form-group clearfix ">
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" class="hideOnMobile" />
                                         <div class=" d-inline-flex customEstimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">
