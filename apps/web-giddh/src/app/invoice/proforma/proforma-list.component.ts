@@ -106,9 +106,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     ngOnInit() {
 
         // get default datepicker options from store
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a) {
-                this.datePickerOptions = a;
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(datePickerOptions => {
+            if (datePickerOptions) {
+                this.datePickerOptions = datePickerOptions;
             }
         });
 
