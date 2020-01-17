@@ -189,7 +189,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
         }
 
-        if (rawInputValue) {
+        if (rawInputValue && this.rawInputValue !== undefined && this.rawInputValue !== null) {
             // replace input value with raw value for getting update values
             this._inputValue = this.rawInputValue.toString();
         }

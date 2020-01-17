@@ -354,7 +354,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
-        if (this.isRcmEntry && !this.validateTaxes()) {
+        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
             this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
             return;
         }

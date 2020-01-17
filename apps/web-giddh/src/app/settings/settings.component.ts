@@ -206,7 +206,7 @@ export class SettingsComponent implements OnInit {
                 this._toast.errorToast(res.message, res.code);
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-            this.router.navigateByUrl('/pages/settings/integration/email');
+            // this.router.navigate(['/pages/settings/integration/email']);
             // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
         });
     }
