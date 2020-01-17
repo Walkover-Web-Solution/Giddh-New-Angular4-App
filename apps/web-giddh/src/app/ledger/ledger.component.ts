@@ -400,7 +400,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        console.log('Selected Tx: ', txn);
         this.handleRcmVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
@@ -1648,10 +1647,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                 }
                 const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
-                console.log('RCM: ', shouldShowRcmEntry);
                 if (this.lc && this.lc.currentBlankTxn) {
                     this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
-                    console.log('Current: ', this.lc.currentBlankTxn);
                 }
             }
         });

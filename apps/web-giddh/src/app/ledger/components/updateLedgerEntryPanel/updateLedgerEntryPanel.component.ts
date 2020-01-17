@@ -1232,10 +1232,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private isRcmEntryPresent(transactions: any): boolean {
         if (transactions) {
-            console.log('Trx: ', transactions);
             for (let index = 0; index < transactions.length; index++) {
                 const transactionUniqueName = transactions[index].particular.uniqueName;
-                console.log('transaction unique name: ', transactionUniqueName);
                 let selectedAccountDetails;
                 this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
                     for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
@@ -1243,14 +1241,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         if (account.uniqueName === transactionUniqueName) {
                             // Found the user selected particular account
                             selectedAccountDetails = _.cloneDeep(account);
-                            console.log('Found: ', selectedAccountDetails);
                             break;
                         }
                     }
                 });
                 if (selectedAccountDetails) {
                     const isRcmEntry = this.generalService.shouldShowRcmSection(this.activeAccount, selectedAccountDetails);
-                    console.log('isrcm: ', isRcmEntry);
                     if (isRcmEntry) {
                         return true;
                     }

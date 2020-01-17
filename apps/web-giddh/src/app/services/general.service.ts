@@ -243,8 +243,6 @@ export class GeneralService {
      */
     shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
-            console.log('Current Ledger: ', currentLedgerAccountDetails);
-            console.log('Selected account: ', selectedAccountDetails);
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = ['operatingcost', 'indirectexpenses', 'fixedassets'];
