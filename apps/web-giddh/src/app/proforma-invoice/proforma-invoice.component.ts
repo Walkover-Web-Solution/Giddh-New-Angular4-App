@@ -3278,11 +3278,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * get currency rate on entry date changed
+     * get currency rate on voucher date changed
      * @param selectedDate: Date ( date that is selected by user )
      * @param modelDate: Date ( date that was already selected by user )
      */
-    public onEntryDateChanged(selectedDate, modelDate) {
+    public onVoucherDateChanged(selectedDate, modelDate) {
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format('DD-MM-YYYY'));
         }
