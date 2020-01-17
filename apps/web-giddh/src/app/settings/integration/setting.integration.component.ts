@@ -115,7 +115,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private _generalActions: GeneralActions
     ) {
         this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.select(s => s.settings.amazonState.isSellerSuccess).pipe(takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.select(s => s.settings.amazonState.isSellerUpdated).pipe(takeUntil(this.destroyed$));
@@ -127,7 +127,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
         // getting all page data of integration page
@@ -228,7 +228,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
     public ngAfterViewInit() {
-        if (this.selectedTabParent) {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
     }
@@ -489,21 +489,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getRedirectUrl(baseHref: string) {
-        if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/pages/settings?tab=integration';
-        } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/settings/integration/email';
-        } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/settings/integration/email';
-        } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
-        } else {
-            return 'https://app.giddh.com/pages/settings?tab=integration';
-        }
+        return `${baseHref}pages/settings?tab=integration`;
     }
 
-    private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+    private getGoogleCredentials() {
+        if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
             };

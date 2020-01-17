@@ -24,7 +24,9 @@
                             "testing/tsconfig.libs.json",
                             "testing/tsconfig.libs.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -50,7 +52,9 @@
                             "testing/tsconfig.xplat.json",
                             "testing/tsconfig.xplat.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }
@@ -69,7 +73,7 @@
                 "build": {
                     "builder": "ngx-build-plus:build",
                     "options": {
-                        "baseHref": "http://localapp.giddh.com:3000",
+                        "baseHref": "http://localhost:3000",
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
@@ -123,8 +127,8 @@
                         "local": {
                             "outputPath": "dist/apps/web-giddh-local",
                             "extraWebpackConfig": "./webpack.local.partial.js",
-                            "baseHref": "http://localapp.giddh.com:3000",
-                            "baseUrl": "localapp.giddh.com:3000",
+                            "baseHref": "http://localhost:3000",
+                            "baseUrl": "localhost:3000",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -155,7 +159,7 @@
                         "stage": {
                             "outputPath": "dist/apps/web-giddh-stage",
                             "extraWebpackConfig": "./webpack.stage.partial.js",
-                            "baseHref": "http://stage.giddh.com/",
+                            "baseHref": "https://stage.giddh.com/",
                             "baseUrl": "stage.giddh.com",
                             "fileReplacements": [
                                 {
@@ -212,7 +216,7 @@
                         "test": {
                             "outputPath": "dist/apps/web-giddh-test",
                             "extraWebpackConfig": "./webpack.test.partial.js",
-                            "baseHref": "http://test.giddh.com/",
+                            "baseHref": "https://test.giddh.com/",
                             "baseUrl": "test.giddh.com",
                             "fileReplacements": [
                                 {
@@ -246,10 +250,10 @@
                 "serve": {
                     "builder": "ngx-build-plus:dev-server",
                     "options": {
-                        "host": "localapp.giddh.com",
-                        "baseHref": "http://localapp.giddh.com:3000",
+                        "host": "localhost",
+                        "baseHref": "http://localhost:3000",
                         "port": 3000,
-                        "baseUrl": "localapp.giddh.com:3000",
+                        "baseUrl": "localhost:3000",
                         "browserTarget": "web-giddh:build",
                         "extraWebpackConfig": "./webpack.partial.js",
                         "assets": [],
@@ -268,7 +272,9 @@
                             "apps/web-giddh/tsconfig.app.json",
                             "apps/web-giddh/tsconfig.spec.json"
                         ],
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 },
                 "test": {
@@ -306,7 +312,9 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
-                        "exclude": ["**/node_modules/**"]
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
                     }
                 }
             }

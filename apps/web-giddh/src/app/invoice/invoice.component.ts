@@ -39,7 +39,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                 let queryParams = result[1];
 
                 if (params) {
-                    if (params.voucherType === 'sales' || params.voucherType === 'debit note' || params.voucherType === 'credit note') {
+                    if (params.voucherType) {
                         this.selectedVoucherType = params.voucherType;
                     }
 
@@ -63,30 +63,6 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                     }
                 }
             });
-
-        // this._activatedRoute.params.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
-        //   if (!a) {
-        //     return;
-        //   }
-        //   if (a.voucherType === 'recurring') {
-        //     return;
-        //   }
-        //   this.selectedVoucherType = a.voucherType;
-        //   if (a.voucherType === 'sales') {
-        //     this.activeTab = 'invoice';
-        //   } else {
-        //     this.activeTab = a.voucherType;
-        //   }
-        // });
-        //
-        // this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$), delay(700)).subscribe(a => {
-        //   if (a.tab && a.tabIndex) {
-        //     if (this.staticTabs && this.staticTabs.tabs) {
-        //       this.staticTabs.tabs[a.tabIndex].active = true;
-        //       this.tabChanged(a.tab);
-        //     }
-        //   }
-        // });
     }
 
     public voucherChanged(tab: string) {

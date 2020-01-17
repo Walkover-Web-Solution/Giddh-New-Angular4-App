@@ -51,21 +51,21 @@
 
     function getApi() {
         switch (window.location.hostname) {
-            case 'localapp.giddh.com':
+            case 'localhost':
             case 'dev.giddh.com':
-                apiBaseUrl = 'http://apitest.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'test.giddh.com':
-                apiBaseUrl = 'http://apitest.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'stage.giddh.com':
-                apiBaseUrl = 'http://apitest.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
                 break;
             case 'app.giddh.com':
                 apiBaseUrl = 'https://api.giddh.com/';
                 break;
             default:
-                apiBaseUrl = 'http://apitest.giddh.com/';
+                apiBaseUrl = 'https://apitest.giddh.com/';
         }
         return apiBaseUrl;
     }

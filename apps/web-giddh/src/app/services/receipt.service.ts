@@ -165,6 +165,21 @@ export class ReceiptService implements OnInit {
             }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
     }
 
+    /*
+  * get detailed registered sales
+  * */
+    public getDetailedPurchaseRegister(request: ReportsDetailedRequestFilter) {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_PURCHASE, {
+            page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
+        });
+        return this._http.get(url
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<SalesRegisteDetailedResponse, string> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, SalesRegisteDetailedResponse>(e, ReportsDetailedRequestFilter)));
+    }
+
     private createQueryString(str, model) {
         let url = str;
         if ((model.from)) {

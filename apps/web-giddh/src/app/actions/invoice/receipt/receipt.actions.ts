@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { DownloadVoucherRequest, InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { INVOICE_ACTIONS } from '../invoice.const';
 import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../../models/api-models/Sales';
-import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
+import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 
 @Injectable()
 export class InvoiceReceiptActions {
@@ -87,7 +87,7 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)),
             map((response: BaseResponse<any, any>) => {
                 if (response) {
-                    // this.showToaster('');
+                    
                 } else {
                     this.showToaster(response.message, 'error');
                 }
@@ -98,11 +98,17 @@ export class InvoiceReceiptActions {
         .ofType(INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS).pipe(
             switchMap((action: CustomActions) => this._receiptService.getDetailedSalesRegister(action.payload)),
             map((response: BaseResponse<any, SalesRegisteDetailedResponse>) => {
-                if (response.status === 'success') {
-                    // this.showToaster('');
-                }
                 return this.GetSalesRegistedDetailsResponse(response);
             }));
+
+    @Effect()
+    private GetPurchaseRegistedDetails$: Observable<Action> = this.action$
+        .ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS).pipe(
+            switchMap((action: CustomActions) => this._receiptService.getDetailedPurchaseRegister(action.payload)),
+            map((response: BaseResponse<any, PurchaseRegisteDetailedResponse>) => {
+                return this.GetPurchaseRegistedDetailsResponse(response);
+            }));     
+
     constructor(private action$: Actions, private _toasty: ToasterService,
         private store: Store<AppState>, private _receiptService: ReceiptService) {
     }
@@ -244,6 +250,20 @@ export class InvoiceReceiptActions {
         };
     }
 
+    // purchase report
+    public GetPurchaseRegistedDetails(requestModel: ReportsDetailedRequestFilter): CustomActions {
+        return {
+            type: INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS,
+            payload: requestModel
+        };
+    }
+
+    public GetPurchaseRegistedDetailsResponse(response: BaseResponse<any, PurchaseRegisteDetailedResponse>): CustomActions {
+        return {
+            type: INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS_RESPONSE,
+            payload: response
+        };
+    }
 
     //endregion
 
