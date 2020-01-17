@@ -1,67 +1,54 @@
 <div class="box clearfix mrT1">
-    <h1 class="section_head pdT0">Create New Trigger</h1>
+    <h1 class="section_head pdT0">Create New Trigger(Webhook)</h1>
     <div class="row">
         <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-sm-10 col-xs-12 ">
             <div class="row">
-                <div class="form-group col-sm-3 col-xs-12">
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>Name</label><br>
-                    <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name"
-                        name="name" class="form-control" />
+                    <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name" name="name" class="form-control" />
                 </div>
-                <div class="form-group col-sm-3 col-xs-12">
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>Select Entity Type</label><br>
-                    <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)"
-                        [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false"
-                        name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'"
+                    <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)" [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false" name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'"
                         [ItemHeight]="33">
                     </sh-select>
                 </div>
-                <div class="form-group col-sm-3 col-xs-12">
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>Select Entity</label><br>
-                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async"
-                        [options]="entityOptions$ | async" name="entityOptions"
-                        [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
+                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
                     </sh-select>
                 </div>
-                <div class="form-group col-sm-3 col-xs-12">
+
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label>Filter</label><br>
+                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList" [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'" [ItemHeight]="33">
+                    </sh-select>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>Scope</label><br>
-                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
-                        placeholder="Select Scope" name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList"
-                        (selected)="onSelectScope($event)">
+                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope" name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
                         <option>selected</option>
                     </sh-select>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-3 col-xs-12">
-                    <label>Filter</label><br>
-                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList"
-                        [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter"
-                        [placeholder]="'Select Filter'" [ItemHeight]="33">
-                    </sh-select>
-                </div>
-                <div class="form-group col-sm-3 col-xs-12">
+                <!-- <div class="form-group col-sm-3 col-xs-12">
                     <label>Action</label><br>
-                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
-                        placeholder="Select Action" name="action" [(ngModel)]="newTriggerObj.action"
-                        [options]="actionList"></sh-select>
-                </div>
-                <div class="form-group col-sm-3 col-xs-12">
+                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Action" name="action" [(ngModel)]="newTriggerObj.action" [options]="actionList"></sh-select>
+                </div> -->
+                <!-- <div class="form-group col-sm-3 col-xs-12">
                     <label>Value</label><br>
-                    <input type="number" [(ngModel)]="newTriggerObj.value" name="value" placeholder="Value"
-                        class="form-control" />
-                </div>
-                <div class="form-group col-sm-3 col-xs-12">
+                    <input type="number" [(ngModel)]="newTriggerObj.value" name="value" placeholder="Value" class="form-control" />
+                </div> -->
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>URL</label><br>
-                    <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL"
-                        class="form-control" />
+                    <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL" class="form-control" />
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-sm-3 col-xs-12">
+                <div class="form-group col-sm-4 col-xs-12">
                     <label>Description</label><br>
-                    <textarea class="form-control" [(ngModel)]="newTriggerObj.description"
-                        name="description"></textarea>
+                    <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
                 </div>
             </div>
             <div class="row">
@@ -86,7 +73,8 @@
                             <th>Scope</th>
                             <th>Filter</th>
                             <th>Action</th>
-                            <th>Value</th>
+                            <!-- value option is hide now bcz there is only single "Entity Type" called "Closing Balance"  -->
+                            <!-- <th>Value</th> -->
                             <th>URL</th>
                             <th>Description</th>
                             <th class="text-center">Action</th>
@@ -97,62 +85,50 @@
                             <td data-title="#">{{i+1}}</td>
                             <td data-title="Name">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.name}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.name">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.name">
                             </td>
                             <td data-title="Entity Type">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.entity}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.entity">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entity">
                             </td>
                             <td data-title="Entity">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.entityUniqueName}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.entityUniqueName">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.entityUniqueName">
                             </td>
                             <td data-title="Scope">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.scope}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.scope">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.scope">
                             </td>
                             <td data-title="Filter">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.filter}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.filter">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.filter">
                             </td>
                             <td data-title="Action">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.action}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.action">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.action">
                             </td>
-                            <td data-title="Value">
+                            <!-- <td data-title="Value">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.value}}</span>
                                 <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
                                     [(ngModel)]="trigger.value">
-                            </td>
+                            </td> -->
                             <td data-title="URL">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.url}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.url">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.url">
                             </td>
                             <td data-title="Description">
                                 <span *ngIf="!triggerToEdit[i]">{{trigger.description}}</span>
-                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}"
-                                    [(ngModel)]="trigger.description">
+                                <input *ngIf="triggerToEdit[i]" class="form-control" type="text" name="name_{{i}}" [(ngModel)]="trigger.description">
                             </td>
 
                             <td class="text-center ico-btn" data-title="Action">
-                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs"
-                                    (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="fa fa-pencil"
+                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="fa fa-pencil"
                                         aria-hidden="true" tooltip="Edit"></i></button>
-                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs"
-                                    (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
+                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
                                         tooltip="Delete"></i></button>
-                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs"
-                                    (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check"
+                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="updateTrigger(i); triggerToEdit[i] = false"><i class="fa fa-check"
                                         aria-hidden="true" tooltip="Save"></i></button>
-                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs"
-                                    (click)="triggerToEdit[i] = false"><i class="fa fa-times" aria-hidden="true"
+                                <button *ngIf="triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit[i] = false"><i class="fa fa-times" aria-hidden="true"
                                         tooltip="Reset"></i></button>
                             </td>
                         </tr>
@@ -175,8 +151,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <delete-tax-confirmation-model [message]="confirmationMessage"
-                (userConfirmationEvent)="userConfirmation($event)">
+            <delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)">
             </delete-tax-confirmation-model>
         </div>
     </div>

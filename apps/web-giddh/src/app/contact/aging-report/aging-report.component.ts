@@ -119,6 +119,9 @@ export class AgingReportComponent implements OnInit {
             if (a) {
                 this.fromDate = moment(a[0]).format('DD-MM-YYYY');
                 this.toDate = moment(a[1]).format('DD-MM-YYYY');
+
+                // get sundry accounts when application date changes
+                this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
             }
         });
         let companyUniqueName = null;
@@ -137,7 +140,6 @@ export class AgingReportComponent implements OnInit {
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = _.cloneDeep(p);
         });
-        this.getSundrydebtorsAccounts(this.fromDate, this.toDate);
 
         this.searchStr$.pipe(
             debounceTime(1000),

@@ -55,7 +55,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService
     ) {
-        this.isProdMode = AppUrl === 'https://app.giddh.com/';
+        this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
         this.store.select(s => s.session).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
@@ -109,9 +109,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         // Need to implement for Web app only
-        if (!AppUrl.includes('localapp.giddh.com') && !isElectron) {
+        if (!LOCAL_ENV && !isElectron) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
-
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);

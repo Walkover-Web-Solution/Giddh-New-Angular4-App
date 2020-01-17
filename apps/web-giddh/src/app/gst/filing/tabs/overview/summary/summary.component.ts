@@ -21,7 +21,7 @@ export const GstR1SummarySequencing: SequenceConfig[] = [
 	{ name: 'B2C (Small) Invoices', gstReturnType: 'b2cs', index: 4 },
 	{ name: 'Exempt', gstReturnType: 'nil', index: 5 },
 	{ name: 'Credit / Debit Notes / Refund Vouchers', gstReturnType: 'CreditNote/DebitNote/RefundVouchers', index: 6 },
-	{ name: 'Advance Payments', gstReturnType: 'advance-payments', index: 7 },
+	{ name: 'Advance Receipt', gstReturnType: 'advance-receipt', index: 7 },
 	{ name: 'Tax Paid', gstReturnType: 'taxPaid', index: 8 },
 	{ name: 'HSN Summary', gstReturnType: 'hsnsac', index: 9 }
 ];

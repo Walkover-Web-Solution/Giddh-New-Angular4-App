@@ -1,0 +1,16 @@
+.input-group-addon {
+    position: relative;
+    position: relative;
+    width: 45px;
+    .checkbox-custom-label {
+        position: absolute;
+        left: 14px;
+    }
+}
+.input-group-addon {
+    .checkbox-custom-label {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+    }
+}

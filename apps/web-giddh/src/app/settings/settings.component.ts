@@ -178,7 +178,9 @@ export class SettingsComponent implements OnInit {
             this.setStateDetails(tab, this.integrationtab);
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            if (this.integrationtab) {
+                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            }
         } else {
             this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
@@ -191,8 +193,8 @@ export class SettingsComponent implements OnInit {
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
-            client_secret: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_SECRET,
-            client_id: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID,
+            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
+            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
@@ -204,27 +206,17 @@ export class SettingsComponent implements OnInit {
                 this._toast.errorToast(res.message, res.code);
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-            this.router.navigateByUrl('/pages/settings/integration/email');
+            // this.router.navigate(['/pages/settings/integration/email']);
             // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
         });
     }
 
     private getRedirectUrl(baseHref: string) {
-        if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/pages/settings?tab=integration';
-        } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/settings?tab=integration';
-        } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/settings?tab=integration';
-        } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            return 'http://localapp.giddh.com:3000/pages/settings?tab=integration';
-        } else {
-            return 'https://app.giddh.com/pages/settings?tab=integration';
-        }
+        return `${baseHref}pages/settings?tab=integration`;
     }
 
-    private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+    private getGoogleCredentials() {
+        if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'

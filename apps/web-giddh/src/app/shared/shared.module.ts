@@ -19,7 +19,9 @@ import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-sc
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
+import { RcmModalComponent } from '../common/rcm-modal/rcm-modal.component';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import {
@@ -33,7 +35,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
-import { CommandKModule } from '../theme/command-k/command.k.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
@@ -72,8 +73,8 @@ import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
-const getGoogleCredentials = (baseHref: string) => {
-    if (baseHref === 'https://app.giddh.com/' || isElectron) {
+const getGoogleCredentials = () => {
+    if (PRODUCTION_ENV || isElectron) {
         return {
             GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
         };
@@ -91,7 +92,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
-        provider: new GoogleLoginProvider(getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
     },
     {
         id: LinkedinLoginProvider.PROVIDER_ID,
@@ -129,7 +130,8 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent
+        WelcomeComponent,
+        RcmModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -144,7 +146,7 @@ export function provideConfig() {
         NgbTypeaheadModule,
         TooltipModule,
         BsDropdownModule,
-        PopoverModule,
+        PopoverModule.forRoot(),
         PerfectScrollbarModule,
         SocialLoginModule,
         FormWizardModule,
@@ -171,6 +173,7 @@ export function provideConfig() {
         CommonModule,
         DatepickerModule,
         DecimalDigitsModule,
+        PopoverModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
@@ -182,6 +185,7 @@ export function provideConfig() {
         FooterComponent,
         FixedFooterComponent,
         ManageGroupsAccountsComponent,
+        RcmModalComponent,
         AccountFilterPipe,
         SelectModule,
         PaginationModule,

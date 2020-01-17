@@ -1,21 +1,19 @@
 <span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false; taxInputBlur($event)"
     (click)="$event.stopPropagation()">
-    <label *ngIf="showHeading">Tax</label>
+    <label *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
     <a id="tax" class="clearfix">
 
         <div class="multi-select adjust" id="tax-control-multi-select">
 
-            <input type="text" readonly name="sum" *ngIf="!maskInput"
+            <input #taxInputElement type="text" readonly name="sum" *ngIf="!maskInput"
                 class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxTotalAmount"
-                (focus)="showTaxPopup = true;hideOtherPopups.emit(true)" style="padding-right:28px !important;"
-                (blur)="taxInputBlur($event)" />
+                (focus)="handleInputFocus()" style="padding-right:28px !important;" (blur)="taxInputBlur($event)" />
 
-
-            <input type="text" readonly name="sum" *ngIf="maskInput"
+            <input #taxInputElement type="text" readonly name="sum" *ngIf="maskInput"
                 class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxTotalAmount" [mask]="maskInput"
-                [prefix]="prefixInput" [suffix]="suffixInput" (focus)="showTaxPopup = true;hideOtherPopups.emit(true)"
-                (blur)="taxInputBlur($event)" style="padding-right:24px !important;" />
+                [prefix]="prefixInput" [suffix]="suffixInput" (focus)="handleInputFocus()" (blur)="taxInputBlur($event)"
+                style="padding-right:24px !important;" />
 
             <!-- <span class="caret cp no-select" (click)="showTaxPopup = !showTaxPopup"></span> -->
 

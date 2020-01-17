@@ -146,16 +146,20 @@
                                                 <ng-container *ngIf="isCashInvoice">
                                                     <input type="text" name="voucherDetails.customerName"
                                                         #inputCustomerName class="form-control cashInvoiceInput"
-                                                        [(ngModel)]="invFormData.voucherDetails.customerName" (change)="handleCustomerChange($event)"
+                                                        [(ngModel)]="invFormData.voucherDetails.customerName"
+                                                        (change)="handleCustomerChange($event)"
                                                         (blur)='selectDefaultbank()' [readOnly]="isUpdateMode">
                                                 </ng-container>
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
-                                                    <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
-                                                        <i class="fa fa-files-o"></i>
-                                                        Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
+                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate
+                                                    *ngIf="invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode"
+                                                    style="align-items: center;margin-left: 2%">
+                                                    <a href="javascript: void 0"
+                                                        (click)="showLastEstimateModal = !showLastEstimateModal">
+                                                        <i class="fa fa-files-o"></i> Copy Previous
+                                                        {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
                                                     <ng-container
                                                         *ngTemplateOutlet="lastEstimateModal;context:{ $implicit: showLastEstimateModal}">
@@ -310,7 +314,6 @@
                                                                         </div>
 
                                                                         <div class="col-sm-12 pd ">
-
                                                                             <input [readonly]="autoFillShipping"
                                                                                 autocomplete="None" maxLength="15"
                                                                                 type="text"
@@ -320,6 +323,15 @@
                                                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
                                                                                 (keyup)="getStateCode('shippingDetails', statesShipping)"
                                                                                 placeholder="GSTIN" />
+                                                                            <input [readonly]="autoFillShipping"
+                                                                                maxLength="15" autocomplete="None"
+                                                                                type="text"
+                                                                                name="shippingDetails.gstNumber"
+                                                                                class="form-control input-custom"
+                                                                                *ngIf="showTRNNo"
+                                                                                [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber"
+                                                                                (keyup)="getStateCode('shippingDetails', statesShipping);"
+                                                                                placeholder="TRN" />
                                                                         </div>
 
                                                                     </div>
@@ -425,7 +437,8 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse" [options]="warehouses">
+                                        <sh-select name="warehouse" [placeholder]="'Select Warehouse'"
+                                            [(ngModel)]="selectedWarehouse" [options]="warehouses">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -441,7 +454,8 @@
                                         <!-- Enabled for CR/DR update flow -->
                                         <input type="text" name="accountDetails.invoiceNum"
                                             class="form-control invoiceDate attentionTo"
-                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
+                                            [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                            [disabled]="isUpdateMode && !(isCreditNote || isDebitNote)"
                                             [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
@@ -457,7 +471,7 @@
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="isUpdateMode"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
-                                                    (blur)="onBlurInvoiceDate(0)" />
+                                                    (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" />
                                                 <p class="text-danger"
                                                     *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                                     Invalid Date
@@ -474,7 +488,7 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                     [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    (blur)="onBlurDueDate(0)" />
+                                                    (blur)="onBlurDueDate(0)"/>
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
@@ -497,6 +511,7 @@
                                             name="voucherDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                            (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                             [disabled]="isUpdateMode"
                                             [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
                                         <p class="text-danger"
@@ -525,6 +540,47 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- reverse charge transction start -->
+                            <!-- for purchase invoice start -->
+                            <!-- <div class="row mTB1" *ngIf="isPurchaseInvoice">
+                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <label></label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-6 pl-0">
+                                        <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
+                                            type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
+                                        <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body"
+                                            placement="bottom" containerClass="purchase-invoice-rcm"
+                                            for="reverse-charge" class="checkbox-custom-label">
+                                            Is this transaction applicable for reverse charge?
+                                        </label>
+                                    </div>
+                                </div>
+                                <ng-template #rcmTemplate>
+                                    <rcm-modal [configuration]="rcmConfiguration"
+                                        (buttonClicked)="handleRcmChange($event)"></rcm-modal>
+                                </ng-template>
+                            </div> -->
+                            <!-- for purchase invoice end -->
+                            <!-- reverse charge transction end  -->
+
+                            <!-- for sales invoice start -->
+                            <div class="row mTB1" hidden>
+                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <label></label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-6 pl-0">
+                                        <input id="tourist-scheme" class="checkbox-custom" type="checkbox">
+                                        <label for="tourist-scheme" class="checkbox-custom-label">
+                                            Is this transaction applicable for Tourist Scheme?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- for sales invoice end -->
                             <!-- endregion -->
 
                         </div>
@@ -610,19 +666,20 @@
                             <tr>
                                 <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
                                     class="theadOfSalesInvoice" [ngClass]="item.label">
-                                    {{item.label}}
+                                    {{item.label}} <span class="mandatory-asterisk"
+                                        *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup>*</sup></span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody
                             *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last"
-                            (clickOutside)="activeIndx = null" [exclude]="'.entriesTr'">
+                            (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
 
                             <ng-container *ngFor="let transaction of entry.transactions;">
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                                 <!-- region static entries-->
                                 <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()"
-                                    [hidden]="activeIndx === entryIdx" class="entriesTr setActive"
+                                    [hidden]="activeIndx === entryIdx" class="entriesTr set-active"
                                     [ngClass]="{'isOtherTax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
 
                                     <td>{{ entryIdx + 1 }}</td>
@@ -731,7 +788,8 @@
                                         </div>
 
                                     </td>
-                                    <td class="text-right item-tax" style="height:1px;">
+                                    <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
+                                        style="height:1px;" (focus)="transaction.requiredTax = false;">
                                         <div class="td_Wrapper">
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data"><span
@@ -772,7 +830,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
@@ -851,6 +909,7 @@
                                                             <span *ngIf="!isUpdateMode">
                                                                 <input type="text" [placeholder]="giddhDateFormat"
                                                                     bsDatepicker name="transaction.date_{{entryIdx}}"
+                                                                    id="transaction.date_{{entryIdx}}"
                                                                     class="form-control text-left"
                                                                     [(ngModel)]="entry.entryDate"
                                                                     [disabled]="isUpdateMode"
@@ -958,7 +1017,8 @@
                                             <div style="flex: 1;">
                                                 <input type="text" [disabled]="transaction.isStockTxn"
                                                     (blur)="calculateWhenTrxAltered(entry, transaction)"
-                                                    placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                                                    (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
@@ -1007,7 +1067,12 @@
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
                                                 </tax-control>
+                                                <!-- TODO: After design finalization
+                                                    <span class="eligible-ITC">Eligible for ITC <span
+                                                        class="icon-edit"></span>
+                                                </span> -->
                                             </div>
+
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>{{baseCurrencySymbol}}</span>
                                                 <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
@@ -1047,12 +1112,12 @@
                                                                     <img src="assets/images/edit-pencilicon.svg">
                                                                 </a>
                                                             </span>
-
                                                             <input class="text-right form-control other-taxes-input"
                                                                 disabled="disabled" [(ngModel)]="entry.otherTaxSum"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" name="entry.otherTaxesSum" />
+                                                                [mask]="inputMaskFormat"
+                                                                name="entry.otherTaxesSum_{{entryIdx}}" />
                                                         </div>
 
                                                         <p
@@ -1080,7 +1145,7 @@
 
                                         </div>
 
-                                        <div class="trashIconDlt"
+                                        <div class="trash-icon-delete"
                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)"
                                             (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
@@ -1258,7 +1323,8 @@
                                                     *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                                             </div>
                                         </div>
-                                        <div class="tableRow" *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                        <div class="tableRow"
+                                            *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                             <div class="tableCell">
                                                 <strong>Round Off</strong>
@@ -1418,20 +1484,16 @@
                 </section>
                 <!-- endregion -->
 
-                <!-- region mobile view  -->
-                <div class="showInMobile">
+                <!-- region mobile view -->
+                <div class="showInMobile" *ngIf="isMobileView">
                     <div class="card-invoiceTable-wrapper"
                         *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
-
                         <ng-container *ngFor="let transaction of entry.transactions;">
                             <!-- region static entry -->
                             <div class="card-invoiceTable" [hidden]="activeIndx === entryIdx">
                                 <div class="row">
-
                                     <div class="col-xs-12">
-
                                         <div class="single-card-row">
-
                                             <div class="productName">
                                                 <label class="card-label">Product/Service Description</label>
                                                 <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click
@@ -1654,6 +1716,7 @@
                                                                         <input type="text"
                                                                             [placeholder]="giddhDateFormat" bsDatepicker
                                                                             name="transaction.date_{{entryIdx}}"
+                                                                            id="transaction.date_{{entryIdx}}"
                                                                             class="form-control text-left"
                                                                             [(ngModel)]="entry.entryDate"
                                                                             [disabled]="isUpdateMode"
@@ -1805,6 +1868,7 @@
                                                 <div style="flex: 1;">
                                                     <input type="text" [disabled]="transaction.isStockTxn"
                                                         (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (click)="transactionAmountClicked(transaction)"
                                                         placeholder="Amount" name="transaction.amount_{{entryIdx}}"
                                                         class="form-control text-right" [(ngModel)]="transaction.amount"
                                                         decimalDigitsDirective
@@ -1922,7 +1986,7 @@
                                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                                     [suffix]="selectedSuffixForCurrency"
                                                                     [mask]="inputMaskFormat"
-                                                                    name="entry.otherTaxesSum" />
+                                                                    name="entry.otherTaxesSum_{{entryIdx}}" />
                                                             </div>
 
                                                             <p
@@ -2082,7 +2146,8 @@
                                         *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}}
                                 </div>
                             </div>
-                            <div class="tableRow" *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                            <div class="tableRow"
+                                *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="tableCell">
                                     <strong>Round Off</strong>
@@ -2253,8 +2318,7 @@
                                     class="btn btn-default" *ngIf="isCustomerSelected">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
-                                    </span>
-                                    &amp; Update A/c
+                                    </span> &amp; Update A/c
                                 </button>
 
                                 <div class="btn-group" dropdown [dropup]="true">
@@ -2376,8 +2440,9 @@
     (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
 
 <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService"
-    (closeAsideEvent)="onNoResultsClicked()" (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
+<aside-menu-product-service [class]="asideMenuStateForProductService" [selectedVoucherType]="selectedVoucherType"
+    [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"
+    (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 <app-aside-recurring-entry [voucherType]="invoiceType" [voucherNumber]="voucherNumber"
     [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry"

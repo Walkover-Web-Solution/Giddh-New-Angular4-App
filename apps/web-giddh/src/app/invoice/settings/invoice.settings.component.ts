@@ -81,7 +81,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private router: Router
     ) {
         this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
@@ -444,8 +444,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
-            client_secret: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_SECRET,
-            client_id: this.getGoogleCredentials(AppUrl).GOOGLE_CLIENT_ID,
+            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
+            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
@@ -460,25 +460,19 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
     }
     private getRedirectUrl(baseHref: string) {
-        if (baseHref.indexOf('dev.giddh.com') > -1) {
-            return 'http://dev.giddh.com/app/pages/invoice/preview/sales?tab=settings&tabIndex=4';
-        } else if (baseHref.indexOf('test.giddh.com') > -1) {
-            return 'http://test.giddh.com/pages/invoice/preview/sales?tab=settings&tabIndex=4';
-        } else if (baseHref.indexOf('stage.giddh.com') > -1) {
-            return 'http://stage.giddh.com/pages/invoice/preview/settings';
-        } else if (baseHref.indexOf('localapp.giddh.com') > -1) {
-            return 'http://localapp.giddh.com:3000/pages/invoice/preview/settings';
-        } else {
+        if (TEST_ENV) {
+            return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;
+        } else if (PRODUCTION_ENV || STAGING_ENV || LOCAL_ENV) {
             /* All the above URIs are not secured and Google has blocked
               addition of unsecured URIs therefore show Gmail integration text only
               for PROD. This flag need to be removed once all the above URIs become secure */
             this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
-            return 'https://app.giddh.com/pages/invoice/preview/settings';
+            return `${baseHref}pages/invoice/preview/settings`;
         }
     }
 
-    private getGoogleCredentials(baseHref: string) {
-        if (baseHref === 'https://app.giddh.com/' || isElectron) {
+    private getGoogleCredentials() {
+        if (PRODUCTION_ENV || isElectron) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
