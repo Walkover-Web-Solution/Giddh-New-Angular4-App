@@ -1080,12 +1080,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignDates() {
+        if (this.isUpdateMode) {
+            return;
+        }
         let date = _.cloneDeep(this.universalDate);
         this.invFormData.voucherDetails.voucherDate = date;
 
         // get exchange rate when application date is changed
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format('DD-MM-YYYY'));
+            let from = this.companyCurrency;
+            let to = this.customerCurrencyCode;
+            this.getCurrencyRate(this.showSwitchedCurr ? to : from, this.showSwitchedCurr ? from : to, moment(date).format(GIDDH_DATE_FORMAT));
         }
 
         this.invFormData.entries.forEach((entry: SalesEntryClass) => {
