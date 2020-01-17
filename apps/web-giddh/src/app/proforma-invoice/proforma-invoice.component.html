@@ -471,7 +471,7 @@
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="isUpdateMode"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
-                                                    (blur)="onBlurInvoiceDate(0)" />
+                                                    (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" />
                                                 <p class="text-danger"
                                                     *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
                                                     Invalid Date
@@ -488,7 +488,7 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                     [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    (blur)="onBlurDueDate(0)" />
+                                                    (blur)="onBlurDueDate(0)"/>
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
@@ -511,6 +511,7 @@
                                             name="voucherDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                            (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                             [disabled]="isUpdateMode"
                                             [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" />
                                         <p class="text-danger"
