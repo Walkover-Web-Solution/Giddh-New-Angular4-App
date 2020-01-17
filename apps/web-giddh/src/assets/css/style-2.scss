@@ -865,6 +865,7 @@ ul.sub-list {
     box-shadow: 0 6px 7px #cacaca;
     border: 1px solid $dark-blue00 !important;
     color: #333333 !important;
+    border-radius: 3px;
     /* display: block; */
 }
 
@@ -6576,7 +6577,7 @@ table td[class*=col-]:last-child {
 .illustration_box img {
     /* max-width: 85%; */
     opacity: 0.7;
-    /* max-width: 300px; */
+    max-width: 600px;
 }
 
 .cursor-pointer {
@@ -8054,7 +8055,7 @@ span.red-text {
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: transparent !important;
+    background: $White !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8353,7 +8354,9 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
 }
-
+#tab-integration .nav-tabs > li a:hover {
+    background-color: $White !important;
+}
 #tab-integration .nav-tabs > li a.active {
     border-bottom: 1px solid $activeTabBorder !important;
     font-family: "opensans-regular";

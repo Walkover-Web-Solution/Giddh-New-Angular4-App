@@ -170,7 +170,7 @@ const INVOICE_ROUTES: Routes = [
         ConfirmModalModule,
         SharedModule,
         VoucherTypeToNamePipeModule,
-        SendEmailInvoiceModule
+        SendEmailInvoiceModule,
     ],
     exports: [
         RouterModule,
