@@ -3285,7 +3285,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public onVoucherDateChanged(selectedDate, modelDate) {
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format('DD-MM-YYYY'));
+            let from = this.companyCurrency;
+            let to = this.customerCurrencyCode;
+            this.getCurrencyRate(this.showSwitchedCurr ? to : from, this.showSwitchedCurr ? from : to, moment(selectedDate).format('DD-MM-YYYY'));
         }
     }
 
@@ -3293,8 +3295,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
             let rate = response.body;
             if (rate) {
-                this.originalExchangeRate = rate;
-                this.exchangeRate = rate;
+                if (this.showSwitchedCurr) {
+                    this.originalReverseExchangeRate = rate;
+                    this.reverseExchangeRate = rate;
+                } else {
+                    this.originalExchangeRate = rate;
+                    this.exchangeRate = rate;
+                }
             }
         }, (error => {
 
@@ -3315,14 +3322,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return _.orderBy(bankAccounts, 'label');
     }
 
-    public switchCurrencyImg(switchCurr) {
+    public async switchCurrencyImg(switchCurr) {
         this.showSwitchedCurr = switchCurr;
-        if (switchCurr) {
-            this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
-            this.originalReverseExchangeRate = this.reverseExchangeRate;
+        let from = this.companyCurrency;
+        let to = this.customerCurrencyCode;
+        if (this.isUpdateMode) {
+            if (switchCurr) {
+                this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
+                this.originalReverseExchangeRate = this.reverseExchangeRate;
+            } else {
+                this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
+                this.originalExchangeRate = this.exchangeRate;
+            }
         } else {
-            this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
-            this.originalExchangeRate = this.exchangeRate;
+            await this.getCurrencyRate(switchCurr ? to : from, switchCurr ? from : to, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
         }
     }
 
