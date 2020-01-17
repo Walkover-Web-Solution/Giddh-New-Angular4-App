@@ -193,7 +193,8 @@ export class ReportsDetailsComponent implements OnInit {
                 this.financialOptions = selectedCmp.financialYears.map(q => {
                     return { label: q.uniqueName, value: q.uniqueName };
                 });
-                this.currentActiveFinacialYear = _.cloneDeep(this.financialOptions[0]);
+                let financialYear = this.financialOptions.find(p => p.value === selectedCmp.activeFinancialYear.uniqueName);
+                this.currentActiveFinacialYear = _.cloneDeep(financialYear);
                 this.activeFinacialYr = selectedCmp.activeFinancialYear;
                 this.populateRecords('monthly');
                 this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;

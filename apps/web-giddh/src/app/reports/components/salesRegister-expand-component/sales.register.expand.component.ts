@@ -9,6 +9,8 @@ import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operat
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap';
 import { FormControl } from '@angular/forms';
+import { CurrentPage } from '../../../models/api-models/Common';
+import { GeneralActions } from '../../../actions/general/general.actions';
 
 
 @Component({
@@ -58,19 +60,17 @@ export class SalesRegisterExpandComponent implements OnInit {
 
     bsValue = new Date();
 
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
-
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
         this.SalesRegisteDetailedResponse$ = this.store.pipe(select(p => p.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
-
     }
 
     ngOnInit() {
-
+        this.setCurrentPageTitle();
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
-        this.getDetailedsalesRequestFilter.count = 20;
+        this.getDetailedsalesRequestFilter.count = 50;
         this.getDetailedsalesRequestFilter.q = '';
 
 
@@ -152,7 +152,7 @@ export class SalesRegisterExpandComponent implements OnInit {
         if (val) {
             this.router.navigate(['/pages/reports']);
         } else {
-            this.router.navigate(['/pages/reports', 'reports-details']);
+            this.router.navigate(['/pages/reports', 'sales-register']);
         }
     }
 
@@ -251,5 +251,12 @@ export class SalesRegisterExpandComponent implements OnInit {
         if (!this._cd['destroyed']) {
             this._cd.detectChanges();
         }
+    }
+
+    public setCurrentPageTitle() {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Reports > Sales Register";
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

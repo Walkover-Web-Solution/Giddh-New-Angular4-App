@@ -178,7 +178,9 @@ export class SettingsComponent implements OnInit {
             this.setStateDetails(tab, this.integrationtab);
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
-            this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            if (this.integrationtab) {
+                this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
+            }
         } else {
             this.setStateDetails(tab, '');
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
@@ -204,7 +206,7 @@ export class SettingsComponent implements OnInit {
                 this._toast.errorToast(res.message, res.code);
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-            this.router.navigateByUrl('/pages/settings/integration/email');
+            // this.router.navigate(['/pages/settings/integration/email']);
             // this.router.navigateByUrl('/pages/settings?tab=integration&tabIndex=1');
         });
     }

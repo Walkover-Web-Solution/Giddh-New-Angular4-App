@@ -35,6 +35,7 @@ import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest'
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
+import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
@@ -183,6 +184,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public inputMaskFormat: string;
     public giddhBalanceDecimalPlaces: number = 2;
     public activeAccountParentGroupsUniqueName: string = '';
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private accountUniquename: any;
 
@@ -196,6 +198,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private _loginActions: LoginActions,
         private _loaderService: LoaderService,
         private _settingsDiscountAction: SettingsDiscountActions,
@@ -397,9 +400,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         // check if selected account category allows to show taxationDiscountBox in newEntry popup
         txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+        this.handleRcmVisibility(txn);
         this.newLedPanelCtrl.calculateTotal();
         // this.newLedPanelCtrl.checkForMulitCurrency();
-        this.newLedPanelCtrl.detactChanges();
+        this.newLedPanelCtrl.detectChanges();
         this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
     }
 
@@ -485,6 +489,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.trxRequest.to = '';
                 }
             }
+
+            this.currencyTogglerModel = false;
 
             if (params['accountUniqueName']) {
                 // this.advanceSearchComp.resetAdvanceSearchModal();
@@ -633,7 +639,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                this.currencyTogglerModel = false;
 
                 let stockListFormFlattenAccount: IFlattenAccountsResultItem;
                 if (data[1]) {
@@ -977,7 +982,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             otherTaxType: 'tcs',
             exchangeRate: 1,
             exchangeRateForDisplay: 1,
-            valuesInAccountCurrency: false,
+            valuesInAccountCurrency: (this.selectedCurrency === 0),
             selectedCurrencyToDisplay: this.selectedCurrency,
             baseCurrencyToDisplay: cloneDeep(this.baseCurrencyDetails),
             foreignCurrencyToDisplay: cloneDeep(this.foreignCurrencyDetails)
@@ -1126,11 +1131,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-        blankTransactionObj.valuesInAccountCurrency = this.selectedCurrency === 0;
-        blankTransactionObj.exchangeRate = (this.lc.blankLedger.selectedCurrencyToDisplay !== this.selectedCurrency) ? (1 / blankTransactionObj.exchangeRate) : blankTransactionObj.exchangeRate;
 
         if (blankTransactionObj.transactions.length > 0) {
-
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
@@ -1564,6 +1566,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
         this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
         this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+        // If the currency toggle button is checked then it is not in account currency
+        this.lc.blankLedger.valuesInAccountCurrency = !event.target.checked;
 
         this.getTransactionData();
     }
@@ -1614,4 +1618,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getBankTransactions();
         this.getTransactionData();
     }
+
+    /**
+     * Handles RCM section visinility based on provided transaction details
+     *
+     * @private
+     * @param {*} transaction Transaction details which will decide if transaction is RCM applicable
+     * @memberof LedgerComponent
+     */
+    private handleRcmVisibility(transaction: any): void {
+        this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
+            if (accounts) {
+                let currentLedgerAccountDetails, selectedAccountDetails;
+                const transactionUniqueName = (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '';
+                for (let index = 0; index < accounts.length; index++) {
+                    const account = accounts[index];
+                    if (account.uniqueName === this.lc.accountUnq) {
+                        // Found the current ledger details
+                        currentLedgerAccountDetails = _.cloneDeep(account);
+                    }
+                    if (account.uniqueName === transactionUniqueName) {
+                        // Found the user selected particular account
+                        selectedAccountDetails = _.cloneDeep(account);
+                    }
+                    if (currentLedgerAccountDetails && selectedAccountDetails) {
+                        // Accounts found, break the loop
+                        break;
+                    }
+                }
+                const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+                if (this.lc && this.lc.currentBlankTxn) {
+                    this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
+                }
+            }
+        });
+    }
+
+
 }

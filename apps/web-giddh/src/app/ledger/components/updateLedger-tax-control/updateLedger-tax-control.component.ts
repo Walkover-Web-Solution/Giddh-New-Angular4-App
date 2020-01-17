@@ -1,12 +1,25 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    forwardRef,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment/moment';
+
 import * as _ from '../../../lodash-optimized';
-import { ITaxDetail } from '../../../models/interfaces/tax.interface';
+import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
+import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -34,6 +47,10 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Input() public showHeading: boolean = true;
     @Input() public showTaxPopup: boolean = false;
     @Input() public totalForTax: number = 0;
+    /** Custom heading to be applied to tax control header */
+    @Input() public customHeading: string = '';
+    /** True, if mandatory asterisk needs to be displayed */
+    @Input() public isMandatory: boolean = false;
 
     @Input() public customTaxTypesForTaxFilter: string[] = [];
     @Input() public exceptTaxTypes: string[] = [];
@@ -48,6 +65,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public selectedTaxEvent: EventEmitter<UpdateLedgerTaxData[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    /** Tax input field */
+    @ViewChild('taxInputElement') public taxInputElement: ElementRef;
 
     public sum: number = 0;
     public formattedTotal: string;
@@ -217,6 +237,19 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
             }
         });
         return isApplicable;
+    }
+
+    /**
+     * Tax input focus handler
+     *
+     * @memberof TaxControlComponent
+     */
+    public handleInputFocus(): void {
+        this.showTaxPopup = true;
+        this.hideOtherPopups.emit(true);
+        if (this.taxInputElement && this.taxInputElement.nativeElement) {
+            this.taxInputElement.nativeElement.classList.remove('error-box');
+        }
     }
 
     /**
