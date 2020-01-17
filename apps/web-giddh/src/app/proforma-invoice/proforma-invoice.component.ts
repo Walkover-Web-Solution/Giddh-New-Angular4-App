@@ -1080,6 +1080,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignDates() {
+        // currently we are not allowing user to change invoice date in update mode
+        // so don't update invoice date on change of application date
         if (this.isUpdateMode) {
             return;
         }
@@ -2422,7 +2424,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.store.dispatch(this.proformaActions.updateProforma(result));
         } else {
             let data = result.voucher;
-            let exRate = this.originalExchangeRate;
+            let exRate = this.showSwitchedCurr ?  this.reverseExchangeRate : this.exchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
 
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
@@ -3331,17 +3333,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.showSwitchedCurr = switchCurr;
         let from = this.companyCurrency;
         let to = this.customerCurrencyCode;
-        if (this.isUpdateMode) {
-            if (switchCurr) {
-                this.reverseExchangeRate = this.exchangeRate ? 1 / this.exchangeRate : 0;
-                this.originalReverseExchangeRate = this.reverseExchangeRate;
-            } else {
-                this.exchangeRate = this.reverseExchangeRate ? 1 / this.reverseExchangeRate : 0;
-                this.originalExchangeRate = this.exchangeRate;
-            }
-        } else {
-            await this.getCurrencyRate(switchCurr ? to : from, switchCurr ? from : to, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
-        }
+        await this.getCurrencyRate(switchCurr ? to : from, switchCurr ? from : to, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
     }
 
     public saveCancelExcRate(toSave) {
