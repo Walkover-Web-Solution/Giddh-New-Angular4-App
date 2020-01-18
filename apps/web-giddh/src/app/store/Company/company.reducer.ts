@@ -6,6 +6,8 @@ import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 import * as moment from 'moment/moment';
 import { IRegistration } from "../../models/interfaces/registration.interface";
+import { DEFAULT_DATE_RANGE_PICKER_RANGES, DefaultDateRangePickerRangesEnum } from '../../app.constant';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 /**
  * Keeping Track of the CompanyState
@@ -26,60 +28,27 @@ export interface CurrentCompanyState {
 }
 
 /**
-* Setting the InitialState for this Reducer's Store
-*/
+ * Setting the InitialState for this Reducer's Store
+ */
 const initialState: CurrentCompanyState = {
     taxes: null,
     isTaxesLoading: false,
     isGetTaxesSuccess: false,
     activeFinancialYear: null,
     dateRangePickerConfig: {
-        opens: 'left',
         locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
+            direction: 'ltr',
+            separator: '-',
+            weekLabel: 'W',
+            applyLabel: 'Apply',
             cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
+            customRangeLabel: 'Custom range',
+            daysOfWeek: moment.weekdaysMin(),
+            monthNames: moment.monthsShort(),
+            firstDay: moment.localeData().firstDayOfWeek(),
+            format: GIDDH_DATE_FORMAT
         },
-        ranges: {
-            'This Month to Date': [
-                moment().startOf('month'),
-                moment()
-            ],
-            'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
-            ],
-            'This Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ],
-            'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
-            ],
-            'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-            ],
-            'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
-            ],
-            'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        ranges: DEFAULT_DATE_RANGE_PICKER_RANGES
     },
     account: null,
     isTaxCreationInProcess: false,
@@ -120,7 +89,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxCreationInProcess: true,
                 isTaxCreatedSuccessfully: false,
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
@@ -137,7 +106,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxCreationInProcess: false,
                 isTaxCreatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX: {
@@ -145,7 +114,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxUpdatingInProcess: true,
                 isTaxUpdatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE: {
@@ -167,7 +136,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 ...state,
                 isTaxUpdatingInProcess: false,
                 isTaxUpdatedSuccessfully: false
-            }
+            };
         }
 
         case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
@@ -185,16 +154,24 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         case CompanyActions.SET_ACTIVE_FINANCIAL_YEAR: {
             let res = action.payload;
             if (res) {
-                let newState = _.cloneDeep(state);
-                let dateRangePickerConfig = _.cloneDeep(newState.dateRangePickerConfig);
-                dateRangePickerConfig.ranges['This Financial Year to Date'][0] = moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-                dateRangePickerConfig.ranges['Last Financial Year'] = [
-                    moment(_.clone(res.financialYearStarts), 'DD-MM-YYYY').subtract(1, 'year'),
-                    moment(_.clone(res.financialYearEnds), 'DD-MM-YYYY').subtract(1, 'year')
-                ];
-                return Object.assign({}, state, {
-                    dateRangePickerConfig
-                });
+
+                return {
+                    ...state,
+                    dateRangePickerConfig: {
+                        ...state.dateRangePickerConfig,
+                        ranges: state.dateRangePickerConfig.ranges.map(range => {
+                            if (range.name === DefaultDateRangePickerRangesEnum.ThisFinancialYearToDate) {
+                                range.value = [moment(res.financialYearStarts, 'DD-MM-YYYY').startOf('day'), moment()];
+                            } else if (range.name === DefaultDateRangePickerRangesEnum.LastFinancialYear) {
+                                range.value = [
+                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
+                                    moment(res.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year')
+                                ];
+                            }
+                            return range;
+                        })
+                    }
+                };
             }
             break;
         }
@@ -202,13 +179,13 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             return {
                 ...state,
                 isCompanyActionInProgress: true
-            }
+            };
         }
         case CompanyActions.DELETE_COMPANY_RESPONSE: {
             return {
                 ...state,
                 isCompanyActionInProgress: false
-            }
+            };
         }
         case CompanyActions.GET_REGISTRATION_ACCOUNT:
             return Object.assign({}, state, {
